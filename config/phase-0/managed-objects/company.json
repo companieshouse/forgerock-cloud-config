@@ -1,0 +1,197 @@
+{
+  "iconClass": "fa fa-database",
+  "name": "Company",
+  "schema": {
+    "$schema": "http://forgerock.org/json-schema#",
+    "description": "A company",
+    "icon": "fa-building",
+    "order": [
+      "code",
+      "name",
+      "authzCode",
+      "presenters",
+      "officers",
+      "PSCs"
+    ],
+    "properties": {
+      "PSCs": {
+        "description": null,
+        "items": {
+          "notifySelf": false,
+          "properties": {
+            "_ref": { "type": "string" },
+            "_refProperties": {
+              "properties": {
+                "_id": {
+                  "propName": "_id",
+                  "required": false,
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "resourceCollection": [
+            {
+              "label": "Alpha_user",
+              "notify": false,
+              "path": "managed/alpha_user",
+              "query": {
+                "fields": ["mail"],
+                "queryFilter": "true",
+                "sortKeys": []
+              }
+            }
+          ],
+          "reversePropertyName": "isPCSof",
+          "reverseRelationship": true,
+          "type": "relationship",
+          "validate": true
+        },
+        "returnByDefault": false,
+        "searchable": false,
+        "title": "PSCs",
+        "type": "array",
+        "userEditable": false,
+        "viewable": true
+      },
+      "authzCode": {
+        "searchable": true,
+        "title": "Auth Code",
+        "type": "string",
+        "userEditable": true,
+        "viewable": true
+      },
+      "code": {
+        "searchable": true,
+        "title": "Company Number",
+        "type": "string",
+        "userEditable": true,
+        "viewable": true
+      },
+      "name": {
+        "searchable": true,
+        "title": "Company Name",
+        "type": "string",
+        "userEditable": true,
+        "viewable": true
+      },
+      "officers": {
+        "description": null,
+        "items": {
+          "notifySelf": false,
+          "properties": {
+            "_ref": { "type": "string" },
+            "_refProperties": {
+              "properties": {
+                "_id": {
+                  "propName": "_id",
+                  "required": false,
+                  "type": "string"
+                },
+                "is_director": {
+                  "label": null,
+                  "propName": "is_director",
+                  "required": false,
+                  "type": "string"
+                },
+                "is_secretary": {
+                  "label": null,
+                  "propName": "is_secretary",
+                  "required": false,
+                  "type": "string"
+                },
+                "is_shareholder": {
+                  "label": null,
+                  "propName": "is_shareholder",
+                  "required": false,
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "resourceCollection": [
+            {
+              "label": "Alpha_user",
+              "notify": false,
+              "path": "managed/alpha_user",
+              "query": {
+                "fields": ["mail"],
+                "queryFilter": "true",
+                "sortKeys": []
+              }
+            }
+          ],
+          "reversePropertyName": "isOfficerOf",
+          "reverseRelationship": true,
+          "type": "relationship",
+          "validate": false
+        },
+        "returnByDefault": false,
+        "searchable": false,
+        "title": "Officers",
+        "type": "array",
+        "userEditable": false,
+        "viewable": true
+      },
+      "presenters": {
+        "description": null,
+        "items": {
+          "notifySelf": false,
+          "properties": {
+            "_ref": { "type": "string" },
+            "_refProperties": {
+              "properties": {
+                "_id": {
+                  "propName": "_id",
+                  "required": false,
+                  "type": "string"
+                },
+                "allowed_financial_filing": {
+                  "label": "File Financial Statments ",
+                  "propName": "allowed_financial_filing",
+                  "required": false,
+                  "type": "string"
+                },
+                "allowed_incorporation_filing": {
+                  "label": "File Incorporation Statements ",
+                  "propName": "allowed_incorporation_filing",
+                  "required": false,
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "resourceCollection": [
+            {
+              "label": "Alpha_user",
+              "notify": false,
+              "path": "managed/alpha_user",
+              "query": {
+                "fields": ["mail"],
+                "queryFilter": "true",
+                "sortKeys": []
+              }
+            }
+          ],
+          "reversePropertyName": "isPresenterOf",
+          "reverseRelationship": true,
+          "type": "relationship",
+          "validate": false
+        },
+        "returnByDefault": false,
+        "searchable": false,
+        "title": "Presenters",
+        "type": "array",
+        "userEditable": false,
+        "viewable": true
+      }
+    },
+    "required": [],
+    "title": "company",
+    "type": "object"
+  },
+  "type": "Managed Object"
+}
