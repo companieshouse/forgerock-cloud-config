@@ -1,0 +1,13 @@
+{
+  "name": "fric-config",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {},
+  "author": "Amido",
+  "license": "ISC",
+  "dependencies": {
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6",
+    "yargs": "^16.2.0"
+  }
+}
