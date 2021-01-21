@@ -1,16 +1,19 @@
+#!/usr/bin/env node
 const request = require("request-promise");
+const yargs = require("yargs");
 const fs = require("fs")
 const path = require("path");
 
 // Script arguments
-const argv = require("yargs")
+const argv = yargs
   .usage("Usage: $0 [arguments]")
   .version(false)
   .help("h")
   .alias("h", "help")
   .demandOption(["t"])
   .alias("t", "token")
-  .describe("t", "Access Token").argv;
+  .describe("t", "Access Token")
+  .parse(process.argv);
 
 const { token } = argv;
 
@@ -25,7 +28,7 @@ if (!FRIC_URL) {
 console.log(`Using phase ${PHASE} config`);
 
 // Combine managed object JSON files
-const dir = path.resolve(__dirname, `../config/phase-${PHASE}/managed-objects`);
+const dir = path.resolve(__dirname, `../../config/phase-${PHASE}/managed-objects`);
 
 const managedObjects = fs.readdirSync(dir)
   .filter((name) => path.extname(name) === ".json") // Filter out any non JSON files

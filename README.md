@@ -30,7 +30,7 @@ All scripts can also be ran locally with the correct arguments and environment v
 Calls the Access Management OAuth2 endpoint to get an access token of a user. This token is used for subsequent API calls.
 
 **Help Message:**
-`node scripts/get-access-token.js -h`
+`get-access-token -h`
 
 ### Update Managed Objects
 
@@ -39,4 +39,4 @@ Calls the Identity Management endpoint to get update Managed Objects. The config
 **This command will update all Managed Objects and delete any not present in the directory.**
 
 **Help Message:**
-`node scripts/update-managed-objects.js -h`
+`update-managed-objects -h`

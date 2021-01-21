@@ -2,7 +2,13 @@
   "name": "fric-config",
   "version": "1.0.0",
   "description": "",
-  "scripts": {},
+  "scripts": {
+    "test": "jest"
+  },
+  "bin": {
+    "get-access-token": "./scripts/get-access-token/index.js",
+    "update-managed-objects": "./scripts/update-managed-objects/index.js"
+  },
   "author": "Amido",
   "license": "ISC",
   "dependencies": {

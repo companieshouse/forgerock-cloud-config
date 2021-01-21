@@ -1,7 +1,9 @@
+#!/usr/bin/env node
 const request = require("request-promise");
+const yargs = require("yargs");
 
 // Script arguments
-const argv = require("yargs")
+const argv = yargs
   .usage("Usage: $0 [arguments]")
   .version(false)
   .help("h")
@@ -17,7 +19,8 @@ const argv = require("yargs")
   .describe("a", "Admin Client ID")
   .describe("s", "Admin Client Secret")
   .describe("r", "Realm")
-  .demandOption(["u", "p", "a", "s"]).argv;
+  .demandOption(["u", "p", "a", "s"])
+  .parse(process.argv);
 
 const { username, password, adminClientId, adminClientSecret, realm } = argv;
 
