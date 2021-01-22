@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-const request = require("request-promise");
 const yargs = require("yargs");
+const getAccessToken = require("./get-access-token");
 
 // Script arguments
-const argv = yargs
+yargs
   .usage("Usage: $0 [arguments]")
   .version(false)
   .help("h")
@@ -20,41 +20,8 @@ const argv = yargs
   .describe("s", "Admin Client Secret")
   .describe("r", "Realm")
   .demandOption(["u", "p", "a", "s"])
-  .parse(process.argv);
-
-const { username, password, adminClientId, adminClientSecret, realm } = argv;
-
-// Check environment variables
-const { FRIC_URL } = process.env;
-
-if (!FRIC_URL) {
-  console.error("Missing FRIC_URL environment variable");
-  process.exit(1);
-}
-
-// Get access token
-const requestOptions = {
-  uri: `${FRIC_URL}/am/oauth2${realm}/access_token?auth_chain=PasswordGrant`,
-  method: "POST",
-  headers: {
-    "Content-Type": "application/x-www-form-urlencoded",
-  },
-  json: true,
-  form: {
-    username,
-    password,
-    client_id: adminClientId,
-    client_secret: adminClientSecret,
-    grant_type: "password",
-    scope: "fr:idm:*",
-  },
-};
-
-request(requestOptions)
-  .then(({ access_token}) => {
-    console.log(access_token);
-  })
-  .catch((err) => {
-    console.error(err.message);
-    process.exit(1);
-  });
+  .command({
+    command: "$0",
+    desc: "default",
+    handler: (argv) => getAccessToken(argv),
+  }).argv;

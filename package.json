@@ -12,8 +12,7 @@
   "author": "Amido",
   "license": "ISC",
   "dependencies": {
-    "request": "^2.88.2",
-    "request-promise": "^4.2.6",
+    "node-fetch": "^2.6.1",
     "yargs": "^16.2.0"
   },
   "devDependencies": {
