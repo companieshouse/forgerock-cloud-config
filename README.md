@@ -6,9 +6,11 @@ This repository contains scripts and configuration for Companies House ForgeRock
 
 ### Pre-Requisites
 
-The following need to be installed and configured for local use:
+The following need to be installed/configured for local use:
 
 - [NodeJS](https://nodejs.org/en/download/)
+- [ForgeRock Identity Cloud User](https://backstage.forgerock.com/docs/idcloud/latest/paas/tenant/postman-collection.html#preparing_your_identity_cloud)
+- [ForgeRock Identity Cloud Admin OAuth Client](https://backstage.forgerock.com/docs/idcloud/latest/paas/tenant/postman-collection.html#running_the_prerequisite_steps)
 
 ### Environment Variables
 
