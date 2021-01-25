@@ -1,1021 +1,1161 @@
 {
-	"iconClass": "fa fa-database",
-	"meta": {
-		"property": "_meta",
-		"resourceCollection": "managed/alpha_usermeta",
-		"trackedProperties": ["createDate", "lastChanged"]
-	},
-	"name": "alpha_user",
-	"notifications": {},
-	"onCreate": {
-		"source": "require('onCreateUser').setDefaultFields(object);",
-		"type": "text/javascript"
-	},
-	"onUpdate": {
-		"source": "require('onUpdateUser').preserveLastSync(object, oldObject, request);",
-		"type": "text/javascript"
-	},
-	"schema": {
-		"$schema": "http://forgerock.org/json-schema#",
-		"type": "object",
-		"title": "Alpha realm - User",
-		"description": null,
-		"icon": "fa-user",
-		"properties": {
-			"_id": {
-				"deleteQueryConfig": false,
-				"description": "User ID",
-				"isPersonal": false,
-				"isVirtual": false,
-				"policies": [{
-					"params": {
-						"forbiddenChars": ["/"]
-					},
-					"policyId": "cannot-contain-characters"
-				}],
-				"searchable": false,
-				"title": null,
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": false,
-				"viewable": false
-			},
-			"userName": {
-				"description": "Username",
-				"isPersonal": true,
-				"minLength": 1,
-				"policies": [{
-					"policyId": "valid-username"
-				}, {
-					"params": {
-						"forbiddenChars": ["/"]
-					},
-					"policyId": "cannot-contain-characters"
-				}, {
-					"params": {
-						"minLength": 1
-					},
-					"policyId": "minimum-length"
-				}, {
-					"params": {
-						"maxLength": 255
-					},
-					"policyId": "maximum-length"
-				}],
-				"searchable": true,
-				"title": "Username",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"password": {
-				"description": "Password",
-				"isPersonal": false,
-				"isProtected": true,
-				"scope": "private",
-				"searchable": false,
-				"title": "Password",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": false
-			},
-			"givenName": {
-				"description": "First Name",
-				"isPersonal": true,
-				"searchable": true,
-				"title": "First Name",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"cn": {
-				"description": "Common Name",
-				"isPersonal": true,
-				"isVirtual": true,
-				"onStore": {
-					"source": "object.cn || (object.givenName + ' ' + object.sn)",
-					"type": "text/javascript"
-				},
-				"scope": "private",
-				"searchable": false,
-				"title": "Common Name",
-				"type": "string",
-				"userEditable": false,
-				"viewable": false
-			},
-			"sn": {
-				"description": "Last Name",
-				"isPersonal": true,
-				"searchable": true,
-				"title": "Last Name",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"mail": {
-				"description": "Email Address",
-				"isPersonal": true,
-				"policies": [{
-					"policyId": "valid-email-address-format"
-				}],
-				"searchable": true,
-				"title": "Email Address",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"description": {
-				"description": "Description",
-				"isPersonal": false,
-				"searchable": true,
-				"title": "Description",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"accountStatus": {
-				"description": "Status",
-				"isPersonal": false,
-				"searchable": true,
-				"title": "Status",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": false,
-				"viewable": true
-			},
-			"telephoneNumber": {
-				"description": "Telephone Number",
-				"isPersonal": true,
-				"pattern": "^\\+?([0-9\\- \\(\\)])*$",
-				"title": "Telephone Number",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"postalAddress": {
-				"description": "Address 1",
-				"isPersonal": true,
-				"title": "Address 1",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"city": {
-				"description": "City",
-				"isPersonal": false,
-				"title": "City",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"postalCode": {
-				"description": "Postal Code",
-				"isPersonal": false,
-				"title": "Postal Code",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"country": {
-				"description": "Country",
-				"isPersonal": false,
-				"title": "Country",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"stateProvince": {
-				"description": "State/Province",
-				"isPersonal": false,
-				"title": "State/Province",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"roles": {
-				"description": "Provisioning Roles",
-				"id": "urn:jsonschema:org:forgerock:openidm:managed:api:User:roles",
-				"isPersonal": false,
-				"items": {
-					"id": "urn:jsonschema:org:forgerock:openidm:managed:api:User:roles:items",
-					"notifySelf": true,
-					"properties": {
-						"_ref": {
-							"description": "References a relationship from a managed object",
-							"type": "string"
-						},
-						"_refProperties": {
-							"description": "Supports metadata within the relationship",
-							"properties": {
-								"_grantType": {
-									"description": "Grant Type",
-									"label": "Grant Type",
-									"type": "string"
-								},
-								"_id": {
-									"description": "_refProperties object ID",
-									"type": "string"
-								}
-							},
-							"title": "Provisioning Roles Items _refProperties",
-							"type": "object"
-						}
-					},
-					"resourceCollection": [{
-						"conditionalAssociationField": "condition",
-						"label": "Role",
-						"path": "managed/alpha_role",
-						"query": {
-							"fields": ["name"],
-							"queryFilter": "true"
-						}
-					}],
-					"reversePropertyName": "members",
-					"reverseRelationship": true,
-					"title": "Provisioning Roles Items",
-					"type": "relationship",
-					"validate": true
-				},
-				"relationshipGrantTemporalConstraintsEnforced": true,
-				"returnByDefault": false,
-				"title": "Provisioning Roles",
-				"type": "array",
-				"usageDescription": null,
-				"userEditable": false,
-				"viewable": true
-			},
-			"manager": {
-				"description": "Manager",
-				"isPersonal": false,
-				"properties": {
-					"_ref": {
-						"description": "References a relationship from a managed object",
-						"type": "string"
-					},
-					"_refProperties": {
-						"description": "Supports metadata within the relationship",
-						"properties": {
-							"_id": {
-								"description": "_refProperties object ID",
-								"type": "string"
-							}
-						},
-						"title": "Manager _refProperties",
-						"type": "object"
-					}
-				},
-				"resourceCollection": [{
-					"label": "User",
-					"path": "managed/alpha_user",
-					"query": {
-						"fields": ["userName", "givenName", "sn"],
-						"queryFilter": "true"
-					}
-				}],
-				"reversePropertyName": "reports",
-				"reverseRelationship": true,
-				"searchable": false,
-				"title": "Manager",
-				"type": "relationship",
-				"usageDescription": null,
-				"userEditable": false,
-				"validate": true,
-				"viewable": true
-			},
-			"authzRoles": {
-				"description": "Authorization Roles",
-				"id": "urn:jsonschema:org:forgerock:openidm:managed:api:User:authzRoles",
-				"isPersonal": false,
-				"items": {
-					"id": "urn:jsonschema:org:forgerock:openidm:managed:api:User:authzRoles:items",
-					"properties": {
-						"_ref": {
-							"description": "References a relationship from a managed object",
-							"type": "string"
-						},
-						"_refProperties": {
-							"description": "Supports metadata within the relationship",
-							"properties": {
-								"_id": {
-									"description": "_refProperties object ID",
-									"type": "string"
-								}
-							},
-							"title": "Authorization Roles Items _refProperties",
-							"type": "object"
-						}
-					},
-					"resourceCollection": [{
-						"conditionalAssociationField": "condition",
-						"label": "Internal Role",
-						"path": "internal/role",
-						"query": {
-							"fields": ["name"],
-							"queryFilter": "true"
-						}
-					}],
-					"reversePropertyName": "authzMembers",
-					"reverseRelationship": true,
-					"title": "Authorization Roles Items",
-					"type": "relationship",
-					"validate": true
-				},
-				"returnByDefault": false,
-				"title": "Authorization Roles",
-				"type": "array",
-				"usageDescription": null,
-				"userEditable": false,
-				"viewable": true
-			},
-			"reports": {
-				"description": "Direct Reports",
-				"isPersonal": false,
-				"items": {
-					"id": "urn:jsonschema:org:forgerock:openidm:managed:api:User:reports:items",
-					"properties": {
-						"_ref": {
-							"description": "References a relationship from a managed object",
-							"type": "string"
-						},
-						"_refProperties": {
-							"description": "Supports metadata within the relationship",
-							"properties": {
-								"_id": {
-									"description": "_refProperties object ID",
-									"type": "string"
-								}
-							},
-							"title": "Direct Reports Items _refProperties",
-							"type": "object"
-						}
-					},
-					"resourceCollection": [{
-						"label": "User",
-						"path": "managed/alpha_user",
-						"query": {
-							"fields": ["userName", "givenName", "sn"],
-							"queryFilter": "true"
-						}
-					}],
-					"reversePropertyName": "manager",
-					"reverseRelationship": true,
-					"title": "Direct Reports Items",
-					"type": "relationship",
-					"validate": true
-				},
-				"returnByDefault": false,
-				"title": "Direct Reports",
-				"type": "array",
-				"usageDescription": null,
-				"userEditable": false,
-				"viewable": true
-			},
-			"effectiveRoles": {
-				"description": "Effective Roles",
-				"isPersonal": false,
-				"isVirtual": true,
-				"items": {
-					"title": "Effective Roles Items",
-					"type": "object"
-				},
-				"queryConfig": {
-					"referencedRelationshipFields": ["roles"]
-				},
-				"returnByDefault": true,
-				"title": "Effective Roles",
-				"type": "array",
-				"usageDescription": null,
-				"viewable": false
-			},
-			"effectiveAssignments": {
-				"description": "Effective Assignments",
-				"isPersonal": false,
-				"isVirtual": true,
-				"items": {
-					"title": "Effective Assignments Items",
-					"type": "object"
-				},
-				"queryConfig": {
-					"referencedObjectFields": ["*"],
-					"referencedRelationshipFields": ["roles", "assignments"]
-				},
-				"returnByDefault": true,
-				"title": "Effective Assignments",
-				"type": "array",
-				"usageDescription": null,
-				"viewable": false
-			},
-			"lastSync": {
-				"description": "Last Sync timestamp",
-				"isPersonal": false,
-				"order": ["effectiveAssignments", "timestamp"],
-				"properties": {
-					"effectiveAssignments": {
-						"description": "Effective Assignments",
-						"items": {
-							"title": "Effective Assignments Items",
-							"type": "object"
-						},
-						"title": "Effective Assignments",
-						"type": "array"
-					},
-					"timestamp": {
-						"description": "Timestamp",
-						"type": "string"
-					}
-				},
-				"scope": "private",
-				"searchable": false,
-				"title": "Last Sync timestamp",
-				"type": "object",
-				"usageDescription": null,
-				"viewable": false
-			},
-			"kbaInfo": {
-				"description": "KBA Info",
-				"isPersonal": true,
-				"items": {
-					"order": ["answer", "customQuestion", "questionId"],
-					"properties": {
-						"answer": {
-							"description": "Answer",
-							"type": "string"
-						},
-						"customQuestion": {
-							"description": "Custom question",
-							"type": "string"
-						},
-						"questionId": {
-							"description": "Question ID",
-							"type": "string"
-						}
-					},
-					"required": [],
-					"title": "KBA Info Items",
-					"type": "object"
-				},
-				"type": "array",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": false
-			},
-			"preferences": {
-				"description": "Preferences",
-				"isPersonal": false,
-				"order": ["updates", "marketing"],
-				"properties": {
-					"marketing": {
-						"description": "Send me special offers and services",
-						"type": "boolean"
-					},
-					"updates": {
-						"description": "Send me news and updates",
-						"type": "boolean"
-					}
-				},
-				"searchable": false,
-				"title": "Preferences",
-				"type": "object",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"consentedMappings": {
-				"description": "Consented Mappings",
-				"isPersonal": false,
-				"isVirtual": false,
-				"items": {
-					"items": {
-						"order": ["mapping", "consentDate"],
-						"properties": {
-							"consentDate": {
-								"description": "Consent Date",
-								"searchable": true,
-								"title": "Consent Date",
-								"type": "string",
-								"userEditable": true,
-								"viewable": true
-							},
-							"mapping": {
-								"description": "Mapping",
-								"searchable": true,
-								"title": "Mapping",
-								"type": "string",
-								"userEditable": true,
-								"viewable": true
-							}
-						},
-						"required": ["mapping", "consentDate"],
-						"title": "Consented Mappings Item",
-						"type": "object"
-					},
-					"title": "Consented Mappings Items",
-					"type": "array"
-				},
-				"returnByDefault": false,
-				"searchable": false,
-				"title": "Consented Mappings",
-				"type": "array",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": false
-			},
-			"frIndexedString1": {
-				"deleteQueryConfig": false,
-				"description": "Officer Type",
-				"isPersonal": false,
-				"isVirtual": false,
-				"searchable": true,
-				"title": "Officer Type",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedString2": {
-				"description": "Generic Indexed String 2",
-				"isPersonal": false,
-				"title": "Generic Indexed String 2",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedString3": {
-				"description": "Generic Indexed String 3",
-				"isPersonal": false,
-				"title": "Generic Indexed String 3",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedString4": {
-				"description": "Generic Indexed String 4",
-				"isPersonal": false,
-				"title": "Generic Indexed String 4",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedString5": {
-				"description": "Generic Indexed String 5",
-				"isPersonal": false,
-				"title": "Generic Indexed String 5",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frUnindexedString4": {
-				"description": "Generic Unindexed String 4",
-				"isPersonal": false,
-				"title": "initCode",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true,
-				"searchable": false,
-				"isVirtual": false,
-				"deleteQueryConfig": false
-			},
-			"frUnindexedString5": {
-				"description": "Generic Unindexed String 5",
-				"isPersonal": false,
-				"title": "Generic Unindexed String 5",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedMultivalued1": {
-				"description": "Generic Indexed Multivalue 1",
-				"isPersonal": false,
-				"items": {
-					"type": "string"
-				},
-				"title": "Generic Indexed Multivalue 1",
-				"type": "array",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedMultivalued2": {
-				"description": "Generic Indexed Multivalue 2",
-				"isPersonal": false,
-				"items": {
-					"type": "string"
-				},
-				"title": "Generic Indexed Multivalue 2",
-				"type": "array",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedMultivalued3": {
-				"description": "Generic Indexed Multivalue 3",
-				"isPersonal": false,
-				"items": {
-					"type": "string"
-				},
-				"title": "Generic Indexed Multivalue 3",
-				"type": "array",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedMultivalued4": {
-				"description": "Generic Indexed Multivalue 4",
-				"isPersonal": false,
-				"items": {
-					"type": "string"
-				},
-				"title": "Generic Indexed Multivalue 4",
-				"type": "array",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedMultivalued5": {
-				"description": "Generic Indexed Multivalue 5",
-				"isPersonal": false,
-				"items": {
-					"type": "string"
-				},
-				"title": "Generic Indexed Multivalue 5",
-				"type": "array",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frUnindexedMultivalued1": {
-				"description": "Generic Unindexed Multivalue 1",
-				"isPersonal": false,
-				"items": {
-					"type": "string"
-				},
-				"title": "Generic Unindexed Multivalue 1",
-				"type": "array",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frUnindexedMultivalued2": {
-				"description": "Generic Unindexed Multivalue 2",
-				"isPersonal": false,
-				"items": {
-					"type": "string"
-				},
-				"title": "Generic Unindexed Multivalue 2",
-				"type": "array",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frUnindexedMultivalued3": {
-				"description": "Generic Unindexed Multivalue 3",
-				"isPersonal": false,
-				"items": {
-					"type": "string"
-				},
-				"title": "Generic Unindexed Multivalue 3",
-				"type": "array",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frUnindexedMultivalued4": {
-				"description": "Generic Unindexed Multivalue 4",
-				"isPersonal": false,
-				"items": {
-					"type": "string"
-				},
-				"title": "Generic Unindexed Multivalue 4",
-				"type": "array",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frUnindexedMultivalued5": {
-				"description": "Generic Unindexed Multivalue 5",
-				"isPersonal": false,
-				"items": {
-					"type": "string"
-				},
-				"title": "Generic Unindexed Multivalue 5",
-				"type": "array",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedDate1": {
-				"description": "Generic Indexed Date 1",
-				"isPersonal": false,
-				"title": "Generic Indexed Date 1",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedDate2": {
-				"description": "Generic Indexed Date 2",
-				"isPersonal": false,
-				"title": "Generic Indexed Date 2",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedDate3": {
-				"description": "Generic Indexed Date 3",
-				"isPersonal": false,
-				"title": "Generic Indexed Date 3",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedDate4": {
-				"description": "Generic Indexed Date 4",
-				"isPersonal": false,
-				"title": "Generic Indexed Date 4",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedDate5": {
-				"description": "Generic Indexed Date 5",
-				"isPersonal": false,
-				"title": "Generic Indexed Date 5",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frUnindexedDate1": {
-				"description": "Generic Unindexed Date 1",
-				"isPersonal": false,
-				"title": "Generic Unindexed Date 1",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frUnindexedDate2": {
-				"description": "Generic Unindexed Date 2",
-				"isPersonal": false,
-				"title": "Generic Unindexed Date 2",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frUnindexedDate3": {
-				"description": "Generic Unindexed Date 3",
-				"isPersonal": false,
-				"title": "Generic Unindexed Date 3",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frUnindexedDate4": {
-				"description": "Generic Unindexed Date 4",
-				"isPersonal": false,
-				"title": "Generic Unindexed Date 4",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frUnindexedDate5": {
-				"description": "Generic Unindexed Date 5",
-				"isPersonal": false,
-				"title": "Generic Unindexed Date 5",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedInteger1": {
-				"description": "Generic Indexed Integer 1",
-				"isPersonal": false,
-				"title": "Generic Indexed Integer 1",
-				"type": "number",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedInteger2": {
-				"description": "Generic Indexed Integer 2",
-				"isPersonal": false,
-				"title": "Generic Indexed Integer 2",
-				"type": "number",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedInteger3": {
-				"description": "Generic Indexed Integer 3",
-				"isPersonal": false,
-				"title": "Generic Indexed Integer 3",
-				"type": "number",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedInteger4": {
-				"description": "Generic Indexed Integer 4",
-				"isPersonal": false,
-				"title": "Generic Indexed Integer 4",
-				"type": "number",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frIndexedInteger5": {
-				"description": "Generic Indexed Integer 5",
-				"isPersonal": false,
-				"title": "Generic Indexed Integer 5",
-				"type": "number",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frUnindexedInteger1": {
-				"description": "Generic Unindexed Integer 1",
-				"isPersonal": false,
-				"title": "Generic Unindexed Integer 1",
-				"type": "number",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frUnindexedInteger2": {
-				"description": "Generic Unindexed Integer 2",
-				"isPersonal": false,
-				"title": "Generic Unindexed Integer 2",
-				"type": "number",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frUnindexedInteger3": {
-				"description": "Generic Unindexed Integer 3",
-				"isPersonal": false,
-				"title": "Generic Unindexed Integer 3",
-				"type": "number",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frUnindexedInteger4": {
-				"description": "Generic Unindexed Integer 4",
-				"isPersonal": false,
-				"title": "Generic Unindexed Integer 4",
-				"type": "number",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frUnindexedInteger5": {
-				"description": "Generic Unindexed Integer 5",
-				"isPersonal": false,
-				"title": "Generic Unindexed Integer 5",
-				"type": "number",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"aliasList": {
-				"description": "List of identity aliases used primarily to record social IdP subjects for this user",
-				"isVirtual": false,
-				"items": {
-					"title": "User Alias Names Items",
-					"type": "string"
-				},
-				"returnByDefault": false,
-				"searchable": false,
-				"title": "User Alias Names List",
-				"type": "array",
-				"userEditable": true,
-				"viewable": false
-			},
-			"frUnindexedString1": {
-				"deleteQueryConfig": false,
-				"description": "Companies the user is PSC of",
-				"isPersonal": false,
-				"isVirtual": false,
-				"searchable": false,
-				"title": "PSC companies",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"frUnindexedString2": {
-				"deleteQueryConfig": false,
-				"description": "Companies the user is officer of",
-				"isPersonal": false,
-				"isVirtual": false,
-				"searchable": false,
-				"title": "Officer companies",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			},
-			"isPresenterOf": {
-				"description": null,
-				"items": {
-					"properties": {
-						"_ref": {
-							"type": "string"
-						},
-						"_refProperties": {
-							"properties": {
-								"_id": {
-									"type": "string",
-									"required": false,
-									"propName": "_id"
-								},
-								"permissionFiling": {
-									"label": "File Financial Statments ",
-									"type": "string",
-									"required": false,
-									"propName": "permissionFiling"
-								},
-								"permissionAdmin": {
-									"label": "Administer the Company",
-									"type": "string",
-									"required": false,
-									"propName": "permissionAdmin"
-								},
-								"permissionUpdate": {
-									"label": "Update company details",
-									"type": "string",
-									"required": false,
-									"propName": "permissionUpdate"
-								}
-							},
-							"type": "object"
-						}
-					},
-					"resourceCollection": [{
-						"label": "Company",
-						"notify": false,
-						"path": "managed/Company",
-						"query": {
-							"fields": ["name", "number", "authCode", "type", "status"],
-							"queryFilter": "true",
-							"sortKeys": []
-						}
-					}],
-					"reversePropertyName": "presenters",
-					"reverseRelationship": true,
-					"type": "relationship",
-					"validate": false
-				},
-				"minLength": null,
-				"notifySelf": false,
-				"pattern": null,
-				"policies": [],
-				"returnByDefault": false,
-				"searchable": false,
-				"title": "Ispresenterof",
-				"type": "array",
-				"userEditable": false,
-				"viewable": true
-			},
-			"frUnindexedString3": {
-				"deleteQueryConfig": false,
-				"description": "Companies the user is presenter for",
-				"isPersonal": false,
-				"isVirtual": false,
-				"searchable": false,
-				"title": "Presenter companies",
-				"type": "string",
-				"usageDescription": null,
-				"userEditable": true,
-				"viewable": true
-			}
-		},
-		"order": ["_id", "userName", "password", "givenName", "cn", "sn", "mail", "description", "accountStatus", "telephoneNumber", "postalAddress", "city", "postalCode", "country", "stateProvince", "roles", "manager", "authzRoles", "reports", "effectiveRoles", "effectiveAssignments", "lastSync", "kbaInfo", "preferences", "consentedMappings", "frIndexedString1", "frIndexedString2", "frIndexedString3", "frIndexedString4", "frIndexedString5", "frUnindexedString4", "frUnindexedString5", "frIndexedMultivalued1", "frIndexedMultivalued2", "frIndexedMultivalued3", "frIndexedMultivalued4", "frIndexedMultivalued5", "frUnindexedMultivalued1", "frUnindexedMultivalued2", "frUnindexedMultivalued3", "frUnindexedMultivalued4", "frUnindexedMultivalued5", "frIndexedDate1", "frIndexedDate2", "frIndexedDate3", "frIndexedDate4", "frIndexedDate5", "frUnindexedDate1", "frUnindexedDate2", "frUnindexedDate3", "frUnindexedDate4", "frUnindexedDate5", "frIndexedInteger1", "frIndexedInteger2", "frIndexedInteger3", "frIndexedInteger4", "frIndexedInteger5", "frUnindexedInteger1", "frUnindexedInteger2", "frUnindexedInteger3", "frUnindexedInteger4", "frUnindexedInteger5", "aliasList", "frUnindexedString1", "frUnindexedString2", "isPresenterOf", "frUnindexedString3"],
-		"required": ["userName", "givenName", "sn", "mail"]
-	},
-	"type": "Managed Object"
+  "iconClass": "fa fa-database",
+  "meta": {
+    "property": "_meta",
+    "resourceCollection": "managed/alpha_usermeta",
+    "trackedProperties": [
+      "createDate",
+      "lastChanged"
+    ]
+  },
+  "name": "alpha_user",
+  "notifications": {},
+  "onCreate": {
+    "source": "require('onCreateUser').setDefaultFields(object);",
+    "type": "text/javascript"
+  },
+  "onUpdate": {
+    "source": "require('onUpdateUser').preserveLastSync(object, oldObject, request);",
+    "type": "text/javascript"
+  },
+  "schema": {
+    "$schema": "http://forgerock.org/json-schema#",
+    "type": "object",
+    "title": "Alpha realm - User",
+    "description": null,
+    "icon": "fa-user",
+    "properties": {
+      "_id": {
+        "deleteQueryConfig": false,
+        "description": "User ID",
+        "isPersonal": false,
+        "isVirtual": false,
+        "policies": [
+          {
+            "params": {
+              "forbiddenChars": [
+                "/"
+              ]
+            },
+            "policyId": "cannot-contain-characters"
+          }
+        ],
+        "searchable": false,
+        "title": null,
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": false,
+        "viewable": false
+      },
+      "userName": {
+        "description": "Username",
+        "isPersonal": true,
+        "minLength": 1,
+        "policies": [
+          {
+            "policyId": "valid-username"
+          },
+          {
+            "params": {
+              "forbiddenChars": [
+                "/"
+              ]
+            },
+            "policyId": "cannot-contain-characters"
+          },
+          {
+            "params": {
+              "minLength": 1
+            },
+            "policyId": "minimum-length"
+          },
+          {
+            "params": {
+              "maxLength": 255
+            },
+            "policyId": "maximum-length"
+          }
+        ],
+        "searchable": true,
+        "title": "Username",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "password": {
+        "description": "Password",
+        "isPersonal": false,
+        "isProtected": true,
+        "scope": "private",
+        "searchable": false,
+        "title": "Password",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": false
+      },
+      "givenName": {
+        "description": "First Name",
+        "isPersonal": true,
+        "searchable": true,
+        "title": "First Name",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "cn": {
+        "description": "Common Name",
+        "isPersonal": true,
+        "isVirtual": true,
+        "onStore": {
+          "source": "object.cn || (object.givenName + ' ' + object.sn)",
+          "type": "text/javascript"
+        },
+        "scope": "private",
+        "searchable": false,
+        "title": "Common Name",
+        "type": "string",
+        "userEditable": false,
+        "viewable": false
+      },
+      "sn": {
+        "description": "Last Name",
+        "isPersonal": true,
+        "searchable": true,
+        "title": "Last Name",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "mail": {
+        "description": "Email Address",
+        "isPersonal": true,
+        "policies": [
+          {
+            "policyId": "valid-email-address-format"
+          }
+        ],
+        "searchable": true,
+        "title": "Email Address",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "description": {
+        "description": "Description",
+        "isPersonal": false,
+        "searchable": true,
+        "title": "Description",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "accountStatus": {
+        "description": "Status",
+        "isPersonal": false,
+        "searchable": true,
+        "title": "Status",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": false,
+        "viewable": true
+      },
+      "telephoneNumber": {
+        "description": "Telephone Number",
+        "isPersonal": true,
+        "pattern": "^\\+?([0-9\\- \\(\\)])*$",
+        "title": "Telephone Number",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "postalAddress": {
+        "description": "Address 1",
+        "isPersonal": true,
+        "title": "Address 1",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "city": {
+        "description": "City",
+        "isPersonal": false,
+        "title": "City",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "postalCode": {
+        "description": "Postal Code",
+        "isPersonal": false,
+        "title": "Postal Code",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "country": {
+        "description": "Country",
+        "isPersonal": false,
+        "title": "Country",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "stateProvince": {
+        "description": "State/Province",
+        "isPersonal": false,
+        "title": "State/Province",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "roles": {
+        "description": "Provisioning Roles",
+        "id": "urn:jsonschema:org:forgerock:openidm:managed:api:User:roles",
+        "isPersonal": false,
+        "items": {
+          "id": "urn:jsonschema:org:forgerock:openidm:managed:api:User:roles:items",
+          "notifySelf": true,
+          "properties": {
+            "_ref": {
+              "description": "References a relationship from a managed object",
+              "type": "string"
+            },
+            "_refProperties": {
+              "description": "Supports metadata within the relationship",
+              "properties": {
+                "_grantType": {
+                  "description": "Grant Type",
+                  "label": "Grant Type",
+                  "type": "string"
+                },
+                "_id": {
+                  "description": "_refProperties object ID",
+                  "type": "string"
+                }
+              },
+              "title": "Provisioning Roles Items _refProperties",
+              "type": "object"
+            }
+          },
+          "resourceCollection": [
+            {
+              "conditionalAssociationField": "condition",
+              "label": "Role",
+              "path": "managed/alpha_role",
+              "query": {
+                "fields": [
+                  "name"
+                ],
+                "queryFilter": "true"
+              }
+            }
+          ],
+          "reversePropertyName": "members",
+          "reverseRelationship": true,
+          "title": "Provisioning Roles Items",
+          "type": "relationship",
+          "validate": true
+        },
+        "relationshipGrantTemporalConstraintsEnforced": true,
+        "returnByDefault": false,
+        "title": "Provisioning Roles",
+        "type": "array",
+        "usageDescription": null,
+        "userEditable": false,
+        "viewable": true
+      },
+      "manager": {
+        "description": "Manager",
+        "isPersonal": false,
+        "properties": {
+          "_ref": {
+            "description": "References a relationship from a managed object",
+            "type": "string"
+          },
+          "_refProperties": {
+            "description": "Supports metadata within the relationship",
+            "properties": {
+              "_id": {
+                "description": "_refProperties object ID",
+                "type": "string"
+              }
+            },
+            "title": "Manager _refProperties",
+            "type": "object"
+          }
+        },
+        "resourceCollection": [
+          {
+            "label": "User",
+            "path": "managed/alpha_user",
+            "query": {
+              "fields": [
+                "userName",
+                "givenName",
+                "sn"
+              ],
+              "queryFilter": "true"
+            }
+          }
+        ],
+        "reversePropertyName": "reports",
+        "reverseRelationship": true,
+        "searchable": false,
+        "title": "Manager",
+        "type": "relationship",
+        "usageDescription": null,
+        "userEditable": false,
+        "validate": true,
+        "viewable": true
+      },
+      "authzRoles": {
+        "description": "Authorization Roles",
+        "id": "urn:jsonschema:org:forgerock:openidm:managed:api:User:authzRoles",
+        "isPersonal": false,
+        "items": {
+          "id": "urn:jsonschema:org:forgerock:openidm:managed:api:User:authzRoles:items",
+          "properties": {
+            "_ref": {
+              "description": "References a relationship from a managed object",
+              "type": "string"
+            },
+            "_refProperties": {
+              "description": "Supports metadata within the relationship",
+              "properties": {
+                "_id": {
+                  "description": "_refProperties object ID",
+                  "type": "string"
+                }
+              },
+              "title": "Authorization Roles Items _refProperties",
+              "type": "object"
+            }
+          },
+          "resourceCollection": [
+            {
+              "conditionalAssociationField": "condition",
+              "label": "Internal Role",
+              "path": "internal/role",
+              "query": {
+                "fields": [
+                  "name"
+                ],
+                "queryFilter": "true"
+              }
+            }
+          ],
+          "reversePropertyName": "authzMembers",
+          "reverseRelationship": true,
+          "title": "Authorization Roles Items",
+          "type": "relationship",
+          "validate": true
+        },
+        "returnByDefault": false,
+        "title": "Authorization Roles",
+        "type": "array",
+        "usageDescription": null,
+        "userEditable": false,
+        "viewable": true
+      },
+      "reports": {
+        "description": "Direct Reports",
+        "isPersonal": false,
+        "items": {
+          "id": "urn:jsonschema:org:forgerock:openidm:managed:api:User:reports:items",
+          "properties": {
+            "_ref": {
+              "description": "References a relationship from a managed object",
+              "type": "string"
+            },
+            "_refProperties": {
+              "description": "Supports metadata within the relationship",
+              "properties": {
+                "_id": {
+                  "description": "_refProperties object ID",
+                  "type": "string"
+                }
+              },
+              "title": "Direct Reports Items _refProperties",
+              "type": "object"
+            }
+          },
+          "resourceCollection": [
+            {
+              "label": "User",
+              "path": "managed/alpha_user",
+              "query": {
+                "fields": [
+                  "userName",
+                  "givenName",
+                  "sn"
+                ],
+                "queryFilter": "true"
+              }
+            }
+          ],
+          "reversePropertyName": "manager",
+          "reverseRelationship": true,
+          "title": "Direct Reports Items",
+          "type": "relationship",
+          "validate": true
+        },
+        "returnByDefault": false,
+        "title": "Direct Reports",
+        "type": "array",
+        "usageDescription": null,
+        "userEditable": false,
+        "viewable": true
+      },
+      "effectiveRoles": {
+        "description": "Effective Roles",
+        "isPersonal": false,
+        "isVirtual": true,
+        "items": {
+          "title": "Effective Roles Items",
+          "type": "object"
+        },
+        "queryConfig": {
+          "referencedRelationshipFields": [
+            "roles"
+          ]
+        },
+        "returnByDefault": true,
+        "title": "Effective Roles",
+        "type": "array",
+        "usageDescription": null,
+        "viewable": false
+      },
+      "effectiveAssignments": {
+        "description": "Effective Assignments",
+        "isPersonal": false,
+        "isVirtual": true,
+        "items": {
+          "title": "Effective Assignments Items",
+          "type": "object"
+        },
+        "queryConfig": {
+          "referencedObjectFields": [
+            "*"
+          ],
+          "referencedRelationshipFields": [
+            "roles",
+            "assignments"
+          ]
+        },
+        "returnByDefault": true,
+        "title": "Effective Assignments",
+        "type": "array",
+        "usageDescription": null,
+        "viewable": false
+      },
+      "lastSync": {
+        "description": "Last Sync timestamp",
+        "isPersonal": false,
+        "order": [
+          "effectiveAssignments",
+          "timestamp"
+        ],
+        "properties": {
+          "effectiveAssignments": {
+            "description": "Effective Assignments",
+            "items": {
+              "title": "Effective Assignments Items",
+              "type": "object"
+            },
+            "title": "Effective Assignments",
+            "type": "array"
+          },
+          "timestamp": {
+            "description": "Timestamp",
+            "type": "string"
+          }
+        },
+        "scope": "private",
+        "searchable": false,
+        "title": "Last Sync timestamp",
+        "type": "object",
+        "usageDescription": null,
+        "viewable": false
+      },
+      "kbaInfo": {
+        "description": "KBA Info",
+        "isPersonal": true,
+        "items": {
+          "order": [
+            "answer",
+            "customQuestion",
+            "questionId"
+          ],
+          "properties": {
+            "answer": {
+              "description": "Answer",
+              "type": "string"
+            },
+            "customQuestion": {
+              "description": "Custom question",
+              "type": "string"
+            },
+            "questionId": {
+              "description": "Question ID",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "KBA Info Items",
+          "type": "object"
+        },
+        "type": "array",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": false
+      },
+      "preferences": {
+        "description": "Preferences",
+        "isPersonal": false,
+        "order": [
+          "updates",
+          "marketing"
+        ],
+        "properties": {
+          "marketing": {
+            "description": "Send me special offers and services",
+            "type": "boolean"
+          },
+          "updates": {
+            "description": "Send me news and updates",
+            "type": "boolean"
+          }
+        },
+        "searchable": false,
+        "title": "Preferences",
+        "type": "object",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "consentedMappings": {
+        "description": "Consented Mappings",
+        "isPersonal": false,
+        "isVirtual": false,
+        "items": {
+          "items": {
+            "order": [
+              "mapping",
+              "consentDate"
+            ],
+            "properties": {
+              "consentDate": {
+                "description": "Consent Date",
+                "searchable": true,
+                "title": "Consent Date",
+                "type": "string",
+                "userEditable": true,
+                "viewable": true
+              },
+              "mapping": {
+                "description": "Mapping",
+                "searchable": true,
+                "title": "Mapping",
+                "type": "string",
+                "userEditable": true,
+                "viewable": true
+              }
+            },
+            "required": [
+              "mapping",
+              "consentDate"
+            ],
+            "title": "Consented Mappings Item",
+            "type": "object"
+          },
+          "title": "Consented Mappings Items",
+          "type": "array"
+        },
+        "returnByDefault": false,
+        "searchable": false,
+        "title": "Consented Mappings",
+        "type": "array",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": false
+      },
+      "frIndexedString1": {
+        "deleteQueryConfig": false,
+        "description": "Officer Type",
+        "isPersonal": false,
+        "isVirtual": false,
+        "searchable": true,
+        "title": "Officer Type",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedString2": {
+        "description": "Generic Indexed String 2",
+        "isPersonal": false,
+        "title": "Generic Indexed String 2",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedString3": {
+        "description": "Generic Indexed String 3",
+        "isPersonal": false,
+        "title": "Generic Indexed String 3",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedString4": {
+        "description": "Generic Indexed String 4",
+        "isPersonal": false,
+        "title": "Generic Indexed String 4",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedString5": {
+        "description": "Generic Indexed String 5",
+        "isPersonal": false,
+        "title": "Generic Indexed String 5",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedString4": {
+        "description": "Generic Unindexed String 4",
+        "isPersonal": false,
+        "title": "initCode",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true,
+        "searchable": false,
+        "isVirtual": false,
+        "deleteQueryConfig": false
+      },
+      "frUnindexedString5": {
+        "description": "Generic Unindexed String 5",
+        "isPersonal": false,
+        "title": "Generic Unindexed String 5",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedMultivalued1": {
+        "description": "Generic Indexed Multivalue 1",
+        "isPersonal": false,
+        "items": {
+          "type": "string"
+        },
+        "title": "Generic Indexed Multivalue 1",
+        "type": "array",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedMultivalued2": {
+        "description": "Generic Indexed Multivalue 2",
+        "isPersonal": false,
+        "items": {
+          "type": "string"
+        },
+        "title": "Generic Indexed Multivalue 2",
+        "type": "array",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedMultivalued3": {
+        "description": "Generic Indexed Multivalue 3",
+        "isPersonal": false,
+        "items": {
+          "type": "string"
+        },
+        "title": "Generic Indexed Multivalue 3",
+        "type": "array",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedMultivalued4": {
+        "description": "Generic Indexed Multivalue 4",
+        "isPersonal": false,
+        "items": {
+          "type": "string"
+        },
+        "title": "Generic Indexed Multivalue 4",
+        "type": "array",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedMultivalued5": {
+        "description": "Generic Indexed Multivalue 5",
+        "isPersonal": false,
+        "items": {
+          "type": "string"
+        },
+        "title": "Generic Indexed Multivalue 5",
+        "type": "array",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedMultivalued1": {
+        "description": "Generic Unindexed Multivalue 1",
+        "isPersonal": false,
+        "items": {
+          "type": "string"
+        },
+        "title": "Generic Unindexed Multivalue 1",
+        "type": "array",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedMultivalued2": {
+        "description": "Generic Unindexed Multivalue 2",
+        "isPersonal": false,
+        "items": {
+          "type": "string"
+        },
+        "title": "Generic Unindexed Multivalue 2",
+        "type": "array",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedMultivalued3": {
+        "description": "Generic Unindexed Multivalue 3",
+        "isPersonal": false,
+        "items": {
+          "type": "string"
+        },
+        "title": "Generic Unindexed Multivalue 3",
+        "type": "array",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedMultivalued4": {
+        "description": "Generic Unindexed Multivalue 4",
+        "isPersonal": false,
+        "items": {
+          "type": "string"
+        },
+        "title": "Generic Unindexed Multivalue 4",
+        "type": "array",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedMultivalued5": {
+        "description": "Generic Unindexed Multivalue 5",
+        "isPersonal": false,
+        "items": {
+          "type": "string"
+        },
+        "title": "Generic Unindexed Multivalue 5",
+        "type": "array",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedDate1": {
+        "description": "Generic Indexed Date 1",
+        "isPersonal": false,
+        "title": "Generic Indexed Date 1",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedDate2": {
+        "description": "Generic Indexed Date 2",
+        "isPersonal": false,
+        "title": "Generic Indexed Date 2",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedDate3": {
+        "description": "Generic Indexed Date 3",
+        "isPersonal": false,
+        "title": "Generic Indexed Date 3",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedDate4": {
+        "description": "Generic Indexed Date 4",
+        "isPersonal": false,
+        "title": "Generic Indexed Date 4",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedDate5": {
+        "description": "Generic Indexed Date 5",
+        "isPersonal": false,
+        "title": "Generic Indexed Date 5",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedDate1": {
+        "description": "Generic Unindexed Date 1",
+        "isPersonal": false,
+        "title": "Generic Unindexed Date 1",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedDate2": {
+        "description": "Generic Unindexed Date 2",
+        "isPersonal": false,
+        "title": "Generic Unindexed Date 2",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedDate3": {
+        "description": "Generic Unindexed Date 3",
+        "isPersonal": false,
+        "title": "Generic Unindexed Date 3",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedDate4": {
+        "description": "Generic Unindexed Date 4",
+        "isPersonal": false,
+        "title": "Generic Unindexed Date 4",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedDate5": {
+        "description": "Generic Unindexed Date 5",
+        "isPersonal": false,
+        "title": "Generic Unindexed Date 5",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedInteger1": {
+        "description": "Generic Indexed Integer 1",
+        "isPersonal": false,
+        "title": "Generic Indexed Integer 1",
+        "type": "number",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedInteger2": {
+        "description": "Generic Indexed Integer 2",
+        "isPersonal": false,
+        "title": "Generic Indexed Integer 2",
+        "type": "number",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedInteger3": {
+        "description": "Generic Indexed Integer 3",
+        "isPersonal": false,
+        "title": "Generic Indexed Integer 3",
+        "type": "number",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedInteger4": {
+        "description": "Generic Indexed Integer 4",
+        "isPersonal": false,
+        "title": "Generic Indexed Integer 4",
+        "type": "number",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frIndexedInteger5": {
+        "description": "Generic Indexed Integer 5",
+        "isPersonal": false,
+        "title": "Generic Indexed Integer 5",
+        "type": "number",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedInteger1": {
+        "description": "Generic Unindexed Integer 1",
+        "isPersonal": false,
+        "title": "Generic Unindexed Integer 1",
+        "type": "number",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedInteger2": {
+        "description": "Generic Unindexed Integer 2",
+        "isPersonal": false,
+        "title": "Generic Unindexed Integer 2",
+        "type": "number",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedInteger3": {
+        "description": "Generic Unindexed Integer 3",
+        "isPersonal": false,
+        "title": "Generic Unindexed Integer 3",
+        "type": "number",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedInteger4": {
+        "description": "Generic Unindexed Integer 4",
+        "isPersonal": false,
+        "title": "Generic Unindexed Integer 4",
+        "type": "number",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedInteger5": {
+        "description": "Generic Unindexed Integer 5",
+        "isPersonal": false,
+        "title": "Generic Unindexed Integer 5",
+        "type": "number",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "aliasList": {
+        "description": "List of identity aliases used primarily to record social IdP subjects for this user",
+        "isVirtual": false,
+        "items": {
+          "title": "User Alias Names Items",
+          "type": "string"
+        },
+        "returnByDefault": false,
+        "searchable": false,
+        "title": "User Alias Names List",
+        "type": "array",
+        "userEditable": true,
+        "viewable": false
+      },
+      "frUnindexedString1": {
+        "deleteQueryConfig": false,
+        "description": "Companies the user is PSC of",
+        "isPersonal": false,
+        "isVirtual": false,
+        "searchable": false,
+        "title": "PSC companies",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedString2": {
+        "deleteQueryConfig": false,
+        "description": "Companies the user is officer of",
+        "isPersonal": false,
+        "isVirtual": false,
+        "searchable": false,
+        "title": "Officer companies",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "isPresenterOf": {
+        "description": null,
+        "items": {
+          "properties": {
+            "_ref": {
+              "type": "string"
+            },
+            "_refProperties": {
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "required": false,
+                  "propName": "_id"
+                },
+                "permissionFiling": {
+                  "label": "File Financial Statments ",
+                  "type": "string",
+                  "required": false,
+                  "propName": "permissionFiling"
+                },
+                "permissionAdmin": {
+                  "label": "Administer the Company",
+                  "type": "string",
+                  "required": false,
+                  "propName": "permissionAdmin"
+                },
+                "permissionUpdate": {
+                  "label": "Update company details",
+                  "type": "string",
+                  "required": false,
+                  "propName": "permissionUpdate"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "resourceCollection": [
+            {
+              "label": "Company",
+              "notify": false,
+              "path": "managed/Company",
+              "query": {
+                "fields": [
+                  "name",
+                  "number",
+                  "authCode",
+                  "type",
+                  "status"
+                ],
+                "queryFilter": "true",
+                "sortKeys": []
+              }
+            }
+          ],
+          "reversePropertyName": "presenters",
+          "reverseRelationship": true,
+          "type": "relationship",
+          "validate": false
+        },
+        "minLength": null,
+        "notifySelf": false,
+        "pattern": null,
+        "policies": [],
+        "returnByDefault": false,
+        "searchable": false,
+        "title": "Ispresenterof",
+        "type": "array",
+        "userEditable": false,
+        "viewable": true
+      },
+      "frUnindexedString3": {
+        "deleteQueryConfig": false,
+        "description": "Companies the user is presenter for",
+        "isPersonal": false,
+        "isVirtual": false,
+        "searchable": false,
+        "title": "Presenter companies",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      }
+    },
+    "order": [
+      "_id",
+      "userName",
+      "password",
+      "givenName",
+      "cn",
+      "sn",
+      "mail",
+      "description",
+      "accountStatus",
+      "telephoneNumber",
+      "postalAddress",
+      "city",
+      "postalCode",
+      "country",
+      "stateProvince",
+      "roles",
+      "manager",
+      "authzRoles",
+      "reports",
+      "effectiveRoles",
+      "effectiveAssignments",
+      "lastSync",
+      "kbaInfo",
+      "preferences",
+      "consentedMappings",
+      "frIndexedString1",
+      "frIndexedString2",
+      "frIndexedString3",
+      "frIndexedString4",
+      "frIndexedString5",
+      "frUnindexedString4",
+      "frUnindexedString5",
+      "frIndexedMultivalued1",
+      "frIndexedMultivalued2",
+      "frIndexedMultivalued3",
+      "frIndexedMultivalued4",
+      "frIndexedMultivalued5",
+      "frUnindexedMultivalued1",
+      "frUnindexedMultivalued2",
+      "frUnindexedMultivalued3",
+      "frUnindexedMultivalued4",
+      "frUnindexedMultivalued5",
+      "frIndexedDate1",
+      "frIndexedDate2",
+      "frIndexedDate3",
+      "frIndexedDate4",
+      "frIndexedDate5",
+      "frUnindexedDate1",
+      "frUnindexedDate2",
+      "frUnindexedDate3",
+      "frUnindexedDate4",
+      "frUnindexedDate5",
+      "frIndexedInteger1",
+      "frIndexedInteger2",
+      "frIndexedInteger3",
+      "frIndexedInteger4",
+      "frIndexedInteger5",
+      "frUnindexedInteger1",
+      "frUnindexedInteger2",
+      "frUnindexedInteger3",
+      "frUnindexedInteger4",
+      "frUnindexedInteger5",
+      "aliasList",
+      "frUnindexedString1",
+      "frUnindexedString2",
+      "isPresenterOf",
+      "frUnindexedString3"
+    ],
+    "required": [
+      "userName",
+      "givenName",
+      "sn",
+      "mail"
+    ]
+  },
+  "type": "Managed Object"
 }
