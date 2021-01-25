@@ -5,7 +5,7 @@ describe('get-access-token', () => {
   const getAccessToken = require('./get-access-token')
 
   const mockValues = {
-    fricUrl: 'https://fric-test.forgerock.com',
+    fidcUrl: 'https://fidc-test.forgerock.com',
     username: 'test-user',
     password: 'SecurePassword123',
     adminClientId: 'ForgeRockAdminClient',
@@ -30,7 +30,7 @@ describe('get-access-token', () => {
         json: () => Promise.resolve({ access_token: mockValues.accessToken })
       })
     )
-    process.env.FRIC_URL = mockValues.fricUrl
+    process.env.FIDC_URL = mockValues.fidcUrl
   })
 
   afterEach(() => {
@@ -38,15 +38,15 @@ describe('get-access-token', () => {
   })
 
   it('should reject if missing FRIC environment variable', async () => {
-    delete process.env.FRIC_URL
+    delete process.env.FIDC_URL
     expect.assertions(1)
     await expect(getAccessToken(mockValues)).rejects.toEqual(
-      new Error('Missing FRIC_URL environment variable')
+      new Error('Missing FIDC_URL environment variable')
     )
   })
 
   it('should call API with the correct options', async () => {
-    const expectedUrl = `${mockValues.fricUrl}/am/oauth2${mockValues.realm}/access_token?auth_chain=PasswordGrant`
+    const expectedUrl = `${mockValues.fidcUrl}/am/oauth2${mockValues.realm}/access_token?auth_chain=PasswordGrant`
     const expectedApiOptions = {
       method: 'post',
       body: expectedBody
@@ -61,7 +61,7 @@ describe('get-access-token', () => {
   it('should change the realm if the realm argument is set', async () => {
     const updatedRealm = '/realms/root/realms/beta'
 
-    const expectedUrl = `${mockValues.fricUrl}/am/oauth2${updatedRealm}/access_token?auth_chain=PasswordGrant`
+    const expectedUrl = `${mockValues.fidcUrl}/am/oauth2${updatedRealm}/access_token?auth_chain=PasswordGrant`
 
     const expectedApiOptions = {
       method: 'post',

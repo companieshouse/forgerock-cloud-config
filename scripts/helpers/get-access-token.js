@@ -4,14 +4,14 @@ const getAccessToken = async (argv) => {
   const { username, password, adminClientId, adminClientSecret, realm } = argv
 
   // Check environment variables
-  const { FRIC_URL } = process.env
+  const { FIDC_URL } = process.env
 
-  if (!FRIC_URL) {
-    return Promise.reject(new Error('Missing FRIC_URL environment variable'))
+  if (!FIDC_URL) {
+    return Promise.reject(new Error('Missing FIDC_URL environment variable'))
   }
 
   // Get access token
-  const requestUrl = `${FRIC_URL}/am/oauth2${realm}/access_token?auth_chain=PasswordGrant`
+  const requestUrl = `${FIDC_URL}/am/oauth2${realm}/access_token?auth_chain=PasswordGrant`
   const body = new URLSearchParams()
   body.append('username', username)
   body.append('password', password)

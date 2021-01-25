@@ -5,10 +5,10 @@ const getAccessToken = require('../helpers/get-access-token')
 
 const updateManagedObjects = async (argv) => {
   // Check environment variables
-  const { FRIC_URL, PHASE = '0' } = process.env
+  const { FIDC_URL, PHASE = '0' } = process.env
 
-  if (!FRIC_URL) {
-    console.error('Missing FRIC_URL environment variable')
+  if (!FIDC_URL) {
+    console.error('Missing FIDC_URL environment variable')
     return process.exit(1)
   }
 
@@ -29,7 +29,7 @@ const updateManagedObjects = async (argv) => {
       .map((filename) => require(path.join(dir, filename))) // Map JSON file content to an array
 
     // Update all managed objects
-    const requestUrl = `${FRIC_URL}/openidm/config/managed`
+    const requestUrl = `${FIDC_URL}/openidm/config/managed`
 
     const requestOptions = {
       method: 'put',

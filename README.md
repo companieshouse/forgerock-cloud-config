@@ -14,7 +14,7 @@ The following need to be installed and configured for local use:
 
 | Name     | Description                                        | Default Value | Required           |
 | -------- | -------------------------------------------------- | ------------- | ------------------ |
-| FRIC_URL | ForgeRock Identity Cloud URL.                      | N/A           | :white_check_mark: |
+| FIDC_URL | ForgeRock Identity Cloud URL.                      | N/A           | :white_check_mark: |
 | PHASE    | Phase number (0-4). Controls which config is used. | 0             |                    |
 
 ### Install Dependencies

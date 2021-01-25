@@ -13,7 +13,7 @@ describe('update-managed-objects', () => {
   const updateManagedObject = require('./update-managed-objects')
 
   const mockValues = {
-    fricUrl: 'https://fric-test.forgerock.com',
+    fidcUrl: 'https://fidc-test.forgerock.com',
     accessToken: 'forgerock-token'
   }
 
@@ -74,7 +74,7 @@ describe('update-managed-objects', () => {
     type: 'Managed Object'
   }
 
-  const expectedUrl = `${mockValues.fricUrl}/openidm/config/managed`
+  const expectedUrl = `${mockValues.fidcUrl}/openidm/config/managed`
 
   beforeEach(() => {
     fetch.mockImplementation(() =>
@@ -86,7 +86,7 @@ describe('update-managed-objects', () => {
     getAccessToken.mockImplementation(() =>
       Promise.resolve(mockValues.accessToken)
     )
-    process.env.FRIC_URL = mockValues.fricUrl
+    process.env.FIDC_URL = mockValues.fidcUrl
     delete process.env.PHASE
     fs.readdirSync.mockReturnValue(['user.json'])
     jest.mock(mockPhase0ConfigFile, () => mockPhase0Config, { virtual: true })
@@ -107,10 +107,10 @@ describe('update-managed-objects', () => {
   })
 
   it('should error if missing FRIC environment variable', async () => {
-    delete process.env.FRIC_URL
+    delete process.env.FIDC_URL
     await updateManagedObject(mockValues)
     expect(console.error).toHaveBeenCalledWith(
-      'Missing FRIC_URL environment variable'
+      'Missing FIDC_URL environment variable'
     )
     expect(process.exit).toHaveBeenCalledWith(1)
   })
