@@ -7,8 +7,7 @@ const getAccessToken = async(argv) => {
   const { FRIC_URL } = process.env;
 
   if (!FRIC_URL) {
-    console.error("Missing FRIC_URL environment variable");
-    return process.exit(1);
+    return Promise.reject(new Error("Missing FRIC_URL environment variable"));
   }
 
   // Get access token
@@ -32,10 +31,9 @@ const getAccessToken = async(argv) => {
       throw new Error(`${response.status}: ${response.statusText}`);
     }
     const { access_token } = await response.json();
-    console.log(access_token)
+    return Promise.resolve(access_token);
   } catch (error) {
-    console.error(error.message);
-    process.exit(1);
+    return Promise.reject(error);
   }
 };
 

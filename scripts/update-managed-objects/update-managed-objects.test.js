@@ -4,6 +4,8 @@ describe("update-managed-objects", () => {
   jest.mock("fs");
   const fs = require("fs");
   const path = require("path");
+  jest.mock("../helpers/get-access-token");
+  const getAccessToken = require("../helpers/get-access-token");
   jest.spyOn(console, "log").mockImplementation(() => {});
   jest.spyOn(console, "error").mockImplementation(() => {});
   jest.spyOn(process, "exit").mockImplementation(() => {});
@@ -12,7 +14,7 @@ describe("update-managed-objects", () => {
 
   const mockValues = {
     fricUrl: "https://fric-test.forgerock.com",
-    token: "forgerock-token",
+    accessToken: "forgerock-token",
   };
 
   const mockPhase0ConfigFile = path.resolve(
@@ -81,6 +83,7 @@ describe("update-managed-objects", () => {
         statusText: "OK"
       })
     );
+    getAccessToken.mockImplementation(() => Promise.resolve(mockValues.accessToken))
     process.env.FRIC_URL = mockValues.fricUrl;
     delete process.env.PHASE;
     fs.readdirSync.mockReturnValue(["user.json"]);
@@ -117,12 +120,20 @@ describe("update-managed-objects", () => {
     );
     expect(process.exit).toHaveBeenCalledWith(1);
   });
+  
+  it("should error if getAccessToken functions fails", async() => {
+    const errorMessage = "Invalid user";
+    getAccessToken.mockImplementation(() => Promise.reject(new Error(errorMessage)))
+    await updateManagedObject(mockValues);
+    expect(console.error).toHaveBeenCalledWith(errorMessage);
+    expect(process.exit).toHaveBeenCalledWith(1);
+  });
 
   it("should call API with phase 0 config by default", async() => {
     const expectedApiOptions = {
       method: "put",
       headers: {
-        Authorization: `Bearer ${mockValues.token}`,
+        Authorization: `Bearer ${mockValues.accessToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -138,7 +149,7 @@ describe("update-managed-objects", () => {
     const expectedApiOptions = {
       method: "put",
       headers: {
-        Authorization: `Bearer ${mockValues.token}`,
+        Authorization: `Bearer ${mockValues.accessToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

@@ -8,9 +8,18 @@ const argv = yargs
   .version(false)
   .help("h")
   .alias("h", "help")
-  .demandOption(["t"])
-  .alias("t", "token")
-  .describe("t", "Access Token")
+  .alias("u", "username")
+  .alias("p", "password")
+  .alias("a", "adminClientId")
+  .alias("s", "adminClientSecret")
+  .alias("r", "realm")
+  .default("r", "/realms/root/realms/alpha")
+  .describe("u", "Username")
+  .describe("p", "Password")
+  .describe("a", "Admin Client ID")
+  .describe("s", "Admin Client Secret")
+  .describe("r", "Realm")
+  .demandOption(["u", "p", "a", "s"])
   .command({
     command: "$0",
     desc: "default",

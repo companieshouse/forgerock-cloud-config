@@ -1,9 +1,6 @@
 describe("get-access-token", () => {
   jest.mock("node-fetch");
   const fetch = require("node-fetch");
-  jest.spyOn(console, "log").mockImplementation(() => {});
-  jest.spyOn(console, "error").mockImplementation(() => {});
-  jest.spyOn(process, "exit").mockImplementation(() => {});
 
   const getAccessToken = require("./get-access-token");
 
@@ -14,6 +11,7 @@ describe("get-access-token", () => {
     adminClientId: "ForgeRockAdminClient",
     adminClientSecret: "SecureClientSecret123",
     realm: "/realms/root/realms/alpha",
+    accessToken: "abcd-1234"
   };
 
   const expectedBody = new URLSearchParams();
@@ -29,7 +27,7 @@ describe("get-access-token", () => {
       Promise.resolve({
         status: 200,
         statusText: 'OK',
-        json: () => Promise.resolve({ access_token: "abcd-1234" }),
+        json: () => Promise.resolve({ access_token: mockValues.accessToken }),
       })
     );
     process.env.FRIC_URL = mockValues.fricUrl;
@@ -37,24 +35,12 @@ describe("get-access-token", () => {
 
   afterEach(() => {
     jest.resetAllMocks();
-    console.log.mockClear();
-    console.error.mockClear();
-    process.exit.mockClear();
   });
 
-  afterAll(() => {
-    console.log.mockRestore();
-    console.error.mockRestore();
-    process.exit.mockRestore();
-  });
-
-  it("should error if missing FRIC environment variable", async() => {
+  it("should reject if missing FRIC environment variable", async() => {
     delete process.env.FRIC_URL;
-    await getAccessToken(mockValues);
-    expect(console.error).toHaveBeenCalledWith(
-      "Missing FRIC_URL environment variable"
-    );
-    expect(process.exit).toHaveBeenCalledWith(1);
+    expect.assertions(1);
+    await expect(getAccessToken(mockValues)).rejects.toEqual(new Error("Missing FRIC_URL environment variable"));
   });
 
   it("should call API with the correct options", async() => {
@@ -63,7 +49,8 @@ describe("get-access-token", () => {
       method: "post",
       body: expectedBody,
     };
-    await getAccessToken(mockValues);
+    expect.assertions(2);
+    await expect(getAccessToken(mockValues)).resolves.toEqual(mockValues.accessToken);
     expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions);
   });
 
@@ -79,27 +66,24 @@ describe("get-access-token", () => {
 
     mockValues.realm = updatedRealm;
 
-    await getAccessToken(mockValues);
+    expect.assertions(2);
+    await expect(getAccessToken(mockValues)).resolves.toEqual(mockValues.accessToken);
     expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions);
   });
 
-  it("should error if API request fails", async () => {
+  it("should reject if API request fails", async () => {
     const errorMessage = "testing request failed";
     fetch.mockImplementation(() => Promise.reject(new Error(errorMessage)));
 
-    await getAccessToken(mockValues);
-    expect(console.error).toHaveBeenCalledWith(errorMessage);
-    expect(process.exit).toHaveBeenCalledWith(1);
+    await expect(getAccessToken(mockValues)).rejects.toEqual(new Error(errorMessage));
   });
   
-  it("should error if API response is not 200", async () => {
+  it("should reject if API response is not 200", async () => {
     fetch.mockImplementation(() => Promise.resolve({
       status: 401,
       statusText: 'Unauthorized',
     }));
 
-    await getAccessToken(mockValues);
-    expect(console.error).toHaveBeenCalledWith("401: Unauthorized");
-    expect(process.exit).toHaveBeenCalledWith(1);
+    await expect(getAccessToken(mockValues)).rejects.toEqual(new Error("401: Unauthorized"));
   });
 });

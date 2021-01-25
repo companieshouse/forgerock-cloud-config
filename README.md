@@ -25,13 +25,6 @@ The following need to be installed and configured for local use:
 
 All scripts can also be ran locally with the correct arguments and environment variables.
 
-### Get Access Token
-
-Calls the Access Management OAuth2 endpoint to get an access token of a user. This token is used for subsequent API calls.
-
-**Help Message:**
-`get-access-token -h`
-
 ### Update Managed Objects
 
 Calls the Identity Management endpoint to get update Managed Objects. The configuration is store in JSON files in the `config/managed-objects` directory.
