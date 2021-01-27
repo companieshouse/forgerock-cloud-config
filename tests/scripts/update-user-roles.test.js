@@ -4,13 +4,13 @@ describe('update-user-roles', () => {
   jest.mock('fs')
   const fs = require('fs')
   const path = require('path')
-  jest.mock('../helpers/get-access-token')
-  const getAccessToken = require('../helpers/get-access-token')
+  jest.mock('../../helpers/get-access-token')
+  const getAccessToken = require('../../helpers/get-access-token')
   jest.spyOn(console, 'log').mockImplementation(() => {})
   jest.spyOn(console, 'error').mockImplementation(() => {})
   jest.spyOn(process, 'exit').mockImplementation(() => {})
 
-  const updateUserRoles = require('./update-user-roles')
+  const updateUserRoles = require('../../scripts/update-user-roles/update-user-roles')
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
