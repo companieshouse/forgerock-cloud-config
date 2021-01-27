@@ -14,10 +14,11 @@ The following need to be installed/configured for local use:
 
 ### Environment Variables
 
-| Name     | Description                                        | Default Value | Required           |
-| -------- | -------------------------------------------------- | ------------- | ------------------ |
-| FIDC_URL | ForgeRock Identity Cloud URL.                      | N/A           | :white_check_mark: |
-| PHASE    | Phase number (0-4). Controls which config is used. | 0             |                    |
+| Name             | Description                                                     | Default Value | Required           |
+| ---------------- | --------------------------------------------------------------- | ------------- | ------------------ |
+| FIDC_URL         | ForgeRock Identity Cloud URL.                                   | N/A           | :white_check_mark: |
+| FIDC_COOKIE_NAME | ForgeRock Identity Cloud Cookie Name(found in tenant settings). | N/A           | :white_check_mark: |
+| PHASE            | Phase number (0-4). Controls which config is used.              | 0             |                    |
 
 ### Install Dependencies
 
@@ -35,3 +36,12 @@ Calls the Identity Management endpoint to get update Managed Objects. The config
 
 **Help Message:**
 `update-managed-objects -h`
+
+### Update Auth Trees
+
+Calls the Access Management endpoint to get update Authentication Trees. The configuration is store in JSON files in the `config/auth-trees` directory.
+
+**This command will update all Managed Objects and delete any not present in the directory.**
+
+**Help Message:**
+`update-auth-trees -h`
