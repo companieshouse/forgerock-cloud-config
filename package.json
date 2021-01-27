@@ -1,0 +1,28 @@
+{
+  "name": "forgerock-cloud-config",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "lint": "standard",
+    "test": "jest"
+  },
+  "bin": {
+    "update-managed-objects": "./scripts/update-managed-objects/index.js",
+    "update-user-roles": "./scripts/update-user-roles/index.js"
+  },
+  "author": "Amido",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^2.6.1",
+    "yargs": "^16.2.0"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "standard": "^16.0.3"
+  },
+  "standard": {
+    "env": [
+      "jest"
+    ]
+  }
+}

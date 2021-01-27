@@ -1,0 +1,128 @@
+{
+  "iconClass": "fa fa-database",
+  "name": "Company",
+  "schema": {
+    "$schema": "http://forgerock.org/json-schema#",
+    "type": "object",
+    "title": "Company",
+    "description": "A company",
+    "icon": "fa-building",
+    "properties": {
+      "name": {
+        "searchable": true,
+        "title": "Company Name",
+        "type": "string",
+        "userEditable": true,
+        "viewable": true,
+        "description": "The name of the company",
+        "isVirtual": false,
+        "deleteQueryConfig": false
+      },
+      "presenters": {
+        "description": "Presenters are Users that are associated with a Company",
+        "items": {
+          "properties": {
+            "_ref": {
+              "type": "string"
+            },
+            "_refProperties": {
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "permissionFiling": {
+                  "label": "File Financial Statments ",
+                  "type": "string"
+                },
+                "permissionAdmin": {
+                  "label": "Administer the Company",
+                  "type": "string"
+                },
+                "permissionUpdate": {
+                  "label": "Update company details",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "resourceCollection": [
+            {
+              "label": "Alpha_user",
+              "notify": false,
+              "path": "managed/alpha_user",
+              "query": {
+                "fields": [
+                  "mail"
+                ],
+                "queryFilter": "true",
+                "sortKeys": []
+              }
+            }
+          ],
+          "reversePropertyName": "isPresenterOf",
+          "reverseRelationship": true,
+          "type": "relationship",
+          "validate": false,
+          "notifySelf": false
+        },
+        "returnByDefault": false,
+        "searchable": false,
+        "title": "Presenters",
+        "type": "array",
+        "userEditable": false,
+        "viewable": true,
+        "requiredByParent": false,
+        "isVirtual": false,
+        "referencedRelationshipFields": null,
+        "referencedObjectFields": null,
+        "deleteQueryConfig": false
+      },
+      "number": {
+        "title": "Company Number",
+        "type": "string",
+        "viewable": true,
+        "searchable": true,
+        "userEditable": true,
+        "description": "The unique number allocated to a company on incorporation",
+        "isVirtual": false,
+        "deleteQueryConfig": false
+      },
+      "type": {
+        "title": "Type",
+        "type": "string",
+        "viewable": true,
+        "searchable": true,
+        "userEditable": true
+      },
+      "status": {
+        "title": "Status",
+        "type": "string",
+        "viewable": true,
+        "searchable": true,
+        "userEditable": true
+      },
+      "authCode": {
+        "title": "Authentication Code",
+        "type": "string",
+        "viewable": true,
+        "searchable": true,
+        "userEditable": true
+      }
+    },
+    "order": [
+      "name",
+      "presenters",
+      "number",
+      "type",
+      "status",
+      "authCode"
+    ],
+    "required": [
+      "name",
+      "number"
+    ],
+    "mat-icon": null
+  },
+  "type": "Managed Object"
+}
