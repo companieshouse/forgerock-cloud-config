@@ -7,7 +7,8 @@
     "test": "jest"
   },
   "bin": {
-    "update-managed-objects": "./scripts/update-managed-objects/index.js"
+    "update-managed-objects": "./scripts/update-managed-objects/index.js",
+    "update-user-roles": "./scripts/update-user-roles/index.js"
   },
   "author": "Amido",
   "license": "ISC",
