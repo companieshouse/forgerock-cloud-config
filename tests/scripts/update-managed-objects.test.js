@@ -106,7 +106,7 @@ describe('update-managed-objects', () => {
     process.exit.mockRestore()
   })
 
-  it('should error if missing FRIC environment variable', async () => {
+  it('should error if missing FIDC environment variable', async () => {
     delete process.env.FIDC_URL
     await updateManagedObject(mockValues)
     expect(console.error).toHaveBeenCalledWith(
