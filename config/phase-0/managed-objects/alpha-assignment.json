@@ -38,18 +38,26 @@
               "description": "Assignment operation",
               "type": "string"
             },
-            "name": { "description": "Name", "type": "string" },
+            "name": {
+              "description": "Name",
+              "type": "string"
+            },
             "unassignmentOperation": {
               "description": "Unassignment operation",
               "type": "string"
             },
-            "value": { "description": "Value", "type": "string" }
+            "value": {
+              "description": "Value",
+              "type": "string"
+            }
           },
           "required": [],
           "title": "Assignment Attributes Items",
           "type": "object"
         },
-        "notifyRelationships": ["roles"],
+        "notifyRelationships": [
+          "roles"
+        ],
         "title": "Assignment Attributes",
         "type": "array",
         "viewable": true
@@ -63,14 +71,21 @@
       },
       "linkQualifiers": {
         "description": "Conditional link qualifiers to restrict this assignment to.",
-        "items": { "title": "Link Qualifiers Items", "type": "string" },
+        "items": {
+          "title": "Link Qualifiers Items",
+          "type": "string"
+        },
         "title": "Link Qualifiers",
         "type": "array",
         "viewable": true
       },
       "mapping": {
         "description": "The name of the mapping this assignment applies to",
-        "policies": [{ "policyId": "mapping-exists" }],
+        "policies": [
+          {
+            "policyId": "mapping-exists"
+          }
+        ],
         "searchable": true,
         "title": "Mapping",
         "type": "string",
@@ -109,7 +124,12 @@
               "label": "Role",
               "notify": true,
               "path": "managed/alpha_role",
-              "query": { "fields": ["name"], "queryFilter": "true" }
+              "query": {
+                "fields": [
+                  "name"
+                ],
+                "queryFilter": "true"
+              }
             }
           ],
           "reversePropertyName": "assignments",
@@ -125,7 +145,11 @@
         "viewable": true
       }
     },
-    "required": ["name", "description", "mapping"],
+    "required": [
+      "name",
+      "description",
+      "mapping"
+    ],
     "title": "Alpha realm - Assignment",
     "type": "object"
   },
