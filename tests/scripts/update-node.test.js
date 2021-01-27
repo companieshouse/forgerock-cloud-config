@@ -47,7 +47,7 @@ describe('update-auth-trees', () => {
         mockValues.fidcCookieHeader,
         mockValues.node
       )
-    ).rejects.toEqual(new Error('401: Unauthorized'))
+    ).rejects.toEqual(new Error(`${mockValues.node._id} 401: Unauthorized`))
   })
 
   it('should call the API with the correct options', async () => {

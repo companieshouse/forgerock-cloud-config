@@ -16,7 +16,7 @@ const updateNode = async (url, cookieHeader, node) => {
   }
   const { status, statusText } = await fetch(requestUrl, requestOptions)
   if (status > 299) {
-    throw new Error(`${status}: ${statusText}`)
+    throw new Error(`${node._id} ${status}: ${statusText}`)
   }
   return Promise.resolve()
 }
