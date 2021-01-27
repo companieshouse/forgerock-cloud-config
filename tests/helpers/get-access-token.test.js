@@ -2,7 +2,7 @@ describe('get-access-token', () => {
   jest.mock('node-fetch')
   const fetch = require('node-fetch')
 
-  const getAccessToken = require('./get-access-token')
+  const getAccessToken = require('../../helpers/get-access-token')
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',

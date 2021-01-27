@@ -4,13 +4,13 @@ describe('update-managed-objects', () => {
   jest.mock('fs')
   const fs = require('fs')
   const path = require('path')
-  jest.mock('../helpers/get-access-token')
-  const getAccessToken = require('../helpers/get-access-token')
+  jest.mock('../../helpers/get-access-token')
+  const getAccessToken = require('../../helpers/get-access-token')
   jest.spyOn(console, 'log').mockImplementation(() => {})
   jest.spyOn(console, 'error').mockImplementation(() => {})
   jest.spyOn(process, 'exit').mockImplementation(() => {})
 
-  const updateManagedObject = require('./update-managed-objects')
+  const updateManagedObject = require('../../scripts/update-managed-objects/update-managed-objects')
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
@@ -106,7 +106,7 @@ describe('update-managed-objects', () => {
     process.exit.mockRestore()
   })
 
-  it('should error if missing FRIC environment variable', async () => {
+  it('should error if missing FIDC environment variable', async () => {
     delete process.env.FIDC_URL
     await updateManagedObject(mockValues)
     expect(console.error).toHaveBeenCalledWith(

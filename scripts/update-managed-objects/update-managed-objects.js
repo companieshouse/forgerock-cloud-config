@@ -1,7 +1,7 @@
 const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
-const getAccessToken = require('../helpers/get-access-token')
+const getAccessToken = require('../../helpers/get-access-token')
 
 const updateManagedObjects = async (argv) => {
   // Check environment variables

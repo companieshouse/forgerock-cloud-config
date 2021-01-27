@@ -1,0 +1,132 @@
+{
+  "nodes": [
+    {
+      "_id": "566a0888-7029-4ebc-8786-18f5c645c7ca",
+      "nodeType": "InnerTreeEvaluatorNode",
+      "details": {
+        "tree": "ProgressiveProfile"
+      }
+    },
+    {
+      "_id": "cf1f549e-a917-4790-a301-007cb0b56f2c",
+      "nodeType": "IncrementLoginCountNode",
+      "details": {
+        "identityAttribute": "userName"
+      }
+    },
+    {
+      "_id": "2185e13b-6263-41ea-a865-834029f64816",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "outcomes": [
+          "ok",
+          "ko"
+        ],
+        "inputs": [
+          "*"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "script": "c72754b6-1bfe-41cf-8758-1b77ef0a1f42"
+      }
+    },
+    {
+      "_id": "9f6d20be-ca41-4c85-a36d-5802a1b1fcf0",
+      "nodeType": "ValidatedUsernameNode",
+      "details": {
+        "validateInput": false,
+        "usernameAttribute": "userName"
+      }
+    },
+    {
+      "_id": "cb11442d-e7e6-43e5-acf8-fb956e6d6ae7",
+      "nodeType": "ValidatedPasswordNode",
+      "details": {
+        "validateInput": false,
+        "passwordAttribute": "password"
+      }
+    },
+    {
+      "_id": "a82a578e-4efc-4faa-b032-c9815fd3950a",
+      "nodeType": "PageNode",
+      "details": {
+        "nodes": [
+          {
+            "_id": "9f6d20be-ca41-4c85-a36d-5802a1b1fcf0",
+            "nodeType": "ValidatedUsernameNode",
+            "displayName": "Platform Username"
+          },
+          {
+            "_id": "cb11442d-e7e6-43e5-acf8-fb956e6d6ae7",
+            "nodeType": "ValidatedPasswordNode",
+            "displayName": "Platform Password"
+          }
+        ],
+        "pageDescription": {
+          "en": "New here? <a href=\"#/service/Registration\">Create an account</a><br><a href=\"#/service/ForgottenUsername\">Forgot username?</a><a href=\"#/service/ResetPassword\"> Forgot password?</a>"
+        },
+        "pageHeader": {
+          "en": "Sign In"
+        }
+      }
+    },
+    {
+      "_id": "14ba2b76-babd-4635-8aff-acafbf040cdb",
+      "nodeType": "DataStoreDecisionNode",
+      "details": {}
+    }
+  ],
+  "tree": {
+    "_id": "LoginMFA",
+    "description": "Platform Login Tree",
+    "entryNodeId": "a82a578e-4efc-4faa-b032-c9815fd3950a",
+    "identityResource": "managed/alpha_user",
+    "staticNodes": {
+      "startNode": {},
+      "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {},
+      "e301438c-0bd0-429c-ab0c-66126501069a": {}
+    },
+    "uiConfig": {},
+    "nodes": {
+      "566a0888-7029-4ebc-8786-18f5c645c7ca": {
+        "connections": {
+          "false": "e301438c-0bd0-429c-ab0c-66126501069a",
+          "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+        },
+        "displayName": "Inner Tree Evaluator",
+        "nodeType": "InnerTreeEvaluatorNode"
+      },
+      "cf1f549e-a917-4790-a301-007cb0b56f2c": {
+        "connections": {
+          "outcome": "566a0888-7029-4ebc-8786-18f5c645c7ca"
+        },
+        "displayName": "Increment Login Count",
+        "nodeType": "IncrementLoginCountNode"
+      },
+      "2185e13b-6263-41ea-a865-834029f64816": {
+        "connections": {
+          "ko": "e301438c-0bd0-429c-ab0c-66126501069a",
+          "ok": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+        },
+        "displayName": "Notify Call",
+        "nodeType": "ScriptedDecisionNode"
+      },
+      "a82a578e-4efc-4faa-b032-c9815fd3950a": {
+        "connections": {
+          "outcome": "14ba2b76-babd-4635-8aff-acafbf040cdb"
+        },
+        "displayName": "Page Node",
+        "nodeType": "PageNode"
+      },
+      "14ba2b76-babd-4635-8aff-acafbf040cdb": {
+        "connections": {
+          "false": "e301438c-0bd0-429c-ab0c-66126501069a",
+          "true": "cf1f549e-a917-4790-a301-007cb0b56f2c"
+        },
+        "displayName": "Data Store Decision",
+        "nodeType": "DataStoreDecisionNode"
+      }
+    }
+  }
+}
