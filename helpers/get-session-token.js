@@ -1,7 +1,7 @@
 const fetch = require('node-fetch')
 
 const getSessionToken = async (argv) => {
-  const { username, password } = argv
+  const { username, password, realm } = argv
 
   // Check environment variables
   const { FIDC_URL } = process.env
@@ -11,7 +11,7 @@ const getSessionToken = async (argv) => {
   }
 
   // Get session token
-  const requestUrl = `${FIDC_URL}/am/json/authenticate`
+  const requestUrl = `${FIDC_URL}/am/json${realm}/authenticate`
 
   const topLevelRequestOptions = {
     method: 'post',
@@ -84,8 +84,7 @@ const getSessionToken = async (argv) => {
         `${sessionTokenResponse.status}: ${sessionTokenResponse.statusText}`
       )
     }
-    const { tokenId } = await sessionTokenResponse.json()
-    return Promise.resolve(tokenId)
+    return Promise.resolve(sessionTokenResponse.headers.get('set-cookie'))
   } catch (error) {
     return Promise.reject(error)
   }

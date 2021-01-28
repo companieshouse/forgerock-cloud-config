@@ -8,11 +8,12 @@ describe('get-session-token', () => {
     fidcUrl: 'https://fidc-test.forgerock.com',
     username: 'test-user',
     password: 'SecurePassword123',
+    realm: '/realms/root/realms/alpha',
     authId: 'auth-1234',
-    sessionToken: 'session-1234'
+    sessionToken: 'session=1234'
   }
 
-  const expectedUrl = `${mockValues.fidcUrl}/am/json/authenticate`
+  const expectedUrl = `${mockValues.fidcUrl}/am/json${mockValues.realm}/authenticate`
 
   const expectedTopLevelOptions = {
     method: 'post',
@@ -94,7 +95,9 @@ describe('get-session-token', () => {
         Promise.resolve({
           status: 200,
           statusText: 'OK',
-          json: () => Promise.resolve({ tokenId: mockValues.sessionToken })
+          headers: {
+            get: () => Promise.resolve(mockValues.sessionToken)
+          }
         })
       )
     await expect(getSessionToken(mockValues)).resolves.toEqual(
