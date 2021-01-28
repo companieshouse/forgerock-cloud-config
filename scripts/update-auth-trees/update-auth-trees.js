@@ -8,10 +8,10 @@ const updateAuthTrees = async (argv) => {
   const { realm } = argv
 
   // Check environment variables
-  const { FIDC_URL, FIDC_COOKIE_NAME, PHASE = '0' } = process.env
+  const { FIDC_URL, PHASE = '0' } = process.env
 
-  if (!FIDC_URL || !FIDC_COOKIE_NAME) {
-    console.error('Missing required environment variable(s)')
+  if (!FIDC_URL) {
+    console.error('Missing FIDC_URL environment variable')
     return process.exit(1)
   }
 
@@ -38,10 +38,9 @@ const updateAuthTrees = async (argv) => {
           return Promise.reject(new Error('Missing _id in auth tree config'))
         }
         const baseUrl = `${FIDC_URL}/am/json${realm}/realm-config/authentication/authenticationtrees`
-        const cookieHeader = `${FIDC_COOKIE_NAME}=${sessionToken}`
         await Promise.all(
           authTreeFile.nodes.map(async (node) => {
-            return await updateNode(baseUrl, cookieHeader, node)
+            return await updateNode(baseUrl, sessionToken, node)
           })
         )
         console.log('nodes updated')
@@ -52,7 +51,7 @@ const updateAuthTrees = async (argv) => {
           headers: {
             'content-type': 'application/json',
             'x-requested-with': 'ForgeRock CREST.js',
-            cookie: cookieHeader
+            cookie: sessionToken
           }
         }
         const { status, statusText } = await fetch(requestUrl, requestOptions)

@@ -16,8 +16,7 @@ describe('update-auth-trees', () => {
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
-    fidcCookieName: 'frcookie',
-    sessionToken: 'forgerock-token',
+    sessionToken: 'session=1234',
     realm: '/realms/root/realms/alpha'
   }
 
@@ -108,7 +107,6 @@ describe('update-auth-trees', () => {
     )
     updateNode.mockImplementation(() => Promise.resolve())
     process.env.FIDC_URL = mockValues.fidcUrl
-    process.env.FIDC_COOKIE_NAME = mockValues.fidcCookieName
     delete process.env.PHASE
     fs.readdirSync.mockReturnValue(['login-tree.json'])
     jest.mock(mockPhase0ConfigFile, () => mockPhase0Config, { virtual: true })
@@ -134,17 +132,7 @@ describe('update-auth-trees', () => {
     delete process.env.FIDC_URL
     await updateAuthTrees(mockValues)
     expect(console.error).toHaveBeenCalledWith(
-      'Missing required environment variable(s)'
-    )
-    expect(process.exit).toHaveBeenCalledWith(1)
-  })
-
-  it('should error if missing FIDC_COOKIE_NAME environment variable', async () => {
-    expect.assertions(2)
-    delete process.env.FIDC_COOKIE_NAME
-    await updateAuthTrees(mockValues)
-    expect(console.error).toHaveBeenCalledWith(
-      'Missing required environment variable(s)'
+      'Missing FIDC_URL environment variable'
     )
     expect(process.exit).toHaveBeenCalledWith(1)
   })
@@ -177,7 +165,7 @@ describe('update-auth-trees', () => {
       headers: {
         'content-type': 'application/json',
         'x-requested-with': 'ForgeRock CREST.js',
-        cookie: `${mockValues.fidcCookieName}=${mockValues.sessionToken}`
+        cookie: mockValues.sessionToken
       },
       body: JSON.stringify(mockPhase0Config.tree)
     }
@@ -198,7 +186,7 @@ describe('update-auth-trees', () => {
       headers: {
         'content-type': 'application/json',
         'x-requested-with': 'ForgeRock CREST.js',
-        cookie: `${mockValues.fidcCookieName}=${mockValues.sessionToken}`
+        cookie: mockValues.sessionToken
       },
       body: JSON.stringify(mockPhase1Config.tree)
     }
@@ -217,7 +205,7 @@ describe('update-auth-trees', () => {
       headers: {
         'content-type': 'application/json',
         'x-requested-with': 'ForgeRock CREST.js',
-        cookie: `${mockValues.fidcCookieName}=${mockValues.sessionToken}`
+        cookie: mockValues.sessionToken
       },
       body: JSON.stringify(mockPhase0Config.tree)
     }
