@@ -173,7 +173,10 @@
         "type": "string",
         "usageDescription": null,
         "userEditable": true,
-        "viewable": true
+        "viewable": true,
+        "searchable": false,
+        "isVirtual": false,
+        "deleteQueryConfig": false
       },
       "postalAddress": {
         "description": "Address 1",
@@ -639,17 +642,53 @@
         "userEditable": true,
         "viewable": true
       },
+      "frUnindexedString1": {
+        "deleteQueryConfig": false,
+        "description": "Generic Unindexed String 1",
+        "isPersonal": false,
+        "isVirtual": false,
+        "searchable": false,
+        "title": "Generic Unindexed String 1",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedString2": {
+        "deleteQueryConfig": false,
+        "description": "Generic Unindexed String 2",
+        "isPersonal": false,
+        "isVirtual": false,
+        "searchable": false,
+        "title": "Generic Unindexed String 2",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
+      "frUnindexedString3": {
+        "deleteQueryConfig": false,
+        "description": "Generic Unindexed String 3",
+        "isPersonal": false,
+        "isVirtual": false,
+        "searchable": false,
+        "title": "Generic Unindexed String 3",
+        "type": "string",
+        "usageDescription": null,
+        "userEditable": true,
+        "viewable": true
+      },
       "frUnindexedString4": {
+        "deleteQueryConfig": false,
         "description": "Generic Unindexed String 4",
         "isPersonal": false,
+        "isVirtual": false,
+        "searchable": false,
         "title": "initCode",
         "type": "string",
         "usageDescription": null,
         "userEditable": true,
-        "viewable": true,
-        "searchable": false,
-        "isVirtual": false,
-        "deleteQueryConfig": false
+        "viewable": true
       },
       "frUnindexedString5": {
         "description": "Generic Unindexed String 5",
@@ -974,38 +1013,24 @@
         "userEditable": true,
         "viewable": false
       },
-      "frUnindexedString1": {
-        "deleteQueryConfig": false,
-        "description": "Companies the user is PSC of",
-        "isPersonal": false,
-        "isVirtual": false,
+      "isAuthorisedUser": {
+        "title": "Authorised User",
+        "viewable": true,
         "searchable": false,
-        "title": "PSC companies",
-        "type": "string",
-        "usageDescription": null,
-        "userEditable": true,
-        "viewable": true
-      },
-      "frUnindexedString2": {
-        "deleteQueryConfig": false,
-        "description": "Companies the user is officer of",
-        "isPersonal": false,
-        "isVirtual": false,
-        "searchable": false,
-        "title": "Officer companies",
-        "type": "string",
-        "usageDescription": null,
-        "userEditable": true,
-        "viewable": true
-      },
-      "isPresenterOf": {
-        "description": null,
+        "userEditable": false,
+        "returnByDefault": false,
+        "type": "array",
         "items": {
+          "type": "relationship",
+          "reverseRelationship": true,
+          "reversePropertyName": "hasAuthorisedUser",
+          "validate": false,
           "properties": {
             "_ref": {
               "type": "string"
             },
             "_refProperties": {
+              "type": "object",
               "properties": {
                 "_id": {
                   "type": "string",
@@ -1013,7 +1038,7 @@
                   "propName": "_id"
                 },
                 "permissionFiling": {
-                  "label": "File Financial Statments ",
+                  "label": "File Financial Statments",
                   "type": "string",
                   "required": false,
                   "propName": "permissionFiling"
@@ -1030,55 +1055,32 @@
                   "required": false,
                   "propName": "permissionUpdate"
                 }
-              },
-              "type": "object"
+              }
             }
           },
           "resourceCollection": [
             {
-              "label": "Company",
-              "notify": false,
               "path": "managed/Company",
+              "label": "Company",
               "query": {
+                "queryFilter": "true",
                 "fields": [
                   "name",
-                  "number",
-                  "authCode",
-                  "type",
-                  "status"
+                  "number"
                 ],
-                "queryFilter": "true",
                 "sortKeys": []
-              }
+              },
+              "notify": false
             }
           ],
-          "reversePropertyName": "presenters",
-          "reverseRelationship": true,
-          "type": "relationship",
-          "validate": false
+          "notifySelf": false
         },
-        "minLength": null,
-        "notifySelf": false,
-        "pattern": null,
-        "policies": [],
-        "returnByDefault": false,
-        "searchable": false,
-        "title": "Ispresenterof",
-        "type": "array",
-        "userEditable": false,
-        "viewable": true
-      },
-      "frUnindexedString3": {
-        "deleteQueryConfig": false,
-        "description": "Companies the user is presenter for",
-        "isPersonal": false,
+        "description": "Authorised Users are Users that are associated with a Company",
+        "requiredByParent": false,
         "isVirtual": false,
-        "searchable": false,
-        "title": "Presenter companies",
-        "type": "string",
-        "usageDescription": null,
-        "userEditable": true,
-        "viewable": true
+        "referencedRelationshipFields": null,
+        "referencedObjectFields": null,
+        "deleteQueryConfig": false
       }
     },
     "order": [
@@ -1112,6 +1114,9 @@
       "frIndexedString3",
       "frIndexedString4",
       "frIndexedString5",
+      "frUnindexedString1",
+      "frUnindexedString2",
+      "frUnindexedString3",
       "frUnindexedString4",
       "frUnindexedString5",
       "frIndexedMultivalued1",
@@ -1145,10 +1150,7 @@
       "frUnindexedInteger4",
       "frUnindexedInteger5",
       "aliasList",
-      "frUnindexedString1",
-      "frUnindexedString2",
-      "isPresenterOf",
-      "frUnindexedString3"
+      "isAuthorisedUser"
     ],
     "required": [
       "userName",
