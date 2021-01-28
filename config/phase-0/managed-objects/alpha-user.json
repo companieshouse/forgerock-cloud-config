@@ -1013,8 +1013,8 @@
         "userEditable": true,
         "viewable": false
       },
-      "isAuthorisedUser": {
-        "title": "Authorised User",
+      "isAuthorisedUserOf": {
+        "title": "Authorised User Of",
         "viewable": true,
         "searchable": false,
         "userEditable": false,
@@ -1023,7 +1023,7 @@
         "items": {
           "type": "relationship",
           "reverseRelationship": true,
-          "reversePropertyName": "hasAuthorisedUser",
+          "reversePropertyName": "authorisedUsers",
           "validate": false,
           "properties": {
             "_ref": {
@@ -1150,7 +1150,7 @@
       "frUnindexedInteger4",
       "frUnindexedInteger5",
       "aliasList",
-      "isAuthorisedUser"
+      "isAuthorisedUserOf"
     ],
     "required": [
       "userName",

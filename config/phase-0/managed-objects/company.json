@@ -49,7 +49,7 @@
         "userEditable": true,
         "viewable": true
       },
-      "hasAuthorisedUser": {
+      "authorisedUsers": {
         "description": "Authorised Users are Users that are associated with a Company",
         "title": "Has Authorised User",
         "viewable": true,
@@ -62,7 +62,7 @@
         "items": {
           "type": "relationship",
           "reverseRelationship": true,
-          "reversePropertyName": "isAuthorisedUser",
+          "reversePropertyName": "isAuthorisedUserOf",
           "validate": false,
           "properties": {
             "_ref": {
@@ -126,7 +126,7 @@
       "type",
       "status",
       "authCode",
-      "hasAuthorisedUser"
+      "authorisedUsers"
     ],
     "required": [
       "name",
