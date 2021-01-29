@@ -48,4 +48,4 @@ Calls the Access Management endpoint to update Authentication Trees. The configu
 Calls the Access Management endpoint to update AM Scripts. The configuration is stored in JSON files in the `config/am-scripts` directory.
 
 **Help Message:**
-`update-scripts -h`
+`scripts/update-scripts -h`

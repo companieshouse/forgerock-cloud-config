@@ -33,7 +33,6 @@ const updateScripts = async (argv) => {
     // Update each script
     await Promise.all(
         scriptFileContent.map(async (scriptFile) => {
-           
             const baseUrl = `${FIDC_URL}/am/json${realm}`
             await Promise.all(
                 scriptFile.scripts.map(async (script) => {
@@ -41,7 +40,6 @@ const updateScripts = async (argv) => {
                         return Promise.reject(new Error('Missing _id in script config'))
                     }
                     //updates the script content with encoded file
-                    console.log(process.cwd()); 
                     script.payload.script = fs.readFileSync(`./config/phase-${PHASE}/am-scripts/scripts-content/${script.filename}`, {encoding: 'base64'});
                     return await updateScript(baseUrl, sessionToken, script.payload)
                 })
@@ -58,7 +56,6 @@ const updateScripts = async (argv) => {
 
 const updateScript = async (url, cookieHeader, script) => {
     const requestUrl = `${url}/scripts/${script._id}`
-    console.log(requestUrl);
     const requestOptions = {
       method: 'put',
       body: JSON.stringify({
@@ -74,7 +71,7 @@ const updateScript = async (url, cookieHeader, script) => {
     }
     const { status, statusText } = await fetch(requestUrl, requestOptions)
     if (status > 299) {
-      throw new Error(`${node._id} ${status}: ${statusText}`)
+      throw new Error(`${script._id} ${status}: ${statusText}`)
     }
     return Promise.resolve()
 }
