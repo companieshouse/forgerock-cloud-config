@@ -1,0 +1,81 @@
+{
+    "scripts": [
+        {
+            "payload": {
+                "_id": "c72754b6-1bfe-41cf-8758-1b77ef0a1f42",
+                "name": "Send Registration Email",
+                "description": "Send Registration Email",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258    
+            },
+            "filename": "ch-send-registration-email.js"
+        },
+        {
+            "payload": {
+                "_id": "b276c566-622e-11eb-ae93-0242ac130002",
+                "name": "Send MFA text",
+                "description": "Send MFA text",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258    
+            },
+            "filename": "ch-send-mfa-sms.js"
+        },
+        {
+            "payload": {
+                "_id": "c056951c-622e-11eb-ae93-0242ac130002",
+                "name": "Send Reset Password Email",
+                "description": "Send Reset Password Email",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258    
+            },
+            "filename": "ch-send-reset-pwd-email.js"
+        },
+        {
+            "payload": {
+                "_id":"d22f9a0c-426a-4466-b95e-d0f125b0d5fa",
+                "name":"OAuth2 Access Token Modification Script",
+                "description":"Default global script for OAuth2 Access Token Modification",
+                "script":"<replace>",
+                "default":true,
+                "language":"GROOVY",
+                "context":"OAUTH2_ACCESS_TOKEN_MODIFICATION",
+                "createdBy":"id=dsameuser,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate":1433147666269,
+                "lastModifiedBy":"id=dsameuser,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate":1433147666269
+                },
+            "filename": "oauth2-token-mod.groovy"
+        },
+        {
+            "payload":  {
+                "_id":"01e1a3c0-038b-4c16-956a-6c9d89328cff",
+                "name":"Authentication Tree Decision Node Script",
+                "description":"Default global script for a scripted decision node",
+                "script":"<replace>",
+                "default":true,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"null",
+                "lastModifiedDate":0
+             },
+             "filename": "auth-tree-decision-node.js"
+        }
+    ]
+}
