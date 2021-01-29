@@ -8,6 +8,7 @@
   },
   "bin": {
     "update-auth-trees": "./scripts/update-auth-trees/index.js",
+    "update-internal-roles": "./scripts/update-internal-roles/index.js",
     "update-managed-objects": "./scripts/update-managed-objects/index.js",
     "update-user-roles": "./scripts/update-user-roles/index.js"
   },

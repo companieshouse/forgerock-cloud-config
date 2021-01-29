@@ -1,0 +1,45 @@
+{
+  "_id": "b0967532-8fb3-43b5-b383-7b72dd498dae",
+  "name": "Admin",
+  "description": "Admin role for internal users",
+  "privileges": [
+    {
+      "path": "managed/Company",
+      "name": "Companies",
+      "actions": [],
+      "permissions": [
+        "VIEW"
+      ],
+      "accessFlags": [
+        {
+          "attribute": "name",
+          "readOnly": true
+        },
+        {
+          "attribute": "presenters",
+          "readOnly": true
+        },
+        {
+          "attribute": "number",
+          "readOnly": true
+        },
+        {
+          "attribute": "type",
+          "readOnly": true
+        },
+        {
+          "attribute": "status",
+          "readOnly": true
+        },
+        {
+          "attribute": "authCode",
+          "readOnly": true
+        },
+        {
+          "attribute": "hasAuthorisedUsers",
+          "readOnly": true
+        }
+      ]
+    }
+  ]
+}
