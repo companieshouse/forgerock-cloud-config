@@ -9,120 +9,129 @@
     "icon": "fa-building",
     "properties": {
       "name": {
+        "deleteQueryConfig": false,
+        "description": "The name of the company",
+        "isVirtual": false,
         "searchable": true,
         "title": "Company Name",
         "type": "string",
         "userEditable": true,
-        "viewable": true,
-        "description": "The name of the company",
-        "isVirtual": false,
-        "deleteQueryConfig": false
+        "viewable": true
       },
-      "presenters": {
-        "description": "Presenters are Users that are associated with a Company",
+      "number": {
+        "deleteQueryConfig": false,
+        "description": "The unique number allocated to a company on incorporation",
+        "isVirtual": false,
+        "searchable": true,
+        "title": "Company Number",
+        "type": "string",
+        "userEditable": true,
+        "viewable": true
+      },
+      "type": {
+        "searchable": true,
+        "title": "Type",
+        "type": "string",
+        "userEditable": true,
+        "viewable": true
+      },
+      "status": {
+        "searchable": true,
+        "title": "Status",
+        "type": "string",
+        "userEditable": true,
+        "viewable": true
+      },
+      "authCode": {
+        "searchable": true,
+        "title": "Authentication Code",
+        "type": "string",
+        "userEditable": true,
+        "viewable": true
+      },
+      "authorisedUsers": {
+        "description": "Authorised Users are Users that are associated with a Company",
+        "title": "Has Authorised User",
+        "viewable": true,
+        "searchable": false,
+        "userEditable": false,
+        "policies": [],
+        "returnByDefault": false,
+        "minLength": null,
+        "type": "array",
         "items": {
+          "type": "relationship",
+          "reverseRelationship": true,
+          "reversePropertyName": "isAuthorisedUserOf",
+          "validate": false,
           "properties": {
             "_ref": {
               "type": "string"
             },
             "_refProperties": {
+              "type": "object",
               "properties": {
                 "_id": {
-                  "type": "string"
+                  "type": "string",
+                  "required": false,
+                  "propName": "_id"
                 },
                 "permissionFiling": {
-                  "label": "File Financial Statments ",
-                  "type": "string"
+                  "label": "File Financial Statments",
+                  "type": "string",
+                  "required": false,
+                  "propName": "permissionFiling"
                 },
                 "permissionAdmin": {
                   "label": "Administer the Company",
-                  "type": "string"
+                  "type": "string",
+                  "required": false,
+                  "propName": "permissionAdmin"
                 },
                 "permissionUpdate": {
                   "label": "Update company details",
-                  "type": "string"
+                  "type": "string",
+                  "required": false,
+                  "propName": "permissionUpdate"
                 }
-              },
-              "type": "object"
+              }
             }
           },
           "resourceCollection": [
             {
-              "label": "Alpha_user",
-              "notify": false,
               "path": "managed/alpha_user",
+              "label": "Alpha_user",
               "query": {
-                "fields": [
-                  "mail"
-                ],
                 "queryFilter": "true",
+                "fields": [
+                  "_id"
+                ],
                 "sortKeys": []
-              }
+              },
+              "notify": false
             }
           ],
-          "reversePropertyName": "isPresenterOf",
-          "reverseRelationship": true,
-          "type": "relationship",
-          "validate": false,
           "notifySelf": false
         },
-        "returnByDefault": false,
-        "searchable": false,
-        "title": "Presenters",
-        "type": "array",
-        "userEditable": false,
-        "viewable": true,
         "requiredByParent": false,
         "isVirtual": false,
         "referencedRelationshipFields": null,
         "referencedObjectFields": null,
         "deleteQueryConfig": false
-      },
-      "number": {
-        "title": "Company Number",
-        "type": "string",
-        "viewable": true,
-        "searchable": true,
-        "userEditable": true,
-        "description": "The unique number allocated to a company on incorporation",
-        "isVirtual": false,
-        "deleteQueryConfig": false
-      },
-      "type": {
-        "title": "Type",
-        "type": "string",
-        "viewable": true,
-        "searchable": true,
-        "userEditable": true
-      },
-      "status": {
-        "title": "Status",
-        "type": "string",
-        "viewable": true,
-        "searchable": true,
-        "userEditable": true
-      },
-      "authCode": {
-        "title": "Authentication Code",
-        "type": "string",
-        "viewable": true,
-        "searchable": true,
-        "userEditable": true
       }
     },
     "order": [
       "name",
-      "presenters",
       "number",
       "type",
       "status",
-      "authCode"
+      "authCode",
+      "authorisedUsers"
     ],
     "required": [
       "name",
       "number"
-    ],
-    "mat-icon": null
+    ]
   },
   "type": "Managed Object"
 }
