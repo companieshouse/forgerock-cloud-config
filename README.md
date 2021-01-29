@@ -23,6 +23,10 @@ The following need to be installed/configured for local use:
 
 `npm install`
 
+### Run tests locally
+
+`npm test`
+
 ## Scripts
 
 All scripts can also be ran locally with the correct arguments and environment variables.
@@ -42,6 +46,20 @@ Calls the Access Management endpoint to update Authentication Trees. The configu
 
 **Help Message:**
 `update-auth-trees -h`
+
+### User Roles
+
+Calls the Identity Management endpoint to update User Roles. The configuration is stored in JSON files in the `config/user-roles` directory.
+
+**Help Message:**
+`update-user-roles -h`
+
+### Internal Roles
+
+Calls the Identity Management endpoint to update Internal Roles. The configuration is stored in JSON files in the `config/internal-roles` directory.
+
+**Help Message:**
+`update-internal-roles -h`
 
 ### Update AM Scripts
 
