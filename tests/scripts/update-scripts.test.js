@@ -39,31 +39,31 @@ describe('update-am-scripts', () => {
           createdBy: 'id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org',
           creationDate: 1436807766258,
           lastModifiedBy: 'id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org',
-          lastModifiedDate: 1436807766258 
+          lastModifiedDate: 1436807766258
         },
-        filename: "filename.js"
+        filename: 'filename.js'
       }
     ]
   }
 
   const mockPhase1Config = {
-      scripts: [
-        {
-          payload: {
-            _id: 'abcd',
-            name: 'Script 1',
-            description: 'Script 1',
-            script: '<base64encoding>',
-            language: 'JAVASCRIPT',
-            context: 'AUTHENTICATION_TREE_DECISION_NODE',
-            createdBy: 'id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org',
-            creationDate: 1436807766258,
-            lastModifiedBy: 'id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org',
-            lastModifiedDate: 1436807766258 
-          },
-          filename: "filename.js"
-        }
-      ]
+    scripts: [
+      {
+        payload: {
+          _id: 'abcd',
+          name: 'Script 1',
+          description: 'Script 1',
+          script: '<base64encoding>',
+          language: 'JAVASCRIPT',
+          context: 'AUTHENTICATION_TREE_DECISION_NODE',
+          createdBy: 'id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org',
+          creationDate: 1436807766258,
+          lastModifiedBy: 'id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org',
+          lastModifiedDate: 1436807766258
+        },
+        filename: 'filename.js'
+      }
+    ]
   }
 
   beforeEach(() => {
@@ -171,7 +171,9 @@ describe('update-am-scripts', () => {
       })
     )
     await updateScripts(mockValues)
-    expect(console.error).toHaveBeenCalledWith(`${mockPhase1Config.scripts[0].payload._id} 401: Unauthorized`)
+    expect(console.error).toHaveBeenCalledWith(
+      `${mockPhase1Config.scripts[0].payload._id} 401: Unauthorized`
+    )
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 })
