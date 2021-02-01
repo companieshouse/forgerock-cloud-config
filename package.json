@@ -11,7 +11,8 @@
     "update-internal-roles": "./scripts/update-internal-roles/index.js",
     "update-managed-objects": "./scripts/update-managed-objects/index.js",
     "update-user-roles": "./scripts/update-user-roles/index.js",
-    "update-scripts": "./scripts/update-scripts/index.js"
+    "update-scripts": "./scripts/update-scripts/index.js",
+    "update-terms-and-conditions": "./scripts/update-terms-and-conditions/index.js"
   },
   "author": "Amido",
   "license": "ISC",
