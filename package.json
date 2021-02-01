@@ -26,6 +26,9 @@
   "standard": {
     "env": [
       "jest"
+    ],
+    "ignore": [
+      "config/**/*.js"
     ]
   }
 }
