@@ -40,7 +40,7 @@ const updateScripts = async (argv) => {
                         return Promise.reject(new Error('Missing _id in script config'))
                     }
                     //updates the script content with encoded file
-                    script.payload.script = fs.readFileSync(`./config/phase-${PHASE}/am-scripts/scripts-content/${script.filename}`, {encoding: 'base64'});
+                    script.payload.script = fs.readFileSync(`${dir}/scripts-content/${script.filename}`, {encoding: 'base64'});
                     return await updateScript(baseUrl, sessionToken, script.payload)
                 })
             )
