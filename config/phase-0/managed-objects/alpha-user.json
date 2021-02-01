@@ -596,14 +596,14 @@
       },
       "frIndexedString1": {
         "deleteQueryConfig": false,
-        "description": "Officer Type",
+        "description": "User Type",
         "isPersonal": false,
         "isVirtual": false,
         "searchable": true,
-        "title": "Officer Type",
+        "title": "User Type",
         "type": "string",
-        "usageDescription": null,
-        "userEditable": true,
+        "usageDescription": "Set to 'internal' for CH support Users, or to 'external' for company users",
+        "userEditable": false,
         "viewable": true
       },
       "frIndexedString2": {
