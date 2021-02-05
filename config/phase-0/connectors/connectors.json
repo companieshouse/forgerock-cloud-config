@@ -1,0 +1,15 @@
+{
+  "_id": "provisioner.openicf.connectorinfoprovider",
+  "connectorsLocation": "connectors",
+  "remoteConnectorClients": [
+    {
+      "name": "mongodb",
+      "displayName": "mongodb",
+      "useSSL": true,
+      "enabled": true
+    }
+  ],
+  "remoteConnectorServers": [],
+  "remoteConnectorClientsGroups": [],
+  "remoteConnectorServersGroups": []
+}
