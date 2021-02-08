@@ -2,6 +2,21 @@
     "scripts": [
         {
             "payload": {
+                "_id":"df67765e-df3a-4503-9ba5-35c992b39259",
+                "name":"Create Notify JWT",
+                "description":"This script creates a JWT compatible with Gov Notify service. \nThe resulting JWT (along with the template IDs) is then put in the transient state.",
+                "script":"<replace>",
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258    
+            },
+            "filename": "ch-create-notify-jwt.js"
+        },
+        {
+            "payload": {
                 "_id": "c72754b6-1bfe-41cf-8758-1b77ef0a1f42",
                 "name": "Send Registration Email",
                 "description": "Send Registration Email",
