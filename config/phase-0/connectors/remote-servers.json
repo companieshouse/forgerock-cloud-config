@@ -1,0 +1,15 @@
+{
+  "_id": "provisioner.openicf.connectorinfoprovider",
+  "connectorsLocation": "connectors",
+  "remoteConnectorClients": [
+    {
+      "name": "aws",
+      "displayName": "aws",
+      "useSSL": true,
+      "enabled": true
+    }
+  ],
+  "remoteConnectorServers": [],
+  "remoteConnectorClientsGroups": [],
+  "remoteConnectorServersGroups": []
+}
