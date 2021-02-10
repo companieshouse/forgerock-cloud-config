@@ -67,3 +67,10 @@ Calls the Access Management endpoint to update AM Scripts. The configuration is 
 
 **Help Message:**
 `scripts/update-scripts -h`
+
+### Update AM CORS Configuration
+
+Calls the Access Management endpoint to update AM CORS Configuration. The configuration is stored in JSON files in the `config/cors` directory.
+
+**Help Message:**
+`scripts/update-cors -h`
