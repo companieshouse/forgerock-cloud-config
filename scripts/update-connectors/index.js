@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const yargs = require('yargs')
-const updateConnectors = require('./update-connectors')
+const updateRemoteServers = require('./update-remote-servers')
+const updateConnectorDefinitions = require('./update-connector-definitions')
 
 // Script arguments
 yargs
@@ -21,8 +22,13 @@ yargs
   .describe('r', 'Realm')
   .demandOption(['u', 'p', 'a', 's'])
   .command({
-    command: '$0',
-    desc: 'default',
-    handler: (argv) => updateConnectors(argv)
+    command: 'remote-servers',
+    desc: 'remote-servers',
+    handler: (argv) => updateRemoteServers(argv)
+  })
+  .command({
+    command: 'definitions',
+    desc: 'connector definitions',
+    handler: (argv) => updateConnectorDefinitions(argv)
   })
   .parse()
