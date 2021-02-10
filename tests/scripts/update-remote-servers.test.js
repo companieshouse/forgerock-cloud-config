@@ -1,4 +1,4 @@
-describe('update-connectors', () => {
+describe('update-remote-servers', () => {
   jest.mock('node-fetch')
   const fetch = require('node-fetch')
   const path = require('path')
@@ -8,7 +8,7 @@ describe('update-connectors', () => {
   jest.spyOn(console, 'error').mockImplementation(() => {})
   jest.spyOn(process, 'exit').mockImplementation(() => {})
 
-  const updateConnectors = require('../../scripts/update-connectors/update-connectors')
+  const updateRemoteServers = require('../../scripts/update-connectors/update-remote-servers')
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
@@ -17,11 +17,11 @@ describe('update-connectors', () => {
 
   const mockPhase0ConfigFile = path.resolve(
     __dirname,
-    '../../config/phase-0/connectors/connectors.json'
+    '../../config/phase-0/connectors/remote-servers.json'
   )
   const mockPhase1ConfigFile = path.resolve(
     __dirname,
-    '../../config/phase-1/connectors/connectors.json'
+    '../../config/phase-1/connectors/remote-servers.json'
   )
 
   const mockPhase0Config = {
@@ -90,7 +90,7 @@ describe('update-connectors', () => {
   it('should error if missing FRIC environment variable', async () => {
     expect.assertions(2)
     delete process.env.FIDC_URL
-    await updateConnectors(mockValues)
+    await updateRemoteServers(mockValues)
     expect(console.error).toHaveBeenCalledWith(
       'Missing FIDC_URL environment variable'
     )
@@ -103,7 +103,7 @@ describe('update-connectors', () => {
     getAccessToken.mockImplementation(() =>
       Promise.reject(new Error(errorMessage))
     )
-    await updateConnectors(mockValues)
+    await updateRemoteServers(mockValues)
     expect(console.error).toHaveBeenCalledWith(errorMessage)
     expect(process.exit).toHaveBeenCalledWith(1)
   })
@@ -118,7 +118,7 @@ describe('update-connectors', () => {
         'content-type': 'application/json'
       }
     }
-    await updateConnectors(mockValues)
+    await updateRemoteServers(mockValues)
     expect(fetch.mock.calls.length).toEqual(1)
     expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions)
   })
@@ -134,7 +134,7 @@ describe('update-connectors', () => {
         'content-type': 'application/json'
       }
     }
-    await updateConnectors(mockValues)
+    await updateRemoteServers(mockValues)
     expect(fetch.mock.calls.length).toEqual(1)
     expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions)
   })
@@ -143,7 +143,7 @@ describe('update-connectors', () => {
     expect.assertions(2)
     const errorMessage = 'Something went wrong'
     fetch.mockImplementation(() => Promise.reject(new Error(errorMessage)))
-    await updateConnectors(mockValues)
+    await updateRemoteServers(mockValues)
     expect(console.error).toHaveBeenCalledWith(errorMessage)
     expect(process.exit).toHaveBeenCalledWith(1)
   })
@@ -156,7 +156,7 @@ describe('update-connectors', () => {
         statusText: 'Unauthorized'
       })
     )
-    await updateConnectors(mockValues)
+    await updateRemoteServers(mockValues)
     expect(console.error).toHaveBeenCalledWith('401: Unauthorized')
     expect(process.exit).toHaveBeenCalledWith(1)
   })

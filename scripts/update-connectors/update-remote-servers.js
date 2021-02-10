@@ -2,7 +2,7 @@ const fetch = require('node-fetch')
 const path = require('path')
 const getAccessToken = require('../../helpers/get-access-token')
 
-const updateConnectors = async (argv) => {
+const updateRemoteServers = async (argv) => {
   // Check environment variables
   const { FIDC_URL, PHASE = '0' } = process.env
 
@@ -21,13 +21,16 @@ const updateConnectors = async (argv) => {
       `../../config/phase-${PHASE}/connectors`
     )
 
-    const connectorsFileContent = require(path.join(dir, 'connectors.json'))
+    const remoteServersFileContent = require(path.join(
+      dir,
+      'remote-servers.json'
+    ))
 
     const requestUrl = `${FIDC_URL}/openidm/config/provisioner.openicf.connectorinfoprovider`
 
     const requestOptions = {
       method: 'put',
-      body: JSON.stringify(connectorsFileContent),
+      body: JSON.stringify(remoteServersFileContent),
       headers: {
         authorization: `Bearer ${accessToken}`,
         'content-type': 'application/json'
@@ -38,11 +41,11 @@ const updateConnectors = async (argv) => {
     if (status !== 200) {
       throw new Error(`${status}: ${statusText}`)
     }
-    console.log('Connectors updated')
+    console.log('Remote servers updated')
   } catch (error) {
     console.error(error.message)
     process.exit(1)
   }
 }
 
-module.exports = updateConnectors
+module.exports = updateRemoteServers
