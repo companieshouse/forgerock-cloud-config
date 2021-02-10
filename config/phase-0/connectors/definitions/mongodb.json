@@ -49,7 +49,7 @@
 		"deleteScriptFileName": "Delete.groovy",
 		"scriptBaseClass": null,
 		"scriptRoots": [
-			"jar:file:connectors/mongodb-connector-1.5.19.1.jar\u0021/scripts/mongodb/usersRoles/"
+			"jar:file:connectors/mongodb-connector-1.5.19.1.jar\u0021/scripts/mongodb/"
 		],
 		"customConfiguration": null,
 		"resolveUsernameScriptFileName": null,
