@@ -12,7 +12,8 @@
     "update-managed-objects": "./scripts/update-managed-objects/index.js",
     "update-user-roles": "./scripts/update-user-roles/index.js",
     "update-scripts": "./scripts/update-scripts/index.js",
-    "update-terms-and-conditions": "./scripts/update-terms-and-conditions/index.js"
+    "update-terms-and-conditions": "./scripts/update-terms-and-conditions/index.js",
+    "update-connectors": "./scripts/update-connectors/index.js"
   },
   "author": "Amido",
   "license": "ISC",
