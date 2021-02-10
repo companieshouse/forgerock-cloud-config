@@ -13,7 +13,8 @@
     "update-user-roles": "./scripts/update-user-roles/index.js",
     "update-scripts": "./scripts/update-scripts/index.js",
     "update-terms-and-conditions": "./scripts/update-terms-and-conditions/index.js",
-    "update-cors": "./scripts/update-cors/index.js"
+    "update-cors": "./scripts/update-cors/index.js",
+    "update-connectors": "./scripts/update-connectors/index.js"
   },
   "author": "Amido",
   "license": "ISC",
