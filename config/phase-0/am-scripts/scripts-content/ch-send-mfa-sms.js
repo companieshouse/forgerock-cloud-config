@@ -4,18 +4,21 @@ var fr = JavaImporter(
 
 var notifyJWT = transientState.get("notifyJWT");
 var templates = transientState.get("notifyTemplates");
+var code = sharedState.get("oneTimePassword");
+var phoneNumber = "TODO";
 
 logger.error("JWT from transient state: " + notifyJWT);
-logger.error("templates from transient state: " + templates);
+logger.error("Templates from transient state: " + templates);
+logger.error("Code: " + code);
 
 var request = new org.forgerock.http.protocol.Request()
 request.setUri("https://api.notifications.service.gov.uk/v2/notifications/sms");
 try{
   var requestBodyJson = {
-    "phone_number": "TODO",
+    "phone_number": phoneNumber,
     "template_id": JSON.parse(templates).otpSms,
     "personalisation": {
-        "code": "TODO"
+        "code": code
     }
   }
 }catch(e){
