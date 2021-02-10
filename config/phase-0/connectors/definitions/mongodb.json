@@ -1,8 +1,8 @@
 {
-	"_id": "MongoDB",
+	"_id": "CHSUser",
 	"connectorRef": {
 		"connectorHostRef": "mongodb",
-		"displayName": "MongoDB Connector",
+		"displayName": "CHS User Connector",
 		"bundleVersion": "1.5.19.1",
 		"systemType": "provisioner.openicf",
 		"bundleName": "org.forgerock.openicf.connectors.mongodb-connector",

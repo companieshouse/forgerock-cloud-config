@@ -3,8 +3,8 @@
   "connectorsLocation": "connectors",
   "remoteConnectorClients": [
     {
-      "name": "mongodb",
-      "displayName": "mongodb",
+      "name": "aws",
+      "displayName": "aws",
       "useSSL": true,
       "enabled": true
     }
