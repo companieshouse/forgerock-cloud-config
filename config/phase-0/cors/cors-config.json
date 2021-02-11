@@ -1,0 +1,52 @@
+{
+    "corsServiceGlobal": {
+        "enabled":true,
+        "_id":"",
+        "_type":{
+            "_id":"CorsService",
+            "name":"CORS Service",
+            "collection":false
+        }
+    },
+    "corsServiceConfig":{
+        "maxAge":0,
+        "acceptedMethods":["HEAD","DELETE","POST","GET","OPTIONS","PUT","PATCH"],
+        "acceptedHeaders":["authorization","accept-api-version","content-type","*"],
+        "enabled":true,
+        "acceptedOrigins":[
+            "https://sdkapp.example.com:8443",
+            "http://localhost:3000",
+            "https://ui-amido-demo.forgeblocks.com",
+            "https://example.com"
+        ],
+        "allowCredentials":true,
+        "exposedHeaders":["*"],
+        "_id":"org-ui",
+        "_type":{
+            "_id":"configuration",
+            "name":"Cors Configuration",
+            "collection":true
+        }
+    },
+    "idmCorsConfig":{
+        "maxAge":0,
+        "acceptedMethods":["HEAD","DELETE","POST","GET","OPTIONS","PUT","PATCH"],
+        "acceptedHeaders":["authorization","accept-api-version","content-type","*"],
+        "enabled":true,
+        "acceptedOrigins":[
+            "https://sdkapp.example.com:8443",
+            "http://localhost:3000",
+            "https://ui-amido-demo.forgeblocks.com",
+            "https://example.com/stoca"
+        ],
+        "allowCredentials":true,
+        "exposedHeaders":["*"],
+        "_id":"org-ui",
+        "_type":{
+            "_id":"configuration",
+            "name":"Cors Configuration",
+            "collection":true
+        }
+    }  
+}
+
