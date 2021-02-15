@@ -2,6 +2,7 @@
 const yargs = require('yargs')
 const updateRemoteServers = require('./update-remote-servers')
 const updateConnectorDefinitions = require('./update-connector-definitions')
+const updateConnectorMappings = require('./update-connector-mappings')
 
 // Script arguments
 yargs
@@ -30,5 +31,10 @@ yargs
     command: 'definitions',
     desc: 'connector definitions',
     handler: (argv) => updateConnectorDefinitions(argv)
+  })
+  .command({
+    command: 'mappings',
+    desc: 'connector mappings',
+    handler: (argv) => updateConnectorMappings(argv)
   })
   .parse()
