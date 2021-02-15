@@ -1,0 +1,80 @@
+{
+  "consentRequired": false,
+  "displayName": "systemMongodbawsUsers_managedAlpha_user",
+  "icon": null,
+  "name": "systemMongodbawsUsers_managedAlpha_user",
+  "policies": [
+    {
+      "action": "EXCEPTION",
+      "situation": "AMBIGUOUS"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "SOURCE_MISSING"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "MISSING"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "FOUND_ALREADY_LINKED"
+    },
+    {
+      "action": "DELETE",
+      "situation": "UNQUALIFIED"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "UNASSIGNED"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "LINK_ONLY"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "TARGET_IGNORED"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "SOURCE_IGNORED"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "ALL_GONE"
+    },
+    {
+      "action": "UPDATE",
+      "situation": "CONFIRMED"
+    },
+    {
+      "action": "UPDATE",
+      "situation": "FOUND"
+    },
+    {
+      "action": "CREATE",
+      "situation": "ABSENT"
+    }
+  ],
+  "properties": [
+    {
+      "source": "email",
+      "target": "mail"
+    },
+    {
+      "source": "email",
+      "target": "userName"
+    },
+    {
+      "source": "forename",
+      "target": "givenName"
+    },
+    {
+      "source": "surname",
+      "target": "sn"
+    }
+  ],
+  "source": "system/MongoDBAWS/users",
+  "target": "managed/alpha_user"
+}
