@@ -1,8 +1,8 @@
 {
   "consentRequired": false,
-  "displayName": "systemMongodbawsUsers_managedAlpha_user",
+  "displayName": "CHSUsers_managedAlpha_user",
   "icon": null,
-  "name": "systemMongodbawsUsers_managedAlpha_user",
+  "name": "CHSUsers_managedAlpha_user",
   "policies": [
     {
       "action": "EXCEPTION",
@@ -75,6 +75,6 @@
       "target": "sn"
     }
   ],
-  "source": "system/MongoDBAWS/users",
+  "source": "system/CHSUsers/users",
   "target": "managed/alpha_user"
 }

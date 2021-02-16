@@ -68,21 +68,6 @@
 		"connectionURI": "mongodb://mongo-db1-amido.development.aws.internal:27017",
 		"host": "mongo-db1-amido.development.aws.internal",
 		"port": "27017",
-		"password": {
-			"$crypto": {
-				"type": "x-simple-encryption",
-				"value": {
-					"cipher": "AES/CBC/PKCS5Padding",
-					"data": "bcLRxI8tFn1EhOEAn7YhZw==",
-					"iv": "RhNEy+nsqPKKwpCOvbCy+w==",
-					"keySize": 16,
-					"mac": "z0ChWV3NqJ5dgm4hZE3T1A==",
-					"purpose": "idm.config.encryption",
-					"salt": "7AJynQ5jWtpJwB1TajHSzg==",
-					"stableId": "openidm-sym-default"
-				}
-			}
-		},
 		"userDatabase": "admin",
 		"clusterAddresses": null,
 		"dateAttributes": [],
