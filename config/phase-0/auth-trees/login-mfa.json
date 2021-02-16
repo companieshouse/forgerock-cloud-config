@@ -1,110 +1,201 @@
 {
-	"_id": "LoginMFATest",
-	"_rev": "307613667",
-	"entryNodeId": "a6eb5385-ac12-4359-8f0f-9a588ca5a334",
-	"nodes": {
-		"15993a44-70e7-4799-b35c-a245acb9ccc6": {
-			"x": 1661,
-			"y": 214,
-			"connections": {
-				"outcome": "de45e2b0-1462-4423-a397-80df1255f4ea"
-			},
+	"nodes": [
+		{
+			"_id": "15993a44-70e7-4799-b35c-a245acb9ccc6",
 			"nodeType": "IncrementLoginCountNode",
-			"displayName": "Increment Login Count"
+			"details": {
+				"identityAttribute": "userName"
+			}
 		},
-		"5c3d2eda-3ea6-4fdc-8421-e29a5b2aecda": {
-			"x": 1081,
-			"y": 185,
-			"connections": {
-				"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-				"true": "9e7e7c6c-fe82-4ea0-9199-c99e438ece95"
-			},
+		{
+			"_id": "5c3d2eda-3ea6-4fdc-8421-e29a5b2aecda",
 			"nodeType": "ScriptedDecisionNode",
-			"displayName": "Send MFA text via Notify"
+			"details": {
+				"inputs": [
+					"*"
+				],
+				"outcomes": [
+					"true",
+					"false"
+				],
+				"outputs": [
+					"*"
+				],
+				"script": "b276c566-622e-11eb-ae93-0242ac130002"
+			}
 		},
-		"77f75f06-34de-4045-a9f2-73b01bf79a3b": {
-			"x": 482,
-			"y": 462,
-			"connections": {
-				"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-				"true": "97b35ef6-74bf-4f46-a0d3-dab716e40249"
-			},
+		{
+			"_id": "77f75f06-34de-4045-a9f2-73b01bf79a3b",
 			"nodeType": "DataStoreDecisionNode",
-			"displayName": "Data Store Decision"
+			"details": {}
 		},
-		"97b35ef6-74bf-4f46-a0d3-dab716e40249": {
-			"x": 564,
-			"y": 174.015625,
-			"connections": {
-				"true": "fdcf16b0-de65-4219-a8e6-713f20235fe4"
-			},
+		{
+			"_id": "97b35ef6-74bf-4f46-a0d3-dab716e40249",
 			"nodeType": "IdentifyExistingUserNode",
-			"displayName": "Identify Existing User"
+			"details": {
+				"identifier": "userName",
+				"identityAttribute": "userName"
+			}
 		},
-		"9e7e7c6c-fe82-4ea0-9199-c99e438ece95": {
-			"x": 1361.875,
-			"y": 146.015625,
-			"connections": {
-				"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-				"true": "15993a44-70e7-4799-b35c-a245acb9ccc6"
-			},
+		{
+			"_id": "9e7e7c6c-fe82-4ea0-9199-c99e438ece95",
 			"nodeType": "OneTimePasswordCollectorDecisionNode",
-			"displayName": "OTP Collector Decision"
+			"details": {
+				"passwordExpiryTime": 30
+			}
 		},
-		"a6eb5385-ac12-4359-8f0f-9a588ca5a334": {
-			"x": 202,
-			"y": 202,
-			"connections": {
-				"outcome": "77f75f06-34de-4045-a9f2-73b01bf79a3b"
-			},
+		{
+			"_id": "cf8de09d-51a6-444a-8d77-77570d94631e",
+			"nodeType": "ValidatedUsernameNode",
+			"details": {
+				"validateInput": false,
+				"usernameAttribute": "userName"
+			}
+		},
+		{
+			"_id": "bd201d63-6810-48eb-a77e-387eae4a6ea8",
+			"nodeType": "ValidatedPasswordNode",
+			"details": {
+				"validateInput": false,
+				"passwordAttribute": "password"
+			}
+		},
+		{
+			"_id": "a6eb5385-ac12-4359-8f0f-9a588ca5a334",
 			"nodeType": "PageNode",
-			"displayName": "Page Node"
+			"details": {
+				"nodes": [
+					{
+						"_id": "cf8de09d-51a6-444a-8d77-77570d94631e",
+						"nodeType": "ValidatedUsernameNode",
+						"displayName": "Platform Username"
+					},
+					{
+						"_id": "bd201d63-6810-48eb-a77e-387eae4a6ea8",
+						"nodeType": "ValidatedPasswordNode",
+						"displayName": "Platform Password"
+					}
+				],
+				"pageDescription": {
+					"en": "New here? <a href=\"#/service/Registration\">Create an account</a><br><a href=\"#/service/ForgottenUsername\">Forgot username?</a><a href=\"#/service/ResetPassword\"> Forgot password?</a>"
+				},
+				"pageHeader": {
+					"en": "Sign In"
+				}
+			}
 		},
-		"de45e2b0-1462-4423-a397-80df1255f4ea": {
-			"x": 1722,
-			"y": 410,
-			"connections": {
-				"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-				"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
-			},
+		{
+			"_id": "de45e2b0-1462-4423-a397-80df1255f4ea",
 			"nodeType": "InnerTreeEvaluatorNode",
-			"displayName": "Inner Tree Evaluator"
+			"details": {
+				"tree": "ProgressiveProfile"
+			}
 		},
-		"f8cba5d7-0906-40c0-bd61-df601a04cf9f": {
-			"x": 873,
-			"y": 123.015625,
-			"connections": {
-				"outcome": "5c3d2eda-3ea6-4fdc-8421-e29a5b2aecda"
-			},
+		{
+			"_id": "f8cba5d7-0906-40c0-bd61-df601a04cf9f",
 			"nodeType": "OneTimePasswordGeneratorNode",
-			"displayName": "HOTP Generator"
+			"details": {
+				"length": 6
+			}
 		},
-		"fdcf16b0-de65-4219-a8e6-713f20235fe4": {
-			"x": 793,
-			"y": 342.015625,
-			"connections": {
-				"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-				"true": "f8cba5d7-0906-40c0-bd61-df601a04cf9f"
-			},
+		{
+			"_id": "fdcf16b0-de65-4219-a8e6-713f20235fe4",
 			"nodeType": "ScriptedDecisionNode",
-			"displayName": "Setup Notify"
+			"details": {
+				"inputs": [
+					"*"
+				],
+				"outcomes": [
+					"true",
+					"false"
+				],
+				"outputs": [
+					"*"
+				],
+				"script": "df67765e-df3a-4503-9ba5-35c992b39259"
+			}
 		}
-	},
-	"staticNodes": {
-		"startNode": {
-			"x": 70,
-			"y": 265
+	],
+	"tree": {
+		"_id": "LoginMFATest",
+		"description": "Platform Login Tree",
+		"identityResource": "managed/alpha_user",
+		"entryNodeId": "a6eb5385-ac12-4359-8f0f-9a588ca5a334",
+		"staticNodes": {
+			"startNode": {},
+			"70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {},
+			"e301438c-0bd0-429c-ab0c-66126501069a": {}
 		},
-		"70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
-			"x": 1990,
-			"y": 344.83333333333337
-		},
-		"e301438c-0bd0-429c-ab0c-66126501069a": {
-			"x": 1608,
-			"y": 797.6666666666667
+		"uiConfig": {},
+		"nodes": {
+			"15993a44-70e7-4799-b35c-a245acb9ccc6": {
+				"connections": {
+					"outcome": "de45e2b0-1462-4423-a397-80df1255f4ea"
+				},
+				"nodeType": "IncrementLoginCountNode",
+				"displayName": "Increment Login Count"
+			},
+			"5c3d2eda-3ea6-4fdc-8421-e29a5b2aecda": {
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "9e7e7c6c-fe82-4ea0-9199-c99e438ece95"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Send MFA text via Notify"
+			},
+			"77f75f06-34de-4045-a9f2-73b01bf79a3b": {
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "97b35ef6-74bf-4f46-a0d3-dab716e40249"
+				},
+				"nodeType": "DataStoreDecisionNode",
+				"displayName": "Data Store Decision"
+			},
+			"97b35ef6-74bf-4f46-a0d3-dab716e40249": {
+				"connections": {
+					"true": "fdcf16b0-de65-4219-a8e6-713f20235fe4"
+				},
+				"nodeType": "IdentifyExistingUserNode",
+				"displayName": "Identify Existing User"
+			},
+			"9e7e7c6c-fe82-4ea0-9199-c99e438ece95": {
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "15993a44-70e7-4799-b35c-a245acb9ccc6"
+				},
+				"nodeType": "OneTimePasswordCollectorDecisionNode",
+				"displayName": "OTP Collector Decision"
+			},
+			"a6eb5385-ac12-4359-8f0f-9a588ca5a334": {
+				"connections": {
+					"outcome": "77f75f06-34de-4045-a9f2-73b01bf79a3b"
+				},
+				"nodeType": "PageNode",
+				"displayName": "Page Node"
+			},
+			"de45e2b0-1462-4423-a397-80df1255f4ea": {
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+				},
+				"nodeType": "InnerTreeEvaluatorNode",
+				"displayName": "Inner Tree Evaluator"
+			},
+			"f8cba5d7-0906-40c0-bd61-df601a04cf9f": {
+				"connections": {
+					"outcome": "5c3d2eda-3ea6-4fdc-8421-e29a5b2aecda"
+				},
+				"nodeType": "OneTimePasswordGeneratorNode",
+				"displayName": "HOTP Generator"
+			},
+			"fdcf16b0-de65-4219-a8e6-713f20235fe4": {
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "f8cba5d7-0906-40c0-bd61-df601a04cf9f"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Setup Notify"
+			}
 		}
-	},
-	"description": "Platform Login Tree",
-	"identityResource": "managed/alpha_user",
-	"uiConfig": {}
+	}
 }
