@@ -1,7 +1,7 @@
 {
 	"_id": "CHSUser",
 	"connectorRef": {
-		"connectorHostRef": "mongodb",
+		"connectorHostRef": "aws",
 		"displayName": "CHS User Connector",
 		"bundleVersion": "1.5.19.1",
 		"systemType": "provisioner.openicf",
@@ -38,7 +38,7 @@
 	},
 	"configurationProperties": {
 		"customSensitiveConfiguration": null,
-		"createScriptFileName": "Create.groovy",
+		"createScriptFileName": "CreateMongoDB.groovy",
 		"targetDirectory": null,
 		"customizerScriptFileName": null,
 		"warningLevel": "1",
@@ -46,44 +46,28 @@
 		"scriptExtensions": "groovy",
 		"scriptOnResourceScriptFileName": null,
 		"minimumRecompilationInterval": "100",
-		"deleteScriptFileName": "Delete.groovy",
+		"deleteScriptFileName": "DeleteMongoDB.groovy",
 		"scriptBaseClass": null,
 		"scriptRoots": [
 			"jar:file:connectors/mongodb-connector-1.5.19.1.jar\u0021/scripts/mongodb/"
 		],
 		"customConfiguration": null,
 		"resolveUsernameScriptFileName": null,
-		"searchScriptFileName": "Search.groovy",
+		"searchScriptFileName": "SearchMongoDB.groovy",
 		"tolerance": "10",
-		"updateScriptFileName": "Update.groovy",
+		"updateScriptFileName": "UpdateMongoDB.groovy",
 		"debug": "false",
 		"classpath": [],
 		"disabledGlobalASTTransformations": null,
-		"schemaScriptFileName": "Schema.groovy",
+		"schemaScriptFileName": "SchemaMongoDB.groovy",
 		"verbose": false,
-		"testScriptFileName": null,
+		"testScriptFileName": "TestMongoDB.groovy",
 		"sourceEncoding": "UTF-8",
-		"syncScriptFileName": "Sync.groovy",
+		"syncScriptFileName": null,
 		"recompileGroovySource": "false",
-		"connectionURI": "mongodb://6de740d7aba1:27017",
-		"host": "6de740d7aba1",
+		"connectionURI": "mongodb://mongo-db1-amido.development.aws.internal:27017",
+		"host": "mongo-db1-amido.development.aws.internal",
 		"port": "27017",
-		"user": "myUserAdmin",
-		"password": {
-			"$crypto": {
-				"type": "x-simple-encryption",
-				"value": {
-					"cipher": "AES/CBC/PKCS5Padding",
-					"stableId": "openidm-sym-default",
-					"salt": "Ij8PtiQmmy6djqNy+8UwWw==",
-					"data": "L1kCyFhgjqrXD4Q1sFvsRb45YWZtm2LqvPHcTTIGj4U=",
-					"keySize": 16,
-					"purpose": "idm.config.encryption",
-					"iv": "WN7qugY7JTEb+C9KcdKNdQ==",
-					"mac": "ujr+B5McFqiySmbgZDPF+g=="
-				}
-			}
-		},
 		"userDatabase": "admin",
 		"clusterAddresses": null,
 		"dateAttributes": [],
@@ -99,143 +83,168 @@
 		"maxConnectionIdleTime": "0",
 		"maxConnectionLifeTime": "0",
 		"minConnectionsPerHost": "0",
-		"maxConnectionsPerHost": "4"
+		"maxConnectionsPerHost": "5"
 	},
 	"enabled": true,
 	"objectTypes": {
 		"role": {
 			"$schema": "http://json-schema.org/draft-03/schema",
 			"id": "role",
-			"type": "object",
 			"nativeType": "role",
 			"properties": {
-				"role": {
-					"type": "string",
-					"required": true,
-					"nativeName": "role",
-					"nativeType": "string",
-					"flags": [
-						"NOT_UPDATEABLE"
-					]
-				},
-				"inheritedRoles": {
-					"type": "array",
-					"items": {
-						"type": "object",
-						"nativeType": "object"
-					},
-					"nativeName": "inheritedRoles",
-					"nativeType": "object",
-					"flags": [
-						"NOT_CREATABLE",
-						"NOT_UPDATEABLE"
-					]
-				},
-				"roles": {
-					"type": "array",
-					"items": {
-						"type": "object",
-						"nativeType": "object"
-					},
-					"nativeName": "roles",
-					"nativeType": "object"
-				},
 				"__NAME__": {
-					"type": "string",
 					"nativeName": "__NAME__",
-					"nativeType": "string"
-				},
-				"isBuiltin": {
-					"type": "string",
-					"nativeName": "isBuiltin",
 					"nativeType": "string",
-					"flags": [
-						"NOT_CREATABLE",
-						"NOT_UPDATEABLE"
-					]
+					"type": "string"
 				},
 				"db": {
-					"type": "string",
-					"nativeName": "db",
-					"nativeType": "string",
 					"flags": [
 						"NOT_CREATABLE",
 						"NOT_UPDATEABLE"
-					]
-				},
-				"privileges": {
-					"type": "array",
-					"items": {
-						"type": "object",
-						"nativeType": "object"
-					},
-					"nativeName": "privileges",
-					"nativeType": "object"
+					],
+					"nativeName": "db",
+					"nativeType": "string",
+					"type": "string"
 				},
 				"inheritedPrivileges": {
-					"type": "array",
+					"flags": [
+						"NOT_CREATABLE",
+						"NOT_UPDATEABLE"
+					],
 					"items": {
-						"type": "object",
-						"nativeType": "object"
+						"nativeType": "object",
+						"type": "object"
 					},
 					"nativeName": "inheritedPrivileges",
 					"nativeType": "object",
+					"type": "array"
+				},
+				"inheritedRoles": {
 					"flags": [
 						"NOT_CREATABLE",
 						"NOT_UPDATEABLE"
-					]
-				}
-			}
-		},
-		"__ACCOUNT__": {
-			"$schema": "http://json-schema.org/draft-03/schema",
-			"id": "__ACCOUNT__",
-			"type": "object",
-			"nativeType": "__ACCOUNT__",
-			"properties": {
-				"roles": {
-					"type": "array",
+					],
 					"items": {
-						"type": "object",
-						"nativeType": "object"
+						"nativeType": "object",
+						"type": "object"
+					},
+					"nativeName": "inheritedRoles",
+					"nativeType": "object",
+					"type": "array"
+				},
+				"isBuiltin": {
+					"flags": [
+						"NOT_CREATABLE",
+						"NOT_UPDATEABLE"
+					],
+					"nativeName": "isBuiltin",
+					"nativeType": "string",
+					"type": "string"
+				},
+				"privileges": {
+					"items": {
+						"nativeType": "object",
+						"type": "object"
+					},
+					"nativeName": "privileges",
+					"nativeType": "object",
+					"type": "array"
+				},
+				"role": {
+					"flags": [
+						"NOT_UPDATEABLE"
+					],
+					"nativeName": "role",
+					"nativeType": "string",
+					"required": true,
+					"type": "string"
+				},
+				"roles": {
+					"items": {
+						"nativeType": "object",
+						"type": "object"
 					},
 					"nativeName": "roles",
-					"nativeType": "object"
-				},
-				"__NAME__": {
-					"type": "string",
-					"nativeName": "__NAME__",
-					"nativeType": "string"
-				},
-				"pwd": {
-					"type": "string",
+					"nativeType": "object",
+					"type": "array"
+				}
+			},
+			"type": "object"
+		},
+		"users": {
+			"$schema": "http://json-schema.org/draft-03/schema",
+			"id": "users",
+			"nativeType": "users",
+			"properties": {
+				"_id": {
+					"flags": [],
+					"nativeName": "_id",
+					"nativeType": "string",
 					"required": true,
-					"nativeName": "pwd",
-					"nativeType": "JAVA_TYPE_GUARDEDSTRING",
+					"runAsUser": false,
+					"type": "string"
+				},
+				"email": {
+					"flags": [],
+					"nativeName": "email",
+					"nativeType": "string",
+					"required": true,
+					"runAsUser": false,
+					"type": "string"
+				},
+				"forename": {
+					"nativeName": "forename",
+					"nativeType": "string",
+					"required": false,
+					"type": "string"
+				},
+				"password": {
 					"flags": [
-						"NOT_READABLE",
-						"NOT_RETURNED_BY_DEFAULT"
-					]
+						"NOT_RETURNED_BY_DEFAULT",
+						"NOT_READABLE"
+					],
+					"nativeName": "password",
+					"nativeType": "JAVA_TYPE_GUARDEDSTRING",
+					"required": true,
+					"runAsUser": false,
+					"type": "string"
+				},
+				"roles": {
+					"flags": [],
+					"items": {
+						"nativeType": "string",
+						"type": "string"
+					},
+					"nativeName": "roles",
+					"nativeType": "string",
+					"required": false,
+					"runAsUser": false,
+					"type": "array"
+				},
+				"surname": {
+					"nativeName": "surname",
+					"nativeType": "string",
+					"required": false,
+					"type": "string"
+				},
+				"test_data": {
+					"nativeName": "test_data",
+					"nativeType": "boolean",
+					"required": false,
+					"type": "boolean"
 				},
 				"user": {
-					"type": "string",
-					"required": true,
+					"flags": [
+						"NOT_UPDATEABLE"
+					],
 					"nativeName": "user",
 					"nativeType": "string",
-					"flags": [
-						"NOT_UPDATEABLE"
-					]
-				},
-				"db": {
-					"type": "string",
-					"nativeName": "db",
-					"nativeType": "string",
-					"flags": [
-						"NOT_CREATABLE",
-						"NOT_UPDATEABLE"
-					]
+					"required": false,
+					"runAsUser": false,
+					"type": "string"
 				}
-			}
+			},
+			"type": "object"
 		}
 	}
 }
