@@ -1,11 +1,11 @@
 describe('update-am-scripts', () => {
-  jest.mock('node-fetch')
-  const fetch = require('node-fetch')
   jest.mock('fs')
   const fs = require('fs')
   const path = require('path')
   jest.mock('../../helpers/get-session-token')
   const getSessionToken = require('../../helpers/get-session-token')
+  jest.mock('../../helpers/fidc-request')
+  const fidcRequest = require('../../helpers/fidc-request')
   const updateScripts = require('../../scripts/update-scripts/update-scripts')
   jest.spyOn(console, 'log').mockImplementation(() => {})
   jest.spyOn(console, 'error').mockImplementation(() => {})
@@ -50,9 +50,9 @@ describe('update-am-scripts', () => {
     scripts: [
       {
         payload: {
-          _id: 'abcd',
-          name: 'Script 1',
-          description: 'Script 1',
+          _id: 'efgh',
+          name: 'Script 2',
+          description: 'Script 2',
           script: '<base64encoding>',
           language: 'JAVASCRIPT',
           context: 'AUTHENTICATION_TREE_DECISION_NODE',
@@ -67,12 +67,7 @@ describe('update-am-scripts', () => {
   }
 
   beforeEach(() => {
-    fetch.mockImplementation(() =>
-      Promise.resolve({
-        status: 200,
-        statusText: 'OK'
-      })
-    )
+    fidcRequest.mockImplementation(() => Promise.resolve())
     getSessionToken.mockImplementation(() =>
       Promise.resolve(mockValues.sessionToken)
     )
@@ -122,58 +117,39 @@ describe('update-am-scripts', () => {
   it('should call API with phase 0 config by default', async () => {
     expect.assertions(2)
     const expectedUrl = `${mockValues.fidcUrl}/am/json${mockValues.realm}/scripts/${mockPhase0Config.scripts[0].payload._id}`
-    const expectedApiOptions = {
-      method: 'put',
-      headers: {
-        'content-type': 'application/json',
-        'x-requested-with': 'ForgeRock CREST.js',
-        'Accept-API-Version': 'resource=1.1',
-        cookie: mockValues.sessionToken
-      },
-      body: JSON.stringify(mockPhase0Config.scripts[0].payload)
-    }
+    const expectedBody = mockPhase0Config.scripts[0].payload
     await updateScripts(mockValues)
-    expect(fetch.mock.calls.length).toEqual(1)
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions)
+    expect(fidcRequest.mock.calls.length).toEqual(1)
+    expect(fidcRequest).toHaveBeenCalledWith(
+      expectedUrl,
+      expectedBody,
+      mockValues.sessionToken,
+      true
+    )
   })
 
   it('should call API with phase config by environment variable', async () => {
+    expect.assertions(2)
     process.env.PHASE = 1
     const expectedUrl = `${mockValues.fidcUrl}/am/json${mockValues.realm}/scripts/${mockPhase1Config.scripts[0].payload._id}`
-    const expectedApiOptions = {
-      method: 'put',
-      body: JSON.stringify(mockPhase1Config.scripts[0].payload),
-      headers: {
-        'content-type': 'application/json',
-        'x-requested-with': 'ForgeRock CREST.js',
-        'Accept-API-Version': 'resource=1.1',
-        cookie: mockValues.sessionToken
-      }
-    }
+    const expectedBody = mockPhase1Config.scripts[0].payload
     await updateScripts(mockValues)
-    expect(fetch.mock.calls.length).toEqual(1)
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions)
+    expect(fidcRequest.mock.calls.length).toEqual(1)
+    expect(fidcRequest).toHaveBeenCalledWith(
+      expectedUrl,
+      expectedBody,
+      mockValues.sessionToken,
+      true
+    )
   })
 
   it('should error if API request fails', async () => {
     const errorMessage = 'testing request failed'
-    fetch.mockImplementation(() => Promise.reject(new Error(errorMessage)))
+    fidcRequest.mockImplementation(() =>
+      Promise.reject(new Error(errorMessage))
+    )
     await updateScripts(mockValues)
     expect(console.error).toHaveBeenCalledWith(errorMessage)
-    expect(process.exit).toHaveBeenCalledWith(1)
-  })
-
-  it('should error if API response is not 200', async () => {
-    fetch.mockImplementation(() =>
-      Promise.resolve({
-        status: 401,
-        statusText: 'Unauthorized'
-      })
-    )
-    await updateScripts(mockValues)
-    expect(console.error).toHaveBeenCalledWith(
-      `${mockPhase1Config.scripts[0].payload._id} 401: Unauthorized`
-    )
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 })

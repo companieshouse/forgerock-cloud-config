@@ -1,7 +1,7 @@
-const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
 const getSessionToken = require('../../helpers/get-session-token')
+const fidcRequest = require('../../helpers/fidc-request')
 
 const updateScripts = async (argv) => {
   const { realm } = argv
@@ -43,7 +43,13 @@ const updateScripts = async (argv) => {
               `${dir}/scripts-content/${script.filename}`,
               { encoding: 'base64' }
             )
-            return await updateScript(baseUrl, sessionToken, script.payload)
+            const requestUrl = `${baseUrl}/scripts/${script.payload._id}`
+            return await fidcRequest(
+              requestUrl,
+              script.payload,
+              sessionToken,
+              true
+            )
           })
         )
         console.log('scripts updated')
@@ -54,28 +60,6 @@ const updateScripts = async (argv) => {
     console.error(error.message)
     process.exit(1)
   }
-}
-
-const updateScript = async (url, cookieHeader, script) => {
-  const requestUrl = `${url}/scripts/${script._id}`
-  const requestOptions = {
-    method: 'put',
-    body: JSON.stringify({
-      _id: script._id,
-      ...script
-    }),
-    headers: {
-      'content-type': 'application/json',
-      'x-requested-with': 'ForgeRock CREST.js',
-      'Accept-API-Version': 'resource=1.1',
-      cookie: cookieHeader
-    }
-  }
-  const { status, statusText } = await fetch(requestUrl, requestOptions)
-  if (status > 299) {
-    throw new Error(`${script._id} ${status}: ${statusText}`)
-  }
-  return Promise.resolve()
 }
 
 module.exports = updateScripts
