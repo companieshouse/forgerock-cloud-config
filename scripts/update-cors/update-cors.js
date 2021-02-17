@@ -1,8 +1,8 @@
-const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
 const getSessionToken = require('../../helpers/get-session-token')
 const getAccessToken = require('../../helpers/get-access-token')
+const fidcRequest = require('../../helpers/fidc-request')
 
 const updateCors = async (argv) => {
   // Check environment variables
@@ -28,10 +28,7 @@ const updateCors = async (argv) => {
     console.log(`Using phase ${PHASE} config`)
 
     // Read auth tree JSON files
-    const dir = path.resolve(
-      __dirname,
-      `../../config/phase-${PHASE}/cors`
-    )
+    const dir = path.resolve(__dirname, `../../config/phase-${PHASE}/cors`)
 
     const corsFileContent = fs
       .readdirSync(dir)
@@ -40,12 +37,23 @@ const updateCors = async (argv) => {
 
     // Update AM CORS settings
     await Promise.all(
-
       corsFileContent.map(async (corsConfigFile) => {
-        const baseUrl = `${FIDC_URL}/am/json/global-config/services/CorsService`
-        await updateCorsService(baseUrl, sessionToken, corsConfigFile.corsServiceGlobal)
-        await updateCorsServiceConfig(baseUrl, sessionToken, corsConfigFile.corsServiceConfig)
-        await updateCorsIDMConfig(`${FIDC_URL}`, accessToken, corsConfigFile.idmCorsConfig)
+        const serviceUrl = `${FIDC_URL}/am/json/global-config/services/CorsService`
+        const serviceConfigUrl = `${serviceUrl}/configuration/${corsConfigFile.corsServiceConfig._id}`
+        const idmUrl = `${FIDC_URL}/openidm/config/servletfilter/cors`
+        await fidcRequest(
+          serviceUrl,
+          corsConfigFile.corsServiceGlobal,
+          sessionToken,
+          true
+        )
+        await fidcRequest(
+          serviceConfigUrl,
+          corsConfigFile.corsServiceConfig,
+          sessionToken,
+          true
+        )
+        await fidcRequest(idmUrl, corsConfigFile.idmCorsConfig, accessToken)
         console.log('CORS configuration updated in AM and IDM')
         return Promise.resolve()
       })
@@ -53,62 +61,6 @@ const updateCors = async (argv) => {
   } catch (error) {
     console.error(error.message)
     process.exit(1)
-  }
-}
-
-const updateCorsService = async (requestUrl, cookieHeader, config) => {
-  const requestOptions = {
-    method: 'put',
-    body: JSON.stringify(config),
-    headers: {
-      'content-type': 'application/json',
-      'x-requested-with': 'XMLHttpRequest',
-      'Accept-API-Version': 'protocol=1.0,resource=1.0',
-      cookie: cookieHeader
-    }
-  }
-  const { status, statusText } = await fetch(requestUrl, requestOptions)
-  if (status > 299) {
-    throw new Error(`${status}: ${statusText}`)
-  }
-  return Promise.resolve()
-}
-
-const updateCorsServiceConfig = async (url, cookieHeader, config) => {
-  const requestUrl = `${url}/configuration/${config._id}`
-  const requestOptions = {
-    method: 'put',
-    body: JSON.stringify(config),
-    headers: {
-      'content-type': 'application/json',
-      'x-requested-with': 'XMLHttpRequest',
-      'Accept-API-Version': 'protocol=1.0,resource=1.0',
-      cookie: cookieHeader
-    }
-  }
-  const { status, statusText } = await fetch(requestUrl, requestOptions)
-  if (status > 299) {
-    throw new Error(`${config._id} ${status}: ${statusText}`)
-  }
-  return Promise.resolve()
-}
-
-const updateCorsIDMConfig = async (url, accessToken, config) => {
-  // Update all managed objects
-  const requestUrl = `${url}/openidm/config/servletfilter/cors`
-
-  const requestOptions = {
-    method: 'put',
-    body: JSON.stringify(config),
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-      'Accept-API-Version': 'resource=1.0'
-    }
-  }
-  const { status, statusText } = await fetch(requestUrl, requestOptions)
-  if (status !== 200) {
-    throw new Error(`${status}: ${statusText}`)
   }
 }
 
