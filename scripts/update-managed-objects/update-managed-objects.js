@@ -1,7 +1,7 @@
-const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
 const getAccessToken = require('../../helpers/get-access-token')
+const fidcRequest = require('../../helpers/fidc-request')
 
 const updateManagedObjects = async (argv) => {
   // Check environment variables
@@ -30,22 +30,11 @@ const updateManagedObjects = async (argv) => {
 
     // Update all managed objects
     const requestUrl = `${FIDC_URL}/openidm/config/managed`
-
-    const requestOptions = {
-      method: 'put',
-      body: JSON.stringify({
-        objects: managedObjects
-      }),
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      }
+    const requestBody = {
+      objects: managedObjects
     }
 
-    const { status, statusText } = await fetch(requestUrl, requestOptions)
-    if (status !== 200) {
-      throw new Error(`${status}: ${statusText}`)
-    }
+    await fidcRequest(requestUrl, requestBody, accessToken)
     console.log('Managed objects updated')
   } catch (error) {
     console.error(error.message)
