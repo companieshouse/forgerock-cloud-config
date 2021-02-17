@@ -1,7 +1,7 @@
-const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
 const getAccessToken = require('../../helpers/get-access-token')
+const fidcRequest = require('../../helpers/fidc-request')
 
 const updateInternalRoles = async (argv) => {
   // Check environment variables
@@ -31,22 +31,7 @@ const updateInternalRoles = async (argv) => {
     await Promise.all(
       internalRolesFileContent.map(async (internalRoleFile) => {
         const requestUrl = `${FIDC_URL}/openidm/internal/role/${internalRoleFile._id}`
-        const requestOptions = {
-          method: 'put',
-          body: JSON.stringify(internalRoleFile),
-          headers: {
-            authorization: `Bearer ${accessToken}`,
-            'content-type': 'application/json'
-          }
-        }
-        const { status, statusText } = await fetch(requestUrl, requestOptions)
-        if (status > 299) {
-          return Promise.reject(
-            new Error(`${internalRoleFile.name} ${status}: ${statusText}`)
-          )
-        }
-        console.log(`${internalRoleFile.name} updated`)
-        return Promise.resolve()
+        await fidcRequest(requestUrl, internalRoleFile, accessToken)
       })
     )
     console.log('Internal roles updated')
