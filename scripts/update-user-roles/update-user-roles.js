@@ -1,7 +1,7 @@
-const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
 const getAccessToken = require('../../helpers/get-access-token')
+const fidcRequest = require('../../helpers/fidc-request')
 
 const updateUserRoles = async (argv) => {
   // Check environment variables
@@ -31,20 +31,7 @@ const updateUserRoles = async (argv) => {
     await Promise.all(
       userRolesFileContent.map(async (userRoleFile) => {
         const requestUrl = `${FIDC_URL}/openidm/managed/${userRoleFile.realm}_role/${userRoleFile._id}`
-        const requestOptions = {
-          method: 'put',
-          body: JSON.stringify(userRoleFile),
-          headers: {
-            authorization: `Bearer ${accessToken}`,
-            'content-type': 'application/json'
-          }
-        }
-        const { status, statusText } = await fetch(requestUrl, requestOptions)
-        if (status > 299) {
-          return Promise.reject(
-            new Error(`${userRoleFile.name} ${status}: ${statusText}`)
-          )
-        }
+        await fidcRequest(requestUrl, userRoleFile, accessToken)
         console.log(`${userRoleFile.name} updated`)
         return Promise.resolve()
       })
