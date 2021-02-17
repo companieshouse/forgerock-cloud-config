@@ -1,0 +1,203 @@
+{
+	"nodes": [
+		{
+			"_id": "a6eb5385-ac12-4359-8f0f-9a588ca5a334",
+			"nodeType": "PageNode",
+			"details": {
+				"nodes": [{
+					"_id": "cf8de09d-51a6-444a-8d77-77570d94631e",
+					"nodeType": "ValidatedUsernameNode",
+					"displayName": "Platform Username"
+				}, {
+					"_id": "bd201d63-6810-48eb-a77e-387eae4a6ea8",
+					"nodeType": "ValidatedPasswordNode",
+					"displayName": "Platform Password"
+				}],
+				"pageDescription": {
+					"en": "New here? <a href=\"#/service/Registration\">Create an account</a><br><a href=\"#/service/ForgottenUsername\">Forgot username?</a><a href=\"#/service/ResetPassword\"> Forgot password?</a>"
+				},
+				"pageHeader": {
+					"en": "Sign In"
+				}
+			}
+		},
+		{
+			"_id": "cf8de09d-51a6-444a-8d77-77570d94631e",
+			"nodeType": "ValidatedUsernameNode",
+			"details": {
+				"validateInput": false,
+				"usernameAttribute": "userName"
+			}
+		},
+		{
+			"_id": "bd201d63-6810-48eb-a77e-387eae4a6ea8",
+			"nodeType": "ValidatedPasswordNode",
+			"details": {
+				"validateInput": false,
+				"passwordAttribute": "password"
+			}
+		},
+		{
+			"_id": "77f75f06-34de-4045-a9f2-73b01bf79a3b",
+			"nodeType": "DataStoreDecisionNode",
+			"details": {}
+		},
+		{
+			"_id": "97b35ef6-74bf-4f46-a0d3-dab716e40249",
+			"nodeType": "IdentifyExistingUserNode",
+			"details": {
+				"identifier": "userName",
+				"identityAttribute": "userName"
+			}
+		},
+		{
+			"_id": "c3f22327-1e32-4f18-957f-731aa9c97dd5",
+			"nodeType": "ScriptedDecisionNode",
+			"details": {
+				"outcomes": ["true", "false"],
+				"inputs": ["*"],
+				"outputs": ["*"],
+				"script": "b480d9f7-5908-45cf-91d1-bc1fe56fe8de"
+			}
+		},
+		{
+			"_id": "fdcf16b0-de65-4219-a8e6-713f20235fe4",
+			"nodeType": "ScriptedDecisionNode",
+			"details": {
+				"inputs": ["*"],
+				"outcomes": ["true", "false"],
+				"outputs": ["*"],
+				"script": "df67765e-df3a-4503-9ba5-35c992b39259"
+			}
+		},
+		{
+			"_id": "f8cba5d7-0906-40c0-bd61-df601a04cf9f",
+			"nodeType": "OneTimePasswordGeneratorNode",
+			"details": {
+				"length": 6
+			}
+		},
+		{
+			"_id": "5c3d2eda-3ea6-4fdc-8421-e29a5b2aecda",
+			"nodeType": "ScriptedDecisionNode",
+			"details": {
+				"inputs": ["*"],
+				"outcomes": ["true", "false"],
+				"outputs": ["*"],
+				"script": "b276c566-622e-11eb-ae93-0242ac130002"
+			}
+		},
+		{
+			"_id": "9e7e7c6c-fe82-4ea0-9199-c99e438ece95",
+			"nodeType": "OneTimePasswordCollectorDecisionNode",
+			"details": {
+				"passwordExpiryTime": 30
+			}
+		},
+		{
+			"_id": "15993a44-70e7-4799-b35c-a245acb9ccc6",
+			"nodeType": "IncrementLoginCountNode",
+			"details": {
+				"identityAttribute": "userName"
+			}
+		},
+		{
+			"_id": "de45e2b0-1462-4423-a397-80df1255f4ea",
+			"nodeType": "InnerTreeEvaluatorNode",
+			"details": {
+				"tree": "ProgressiveProfile"
+			}
+		}
+	],
+  "tree": {
+		"_id": "LoginMFA",
+		"description": "Platform Login Tree",
+		"identityResource": "managed/alpha_user",
+		"entryNodeId": "a6eb5385-ac12-4359-8f0f-9a588ca5a334",
+		"staticNodes": {
+			"startNode": {},
+			"70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {},
+			"e301438c-0bd0-429c-ab0c-66126501069a": {}
+		},
+		"uiConfig": {},
+		"nodes": {
+			"15993a44-70e7-4799-b35c-a245acb9ccc6": {
+				"connections": {
+					"outcome": "de45e2b0-1462-4423-a397-80df1255f4ea"
+				},
+				"nodeType": "IncrementLoginCountNode",
+				"displayName": "Increment Login Count"
+			},
+			"5c3d2eda-3ea6-4fdc-8421-e29a5b2aecda": {
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "9e7e7c6c-fe82-4ea0-9199-c99e438ece95"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Send MFA text via Notify"
+			},
+			"77f75f06-34de-4045-a9f2-73b01bf79a3b": {
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "97b35ef6-74bf-4f46-a0d3-dab716e40249"
+				},
+				"nodeType": "DataStoreDecisionNode",
+				"displayName": "Data Store Decision"
+			},
+			"97b35ef6-74bf-4f46-a0d3-dab716e40249": {
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "c3f22327-1e32-4f18-957f-731aa9c97dd5"
+				},
+				"nodeType": "IdentifyExistingUserNode",
+				"displayName": "Identify Existing User"
+			},
+			"9e7e7c6c-fe82-4ea0-9199-c99e438ece95": {
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "15993a44-70e7-4799-b35c-a245acb9ccc6"
+				},
+				"nodeType": "OneTimePasswordCollectorDecisionNode",
+				"displayName": "OTP Collector Decision"
+			},
+			"a6eb5385-ac12-4359-8f0f-9a588ca5a334": {
+				"connections": {
+					"outcome": "77f75f06-34de-4045-a9f2-73b01bf79a3b"
+				},
+				"nodeType": "PageNode",
+				"displayName": "Page Node"
+			},
+			"de45e2b0-1462-4423-a397-80df1255f4ea": {
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+				},
+				"nodeType": "InnerTreeEvaluatorNode",
+				"displayName": "Inner Tree Evaluator"
+			},
+			"f8cba5d7-0906-40c0-bd61-df601a04cf9f": {
+				"connections": {
+					"outcome": "5c3d2eda-3ea6-4fdc-8421-e29a5b2aecda"
+				},
+				"nodeType": "OneTimePasswordGeneratorNode",
+				"displayName": "HOTP Generator"
+			},
+			"fdcf16b0-de65-4219-a8e6-713f20235fe4": {
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "f8cba5d7-0906-40c0-bd61-df601a04cf9f"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Setup Notify"
+			},
+			"c3f22327-1e32-4f18-957f-731aa9c97dd5": {
+				"connections": {
+					"true": "fdcf16b0-de65-4219-a8e6-713f20235fe4",
+					"false": "15993a44-70e7-4799-b35c-a245acb9ccc6"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Has Phone Number"
+			}
+		}
+	}
+}
