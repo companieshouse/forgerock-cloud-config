@@ -11,7 +11,7 @@
                 "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
                 "creationDate": 1436807766258,
                 "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate": 1436807766258    
+                "lastModifiedDate": 1436807766258
             },
             "filename": "ch-create-notify-jwt.js"
         },
@@ -26,7 +26,7 @@
                 "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
                 "creationDate": 1436807766258,
                 "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate": 1436807766258    
+                "lastModifiedDate": 1436807766258
             },
             "filename": "ch-send-registration-email.js"
         },
@@ -41,7 +41,7 @@
                 "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
                 "creationDate": 1436807766258,
                 "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate": 1436807766258    
+                "lastModifiedDate": 1436807766258
             },
             "filename": "ch-send-mfa-sms.js"
         },
@@ -56,7 +56,7 @@
                 "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
                 "creationDate": 1436807766258,
                 "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate": 1436807766258    
+                "lastModifiedDate": 1436807766258
             },
             "filename": "ch-send-reset-pwd-email.js"
         },
@@ -203,6 +203,21 @@
                 "lastModifiedDate":1565386615495
              },
              "filename": "template-oidc-claims-script.groovy"
+        },
+        {
+            "payload": {
+                "_id": "c3f22327-1e32-4f18-957f-731aa9c97dd5",
+                "name": "Has Phone Number",
+                "description": "Has Phone Number",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "phone-number-present.js"
         }
     ]
 }
