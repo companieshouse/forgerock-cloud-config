@@ -1,13 +1,11 @@
 describe('update-auth-trees', () => {
-  jest.mock('node-fetch')
-  const fetch = require('node-fetch')
   jest.mock('fs')
   const fs = require('fs')
   const path = require('path')
   jest.mock('../../helpers/get-session-token')
   const getSessionToken = require('../../helpers/get-session-token')
-  jest.mock('../../scripts/update-auth-trees/update-node')
-  const updateNode = require('../../scripts/update-auth-trees/update-node')
+  jest.mock('../../helpers/fidc-request')
+  const fidcRequest = require('../../helpers/fidc-request')
   jest.spyOn(console, 'log').mockImplementation(() => {})
   jest.spyOn(console, 'error').mockImplementation(() => {})
   jest.spyOn(process, 'exit').mockImplementation(() => {})
@@ -95,17 +93,13 @@ describe('update-auth-trees', () => {
     }
   }
 
+  const expectedBaseUrl = `${mockValues.fidcUrl}/am/json${mockValues.realm}/realm-config/authentication/authenticationtrees`
+
   beforeEach(() => {
-    fetch.mockImplementation(() =>
-      Promise.resolve({
-        status: 200,
-        statusText: 'OK'
-      })
-    )
     getSessionToken.mockImplementation(() =>
       Promise.resolve(mockValues.sessionToken)
     )
-    updateNode.mockImplementation(() => Promise.resolve())
+    fidcRequest.mockImplementation(() => Promise.resolve())
     process.env.FIDC_URL = mockValues.fidcUrl
     delete process.env.PHASE
     fs.readdirSync.mockReturnValue(['login-tree.json'])
@@ -148,89 +142,106 @@ describe('update-auth-trees', () => {
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 
-  it('should error if updateNode function fails', async () => {
+  it('should error if fidcRequest function fails', async () => {
     expect.assertions(2)
     const errorMessage = 'Forbidden'
-    updateNode.mockImplementation(() => Promise.reject(new Error(errorMessage)))
+    fidcRequest.mockImplementation(() =>
+      Promise.reject(new Error(errorMessage))
+    )
     await updateAuthTrees(mockValues)
     expect(console.error).toHaveBeenCalledWith(errorMessage)
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 
   it('should call API with phase 0 config by default', async () => {
-    expect.assertions(2)
-    const expectedUrl = `${mockValues.fidcUrl}/am/json${mockValues.realm}/realm-config/authentication/authenticationtrees/trees/${mockPhase0Config.tree._id}`
-    const expectedApiOptions = {
-      method: 'put',
-      headers: {
-        'content-type': 'application/json',
-        'x-requested-with': 'ForgeRock CREST.js',
-        cookie: mockValues.sessionToken
-      },
-      body: JSON.stringify(mockPhase0Config.tree)
+    expect.assertions(3)
+
+    const node = mockPhase0Config.nodes[0]
+    const expectNodeUrl = `${expectedBaseUrl}/nodes/${node.nodeType}/${node._id}`
+    const expectedNodeBody = {
+      _id: node._id,
+      ...node.details
     }
+
+    const expectedAuthTreeUrl = `${expectedBaseUrl}/trees/${mockPhase0Config.tree._id}`
+
     await updateAuthTrees(mockValues)
-    expect(fetch.mock.calls.length).toEqual(1)
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions)
+    expect(fidcRequest.mock.calls.length).toEqual(2)
+    expect(fidcRequest.mock.calls[0]).toEqual([
+      expectNodeUrl,
+      expectedNodeBody,
+      mockValues.sessionToken,
+      true
+    ])
+    expect(fidcRequest.mock.calls[1]).toEqual([
+      expectedAuthTreeUrl,
+      mockPhase0Config.tree,
+      mockValues.sessionToken,
+      true
+    ])
   })
 
   it('should call API with phase config by environment variable', async () => {
+    expect.assertions(3)
     process.env.PHASE = 1
     fs.readdirSync.mockReturnValue([
       'login-tree.json',
       'registration-tree.json'
     ])
-    const expectedUrl = `${mockValues.fidcUrl}/am/json${mockValues.realm}/realm-config/authentication/authenticationtrees/trees/${mockPhase1Config.tree._id}`
-    const expectedApiOptions = {
-      method: 'put',
-      headers: {
-        'content-type': 'application/json',
-        'x-requested-with': 'ForgeRock CREST.js',
-        cookie: mockValues.sessionToken
-      },
-      body: JSON.stringify(mockPhase1Config.tree)
+
+    const node = mockPhase1Config.nodes[0]
+    const expectNodeUrl = `${expectedBaseUrl}/nodes/${node.nodeType}/${node._id}`
+    const expectedNodeBody = {
+      _id: node._id,
+      ...node.details
     }
+
+    const expectedAuthTreeUrl = `${expectedBaseUrl}/trees/${mockPhase1Config.tree._id}`
+
     await updateAuthTrees(mockValues)
-    expect(fetch.mock.calls.length).toEqual(2)
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions)
+    expect(fidcRequest.mock.calls.length).toEqual(4)
+    expect(fidcRequest.mock.calls[0]).toEqual([
+      expectNodeUrl,
+      expectedNodeBody,
+      mockValues.sessionToken,
+      true
+    ])
+    expect(fidcRequest.mock.calls[2]).toEqual([
+      expectedAuthTreeUrl,
+      mockPhase1Config.tree,
+      mockValues.sessionToken,
+      true
+    ])
   })
 
-  it('should call update the url if the realm is changed', async () => {
-    expect.assertions(2)
-    const updatedRealm = '/realms/root/realms/alpha'
+  it('should update the url if the realm is changed', async () => {
+    expect.assertions(3)
+    const updatedRealm = '/realms/root/realms/bravo'
     mockValues.realm = updatedRealm
-    const expectedUrl = `${mockValues.fidcUrl}/am/json${updatedRealm}/realm-config/authentication/authenticationtrees/trees/${mockPhase0Config.tree._id}`
-    const expectedApiOptions = {
-      method: 'put',
-      headers: {
-        'content-type': 'application/json',
-        'x-requested-with': 'ForgeRock CREST.js',
-        cookie: mockValues.sessionToken
-      },
-      body: JSON.stringify(mockPhase0Config.tree)
+    const updatedBaseUrl = `${mockValues.fidcUrl}/am/json${updatedRealm}/realm-config/authentication/authenticationtrees`
+
+    const node = mockPhase0Config.nodes[0]
+    const expectNodeUrl = `${updatedBaseUrl}/nodes/${node.nodeType}/${node._id}`
+    const expectedNodeBody = {
+      _id: node._id,
+      ...node.details
     }
-    await updateAuthTrees(mockValues)
-    expect(fetch.mock.calls.length).toEqual(1)
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions)
-  })
 
-  it('should error if API request fails', async () => {
-    const errorMessage = 'testing request failed'
-    fetch.mockImplementation(() => Promise.reject(new Error(errorMessage)))
-    await updateAuthTrees(mockValues)
-    expect(console.error).toHaveBeenCalledWith(errorMessage)
-    expect(process.exit).toHaveBeenCalledWith(1)
-  })
+    const expectedAuthTreeUrl = `${updatedBaseUrl}/trees/${mockPhase0Config.tree._id}`
 
-  it('should error if API response is not 200', async () => {
-    fetch.mockImplementation(() =>
-      Promise.resolve({
-        status: 401,
-        statusText: 'Unauthorized'
-      })
-    )
     await updateAuthTrees(mockValues)
-    expect(console.error).toHaveBeenCalledWith('401: Unauthorized')
-    expect(process.exit).toHaveBeenCalledWith(1)
+    expect(fidcRequest.mock.calls.length).toEqual(2)
+    expect(fidcRequest.mock.calls[0]).toEqual([
+      expectNodeUrl,
+      expectedNodeBody,
+      mockValues.sessionToken,
+      true
+    ])
+    expect(fidcRequest.mock.calls[1]).toEqual([
+      expectedAuthTreeUrl,
+      mockPhase0Config.tree,
+      mockValues.sessionToken,
+      true
+    ])
   })
 })

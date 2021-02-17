@@ -1,8 +1,7 @@
-const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
 const getSessionToken = require('../../helpers/get-session-token')
-const updateNode = require('./update-node')
+const fidcRequest = require('../../helpers/fidc-request')
 
 const updateAuthTrees = async (argv) => {
   const { realm } = argv
@@ -40,24 +39,22 @@ const updateAuthTrees = async (argv) => {
         const baseUrl = `${FIDC_URL}/am/json${realm}/realm-config/authentication/authenticationtrees`
         await Promise.all(
           authTreeFile.nodes.map(async (node) => {
-            return await updateNode(baseUrl, sessionToken, node)
+            const nodeRequestUrl = `${baseUrl}/nodes/${node.nodeType}/${node._id}`
+            const nodeRequestBody = {
+              _id: node._id,
+              ...node.details
+            }
+            return await fidcRequest(
+              nodeRequestUrl,
+              nodeRequestBody,
+              sessionToken,
+              true
+            )
           })
         )
         console.log('nodes updated')
         const requestUrl = `${baseUrl}/trees/${authTreeFile.tree._id}`
-        const requestOptions = {
-          method: 'put',
-          body: JSON.stringify(authTreeFile.tree),
-          headers: {
-            'content-type': 'application/json',
-            'x-requested-with': 'ForgeRock CREST.js',
-            cookie: sessionToken
-          }
-        }
-        const { status, statusText } = await fetch(requestUrl, requestOptions)
-        if (status > 299) {
-          return Promise.reject(new Error(`${status}: ${statusText}`))
-        }
+        await fidcRequest(requestUrl, authTreeFile.tree, sessionToken, true)
         console.log(`${authTreeFile.tree._id} updated`)
         return Promise.resolve()
       })
