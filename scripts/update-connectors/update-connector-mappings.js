@@ -1,7 +1,7 @@
-const fetch = require('node-fetch')
 const path = require('path')
 const fs = require('fs')
 const getAccessToken = require('../../helpers/get-access-token')
+const fidcRequest = require('../../helpers/fidc-request')
 
 const updateConnectorMappings = async (argv) => {
   // Check environment variables
@@ -28,21 +28,12 @@ const updateConnectorMappings = async (argv) => {
       .map((filename) => require(path.join(`${dir}`, filename))) // Map JSON file content to an array
 
     const requestUrl = `${FIDC_URL}/openidm/config/sync`
+    const requestBody = {
+      mappings: mappingFilesContent
+    }
 
-    const requestOptions = {
-      method: 'put',
-      body: JSON.stringify({
-        mappings: mappingFilesContent
-      }),
-      headers: {
-        authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json'
-      }
-    }
-    const { status, statusText } = await fetch(requestUrl, requestOptions)
-    if (status > 299) {
-      throw new Error(`${status}: ${statusText}`)
-    }
+    await fidcRequest(requestUrl, requestBody, accessToken)
+
     console.log('Connector mappings updated')
     return Promise.resolve()
   } catch (error) {

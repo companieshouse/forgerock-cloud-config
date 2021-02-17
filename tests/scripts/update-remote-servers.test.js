@@ -1,9 +1,9 @@
 describe('update-remote-servers', () => {
-  jest.mock('node-fetch')
-  const fetch = require('node-fetch')
   const path = require('path')
   jest.mock('../../helpers/get-access-token')
   const getAccessToken = require('../../helpers/get-access-token')
+  jest.mock('../../helpers/fidc-request')
+  const fidcRequest = require('../../helpers/fidc-request')
   jest.spyOn(console, 'log').mockImplementation(() => {})
   jest.spyOn(console, 'error').mockImplementation(() => {})
   jest.spyOn(process, 'exit').mockImplementation(() => {})
@@ -59,12 +59,7 @@ describe('update-remote-servers', () => {
   const expectedUrl = `${mockValues.fidcUrl}/openidm/config/provisioner.openicf.connectorinfoprovider`
 
   beforeEach(() => {
-    fetch.mockImplementation(() =>
-      Promise.resolve({
-        status: 200,
-        statusText: 'OK'
-      })
-    )
+    fidcRequest.mockImplementation(() => Promise.resolve())
     getAccessToken.mockImplementation(() =>
       Promise.resolve(mockValues.accessToken)
     )
@@ -110,54 +105,35 @@ describe('update-remote-servers', () => {
 
   it('should call API with phase 0 config by default', async () => {
     expect.assertions(2)
-    const expectedApiOptions = {
-      method: 'put',
-      body: JSON.stringify(mockPhase0Config),
-      headers: {
-        authorization: `Bearer ${mockValues.accessToken}`,
-        'content-type': 'application/json'
-      }
-    }
     await updateRemoteServers(mockValues)
-    expect(fetch.mock.calls.length).toEqual(1)
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions)
+    expect(fidcRequest.mock.calls.length).toEqual(1)
+    expect(fidcRequest).toHaveBeenCalledWith(
+      expectedUrl,
+      mockPhase0Config,
+      mockValues.accessToken
+    )
   })
 
   it('should call API with phase config by environment variable', async () => {
     expect.assertions(2)
     process.env.PHASE = 1
-    const expectedApiOptions = {
-      method: 'put',
-      body: JSON.stringify(mockPhase1Config),
-      headers: {
-        authorization: `Bearer ${mockValues.accessToken}`,
-        'content-type': 'application/json'
-      }
-    }
     await updateRemoteServers(mockValues)
-    expect(fetch.mock.calls.length).toEqual(1)
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions)
+    expect(fidcRequest.mock.calls.length).toEqual(1)
+    expect(fidcRequest).toHaveBeenCalledWith(
+      expectedUrl,
+      mockPhase1Config,
+      mockValues.accessToken
+    )
   })
 
   it('should error if API request fails', async () => {
     expect.assertions(2)
     const errorMessage = 'Something went wrong'
-    fetch.mockImplementation(() => Promise.reject(new Error(errorMessage)))
-    await updateRemoteServers(mockValues)
-    expect(console.error).toHaveBeenCalledWith(errorMessage)
-    expect(process.exit).toHaveBeenCalledWith(1)
-  })
-
-  it('should error if API response is not 200', async () => {
-    expect.assertions(2)
-    fetch.mockImplementation(() =>
-      Promise.resolve({
-        status: 401,
-        statusText: 'Unauthorized'
-      })
+    fidcRequest.mockImplementation(() =>
+      Promise.reject(new Error(errorMessage))
     )
     await updateRemoteServers(mockValues)
-    expect(console.error).toHaveBeenCalledWith('401: Unauthorized')
+    expect(console.error).toHaveBeenCalledWith(errorMessage)
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 })

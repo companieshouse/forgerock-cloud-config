@@ -1,7 +1,7 @@
-const fetch = require('node-fetch')
 const path = require('path')
 const fs = require('fs')
 const getAccessToken = require('../../helpers/get-access-token')
+const fidcRequest = require('../../helpers/fidc-request')
 
 const updateConnectorDefinitions = async (argv) => {
   // Check environment variables
@@ -31,18 +31,7 @@ const updateConnectorDefinitions = async (argv) => {
     await Promise.all(
       connectorFileContent.map(async (connectorFile) => {
         const requestUrl = `${FIDC_URL}/openidm/config/provisioner.openicf/${connectorFile._id}`
-        const requestOptions = {
-          method: 'put',
-          body: JSON.stringify(connectorFile),
-          headers: {
-            authorization: `Bearer ${accessToken}`,
-            'content-type': 'application/json'
-          }
-        }
-        const { status, statusText } = await fetch(requestUrl, requestOptions)
-        if (status > 299) {
-          return Promise.reject(new Error(`${status}: ${statusText}`))
-        }
+        await fidcRequest(requestUrl, connectorFile, accessToken)
         console.log(`${connectorFile._id} updated`)
         return Promise.resolve()
       })
