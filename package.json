@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "lint": "standard",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "bin": {
     "update-auth-trees": "./scripts/update-auth-trees/index.js",
@@ -14,7 +14,8 @@
     "update-scripts": "./scripts/update-scripts/index.js",
     "update-terms-and-conditions": "./scripts/update-terms-and-conditions/index.js",
     "update-cors": "./scripts/update-cors/index.js",
-    "update-connectors": "./scripts/update-connectors/index.js"
+    "update-connectors": "./scripts/update-connectors/index.js",
+    "update-applications": "./scripts/update-applications/index.js"
   },
   "author": "Amido",
   "license": "ISC",
