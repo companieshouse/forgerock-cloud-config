@@ -4,7 +4,10 @@
   "description": "",
   "scripts": {
     "lint": "standard",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "QATest_dev": "node .\\QATests\\TestRunner.js dev",
+    "QATest_staging": "node .\\QATests\\TestRunner.js staging",
+    "QATest_production": "node .\\QATests\\TestRunner.js production"
   },
   "bin": {
     "update-auth-trees": "./scripts/update-auth-trees/index.js",
@@ -26,6 +29,8 @@
   "devDependencies": {
     "husky": "^4.3.8",
     "jest": "^26.6.3",
+    "newman": "^5.2.2",
+    "newman-reporter-htmlextra": "^1.20.1",
     "standard": "^16.0.3"
   },
   "standard": {
