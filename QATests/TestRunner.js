@@ -44,7 +44,7 @@ switch (environment) {
 
     newman.run({
       collection: 'QATests\\FR Configuration test.postman_collection.json',
-      environment: 'QATests\\FR_Dev.postman_environment.json',
+      environment: 'QATests\\FR_Staging.postman_environment.json',
       reporters: ['htmlextra'],
       iterationCount: 1,
       reporter: {
