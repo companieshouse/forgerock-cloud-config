@@ -15,12 +15,15 @@
     "update-terms-and-conditions": "./scripts/update-terms-and-conditions/index.js",
     "update-cors": "./scripts/update-cors/index.js",
     "update-connectors": "./scripts/update-connectors/index.js",
-    "update-applications": "./scripts/update-applications/index.js"
+    "update-applications": "./scripts/update-applications/index.js",
+    "update-services": "./scripts/update-services/index.js"
   },
   "author": "Amido",
   "license": "ISC",
   "dependencies": {
+    "fs-extra": "^9.1.0",
     "node-fetch": "^2.6.1",
+    "replace-in-file": "^6.2.0",
     "yargs": "^16.2.0"
   },
   "devDependencies": {
