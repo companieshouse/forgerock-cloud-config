@@ -28,7 +28,7 @@ switch (environment) {
           hideRequestBody: ['Access Token', 'Session Token', 'Authentication to Top-Level Realm', 'Authenticate as ID Cloud Admin and Get Session Token, and Cookie Name'],
           hideResponseBody: ['Access Token', 'Session Token', 'Authentication to Top-Level Realm', 'Authenticate as ID Cloud Admin and Get Session Token, and Cookie Name'],
           showEnvironmentData: true,
-          skipEnvironmentVars: ['IDCloudAdminUsername', 'IDCloudAdminPassword', 'username', 'password'],
+          skipEnvironmentVars: ['access_token', 'ClientId', 'ClientSecret', 'session_token', 'cookie_Name', 'cookie_Name', 'IDCloudAdminUsername', 'IDCloudAdminPassword', 'username', 'password'],
           showGlobalData: false
           // skipGlobalVars: ["API_TOKEN"],
           // skipSensitiveData: true,
@@ -44,7 +44,7 @@ switch (environment) {
 
     newman.run({
       collection: 'QATests\\FR Configuration test.postman_collection.json',
-      environment: '',
+      environment: 'QATests\\FR_Dev.postman_environment.json',
       reporters: ['htmlextra'],
       iterationCount: 1,
       reporter: {
@@ -63,7 +63,7 @@ switch (environment) {
           hideRequestBody: ['Access Token', 'Session Token', 'Authentication to Top-Level Realm', 'Authenticate as ID Cloud Admin and Get Session Token, and Cookie Name'],
           hideResponseBody: ['Access Token', 'Session Token', 'Authentication to Top-Level Realm', 'Authenticate as ID Cloud Admin and Get Session Token, and Cookie Name'],
           showEnvironmentData: true,
-          skipEnvironmentVars: ['IDCloudAdminUsername', 'IDCloudAdminPassword', 'username', 'password'],
+          skipEnvironmentVars: ['access_token', 'ClientId', 'ClientSecret', 'session_token', 'cookie_Name', 'cookie_Name', 'IDCloudAdminUsername', 'IDCloudAdminPassword', 'username', 'password'],
           showGlobalData: false
           // skipGlobalVars: ["API_TOKEN"],
           // skipSensitiveData: true,
@@ -78,7 +78,7 @@ switch (environment) {
 
     newman.run({
       collection: 'QATests\\FR Configuration test.postman_collection.json',
-      environment: '',
+      environment: 'QATests\\FR_Prod.postman_environment.json',
       reporters: ['htmlextra'],
       iterationCount: 1,
       reporter: {
@@ -96,8 +96,8 @@ switch (environment) {
           skipHeaders: ['Authorization', 'cookie'],
           hideRequestBody: ['Access Token', 'Session Token', 'Authentication to Top-Level Realm', 'Authenticate as ID Cloud Admin and Get Session Token, and Cookie Name'],
           hideResponseBody: ['Access Token', 'Session Token', 'Authentication to Top-Level Realm', 'Authenticate as ID Cloud Admin and Get Session Token, and Cookie Name'],
-          showEnvironmentData: true,
-          skipEnvironmentVars: ['IDCloudAdminUsername', 'IDCloudAdminPassword', 'username', 'password'],
+          showEnvironmentData: false,
+          skipEnvironmentVars: ['access_token', 'ClientId', 'ClientSecret', 'session_token', 'cookie_Name', 'cookie_Name', 'IDCloudAdminUsername', 'IDCloudAdminPassword', 'username', 'password'],
           showGlobalData: false
           // skipGlobalVars: ["API_TOKEN"],
           // skipSensitiveData: true,
