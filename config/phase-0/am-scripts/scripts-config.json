@@ -3,7 +3,7 @@
         {
             "payload": {
                 "_id":"df67765e-df3a-4503-9ba5-35c992b39259",
-                "name":"Create Notify JWT",
+                "name":"CH - Create Notify JWT",
                 "description":"This script creates a JWT compatible with Gov Notify service. \nThe resulting JWT (along with the template IDs) is then put in the transient state.",
                 "script":"<replace>",
                 "language":"JAVASCRIPT",
@@ -17,9 +17,9 @@
         },
         {
             "payload": {
-                "_id": "c72754b6-1bfe-41cf-8758-1b77ef0a1f42",
-                "name": "Send Registration Email",
-                "description": "Send Registration Email",
+                "_id": "b9d881b7-75c0-4cd6-8ede-e42193665657",
+                "name": "CH - Verify Registration",
+                "description": "Verify User Registration (via email link)",
                 "script": "<replace>",
                 "language": "JAVASCRIPT",
                 "context": "AUTHENTICATION_TREE_DECISION_NODE",
@@ -28,12 +28,58 @@
                 "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
                 "lastModifiedDate": 1436807766258
             },
+            "filename": "ch-confirm-registration.js"
+        },
+        {
+            "payload": {
+                "_id": "72921084-9674-4f0b-bf0c-8ef974d84008",
+                "name": "CH - Callback for Successful Registration",
+                "description": "Callback to return successful User registration message",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "ch-callback-user-registered.js"
+        },
+        {
+            "payload": {
+                "_id": "181f73fa-ec30-4ef4-b78a-9790a4918b23",
+                "name": "CH - Callback for User Already Exists",
+                "description": "Callback to return the existing user message during registration",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "ch-callback-user-exists.js"
+        },
+        {
+            "payload": {
+                "_id":"b6ca4a1f-573f-4a3a-a410-d18b01207f6e",
+                "name":"CH - Create and Email Registration Link",
+                "description":"Creates a registration link and sends it via email to the user via Notify.",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"null",
+                "lastModifiedDate":0
+            },
             "filename": "ch-send-registration-email.js"
         },
         {
             "payload": {
                 "_id": "b276c566-622e-11eb-ae93-0242ac130002",
-                "name": "Send MFA text",
+                "name": "CH - Send MFA text",
                 "description": "Send MFA text",
                 "script": "<replace>",
                 "language": "JAVASCRIPT",
@@ -48,7 +94,7 @@
         {
             "payload": {
                 "_id": "c056951c-622e-11eb-ae93-0242ac130002",
-                "name": "Send Reset Password Email",
+                "name": "CH - Send Reset Password Email",
                 "description": "Send Reset Password Email",
                 "script": "<replace>",
                 "language": "JAVASCRIPT",
