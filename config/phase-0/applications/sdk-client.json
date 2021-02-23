@@ -32,13 +32,11 @@
       "inherited": false,
       "value": [
         "forgerock://oidc_callback",
-        "https://sdkapp.example.com:8443/_callback",
-        "https://sdkapp.example.com:8443",
         "http://localhost:3000",
         "http://localhost:3000/_callback",
         "http://localhost:3000/account/home/",
         "https://ch-account-ui.amido.aws.chdev.org",
-        "https://ch-account-ui.amido.aws.chdev.org/account/home",
+        "https://ch-account-ui.amido.aws.chdev.org/account/home/",
         "https://ch-account-ui.amido.aws.chdev.org/_callback"
       ]
     },
@@ -112,8 +110,7 @@
       "value": [
         "forgerock://oidc_callback",
         "https://ch-account-ui.amido.aws.chdev.org",
-        "http://localhost:3000",
-        "https://sdkapp.example.com:8443"
+        "http://localhost:3000"
       ]
     },
     "policyUri": {
@@ -263,8 +260,6 @@
       "inherited": false,
       "value": [
         "forgerock://oidc_callback",
-        "https://sdkapp.example.com:8443",
-        "https://sdkapp.example.com:8443/_callback",
         "http://localhost:3000",
         "http://localhost:3000/_callback",
         "https://ch-account-ui.amido.aws.chdev.org",
