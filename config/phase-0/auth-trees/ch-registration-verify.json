@@ -30,8 +30,12 @@
                     }
                 ]
             },
-            "pageDescription":{},
-            "pageHeader":{}
+            "pageDescription":{
+                "en": "Please enter your account password"
+            },
+            "pageHeader":{
+                "en": "Enter your password"
+            }
         },
         {
             "_id":"cc0eae7e-d27f-468f-9966-3f9efe7d7918",           
