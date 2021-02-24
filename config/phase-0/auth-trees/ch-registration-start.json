@@ -46,10 +46,12 @@
       {
          "_id":"9e02588a-e4ac-4b08-b10f-ad8f298ae720",
          "nodeType": "ScriptedDecisionNode", 
-         "inputs":["*"],
-         "outcomes":["true","false"],
-         "outputs":["*"],
-         "script":"b6ca4a1f-573f-4a3a-a410-d18b01207f6e"
+         "details": {
+            "inputs":["*"],
+            "outcomes":["true","false"],
+            "outputs":["*"],
+            "script":"b6ca4a1f-573f-4a3a-a410-d18b01207f6e"
+         }
       }
    ],
    "tree": {
