@@ -1,11 +1,11 @@
 describe('update-applications', () => {
-  jest.mock('node-fetch')
-  const fetch = require('node-fetch')
   jest.mock('fs')
   const fs = require('fs')
   const path = require('path')
   jest.mock('../../helpers/get-session-token')
   const getSessionToken = require('../../helpers/get-session-token')
+  jest.mock('../../helpers/fidc-request')
+  const fidcRequest = require('../../helpers/fidc-request')
   jest.spyOn(console, 'log').mockImplementation(() => {})
   jest.spyOn(console, 'error').mockImplementation(() => {})
   jest.spyOn(process, 'exit').mockImplementation(() => {})
@@ -88,15 +88,10 @@ describe('update-applications', () => {
   }
 
   beforeEach(() => {
-    fetch.mockImplementation(() =>
-      Promise.resolve({
-        status: 200,
-        statusText: 'OK'
-      })
-    )
     getSessionToken.mockImplementation(() =>
       Promise.resolve(mockValues.sessionToken)
     )
+    fidcRequest.mockImplementation(() => Promise.resolve())
     process.env.FIDC_URL = mockValues.fidcUrl
     delete process.env.PHASE
     fs.readdirSync.mockReturnValue(['sdk-client.json'])
@@ -139,21 +134,28 @@ describe('update-applications', () => {
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 
+  it('should error if fidcRequest function fails', async () => {
+    expect.assertions(2)
+    const errorMessage = 'Forbidden'
+    fidcRequest.mockImplementation(() =>
+      Promise.reject(new Error(errorMessage))
+    )
+    await updateApplications(mockValues)
+    expect(console.error).toHaveBeenCalledWith(errorMessage)
+    expect(process.exit).toHaveBeenCalledWith(1)
+  })
+
   it('should call API with phase 0 config by default', async () => {
     expect.assertions(2)
     const expectedUrl = `${mockValues.fidcUrl}/am/json${mockValues.realm}/realm-config/agents/OAuth2Client/${mockPhase0Config._id}`
-    const expectedApiOptions = {
-      method: 'put',
-      headers: {
-        'content-type': 'application/json',
-        'x-requested-with': 'ForgeRock CREST.js',
-        cookie: mockValues.sessionToken
-      },
-      body: JSON.stringify(mockPhase0Config)
-    }
     await updateApplications(mockValues)
-    expect(fetch.mock.calls.length).toEqual(1)
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions)
+    expect(fidcRequest.mock.calls.length).toEqual(1)
+    expect(fidcRequest.mock.calls[0]).toEqual([
+      expectedUrl,
+      mockPhase0Config,
+      mockValues.sessionToken,
+      true
+    ])
   })
 
   it('should call API with phase config by environment variable', async () => {
@@ -161,18 +163,14 @@ describe('update-applications', () => {
     process.env.PHASE = 1
     fs.readdirSync.mockReturnValue(['sdk-client.json', 'rsc-client.json'])
     const expectedUrl = `${mockValues.fidcUrl}/am/json${mockValues.realm}/realm-config/agents/OAuth2Client/${mockPhase1Config._id}`
-    const expectedApiOptions = {
-      method: 'put',
-      headers: {
-        'content-type': 'application/json',
-        'x-requested-with': 'ForgeRock CREST.js',
-        cookie: mockValues.sessionToken
-      },
-      body: JSON.stringify(mockPhase1Config)
-    }
     await updateApplications(mockValues)
-    expect(fetch.mock.calls.length).toEqual(2)
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions)
+    expect(fidcRequest.mock.calls.length).toEqual(2)
+    expect(fidcRequest.mock.calls[0]).toEqual([
+      expectedUrl,
+      mockPhase1Config,
+      mockValues.sessionToken,
+      true
+    ])
   })
 
   it('should call update the url if the realm is changed', async () => {
@@ -180,39 +178,13 @@ describe('update-applications', () => {
     const updatedRealm = '/realms/root/realms/bravo'
     mockValues.realm = updatedRealm
     const expectedUrl = `${mockValues.fidcUrl}/am/json${updatedRealm}/realm-config/agents/OAuth2Client/${mockPhase0Config._id}`
-    const expectedApiOptions = {
-      method: 'put',
-      headers: {
-        'content-type': 'application/json',
-        'x-requested-with': 'ForgeRock CREST.js',
-        cookie: mockValues.sessionToken
-      },
-      body: JSON.stringify(mockPhase0Config)
-    }
     await updateApplications(mockValues)
-    expect(fetch.mock.calls.length).toEqual(1)
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions)
-  })
-
-  it('should error if API request fails', async () => {
-    expect.assertions(2)
-    const errorMessage = 'testing request failed'
-    fetch.mockImplementation(() => Promise.reject(new Error(errorMessage)))
-    await updateApplications(mockValues)
-    expect(console.error).toHaveBeenCalledWith(errorMessage)
-    expect(process.exit).toHaveBeenCalledWith(1)
-  })
-
-  it('should error if API response is not 200', async () => {
-    expect.assertions(2)
-    fetch.mockImplementation(() =>
-      Promise.resolve({
-        status: 401,
-        statusText: 'Unauthorized'
-      })
-    )
-    await updateApplications(mockValues)
-    expect(console.error).toHaveBeenCalledWith('401: Unauthorized')
-    expect(process.exit).toHaveBeenCalledWith(1)
+    expect(fidcRequest.mock.calls.length).toEqual(1)
+    expect(fidcRequest.mock.calls[0]).toEqual([
+      expectedUrl,
+      mockPhase0Config,
+      mockValues.sessionToken,
+      true
+    ])
   })
 })
