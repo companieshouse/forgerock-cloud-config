@@ -80,9 +80,8 @@ const getSessionToken = async (argv) => {
       sessionTokenRequestOptions
     )
     if (sessionTokenResponse.status > 299) {
-      throw new Error(
-        `${sessionTokenResponse.status}: ${sessionTokenResponse.statusText}`
-      )
+      console.log('Error while getting Session Token')
+      throw new Error(`${sessionTokenResponse.status}: ${sessionTokenResponse.statusText}`)
     }
     return Promise.resolve(sessionTokenResponse.headers.get('set-cookie'))
   } catch (error) {

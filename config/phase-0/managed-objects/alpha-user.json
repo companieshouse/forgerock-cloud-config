@@ -52,16 +52,10 @@
         "isPersonal": true,
         "policies":[
           {
-             "policyId":"valid-email-address-format",
-             "params":{
-                
-             }
+             "policyId":"valid-email-address-format"
           },
           {
-             "policyId":"valid-username",
-             "params":{
-                
-             }
+             "policyId":"valid-username"
           }
         ],
         "searchable":true,

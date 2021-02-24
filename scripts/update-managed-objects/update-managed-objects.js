@@ -44,6 +44,7 @@ const updateManagedObjects = async (argv) => {
 
     const { status, statusText } = await fetch(requestUrl, requestOptions)
     if (status !== 200) {
+      console.log('Error while updating IDM Managed Objects')
       throw new Error(`${status}: ${statusText}`)
     }
     console.log('Managed objects updated')

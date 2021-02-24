@@ -28,6 +28,7 @@ const getAccessToken = async (argv) => {
   try {
     const response = await fetch(requestUrl, requestOptions)
     if (response.status !== 200) {
+      console.log('Error while getting Access Token')
       throw new Error(`${response.status}: ${response.statusText}`)
     }
     const responseJson = await response.json()
