@@ -28,13 +28,13 @@
                         "nodeType":"ValidatedPasswordNode",
                         "displayName":"Platform Password"
                     }
-                ]
-            },
-            "pageDescription":{
-                "en": "Please enter your account password"
-            },
-            "pageHeader":{
-                "en": "Enter your password"
+                ],
+                "pageDescription":{
+                    "en": "Please enter your account password"
+                },
+                "pageHeader":{
+                    "en": "Enter your password"
+                }
             }
         },
         {

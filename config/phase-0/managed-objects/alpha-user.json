@@ -11,11 +11,11 @@
   "name": "alpha_user",
   "notifications": {},
   "onCreate": {
-    "source": "require('onCreateUser').setDefaultFields(object);",
+    "source":"require('onCreateUser').setDefaultFields(object);\nlogger.info(\"setting email as username \"+object.mail);\nobject.userName = object.mail;\n\n",
     "type": "text/javascript"
   },
   "onUpdate": {
-    "source": "require('onUpdateUser').preserveLastSync(object, oldObject, request);",
+    "source":"require('onUpdateUser').preserveLastSync(object, oldObject, request);\nnewObject.userName = newObject.mail;",
     "type": "text/javascript"
   },
   "schema": {
@@ -50,35 +50,28 @@
       "userName": {
         "description": "Username",
         "isPersonal": true,
-        "minLength": 1,
-        "policies": [
+        "policies":[
           {
-            "params": {
-              "forbiddenChars": [
-                "/"
-              ]
-            },
-            "policyId": "cannot-contain-characters"
+             "policyId":"valid-email-address-format",
+             "params":{
+                
+             }
           },
           {
-            "params": {
-              "minLength": 1
-            },
-            "policyId": "minimum-length"
-          },
-          {
-            "params": {
-              "maxLength": 255
-            },
-            "policyId": "maximum-length"
+             "policyId":"valid-username",
+             "params":{
+                
+             }
           }
         ],
-        "searchable": true,
-        "title": "Username",
-        "type": "string",
-        "usageDescription": null,
-        "userEditable": true,
-        "viewable": true
+        "searchable":true,
+        "title":"Username",
+        "type":"string",
+        "usageDescription":null,
+        "userEditable":false,
+        "viewable":true,
+        "isVirtual":false,
+        "deleteQueryConfig":false
       },
       "password": {
         "description": "Password",
@@ -1150,7 +1143,6 @@
       "isAuthorisedUserOf"
     ],
     "required": [
-      "userName",
       "givenName",
       "sn",
       "mail"

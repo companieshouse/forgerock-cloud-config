@@ -10,14 +10,14 @@
                   "nodeType":"AttributeCollectorNode",
                   "displayName":"Attribute Collector"
                }
-            ]
-         },
-         "pageDescription":{
-            "en":"Signing up is fast and easy.<br>Already have an account? <a href='#/service/Login'>Sign In</a>"
-         },
-         "pageHeader":{
-            "en":"Sign Up"
-         }
+            ],
+            "pageDescription":{
+               "en":"Signing up is fast and easy.<br>Already have an account? <a href='#/service/Login'>Sign In</a>"
+            },
+            "pageHeader":{
+               "en":"Sign Up"
+            }
+         }         
       },
       {
          "_id":"f07f1b4a-8aef-4c53-b04f-e41fd06ed859",     
