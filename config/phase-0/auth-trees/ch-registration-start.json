@@ -20,13 +20,43 @@
          }         
       },
       {
+         "_id":"49747def-2c53-4d70-99f2-d60d62a620cc",
+         "nodeType": "PageNode",
+         "details": {
+            "nodes":[
+               {
+                  "_id":"b361444b-136d-4bc9-af4a-6c251d851772",
+                  "nodeType":"AttributeCollectorNode",
+                  "displayName":"Attribute Collector"
+               }
+            ],
+            "pageHeader":{
+               "title":"Please enter your name"
+            },
+            "pageDescription":{
+               "desc":"Please enter your first name and last name"
+            }
+         }         
+      },
+      {
          "_id":"f07f1b4a-8aef-4c53-b04f-e41fd06ed859",     
          "nodeType": "AttributeCollectorNode",
          "details": {
             "attributesToCollect":[
-               "givenName",
-               "sn",
                "mail"
+            ],
+            "identityAttribute":"userName",
+            "required":true,
+            "validateInputs":true
+         }
+      },
+      {
+         "_id":"b361444b-136d-4bc9-af4a-6c251d851772",
+         "nodeType": "AttributeCollectorNode",
+         "details": {
+            "attributesToCollect":[
+               "givenName",
+               "sn"
             ],
             "identityAttribute":"userName",
             "required":true,
@@ -66,11 +96,18 @@
       "uiConfig": {},
       "nodes":{
             "eb711261-5253-4e17-9357-43e175a5005d":{
+               "displayName":"Email Collector",
+               "connections":{
+                  "outcome":"49747def-2c53-4d70-99f2-d60d62a620cc"
+               },
+               "nodeType":"PageNode"
+            },
+            "49747def-2c53-4d70-99f2-d60d62a620cc":{
+               "displayName":"Name Collector",
+               "nodeType":"PageNode",
                "connections":{
                   "outcome":"997cc39b-afde-4935-b9b5-a0d4e3034072"
-               },
-               "displayName":"Page Node",
-               "nodeType":"PageNode"
+               }
             },
             "997cc39b-afde-4935-b9b5-a0d4e3034072":{
                "connections":{

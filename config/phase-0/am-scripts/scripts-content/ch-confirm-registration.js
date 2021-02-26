@@ -61,6 +61,7 @@ if (Math.round(Difference_In_Time/(1000 * 60)) < 10080){
   try{
     // put the read attributes in shared state for the Create Object node to consume
     sharedState.put("objectAttributes", {"userName":email, "givenName":firstName, "sn":lastName, "mail":email});
+    sharedState.put("userName", email);
   }catch(e){
     logger.error("error while storing state: " + e);
     errorFound = true;

@@ -42,7 +42,7 @@
             "nodeType":"ValidatedPasswordNode",
 			"details": {
                 "passwordAttribute":"password",
-                "validateInput":false                
+                "validateInput":true                
             }
         },
         {
@@ -71,7 +71,14 @@
                 "outputs":["*"],
                 "script":"72921084-9674-4f0b-bf0c-8ef974d84008"
             }
-        }
+        },
+        {
+            "_id":"793b7cc5-1c8d-4b36-af55-9b26d7d2a503",
+            "nodeType":"IncrementLoginCountNode",
+            "details": {
+                "identityAttribute":"userName"
+            }
+         }
     ],
     "tree": {
         "_id":"CHVerifyReg",
@@ -87,7 +94,7 @@
             "02d95fe8-1c39-4144-b411-13fcd4226c6a":{
                 "connections":{
                     "FAILURE":"e301438c-0bd0-429c-ab0c-66126501069a",
-                    "CREATED":"1b1d44c3-8e55-4729-b783-54b69b021bae"
+                    "CREATED":"793b7cc5-1c8d-4b36-af55-9b26d7d2a503"
                 },
                 "nodeType":"CreateObjectNode",
                 "displayName":"Create User"
@@ -99,13 +106,6 @@
                 },
                 "nodeType":"ScriptedDecisionNode",
                 "displayName":"Verify Reg Token"
-            },
-            "d3d9440a-6562-479a-be32-7d863a159155":{
-                "connections":{
-                    "outcome":"02d95fe8-1c39-4144-b411-13fcd4226c6a"
-                },
-                "nodeType":"PageNode",
-                "displayName":"Page Node"
             },
             "63a23daf-33ad-4848-8e2a-c3f3d749e646":{
                 "connections":{
@@ -122,13 +122,20 @@
                 "nodeType":"ScriptedDecisionNode",
                 "displayName":"Callback Existing User"
             },
-            "1b1d44c3-8e55-4729-b783-54b69b021bae":{
+            "d3d9440a-6562-479a-be32-7d863a159155":{
                 "connections":{
-                    "true":"70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+                    "outcome":"02d95fe8-1c39-4144-b411-13fcd4226c6a"
                 },
-                "nodeType":"ScriptedDecisionNode",
-                "displayName":"Callback Reg Complete"
-            }
+                "nodeType":"PageNode",
+                "displayName":"Password Collector"
+            },
+            "793b7cc5-1c8d-4b36-af55-9b26d7d2a503":{
+                "displayName":"Increment Login Count",
+                "nodeType":"IncrementLoginCountNode",
+                "connections":{
+                   "outcome":"70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+                }
+             }
         }
     }
 }
