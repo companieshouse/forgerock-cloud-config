@@ -3,7 +3,7 @@
 	"connectorRef": {
 		"connectorHostRef": "aws",
 		"displayName": "MongoDB Connector",
-		"bundleVersion": "1.5.19.1",
+		"bundleVersion": "1.5.19.7-SNAPSHOT",
 		"systemType": "provisioner.openicf",
 		"bundleName": "org.forgerock.openicf.connectors.mongodb-connector",
 		"connectorName": "org.forgerock.openicf.connectors.mongodb.MongoDBConnector"
@@ -48,7 +48,7 @@
 		"minimumRecompilationInterval": "100",
 		"deleteScriptFileName": "DeleteMongoDB.groovy",
 		"scriptBaseClass": null,
-		"scriptRoots": ["jar:file:connectors/mongodb-connector-1.5.19.1.jar!/scripts/mongodb/"],
+		"scriptRoots": ["jar:file:connectors/mongodb-connector-1.5.19.7-SNAPSHOT.jar!/scripts/mongodb/"],
 		"customConfiguration": null,
 		"resolveUsernameScriptFileName": null,
 		"searchScriptFileName": "SearchMongoDB.groovy",
@@ -68,7 +68,7 @@
 		"port": "27017",
 		"user": null,
 		"password": null,
-		"userDatabase": "admin",
+		"userDatabase": null,
 		"clusterAddresses": null,
 		"dateAttributes": [],
 		"database": "company_profile",
@@ -87,7 +87,7 @@
 	},
 	"enabled": true,
 	"objectTypes": {
-		"company": {
+		"company_profile": {
 			"$schema": "http://json-schema.org/draft-03/schema",
 			"type": "object",
 			"id": "company_profile",
@@ -99,11 +99,13 @@
 					"nativeType": "string",
 					"required": true
 				},
-				"delta_at": {
-					"type": "string",
-					"nativeName": "delta_at",
-					"nativeType": "string",
-					"required": false
+				"data": {
+					"type": "object",
+					"nativeType": "object",
+					"nativeName": "data",
+					"required": true,
+					"flags": [],
+					"runAsUser": false
 				}
 			}
 		}
