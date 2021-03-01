@@ -11,7 +11,6 @@ var fr = JavaImporter(
   org.forgerock.json.jose.jws.JwsAlgorithm,
   org.forgerock.json.jose.jws.SignedJwt,
   org.forgerock.json.jose.jws.JwsHeader,
-  org.forgerock.json.jose.jwt.Payload,  
   javax.security.auth.callback.PasswordCallback 
 )
 
@@ -47,6 +46,13 @@ try{
   var iat = claimSet.getClaim("creationDate");
   var firstName = claimSet.getClaim("firstName");
   var lastName = claimSet.getClaim("lastName");
+
+  // TODO remove these 4 lines when the classes have been whitelisted
+  // var email = 'matteo.formica@amido.com';
+  // var iat = 'Mon Mar 01 2021 09:49:25 GMT-0000 (GMT)';
+  // var firstName = 'Matteo';
+  // var lastName = 'Formica';
+
   var now = new Date();
   var Difference_In_Time = now.getTime() - (new Date(iat)).getTime();
   logger.error("initiating email: " + email + " on: "+ iat + " - difference (min): "+Math.round(Difference_In_Time/(1000 * 60)));
@@ -65,7 +71,8 @@ if(errorFound){
         )
     ).build()
   }
-} else if (Math.round(Difference_In_Time/(1000 * 60)) < 10080){
+} else 
+if (Math.round(Difference_In_Time/(1000 * 60)) < 10080){
   logger.error("token is still valid");
   try{
     // put the read attributes in shared state for the Create Object node to consume
