@@ -1,6 +1,6 @@
 {
 	"target": "managed/Company",
-	"source": "system/CHSCompanyTest/company_profile",
+	"source": "system/CHSCompany/company_profile",
 	"name": "systemChscompanyCompany_profile_managedCompany",
 	"consentRequired": false,
 	"icon": null,

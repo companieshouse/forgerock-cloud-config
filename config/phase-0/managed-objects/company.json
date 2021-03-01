@@ -49,6 +49,20 @@
         "userEditable": true,
         "viewable": true
       },
+      "authCodeIsActive": {
+        "searchable": true,
+        "title": "Authentication Code Active",
+        "type": "boolean",
+        "userEditable": true,
+        "viewable": true
+      },
+      "authCodeValidFrom": {
+        "searchable": true,
+        "title": "Authentication Code Valid From",
+        "type": "string",
+        "userEditable": true,
+        "viewable": true
+      },
       "authorisedUsers": {
         "description": "Authorised Users are Users that are associated with a Company",
         "title": "Has Authorised User",
@@ -120,13 +134,55 @@
         "deleteQueryConfig": false
       }
     },
+    "locality": {
+      "title": "Locality",
+      "type": "string",
+      "viewable": true,
+      "searchable": true,
+      "userEditable": true
+    },
+    "postalCode": {
+      "title": "Postal Code",
+      "type": "string",
+      "viewable": true,
+      "searchable": true,
+      "userEditable": true
+    },
+    "addressLine1": {
+      "title": "Address Line 1",
+      "type": "string",
+      "viewable": true,
+      "searchable": true,
+      "userEditable": true
+    },
+    "addressLine2": {
+      "title": "Address Line 2",
+      "type": "string",
+      "viewable": true,
+      "searchable": true,
+      "userEditable": true
+    },
+    "region": {
+      "title": "Region",
+      "type": "string",
+      "viewable": true,
+      "searchable": true,
+      "userEditable": true
+    },
     "order": [
       "name",
       "number",
       "type",
       "status",
       "authCode",
-      "authorisedUsers"
+      "authCodeIsActive",
+      "authCodeValidFrom",
+      "authorisedUsers",
+      "locality",
+      "postalCode",
+      "addressLine1",
+      "addressLine2",
+      "region"
     ],
     "required": [
       "name",
