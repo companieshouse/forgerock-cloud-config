@@ -36,6 +36,7 @@ logger.error("JWT: " + jwt);
 try{
   transientState.put("notifyJWT", jwt);
   transientState.put("notifyTemplates", JSON.stringify(notifyObj.templates));
+  transientState.put("secretKey", secret);
 }catch(e){
   logger.error(e);
 }
