@@ -1,0 +1,121 @@
+{
+	"target": "managed/Company",
+	"source": "system/CHSCompanyTest/company_profile",
+	"name": "systemChscompanyCompany_profile_managedCompany",
+	"consentRequired": false,
+	"icon": null,
+	"displayName": "systemChscompanyCompany_profile_managedCompany",
+	"properties": [{
+		"target": "name",
+		"source": "data",
+		"transform": {
+			"type": "text/javascript",
+			"globals": {},
+			"source": "source.company_name"
+		}
+	}, {
+		"target": "number",
+		"source": "data",
+		"transform": {
+			"type": "text/javascript",
+			"globals": {},
+			"source": "source.company_number"
+		}
+	}, {
+		"target": "type",
+		"source": "data",
+		"transform": {
+			"type": "text/javascript",
+			"globals": {},
+			"source": "source.type"
+		}
+	}, {
+		"target": "status",
+		"source": "data",
+		"transform": {
+			"type": "text/javascript",
+			"globals": {},
+			"source": "source.company_status"
+		}
+	}, {
+		"target": "locality",
+		"source": "data",
+		"transform": {
+			"type": "text/javascript",
+			"globals": {},
+			"source": "source.registered_office_address.locality"
+		}
+	}, {
+		"target": "postalCode",
+		"source": "data",
+		"transform": {
+			"type": "text/javascript",
+			"globals": {},
+			"source": "source.registered_office_address.postal_code"
+		}
+	}, {
+		"target": "addressLine1",
+		"source": "data",
+		"transform": {
+			"type": "text/javascript",
+			"globals": {},
+			"source": "source.registered_office_address.address_line_1"
+		}
+	}, {
+		"target": "addressLine2",
+		"source": "data",
+		"transform": {
+			"type": "text/javascript",
+			"globals": {},
+			"source": "source.registered_office_address.address_line_2"
+		}
+	}, {
+		"target": "region",
+		"source": "data",
+		"transform": {
+			"type": "text/javascript",
+			"globals": {},
+			"source": "source.registered_office_address.region"
+		}
+	}],
+	"policies": [{
+		"action": "EXCEPTION",
+		"situation": "AMBIGUOUS"
+	}, {
+		"action": "EXCEPTION",
+		"situation": "SOURCE_MISSING"
+	}, {
+		"action": "EXCEPTION",
+		"situation": "MISSING"
+	}, {
+		"action": "EXCEPTION",
+		"situation": "FOUND_ALREADY_LINKED"
+	}, {
+		"action": "DELETE",
+		"situation": "UNQUALIFIED"
+	}, {
+		"action": "EXCEPTION",
+		"situation": "UNASSIGNED"
+	}, {
+		"action": "EXCEPTION",
+		"situation": "LINK_ONLY"
+	}, {
+		"action": "IGNORE",
+		"situation": "TARGET_IGNORED"
+	}, {
+		"action": "IGNORE",
+		"situation": "SOURCE_IGNORED"
+	}, {
+		"action": "IGNORE",
+		"situation": "ALL_GONE"
+	}, {
+		"action": "UPDATE",
+		"situation": "CONFIRMED"
+	}, {
+		"action": "UPDATE",
+		"situation": "FOUND"
+	}, {
+		"action": "CREATE",
+		"situation": "ABSENT"
+	}]
+}
