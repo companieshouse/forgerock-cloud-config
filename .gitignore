@@ -1,2 +1,5 @@
 node_modules
 coverage
+
+# Sensitive config files
+config/phase-*/services/oauth2-provider.json
