@@ -4,6 +4,7 @@
          "_id":"eb711261-5253-4e17-9357-43e175a5005d",
          "nodeType": "PageNode",
          "details": {
+            "stage":"REGISTRATION_1",
             "nodes":[
                {
                   "_id":"f07f1b4a-8aef-4c53-b04f-e41fd06ed859",
@@ -23,6 +24,7 @@
          "_id":"49747def-2c53-4d70-99f2-d60d62a620cc",
          "nodeType": "PageNode",
          "details": {
+            "stage":"REGISTRATION_2",
             "nodes":[
                {
                   "_id":"b361444b-136d-4bc9-af4a-6c251d851772",
