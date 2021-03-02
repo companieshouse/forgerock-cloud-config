@@ -1,5 +1,5 @@
 {
-	"_id": "CHSUser",
+	"_id": "provisioner.openicf/CHSUser",
 	"connectorRef": {
 		"connectorHostRef": "aws",
 		"displayName": "CHS User Connector",
