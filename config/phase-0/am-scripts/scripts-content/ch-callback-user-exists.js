@@ -6,8 +6,16 @@ var fr = JavaImporter(
 if (callbacks.isEmpty()) {
   action = fr.Action.send(
     new fr.TextOutputCallback(
-      fr.TextOutputCallback.ERROR,
-      "Registration failed - A user with this email already exists!" 
+        fr.TextOutputCallback.ERROR,
+        "Registration failed - A user with this email already exists!" 
+    ),
+    new fr.HiddenValueCallback (
+        "stage",
+        "REGISTRATION_ERROR" 
+    ),
+    new fr.HiddenValueCallback (
+        "pagePropsJSON",
+        JSON.stringify({"errors": [{"label": "A user with this email already exists!"}]})
     )
   ).build()
 } else { 

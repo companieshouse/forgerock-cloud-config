@@ -2,7 +2,6 @@ var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
   java.lang.Math,
   org.forgerock.openam.auth.node.api,
-  com.sun.identity.authentication.callbacks.ScriptTextOutputCallback,
   javax.security.auth.callback.TextOutputCallback,
   com.sun.identity.authentication.callbacks.HiddenValueCallback,
   org.forgerock.json.jose.builders.JwtBuilderFactory,
@@ -108,25 +107,35 @@ if(!errorFound){
 
   if(response.getStatus().getCode() == 201){
     if (callbacks.isEmpty()) {
-      // action = fr.Action.send(
-      //     new fr.TextOutputCallback(
-      //         fr.TextOutputCallback.INFORMATION,
-      //         "Please check your email to complete registration - "+email 
-      //     )
-      // ).build()
       action = fr.Action.send(
+	      new fr.TextOutputCallback(
+            fr.TextOutputCallback.INFORMATION,
+            "Please check your email to complete registration - "+email 
+        ),
         new fr.HiddenValueCallback (
             "stage",
             "REGISTRATION_3" 
+        ),
+        new fr.HiddenValueCallback (
+            "pagePropsJSON",
+            JSON.stringify({"email": email}) 
         )
       ).build()
     } 
   }else{
     if (callbacks.isEmpty()) {
       action = fr.Action.send(
+        new fr.HiddenValueCallback (
+            "stage",
+            "REGISTRATION_ERROR" 
+        ),
           new fr.TextOutputCallback(
             fr.TextOutputCallback.ERROR,
             "The email could not be sent: "+response.getEntity().getString()
+        ),
+        new fr.HiddenValueCallback (
+            "pagePropsJSON",
+            JSON.stringify({"apiError": JSON.parse(response.getEntity().getString())})
         )
       ).build()
     } 
@@ -134,6 +143,10 @@ if(!errorFound){
 } else {
   if (callbacks.isEmpty()) {
     action = fr.Action.send(
+      new fr.HiddenValueCallback (
+            "stage",
+            "REGISTRATION_ERROR" 
+        ),
         new fr.TextOutputCallback(
           fr.TextOutputCallback.ERROR,
           "An error has occurred! Please try again later"

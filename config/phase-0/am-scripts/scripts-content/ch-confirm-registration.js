@@ -10,9 +10,7 @@ var fr = JavaImporter(
   org.forgerock.json.jose.jwt.JwtClaimsSet,
   org.forgerock.json.jose.jws.JwsAlgorithm,
   org.forgerock.json.jose.jws.SignedJwt,
-  org.forgerock.json.jose.jws.JwsHeader,
-  org.forgerock.json.jose.jwt.Payload,  
-  javax.security.auth.callback.PasswordCallback 
+  org.forgerock.json.jose.jws.JwsHeader
 )
 
 var Difference_In_Time;
