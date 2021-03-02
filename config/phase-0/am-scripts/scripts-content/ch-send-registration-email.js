@@ -4,6 +4,7 @@ var fr = JavaImporter(
   org.forgerock.openam.auth.node.api,
   com.sun.identity.authentication.callbacks.ScriptTextOutputCallback,
   javax.security.auth.callback.TextOutputCallback,
+  com.sun.identity.authentication.callbacks.HiddenValueCallback,
   org.forgerock.json.jose.builders.JwtBuilderFactory,
   org.forgerock.json.jose.jws.handlers.HmacSigningHandler,
   org.forgerock.json.jose.jwt.JwtClaimsSet,
@@ -107,11 +108,17 @@ if(!errorFound){
 
   if(response.getStatus().getCode() == 201){
     if (callbacks.isEmpty()) {
+      // action = fr.Action.send(
+      //     new fr.TextOutputCallback(
+      //         fr.TextOutputCallback.INFORMATION,
+      //         "Please check your email to complete registration - "+email 
+      //     )
+      // ).build()
       action = fr.Action.send(
-          new fr.TextOutputCallback(
-              fr.TextOutputCallback.INFORMATION,
-              "Please check your email to complete registration - "+email 
-          )
+        new fr.HiddenValueCallback (
+            "stage",
+            "REGISTRATION_3" 
+        )
       ).build()
     } 
   }else{

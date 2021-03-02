@@ -22,6 +22,7 @@
             "_id":"d3d9440a-6562-479a-be32-7d863a159155",
             "nodeType": "PageNode",
             "details": {
+                "stage":"REGISTRATION_4",
                 "nodes":[
                     {
                         "_id":"cc0eae7e-d27f-468f-9966-3f9efe7d7918",
@@ -73,10 +74,11 @@
             }
         },
         {
-            "_id":"793b7cc5-1c8d-4b36-af55-9b26d7d2a503",
-            "nodeType":"IncrementLoginCountNode",
+            "_id":"bb74cb44-5e3f-4634-9e5f-f18e121ca93f",
+            "nodeType":"IdentifyExistingUserNode",
             "details": {
-                "identityAttribute":"userName"
+                "identifier":"userName",
+                "identityAttribute":"mail"
             }
          }
     ],
@@ -94,7 +96,7 @@
             "02d95fe8-1c39-4144-b411-13fcd4226c6a":{
                 "connections":{
                     "FAILURE":"e301438c-0bd0-429c-ab0c-66126501069a",
-                    "CREATED":"793b7cc5-1c8d-4b36-af55-9b26d7d2a503"
+                    "CREATED":"bb74cb44-5e3f-4634-9e5f-f18e121ca93f"
                 },
                 "nodeType":"CreateObjectNode",
                 "displayName":"Create User"
@@ -129,11 +131,12 @@
                 "nodeType":"PageNode",
                 "displayName":"Password Collector"
             },
-            "793b7cc5-1c8d-4b36-af55-9b26d7d2a503":{
-                "displayName":"Increment Login Count",
-                "nodeType":"IncrementLoginCountNode",
+            "bb74cb44-5e3f-4634-9e5f-f18e121ca93f":{
+                "displayName":"Identify Existing User",
+                "nodeType":"IdentifyExistingUserNode",
                 "connections":{
-                   "outcome":"70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+                   "true":"70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
+                   "false":"e301438c-0bd0-429c-ab0c-66126501069a"
                 }
              }
         }
