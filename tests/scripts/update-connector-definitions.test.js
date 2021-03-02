@@ -132,7 +132,7 @@ describe('update-connector-definitions', () => {
 
   it('should call API with phase 0 config by default', async () => {
     expect.assertions(2)
-    const expectedUrl = `${mockValues.fidcUrl}/openidm/config/provisioner.openicf/${mockPhase0Config._id}`
+    const expectedUrl = `${mockValues.fidcUrl}/openidm/config/${mockPhase0Config._id}`
     const expectedApiOptions = {
       method: 'put',
       headers: {
@@ -149,7 +149,7 @@ describe('update-connector-definitions', () => {
   it('should call API with phase config by environment variable', async () => {
     process.env.PHASE = 1
     fs.readdirSync.mockReturnValue(['mongodb.json', 'oracle.json'])
-    const expectedUrl = `${mockValues.fidcUrl}/openidm/config/provisioner.openicf/${mockPhase1Config._id}`
+    const expectedUrl = `${mockValues.fidcUrl}/openidm/config/${mockPhase1Config._id}`
     const expectedApiOptions = {
       method: 'put',
       headers: {
