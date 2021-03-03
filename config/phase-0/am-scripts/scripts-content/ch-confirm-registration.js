@@ -3,8 +3,8 @@ var fr = JavaImporter(
   java.lang.Math,
   java.lang.String,
   org.forgerock.openam.auth.node.api,
-  com.sun.identity.authentication.callbacks.ScriptTextOutputCallback,
   javax.security.auth.callback.TextOutputCallback,
+  com.sun.identity.authentication.callbacks.HiddenValueCallback,
   org.forgerock.json.jose.builders.JwtBuilderFactory,
   org.forgerock.json.jose.jws.handlers.HmacSigningHandler,
   org.forgerock.json.jose.jwt.JwtClaimsSet,
@@ -64,7 +64,7 @@ if(errorFound){
     ).build()
   }
 } else if (Math.round(Difference_In_Time/(1000 * 60)) < 10080){
-  logger.error("token is still valid");
+  logger.error("The provided token is still valid");
   try{
     // put the read attributes in shared state for the Create Object node to consume
     sharedState.put("objectAttributes", {"userName":email, "givenName":firstName, "sn":lastName, "mail":email});
@@ -74,13 +74,15 @@ if(errorFound){
     errorFound = true;
   }
   outcome = errorFound ? "false" : "true" 
-} else {
-  if (callbacks.isEmpty()) {
+} else if (callbacks.isEmpty()) {
     action = fr.Action.send(
+      new fr.HiddenValueCallback (
+            "stage",
+            "REGISTRATION_ERROR" 
+        ),
         new fr.TextOutputCallback(
-            fr.TextOutputCallback.ERROR,
-            "The provided token is expired"
+          fr.TextOutputCallback.ERROR,
+          "The registration token has expired"
         )
-    ).build()
-  }
+      ).build()
 }

@@ -6,7 +6,10 @@ var fr = JavaImporter(
   org.forgerock.secrets.SecretBuilder,
   javax.crypto.spec.SecretKeySpec,
   org.forgerock.secrets.keys.SigningKey,
-  org.forgerock.json.jose.jws.handlers.SecretHmacSigningHandler
+  org.forgerock.json.jose.jws.handlers.SecretHmacSigningHandler,
+  org.forgerock.openam.auth.node.api.Action,
+  javax.security.auth.callback.TextOutputCallback,
+  com.sun.identity.authentication.callbacks.HiddenValueCallback
 )
 
 var signingHandler;
@@ -14,6 +17,7 @@ var secretbytes;
 var secret;
 var notifyObj;
 var errorFound = false;
+// This variable value will be replaced with the relevant value in the target environment (stored in AM secret store) 
 var notifyDetails = "{ \"keyName\": \"chsidamtest\", \"issUuid\": \"314d829f-4b8c-40fe-b9f5-50ed6001102d\", \"secretKey\": \"0682b662-4502-430d-bceb-4542bc4e9ee7\", \"templates\": { \"invite\": \"6557568c-b9ca-426d-9ced-ac0d686490e4\", \"requestAuthz\": \"5cab9eb4-e648-4a0d-a27b-558980259440\", \"otpEmail\": \"a1f77c64-9268-49d9-bb64-8ddc6bac0166\", \"otpSms\": \"12ac43ec-5b83-48ec-b3db-9a8f3d6624f6\", \"verifyReg\": \"bf9effa7-3c30-4490-b12b-f1f6527f4c69\", \"resetPwd\": \"a17b882f-08a0-4d91-860c-aac9d42c8f0b\"}}"
 var jwt;
 
@@ -23,7 +27,6 @@ try{
   secretbytes = java.lang.String(secret).getBytes()
 }catch(e){
   logger.error("Error while parsing secret: " + e);
-  errorFound = true;
 }
 
 logger.error("parsed: " + JSON.stringify(notifyObj));
@@ -68,8 +71,23 @@ try{
 }
 
 if(errorFound){
-  logger.error("Error Found!");
-  action = fr.Action.goTo("false").withErrorMessage("Error while creating Notify JWT").build()
+  //action = fr.Action.goTo("false").withErrorMessage("Error while creating Notify JWT").build()
+  if (callbacks.isEmpty()) {
+    action = fr.Action.send(
+      new fr.TextOutputCallback(
+          fr.TextOutputCallback.ERROR,
+          "Journey failed - Error while creating Notify JWT" 
+      ),
+      new fr.HiddenValueCallback (
+          "stage",
+          "GENERIC_ERROR" 
+      ),
+      new fr.HiddenValueCallback (
+          "pagePropsJSON",
+          JSON.stringify({"errors": [{"label": "Error while creating Notify JWT"}]})
+      )
+    ).build()
+  }
 }
 
 outcome = "true";

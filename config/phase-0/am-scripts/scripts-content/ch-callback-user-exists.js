@@ -1,6 +1,7 @@
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
-  javax.security.auth.callback.TextOutputCallback
+  javax.security.auth.callback.TextOutputCallback,
+  com.sun.identity.authentication.callbacks.HiddenValueCallback
 )
 
 if (callbacks.isEmpty()) {
