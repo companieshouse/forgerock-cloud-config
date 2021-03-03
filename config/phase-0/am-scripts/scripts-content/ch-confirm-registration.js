@@ -3,15 +3,14 @@ var fr = JavaImporter(
   java.lang.Math,
   java.lang.String,
   org.forgerock.openam.auth.node.api,
-  com.sun.identity.authentication.callbacks.ScriptTextOutputCallback,
   javax.security.auth.callback.TextOutputCallback,
+  com.sun.identity.authentication.callbacks.HiddenValueCallback,
   org.forgerock.json.jose.builders.JwtBuilderFactory,
   org.forgerock.json.jose.jws.handlers.HmacSigningHandler,
   org.forgerock.json.jose.jwt.JwtClaimsSet,
   org.forgerock.json.jose.jws.JwsAlgorithm,
   org.forgerock.json.jose.jws.SignedJwt,
-  org.forgerock.json.jose.jws.JwsHeader,
-  javax.security.auth.callback.PasswordCallback 
+  org.forgerock.json.jose.jws.JwsHeader
 )
 
 var Difference_In_Time;
@@ -46,13 +45,6 @@ try{
   var iat = claimSet.getClaim("creationDate");
   var firstName = claimSet.getClaim("firstName");
   var lastName = claimSet.getClaim("lastName");
-
-  // TODO remove these 4 lines when the classes have been whitelisted
-  // var email = 'matteo.formica@amido.com';
-  // var iat = 'Mon Mar 01 2021 09:49:25 GMT-0000 (GMT)';
-  // var firstName = 'Matteo';
-  // var lastName = 'Formica';
-
   var now = new Date();
   var Difference_In_Time = now.getTime() - (new Date(iat)).getTime();
   logger.error("initiating email: " + email + " on: "+ iat + " - difference (min): "+Math.round(Difference_In_Time/(1000 * 60)));
@@ -71,9 +63,8 @@ if(errorFound){
         )
     ).build()
   }
-} else 
-if (Math.round(Difference_In_Time/(1000 * 60)) < 10080){
-  logger.error("token is still valid");
+} else if (Math.round(Difference_In_Time/(1000 * 60)) < 10080){
+  logger.error("The provided token is still valid");
   try{
     // put the read attributes in shared state for the Create Object node to consume
     sharedState.put("objectAttributes", {"userName":email, "givenName":firstName, "sn":lastName, "mail":email});
@@ -83,13 +74,15 @@ if (Math.round(Difference_In_Time/(1000 * 60)) < 10080){
     errorFound = true;
   }
   outcome = errorFound ? "false" : "true" 
-} else {
-  if (callbacks.isEmpty()) {
+} else if (callbacks.isEmpty()) {
     action = fr.Action.send(
+      new fr.HiddenValueCallback (
+            "stage",
+            "REGISTRATION_ERROR" 
+        ),
         new fr.TextOutputCallback(
-            fr.TextOutputCallback.ERROR,
-            "The provided token is expired"
+          fr.TextOutputCallback.ERROR,
+          "The registration token has expired"
         )
-    ).build()
-  }
+      ).build()
 }
