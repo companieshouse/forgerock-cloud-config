@@ -71,7 +71,7 @@
 		"userDatabase": "admin",
 		"clusterAddresses": null,
 		"dateAttributes": [],
-		"database": "users",
+		"database": "account",
 		"arrayAttributes": [],
 		"includeNullValue": "false",
 		"includeEmptyList": "false",
@@ -87,90 +87,6 @@
 	},
 	"enabled": true,
 	"objectTypes": {
-		"role": {
-			"$schema": "http://json-schema.org/draft-03/schema",
-			"id": "role",
-			"nativeType": "role",
-			"properties": {
-				"__NAME__": {
-					"nativeName": "__NAME__",
-					"nativeType": "string",
-					"type": "string"
-				},
-				"db": {
-					"flags": [
-						"NOT_CREATABLE",
-						"NOT_UPDATEABLE"
-					],
-					"nativeName": "db",
-					"nativeType": "string",
-					"type": "string"
-				},
-				"inheritedPrivileges": {
-					"flags": [
-						"NOT_CREATABLE",
-						"NOT_UPDATEABLE"
-					],
-					"items": {
-						"nativeType": "object",
-						"type": "object"
-					},
-					"nativeName": "inheritedPrivileges",
-					"nativeType": "object",
-					"type": "array"
-				},
-				"inheritedRoles": {
-					"flags": [
-						"NOT_CREATABLE",
-						"NOT_UPDATEABLE"
-					],
-					"items": {
-						"nativeType": "object",
-						"type": "object"
-					},
-					"nativeName": "inheritedRoles",
-					"nativeType": "object",
-					"type": "array"
-				},
-				"isBuiltin": {
-					"flags": [
-						"NOT_CREATABLE",
-						"NOT_UPDATEABLE"
-					],
-					"nativeName": "isBuiltin",
-					"nativeType": "string",
-					"type": "string"
-				},
-				"privileges": {
-					"items": {
-						"nativeType": "object",
-						"type": "object"
-					},
-					"nativeName": "privileges",
-					"nativeType": "object",
-					"type": "array"
-				},
-				"role": {
-					"flags": [
-						"NOT_UPDATEABLE"
-					],
-					"nativeName": "role",
-					"nativeType": "string",
-					"required": true,
-					"type": "string"
-				},
-				"roles": {
-					"items": {
-						"nativeType": "object",
-						"type": "object"
-					},
-					"nativeName": "roles",
-					"nativeType": "object",
-					"type": "array"
-				}
-			},
-			"type": "object"
-		},
 		"users": {
 			"$schema": "http://json-schema.org/draft-03/schema",
 			"id": "users",
