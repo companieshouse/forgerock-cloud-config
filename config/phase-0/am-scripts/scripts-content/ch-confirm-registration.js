@@ -79,10 +79,14 @@ if(errorFound){
       new fr.HiddenValueCallback (
             "stage",
             "REGISTRATION_ERROR" 
-        ),
-        new fr.TextOutputCallback(
-          fr.TextOutputCallback.ERROR,
-          "The registration token has expired"
-        )
-      ).build()
+      ),
+      new fr.HiddenValueCallback (
+        "pagePropsJSON",
+        JSON.stringify({"error": "The registration token has expired"}) 
+      ),
+      new fr.TextOutputCallback(
+        fr.TextOutputCallback.ERROR,
+        "The registration token has expired"
+      )
+    ).build()
 }

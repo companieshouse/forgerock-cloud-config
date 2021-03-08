@@ -97,36 +97,36 @@
       },
       "uiConfig": {},
       "nodes":{
-            "eb711261-5253-4e17-9357-43e175a5005d":{
-               "displayName":"Email Collector",
-               "connections":{
-                  "outcome":"49747def-2c53-4d70-99f2-d60d62a620cc"
-               },
-               "nodeType":"PageNode"
+         "eb711261-5253-4e17-9357-43e175a5005d":{
+            "displayName":"Email Collector",
+            "connections":{
+               "outcome":"49747def-2c53-4d70-99f2-d60d62a620cc"
             },
-            "49747def-2c53-4d70-99f2-d60d62a620cc":{
-               "displayName":"Name Collector",
-               "nodeType":"PageNode",
-               "connections":{
-                  "outcome":"997cc39b-afde-4935-b9b5-a0d4e3034072"
-               }
-            },
-            "997cc39b-afde-4935-b9b5-a0d4e3034072":{
-               "connections":{
-                  "false":"e301438c-0bd0-429c-ab0c-66126501069a",
-                  "true":"9e02588a-e4ac-4b08-b10f-ad8f298ae720"
-               },
-               "displayName":"Create Notify JWT",
-               "nodeType":"ScriptedDecisionNode"
-            },
-            "9e02588a-e4ac-4b08-b10f-ad8f298ae720":{
-               "connections":{
-                  "false":"e301438c-0bd0-429c-ab0c-66126501069a",
-                  "true":"e301438c-0bd0-429c-ab0c-66126501069a"
-               },
-               "displayName":"Create & Email link",
-               "nodeType":"ScriptedDecisionNode"
+            "nodeType":"PageNode"
+         },
+         "49747def-2c53-4d70-99f2-d60d62a620cc":{
+            "displayName":"Name Collector",
+            "nodeType":"PageNode",
+            "connections":{
+               "outcome":"997cc39b-afde-4935-b9b5-a0d4e3034072"
             }
+         },
+         "997cc39b-afde-4935-b9b5-a0d4e3034072":{
+            "connections":{
+               "false":"e301438c-0bd0-429c-ab0c-66126501069a",
+               "true":"9e02588a-e4ac-4b08-b10f-ad8f298ae720"
+            },
+            "displayName":"Create Notify JWT",
+            "nodeType":"ScriptedDecisionNode"
+         },
+         "9e02588a-e4ac-4b08-b10f-ad8f298ae720":{
+            "connections":{
+               "false":"e301438c-0bd0-429c-ab0c-66126501069a",
+               "true":"e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "displayName":"Create & Email link",
+            "nodeType":"ScriptedDecisionNode"
+         }
       }
    }
 }
