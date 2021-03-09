@@ -8,7 +8,7 @@ describe('update-cors', () => {
   const getSessionToken = require('../../helpers/get-session-token')
   const getAccessToken = require('../../helpers/get-access-token')
   const fidcRequest = require('../../helpers/fidc-request')
-  const updateCors = require('../../scripts/update-cors/update-cors')
+  const updateCors = require('../../scripts/update-cors')
   jest.spyOn(console, 'log').mockImplementation(() => {})
   jest.spyOn(console, 'error').mockImplementation(() => {})
   jest.spyOn(process, 'exit').mockImplementation(() => {})
@@ -17,7 +17,7 @@ describe('update-cors', () => {
     fidcUrl: 'https://fidc-test.forgerock.com',
     sessionToken: 'session=1234',
     accessToken: 'blah',
-    realm: '/realms/root/realms/alpha'
+    realm: 'alpha'
   }
 
   const mockPhase0ConfigFile = path.resolve(
@@ -175,16 +175,6 @@ describe('update-cors', () => {
     console.log.mockRestore()
     console.error.mockRestore()
     process.exit.mockRestore()
-  })
-
-  it('should error if missing FIDC_URL environment variable', async () => {
-    expect.assertions(2)
-    delete process.env.FIDC_URL
-    await updateCors(mockValues)
-    expect(console.error).toHaveBeenCalledWith(
-      'Missing FIDC_URL environment variable'
-    )
-    expect(process.exit).toHaveBeenCalledWith(1)
   })
 
   it('should error if getSessionToken functions fails', async () => {

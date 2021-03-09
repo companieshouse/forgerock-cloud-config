@@ -2,16 +2,10 @@ const fetch = require('node-fetch')
 
 const getAccessToken = async (argv) => {
   const { username, password, adminClientId, adminClientSecret, realm } = argv
-
-  // Check environment variables
   const { FIDC_URL } = process.env
 
-  if (!FIDC_URL) {
-    return Promise.reject(new Error('Missing FIDC_URL environment variable'))
-  }
-
   // Get access token
-  const requestUrl = `${FIDC_URL}/am/oauth2${realm}/access_token?auth_chain=PasswordGrant`
+  const requestUrl = `${FIDC_URL}/am/oauth2/realms/root/realms/${realm}/access_token?auth_chain=PasswordGrant`
   const body = new URLSearchParams()
   body.append('username', username)
   body.append('password', password)

@@ -72,14 +72,6 @@ describe('get-session-token', () => {
     jest.resetAllMocks()
   })
 
-  it('should reject if missing FRIC environment variable', async () => {
-    expect.assertions(1)
-    delete process.env.FIDC_URL
-    await expect(getSessionToken(mockValues)).rejects.toEqual(
-      new Error('Missing FIDC_URL environment variable')
-    )
-  })
-
   it('should call APIs with the correct options', async () => {
     expect.assertions(3)
     fetch

@@ -1,34 +1,26 @@
 const fs = require('fs')
 const path = require('path')
-const getSessionToken = require('../../helpers/get-session-token')
-const getAccessToken = require('../../helpers/get-access-token')
-const fidcRequest = require('../../helpers/fidc-request')
+const getSessionToken = require('../helpers/get-session-token')
+const getAccessToken = require('../helpers/get-access-token')
+const fidcRequest = require('../helpers/fidc-request')
 
 const updateCors = async (argv) => {
-  // Check environment variables
   const { FIDC_URL, PHASE = '0' } = process.env
-
-  argv.realm = '/realms/root'
-  if (!FIDC_URL) {
-    console.error('Missing FIDC_URL environment variable')
-    return process.exit(1)
-  }
 
   try {
     const sessionToken = await getSessionToken(argv)
 
     const accessTokenParams = {
-      username: argv.idmusername,
-      password: argv.idmpassword,
-      adminClientId: argv.adminClientId,
-      adminClientSecret: argv.adminClientSecret,
-      realm: '/alpha'
+      ...argv,
+      username: argv.idmUsername,
+      password: argv.idmPassword
     }
+
     const accessToken = await getAccessToken(accessTokenParams)
     console.log(`Using phase ${PHASE} config`)
 
     // Read auth tree JSON files
-    const dir = path.resolve(__dirname, `../../config/phase-${PHASE}/cors`)
+    const dir = path.resolve(__dirname, `../config/phase-${PHASE}/cors`)
 
     const corsFileContent = fs
       .readdirSync(dir)

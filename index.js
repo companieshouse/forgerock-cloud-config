@@ -6,6 +6,7 @@ const {
   updateAuthTrees,
   updateConnectorDefinitions,
   updateConnectorMappings,
+  updateCors,
   updateRemoteServers,
   updateScripts
 } = require('./scripts')
@@ -44,6 +45,18 @@ yargs
     desc: 'Update IDM Connector Mappings',
     builder: cliOptions(['idmUsername', 'idmPassword', 'realm']),
     handler: (argv) => updateConnectorMappings(argv)
+  })
+  .command({
+    command: 'cors',
+    desc: 'Update ForgeRock CORS',
+    builder: cliOptions([
+      'username',
+      'password',
+      'idmUsername',
+      'idmPassword',
+      'realm'
+    ]),
+    handler: (argv) => updateCors(argv)
   })
   .command({
     command: 'remote-servers',

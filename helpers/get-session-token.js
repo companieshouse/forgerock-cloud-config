@@ -2,13 +2,7 @@ const fetch = require('node-fetch')
 
 const getSessionToken = async (argv) => {
   const { username, password } = argv
-
-  // Check environment variables
   const { FIDC_URL } = process.env
-
-  if (!FIDC_URL) {
-    return Promise.reject(new Error('Missing FIDC_URL environment variable'))
-  }
 
   // Get session token
   const requestUrl = `${FIDC_URL}/am/json/realms/root/authenticate`
