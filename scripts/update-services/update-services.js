@@ -1,7 +1,7 @@
-const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
 const getSessionToken = require('../../helpers/get-session-token')
+const fidcRequest = require('../../helpers/fidc-request')
 const replaceSensitiveValues = require('../../helpers/replace-sensitive-values')
 
 const updateServices = async (argv) => {
@@ -38,19 +38,7 @@ const updateServices = async (argv) => {
     await Promise.all(
       servicesFileContent.map(async (serviceFile) => {
         const requestUrl = `${FIDC_URL}/am/json${realm}/realm-config/services/${serviceFile._id}`
-        const requestOptions = {
-          method: 'put',
-          body: JSON.stringify(serviceFile),
-          headers: {
-            'content-type': 'application/json',
-            'x-requested-with': 'ForgeRock CREST.js',
-            cookie: sessionToken
-          }
-        }
-        const { status, statusText } = await fetch(requestUrl, requestOptions)
-        if (status > 299) {
-          return Promise.reject(new Error(`${status}: ${statusText}`))
-        }
+        await fidcRequest(requestUrl, serviceFile, sessionToken, true)
         console.log(`${serviceFile._id} updated`)
         return Promise.resolve()
       })
