@@ -21,7 +21,10 @@ The following need to be installed/configured for local use:
 
 ### Install Dependencies
 
-`npm install`
+```
+npm install
+npm link
+```
 
 ### Run tests locally
 
@@ -29,62 +32,8 @@ The following need to be installed/configured for local use:
 
 ## Scripts
 
-All scripts can also be ran locally with the correct arguments and environment variables.
+All scripts can also be ran locally using the CLI with the correct arguments and environment variables.
 
-### Update Managed Objects
+The available CLI commands can be found using the help option: `update-fidc -h`
 
-Calls the Identity Management endpoint to update Managed Objects. The configuration is stored in JSON files in the `config/managed-objects` directory.
-
-**This command will update all Managed Objects and delete any not present in the directory.**
-
-**Help Message:**
-`update-managed-objects -h`
-
-### Update Auth Trees
-
-Calls the Access Management endpoint to update Authentication Trees. The configuration is stored in JSON files in the `config/auth-trees` directory.
-
-**Help Message:**
-`update-auth-trees -h`
-
-### User Roles
-
-Calls the Identity Management endpoint to update User Roles. The configuration is stored in JSON files in the `config/user-roles` directory.
-
-**Help Message:**
-`update-user-roles -h`
-
-### Internal Roles
-
-Calls the Identity Management endpoint to update Internal Roles. The configuration is stored in JSON files in the `config/internal-roles` directory.
-
-**Help Message:**
-`update-internal-roles -h`
-
-### Update AM Scripts
-
-Calls the Access Management endpoint to update AM Scripts. The configuration is stored in JSON files in the `config/am-scripts` directory.
-
-**Help Message:**
-`scripts/update-scripts -h`
-
-### Update AM CORS Configuration
-
-Calls the Access Management endpoint to update AM CORS Configuration. The configuration is stored in JSON files in the `config/cors` directory.
-
-**Help Message:**
-`scripts/update-cors -h`
-
-### Update Applications Configuration
-
-Calls the Access Management endpoint to update applications. The configuration is stored in JSON files in the `config/application` directory.
-
-**Help Message:**
-`scripts/update-application -h`
-
-### Update Services
-
-Calls the Access Management endpoint to update services. The configuration is stored in JSON files in the `config/services` directory. Config files with sensitive values are stored using the `.tpl` extension and placeholders used for the value. The script will need updating to handle the any new replacements.
-
-**Help Message:**
-`scripts/update-services -h`
+Each command also has it's own help option, for example: `update-fidc applications -h`
