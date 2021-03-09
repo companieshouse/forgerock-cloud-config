@@ -18,8 +18,8 @@
         {
             "payload": {
                 "_id": "b9d881b7-75c0-4cd6-8ede-e42193665657",
-                "name": "CH - Verify Registration",
-                "description": "Verify User Registration (via email link)",
+                "name": "CH - Registration - Verify Token",
+                "description": "Verify User Registration token",
                 "script": "<replace>",
                 "language": "JAVASCRIPT",
                 "context": "AUTHENTICATION_TREE_DECISION_NODE",
@@ -28,22 +28,7 @@
                 "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
                 "lastModifiedDate": 1436807766258
             },
-            "filename": "ch-confirm-registration.js"
-        },
-        {
-            "payload": {
-                "_id": "72921084-9674-4f0b-bf0c-8ef974d84008",
-                "name": "CH - Callback for Successful Registration",
-                "description": "Callback to return successful User registration message",
-                "script": "<replace>",
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "creationDate": 1436807766258,
-                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate": 1436807766258
-            },
-            "filename": "ch-callback-user-registered.js"
+            "filename": "ch-registration-verify-token.js"
         },
         {
             "payload": {
@@ -63,7 +48,7 @@
         {
             "payload": {
                 "_id":"b6ca4a1f-573f-4a3a-a410-d18b01207f6e",
-                "name":"CH - Create and Email Registration Link",
+                "name":"CH - Registration - Create token and send Email",
                 "description":"Creates a registration link and sends it via email to the user via Notify.",
                 "script":"<replace>",
                 "default":false,
@@ -74,7 +59,7 @@
                 "lastModifiedBy":"null",
                 "lastModifiedDate":0
             },
-            "filename": "ch-send-registration-email.js"
+            "filename": "ch-registration-send-email.js"
         },
         {
             "payload": {
@@ -94,7 +79,7 @@
         {
             "payload": {
                 "_id": "c056951c-622e-11eb-ae93-0242ac130002",
-                "name": "CH - Send Reset Password Email",
+                "name": "CH - Reset Password - Create token and Send Email",
                 "description": "Send Reset Password Email",
                 "script": "<replace>",
                 "language": "JAVASCRIPT",
@@ -173,7 +158,7 @@
         {
             "payload": {
                 "_id":"7fc79258-1c54-4df3-baa4-b51850ef3474",
-                "name":"CH - Verify Reset Password Token",
+                "name":"CH - Reset Password - Verify Token",
                 "description":"Checks whether to resume or start the password reset journey, and verifies the Password reset token",
                 "script":"<replace>",
                 "default":false,
