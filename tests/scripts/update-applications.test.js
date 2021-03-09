@@ -18,20 +18,12 @@ describe('update-applications', () => {
     realm: 'alpha'
   }
 
-  const mockPhase0ConfigFile = path.resolve(
+  const mockConfigFile = path.resolve(
     __dirname,
-    '../../config/phase-0/applications/sdk-client.json'
-  )
-  const mockPhase1ConfigFile1 = path.resolve(
-    __dirname,
-    '../../config/phase-1/applications/sdk-client.json'
-  )
-  const mockPhase1ConfigFile2 = path.resolve(
-    __dirname,
-    '../../config/phase-1/applications/rsc-client.json'
+    '../../config/applications/sdk-client.json'
   )
 
-  const mockPhase0Config = {
+  const mockConfig = {
     _id: 'SDKClient',
     coreOAuth2ClientConfig: {
       scopes: {
@@ -59,45 +51,14 @@ describe('update-applications', () => {
     }
   }
 
-  const mockPhase1Config = {
-    _id: 'RSCClient',
-    coreOAuth2ClientConfig: {
-      scopes: {
-        inherited: false,
-        value: ['openid', 'fr:idm:*']
-      },
-      status: {
-        inherited: false,
-        value: 'Active'
-      },
-      redirectionUris: {
-        inherited: false,
-        value: ['http://localhost:3001']
-      }
-    },
-    advancedOAuth2ClientConfig: {
-      responseTypes: {
-        inherited: false,
-        value: ['code', 'token', 'id_token']
-      },
-      javascriptOrigins: {
-        inherited: false,
-        value: ['http://localhost:3001']
-      }
-    }
-  }
-
   beforeEach(() => {
     getSessionToken.mockImplementation(() =>
       Promise.resolve(mockValues.sessionToken)
     )
     fidcRequest.mockImplementation(() => Promise.resolve())
     process.env.FIDC_URL = mockValues.fidcUrl
-    delete process.env.PHASE
     fs.readdirSync.mockReturnValue(['sdk-client.json'])
-    jest.mock(mockPhase0ConfigFile, () => mockPhase0Config, { virtual: true })
-    jest.mock(mockPhase1ConfigFile1, () => mockPhase1Config, { virtual: true })
-    jest.mock(mockPhase1ConfigFile2, () => mockPhase1Config, { virtual: true })
+    jest.mock(mockConfigFile, () => mockConfig, { virtual: true })
   })
 
   afterEach(() => {
@@ -135,29 +96,14 @@ describe('update-applications', () => {
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 
-  it('should call API with phase 0 config by default', async () => {
+  it('should call API with using config file', async () => {
     expect.assertions(2)
-    const expectedUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${mockValues.realm}/realm-config/agents/OAuth2Client/${mockPhase0Config._id}`
+    const expectedUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${mockValues.realm}/realm-config/agents/OAuth2Client/${mockConfig._id}`
     await updateApplications(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(1)
     expect(fidcRequest.mock.calls[0]).toEqual([
       expectedUrl,
-      mockPhase0Config,
-      mockValues.sessionToken,
-      true
-    ])
-  })
-
-  it('should call API with phase config by environment variable', async () => {
-    expect.assertions(2)
-    process.env.PHASE = 1
-    fs.readdirSync.mockReturnValue(['sdk-client.json', 'rsc-client.json'])
-    const expectedUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${mockValues.realm}/realm-config/agents/OAuth2Client/${mockPhase1Config._id}`
-    await updateApplications(mockValues)
-    expect(fidcRequest.mock.calls.length).toEqual(2)
-    expect(fidcRequest.mock.calls[0]).toEqual([
-      expectedUrl,
-      mockPhase1Config,
+      mockConfig,
       mockValues.sessionToken,
       true
     ])
@@ -167,12 +113,12 @@ describe('update-applications', () => {
     expect.assertions(2)
     const updatedRealm = 'bravo'
     mockValues.realm = updatedRealm
-    const expectedUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${updatedRealm}/realm-config/agents/OAuth2Client/${mockPhase0Config._id}`
+    const expectedUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${updatedRealm}/realm-config/agents/OAuth2Client/${mockConfig._id}`
     await updateApplications(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(1)
     expect(fidcRequest.mock.calls[0]).toEqual([
       expectedUrl,
-      mockPhase0Config,
+      mockConfig,
       mockValues.sessionToken,
       true
     ])

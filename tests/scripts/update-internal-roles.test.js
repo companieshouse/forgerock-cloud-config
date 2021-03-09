@@ -17,20 +17,12 @@ describe('update-internal-roles', () => {
     accessToken: 'forgerock-token'
   }
 
-  const mockPhase0ConfigFile = path.resolve(
+  const mockConfigFile = path.resolve(
     __dirname,
-    '../../config/phase-0/internal-roles/admin.json'
-  )
-  const mockPhase1ConfigFile1 = path.resolve(
-    __dirname,
-    '../../config/phase-1/internal-roles/admin.json'
-  )
-  const mockPhase1ConfigFile2 = path.resolve(
-    __dirname,
-    '../../config/phase-1/internal-roles/write-user.json'
+    '../../config/internal-roles/admin.json'
   )
 
-  const mockPhase0Config = {
+  const mockConfig = {
     _id: 'abcd',
     name: 'Admin',
     description: 'Admin role for internal users',
@@ -43,30 +35,14 @@ describe('update-internal-roles', () => {
     ]
   }
 
-  const mockPhase1Config = {
-    _id: '1234',
-    name: 'Write User',
-    description: 'Write permissions for internal users',
-    privileges: [
-      {
-        path: 'managed/Company',
-        name: 'Companies',
-        permissions: ['WRITE']
-      }
-    ]
-  }
-
   beforeEach(() => {
     fidcRequest.mockImplementation(() => Promise.resolve())
     getAccessToken.mockImplementation(() =>
       Promise.resolve(mockValues.accessToken)
     )
     process.env.FIDC_URL = mockValues.fidcUrl
-    delete process.env.PHASE
     fs.readdirSync.mockReturnValue(['admin.json'])
-    jest.mock(mockPhase0ConfigFile, () => mockPhase0Config, { virtual: true })
-    jest.mock(mockPhase1ConfigFile1, () => mockPhase1Config, { virtual: true })
-    jest.mock(mockPhase1ConfigFile2, () => mockPhase1Config, { virtual: true })
+    jest.mock(mockConfigFile, () => mockConfig, { virtual: true })
   })
 
   afterEach(() => {
@@ -93,28 +69,14 @@ describe('update-internal-roles', () => {
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 
-  it('should call API with phase 0 config by default', async () => {
+  it('should call API using config file', async () => {
     expect.assertions(2)
-    const expectedUrl = `${mockValues.fidcUrl}/openidm/internal/role/${mockPhase0Config._id}`
+    const expectedUrl = `${mockValues.fidcUrl}/openidm/internal/role/${mockConfig._id}`
     await updateUserRoles(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(1)
     expect(fidcRequest).toHaveBeenCalledWith(
       expectedUrl,
-      mockPhase0Config,
-      mockValues.accessToken
-    )
-  })
-
-  it('should call API with phase config by environment variable', async () => {
-    expect.assertions(2)
-    process.env.PHASE = 1
-    fs.readdirSync.mockReturnValue(['admin.json', 'write-user.json'])
-    const expectedUrl = `${mockValues.fidcUrl}/openidm/internal/role/${mockPhase1Config._id}`
-    await updateUserRoles(mockValues)
-    expect(fidcRequest.mock.calls.length).toEqual(2)
-    expect(fidcRequest).toHaveBeenCalledWith(
-      expectedUrl,
-      mockPhase1Config,
+      mockConfig,
       mockValues.accessToken
     )
   })

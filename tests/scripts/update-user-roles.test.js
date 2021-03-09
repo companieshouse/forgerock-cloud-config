@@ -17,31 +17,16 @@ describe('update-user-roles', () => {
     accessToken: 'forgerock-token'
   }
 
-  const mockPhase0ConfigFile = path.resolve(
+  const mockConfigFile = path.resolve(
     __dirname,
-    '../../config/phase-0/user-roles/lender.json'
-  )
-  const mockPhase1ConfigFile1 = path.resolve(
-    __dirname,
-    '../../config/phase-1/user-roles/lender.json'
-  )
-  const mockPhase1ConfigFile2 = path.resolve(
-    __dirname,
-    '../../config/phase-1/user-roles/presenter.json'
+    '../../config/user-roles/lender.json'
   )
 
-  const mockPhase0Config = {
+  const mockConfig = {
     _id: 'abcd',
     name: 'Lender',
     description: 'A lender can file for any company',
     realm: 'alpha'
-  }
-
-  const mockPhase1Config = {
-    _id: '1234',
-    name: 'Lender-New',
-    description: 'A lender can file for any company',
-    realm: 'beta'
   }
 
   beforeEach(() => {
@@ -50,11 +35,8 @@ describe('update-user-roles', () => {
       Promise.resolve(mockValues.accessToken)
     )
     process.env.FIDC_URL = mockValues.fidcUrl
-    delete process.env.PHASE
     fs.readdirSync.mockReturnValue(['lender.json'])
-    jest.mock(mockPhase0ConfigFile, () => mockPhase0Config, { virtual: true })
-    jest.mock(mockPhase1ConfigFile1, () => mockPhase1Config, { virtual: true })
-    jest.mock(mockPhase1ConfigFile2, () => mockPhase1Config, { virtual: true })
+    jest.mock(mockConfigFile, () => mockConfig, { virtual: true })
   })
 
   afterEach(() => {
@@ -81,28 +63,14 @@ describe('update-user-roles', () => {
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 
-  it('should call API with phase 0 config by default', async () => {
+  it('should call API using config file', async () => {
     expect.assertions(2)
-    const expectedUrl = `${mockValues.fidcUrl}/openidm/managed/${mockPhase0Config.realm}_role/${mockPhase0Config._id}`
+    const expectedUrl = `${mockValues.fidcUrl}/openidm/managed/${mockConfig.realm}_role/${mockConfig._id}`
     await updateUserRoles(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(1)
     expect(fidcRequest).toHaveBeenCalledWith(
       expectedUrl,
-      mockPhase0Config,
-      mockValues.accessToken
-    )
-  })
-
-  it('should call API with phase config by environment variable', async () => {
-    expect.assertions(2)
-    process.env.PHASE = 1
-    fs.readdirSync.mockReturnValue(['lender.json', 'presenter.json'])
-    const expectedUrl = `${mockValues.fidcUrl}/openidm/managed/${mockPhase1Config.realm}_role/${mockPhase1Config._id}`
-    await updateUserRoles(mockValues)
-    expect(fidcRequest.mock.calls.length).toEqual(2)
-    expect(fidcRequest).toHaveBeenCalledWith(
-      expectedUrl,
-      mockPhase1Config,
+      mockConfig,
       mockValues.accessToken
     )
   })

@@ -20,20 +20,12 @@ describe('update-services', () => {
     realm: 'alpha'
   }
 
-  const mockPhase0ConfigFile = path.resolve(
+  const mockConfigFile = path.resolve(
     __dirname,
-    '../../config/phase-0/services/oauth2-provider.json'
-  )
-  const mockPhase1ConfigFile1 = path.resolve(
-    __dirname,
-    '../../config/phase-1/services/oauth2-provider.json'
-  )
-  const mockPhase1ConfigFile2 = path.resolve(
-    __dirname,
-    '../../config/phase-1/services/self-service.json'
+    '../../config/services/oauth2-provider.json'
   )
 
-  const mockPhase0Config = {
+  const mockConfig = {
     _id: 'oauth-oidc',
     _type: {
       _id: 'oauth-oidc',
@@ -53,26 +45,6 @@ describe('update-services', () => {
     }
   }
 
-  const mockPhase1Config = {
-    _id: 'oauth-oidc-new',
-    _type: {
-      _id: 'oauth-oidc-new',
-      name: 'OAuth2 Provider New'
-    },
-    advancedOAuth2Config: {
-      customLoginUrlTemplate: 'https://ch-account-ui.gov.uk/account/login/',
-      passwordGrantAuthService: 'PasswordGrant',
-      tlsCertificateBoundAccessTokensEnabled: true
-    },
-    clientDynamicRegistrationConfig: {
-      allowDynamicRegistration: true
-    },
-    consent: {
-      clientsCanSkipConsent: false,
-      enableRemoteConsent: false
-    }
-  }
-
   beforeEach(() => {
     fidcRequest.mockImplementation(() => Promise.resolve())
     getSessionToken.mockImplementation(() =>
@@ -80,11 +52,8 @@ describe('update-services', () => {
     )
     replaceSensitiveValues.mockImplementation(() => Promise.resolve())
     process.env.FIDC_URL = mockValues.fidcUrl
-    delete process.env.PHASE
     fs.readdirSync.mockReturnValue(['oauth2-provider.json'])
-    jest.mock(mockPhase0ConfigFile, () => mockPhase0Config, { virtual: true })
-    jest.mock(mockPhase1ConfigFile1, () => mockPhase1Config, { virtual: true })
-    jest.mock(mockPhase1ConfigFile2, () => mockPhase1Config, { virtual: true })
+    jest.mock(mockConfigFile, () => mockConfig, { virtual: true })
   })
 
   afterEach(() => {
@@ -122,32 +91,14 @@ describe('update-services', () => {
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 
-  it('should call API with phase 0 config by default', async () => {
+  it('should call API using config file', async () => {
     expect.assertions(2)
-    const expectedUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${mockValues.realm}/realm-config/services/${mockPhase0Config._id}`
+    const expectedUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${mockValues.realm}/realm-config/services/${mockConfig._id}`
     await updateServices(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(1)
     expect(fidcRequest).toHaveBeenCalledWith(
       expectedUrl,
-      mockPhase0Config,
-      mockValues.sessionToken,
-      true
-    )
-  })
-
-  it('should call API with phase config by environment variable', async () => {
-    expect.assertions(2)
-    process.env.PHASE = 1
-    fs.readdirSync.mockReturnValue([
-      'oauth2-provider.json',
-      'self-service.json'
-    ])
-    const expectedUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${mockValues.realm}/realm-config/services/${mockPhase1Config._id}`
-    await updateServices(mockValues)
-    expect(fidcRequest.mock.calls.length).toEqual(2)
-    expect(fidcRequest).toHaveBeenCalledWith(
-      expectedUrl,
-      mockPhase1Config,
+      mockConfig,
       mockValues.sessionToken,
       true
     )
@@ -157,12 +108,12 @@ describe('update-services', () => {
     expect.assertions(2)
     const updatedRealm = 'bravo'
     mockValues.realm = updatedRealm
-    const expectedUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${updatedRealm}/realm-config/services/${mockPhase0Config._id}`
+    const expectedUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${updatedRealm}/realm-config/services/${mockConfig._id}`
     await updateServices(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(1)
     expect(fidcRequest).toHaveBeenCalledWith(
       expectedUrl,
-      mockPhase0Config,
+      mockConfig,
       mockValues.sessionToken,
       true
     )

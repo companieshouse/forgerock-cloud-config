@@ -6,15 +6,13 @@ const replaceSensitiveValues = require('../helpers/replace-sensitive-values')
 
 const updateServices = async (argv) => {
   const { realm } = argv
-  const { FIDC_URL, PHASE = '0' } = process.env
+  const { FIDC_URL } = process.env
 
   try {
     const sessionToken = await getSessionToken(argv)
 
-    console.log(`Using phase ${PHASE} config`)
-
     // Read JSON files
-    const dir = path.resolve(__dirname, `../config/phase-${PHASE}/services`)
+    const dir = path.resolve(__dirname, '../config/services')
 
     await replaceSensitiveValues(
       dir,

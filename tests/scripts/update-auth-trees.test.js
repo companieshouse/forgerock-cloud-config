@@ -18,20 +18,12 @@ describe('update-auth-trees', () => {
     realm: 'alpha'
   }
 
-  const mockPhase0ConfigFile = path.resolve(
+  const mockConfigFile = path.resolve(
     __dirname,
-    '../../config/phase-0/auth-trees/login-tree.json'
-  )
-  const mockPhase1ConfigFile1 = path.resolve(
-    __dirname,
-    '../../config/phase-1/auth-trees/login-tree.json'
-  )
-  const mockPhase1ConfigFile2 = path.resolve(
-    __dirname,
-    '../../config/phase-1/auth-trees/registration-tree.json'
+    '../../config/auth-trees/login-tree.json'
   )
 
-  const mockPhase0Config = {
+  const mockConfig = {
     nodes: [
       {
         _id: 'abcd',
@@ -39,7 +31,7 @@ describe('update-auth-trees', () => {
       }
     ],
     tree: {
-      _id: 'Phase0',
+      _id: 'auth_tree',
       entryNodeId: '1234',
       staticNodes: {
         startNode: {
@@ -62,37 +54,6 @@ describe('update-auth-trees', () => {
     }
   }
 
-  const mockPhase1Config = {
-    nodes: [
-      {
-        _id: 'abcd',
-        nodeType: 'IncrementLoginCountNode'
-      }
-    ],
-    tree: {
-      _id: 'Phase1',
-      entryNodeId: '1234',
-      staticNodes: {
-        startNode: {
-          x: 100,
-          y: 50
-        }
-      },
-      uiConfig: {},
-      nodes: {
-        abcd: {
-          displayName: 'Increment Login Count',
-          nodeType: 'IncrementLoginCountNode',
-          x: 120,
-          y: 14,
-          connections: {
-            outcome: '5678'
-          }
-        }
-      }
-    }
-  }
-
   const expectedBaseUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${mockValues.realm}/realm-config/authentication/authenticationtrees`
 
   beforeEach(() => {
@@ -101,11 +62,8 @@ describe('update-auth-trees', () => {
     )
     fidcRequest.mockImplementation(() => Promise.resolve())
     process.env.FIDC_URL = mockValues.fidcUrl
-    delete process.env.PHASE
     fs.readdirSync.mockReturnValue(['login-tree.json'])
-    jest.mock(mockPhase0ConfigFile, () => mockPhase0Config, { virtual: true })
-    jest.mock(mockPhase1ConfigFile1, () => mockPhase1Config, { virtual: true })
-    jest.mock(mockPhase1ConfigFile2, () => mockPhase1Config, { virtual: true })
+    jest.mock(mockConfigFile, () => mockConfig, { virtual: true })
   })
 
   afterEach(() => {
@@ -143,17 +101,17 @@ describe('update-auth-trees', () => {
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 
-  it('should call API with phase 0 config by default', async () => {
+  it('should call API using config file', async () => {
     expect.assertions(3)
 
-    const node = mockPhase0Config.nodes[0]
+    const node = mockConfig.nodes[0]
     const expectNodeUrl = `${expectedBaseUrl}/nodes/${node.nodeType}/${node._id}`
     const expectedNodeBody = {
       _id: node._id,
       ...node.details
     }
 
-    const expectedAuthTreeUrl = `${expectedBaseUrl}/trees/${mockPhase0Config.tree._id}`
+    const expectedAuthTreeUrl = `${expectedBaseUrl}/trees/${mockConfig.tree._id}`
 
     await updateAuthTrees(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(2)
@@ -165,40 +123,7 @@ describe('update-auth-trees', () => {
     ])
     expect(fidcRequest.mock.calls[1]).toEqual([
       expectedAuthTreeUrl,
-      mockPhase0Config.tree,
-      mockValues.sessionToken,
-      true
-    ])
-  })
-
-  it('should call API with phase config by environment variable', async () => {
-    expect.assertions(3)
-    process.env.PHASE = 1
-    fs.readdirSync.mockReturnValue([
-      'login-tree.json',
-      'registration-tree.json'
-    ])
-
-    const node = mockPhase1Config.nodes[0]
-    const expectNodeUrl = `${expectedBaseUrl}/nodes/${node.nodeType}/${node._id}`
-    const expectedNodeBody = {
-      _id: node._id,
-      ...node.details
-    }
-
-    const expectedAuthTreeUrl = `${expectedBaseUrl}/trees/${mockPhase1Config.tree._id}`
-
-    await updateAuthTrees(mockValues)
-    expect(fidcRequest.mock.calls.length).toEqual(4)
-    expect(fidcRequest.mock.calls[0]).toEqual([
-      expectNodeUrl,
-      expectedNodeBody,
-      mockValues.sessionToken,
-      true
-    ])
-    expect(fidcRequest.mock.calls[2]).toEqual([
-      expectedAuthTreeUrl,
-      mockPhase1Config.tree,
+      mockConfig.tree,
       mockValues.sessionToken,
       true
     ])
@@ -210,14 +135,14 @@ describe('update-auth-trees', () => {
     mockValues.realm = updatedRealm
     const updatedBaseUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${updatedRealm}/realm-config/authentication/authenticationtrees`
 
-    const node = mockPhase0Config.nodes[0]
+    const node = mockConfig.nodes[0]
     const expectNodeUrl = `${updatedBaseUrl}/nodes/${node.nodeType}/${node._id}`
     const expectedNodeBody = {
       _id: node._id,
       ...node.details
     }
 
-    const expectedAuthTreeUrl = `${updatedBaseUrl}/trees/${mockPhase0Config.tree._id}`
+    const expectedAuthTreeUrl = `${updatedBaseUrl}/trees/${mockConfig.tree._id}`
 
     await updateAuthTrees(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(2)
@@ -229,7 +154,7 @@ describe('update-auth-trees', () => {
     ])
     expect(fidcRequest.mock.calls[1]).toEqual([
       expectedAuthTreeUrl,
-      mockPhase0Config.tree,
+      mockConfig.tree,
       mockValues.sessionToken,
       true
     ])

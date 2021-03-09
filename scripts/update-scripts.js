@@ -5,14 +5,13 @@ const fidcRequest = require('../helpers/fidc-request')
 
 const updateScripts = async (argv) => {
   const { realm } = argv
-  const { FIDC_URL, PHASE = '0' } = process.env
+  const { FIDC_URL } = process.env
 
   try {
     const sessionToken = await getSessionToken(argv)
-    console.log(`Using phase ${PHASE} config`)
 
     // Read auth tree JSON files
-    const dir = path.resolve(__dirname, `../config/phase-${PHASE}/am-scripts`)
+    const dir = path.resolve(__dirname, '../config/am-scripts')
 
     const scriptFileContent = fs
       .readdirSync(dir)
@@ -25,9 +24,6 @@ const updateScripts = async (argv) => {
         const baseUrl = `${FIDC_URL}/am/json/realms/root/realms/${realm}`
         await Promise.all(
           scriptFile.scripts.map(async (script) => {
-            if (!script.payload._id) {
-              return Promise.reject(new Error('Missing _id in script config'))
-            }
             // updates the script content with encoded file
             script.payload.script = fs.readFileSync(
               `${dir}/scripts-content/${script.filename}`,

@@ -4,17 +4,12 @@ const getAccessToken = require('../helpers/get-access-token')
 const fidcRequest = require('../helpers/fidc-request')
 
 const updateConnectorDefinitions = async (argv) => {
-  const { FIDC_URL, PHASE = '0' } = process.env
+  const { FIDC_URL } = process.env
 
   try {
     const accessToken = await getAccessToken(argv)
 
-    console.log(`Using phase ${PHASE} config`)
-
-    const dir = path.resolve(
-      __dirname,
-      `../config/phase-${PHASE}/connectors/definitions`
-    )
+    const dir = path.resolve(__dirname, '../config/connectors/definitions')
 
     const connectorFileContent = fs
       .readdirSync(`${dir}`)

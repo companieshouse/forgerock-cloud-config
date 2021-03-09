@@ -15,32 +15,12 @@ describe('update-remote-servers', () => {
     accessToken: 'forgerock-token'
   }
 
-  const mockPhase0ConfigFile = path.resolve(
+  const mockConfigFile = path.resolve(
     __dirname,
-    '../../config/phase-0/connectors/remote-servers.json'
-  )
-  const mockPhase1ConfigFile = path.resolve(
-    __dirname,
-    '../../config/phase-1/connectors/remote-servers.json'
+    '../../config/connectors/remote-servers.json'
   )
 
-  const mockPhase0Config = {
-    _id: 'provisioner.openicf.connectorinfoprovider',
-    connectorsLocation: 'connectors',
-    remoteConnectorClients: [
-      {
-        name: 'mongodb',
-        displayName: 'mongodb',
-        useSSL: false,
-        enabled: false
-      }
-    ],
-    remoteConnectorServers: [],
-    remoteConnectorClientsGroups: [],
-    remoteConnectorServersGroups: []
-  }
-
-  const mockPhase1Config = {
+  const mockConfig = {
     _id: 'provisioner.openicf.connectorinfoprovider',
     connectorsLocation: 'connectors',
     remoteConnectorClients: [
@@ -64,9 +44,7 @@ describe('update-remote-servers', () => {
       Promise.resolve(mockValues.accessToken)
     )
     process.env.FIDC_URL = mockValues.fidcUrl
-    delete process.env.PHASE
-    jest.mock(mockPhase0ConfigFile, () => mockPhase0Config, { virtual: true })
-    jest.mock(mockPhase1ConfigFile, () => mockPhase1Config, { virtual: true })
+    jest.mock(mockConfigFile, () => mockConfig, { virtual: true })
   })
 
   afterEach(() => {
@@ -93,25 +71,13 @@ describe('update-remote-servers', () => {
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 
-  it('should call API with phase 0 config by default', async () => {
+  it('should call API using config file', async () => {
     expect.assertions(2)
     await updateRemoteServers(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(1)
     expect(fidcRequest).toHaveBeenCalledWith(
       expectedUrl,
-      mockPhase0Config,
-      mockValues.accessToken
-    )
-  })
-
-  it('should call API with phase config by environment variable', async () => {
-    expect.assertions(2)
-    process.env.PHASE = 1
-    await updateRemoteServers(mockValues)
-    expect(fidcRequest.mock.calls.length).toEqual(1)
-    expect(fidcRequest).toHaveBeenCalledWith(
-      expectedUrl,
-      mockPhase1Config,
+      mockConfig,
       mockValues.accessToken
     )
   })

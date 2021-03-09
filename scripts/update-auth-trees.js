@@ -5,15 +5,13 @@ const fidcRequest = require('../helpers/fidc-request')
 
 const updateAuthTrees = async (argv) => {
   const { realm } = argv
-  const { FIDC_URL, PHASE = '0' } = process.env
+  const { FIDC_URL } = process.env
 
   try {
     const sessionToken = await getSessionToken(argv)
 
-    console.log(`Using phase ${PHASE} config`)
-
     // Read auth tree JSON files
-    const dir = path.resolve(__dirname, `../config/phase-${PHASE}/auth-trees`)
+    const dir = path.resolve(__dirname, '../config/auth-trees')
 
     const authTreesFileContent = fs
       .readdirSync(dir)
@@ -23,9 +21,6 @@ const updateAuthTrees = async (argv) => {
     // Update each auth tree
     await Promise.all(
       authTreesFileContent.map(async (authTreeFile) => {
-        if (!authTreeFile.tree._id) {
-          return Promise.reject(new Error('Missing _id in auth tree config'))
-        }
         const baseUrl = `${FIDC_URL}/am/json/realms/root/realms/${realm}/realm-config/authentication/authenticationtrees`
         await Promise.all(
           authTreeFile.nodes.map(async (node) => {

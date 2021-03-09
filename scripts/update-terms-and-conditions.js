@@ -3,15 +3,13 @@ const getAccessToken = require('../helpers/get-access-token')
 const fidcRequest = require('../helpers/fidc-request')
 
 const updateTermsAndConditions = async (argv) => {
-  const { FIDC_URL, PHASE = '0' } = process.env
+  const { FIDC_URL } = process.env
 
   try {
     const accessToken = await getAccessToken(argv)
 
-    console.log(`Using phase ${PHASE} config`)
-
     // Combine managed object JSON files
-    const dir = path.resolve(__dirname, `../config/phase-${PHASE}/consent`)
+    const dir = path.resolve(__dirname, '../config/consent')
 
     const fileContent = require(path.join(dir, 'terms-and-conditions.json'))
 

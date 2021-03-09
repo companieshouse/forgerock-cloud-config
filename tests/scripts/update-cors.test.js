@@ -20,16 +20,12 @@ describe('update-cors', () => {
     realm: 'alpha'
   }
 
-  const mockPhase0ConfigFile = path.resolve(
+  const mockConfigFile = path.resolve(
     __dirname,
-    '../../config/phase-0/cors/cors-config.json'
-  )
-  const mockPhase1ConfigFile = path.resolve(
-    __dirname,
-    '../../config/phase-1/cors/cors-config.json'
+    '../../config/cors/cors-config.json'
   )
 
-  const mockPhase0Config = {
+  const mockConfig = {
     corsServiceGlobal: {
       enabled: true,
       _id: '',
@@ -107,48 +103,6 @@ describe('update-cors', () => {
     }
   }
 
-  const mockPhase1Config = {
-    corsServiceGlobal: {
-      enabled: false,
-      _id: '',
-      _type: {
-        _id: 'CorsService',
-        name: 'CORS Service',
-        collection: false
-      }
-    },
-    corsServiceConfig: {
-      maxAge: 0,
-      acceptedMethods: ['HEAD', 'GET'],
-      acceptedHeaders: ['authorization'],
-      enabled: true,
-      acceptedOrigins: ['http://localhost:3000'],
-      allowCredentials: true,
-      exposedHeaders: ['*'],
-      _id: 'org-ui',
-      _type: {
-        _id: 'configuration',
-        name: 'Cors Configuration',
-        collection: true
-      }
-    },
-    idmCorsConfig: {
-      maxAge: 0,
-      acceptedMethods: ['HEAD', 'GET'],
-      acceptedHeaders: ['authorization'],
-      enabled: true,
-      acceptedOrigins: ['http://localhost:3000'],
-      allowCredentials: true,
-      exposedHeaders: ['*'],
-      _id: 'org-ui',
-      _type: {
-        _id: 'configuration',
-        name: 'Cors Configuration',
-        collection: true
-      }
-    }
-  }
-
   beforeEach(() => {
     fidcRequest.mockImplementation(() => Promise.resolve())
     getSessionToken.mockImplementation(() =>
@@ -158,10 +112,8 @@ describe('update-cors', () => {
       Promise.resolve(mockValues.accessToken)
     )
     process.env.FIDC_URL = mockValues.fidcUrl
-    delete process.env.PHASE
     fs.readdirSync.mockReturnValue(['cors-config.json'])
-    jest.mock(mockPhase0ConfigFile, () => mockPhase0Config, { virtual: true })
-    jest.mock(mockPhase1ConfigFile, () => mockPhase1Config, { virtual: true })
+    jest.mock(mockConfigFile, () => mockConfig, { virtual: true })
   })
 
   afterEach(() => {
@@ -199,55 +151,28 @@ describe('update-cors', () => {
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 
-  it('should call AM API with phase 0 config by default', async () => {
+  it('should call AM API using config file', async () => {
     expect.assertions(4)
     const expectedServiceUrl = `${mockValues.fidcUrl}/am/json/global-config/services/CorsService`
-    const expectedServiceConfigUrl = `${expectedServiceUrl}/configuration/${mockPhase0Config.corsServiceConfig._id}`
+    const expectedServiceConfigUrl = `${expectedServiceUrl}/configuration/${mockConfig.corsServiceConfig._id}`
     const expectedIdmUrl = `${mockValues.fidcUrl}/openidm/config/servletfilter/cors`
     await updateCors(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(3)
     expect(fidcRequest.mock.calls[0]).toEqual([
       expectedServiceUrl,
-      mockPhase0Config.corsServiceGlobal,
+      mockConfig.corsServiceGlobal,
       mockValues.sessionToken,
       true
     ])
     expect(fidcRequest.mock.calls[1]).toEqual([
       expectedServiceConfigUrl,
-      mockPhase0Config.corsServiceConfig,
+      mockConfig.corsServiceConfig,
       mockValues.sessionToken,
       true
     ])
     expect(fidcRequest.mock.calls[2]).toEqual([
       expectedIdmUrl,
-      mockPhase0Config.idmCorsConfig,
-      mockValues.accessToken
-    ])
-  })
-
-  it('should call API with phase config by environment variable', async () => {
-    expect.assertions(4)
-    process.env.PHASE = 1
-    const expectedServiceUrl = `${mockValues.fidcUrl}/am/json/global-config/services/CorsService`
-    const expectedServiceConfigUrl = `${expectedServiceUrl}/configuration/${mockPhase1Config.corsServiceConfig._id}`
-    const expectedIdmUrl = `${mockValues.fidcUrl}/openidm/config/servletfilter/cors`
-    await updateCors(mockValues)
-    expect(fidcRequest.mock.calls.length).toEqual(3)
-    expect(fidcRequest.mock.calls[0]).toEqual([
-      expectedServiceUrl,
-      mockPhase1Config.corsServiceGlobal,
-      mockValues.sessionToken,
-      true
-    ])
-    expect(fidcRequest.mock.calls[1]).toEqual([
-      expectedServiceConfigUrl,
-      mockPhase1Config.corsServiceConfig,
-      mockValues.sessionToken,
-      true
-    ])
-    expect(fidcRequest.mock.calls[2]).toEqual([
-      expectedIdmUrl,
-      mockPhase1Config.idmCorsConfig,
+      mockConfig.idmCorsConfig,
       mockValues.accessToken
     ])
   })

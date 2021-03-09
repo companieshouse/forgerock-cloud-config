@@ -15,16 +15,12 @@ describe('update-terms-and-conditions', () => {
     accessToken: 'forgerock-token'
   }
 
-  const mockPhase0ConfigFile = path.resolve(
+  const mockConfigFile = path.resolve(
     __dirname,
-    '../../config/phase-0/consent/terms-and-conditions.json'
-  )
-  const mockPhase1ConfigFile = path.resolve(
-    __dirname,
-    '../../config/phase-1/consent/terms-and-conditions.json'
+    '../../config/consent/terms-and-conditions.json'
   )
 
-  const mockPhase0Config = {
+  const mockConfig = {
     versions: [
       {
         version: '0.0',
@@ -42,31 +38,6 @@ describe('update-terms-and-conditions', () => {
     }
   }
 
-  const mockPhase1Config = {
-    versions: [
-      {
-        version: '0.0',
-        termsTranslations: {
-          en: 'Initial T&Cs'
-        },
-        createDate: '2019-10-28T04:20:11.320Z'
-      },
-      {
-        version: '1.0',
-        termsTranslations: {
-          en: 'Updated T&Cs'
-        },
-        createDate: '2019-10-28T04:20:11.320Z'
-      }
-    ],
-    active: '1.0',
-    uiConfig: {
-      displayName: "We've updated our terms",
-      purpose: 'You must accept the updated terms in order to proceed.',
-      buttonText: 'Accept'
-    }
-  }
-
   const expectedUrl = `${mockValues.fidcUrl}/openidm/config/selfservice.terms`
 
   beforeEach(() => {
@@ -75,9 +46,7 @@ describe('update-terms-and-conditions', () => {
       Promise.resolve(mockValues.accessToken)
     )
     process.env.FIDC_URL = mockValues.fidcUrl
-    delete process.env.PHASE
-    jest.mock(mockPhase0ConfigFile, () => mockPhase0Config, { virtual: true })
-    jest.mock(mockPhase1ConfigFile, () => mockPhase1Config, { virtual: true })
+    jest.mock(mockConfigFile, () => mockConfig, { virtual: true })
   })
 
   afterEach(() => {
@@ -104,25 +73,13 @@ describe('update-terms-and-conditions', () => {
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 
-  it('should call API with phase 0 config by default', async () => {
+  it('should call API using config file', async () => {
     expect.assertions(2)
     await updateTermsAndConditions(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(1)
     expect(fidcRequest).toHaveBeenCalledWith(
       expectedUrl,
-      mockPhase0Config,
-      mockValues.accessToken
-    )
-  })
-
-  it('should call API with phase config by environment variable', async () => {
-    expect.assertions(2)
-    process.env.PHASE = 1
-    await updateTermsAndConditions(mockValues)
-    expect(fidcRequest.mock.calls.length).toEqual(1)
-    expect(fidcRequest).toHaveBeenCalledWith(
-      expectedUrl,
-      mockPhase1Config,
+      mockConfig,
       mockValues.accessToken
     )
   })

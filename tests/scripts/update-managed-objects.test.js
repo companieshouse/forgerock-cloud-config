@@ -17,16 +17,12 @@ describe('update-managed-objects', () => {
     accessToken: 'forgerock-token'
   }
 
-  const mockPhase0ConfigFile = path.resolve(
+  const mockConfigFile = path.resolve(
     __dirname,
-    '../../config/phase-0/managed-objects/user.json'
-  )
-  const mockPhase1ConfigFile = path.resolve(
-    __dirname,
-    '../../config/phase-1/managed-objects/user.json'
+    '../../config/managed-objects/user.json'
   )
 
-  const mockPhase0Config = {
+  const mockConfig = {
     iconClass: 'fa fa-database',
     name: 'user',
     schema: {
@@ -48,32 +44,6 @@ describe('update-managed-objects', () => {
     type: 'Managed Object'
   }
 
-  const mockPhase1Config = {
-    iconClass: 'fa fa-database',
-    name: 'user',
-    schema: {
-      order: ['userName', 'password'],
-      properties: {
-        password: {
-          description: 'Password',
-          type: 'string'
-        },
-        userName: {
-          description: 'Username',
-          type: 'string'
-        },
-        company: {
-          description: 'Company',
-          type: 'relationship'
-        }
-      },
-      required: ['userName', 'password', 'company'],
-      title: 'User',
-      type: 'object'
-    },
-    type: 'Managed Object'
-  }
-
   const expectedUrl = `${mockValues.fidcUrl}/openidm/config/managed`
 
   beforeEach(() => {
@@ -82,10 +52,8 @@ describe('update-managed-objects', () => {
       Promise.resolve(mockValues.accessToken)
     )
     process.env.FIDC_URL = mockValues.fidcUrl
-    delete process.env.PHASE
     fs.readdirSync.mockReturnValue(['user.json'])
-    jest.mock(mockPhase0ConfigFile, () => mockPhase0Config, { virtual: true })
-    jest.mock(mockPhase1ConfigFile, () => mockPhase1Config, { virtual: true })
+    jest.mock(mockConfigFile, () => mockConfig, { virtual: true })
   })
 
   afterEach(() => {
@@ -112,25 +80,10 @@ describe('update-managed-objects', () => {
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 
-  it('should call API with phase 0 config by default', async () => {
+  it('should call API using config file', async () => {
     expect.assertions(2)
     const expectedBody = {
-      objects: [mockPhase0Config]
-    }
-    await updateManagedObject(mockValues)
-    expect(fidcRequest.mock.calls.length).toEqual(1)
-    expect(fidcRequest).toHaveBeenCalledWith(
-      expectedUrl,
-      expectedBody,
-      mockValues.accessToken
-    )
-  })
-
-  it('should call API with phase config by environment variable', async () => {
-    expect.assertions(2)
-    process.env.PHASE = 1
-    const expectedBody = {
-      objects: [mockPhase1Config]
+      objects: [mockConfig]
     }
     await updateManagedObject(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(1)

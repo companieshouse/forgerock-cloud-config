@@ -5,15 +5,13 @@ const fidcRequest = require('../helpers/fidc-request')
 
 const updateApplications = async (argv) => {
   const { realm } = argv
-  const { FIDC_URL, PHASE = '0' } = process.env
+  const { FIDC_URL } = process.env
 
   try {
     const sessionToken = await getSessionToken(argv)
 
-    console.log(`Using phase ${PHASE} config`)
-
     // Read auth tree JSON files
-    const dir = path.resolve(__dirname, `../config/phase-${PHASE}/applications`)
+    const dir = path.resolve(__dirname, '../config/applications')
 
     const applicationFileContent = fs
       .readdirSync(dir)

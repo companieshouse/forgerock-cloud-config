@@ -3,14 +3,12 @@ const getAccessToken = require('../helpers/get-access-token')
 const fidcRequest = require('../helpers/fidc-request')
 
 const updateRemoteServers = async (argv) => {
-  const { FIDC_URL, PHASE = '0' } = process.env
+  const { FIDC_URL } = process.env
 
   try {
     const accessToken = await getAccessToken(argv)
 
-    console.log(`Using phase ${PHASE} config`)
-
-    const dir = path.resolve(__dirname, `../config/phase-${PHASE}/connectors`)
+    const dir = path.resolve(__dirname, '../config/connectors')
 
     const remoteServersFileContent = require(path.join(
       dir,

@@ -17,20 +17,12 @@ describe('update-connector-mappings', () => {
     accessToken: 'forgerock-token'
   }
 
-  const mockPhase0ConfigFile = path.resolve(
+  const mockConfigFile = path.resolve(
     __dirname,
-    '../../config/phase-0/connectors/mappings/mongodb-users.json'
-  )
-  const mockPhase1ConfigFile1 = path.resolve(
-    __dirname,
-    '../../config/phase-1/connectors/mappings/mongodb-users.json'
-  )
-  const mockPhase1ConfigFile2 = path.resolve(
-    __dirname,
-    '../../config/phase-1/connectors/mappings/oracle-users.json'
+    '../../config/connectors/mappings/mongodb-users.json'
   )
 
-  const mockPhase0Config = {
+  const mockConfig = {
     consentRequired: false,
     displayName: 'MongodbUsers',
     icon: null,
@@ -55,27 +47,6 @@ describe('update-connector-mappings', () => {
     ]
   }
 
-  const mockPhase1Config = {
-    consentRequired: true,
-    displayName: 'MongodbUsers',
-    icon: null,
-    name: 'MongodbUsers',
-    properties: [
-      {
-        source: 'email',
-        target: 'mail'
-      },
-      {
-        source: 'username',
-        target: 'userName'
-      },
-      {
-        source: 'name',
-        target: 'name'
-      }
-    ]
-  }
-
   const expectedUrl = `${mockValues.fidcUrl}/openidm/config/sync`
 
   beforeEach(() => {
@@ -84,11 +55,8 @@ describe('update-connector-mappings', () => {
       Promise.resolve(mockValues.accessToken)
     )
     process.env.FIDC_URL = mockValues.fidcUrl
-    delete process.env.PHASE
     fs.readdirSync.mockReturnValue(['mongodb-users.json'])
-    jest.mock(mockPhase0ConfigFile, () => mockPhase0Config, { virtual: true })
-    jest.mock(mockPhase1ConfigFile1, () => mockPhase1Config, { virtual: true })
-    jest.mock(mockPhase1ConfigFile2, () => mockPhase1Config, { virtual: true })
+    jest.mock(mockConfigFile, () => mockConfig, { virtual: true })
   })
 
   afterEach(() => {
@@ -115,23 +83,9 @@ describe('update-connector-mappings', () => {
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 
-  it('should call API with phase 0 config by default', async () => {
+  it('should call API using config file', async () => {
     expect.assertions(2)
-    const expectedBody = { mappings: [mockPhase0Config] }
-    await updateConnectorMappings(mockValues)
-    expect(fidcRequest.mock.calls.length).toEqual(1)
-    expect(fidcRequest).toHaveBeenCalledWith(
-      expectedUrl,
-      expectedBody,
-      mockValues.accessToken
-    )
-  })
-
-  it('should call API with phase config by environment variable', async () => {
-    expect.assertions(2)
-    process.env.PHASE = 1
-    fs.readdirSync.mockReturnValue(['mongodb-users.json', 'oracle-users.json'])
-    const expectedBody = { mappings: [mockPhase1Config, mockPhase1Config] }
+    const expectedBody = { mappings: [mockConfig] }
     await updateConnectorMappings(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(1)
     expect(fidcRequest).toHaveBeenCalledWith(
