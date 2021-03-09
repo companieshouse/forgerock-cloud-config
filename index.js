@@ -29,19 +29,19 @@ yargs
   .alias('h', 'help')
   .command({
     command: 'applications',
-    desc: 'Update ForgeRock Applications',
+    desc: 'Update ForgeRock Applications (./config/applications)',
     builder: cliOptions(['username', 'password', 'realm']),
     handler: (argv) => updateApplications(argv)
   })
   .command({
     command: 'auth-trees',
-    desc: 'Update AM Auth Trees',
+    desc: 'Update AM Auth Trees (./config/auth-trees)',
     builder: cliOptions(['username', 'password', 'realm']),
     handler: (argv) => updateAuthTrees(argv)
   })
   .command({
     command: 'connector-definitions',
-    desc: 'Update IDM Connector Definitions',
+    desc: 'Update IDM Connector Definitions (./config/connectors/definitions)',
     builder: cliOptions([
       'idmUsername',
       'idmPassword',
@@ -53,7 +53,7 @@ yargs
   })
   .command({
     command: 'connector-mappings',
-    desc: 'Update IDM Connector Mappings',
+    desc: 'Update IDM Connector Mappings (./config/connectors/mappings)',
     builder: cliOptions([
       'idmUsername',
       'idmPassword',
@@ -65,7 +65,7 @@ yargs
   })
   .command({
     command: 'cors',
-    desc: 'Update ForgeRock CORS',
+    desc: 'Update ForgeRock CORS (./config/cors)',
     builder: cliOptions([
       'username',
       'password',
@@ -79,7 +79,7 @@ yargs
   })
   .command({
     command: 'internal-roles',
-    desc: 'Update IDM Internal Roles',
+    desc: 'Update IDM Internal Roles (./config/internal-roles)',
     builder: cliOptions([
       'idmUsername',
       'idmPassword',
@@ -91,7 +91,7 @@ yargs
   })
   .command({
     command: 'managed-objects',
-    desc: 'Update IDM Managed Objects',
+    desc: 'Update IDM Managed Objects (./config/managed-objects)',
     builder: cliOptions([
       'idmUsername',
       'idmPassword',
@@ -103,7 +103,8 @@ yargs
   })
   .command({
     command: 'remote-servers',
-    desc: 'Update Remote Connector Servers',
+    desc:
+      'Update Remote Connector Servers (./config/connectors/remote-servers.json)',
     builder: cliOptions([
       'idmUsername',
       'idmPassword',
@@ -115,19 +116,20 @@ yargs
   })
   .command({
     command: 'scripts',
-    desc: 'Update AM Scripts',
+    desc: 'Update AM Scripts (./config/am-scripts)',
     builder: cliOptions(['username', 'password', 'realm']),
     handler: (argv) => updateScripts(argv)
   })
   .command({
     command: 'services',
-    desc: 'Update AM Services',
+    desc: 'Update AM Services (./config/services)',
     builder: cliOptions(['username', 'password', 'realm', 'hashSalt']),
     handler: (argv) => updateServices(argv)
   })
   .command({
     command: 'terms-and-conditions',
-    desc: 'Update IDM Terms and Conditions',
+    desc:
+      'Update IDM Terms and Conditions (./config/consent/terms-and-conditions.json)',
     builder: cliOptions([
       'idmUsername',
       'idmPassword',
@@ -139,7 +141,7 @@ yargs
   })
   .command({
     command: 'user-roles',
-    desc: 'Update IDM User Roles',
+    desc: 'Update IDM User Roles (./config/user-roles)',
     builder: cliOptions([
       'idmUsername',
       'idmPassword',
