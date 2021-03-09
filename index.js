@@ -12,7 +12,8 @@ const {
   updateRemoteServers,
   updateScripts,
   updateServices,
-  updateTermsAndConditions
+  updateTermsAndConditions,
+  updateUserRoles
 } = require('./scripts')
 
 if (!process.env.FIDC_URL) {
@@ -135,6 +136,18 @@ yargs
       'realm'
     ]),
     handler: (argv) => updateTermsAndConditions(argv)
+  })
+  .command({
+    command: 'user-roles',
+    desc: 'Update IDM User Roles',
+    builder: cliOptions([
+      'idmUsername',
+      'idmPassword',
+      'adminClientId',
+      'adminClientSecret',
+      'realm'
+    ]),
+    handler: (argv) => updateUserRoles(argv)
   })
   .demandCommand()
   .parse()

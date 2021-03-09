@@ -1,16 +1,10 @@
 const fs = require('fs')
 const path = require('path')
-const getAccessToken = require('../../helpers/get-access-token')
-const fidcRequest = require('../../helpers/fidc-request')
+const getAccessToken = require('../helpers/get-access-token')
+const fidcRequest = require('../helpers/fidc-request')
 
 const updateUserRoles = async (argv) => {
-  // Check environment variables
   const { FIDC_URL, PHASE = '0' } = process.env
-
-  if (!FIDC_URL) {
-    console.error('Missing FIDC_URL environment variable')
-    return process.exit(1)
-  }
 
   try {
     const accessToken = await getAccessToken(argv)
@@ -18,10 +12,7 @@ const updateUserRoles = async (argv) => {
     console.log(`Using phase ${PHASE} config`)
 
     // Combine managed object JSON files
-    const dir = path.resolve(
-      __dirname,
-      `../../config/phase-${PHASE}/user-roles`
-    )
+    const dir = path.resolve(__dirname, `../config/phase-${PHASE}/user-roles`)
 
     const userRolesFileContent = fs
       .readdirSync(dir)
