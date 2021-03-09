@@ -11,7 +11,8 @@ const {
   updateManagedObjects,
   updateRemoteServers,
   updateScripts,
-  updateServices
+  updateServices,
+  updateTermsAndConditions
 } = require('./scripts')
 
 if (!process.env.FIDC_URL) {
@@ -122,6 +123,18 @@ yargs
     desc: 'Update AM Services',
     builder: cliOptions(['username', 'password', 'realm', 'hashSalt']),
     handler: (argv) => updateServices(argv)
+  })
+  .command({
+    command: 'terms-and-conditions',
+    desc: 'Update IDM Terms and Conditions',
+    builder: cliOptions([
+      'idmUsername',
+      'idmPassword',
+      'adminClientId',
+      'adminClientSecret',
+      'realm'
+    ]),
+    handler: (argv) => updateTermsAndConditions(argv)
   })
   .demandCommand()
   .parse()

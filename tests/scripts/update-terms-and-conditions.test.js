@@ -8,7 +8,7 @@ describe('update-terms-and-conditions', () => {
   jest.spyOn(console, 'error').mockImplementation(() => {})
   jest.spyOn(process, 'exit').mockImplementation(() => {})
 
-  const updateTermsAndConditions = require('../../scripts/update-terms-and-conditions/update-terms-and-conditions')
+  const updateTermsAndConditions = require('../../scripts/update-terms-and-conditions')
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
@@ -91,16 +91,6 @@ describe('update-terms-and-conditions', () => {
     console.log.mockRestore()
     console.error.mockRestore()
     process.exit.mockRestore()
-  })
-
-  it('should error if missing FRIC environment variable', async () => {
-    expect.assertions(2)
-    delete process.env.FIDC_URL
-    await updateTermsAndConditions(mockValues)
-    expect(console.error).toHaveBeenCalledWith(
-      'Missing FIDC_URL environment variable'
-    )
-    expect(process.exit).toHaveBeenCalledWith(1)
   })
 
   it('should error if getAccessToken functions fails', async () => {
