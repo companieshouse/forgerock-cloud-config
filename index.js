@@ -3,6 +3,7 @@ const yargs = require('yargs')
 const cliOptions = require('./helpers/cli-options')
 const {
   updateApplications,
+  updateAuthTrees,
   updateConnectorDefinitions,
   updateConnectorMappings,
   updateRemoteServers,
@@ -25,6 +26,12 @@ yargs
     desc: 'Update ForgeRock Applications',
     builder: cliOptions(['username', 'password', 'realm']),
     handler: (argv) => updateApplications(argv)
+  })
+  .command({
+    command: 'auth-trees',
+    desc: 'Update AM Auth Trees',
+    builder: cliOptions(['username', 'password', 'realm']),
+    handler: (argv) => updateAuthTrees(argv)
   })
   .command({
     command: 'connector-definitions',

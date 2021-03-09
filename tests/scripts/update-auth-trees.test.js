@@ -10,12 +10,12 @@ describe('update-auth-trees', () => {
   jest.spyOn(console, 'error').mockImplementation(() => {})
   jest.spyOn(process, 'exit').mockImplementation(() => {})
 
-  const updateAuthTrees = require('../../scripts/update-auth-trees/update-auth-trees')
+  const updateAuthTrees = require('../../scripts/update-auth-trees')
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
     sessionToken: 'session=1234',
-    realm: '/realms/root/realms/alpha'
+    realm: 'alpha'
   }
 
   const mockPhase0ConfigFile = path.resolve(
@@ -93,7 +93,7 @@ describe('update-auth-trees', () => {
     }
   }
 
-  const expectedBaseUrl = `${mockValues.fidcUrl}/am/json${mockValues.realm}/realm-config/authentication/authenticationtrees`
+  const expectedBaseUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${mockValues.realm}/realm-config/authentication/authenticationtrees`
 
   beforeEach(() => {
     getSessionToken.mockImplementation(() =>
@@ -119,16 +119,6 @@ describe('update-auth-trees', () => {
     console.log.mockRestore()
     console.error.mockRestore()
     process.exit.mockRestore()
-  })
-
-  it('should error if missing FIDC_URL environment variable', async () => {
-    expect.assertions(2)
-    delete process.env.FIDC_URL
-    await updateAuthTrees(mockValues)
-    expect(console.error).toHaveBeenCalledWith(
-      'Missing FIDC_URL environment variable'
-    )
-    expect(process.exit).toHaveBeenCalledWith(1)
   })
 
   it('should error if getSessionToken functions fails', async () => {
@@ -216,9 +206,9 @@ describe('update-auth-trees', () => {
 
   it('should update the url if the realm is changed', async () => {
     expect.assertions(3)
-    const updatedRealm = '/realms/root/realms/bravo'
+    const updatedRealm = 'bravo'
     mockValues.realm = updatedRealm
-    const updatedBaseUrl = `${mockValues.fidcUrl}/am/json${updatedRealm}/realm-config/authentication/authenticationtrees`
+    const updatedBaseUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${updatedRealm}/realm-config/authentication/authenticationtrees`
 
     const node = mockPhase0Config.nodes[0]
     const expectNodeUrl = `${updatedBaseUrl}/nodes/${node.nodeType}/${node._id}`
