@@ -35,6 +35,11 @@ const cliOptions = (requestedOptions) => {
       alias: 's',
       demandOption: true,
       describe: 'IDM Admin Client Secret'
+    },
+    hashSalt: {
+      alias: 'hs',
+      demandOption: true,
+      describe: 'OAuth2 Hash Salt'
     }
   }
 

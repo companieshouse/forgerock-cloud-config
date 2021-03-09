@@ -7,6 +7,7 @@ const updateInternalRoles = require('./update-internal-roles')
 const updateManagedObjects = require('./update-managed-objects')
 const updateRemoteServers = require('./update-remote-servers')
 const updateScripts = require('./update-scripts')
+const updateServices = require('./update-services')
 
 module.exports = {
   updateApplications,
@@ -17,5 +18,6 @@ module.exports = {
   updateInternalRoles,
   updateManagedObjects,
   updateRemoteServers,
-  updateScripts
+  updateScripts,
+  updateServices
 }

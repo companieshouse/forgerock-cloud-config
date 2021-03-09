@@ -10,7 +10,8 @@ const {
   updateInternalRoles,
   updateManagedObjects,
   updateRemoteServers,
-  updateScripts
+  updateScripts,
+  updateServices
 } = require('./scripts')
 
 if (!process.env.FIDC_URL) {
@@ -115,6 +116,12 @@ yargs
     desc: 'Update AM Scripts',
     builder: cliOptions(['username', 'password', 'realm']),
     handler: (argv) => updateScripts(argv)
+  })
+  .command({
+    command: 'services',
+    desc: 'Update AM Services',
+    builder: cliOptions(['username', 'password', 'realm', 'hashSalt']),
+    handler: (argv) => updateServices(argv)
   })
   .demandCommand()
   .parse()
