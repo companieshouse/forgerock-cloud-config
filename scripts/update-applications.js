@@ -1,18 +1,11 @@
 const fs = require('fs')
 const path = require('path')
-const getSessionToken = require('../../helpers/get-session-token')
-const fidcRequest = require('../../helpers/fidc-request')
+const getSessionToken = require('../helpers/get-session-token')
+const fidcRequest = require('../helpers/fidc-request')
 
 const updateApplications = async (argv) => {
   const { realm } = argv
-
-  // Check environment variables
   const { FIDC_URL, PHASE = '0' } = process.env
-
-  if (!FIDC_URL) {
-    console.error('Missing FIDC_URL environment variable')
-    return process.exit(1)
-  }
 
   try {
     const sessionToken = await getSessionToken(argv)
@@ -20,10 +13,7 @@ const updateApplications = async (argv) => {
     console.log(`Using phase ${PHASE} config`)
 
     // Read auth tree JSON files
-    const dir = path.resolve(
-      __dirname,
-      `../../config/phase-${PHASE}/applications`
-    )
+    const dir = path.resolve(__dirname, `../config/phase-${PHASE}/applications`)
 
     const applicationFileContent = fs
       .readdirSync(dir)
@@ -33,7 +23,7 @@ const updateApplications = async (argv) => {
     // Update each application
     await Promise.all(
       applicationFileContent.map(async (applicationFile) => {
-        const requestUrl = `${FIDC_URL}/am/json${realm}/realm-config/agents/OAuth2Client/${applicationFile._id}`
+        const requestUrl = `${FIDC_URL}/am/json/realms/root/realms/${realm}/realm-config/agents/OAuth2Client/${applicationFile._id}`
         await fidcRequest(requestUrl, applicationFile, sessionToken, true)
         console.log(`${applicationFile._id} updated`)
         return Promise.resolve()

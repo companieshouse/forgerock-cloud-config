@@ -10,12 +10,12 @@ describe('update-applications', () => {
   jest.spyOn(console, 'error').mockImplementation(() => {})
   jest.spyOn(process, 'exit').mockImplementation(() => {})
 
-  const updateApplications = require('../../scripts/update-applications/update-applications')
+  const updateApplications = require('../../scripts/update-applications')
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
     sessionToken: 'session=1234',
-    realm: '/realms/root/realms/alpha'
+    realm: 'alpha'
   }
 
   const mockPhase0ConfigFile = path.resolve(
@@ -113,16 +113,6 @@ describe('update-applications', () => {
     process.exit.mockRestore()
   })
 
-  it('should error if missing FIDC_URL environment variable', async () => {
-    expect.assertions(2)
-    delete process.env.FIDC_URL
-    await updateApplications(mockValues)
-    expect(console.error).toHaveBeenCalledWith(
-      'Missing FIDC_URL environment variable'
-    )
-    expect(process.exit).toHaveBeenCalledWith(1)
-  })
-
   it('should error if getSessionToken functions fails', async () => {
     expect.assertions(2)
     const errorMessage = 'Invalid user'
@@ -147,7 +137,7 @@ describe('update-applications', () => {
 
   it('should call API with phase 0 config by default', async () => {
     expect.assertions(2)
-    const expectedUrl = `${mockValues.fidcUrl}/am/json${mockValues.realm}/realm-config/agents/OAuth2Client/${mockPhase0Config._id}`
+    const expectedUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${mockValues.realm}/realm-config/agents/OAuth2Client/${mockPhase0Config._id}`
     await updateApplications(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(1)
     expect(fidcRequest.mock.calls[0]).toEqual([
@@ -162,7 +152,7 @@ describe('update-applications', () => {
     expect.assertions(2)
     process.env.PHASE = 1
     fs.readdirSync.mockReturnValue(['sdk-client.json', 'rsc-client.json'])
-    const expectedUrl = `${mockValues.fidcUrl}/am/json${mockValues.realm}/realm-config/agents/OAuth2Client/${mockPhase1Config._id}`
+    const expectedUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${mockValues.realm}/realm-config/agents/OAuth2Client/${mockPhase1Config._id}`
     await updateApplications(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(2)
     expect(fidcRequest.mock.calls[0]).toEqual([
@@ -177,7 +167,7 @@ describe('update-applications', () => {
     expect.assertions(2)
     const updatedRealm = '/realms/root/realms/bravo'
     mockValues.realm = updatedRealm
-    const expectedUrl = `${mockValues.fidcUrl}/am/json${updatedRealm}/realm-config/agents/OAuth2Client/${mockPhase0Config._id}`
+    const expectedUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${updatedRealm}/realm-config/agents/OAuth2Client/${mockPhase0Config._id}`
     await updateApplications(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(1)
     expect(fidcRequest.mock.calls[0]).toEqual([
