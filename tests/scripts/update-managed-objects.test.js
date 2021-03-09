@@ -10,7 +10,7 @@ describe('update-managed-objects', () => {
   jest.spyOn(console, 'error').mockImplementation(() => {})
   jest.spyOn(process, 'exit').mockImplementation(() => {})
 
-  const updateManagedObject = require('../../scripts/update-managed-objects/update-managed-objects')
+  const updateManagedObject = require('../../scripts/update-managed-objects')
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
@@ -99,16 +99,6 @@ describe('update-managed-objects', () => {
     console.log.mockRestore()
     console.error.mockRestore()
     process.exit.mockRestore()
-  })
-
-  it('should error if missing FIDC environment variable', async () => {
-    expect.assertions(2)
-    delete process.env.FIDC_URL
-    await updateManagedObject(mockValues)
-    expect(console.error).toHaveBeenCalledWith(
-      'Missing FIDC_URL environment variable'
-    )
-    expect(process.exit).toHaveBeenCalledWith(1)
   })
 
   it('should error if getAccessToken functions fails', async () => {

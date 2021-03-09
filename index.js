@@ -8,6 +8,7 @@ const {
   updateConnectorMappings,
   updateCors,
   updateInternalRoles,
+  updateManagedObjects,
   updateRemoteServers,
   updateScripts
 } = require('./scripts')
@@ -84,6 +85,18 @@ yargs
       'realm'
     ]),
     handler: (argv) => updateInternalRoles(argv)
+  })
+  .command({
+    command: 'managed-objects',
+    desc: 'Update IDM Managed Objects',
+    builder: cliOptions([
+      'idmUsername',
+      'idmPassword',
+      'adminClientId',
+      'adminClientSecret',
+      'realm'
+    ]),
+    handler: (argv) => updateManagedObjects(argv)
   })
   .command({
     command: 'remote-servers',

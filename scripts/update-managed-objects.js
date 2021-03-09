@@ -1,16 +1,10 @@
 const fs = require('fs')
 const path = require('path')
-const getAccessToken = require('../../helpers/get-access-token')
-const fidcRequest = require('../../helpers/fidc-request')
+const getAccessToken = require('../helpers/get-access-token')
+const fidcRequest = require('../helpers/fidc-request')
 
 const updateManagedObjects = async (argv) => {
-  // Check environment variables
   const { FIDC_URL, PHASE = '0' } = process.env
-
-  if (!FIDC_URL) {
-    console.error('Missing FIDC_URL environment variable')
-    return process.exit(1)
-  }
 
   try {
     const accessToken = await getAccessToken(argv)
@@ -20,7 +14,7 @@ const updateManagedObjects = async (argv) => {
     // Combine managed object JSON files
     const dir = path.resolve(
       __dirname,
-      `../../config/phase-${PHASE}/managed-objects`
+      `../config/phase-${PHASE}/managed-objects`
     )
 
     const managedObjects = fs
