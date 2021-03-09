@@ -31,18 +31,18 @@ try{
   lastName = sharedState.get("objectAttributes").get("sn");
   logger.error("mail : " + email);
 } catch(e){
-  logger.error("error in fetching objectAttributes : " + e); 
+  logger.error("[REGISTRATION] error in fetching objectAttributes : " + e); 
   errorFound = true;
 }
 
-logger.error("JWT from transient state: " + notifyJWT);
-logger.error("Templates from transient state: " + templates);
+logger.error("[REGISTRATION] JWT from transient state: " + notifyJWT);
+logger.error("[REGISTRATION] Templates from transient state: " + templates);
 
 try{
   var secretbytes = java.lang.String(secret).getBytes();
   signingHandler = new fr.HmacSigningHandler(secretbytes);
 }catch(e){
-  logger.error("Error while creating signing handler: " + e);
+  logger.error("[REGISTRATION] Error while creating signing handler: " + e);
   errorFound = true;
 }
   
@@ -56,7 +56,7 @@ try{
   jwtClaims.setClaim("lastName", lastName);
   jwtClaims.setClaim("creationDate", new Date().toString());
 }catch(e){
-  logger.error("Error while adding claims to JWT: " + e);
+  logger.error("[REGISTRATION] Error while adding claims to JWT: " + e);
   errorFound = true;
 }
 
@@ -68,17 +68,17 @@ try{
         .done()
         .claims(jwtClaims)
         .build();
-  logger.error("JWT from reg: " + jwt);
+  logger.error("[REGISTRATION] JWT from reg: " + jwt);
 }catch(e){
-  logger.error("Error while creating JWT: " + e);
+  logger.error("[REGISTRATION] Error while creating JWT: " + e);
   errorFound = true;
 }
 
 try{
   returnUrl = host.concat("/am/XUI/?realm=/alpha&&service=CHVerifyReg&token=", jwt)
-  logger.error("URL: " + returnUrl);
+  logger.error("[REGISTRATION] RETURN URL: " + returnUrl);
 }catch(e){
-  logger.error("Error while extracting host: " + e);
+  logger.error("[REGISTRATION] Error while extracting host: " + e);
   errorFound = true;
 }
 
@@ -93,7 +93,7 @@ try{
     }
 }
 }catch(e){
-  logger.error("Error while preparing request for Notify: " + e);
+  logger.error("[REGISTRATION] Error while preparing request for Notify: " + e);
 }
 
 request.setMethod("POST");
@@ -103,7 +103,7 @@ request.getEntity().setString(JSON.stringify(requestBodyJson))
 
 if(!errorFound){
   var response = httpClient.send(request).get();
-  logger.error("Response: " + response.getStatus().getCode() + " - " + response.getCause() + " - " +response.getEntity().getString());
+  logger.error("[REGISTRATION] Notify Response: " + response.getStatus().getCode() + " - " + response.getCause() + " - " +response.getEntity().getString());
 
   if(response.getStatus().getCode() == 201){
     if (callbacks.isEmpty()) {
