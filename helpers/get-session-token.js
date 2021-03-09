@@ -1,7 +1,7 @@
 const fetch = require('node-fetch')
 
 const getSessionToken = async (argv) => {
-  const { username, password, realm } = argv
+  const { username, password } = argv
 
   // Check environment variables
   const { FIDC_URL } = process.env
@@ -11,7 +11,7 @@ const getSessionToken = async (argv) => {
   }
 
   // Get session token
-  const requestUrl = `${FIDC_URL}/am/json${realm}/authenticate`
+  const requestUrl = `${FIDC_URL}/am/json/realms/root/authenticate`
 
   const topLevelRequestOptions = {
     method: 'post',
@@ -81,7 +81,9 @@ const getSessionToken = async (argv) => {
     )
     if (sessionTokenResponse.status > 299) {
       console.log('Error while getting Session Token')
-      throw new Error(`${sessionTokenResponse.status}: ${sessionTokenResponse.statusText}`)
+      throw new Error(
+        `${sessionTokenResponse.status}: ${sessionTokenResponse.statusText}`
+      )
     }
     return Promise.resolve(sessionTokenResponse.headers.get('set-cookie'))
   } catch (error) {
