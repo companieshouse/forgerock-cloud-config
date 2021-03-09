@@ -7,6 +7,7 @@ const {
   updateConnectorDefinitions,
   updateConnectorMappings,
   updateCors,
+  updateInternalRoles,
   updateRemoteServers,
   updateScripts
 } = require('./scripts')
@@ -37,13 +38,25 @@ yargs
   .command({
     command: 'connector-definitions',
     desc: 'Update IDM Connector Definitions',
-    builder: cliOptions(['idmUsername', 'idmPassword', 'realm']),
+    builder: cliOptions([
+      'idmUsername',
+      'idmPassword',
+      'adminClientId',
+      'adminClientSecret',
+      'realm'
+    ]),
     handler: (argv) => updateConnectorDefinitions(argv)
   })
   .command({
     command: 'connector-mappings',
     desc: 'Update IDM Connector Mappings',
-    builder: cliOptions(['idmUsername', 'idmPassword', 'realm']),
+    builder: cliOptions([
+      'idmUsername',
+      'idmPassword',
+      'adminClientId',
+      'adminClientSecret',
+      'realm'
+    ]),
     handler: (argv) => updateConnectorMappings(argv)
   })
   .command({
@@ -54,14 +67,34 @@ yargs
       'password',
       'idmUsername',
       'idmPassword',
+      'adminClientId',
+      'adminClientSecret',
       'realm'
     ]),
     handler: (argv) => updateCors(argv)
   })
   .command({
+    command: 'internal-roles',
+    desc: 'Update IDM Internal Roles',
+    builder: cliOptions([
+      'idmUsername',
+      'idmPassword',
+      'adminClientId',
+      'adminClientSecret',
+      'realm'
+    ]),
+    handler: (argv) => updateInternalRoles(argv)
+  })
+  .command({
     command: 'remote-servers',
     desc: 'Update Remote Connector Servers',
-    builder: cliOptions(['idmUsername', 'idmPassword', 'realm']),
+    builder: cliOptions([
+      'idmUsername',
+      'idmPassword',
+      'adminClientId',
+      'adminClientSecret',
+      'realm'
+    ]),
     handler: (argv) => updateRemoteServers(argv)
   })
   .command({

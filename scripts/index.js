@@ -3,6 +3,7 @@ const updateAuthTrees = require('./update-auth-trees')
 const updateConnectorDefinitions = require('./update-connector-definitions')
 const updateConnectorMappings = require('./update-connector-mappings')
 const updateCors = require('./update-cors')
+const updateInternalRoles = require('./update-internal-roles')
 const updateRemoteServers = require('./update-remote-servers')
 const updateScripts = require('./update-scripts')
 
@@ -12,6 +13,7 @@ module.exports = {
   updateConnectorDefinitions,
   updateConnectorMappings,
   updateCors,
+  updateInternalRoles,
   updateRemoteServers,
   updateScripts
 }
