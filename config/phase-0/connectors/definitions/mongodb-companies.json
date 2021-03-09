@@ -1,8 +1,8 @@
 {
-	"_id": "provisioner.openicf/CHSUser",
+	"_id": "provisioner.openicf/CHSCompany",
 	"connectorRef": {
 		"connectorHostRef": "aws",
-		"displayName": "CHS User Connector",
+		"displayName": "MongoDB Connector",
 		"bundleVersion": "1.5.19.7-SNAPSHOT",
 		"systemType": "provisioner.openicf",
 		"bundleName": "org.forgerock.openicf.connectors.mongodb-connector",
@@ -48,9 +48,7 @@
 		"minimumRecompilationInterval": "100",
 		"deleteScriptFileName": "DeleteMongoDB.groovy",
 		"scriptBaseClass": null,
-		"scriptRoots": [
-			"jar:file:connectors/mongodb-connector-1.5.19.7-SNAPSHOT.jar\u0021/scripts/mongodb/"
-		],
+		"scriptRoots": ["jar:file:connectors/mongodb-connector-1.5.19.7-SNAPSHOT.jar!/scripts/mongodb/"],
 		"customConfiguration": null,
 		"resolveUsernameScriptFileName": null,
 		"searchScriptFileName": "SearchMongoDB.groovy",
@@ -68,10 +66,12 @@
 		"connectionURI": "mongodb://mongo-db1-amido.development.aws.internal:27017",
 		"host": "mongo-db1-amido.development.aws.internal",
 		"port": "27017",
-		"userDatabase": "admin",
+		"user": null,
+		"password": null,
+		"userDatabase": null,
 		"clusterAddresses": null,
 		"dateAttributes": [],
-		"database": "account",
+		"database": "company_profile",
 		"arrayAttributes": [],
 		"includeNullValue": "false",
 		"includeEmptyList": "false",
@@ -87,80 +87,27 @@
 	},
 	"enabled": true,
 	"objectTypes": {
-		"users": {
+		"company_profile": {
 			"$schema": "http://json-schema.org/draft-03/schema",
-			"id": "users",
-			"nativeType": "users",
+			"type": "object",
+			"id": "company_profile",
+			"nativeType": "company_profile",
 			"properties": {
 				"_id": {
-					"flags": [],
+					"type": "string",
 					"nativeName": "_id",
 					"nativeType": "string",
-					"required": true,
-					"runAsUser": false,
-					"type": "string"
+					"required": true
 				},
-				"email": {
+				"data": {
+					"type": "object",
+					"nativeType": "object",
+					"nativeName": "data",
+					"required": true,
 					"flags": [],
-					"nativeName": "email",
-					"nativeType": "string",
-					"required": true,
-					"runAsUser": false,
-					"type": "string"
-				},
-				"forename": {
-					"nativeName": "forename",
-					"nativeType": "string",
-					"required": false,
-					"type": "string"
-				},
-				"password": {
-					"flags": [
-						"NOT_RETURNED_BY_DEFAULT",
-						"NOT_READABLE"
-					],
-					"nativeName": "password",
-					"nativeType": "JAVA_TYPE_GUARDEDSTRING",
-					"required": true,
-					"runAsUser": false,
-					"type": "string"
-				},
-				"roles": {
-					"flags": [],
-					"items": {
-						"nativeType": "string",
-						"type": "string"
-					},
-					"nativeName": "roles",
-					"nativeType": "string",
-					"required": false,
-					"runAsUser": false,
-					"type": "array"
-				},
-				"surname": {
-					"nativeName": "surname",
-					"nativeType": "string",
-					"required": false,
-					"type": "string"
-				},
-				"test_data": {
-					"nativeName": "test_data",
-					"nativeType": "boolean",
-					"required": false,
-					"type": "boolean"
-				},
-				"user": {
-					"flags": [
-						"NOT_UPDATEABLE"
-					],
-					"nativeName": "user",
-					"nativeType": "string",
-					"required": false,
-					"runAsUser": false,
-					"type": "string"
+					"runAsUser": false
 				}
-			},
-			"type": "object"
+			}
 		}
 	}
 }

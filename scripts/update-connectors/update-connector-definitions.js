@@ -30,7 +30,7 @@ const updateConnectorDefinitions = async (argv) => {
     // Update each connector
     await Promise.all(
       connectorFileContent.map(async (connectorFile) => {
-        const requestUrl = `${FIDC_URL}/openidm/config/provisioner.openicf/${connectorFile._id}`
+        const requestUrl = `${FIDC_URL}/openidm/config/${connectorFile._id}`
         await fidcRequest(requestUrl, connectorFile, accessToken)
         console.log(`${connectorFile._id} updated`)
         return Promise.resolve()

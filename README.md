@@ -81,3 +81,10 @@ Calls the Access Management endpoint to update applications. The configuration i
 
 **Help Message:**
 `scripts/update-application -h`
+
+### Update Services
+
+Calls the Access Management endpoint to update services. The configuration is stored in JSON files in the `config/services` directory. Config files with sensitive values are stored using the `.tpl` extension and placeholders used for the value. The script will need updating to handle the any new replacements.
+
+**Help Message:**
+`scripts/update-services -h`
