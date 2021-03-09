@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const yargs = require('yargs')
 const cliOptions = require('./helpers/cli-options')
-const { updateApplications } = require('./scripts')
+const { updateApplications, updateScripts } = require('./scripts')
 
 if (!process.env.FIDC_URL) {
   console.error('Missing FIDC_URL environment variable')
@@ -19,6 +19,12 @@ yargs
     desc: 'Update ForgeRock Applications',
     builder: cliOptions(['username', 'password', 'realm']),
     handler: (argv) => updateApplications(argv)
+  })
+  .command({
+    command: 'scripts',
+    desc: 'Update ForgeRock AM Scripts',
+    builder: cliOptions(['username', 'password', 'realm']),
+    handler: (argv) => updateScripts(argv)
   })
   .demandCommand()
   .parse()

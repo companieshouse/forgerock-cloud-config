@@ -1,28 +1,18 @@
 const fs = require('fs')
 const path = require('path')
-const getSessionToken = require('../../helpers/get-session-token')
-const fidcRequest = require('../../helpers/fidc-request')
+const getSessionToken = require('../helpers/get-session-token')
+const fidcRequest = require('../helpers/fidc-request')
 
 const updateScripts = async (argv) => {
   const { realm } = argv
-
-  // Check environment variables
   const { FIDC_URL, PHASE = '0' } = process.env
-
-  if (!FIDC_URL) {
-    console.error('Missing FIDC_URL environment variable')
-    return process.exit(1)
-  }
 
   try {
     const sessionToken = await getSessionToken(argv)
     console.log(`Using phase ${PHASE} config`)
 
     // Read auth tree JSON files
-    const dir = path.resolve(
-      __dirname,
-      `../../config/phase-${PHASE}/am-scripts`
-    )
+    const dir = path.resolve(__dirname, `../config/phase-${PHASE}/am-scripts`)
 
     const scriptFileContent = fs
       .readdirSync(dir)
@@ -32,7 +22,7 @@ const updateScripts = async (argv) => {
     // Update each script
     await Promise.all(
       scriptFileContent.map(async (scriptFile) => {
-        const baseUrl = `${FIDC_URL}/am/json${realm}`
+        const baseUrl = `${FIDC_URL}/am/json/realms/root/realms/${realm}`
         await Promise.all(
           scriptFile.scripts.map(async (script) => {
             if (!script.payload._id) {

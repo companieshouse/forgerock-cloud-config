@@ -165,7 +165,7 @@ describe('update-applications', () => {
 
   it('should call update the url if the realm is changed', async () => {
     expect.assertions(2)
-    const updatedRealm = '/realms/root/realms/bravo'
+    const updatedRealm = 'bravo'
     mockValues.realm = updatedRealm
     const expectedUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${updatedRealm}/realm-config/agents/OAuth2Client/${mockPhase0Config._id}`
     await updateApplications(mockValues)

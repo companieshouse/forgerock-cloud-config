@@ -6,7 +6,7 @@ describe('update-am-scripts', () => {
   const getSessionToken = require('../../helpers/get-session-token')
   jest.mock('../../helpers/fidc-request')
   const fidcRequest = require('../../helpers/fidc-request')
-  const updateScripts = require('../../scripts/update-scripts/update-scripts')
+  const updateScripts = require('../../scripts/update-scripts')
   jest.spyOn(console, 'log').mockImplementation(() => {})
   jest.spyOn(console, 'error').mockImplementation(() => {})
   jest.spyOn(process, 'exit').mockImplementation(() => {})
@@ -14,7 +14,7 @@ describe('update-am-scripts', () => {
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
     sessionToken: 'session=1234',
-    realm: '/realms/root/realms/alpha'
+    realm: 'alpha'
   }
 
   const mockPhase0ConfigFile = path.resolve(
@@ -93,16 +93,6 @@ describe('update-am-scripts', () => {
     process.exit.mockRestore()
   })
 
-  it('should error if missing FIDC_URL environment variable', async () => {
-    expect.assertions(2)
-    delete process.env.FIDC_URL
-    await updateScripts(mockValues)
-    expect(console.error).toHaveBeenCalledWith(
-      'Missing FIDC_URL environment variable'
-    )
-    expect(process.exit).toHaveBeenCalledWith(1)
-  })
-
   it('should error if getSessionToken functions fails', async () => {
     expect.assertions(2)
     const errorMessage = 'Invalid user'
@@ -116,7 +106,7 @@ describe('update-am-scripts', () => {
 
   it('should call API with phase 0 config by default', async () => {
     expect.assertions(2)
-    const expectedUrl = `${mockValues.fidcUrl}/am/json${mockValues.realm}/scripts/${mockPhase0Config.scripts[0].payload._id}`
+    const expectedUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${mockValues.realm}/scripts/${mockPhase0Config.scripts[0].payload._id}`
     const expectedBody = mockPhase0Config.scripts[0].payload
     await updateScripts(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(1)
@@ -131,7 +121,7 @@ describe('update-am-scripts', () => {
   it('should call API with phase config by environment variable', async () => {
     expect.assertions(2)
     process.env.PHASE = 1
-    const expectedUrl = `${mockValues.fidcUrl}/am/json${mockValues.realm}/scripts/${mockPhase1Config.scripts[0].payload._id}`
+    const expectedUrl = `${mockValues.fidcUrl}/am/json/realms/root/realms/${mockValues.realm}/scripts/${mockPhase1Config.scripts[0].payload._id}`
     const expectedBody = mockPhase1Config.scripts[0].payload
     await updateScripts(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(1)
