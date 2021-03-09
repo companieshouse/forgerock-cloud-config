@@ -6,8 +6,8 @@ describe('get-access-token', () => {
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
-    username: 'test-user',
-    password: 'SecurePassword123',
+    idmUsername: 'test-user',
+    idmPassword: 'SecurePassword123',
     adminClientId: 'ForgeRockAdminClient',
     adminClientSecret: 'SecureClientSecret123',
     realm: 'alpha',
@@ -15,8 +15,8 @@ describe('get-access-token', () => {
   }
 
   const expectedBody = new URLSearchParams()
-  expectedBody.append('username', mockValues.username)
-  expectedBody.append('password', mockValues.password)
+  expectedBody.append('username', mockValues.idmUsername)
+  expectedBody.append('password', mockValues.idmPassword)
   expectedBody.append('client_id', mockValues.adminClientId)
   expectedBody.append('client_secret', mockValues.adminClientSecret)
   expectedBody.append('grant_type', 'password')

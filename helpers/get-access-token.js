@@ -1,14 +1,20 @@
 const fetch = require('node-fetch')
 
 const getAccessToken = async (argv) => {
-  const { username, password, adminClientId, adminClientSecret, realm } = argv
+  const {
+    idmUsername,
+    idmPassword,
+    adminClientId,
+    adminClientSecret,
+    realm
+  } = argv
   const { FIDC_URL } = process.env
 
   // Get access token
   const requestUrl = `${FIDC_URL}/am/oauth2/realms/root/realms/${realm}/access_token?auth_chain=PasswordGrant`
   const body = new URLSearchParams()
-  body.append('username', username)
-  body.append('password', password)
+  body.append('username', idmUsername)
+  body.append('password', idmPassword)
   body.append('client_id', adminClientId)
   body.append('client_secret', adminClientSecret)
   body.append('grant_type', 'password')

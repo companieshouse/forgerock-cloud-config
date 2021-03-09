@@ -9,14 +9,7 @@ const updateCors = async (argv) => {
 
   try {
     const sessionToken = await getSessionToken(argv)
-
-    const accessTokenParams = {
-      ...argv,
-      username: argv.idmUsername,
-      password: argv.idmPassword
-    }
-
-    const accessToken = await getAccessToken(accessTokenParams)
+    const accessToken = await getAccessToken(argv)
 
     // Read auth tree JSON files
     const dir = path.resolve(__dirname, '../config/cors')
