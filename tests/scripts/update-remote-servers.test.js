@@ -8,7 +8,7 @@ describe('update-remote-servers', () => {
   jest.spyOn(console, 'error').mockImplementation(() => {})
   jest.spyOn(process, 'exit').mockImplementation(() => {})
 
-  const updateRemoteServers = require('../../scripts/update-connectors/update-remote-servers')
+  const updateRemoteServers = require('../../scripts/update-remote-servers')
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
@@ -80,16 +80,6 @@ describe('update-remote-servers', () => {
     console.log.mockRestore()
     console.error.mockRestore()
     process.exit.mockRestore()
-  })
-
-  it('should error if missing FRIC environment variable', async () => {
-    expect.assertions(2)
-    delete process.env.FIDC_URL
-    await updateRemoteServers(mockValues)
-    expect(console.error).toHaveBeenCalledWith(
-      'Missing FIDC_URL environment variable'
-    )
-    expect(process.exit).toHaveBeenCalledWith(1)
   })
 
   it('should error if getAccessToken functions fails', async () => {

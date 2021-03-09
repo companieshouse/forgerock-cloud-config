@@ -1,16 +1,10 @@
 const path = require('path')
 const fs = require('fs')
-const getAccessToken = require('../../helpers/get-access-token')
-const fidcRequest = require('../../helpers/fidc-request')
+const getAccessToken = require('../helpers/get-access-token')
+const fidcRequest = require('../helpers/fidc-request')
 
 const updateConnectorDefinitions = async (argv) => {
-  // Check environment variables
   const { FIDC_URL, PHASE = '0' } = process.env
-
-  if (!FIDC_URL) {
-    console.error('Missing FIDC_URL environment variable')
-    return process.exit(1)
-  }
 
   try {
     const accessToken = await getAccessToken(argv)
@@ -19,7 +13,7 @@ const updateConnectorDefinitions = async (argv) => {
 
     const dir = path.resolve(
       __dirname,
-      `../../config/phase-${PHASE}/connectors/definitions`
+      `../config/phase-${PHASE}/connectors/definitions`
     )
 
     const connectorFileContent = fs

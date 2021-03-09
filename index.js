@@ -1,7 +1,13 @@
 #!/usr/bin/env node
 const yargs = require('yargs')
 const cliOptions = require('./helpers/cli-options')
-const { updateApplications, updateScripts } = require('./scripts')
+const {
+  updateApplications,
+  updateConnectorDefinitions,
+  updateConnectorMappings,
+  updateRemoteServers,
+  updateScripts
+} = require('./scripts')
 
 if (!process.env.FIDC_URL) {
   console.error('Missing FIDC_URL environment variable')
@@ -21,8 +27,26 @@ yargs
     handler: (argv) => updateApplications(argv)
   })
   .command({
+    command: 'connector-definitions',
+    desc: 'Update IDM Connector Definitions',
+    builder: cliOptions(['idmUsername', 'idmPassword', 'realm']),
+    handler: (argv) => updateConnectorDefinitions(argv)
+  })
+  .command({
+    command: 'connector-mappings',
+    desc: 'Update IDM Connector Mappings',
+    builder: cliOptions(['idmUsername', 'idmPassword', 'realm']),
+    handler: (argv) => updateConnectorMappings(argv)
+  })
+  .command({
+    command: 'remote-servers',
+    desc: 'Update Remote Connector Servers',
+    builder: cliOptions(['idmUsername', 'idmPassword', 'realm']),
+    handler: (argv) => updateRemoteServers(argv)
+  })
+  .command({
     command: 'scripts',
-    desc: 'Update ForgeRock AM Scripts',
+    desc: 'Update AM Scripts',
     builder: cliOptions(['username', 'password', 'realm']),
     handler: (argv) => updateScripts(argv)
   })

@@ -1,25 +1,16 @@
 const path = require('path')
-const getAccessToken = require('../../helpers/get-access-token')
-const fidcRequest = require('../../helpers/fidc-request')
+const getAccessToken = require('../helpers/get-access-token')
+const fidcRequest = require('../helpers/fidc-request')
 
 const updateRemoteServers = async (argv) => {
-  // Check environment variables
   const { FIDC_URL, PHASE = '0' } = process.env
-
-  if (!FIDC_URL) {
-    console.error('Missing FIDC_URL environment variable')
-    return process.exit(1)
-  }
 
   try {
     const accessToken = await getAccessToken(argv)
 
     console.log(`Using phase ${PHASE} config`)
 
-    const dir = path.resolve(
-      __dirname,
-      `../../config/phase-${PHASE}/connectors`
-    )
+    const dir = path.resolve(__dirname, `../config/phase-${PHASE}/connectors`)
 
     const remoteServersFileContent = require(path.join(
       dir,

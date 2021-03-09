@@ -10,7 +10,7 @@ describe('update-connector-mappings', () => {
   jest.spyOn(console, 'error').mockImplementation(() => {})
   jest.spyOn(process, 'exit').mockImplementation(() => {})
 
-  const updateConnectorMappings = require('../../scripts/update-connectors/update-connector-mappings')
+  const updateConnectorMappings = require('../../scripts/update-connector-mappings')
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
@@ -102,16 +102,6 @@ describe('update-connector-mappings', () => {
     console.log.mockRestore()
     console.error.mockRestore()
     process.exit.mockRestore()
-  })
-
-  it('should error if missing FIDC_URL environment variable', async () => {
-    expect.assertions(2)
-    delete process.env.FIDC_URL
-    await updateConnectorMappings(mockValues)
-    expect(console.error).toHaveBeenCalledWith(
-      'Missing FIDC_URL environment variable'
-    )
-    expect(process.exit).toHaveBeenCalledWith(1)
   })
 
   it('should error if getAccessToken functions fails', async () => {
