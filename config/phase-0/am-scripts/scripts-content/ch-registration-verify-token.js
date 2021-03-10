@@ -13,7 +13,7 @@ var fr = JavaImporter(
   org.forgerock.json.jose.jws.JwsHeader
 )
 
-var Difference_In_Time;
+var differenceInTime;
 var errorFound = false;
 var tokenURL;
 
@@ -54,8 +54,8 @@ if (!tokenURLParam) {
     var firstName = claimSet.getClaim("firstName");
     var lastName = claimSet.getClaim("lastName");
     var now = new Date();
-    var Difference_In_Time = now.getTime() - (new Date(iat)).getTime();
-    logger.error("[REGISTRATION-RESUME] initiating email: " + email + " on: "+ iat + " - difference (min): "+Math.round(Difference_In_Time/(1000 * 60)));
+    differenceInTime = now.getTime() - (new Date(iat)).getTime();
+    logger.error("[REGISTRATION-RESUME] initiating email: " + email + " on: "+ iat + " - difference (hours): "+Math.round(differenceInTime/(1000 * 60)/60));
     logger.error("[REGISTRATION-RESUME] name: " + firstName + " - surname: "+lastName);
   }catch(e){
     logger.error("[REGISTRATION-RESUME] error while reconstructing JWT: " + e);
@@ -71,7 +71,7 @@ if (!tokenURLParam) {
           )
       ).build()
     }
-  } else if (Math.round(Difference_In_Time/(1000 * 60)) < 10080){
+  } else if (Math.round(differenceInTime/(1000 * 60)) < 1440){
     logger.error("[REGISTRATION-RESUME] The provided token is still valid");
     try{
       // put the read attributes in shared state for the Create Object node to consume

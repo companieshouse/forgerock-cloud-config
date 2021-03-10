@@ -79,15 +79,15 @@ try{
 var request = new org.forgerock.http.protocol.Request();
 request.setUri("https://api.notifications.service.gov.uk/v2/notifications/email");
 try{
-var requestBodyJson = {
-  "email_address": email,
-  "template_id": JSON.parse(templates).resetPwd,
-  "personalisation": {
-      "link": returnUrl
+  var requestBodyJson = {
+    "email_address": email,
+    "template_id": JSON.parse(templates).resetPwd,
+    "personalisation": {
+        "link": returnUrl
+    }
   }
-}
 }catch(e){
-logger.error("[RESET PWD] Error while preparing request for Notify: " + e);
+  logger.error("[RESET PWD] Error while preparing request for Notify: " + e);
 }
 
 request.setMethod("POST");
@@ -96,44 +96,56 @@ request.getHeaders().add("Authorization", "Bearer " + notifyJWT);
 request.getEntity().setString(JSON.stringify(requestBodyJson))
 
 if(!errorFound){
-var response = httpClient.send(request).get();
-logger.error("[RESET PWD] Response: " + response.getStatus().getCode() + " - " + response.getCause() + " - " +response.getEntity().getString());
+  var response = httpClient.send(request).get();
+  var notificationId;
+  logger.error("[RESET PWD] Response: " + response.getStatus().getCode() + " - " + response.getCause() + " - " +response.getEntity().getString());
 
-if(response.getStatus().getCode() == 201){
-  if (callbacks.isEmpty()) {
-    action = fr.Action.send(
-      new fr.TextOutputCallback(
-          fr.TextOutputCallback.INFORMATION,
-          "Please check your email to complete reset password - "+email 
-      ),
-      new fr.HiddenValueCallback (
-          "stage",
-          "RESET_PASSWORD_6" 
-      ),
-      new fr.HiddenValueCallback (
-          "pagePropsJSON",
-          JSON.stringify({"email": email}) 
-      )
-    ).build()
-  } 
-}else{
-  if (callbacks.isEmpty()) {
-    action = fr.Action.send(
-      new fr.HiddenValueCallback (
-          "stage",
-          "RESET_PASSWORD_ERROR" 
-      ),
+  try{
+    notificationId = JSON.parse(response.getEntity().getString()).id;
+    logger.error("[RESET PWD] Notify ID: " + notificationId);
+  }catch(e){
+    logger.error("[RESET PWD] Error while parsing Notify response: " + e);
+  }
+
+  if(response.getStatus().getCode() == 201){
+    if (callbacks.isEmpty()) {
+      action = fr.Action.send(
         new fr.TextOutputCallback(
-          fr.TextOutputCallback.ERROR,
-          "The email could not be sent: "+response.getEntity().getString()
-      ),
-      new fr.HiddenValueCallback (
-          "pagePropsJSON",
-          JSON.stringify({"apiError": JSON.parse(response.getEntity().getString())})
+            fr.TextOutputCallback.INFORMATION,
+            "Please check your email to complete reset password - "+email 
+        ),
+        new fr.HiddenValueCallback (
+            "stage",
+            "RESET_PASSWORD_6" 
+        ),
+        new fr.HiddenValueCallback (
+            "pagePropsJSON",
+            JSON.stringify({"email": email}) 
+        ),
+        new fr.HiddenValueCallback (
+          "notificationId",
+          notificationId 
       )
-    ).build()
-  } 
-}
+      ).build()
+    } 
+  }else{
+    if (callbacks.isEmpty()) {
+      action = fr.Action.send(
+        new fr.HiddenValueCallback (
+            "stage",
+            "RESET_PASSWORD_ERROR" 
+        ),
+          new fr.TextOutputCallback(
+            fr.TextOutputCallback.ERROR,
+            "The email could not be sent: "+response.getEntity().getString()
+        ),
+        new fr.HiddenValueCallback (
+            "pagePropsJSON",
+            JSON.stringify({"apiError": JSON.parse(response.getEntity().getString())})
+        )
+      ).build()
+    } 
+  }
 } else {
 if (callbacks.isEmpty()) {
   action = fr.Action.send(
