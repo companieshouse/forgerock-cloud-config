@@ -8,12 +8,11 @@ describe('get-session-token', () => {
     fidcUrl: 'https://fidc-test.forgerock.com',
     username: 'test-user',
     password: 'SecurePassword123',
-    realm: '/realms/root/realms/alpha',
     authId: 'auth-1234',
     sessionToken: 'session=1234'
   }
 
-  const expectedUrl = `${mockValues.fidcUrl}/am/json${mockValues.realm}/authenticate`
+  const expectedUrl = `${mockValues.fidcUrl}/am/json/realms/root/authenticate`
 
   const expectedTopLevelOptions = {
     method: 'post',
@@ -71,14 +70,6 @@ describe('get-session-token', () => {
 
   afterEach(() => {
     jest.resetAllMocks()
-  })
-
-  it('should reject if missing FRIC environment variable', async () => {
-    expect.assertions(1)
-    delete process.env.FIDC_URL
-    await expect(getSessionToken(mockValues)).rejects.toEqual(
-      new Error('Missing FIDC_URL environment variable')
-    )
   })
 
   it('should call APIs with the correct options', async () => {

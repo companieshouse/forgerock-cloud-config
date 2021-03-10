@@ -35,9 +35,9 @@
         "http://localhost:3000",
         "http://localhost:3000/_callback",
         "http://localhost:3000/account/home/",
-        "https://ch-account-ui.amido.aws.chdev.org",
-        "https://ch-account-ui.amido.aws.chdev.org/account/home/",
-        "https://ch-account-ui.amido.aws.chdev.org/_callback"
+        "{REPLACEMENT_UI_URL}",
+        "{REPLACEMENT_UI_URL}/account/home/",
+        "{REPLACEMENT_UI_URL}/_callback"
       ]
     },
     "clientName": {
@@ -109,7 +109,7 @@
       "inherited": false,
       "value": [
         "forgerock://oidc_callback",
-        "https://ch-account-ui.amido.aws.chdev.org",
+        "{REPLACEMENT_UI_URL}",
         "http://localhost:3000"
       ]
     },
@@ -262,8 +262,8 @@
         "forgerock://oidc_callback",
         "http://localhost:3000",
         "http://localhost:3000/_callback",
-        "https://ch-account-ui.amido.aws.chdev.org",
-        "https://ch-account-ui.amido.aws.chdev.org/_callback"
+        "{REPLACEMENT_UI_URL}",
+        "{REPLACEMENT_UI_URL}/_callback"
       ]
     }
   },
