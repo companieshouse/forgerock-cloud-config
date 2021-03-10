@@ -1,93 +1,75 @@
 {
-      "target": "managed/alpha_user",
-      "source": "system/CHSUser/users",
-      "name": "systemChsuserUsers_managedAlpha_user",
-      "consentRequired": false,
-      "icon": null,
-      "displayName": "systemChsuserUsers_managedAlpha_user",
-      "properties": [
-        {
-          "target": "userName",
-          "source": "email"
-        },
-        {
-          "target": "givenName",
-          "source": "forename"
-        },
-        {
-          "target": "sn",
-          "source": "surname"
-        },
-        {
-          "target": "mail",
-          "source": "email"
-        }
-      ],
-      "policies": [
-        {
-          "action": "EXCEPTION",
-          "situation": "AMBIGUOUS"
-        },
-        {
-          "action": "EXCEPTION",
-          "situation": "SOURCE_MISSING"
-        },
-        {
-          "action": "CREATE",
-          "situation": "MISSING"
-        },
-        {
-          "action": "EXCEPTION",
-          "situation": "FOUND_ALREADY_LINKED"
-        },
-        {
-          "action": "DELETE",
-          "situation": "UNQUALIFIED"
-        },
-        {
-          "action": "EXCEPTION",
-          "situation": "UNASSIGNED"
-        },
-        {
-          "action": "EXCEPTION",
-          "situation": "LINK_ONLY"
-        },
-        {
-          "action": "IGNORE",
-          "situation": "TARGET_IGNORED"
-        },
-        {
-          "action": "IGNORE",
-          "situation": "SOURCE_IGNORED"
-        },
-        {
-          "action": "IGNORE",
-          "situation": "ALL_GONE"
-        },
-        {
-          "action": "UPDATE",
-          "situation": "CONFIRMED"
-        },
-        {
-          "action": "UPDATE",
-          "situation": "FOUND"
-        },
-        {
-          "action": "CREATE",
-          "situation": "ABSENT"
-        }
-      ],
-      "correlationQuery": [
-        {
-          "linkQualifier": "default",
-          "expressionTree": {
-            "any": [
-              "userName"
-            ]
-          },
-          "mapping": "systemChsuserUsers_managedAlpha_user",
-          "type": "text/javascript",
-          "file": "ui/correlateTreeToQueryFilter.js"
-        }
-      ]
-    }
+	"target": "managed/alpha_user",
+	"source": "system/CHSUser/users",
+	"name": "systemChsuserUsers_managedAlpha_user",
+	"consentRequired": false,
+	"icon": null,
+	"displayName": "systemChsuserUsers_managedAlpha_user",
+	"properties": [{
+		"target": "userName",
+		"source": "email"
+	}, {
+		"target": "givenName",
+		"source": "forename"
+	}, {
+		"target": "sn",
+		"source": "surname"
+	}, {
+		"target": "mail",
+		"source": "email"
+	}],
+	"policies": [{
+		"action": "EXCEPTION",
+		"situation": "AMBIGUOUS"
+	}, {
+		"action": "EXCEPTION",
+		"situation": "SOURCE_MISSING"
+	}, {
+		"action": "CREATE",
+		"situation": "MISSING"
+	}, {
+		"action": "EXCEPTION",
+		"situation": "FOUND_ALREADY_LINKED"
+	}, {
+		"action": "DELETE",
+		"situation": "UNQUALIFIED"
+	}, {
+		"action": "EXCEPTION",
+		"situation": "UNASSIGNED"
+	}, {
+		"action": "EXCEPTION",
+		"situation": "LINK_ONLY"
+	}, {
+		"action": "IGNORE",
+		"situation": "TARGET_IGNORED"
+	}, {
+		"action": "IGNORE",
+		"situation": "SOURCE_IGNORED"
+	}, {
+		"action": "IGNORE",
+		"situation": "ALL_GONE"
+	}, {
+		"action": "UPDATE",
+		"situation": "CONFIRMED"
+	}, {
+		"action": "UPDATE",
+		"situation": "FOUND"
+	}, {
+		"action": "CREATE",
+		"situation": "ABSENT"
+	}],
+	"correlationQuery": [{
+		"linkQualifier": "default",
+		"expressionTree": {
+			"any": ["userName"]
+		},
+		"mapping": "systemChsuserUsers_managedAlpha_user",
+		"type": "text/javascript",
+		"file": "ui/correlateTreeToQueryFilter.js"
+	}],
+	"onCreate": {
+		"type": "text/javascript",
+		"globals": {},
+		"source": "var incomingRoles = source.roles;\nvar rolesLength = incomingRoles.length;\n\nvar fidcRoles = [];\n\nfor (var i = 0; i < rolesLength; i++) {\n    var role = incomingRoles[i];\n    var fidcRole = {\n      _ref: \"managed/alpha_role/\" + role\n    };\n\n    fidcRoles.push(fidcRole);\n}\n\nif (fidcRoles.length > 0) {\n  target.roles = fidcRoles;\n}"
+	}
+}
