@@ -6,7 +6,7 @@ const replaceSensitiveValues = require('../helpers/replace-sensitive-values')
 
 const updateServices = async (argv) => {
   const { realm } = argv
-  const { FIDC_URL } = process.env
+  const { FIDC_URL, OAUTH2_HASH_SALT } = process.env
 
   try {
     const sessionToken = await getSessionToken(argv)
@@ -17,7 +17,7 @@ const updateServices = async (argv) => {
     await replaceSensitiveValues(
       dir,
       ['{REPLACEMENT_HASH_SALT}'],
-      [argv.hashSalt]
+      [OAUTH2_HASH_SALT]
     )
 
     const servicesFileContent = fs

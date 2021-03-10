@@ -14,10 +14,13 @@ The following need to be installed/configured for local use:
 
 ### Environment Variables
 
-| Name     | Description                  | Default Value | Required           |
-| -------- | ---------------------------- | ------------- | ------------------ |
-| FIDC_URL | ForgeRock Identity Cloud URL | N/A           | :white_check_mark: |
-| UI_URL   | CH Account UI URL            | N/A           | :white_check_mark: |
+A `.env` file can be used for setting environment variables when running locally. Copy the `.env.sample` file to a new file called `.env` and update the values for the environment. 
+
+| Name             | Description                           | Default Value | Required           |
+| ---------------- | ------------------------------------- | ------------- | ------------------ |
+| FIDC_URL         | ForgeRock Identity Cloud URL          | N/A           | :white_check_mark: |
+| UI_URL           | CH Account UI URL                     | N/A           | :white_check_mark: |
+| OAUTH2_HASH_SALT | Hash salt to be use by OAuth2 service | N/A           | :white_check_mark: |
 
 ### Install Dependencies
 

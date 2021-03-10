@@ -16,7 +16,13 @@ const {
   updateUserRoles
 } = require('./scripts')
 
-if (!process.env.FIDC_URL || !process.env.UI_URL) {
+require('dotenv').config()
+
+if (
+  !process.env.FIDC_URL ||
+  !process.env.UI_URL ||
+  !process.env.OAUTH2_HASH_SALT
+) {
   console.error('Missing required environment variable(s)')
   process.exit(1)
 }
@@ -123,7 +129,7 @@ yargs
   .command({
     command: 'services',
     desc: 'Update AM Services (./config/services)',
-    builder: cliOptions(['username', 'password', 'realm', 'hashSalt']),
+    builder: cliOptions(['username', 'password', 'realm']),
     handler: (argv) => updateServices(argv)
   })
   .command({

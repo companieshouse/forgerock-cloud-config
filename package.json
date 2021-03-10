@@ -12,6 +12,7 @@
   "author": "Amido",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "fs-extra": "^9.1.0",
     "node-fetch": "^2.6.1",
     "replace-in-file": "^6.2.0",
