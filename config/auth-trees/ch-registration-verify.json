@@ -64,16 +64,6 @@
             }
         },
         {
-            "_id":"1b1d44c3-8e55-4729-b783-54b69b021bae",
-            "nodeType":"ScriptedDecisionNode",
-            "details": {
-                "inputs":["*"],
-                "outcomes":["true"],
-                "outputs":["*"],
-                "script":"72921084-9674-4f0b-bf0c-8ef974d84008"
-            }
-        },
-        {
             "_id":"bb74cb44-5e3f-4634-9e5f-f18e121ca93f",
             "nodeType":"IdentifyExistingUserNode",
             "details": {

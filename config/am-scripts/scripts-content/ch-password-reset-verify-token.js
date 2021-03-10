@@ -15,29 +15,22 @@ var fr = JavaImporter(
   
   var Difference_In_Time;
   var errorFound = false;
-  var referer = requestHeaders.get("referer").get(0);
-  logger.error("referrer: " + referer);
-  // Parse the referer to get the username and token query parameters 
-  var params = {};
-  var vars = referer.split('&');
-  for (var i = 0; i < vars.length; i++) {
-    var pair = vars[i].split('=');
-    params[pair[0]] = decodeURIComponent(pair[1]);
-  }
-  var tokenURL = params.token;
-  logger.error("[RESET PWD] received token: " + tokenURL);
-  
-  if(tokenURL !== null && tokenURL !== undefined ){
-    logger.error("[RESET PWD] token found: resuming pwd reset journey");
+  var tokenURL;
+
+  var tokenURLParam = requestParameters.get("token");
+  if (tokenURLParam) { 
+    tokenURL = requestParameters.get("token").get(0);
+    logger.error("[RESET PWD] token found: " + tokenURL);
+    logger.error("[RESET PWD] Resuming pwd reset journey!");
   
     try{
-      var signedJwt = new fr.JwtBuilderFactory().reconstruct(tokenURL, fr.SignedJwt);
-      var claimSet = signedJwt.getClaimsSet();
-      var email = claimSet.getSubject();
-      var iat = claimSet.getClaim("creationDate");
-      var now = new Date();
-      var Difference_In_Time = now.getTime() - (new Date(iat)).getTime();
-      logger.error("[RESET PWD] initiating email: " + email + " on: "+ iat + " - difference (min): "+Math.round(Difference_In_Time/(1000 * 60)));
+        var signedJwt = new fr.JwtBuilderFactory().reconstruct(tokenURL, fr.SignedJwt);
+        var claimSet = signedJwt.getClaimsSet();
+        var email = claimSet.getSubject();
+        var iat = claimSet.getClaim("creationDate");
+        var now = new Date();
+        var Difference_In_Time = now.getTime() - (new Date(iat)).getTime();
+        logger.error("[RESET PWD] initiating email: " + email + " on: "+ iat + " - difference (hours): "+Math.round(Difference_In_Time/(1000 * 60)/60));
     }catch(e){
       logger.error("[RESET PWD] error while reconstructing JWT: " + e);
       errorFound = true;	
@@ -56,7 +49,7 @@ var fr = JavaImporter(
             )
         ).build()
       }
-    } else if (Math.round(Difference_In_Time/(1000 * 60)) < 10080){
+    } else if (Math.round(Difference_In_Time/(1000 * 60)) < 360){
       logger.error("The provided token is still valid");
       try{
         // put the read attributes in shared state for the Create Object node to consume
