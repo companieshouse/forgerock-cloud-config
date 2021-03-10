@@ -7,20 +7,12 @@
     "test": "jest --coverage"
   },
   "bin": {
-    "update-auth-trees": "./scripts/update-auth-trees/index.js",
-    "update-internal-roles": "./scripts/update-internal-roles/index.js",
-    "update-managed-objects": "./scripts/update-managed-objects/index.js",
-    "update-user-roles": "./scripts/update-user-roles/index.js",
-    "update-scripts": "./scripts/update-scripts/index.js",
-    "update-terms-and-conditions": "./scripts/update-terms-and-conditions/index.js",
-    "update-cors": "./scripts/update-cors/index.js",
-    "update-connectors": "./scripts/update-connectors/index.js",
-    "update-applications": "./scripts/update-applications/index.js",
-    "update-services": "./scripts/update-services/index.js"
+    "update-fidc": "./index.js"
   },
   "author": "Amido",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "fs-extra": "^9.1.0",
     "node-fetch": "^2.6.1",
     "replace-in-file": "^6.2.0",
