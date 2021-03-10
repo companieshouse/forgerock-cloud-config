@@ -141,7 +141,7 @@ if(!errorFound){
         ),
         new fr.HiddenValueCallback (
             "pagePropsJSON",
-            JSON.stringify({"apiError": JSON.parse(response.getEntity().getString())})
+            JSON.stringify({ 'errors': [{ label: "An error occurred while sending the email. Please try again."} ] })
         )
       ).build()
     } 
@@ -156,6 +156,10 @@ if (callbacks.isEmpty()) {
       new fr.TextOutputCallback(
         fr.TextOutputCallback.ERROR,
         "An error has occurred! Please try again later"
+      ),
+      new fr.HiddenValueCallback (
+        "pagePropsJSON",
+        JSON.stringify({ 'errors': [{ label: "An error has occurred! Please try again later" }] })
       )
     ).build()
   }

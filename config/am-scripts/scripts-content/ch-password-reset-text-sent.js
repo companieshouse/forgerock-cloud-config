@@ -27,7 +27,7 @@ if(otpError){
         action = fr.Action.send(
             new fr.HiddenValueCallback (
                 "pagePropsJSON",
-                JSON.stringify({"error": otpError}) 
+                JSON.stringify({ 'errors': [{ label: otpError, anchor: "IDToken3" }], "phoneNumber": phoneNumber })
             ),
             new fr.TextOutputCallback(
                 fr.TextOutputCallback.ERROR,

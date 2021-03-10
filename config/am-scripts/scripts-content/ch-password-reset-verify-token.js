@@ -13,7 +13,7 @@ var fr = JavaImporter(
     org.forgerock.json.jose.jws.JwsHeader
   )
   
-  var Difference_In_Time;
+  var differenceInTime;
   var errorFound = false;
   var tokenURL;
 
@@ -29,8 +29,8 @@ var fr = JavaImporter(
         var email = claimSet.getSubject();
         var iat = claimSet.getClaim("creationDate");
         var now = new Date();
-        var Difference_In_Time = now.getTime() - (new Date(iat)).getTime();
-        logger.error("[RESET PWD] initiating email: " + email + " on: "+ iat + " - difference (hours): "+Math.round(Difference_In_Time/(1000 * 60)/60));
+        var differenceInTime = now.getTime() - (new Date(iat)).getTime();
+        logger.error("[RESET PWD] initiating email: " + email + " on: "+ iat + " - difference (hours): "+Math.round(differenceInTime/(1000 * 60)/60));
     }catch(e){
       logger.error("[RESET PWD] error while reconstructing JWT: " + e);
       errorFound = true;	
@@ -46,10 +46,14 @@ var fr = JavaImporter(
             new fr.TextOutputCallback(
                 fr.TextOutputCallback.ERROR,
                 "Error While parsing token"
+            ),
+            new fr.HiddenValueCallback (
+                "pagePropsJSON",
+                JSON.stringify({ 'errors': [{ label: "An error occurred while parsing the token" }] })
             )
         ).build()
       }
-    } else if (Math.round(Difference_In_Time/(1000 * 60)) < 360){
+    } else if (Math.round(differenceInTime/(1000 * 60)) < 360){
       logger.error("The provided token is still valid");
       try{
         // put the read attributes in shared state for the Create Object node to consume
@@ -68,7 +72,7 @@ var fr = JavaImporter(
             ),
             new fr.HiddenValueCallback (
                 "pagePropsJSON",
-                JSON.stringify({"error": "The password reset token has expired"}) 
+                JSON.stringify({ 'errors': [{ label: "The password reset token has expired" }] })
             ),
             new fr.TextOutputCallback(
               fr.TextOutputCallback.ERROR,
