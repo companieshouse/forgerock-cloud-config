@@ -67,14 +67,14 @@
 		"type": "text/javascript",
 		"file": "ui/correlateTreeToQueryFilter.js"
 	}],
-	"onCreate": {
-		"type": "text/javascript",
-		"globals": {},
-		"source": "var incomingRoles = source.roles;\nvar rolesLength = incomingRoles.length;\n\nvar fidcRoles = [];\n\nfor (var i = 0; i < rolesLength; i++) {\n    var role = incomingRoles[i];\n    var fidcRole = {\n      _ref: \"managed/alpha_role/\" + role\n    };\n\n    fidcRoles.push(fidcRole);\n}\n\nif (fidcRoles.length > 0) {\n  target.roles = fidcRoles;\n}"
-	},
-	"onUpdate": {
-		"type": "text/javascript",
-		"globals": {},
-		"source": "var incomingRoles = source.roles;\nvar rolesLength = incomingRoles.length;\n\nvar fidcRoles = [];\n\nfor (var i = 0; i < rolesLength; i++) {\n    var role = incomingRoles[i];\n    var fidcRole = {\n      _ref: \"managed/alpha_role/\" + role\n    };\n\n    fidcRoles.push(fidcRole);\n}\n\nif (fidcRoles.length > 0) {\n  target.roles = fidcRoles;\n}"
-	}
+  "onCreate": {
+    "type": "text/javascript",
+    "globals": {},
+    "source": "var incomingRoles = source.roles;\nvar rolesLength = incomingRoles.length;\n\nvar fidcRoles = [];\n\nfor (var i = 0; i < rolesLength; i++) {\n    var role = incomingRoles[i];\n\n    var existingRole = openidm.query('managed/alpha_role',{\"_queryFilter\": '/name eq \"' + role + '\"' }, [\"*\"]);\n    if (existingRole.result.length > 0) {\n      existingRoleId = existingRole.result[0]._id\n\n      var fidcRole = {\n        _ref: \"managed/alpha_role/\" + existingRoleId\n      };\n\n      fidcRoles.push(fidcRole);\n    }\n}\n\nif (fidcRoles.length > 0) {\n  target.roles = fidcRoles;\n}"
+  },
+  "onUpdate": {
+    "type": "text/javascript",
+    "globals": {},
+    "source": "var incomingRoles = source.roles;\nvar rolesLength = incomingRoles.length;\n\nvar fidcRoles = [];\n\nfor (var i = 0; i < rolesLength; i++) {\n    var role = incomingRoles[i];\n\n    var existingRole = openidm.query('managed/alpha_role',{\"_queryFilter\": '/name eq \"' + role + '\"' }, [\"*\"]);\n    if (existingRole.result.length > 0) {\n      existingRoleId = existingRole.result[0]._id\n\n      var fidcRole = {\n        _ref: \"managed/alpha_role/\" + existingRoleId\n      };\n\n      fidcRoles.push(fidcRole);\n    }\n}\n\nif (fidcRoles.length > 0) {\n  target.roles = fidcRoles;\n}"
+  }
 }
