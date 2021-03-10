@@ -30,7 +30,8 @@
       "members",
       "assignments",
       "condition",
-      "temporalConstraints"
+      "temporalConstraints",
+      "permissions"
     ],
     "properties": {
       "_id": {
@@ -190,6 +191,19 @@
         "title": "Temporal Constraints",
         "type": "array",
         "viewable": false
+      },
+      "permissions": {
+        "title": "Permissions",
+        "type": "array",
+        "viewable": true,
+        "searchable": false,
+        "userEditable": true,
+        "items": {
+          "type": "string"
+        },
+        "description": "CH Permissions",
+        "isVirtual": false,
+        "deleteQueryConfig": false
       }
     },
     "required": [
