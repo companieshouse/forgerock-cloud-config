@@ -6,17 +6,17 @@ describe('get-access-token', () => {
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
-    username: 'test-user',
-    password: 'SecurePassword123',
+    idmUsername: 'test-user',
+    idmPassword: 'SecurePassword123',
     adminClientId: 'ForgeRockAdminClient',
     adminClientSecret: 'SecureClientSecret123',
-    realm: '/realms/root/realms/alpha',
+    realm: 'alpha',
     accessToken: 'abcd-1234'
   }
 
   const expectedBody = new URLSearchParams()
-  expectedBody.append('username', mockValues.username)
-  expectedBody.append('password', mockValues.password)
+  expectedBody.append('username', mockValues.idmUsername)
+  expectedBody.append('password', mockValues.idmPassword)
   expectedBody.append('client_id', mockValues.adminClientId)
   expectedBody.append('client_secret', mockValues.adminClientSecret)
   expectedBody.append('grant_type', 'password')
@@ -37,16 +37,8 @@ describe('get-access-token', () => {
     jest.resetAllMocks()
   })
 
-  it('should reject if missing FRIC environment variable', async () => {
-    delete process.env.FIDC_URL
-    expect.assertions(1)
-    await expect(getAccessToken(mockValues)).rejects.toEqual(
-      new Error('Missing FIDC_URL environment variable')
-    )
-  })
-
   it('should call API with the correct options', async () => {
-    const expectedUrl = `${mockValues.fidcUrl}/am/oauth2${mockValues.realm}/access_token?auth_chain=PasswordGrant`
+    const expectedUrl = `${mockValues.fidcUrl}/am/oauth2/realms/root/realms/${mockValues.realm}/access_token?auth_chain=PasswordGrant`
     const expectedApiOptions = {
       method: 'post',
       body: expectedBody
@@ -61,7 +53,7 @@ describe('get-access-token', () => {
   it('should change the realm if the realm argument is set', async () => {
     const updatedRealm = '/realms/root/realms/beta'
 
-    const expectedUrl = `${mockValues.fidcUrl}/am/oauth2${updatedRealm}/access_token?auth_chain=PasswordGrant`
+    const expectedUrl = `${mockValues.fidcUrl}/am/oauth2/realms/root/realms/${updatedRealm}/access_token?auth_chain=PasswordGrant`
 
     const expectedApiOptions = {
       method: 'post',

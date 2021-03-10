@@ -1,0 +1,334 @@
+{
+    "scripts": [
+        {
+            "payload": {
+                "_id":"df67765e-df3a-4503-9ba5-35c992b39259",
+                "name":"CH - Create Notify JWT",
+                "description":"This script creates a JWT compatible with Gov Notify service. \nThe resulting JWT (along with the template IDs) is then put in the transient state.",
+                "script":"<replace>",
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "ch-create-notify-jwt.js"
+        },
+        {
+            "payload": {
+                "_id": "b9d881b7-75c0-4cd6-8ede-e42193665657",
+                "name": "CH - Registration - Verify Token",
+                "description": "Verify User Registration token",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "ch-registration-verify-token.js"
+        },
+        {
+            "payload": {
+                "_id": "181f73fa-ec30-4ef4-b78a-9790a4918b23",
+                "name": "CH - Callback for User Already Exists",
+                "description": "Callback to return the existing user message during registration",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "ch-callback-user-exists.js"
+        },
+        {
+            "payload": {
+                "_id":"b6ca4a1f-573f-4a3a-a410-d18b01207f6e",
+                "name":"CH - Registration - Create token and send Email",
+                "description":"Creates a registration link and sends it via email to the user via Notify.",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"null",
+                "lastModifiedDate":0
+            },
+            "filename": "ch-registration-send-email.js"
+        },
+        {
+            "payload": {
+                "_id": "b276c566-622e-11eb-ae93-0242ac130002",
+                "name": "CH - Send MFA text",
+                "description": "Send MFA text",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "ch-send-mfa-sms.js"
+        },
+        {
+            "payload": {
+                "_id": "c056951c-622e-11eb-ae93-0242ac130002",
+                "name": "CH - Reset Password - Create token and Send Email",
+                "description": "Send Reset Password Email",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "ch-password-reset-send-email.js"
+        },
+        {
+            "payload": {
+                "_id":"8f08bdfd-08b9-42ce-8f45-99da5bc9dcfd",
+                "name":"CH - Callback for Cannot Find User",
+                "description":"Callback to inform the user the email supplied cannot be found",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1615203069195
+             },
+             "filename": "ch-callback-cannot-find-user.js"
+        },
+        {
+            "payload": {
+                "_id":"a39f3f71-1782-46dc-97cf-7cc417d4ca4a",
+                "name":"CH - Callback for Reset Password Email sent",
+                "description":"Callback to show confirmation the password reset email has been sent",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1615203506316
+             },
+            "filename": "ch-password-reset-email-sent.js"
+        },
+        {
+            "payload": {
+                "_id":"24b1421b-8130-4eae-a999-a44dc6e94fa6",
+                "name":"CH - Callback to show SMS sent",
+                "description":"Callback to show the phone number used to sent the OTP code",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1615203506316
+             },
+            "filename": "ch-password-reset-text-sent.js"
+        },
+        {
+            "payload": {
+                "_id":"ae90c22f-2613-49a6-9091-2238ec13eacb",
+                "name":"CH - Callback for Password Updated",
+                "description":"Callback to show confirmation of updated",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1615203563966
+             },
+            "filename": "ch-password-reset-pwd-updated.js"
+        },
+        {
+            "payload": {
+                "_id":"7fc79258-1c54-4df3-baa4-b51850ef3474",
+                "name":"CH - Reset Password - Verify Token",
+                "description":"Checks whether to resume or start the password reset journey, and verifies the Password reset token",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1615203762946
+             },
+            "filename": "ch-password-reset-verify-token.js"
+        },
+        {
+            "payload": {
+                "_id":"d22f9a0c-426a-4466-b95e-d0f125b0d5fa",
+                "name":"OAuth2 Access Token Modification Script",
+                "description":"Default global script for OAuth2 Access Token Modification",
+                "script":"<replace>",
+                "default":true,
+                "language":"GROOVY",
+                "context":"OAUTH2_ACCESS_TOKEN_MODIFICATION",
+                "createdBy":"id=dsameuser,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate":1433147666269,
+                "lastModifiedBy":"id=dsameuser,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate":1433147666269
+                },
+            "filename": "oauth2-token-mod.groovy"
+        },
+        {
+            "payload":  {
+                "_id":"01e1a3c0-038b-4c16-956a-6c9d89328cff",
+                "name":"Authentication Tree Decision Node Script",
+                "description":"Default global script for a scripted decision node",
+                "script":"<replace>",
+                "default":true,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"null",
+                "lastModifiedDate":0
+             },
+             "filename": "auth-tree-decision-node.js"
+        },
+        {
+            "payload": {
+                "_id":"157298c0-7d31-4059-a95b-eeb08473b7e5",
+                "name":"Device Id (Match) - Client Side",
+                "description":"Default global script for client side Device Id (Match) Authentication Module",
+                "script":"<replace>",
+                "default":true,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_CLIENT_SIDE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"null",
+                "lastModifiedDate":0
+             },
+             "filename": "device-id-client.js"
+        },
+        {
+            "payload": {
+                "_id":"703dab1a-1921-4981-98dd-b8e5349d8548",
+                "name":"Device Id (Match) - Server Side",
+                "description":"Default global script for server side Device Id (Match) Authentication Module",
+                "script":"<replace>",
+                "default":true,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_SERVER_SIDE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"null",
+                "lastModifiedDate":0
+             },
+             "filename": "device-id-server.js"
+        },
+        {
+            "payload": {
+                "_id":"36863ffb-40ec-48b9-94b1-9a99f71cc3b5",
+                "name":"OIDC Claims Script",
+                "description":"Default global script for OIDC claims",
+                "script":"<replace>",
+                "default":true,
+                "language":"GROOVY",
+                "context":"OIDC_CLAIMS",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"null",
+                "lastModifiedDate":0
+             },
+             "filename": "oidc-claims-script.groovy"
+        },
+        {
+            "payload": {
+                "_id":"c827d2b4-3608-4693-868e-bbcf86bd87c7",
+                "name":"Scripted Module - Client Side",
+                "description":"Default global script for client side Scripted Authentication Module",
+                "script":"<replace>",
+                "default":true,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_CLIENT_SIDE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"null",
+                "lastModifiedDate":0
+             },
+             "filename": "scripted-module-client.js"
+        },
+        {
+            "payload": {
+                "_id":"7e3d7067-d50f-4674-8c76-a3e13a810c33",
+                "name":"Scripted Module - Server Side",
+                "description":"Default global script for server side Scripted Authentication Module",
+                "script":"<replace>",
+                "default":true,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_SERVER_SIDE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"null",
+                "lastModifiedDate":0
+             },
+             "filename": "scripted-module-server.js"
+        },
+        {
+            "payload": {
+                "_id":"9de3eb62-f131-4fac-a294-7bd170fd4acb",
+                "name":"Scripted Policy Condition",
+                "description":"Default global script for Scripted Policy Conditions",
+                "script":"<replace>",
+                "default":true,
+                "language":"JAVASCRIPT",
+                "context":"POLICY_CONDITION",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"null",
+                "lastModifiedDate":0
+             },
+             "filename": "scripted-policy-condition.js"
+        },
+        {
+            "payload": {
+                "_id":"c64f9cfe-69f6-4568-a150-5546bdbe4c36",
+                "name":"TEMPLATE - OIDC Claims Script.",
+                "description":"Template with tokens for custom scopes/claims: CUSTOM_CLAIM_RESOLVER_MAPPINGS, CUSTOM_SCOPE_TO_CLAIM_MAP",
+                "script":"<replace>",
+                "default":false,
+                "language":"GROOVY",
+                "context":"OIDC_CLAIMS",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"null",
+                "lastModifiedDate":1565386615495
+             },
+             "filename": "template-oidc-claims-script.groovy"
+        },
+        {
+            "payload": {
+                "_id": "b480d9f7-5908-45cf-91d1-bc1fe56fe8de",
+                "name": "Has Phone Number",
+                "description": "Has Phone Number",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "phone-number-present.js"
+        }
+    ]
+}

@@ -1,8 +1,8 @@
 node_modules
 coverage
-config/phase-0/am-scripts/.DS_Store
-config/phase-0/.DS_Store
-config/.DS_Store
 .DS_Store
+.env
+
 # Sensitive config files
-config/phase-*/services/oauth2-provider.json
+config/services/oauth2-provider.json
+config/applications/sdk-client.json
