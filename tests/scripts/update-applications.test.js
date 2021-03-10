@@ -6,6 +6,8 @@ describe('update-applications', () => {
   const getSessionToken = require('../../helpers/get-session-token')
   jest.mock('../../helpers/fidc-request')
   const fidcRequest = require('../../helpers/fidc-request')
+  jest.mock('../../helpers/replace-sensitive-values')
+  const replaceSensitiveValues = require('../../helpers/replace-sensitive-values')
   jest.spyOn(console, 'log').mockImplementation(() => {})
   jest.spyOn(console, 'error').mockImplementation(() => {})
   jest.spyOn(process, 'exit').mockImplementation(() => {})
@@ -56,6 +58,7 @@ describe('update-applications', () => {
       Promise.resolve(mockValues.sessionToken)
     )
     fidcRequest.mockImplementation(() => Promise.resolve())
+    replaceSensitiveValues.mockImplementation(() => Promise.resolve())
     process.env.FIDC_URL = mockValues.fidcUrl
     fs.readdirSync.mockReturnValue(['sdk-client.json'])
     jest.mock(mockConfigFile, () => mockConfig, { virtual: true })
@@ -78,6 +81,17 @@ describe('update-applications', () => {
     expect.assertions(2)
     const errorMessage = 'Invalid user'
     getSessionToken.mockImplementation(() =>
+      Promise.reject(new Error(errorMessage))
+    )
+    await updateApplications(mockValues)
+    expect(console.error).toHaveBeenCalledWith(errorMessage)
+    expect(process.exit).toHaveBeenCalledWith(1)
+  })
+
+  it('should error if replaceSensitiveValues function fails', async () => {
+    expect.assertions(2)
+    const errorMessage = 'File not found'
+    replaceSensitiveValues.mockImplementation(() =>
       Promise.reject(new Error(errorMessage))
     )
     await updateApplications(mockValues)

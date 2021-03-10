@@ -2,16 +2,19 @@ const fs = require('fs')
 const path = require('path')
 const getSessionToken = require('../helpers/get-session-token')
 const fidcRequest = require('../helpers/fidc-request')
+const replaceSensitiveValues = require('../helpers/replace-sensitive-values')
 
 const updateApplications = async (argv) => {
   const { realm } = argv
-  const { FIDC_URL } = process.env
+  const { FIDC_URL, UI_URL } = process.env
 
   try {
     const sessionToken = await getSessionToken(argv)
 
-    // Read auth tree JSON files
+    // Read application JSON files
     const dir = path.resolve(__dirname, '../config/applications')
+
+    await replaceSensitiveValues(dir, [/{REPLACEMENT_UI_URL}/g], [UI_URL])
 
     const applicationFileContent = fs
       .readdirSync(dir)

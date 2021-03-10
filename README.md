@@ -14,9 +14,10 @@ The following need to be installed/configured for local use:
 
 ### Environment Variables
 
-| Name     | Description                   | Default Value | Required           |
-| -------- | ----------------------------- | ------------- | ------------------ |
-| FIDC_URL | ForgeRock Identity Cloud URL. | N/A           | :white_check_mark: |
+| Name     | Description                  | Default Value | Required           |
+| -------- | ---------------------------- | ------------- | ------------------ |
+| FIDC_URL | ForgeRock Identity Cloud URL | N/A           | :white_check_mark: |
+| UI_URL   | CH Account UI URL            | N/A           | :white_check_mark: |
 
 ### Install Dependencies
 
