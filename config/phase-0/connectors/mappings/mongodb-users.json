@@ -71,5 +71,10 @@
 		"type": "text/javascript",
 		"globals": {},
 		"source": "var incomingRoles = source.roles;\nvar rolesLength = incomingRoles.length;\n\nvar fidcRoles = [];\n\nfor (var i = 0; i < rolesLength; i++) {\n    var role = incomingRoles[i];\n    var fidcRole = {\n      _ref: \"managed/alpha_role/\" + role\n    };\n\n    fidcRoles.push(fidcRole);\n}\n\nif (fidcRoles.length > 0) {\n  target.roles = fidcRoles;\n}"
+	},
+	"onUpdate": {
+		"type": "text/javascript",
+		"globals": {},
+		"source": "var incomingRoles = source.roles;\nvar rolesLength = incomingRoles.length;\n\nvar fidcRoles = [];\n\nfor (var i = 0; i < rolesLength; i++) {\n    var role = incomingRoles[i];\n    var fidcRole = {\n      _ref: \"managed/alpha_role/\" + role\n    };\n\n    fidcRoles.push(fidcRole);\n}\n\nif (fidcRoles.length > 0) {\n  target.roles = fidcRoles;\n}"
 	}
 }
