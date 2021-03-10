@@ -4,6 +4,7 @@ var fr = JavaImporter(
     com.sun.identity.authentication.callbacks.HiddenValueCallback
 )
 var phoneNumber = "";
+var notificationId = transientState.get("notificationId");
 
 try{
   var userId = sharedState.get("_id");
@@ -14,7 +15,7 @@ try{
     // TODO Better handling of error
   }
 }catch(e){
-  logger.error("[RESET PWD] Error retrieveing telephoneNumber: "+ e);
+  logger.error("[RESET PWD] Error retrieving telephoneNumber: "+ e);
 }
 
 logger.error("[RESET PWD] phoneNumber : " + phoneNumber);
@@ -24,6 +25,10 @@ if (callbacks.isEmpty()) {
         new fr.HiddenValueCallback (
             "pagePropsJSON",
             JSON.stringify({"phoneNumber": phoneNumber}) 
+        ),
+        new fr.HiddenValueCallback (
+            "notificationId",
+            notificationId
         )
     ).build()
 } else {
