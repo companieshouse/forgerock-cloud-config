@@ -5,6 +5,8 @@ var fr = JavaImporter(
 )
 var phoneNumber = "";
 var notificationId = transientState.get("notificationId");
+var otpError = transientState.get("error");
+logger.error("[RESET PWD] Found OTP Error : " + otpError);
 
 try{
   var userId = sharedState.get("_id");
@@ -20,7 +22,20 @@ try{
 
 logger.error("[RESET PWD] phoneNumber : " + phoneNumber);
 
-if (callbacks.isEmpty()) {
+if(otpError){
+    if (callbacks.isEmpty()) {
+        action = fr.Action.send(
+            new fr.HiddenValueCallback (
+                "pagePropsJSON",
+                JSON.stringify({"error": otpError}) 
+            ),
+            new fr.TextOutputCallback(
+                fr.TextOutputCallback.ERROR,
+                otpError
+            )
+        ).build()    
+    }
+} else if (callbacks.isEmpty()) {
     action = fr.Action.send(
         new fr.HiddenValueCallback (
             "pagePropsJSON",
