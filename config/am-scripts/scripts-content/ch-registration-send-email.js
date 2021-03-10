@@ -103,8 +103,16 @@ request.getEntity().setString(JSON.stringify(requestBodyJson))
 
 if(!errorFound){
   var response = httpClient.send(request).get();
-  logger.error("[REGISTRATION] Notify Response: " + response.getStatus().getCode() + " - " + response.getCause() + " - " +response.getEntity().getString());
+  var notificationId;
+  logger.error("[REGISTRATION] Notify Response: " + response.getStatus().getCode() + " - " +response.getEntity().getString());
 
+  try{
+    notificationId = JSON.parse(response.getEntity().getString()).id;
+    logger.error("[REGISTRATION] Notify ID: " + notificationId);
+  }catch(e){
+    logger.error("[REGISTRATION] Error while parsing Notify response: " + e);
+  }
+  
   if(response.getStatus().getCode() == 201){
     if (callbacks.isEmpty()) {
       action = fr.Action.send(
@@ -119,6 +127,10 @@ if(!errorFound){
         new fr.HiddenValueCallback (
             "pagePropsJSON",
             JSON.stringify({"email": email}) 
+        ),
+        new fr.HiddenValueCallback (
+            "notificationId",
+            notificationId 
         )
       ).build()
     } 
