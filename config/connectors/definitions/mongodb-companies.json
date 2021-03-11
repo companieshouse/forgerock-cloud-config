@@ -1,7 +1,7 @@
 {
 	"_id": "provisioner.openicf/CHSCompany",
 	"connectorRef": {
-		"connectorHostRef": "aws",
+		"connectorHostRef": "aws-primary",
 		"displayName": "MongoDB Connector",
 		"bundleVersion": "1.5.19.7-SNAPSHOT",
 		"systemType": "provisioner.openicf",
@@ -48,7 +48,9 @@
 		"minimumRecompilationInterval": "100",
 		"deleteScriptFileName": "DeleteMongoDB.groovy",
 		"scriptBaseClass": null,
-		"scriptRoots": ["jar:file:connectors/mongodb-connector-1.5.19.7-SNAPSHOT.jar!/scripts/mongodb/"],
+		"scriptRoots": [
+			"jar:file:connectors/mongodb-connector-1.5.19.7-SNAPSHOT.jar!/scripts/mongodb/"
+		],
 		"customConfiguration": null,
 		"resolveUsernameScriptFileName": null,
 		"searchScriptFileName": "SearchMongoDB.groovy",
