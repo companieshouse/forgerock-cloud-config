@@ -9,6 +9,7 @@ const updateRemoteServers = require('./update-remote-servers')
 const updateScripts = require('./update-scripts')
 const updateServices = require('./update-services')
 const updateTermsAndConditions = require('./update-terms-and-conditions')
+const updatePasswordPolicy = require('./update-password-policy')
 const updateUserRoles = require('./update-user-roles')
 
 module.exports = {
@@ -23,5 +24,6 @@ module.exports = {
   updateScripts,
   updateServices,
   updateTermsAndConditions,
+  updatePasswordPolicy,
   updateUserRoles
 }
