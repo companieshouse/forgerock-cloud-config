@@ -378,288 +378,289 @@ public class CHPermissions {
 //
 // See https://github.com/companieshouse/account.ch.gov.uk/blob/361e0425b131068e4942c348f25458dffdc4308c/t/unit/Helpers/ScopeMapper.t#L445
 // for equivalent tests of the original Perl module
-def scopeMapper = new ScopeMapper()
 
-def output = scopeMapper.scopesToPermissions("")
-assert output.isValid() == true
-permissions = output.getPermissions()
-assert permissions.size() == 0
-errors = output.getInvalidErrors()
-assert errors.size() == 0
+// def scopeMapper = new ScopeMapper()
 
-chPermissionsOut = scopeMapper.scopesToPermissions("https://account.companieshouse.gov.uk/user/profile.read", false)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 1
-assert permissions.user_profile == 'read'
+// def output = scopeMapper.scopesToPermissions("")
+// assert output.isValid() == true
+// permissions = output.getPermissions()
+// assert permissions.size() == 0
+// errors = output.getInvalidErrors()
+// assert errors.size() == 0
 
-chPermissionsOut = scopeMapper.scopesToPermissions("https://identity.company-information.service.gov.uk/user/profile.read", false)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 1
-assert permissions.user_profile == 'read'
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://account.companieshouse.gov.uk/user/profile.read", false)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 1
+// assert permissions.user_profile == 'read'
 
-chPermissionsOut = scopeMapper.scopesToPermissions("https://account.companieshouse.gov.uk/user.write-full", true)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 8
-assert permissions.user_applications == 'create,read,update,delete'
-assert permissions.user_profile == 'delete,read,update'
-assert permissions.user_following == 'read,update'
-assert permissions.user_transactions == 'read'
-assert permissions.user_request_auth_code == 'create'
-assert permissions.user_orders == 'create,read,update,delete'
-assert permissions.user_secure_applications == 'create,read,update,delete'
-assert permissions.user_third_party_apps == 'read,delete'
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://identity.company-information.service.gov.uk/user/profile.read", false)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 1
+// assert permissions.user_profile == 'read'
 
-chPermissionsOut = scopeMapper.scopesToPermissions("https://identity.company-information.service.gov.uk/user.write-full", true)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 8
-assert permissions.user_applications == 'create,read,update,delete'
-assert permissions.user_profile == 'delete,read,update'
-assert permissions.user_following == 'read,update'
-assert permissions.user_transactions == 'read'
-assert permissions.user_request_auth_code == 'create'
-assert permissions.user_orders == 'create,read,update,delete'
-assert permissions.user_secure_applications == 'create,read,update,delete'
-assert permissions.user_third_party_apps == 'read,delete'
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://account.companieshouse.gov.uk/user.write-full", true)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 8
+// assert permissions.user_applications == 'create,read,update,delete'
+// assert permissions.user_profile == 'delete,read,update'
+// assert permissions.user_following == 'read,update'
+// assert permissions.user_transactions == 'read'
+// assert permissions.user_request_auth_code == 'create'
+// assert permissions.user_orders == 'create,read,update,delete'
+// assert permissions.user_secure_applications == 'create,read,update,delete'
+// assert permissions.user_third_party_apps == 'read,delete'
 
-chPermissionsOut = scopeMapper.scopesToPermissions("https://account.companieshouse.gov.uk/user.write-full", false)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 0
-assert chPermissionsOut.isValid() == false
-errors = chPermissionsOut.getInvalidErrors()
-assert errors.size() == 1
-assert errors[0] == 'Permission denied.'
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://identity.company-information.service.gov.uk/user.write-full", true)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 8
+// assert permissions.user_applications == 'create,read,update,delete'
+// assert permissions.user_profile == 'delete,read,update'
+// assert permissions.user_following == 'read,update'
+// assert permissions.user_transactions == 'read'
+// assert permissions.user_request_auth_code == 'create'
+// assert permissions.user_orders == 'create,read,update,delete'
+// assert permissions.user_secure_applications == 'create,read,update,delete'
+// assert permissions.user_third_party_apps == 'read,delete'
 
-chPermissionsOut = scopeMapper.scopesToPermissions("https://identity.company-information.service.gov.uk/user.write-full", false)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 0
-assert chPermissionsOut.isValid() == false
-errors = chPermissionsOut.getInvalidErrors()
-assert errors.size() == 1
-assert errors[0] == 'Permission denied.'
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://account.companieshouse.gov.uk/user.write-full", false)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 0
+// assert chPermissionsOut.isValid() == false
+// errors = chPermissionsOut.getInvalidErrors()
+// assert errors.size() == 1
+// assert errors[0] == 'Permission denied.'
 
-chPermissionsOut = scopeMapper.scopesToPermissions("https://api.companieshouse.gov.uk/company/00006400/registered-office-address.update")
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 2
-assert permissions.company_number == '00006400'
-assert permissions.company_roa == 'update'
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://identity.company-information.service.gov.uk/user.write-full", false)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 0
+// assert chPermissionsOut.isValid() == false
+// errors = chPermissionsOut.getInvalidErrors()
+// assert errors.size() == 1
+// assert errors[0] == 'Permission denied.'
 
-chPermissionsOut = scopeMapper.scopesToPermissions("https://api.company-information.service.gov.uk/company/00006400/registered-office-address.update")
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 2
-assert permissions.company_number == '00006400'
-assert permissions.company_roa == 'update'
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://api.companieshouse.gov.uk/company/00006400/registered-office-address.update")
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 2
+// assert permissions.company_number == '00006400'
+// assert permissions.company_roa == 'update'
 
-chPermissionsOut = scopeMapper.scopesToPermissions("https://api.companieshouse.gov.uk/company/00006400/admin.write-full", false)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 0
-assert chPermissionsOut.isValid() == false
-errors = chPermissionsOut.getInvalidErrors()
-assert errors.size() == 1
-assert errors[0] == 'Permission denied.'
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://api.company-information.service.gov.uk/company/00006400/registered-office-address.update")
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 2
+// assert permissions.company_number == '00006400'
+// assert permissions.company_roa == 'update'
 
-chPermissionsOut = scopeMapper.scopesToPermissions("https://api.company-information.service.gov.uk/company/00006400/admin.write-full", false)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 0
-assert chPermissionsOut.isValid() == false
-errors = chPermissionsOut.getInvalidErrors()
-assert errors.size() == 1
-assert errors[0] == 'Permission denied.'
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://api.companieshouse.gov.uk/company/00006400/admin.write-full", false)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 0
+// assert chPermissionsOut.isValid() == false
+// errors = chPermissionsOut.getInvalidErrors()
+// assert errors.size() == 1
+// assert errors[0] == 'Permission denied.'
 
-chPermissionsOut = scopeMapper.scopesToPermissions("https://api.companieshouse.gov.uk/company/00006400/admin.write-full", true)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 7
-assert permissions.company_accounts == 'update'
-assert permissions.company_auth_code == 'update,delete'
-assert permissions.company_number == '00006400'
-assert permissions.company_roa == 'update'
-assert permissions.company_status == 'update'
-assert permissions.company_transactions == 'read'
-assert permissions.company_promise_to_file == 'update'
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://api.company-information.service.gov.uk/company/00006400/admin.write-full", false)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 0
+// assert chPermissionsOut.isValid() == false
+// errors = chPermissionsOut.getInvalidErrors()
+// assert errors.size() == 1
+// assert errors[0] == 'Permission denied.'
 
-chPermissionsOut = scopeMapper.scopesToPermissions("https://api.company-information.service.gov.uk/company/00006400/admin.write-full", true)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 7
-assert permissions.company_accounts == 'update'
-assert permissions.company_auth_code == 'update,delete'
-assert permissions.company_number == '00006400'
-assert permissions.company_roa == 'update'
-assert permissions.company_status == 'update'
-assert permissions.company_transactions == 'read'
-assert permissions.company_promise_to_file == 'update'
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://api.companieshouse.gov.uk/company/00006400/admin.write-full", true)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 7
+// assert permissions.company_accounts == 'update'
+// assert permissions.company_auth_code == 'update,delete'
+// assert permissions.company_number == '00006400'
+// assert permissions.company_roa == 'update'
+// assert permissions.company_status == 'update'
+// assert permissions.company_transactions == 'read'
+// assert permissions.company_promise_to_file == 'update'
 
-chPermissionsOut = scopeMapper.scopesToPermissions("http://api.companieshouse.gov.uk/company/00006400", true)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 7
-assert permissions.company_accounts == 'update'
-assert permissions.company_auth_code == 'update,delete'
-assert permissions.company_number == '00006400'
-assert permissions.company_roa == 'update'
-assert permissions.company_status == 'update'
-assert permissions.company_transactions == 'read'
-assert permissions.company_promise_to_file == 'update'
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://api.company-information.service.gov.uk/company/00006400/admin.write-full", true)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 7
+// assert permissions.company_accounts == 'update'
+// assert permissions.company_auth_code == 'update,delete'
+// assert permissions.company_number == '00006400'
+// assert permissions.company_roa == 'update'
+// assert permissions.company_status == 'update'
+// assert permissions.company_transactions == 'read'
+// assert permissions.company_promise_to_file == 'update'
 
-chPermissionsOut = scopeMapper.scopesToPermissions("https://api.companieshouse.gov.uk/company/00006400", true)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 7
-assert permissions.company_accounts == 'update'
-assert permissions.company_auth_code == 'update,delete'
-assert permissions.company_number == '00006400'
-assert permissions.company_roa == 'update'
-assert permissions.company_status == 'update'
-assert permissions.company_transactions == 'read'
-assert permissions.company_promise_to_file == 'update'
+// chPermissionsOut = scopeMapper.scopesToPermissions("http://api.companieshouse.gov.uk/company/00006400", true)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 7
+// assert permissions.company_accounts == 'update'
+// assert permissions.company_auth_code == 'update,delete'
+// assert permissions.company_number == '00006400'
+// assert permissions.company_roa == 'update'
+// assert permissions.company_status == 'update'
+// assert permissions.company_transactions == 'read'
+// assert permissions.company_promise_to_file == 'update'
 
-chPermissionsOut = scopeMapper.scopesToPermissions("http://api.companieshouse.gov.uk/company/00006400", false)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 0
-assert chPermissionsOut.isValid() == false
-errors = chPermissionsOut.getInvalidErrors()
-assert errors.size() == 1
-assert errors[0] == 'Permission denied.'
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://api.companieshouse.gov.uk/company/00006400", true)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 7
+// assert permissions.company_accounts == 'update'
+// assert permissions.company_auth_code == 'update,delete'
+// assert permissions.company_number == '00006400'
+// assert permissions.company_roa == 'update'
+// assert permissions.company_status == 'update'
+// assert permissions.company_transactions == 'read'
+// assert permissions.company_promise_to_file == 'update'
 
-scopeMapper.setLegacyScopesAllowed(false)
-chPermissionsOut = scopeMapper.scopesToPermissions("http://api.companieshouse.gov.uk/company/00006400", false)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 0
-assert chPermissionsOut.isValid() == false
-errors = chPermissionsOut.getInvalidErrors()
-assert errors.size() == 1
-assert errors[0] == 'Permission denied.'
+// chPermissionsOut = scopeMapper.scopesToPermissions("http://api.companieshouse.gov.uk/company/00006400", false)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 0
+// assert chPermissionsOut.isValid() == false
+// errors = chPermissionsOut.getInvalidErrors()
+// assert errors.size() == 1
+// assert errors[0] == 'Permission denied.'
 
-scopeMapper.setLegacyScopesAllowed(true)
-chPermissionsOut = scopeMapper.scopesToPermissions("https://api.companieshouse.gov.uk/company/00006400/admin.write-full", false)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 0
-assert chPermissionsOut.isValid() == false
-errors = chPermissionsOut.getInvalidErrors()
-assert errors.size() == 1
-assert errors[0] == 'Permission denied.'
+// scopeMapper.setLegacyScopesAllowed(false)
+// chPermissionsOut = scopeMapper.scopesToPermissions("http://api.companieshouse.gov.uk/company/00006400", false)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 0
+// assert chPermissionsOut.isValid() == false
+// errors = chPermissionsOut.getInvalidErrors()
+// assert errors.size() == 1
+// assert errors[0] == 'Permission denied.'
 
-scopeMapper.setLegacyScopesAllowed(true)
-chPermissionsOut = scopeMapper.scopesToPermissions("https://api.company-information.service.gov.uk/company/00006400/admin.write-full", false)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 0
-assert chPermissionsOut.isValid() == false
-errors = chPermissionsOut.getInvalidErrors()
-assert errors.size() == 1
-assert errors[0] == 'Permission denied.'
+// scopeMapper.setLegacyScopesAllowed(true)
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://api.companieshouse.gov.uk/company/00006400/admin.write-full", false)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 0
+// assert chPermissionsOut.isValid() == false
+// errors = chPermissionsOut.getInvalidErrors()
+// assert errors.size() == 1
+// assert errors[0] == 'Permission denied.'
 
-scopeMapper.setLegacyScopesAllowed(true)
-chPermissionsOut = scopeMapper.scopesToPermissions("https://account.companieshouse.gov.uk/user/profile.read https://account.companieshouse.gov.uk/user.write-full", true)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 8
-assert chPermissionsOut.isValid() == true
-assert permissions.user_applications == 'create,read,update,delete'
-assert permissions.user_profile == 'delete,read,update'
-assert permissions.user_following == 'read,update'
-assert permissions.user_transactions == 'read'
-assert permissions.user_request_auth_code == 'create'
-assert permissions.user_orders == 'create,read,update,delete'
-assert permissions.user_secure_applications == 'create,read,update,delete'
-assert permissions.user_third_party_apps == 'read,delete'
+// scopeMapper.setLegacyScopesAllowed(true)
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://api.company-information.service.gov.uk/company/00006400/admin.write-full", false)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 0
+// assert chPermissionsOut.isValid() == false
+// errors = chPermissionsOut.getInvalidErrors()
+// assert errors.size() == 1
+// assert errors[0] == 'Permission denied.'
 
-scopeMapper.setLegacyScopesAllowed(true)
-chPermissionsOut = scopeMapper.scopesToPermissions("https://identity.company-information.service.gov.uk/user/profile.read https://identity.company-information.service.gov.uk/user.write-full", true)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 8
-assert chPermissionsOut.isValid() == true
-assert permissions.user_applications == 'create,read,update,delete'
-assert permissions.user_profile == 'delete,read,update'
-assert permissions.user_following == 'read,update'
-assert permissions.user_transactions == 'read'
-assert permissions.user_request_auth_code == 'create'
-assert permissions.user_orders == 'create,read,update,delete'
-assert permissions.user_secure_applications == 'create,read,update,delete'
-assert permissions.user_third_party_apps == 'read,delete'
+// scopeMapper.setLegacyScopesAllowed(true)
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://account.companieshouse.gov.uk/user/profile.read https://account.companieshouse.gov.uk/user.write-full", true)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 8
+// assert chPermissionsOut.isValid() == true
+// assert permissions.user_applications == 'create,read,update,delete'
+// assert permissions.user_profile == 'delete,read,update'
+// assert permissions.user_following == 'read,update'
+// assert permissions.user_transactions == 'read'
+// assert permissions.user_request_auth_code == 'create'
+// assert permissions.user_orders == 'create,read,update,delete'
+// assert permissions.user_secure_applications == 'create,read,update,delete'
+// assert permissions.user_third_party_apps == 'read,delete'
 
-scopeMapper.setLegacyScopesAllowed(true)
-chPermissionsOut = scopeMapper.scopesToPermissions("https://api.companieshouse.gov.uk/company/00006400/registered-office-address.update https://api.companieshouse.gov.uk/company/00007777/registered-office-address.update", false)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 0
-assert chPermissionsOut.isValid() == false
-errors = chPermissionsOut.getInvalidErrors()
-assert errors.size() == 1
-assert errors[0] == 'Permission denied. Mismatched company numbers in scope requests'
+// scopeMapper.setLegacyScopesAllowed(true)
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://identity.company-information.service.gov.uk/user/profile.read https://identity.company-information.service.gov.uk/user.write-full", true)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 8
+// assert chPermissionsOut.isValid() == true
+// assert permissions.user_applications == 'create,read,update,delete'
+// assert permissions.user_profile == 'delete,read,update'
+// assert permissions.user_following == 'read,update'
+// assert permissions.user_transactions == 'read'
+// assert permissions.user_request_auth_code == 'create'
+// assert permissions.user_orders == 'create,read,update,delete'
+// assert permissions.user_secure_applications == 'create,read,update,delete'
+// assert permissions.user_third_party_apps == 'read,delete'
 
-scopeMapper.setLegacyScopesAllowed(true)
-chPermissionsOut = scopeMapper.scopesToPermissions("https://api.company-information.service.gov.uk/company/00006400/registered-office-address.update https://api.company-information.service.gov.uk/company/00007777/registered-office-address.update", false)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 0
-assert chPermissionsOut.isValid() == false
-errors = chPermissionsOut.getInvalidErrors()
-assert errors.size() == 1
-assert errors[0] == 'Permission denied. Mismatched company numbers in scope requests'
+// scopeMapper.setLegacyScopesAllowed(true)
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://api.companieshouse.gov.uk/company/00006400/registered-office-address.update https://api.companieshouse.gov.uk/company/00007777/registered-office-address.update", false)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 0
+// assert chPermissionsOut.isValid() == false
+// errors = chPermissionsOut.getInvalidErrors()
+// assert errors.size() == 1
+// assert errors[0] == 'Permission denied. Mismatched company numbers in scope requests'
 
-scopeMapper.setLegacyScopesAllowed(true)
-chPermissionsOut = scopeMapper.scopesToPermissions("https://api.companieshouse.gov.uk/company/00006400/admin.write-full", false)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 0
-assert chPermissionsOut.isValid() == false
-errors = chPermissionsOut.getInvalidErrors()
-assert errors.size() == 1
-assert errors[0] == 'Permission denied.'
+// scopeMapper.setLegacyScopesAllowed(true)
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://api.company-information.service.gov.uk/company/00006400/registered-office-address.update https://api.company-information.service.gov.uk/company/00007777/registered-office-address.update", false)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 0
+// assert chPermissionsOut.isValid() == false
+// errors = chPermissionsOut.getInvalidErrors()
+// assert errors.size() == 1
+// assert errors[0] == 'Permission denied. Mismatched company numbers in scope requests'
 
-scopeMapper.setLegacyScopesAllowed(true)
-chPermissionsOut = scopeMapper.scopesToPermissions("'https://api.company-information.service.gov.uk/company/00006400/admin.write-full", false)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 0
-assert chPermissionsOut.isValid() == false
-errors = chPermissionsOut.getInvalidErrors()
-assert errors.size() == 1
-assert errors[0] == 'Permission denied.'
+// scopeMapper.setLegacyScopesAllowed(true)
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://api.companieshouse.gov.uk/company/00006400/admin.write-full", false)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 0
+// assert chPermissionsOut.isValid() == false
+// errors = chPermissionsOut.getInvalidErrors()
+// assert errors.size() == 1
+// assert errors[0] == 'Permission denied.'
 
-scopeMapper.setLegacyScopesAllowed(true)
-chPermissionsOut = scopeMapper.scopesToPermissions("https://account.companieshouse.gov.uk/user.write-full", true)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 8
-assert chPermissionsOut.isValid() == true
-assert permissions.user_applications == 'create,read,update,delete'
-assert permissions.user_profile == 'delete,read,update'
-assert permissions.user_following == 'read,update'
-assert permissions.user_transactions == 'read'
-assert permissions.user_request_auth_code == 'create'
-assert permissions.user_orders == 'create,read,update,delete'
-assert permissions.user_secure_applications == 'create,read,update,delete'
-assert permissions.user_third_party_apps == 'read,delete'
+// scopeMapper.setLegacyScopesAllowed(true)
+// chPermissionsOut = scopeMapper.scopesToPermissions("'https://api.company-information.service.gov.uk/company/00006400/admin.write-full", false)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 0
+// assert chPermissionsOut.isValid() == false
+// errors = chPermissionsOut.getInvalidErrors()
+// assert errors.size() == 1
+// assert errors[0] == 'Permission denied.'
 
-scopeMapper.setLegacyScopesAllowed(true)
-chPermissionsOut = scopeMapper.scopesToPermissions("https://identity.company-information.service.gov.uk/user.write-full", true)
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 8
-assert chPermissionsOut.isValid() == true
-assert permissions.user_applications == 'create,read,update,delete'
-assert permissions.user_profile == 'delete,read,update'
-assert permissions.user_following == 'read,update'
-assert permissions.user_transactions == 'read'
-assert permissions.user_request_auth_code == 'create'
-assert permissions.user_orders == 'create,read,update,delete'
-assert permissions.user_secure_applications == 'create,read,update,delete'
-assert permissions.user_third_party_apps == 'read,delete'
+// scopeMapper.setLegacyScopesAllowed(true)
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://account.companieshouse.gov.uk/user.write-full", true)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 8
+// assert chPermissionsOut.isValid() == true
+// assert permissions.user_applications == 'create,read,update,delete'
+// assert permissions.user_profile == 'delete,read,update'
+// assert permissions.user_following == 'read,update'
+// assert permissions.user_transactions == 'read'
+// assert permissions.user_request_auth_code == 'create'
+// assert permissions.user_orders == 'create,read,update,delete'
+// assert permissions.user_secure_applications == 'create,read,update,delete'
+// assert permissions.user_third_party_apps == 'read,delete'
 
-scopeMapper.setLegacyScopesAllowed(true)
-chPermissionsOut = scopeMapper.scopesToPermissions("https://api.companieshouse.gov.uk/company/00006400/registered-office-address.update'")
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 2
-assert chPermissionsOut.isValid() == true
-assert permissions.company_number == '00006400'
-assert permissions.company_roa == 'update'
+// scopeMapper.setLegacyScopesAllowed(true)
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://identity.company-information.service.gov.uk/user.write-full", true)
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 8
+// assert chPermissionsOut.isValid() == true
+// assert permissions.user_applications == 'create,read,update,delete'
+// assert permissions.user_profile == 'delete,read,update'
+// assert permissions.user_following == 'read,update'
+// assert permissions.user_transactions == 'read'
+// assert permissions.user_request_auth_code == 'create'
+// assert permissions.user_orders == 'create,read,update,delete'
+// assert permissions.user_secure_applications == 'create,read,update,delete'
+// assert permissions.user_third_party_apps == 'read,delete'
 
-scopeMapper.setLegacyScopesAllowed(true)
-chPermissionsOut = scopeMapper.scopesToPermissions("https://api.company-information.service.gov.uk/company/00006400/registered-office-address.update")
-permissions = chPermissionsOut.getPermissions()
-assert permissions.size() == 2
-assert chPermissionsOut.isValid() == true
-assert permissions.company_number == '00006400'
-assert permissions.company_roa == 'update'
+// scopeMapper.setLegacyScopesAllowed(true)
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://api.companieshouse.gov.uk/company/00006400/registered-office-address.update'")
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 2
+// assert chPermissionsOut.isValid() == true
+// assert permissions.company_number == '00006400'
+// assert permissions.company_roa == 'update'
 
-scopeMapper.setLegacyScopesAllowed(true)
-permissionsText = scopeMapper.scopesToPermissionText("https://account.companieshouse.gov.uk/user/profile.read https://api.companieshouse.gov.uk/company/00006400/registered-office-address.update", "Some Company Ltd")
-assert permissionsText.size() == 2
-assert permissionsText[0] == "This will allow it to view your email address."
-assert permissionsText[1] == "This will allow it to update Some Company Ltd's registered office address."
+// scopeMapper.setLegacyScopesAllowed(true)
+// chPermissionsOut = scopeMapper.scopesToPermissions("https://api.company-information.service.gov.uk/company/00006400/registered-office-address.update")
+// permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 2
+// assert chPermissionsOut.isValid() == true
+// assert permissions.company_number == '00006400'
+// assert permissions.company_roa == 'update'
 
-scopeMapper.setLegacyScopesAllowed(true)
-permissionsText = scopeMapper.scopesToPermissionText("https://identity.company-information.service.gov.uk/user/profile.read https://api.company-information.service.gov.uk/company/00006400/registered-office-address.update", "Some Company Ltd")
-assert permissionsText.size() == 2
-assert permissionsText[0] == "This will allow it to view your email address."
-assert permissionsText[1] == "This will allow it to update Some Company Ltd's registered office address."
+// scopeMapper.setLegacyScopesAllowed(true)
+// permissionsText = scopeMapper.scopesToPermissionText("https://account.companieshouse.gov.uk/user/profile.read https://api.companieshouse.gov.uk/company/00006400/registered-office-address.update", "Some Company Ltd")
+// assert permissionsText.size() == 2
+// assert permissionsText[0] == "This will allow it to view your email address."
+// assert permissionsText[1] == "This will allow it to update Some Company Ltd's registered office address."
+
+// scopeMapper.setLegacyScopesAllowed(true)
+// permissionsText = scopeMapper.scopesToPermissionText("https://identity.company-information.service.gov.uk/user/profile.read https://api.company-information.service.gov.uk/company/00006400/registered-office-address.update", "Some Company Ltd")
+// assert permissionsText.size() == 2
+// assert permissionsText[0] == "This will allow it to view your email address."
+// assert permissionsText[1] == "This will allow it to update Some Company Ltd's registered office address."
