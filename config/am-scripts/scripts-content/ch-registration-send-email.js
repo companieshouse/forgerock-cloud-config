@@ -141,13 +141,13 @@ if(!errorFound){
             "stage",
             "REGISTRATION_ERROR" 
         ),
-          new fr.TextOutputCallback(
+        new fr.TextOutputCallback(
             fr.TextOutputCallback.ERROR,
             "The email could not be sent: "+response.getEntity().getString()
         ),
         new fr.HiddenValueCallback (
             "pagePropsJSON",
-            JSON.stringify({"apiError": JSON.parse(response.getEntity().getString())})
+            JSON.stringify({ 'errors': [{ label: "An error occurred while sending the email. Please try again."} ] })
         )
       ).build()
     } 

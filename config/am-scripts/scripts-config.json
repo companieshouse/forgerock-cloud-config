@@ -126,7 +126,7 @@
         {
             "payload": {
                 "_id":"24b1421b-8130-4eae-a999-a44dc6e94fa6",
-                "name":"CH - Callback to show SMS sent",
+                "name":"CH - Callback to show recipient Phone Number",
                 "description":"Callback to show the phone number used to sent the OTP code",
                 "script":"<replace>",
                 "default":false,
@@ -168,8 +168,24 @@
                 "creationDate":0,
                 "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
                 "lastModifiedDate":1615203762946
-             },
+            },
             "filename": "ch-password-reset-verify-token.js"
+        },
+        {
+            "payload": {
+                "_id":"bf6c0ac8-8e13-4f11-8d99-d01b23e02a5c",
+                "name":"CH - Callback to show OTP not valid",
+                "description":"",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1615378956486
+            },
+            "filename": "ch-callback-otp-not-valid.js"
         },
         {
             "payload": {

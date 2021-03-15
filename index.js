@@ -13,6 +13,7 @@ const {
   updateScripts,
   updateServices,
   updateTermsAndConditions,
+  updatePasswordPolicy,
   updateUserRoles
 } = require('./scripts')
 
@@ -144,6 +145,19 @@ yargs
       'realm'
     ]),
     handler: (argv) => updateTermsAndConditions(argv)
+  })
+  .command({
+    command: 'password-policy',
+    desc:
+      'Update IDM Password Policy for Alpha users (./config/password-policy/password-policy.json)',
+    builder: cliOptions([
+      'idmUsername',
+      'idmPassword',
+      'adminClientId',
+      'adminClientSecret',
+      'realm'
+    ]),
+    handler: (argv) => updatePasswordPolicy(argv)
   })
   .command({
     command: 'user-roles',

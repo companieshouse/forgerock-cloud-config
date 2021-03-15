@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const getSessionToken = require('../helpers/get-session-token')
-const getAccessToken = require('../helpers/get-access-token')
+// const getAccessToken = require('../helpers/get-access-token')
 const fidcRequest = require('../helpers/fidc-request')
 
 const updateCors = async (argv) => {
@@ -9,7 +9,7 @@ const updateCors = async (argv) => {
 
   try {
     const sessionToken = await getSessionToken(argv)
-    const accessToken = await getAccessToken(argv)
+    // const accessToken = await getAccessToken(argv)
 
     // Read auth tree JSON files
     const dir = path.resolve(__dirname, '../config/cors')
@@ -24,7 +24,7 @@ const updateCors = async (argv) => {
       corsFileContent.map(async (corsConfigFile) => {
         const serviceUrl = `${FIDC_URL}/am/json/global-config/services/CorsService`
         const serviceConfigUrl = `${serviceUrl}/configuration/${corsConfigFile.corsServiceConfig._id}`
-        const idmUrl = `${FIDC_URL}/openidm/config/servletfilter/cors`
+        // const idmUrl = `${FIDC_URL}/openidm/config/servletfilter/cors`
         await fidcRequest(
           serviceUrl,
           corsConfigFile.corsServiceGlobal,
@@ -37,8 +37,8 @@ const updateCors = async (argv) => {
           sessionToken,
           true
         )
-        await fidcRequest(idmUrl, corsConfigFile.idmCorsConfig, accessToken)
-        console.log('CORS configuration updated in AM and IDM')
+        // await fidcRequest(idmUrl, corsConfigFile.idmCorsConfig, accessToken)
+        console.log('CORS configuration updated in AM')
         return Promise.resolve()
       })
     )
