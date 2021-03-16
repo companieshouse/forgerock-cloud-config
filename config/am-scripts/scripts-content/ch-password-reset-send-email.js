@@ -69,7 +69,7 @@ try{
 }
 
 try{
-  returnUrl = host.concat("/am/XUI/?realm=/alpha&&service=CHCompleteResetPwd&token=", jwt)
+  returnUrl = host.concat("/am/XUI/?realm=/alpha&service=CHResetPassword&token=", jwt)
   logger.error("[RESET PWD] URL: " + returnUrl);
 }catch(e){
   logger.error("[RESET PWD] Error while extracting host: " + e);
