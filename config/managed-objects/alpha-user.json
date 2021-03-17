@@ -11,11 +11,11 @@
   "name": "alpha_user",
   "notifications": {},
   "onCreate": {
-    "source":"require('onCreateUser').setDefaultFields(object);\nlogger.info(\"setting email as username \"+object.mail);\nobject.mail = object.userName;\n\n",
+    "source":"require('onCreateUser').setDefaultFields(object);\nlogger.info(\"setting email as username \"+object.mail);\nobject.mail = object.userName;\nobject.sn = object.userName;\n",
     "type": "text/javascript"
   },
   "onUpdate": {
-    "source":"require('onUpdateUser').preserveLastSync(object, oldObject, request);\nnewObject.mail = newObject.userName;",
+    "source":"require('onUpdateUser').preserveLastSync(object, oldObject, request);\nnewObject.mail = newObject.userName;\nnewObject.sn = newObject.userName;\n",
     "type": "text/javascript"
   },
   "schema": {
@@ -83,7 +83,7 @@
         "description": "First Name",
         "isPersonal": true,
         "searchable": true,
-        "title": "First Name",
+        "title": "Full Name (optional)",
         "type": "string",
         "usageDescription": null,
         "userEditable": true,
@@ -153,7 +153,7 @@
         "description": "Telephone Number",
         "isPersonal": true,
         "pattern": "^\\+?([0-9\\- \\(\\)])*$",
-        "title": "Telephone Number",
+        "title": "Mobile Number (optional)",
         "type": "string",
         "usageDescription": null,
         "userEditable": true,
@@ -1138,7 +1138,6 @@
     ],
     "required": [
       "userName",
-      "givenName",
       "sn",
       "mail"
     ]

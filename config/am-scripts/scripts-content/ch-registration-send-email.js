@@ -11,8 +11,9 @@ var fr = JavaImporter(
 )
 
 var email;
-var firstName;
-var lastName;
+var fullName;
+//var lastName;
+var phone;
 var returnUrl;
 var jwt;
 var signingHandler;
@@ -27,8 +28,9 @@ logger.error("shared: " + sharedState.get("objectAttributes"));
 
 try{
   email = sharedState.get("objectAttributes").get("mail");
-  firstName = sharedState.get("objectAttributes").get("givenName");
-  lastName = sharedState.get("objectAttributes").get("sn");
+  fullName = sharedState.get("objectAttributes").get("givenName");
+  phone = sharedState.get("objectAttributes").get("telephoneNumber");
+  // lastName = sharedState.get("objectAttributes").get("sn");
   logger.error("mail : " + email);
 } catch(e){
   logger.error("[REGISTRATION] error in fetching objectAttributes : " + e); 
@@ -52,8 +54,9 @@ try{
   var dateNow = new Date();
   jwtClaims.setIssuedAtTime(dateNow);
   jwtClaims.setSubject(email);
-  jwtClaims.setClaim("firstName", firstName);
-  jwtClaims.setClaim("lastName", lastName);
+  jwtClaims.setClaim("fullName", fullName);
+  jwtClaims.setClaim("phone", phone);
+  //jwtClaims.setClaim("lastName", lastName);
   jwtClaims.setClaim("creationDate", new Date().toString());
 }catch(e){
   logger.error("[REGISTRATION] Error while adding claims to JWT: " + e);

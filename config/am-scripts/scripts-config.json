@@ -344,7 +344,7 @@
                 "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
                 "lastModifiedDate": 1436807766258
             },
-            "filename": "phone-number-present.js"
+            "filename": "ch-phone-number-present.js"
         }
     ]
 }

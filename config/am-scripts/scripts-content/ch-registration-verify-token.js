@@ -51,12 +51,12 @@ if (!tokenURLParam) {
     var claimSet = signedJwt.getClaimsSet();
     var email = claimSet.getSubject();
     var iat = claimSet.getClaim("creationDate");
-    var firstName = claimSet.getClaim("firstName");
-    var lastName = claimSet.getClaim("lastName");
+    var fullName = claimSet.getClaim("fullName");
+    //var lastName = claimSet.getClaim("lastName");
     var now = new Date();
     differenceInTime = now.getTime() - (new Date(iat)).getTime();
     logger.error("[REGISTRATION-RESUME] initiating email: " + email + " on: "+ iat + " - difference (hours): "+Math.round(differenceInTime/(1000 * 60)/60));
-    logger.error("[REGISTRATION-RESUME] name: " + firstName + " - surname: "+lastName);
+    logger.error("[REGISTRATION-RESUME] name: " + fullName);
   }catch(e){
     logger.error("[REGISTRATION-RESUME] error while reconstructing JWT: " + e);
     errorFound = true;	
@@ -75,7 +75,7 @@ if (!tokenURLParam) {
     logger.error("[REGISTRATION-RESUME] The provided token is still valid");
     try{
       // put the read attributes in shared state for the Create Object node to consume
-      sharedState.put("objectAttributes", {"userName":email, "givenName":firstName, "sn":lastName, "mail":email});
+      sharedState.put("objectAttributes", {"userName":email, "givenName":fullName, "sn":email, "mail":email});
       sharedState.put("userName", email);
     }catch(e){
       logger.error("[REGISTRATION-RESUME] error while storing state: " + e);
