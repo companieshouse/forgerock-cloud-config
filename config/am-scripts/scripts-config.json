@@ -189,6 +189,36 @@
         },
         {
             "payload": {
+                "_id": "b480d9f7-5908-45cf-91d1-bc1fe56fe8de",
+                "name": "CH - Phone Number in IDM profile",
+                "description": "Checks whether the Phone Number is set within the IDM user profile",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "ch-phone-number-present.js"
+        },
+        {
+            "payload": {
+                "_id": "000c65e1-c9c6-4edb-96d2-298a9b152b40",
+                "name": "CH - Phone Number entered by user",
+                "description": "Checks whether the Phone Number has been entered by end user",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "ch-phone-number-entered.js"
+        },
+        {
+            "payload": {
                 "_id":"d22f9a0c-426a-4466-b95e-d0f125b0d5fa",
                 "name":"OAuth2 Access Token Modification Script",
                 "description":"Default global script for OAuth2 Access Token Modification",
@@ -330,21 +360,6 @@
                 "lastModifiedDate":1565386615495
              },
              "filename": "template-oidc-claims-script.groovy"
-        },
-        {
-            "payload": {
-                "_id": "b480d9f7-5908-45cf-91d1-bc1fe56fe8de",
-                "name": "Has Phone Number",
-                "description": "Has Phone Number",
-                "script": "<replace>",
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "creationDate": 1436807766258,
-                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate": 1436807766258
-            },
-            "filename": "ch-phone-number-present.js"
         }
     ]
 }
