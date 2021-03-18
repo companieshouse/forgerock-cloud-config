@@ -1,7 +1,7 @@
 {
 	"_id": "provisioner.openicf/CHSUser",
 	"connectorRef": {
-		"connectorHostRef": "aws-primary",
+		"connectorHostRef": "aws-group",
 		"displayName": "CHS User Connector",
 		"bundleVersion": "1.5.19.7-SNAPSHOT",
 		"systemType": "provisioner.openicf",
