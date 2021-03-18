@@ -4,7 +4,7 @@ var fr = JavaImporter(
 
 var phone = sharedState.get("objectAttributes").get("telephoneNumber");
 if (phone) {
-  transientState.put("phoneNumber", phone);
+  transientState.put("registrationMFA", true);
   outcome = "true";
 } else {
   outcome = "false";

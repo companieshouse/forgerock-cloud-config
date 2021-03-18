@@ -48,15 +48,18 @@ try{
   errorFound = true;
 }
   
-var jwtClaims=new fr.JwtClaimsSet;
+var jwtClaims = new fr.JwtClaimsSet;
 try{
   jwtClaims.setIssuer(host);
   var dateNow = new Date();
   jwtClaims.setIssuedAtTime(dateNow);
   jwtClaims.setSubject(email);
-  jwtClaims.setClaim("fullName", fullName);
-  jwtClaims.setClaim("phone", phone);
-  //jwtClaims.setClaim("lastName", lastName);
+  if(fullName){ 
+    jwtClaims.setClaim("fullName", fullName);
+  }
+  if(phone){
+    jwtClaims.setClaim("phone", phone);
+  }
   jwtClaims.setClaim("creationDate", new Date().toString());
 }catch(e){
   logger.error("[REGISTRATION] Error while adding claims to JWT: " + e);

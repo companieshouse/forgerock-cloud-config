@@ -4,14 +4,21 @@ var fr = JavaImporter(
 
 var notifyJWT = transientState.get("notifyJWT");
 var templates = transientState.get("notifyTemplates");
+var isRegistrationMFA = transientState.get("registrationMFA");
 var code = sharedState.get("oneTimePassword");
 var userId = sharedState.get("_id");
 var phoneNumber = "";
-if (idRepository.getAttribute(userId, "telephoneNumber").iterator().hasNext()) {
-  phoneNumber = idRepository.getAttribute(userId, "telephoneNumber").iterator().next();
+
+if(isRegistrationMFA){
+  // if I'm in the registration journey,I need ro read the phone from sharedState
+  phoneNumber = sharedState.get("objectAttributes").get("telephoneNumber");
 } else {
-  logger.error("[SEND SMS] Couldn't find telephoneNumber");
-  // TODO Better handling of error
+  if (idRepository.getAttribute(userId, "telephoneNumber").iterator().hasNext()) {
+    phoneNumber = idRepository.getAttribute(userId, "telephoneNumber").iterator().next();
+  } else {
+    logger.error("[SEND SMS] Couldn't find telephoneNumber");
+    // TODO Better handling of error
+  }
 }
 
 logger.error("[SEND SMS] User phoneNumber: " + phoneNumber);
