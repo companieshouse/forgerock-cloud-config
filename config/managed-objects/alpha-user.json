@@ -11,11 +11,11 @@
   "name": "alpha_user",
   "notifications": {},
   "onCreate": {
-    "source":"require('onCreateUser').setDefaultFields(object);\nlogger.info(\"setting email as username \"+object.mail);\nobject.mail = object.userName;\nobject.sn = object.userName;\n",
+    "source":"require('onCreateUser').setDefaultFields(object);\nlogger.info(\"setting email as username \"+object.mail);\nobject.mail = object.userName;\n\n",
     "type": "text/javascript"
   },
   "onUpdate": {
-    "source":"require('onUpdateUser').preserveLastSync(object, oldObject, request);\nnewObject.mail = newObject.userName;\nnewObject.sn = newObject.userName;\n",
+    "source":"require('onUpdateUser').preserveLastSync(object, oldObject, request);\nnewObject.mail = newObject.userName;\n\n",
     "type": "text/javascript"
   },
   "schema": {
@@ -118,6 +118,9 @@
         "description": "Email Address",
         "isPersonal": true,
         "policies": [
+          {
+            "policyId": "not-empty"
+          },
           {
             "policyId": "valid-email-address-format"
           }

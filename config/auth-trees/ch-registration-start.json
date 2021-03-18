@@ -25,8 +25,8 @@
          "nodeType": "AttributeCollectorNode",
          "details": {
             "attributesToCollect":[
-               "mail",
                "givenName",
+               "mail",
                "telephoneNumber"
             ],
             "identityAttribute":"userName",
@@ -34,7 +34,6 @@
             "validateInputs":true
          }
       },
-     
       {
          "_id":"997cc39b-afde-4935-b9b5-a0d4e3034072",
          "nodeType": "ScriptedDecisionNode",    
