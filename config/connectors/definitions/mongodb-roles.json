@@ -73,7 +73,7 @@
 		"userDatabase": null,
 		"clusterAddresses": null,
 		"dateAttributes": [],
-		"database": "roles",
+		"database": "account",
 		"arrayAttributes": [],
 		"includeNullValue": "false",
 		"includeEmptyList": "false",
