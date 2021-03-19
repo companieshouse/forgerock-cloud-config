@@ -52,7 +52,6 @@ if (!tokenURLParam) {
     var email = claimSet.getSubject();
     var iat = claimSet.getClaim("creationDate");
     var fullName = claimSet.getClaim("fullName");
-    //var lastName = claimSet.getClaim("lastName");
     var now = new Date();
     differenceInTime = now.getTime() - (new Date(iat)).getTime();
     logger.error("[REGISTRATION-RESUME] initiating email: " + email + " on: "+ iat + " - difference (hours): "+Math.round(differenceInTime/(1000 * 60)/60));

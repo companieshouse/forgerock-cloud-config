@@ -12,7 +12,6 @@ var fr = JavaImporter(
 
 var email;
 var fullName;
-//var lastName;
 var phone;
 var returnUrl;
 var jwt;
@@ -30,7 +29,6 @@ try{
   email = sharedState.get("objectAttributes").get("mail");
   fullName = sharedState.get("objectAttributes").get("givenName");
   phone = sharedState.get("objectAttributes").get("telephoneNumber");
-  // lastName = sharedState.get("objectAttributes").get("sn");
   logger.error("mail : " + email);
 } catch(e){
   logger.error("[REGISTRATION] error in fetching objectAttributes : " + e); 

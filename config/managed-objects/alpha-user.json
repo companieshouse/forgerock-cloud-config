@@ -153,7 +153,7 @@
         "viewable": true
       },
       "telephoneNumber": {
-        "description": "Telephone Number",
+        "description": "Mobile Number",
         "isPersonal": true,
         "pattern": "^\\+?([0-9\\- \\(\\)])*$",
         "title": "Mobile Number (optional)",
