@@ -45,6 +45,6 @@ try {
         outcome = "false"; 
     }
 } catch(e) {
-    logger.error("Require MFA Check error: " + e)
+    logger.error("Require MFA Check error: " + e);
     outcome = "false";
 }

@@ -189,6 +189,38 @@
         },
         {
             "payload": {
+                "_id":"20a3599f-b742-4554-a8b7-27862f248dd5",
+                "name":"CH - Require MFA Check",
+                "description":"Check whether the user has logged in within a certain time period.",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1615378956486
+            },
+            "filename": "ch-require-mfa-check.js"
+        },
+        {
+            "payload": {
+                "_id": "d7da3b35-af63-499b-aa0a-bb03666508db",
+                "name": "CH - Update Last Login",
+                "description": "Update user last login date",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1616152574918
+            },
+            "filename": "ch-update-last-login.js"
+        },
+        {
+            "payload": {
                 "_id":"d22f9a0c-426a-4466-b95e-d0f125b0d5fa",
                 "name":"OAuth2 Access Token Modification Script",
                 "description":"Default global script for OAuth2 Access Token Modification",
