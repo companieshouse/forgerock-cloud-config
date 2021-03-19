@@ -15,7 +15,7 @@
     "type": "text/javascript"
   },
   "onUpdate": {
-    "source":"require('onUpdateUser').preserveLastSync(object, oldObject, request);\nnewObject.mail = newObject.userName;",
+    "source":"require('onUpdateUser').preserveLastSync(object, oldObject, request);\nnewObject.mail = newObject.userName;\n\n",
     "type": "text/javascript"
   },
   "schema": {
@@ -83,7 +83,7 @@
         "description": "First Name",
         "isPersonal": true,
         "searchable": true,
-        "title": "First Name",
+        "title": "Full Name (optional)",
         "type": "string",
         "usageDescription": null,
         "userEditable": true,
@@ -119,6 +119,9 @@
         "isPersonal": true,
         "policies": [
           {
+            "policyId": "not-empty"
+          },
+          {
             "policyId": "valid-email-address-format"
           }
         ],
@@ -150,10 +153,10 @@
         "viewable": true
       },
       "telephoneNumber": {
-        "description": "Telephone Number",
+        "description": "Mobile Number",
         "isPersonal": true,
         "pattern": "^\\+?([0-9\\- \\(\\)])*$",
-        "title": "Telephone Number",
+        "title": "Mobile Number (optional)",
         "type": "string",
         "usageDescription": null,
         "userEditable": true,
@@ -1138,7 +1141,6 @@
     ],
     "required": [
       "userName",
-      "givenName",
       "sn",
       "mail"
     ]

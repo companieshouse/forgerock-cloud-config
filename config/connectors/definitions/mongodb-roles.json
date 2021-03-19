@@ -1,7 +1,7 @@
 {
 	"_id": "provisioner.openicf/CHSRoles",
 	"connectorRef": {
-		"connectorHostRef": "aws-primary",
+		"connectorHostRef": "aws-group",
 		"displayName": "MongoDB Connector",
 		"bundleVersion": "1.5.19.7-SNAPSHOT",
 		"systemType": "provisioner.openicf",
@@ -73,7 +73,7 @@
 		"userDatabase": null,
 		"clusterAddresses": null,
 		"dateAttributes": [],
-		"database": "roles",
+		"database": "account",
 		"arrayAttributes": [],
 		"includeNullValue": "false",
 		"includeEmptyList": "false",
