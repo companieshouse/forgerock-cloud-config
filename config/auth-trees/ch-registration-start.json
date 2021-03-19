@@ -21,47 +21,16 @@
          }         
       },
       {
-         "_id":"49747def-2c53-4d70-99f2-d60d62a620cc",
-         "nodeType": "PageNode",
-         "details": {
-            "stage":"REGISTRATION_2",
-            "nodes":[
-               {
-                  "_id":"b361444b-136d-4bc9-af4a-6c251d851772",
-                  "nodeType":"AttributeCollectorNode",
-                  "displayName":"Attribute Collector"
-               }
-            ],
-            "pageHeader":{
-               "title":"Please enter your name"
-            },
-            "pageDescription":{
-               "desc":"Please enter your first name and last name"
-            }
-         }         
-      },
-      {
          "_id":"f07f1b4a-8aef-4c53-b04f-e41fd06ed859",     
          "nodeType": "AttributeCollectorNode",
          "details": {
             "attributesToCollect":[
-               "mail"
-            ],
-            "identityAttribute":"userName",
-            "required":true,
-            "validateInputs":true
-         }
-      },
-      {
-         "_id":"b361444b-136d-4bc9-af4a-6c251d851772",
-         "nodeType": "AttributeCollectorNode",
-         "details": {
-            "attributesToCollect":[
                "givenName",
-               "sn"
+               "mail",
+               "telephoneNumber"
             ],
             "identityAttribute":"userName",
-            "required":true,
+            "required":false,
             "validateInputs":true
          }
       },
@@ -84,48 +53,204 @@
             "outputs":["*"],
             "script":"b6ca4a1f-573f-4a3a-a410-d18b01207f6e"
          }
+      },
+      {
+         "_id":"a87fa542-b6d3-49a1-bbdf-30370ae7042e",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes":["false","true"],
+            "outputs":["*"],
+            "script":"000c65e1-c9c6-4edb-96d2-298a9b152b40"
+         }
+      },
+      {
+         "_id":"5c7f4247-3b01-4dae-b18b-1d90ee710891",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes":["false","true"],
+            "outputs":["*"],
+            "script":"df67765e-df3a-4503-9ba5-35c992b39259"
+         }
+      },
+      {
+         "_id":"27ec8bc7-d2ed-4877-b8bd-ebd84d5b9994",
+         "nodeType": "OneTimePasswordGeneratorNode", 
+         "details": {
+            "length":6
+         }
+      },
+      {
+         "_id":"37a1f12f-1e7b-4ca2-a870-040bf63291a0",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes":["true","false"],
+            "outputs":["*"],
+            "script":"b276c566-622e-11eb-ae93-0242ac130002"
+         }
+      },   
+      {
+         "_id":"42d22a17-4022-4d9a-8cc2-2ef7b2fd331c",
+         "nodeType": "PageNode", 
+         "details": {
+             "nodes":[
+                 {
+                     "_id":"6b8324ab-700c-40f9-a138-f03f25c425aa",
+                     "nodeType":"ScriptedDecisionNode",
+                     "displayName":"Scripted Decision"
+                  },
+                 {
+                     "_id":"0ab69626-b411-41d0-8744-c2313b74fd93",
+                     "nodeType":"OneTimePasswordCollectorDecisionNode",
+                     "displayName":"OTP Collector Decision"
+                 }
+             ],
+             "pageDescription":{
+                 "desc":"Please enter the code you received via SMS"
+             },
+             "pageHeader":{
+                 "header":"Please enter your code"
+             },
+             "stage":"REGISTRATION_MFA"
+         }
+     },
+     {
+         "_id":"6b8324ab-700c-40f9-a138-f03f25c425aa",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes":["True"],
+            "outputs":["*"],
+            "script":"24b1421b-8130-4eae-a999-a44dc6e94fa6"
+         }
+      },
+      {
+            "_id":"0ab69626-b411-41d0-8744-c2313b74fd93",
+            "nodeType": "OneTimePasswordCollectorDecisionNode", 
+            "details": {
+               "passwordExpiryTime":5   
+            }
+      },
+      {
+         "_id":"2eaa7c69-f97d-4bbf-b8b0-2214832cbc6f",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes":["true"],
+            "outputs":["*"],
+            "script":"bf6c0ac8-8e13-4f11-8d99-d01b23e02a5c"
+         }    
       }
    ],
    "tree": {
-      "_id": "CHRegistration",
-      "description": "Platform Registration Tree for CH Users",
+      "_id":"CHRegistration",
       "entryNodeId":"eb711261-5253-4e17-9357-43e175a5005d",
+      "description":"Platform Registration Tree for CH Users",
       "identityResource":"managed/alpha_user",
-      "staticNodes": {
-         "startNode": {},
-         "e301438c-0bd0-429c-ab0c-66126501069a": {}
-      },
-      "uiConfig": {},
+      "uiConfig":{},
       "nodes":{
          "eb711261-5253-4e17-9357-43e175a5005d":{
-            "displayName":"Email Collector",
+            "x":346,
+            "y":74,
             "connections":{
-               "outcome":"49747def-2c53-4d70-99f2-d60d62a620cc"
+               "outcome":"a87fa542-b6d3-49a1-bbdf-30370ae7042e"
             },
-            "nodeType":"PageNode"
-         },
-         "49747def-2c53-4d70-99f2-d60d62a620cc":{
-            "displayName":"Name Collector",
             "nodeType":"PageNode",
-            "connections":{
-               "outcome":"997cc39b-afde-4935-b9b5-a0d4e3034072"
-            }
+            "displayName":"Email Collector"
          },
          "997cc39b-afde-4935-b9b5-a0d4e3034072":{
+            "x":894,
+            "y":110,
             "connections":{
                "false":"e301438c-0bd0-429c-ab0c-66126501069a",
                "true":"9e02588a-e4ac-4b08-b10f-ad8f298ae720"
             },
-            "displayName":"Create Notify JWT",
-            "nodeType":"ScriptedDecisionNode"
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"Create Notify JWT - Email"
          },
          "9e02588a-e4ac-4b08-b10f-ad8f298ae720":{
+            "x":1203,
+            "y":89.015625,
             "connections":{
-               "false":"e301438c-0bd0-429c-ab0c-66126501069a",
-               "true":"e301438c-0bd0-429c-ab0c-66126501069a"
+               "true":"e301438c-0bd0-429c-ab0c-66126501069a",
+               "false":"e301438c-0bd0-429c-ab0c-66126501069a"
             },
-            "displayName":"Create & Email link",
-            "nodeType":"ScriptedDecisionNode"
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"Create & Email link"
+         },
+         "a87fa542-b6d3-49a1-bbdf-30370ae7042e":{
+            "x":389,
+            "y":307.015625,
+            "connections":{
+               "false":"997cc39b-afde-4935-b9b5-a0d4e3034072",
+               "true":"5c7f4247-3b01-4dae-b18b-1d90ee710891"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"Check phone entered"
+         },
+         "27ec8bc7-d2ed-4877-b8bd-ebd84d5b9994":{
+            "x":629,
+            "y":650.015625,
+            "connections":{
+               "outcome":"37a1f12f-1e7b-4ca2-a870-040bf63291a0"
+            },
+            "nodeType":"OneTimePasswordGeneratorNode",
+            "displayName":"HOTP Generator"
+         },
+         "37a1f12f-1e7b-4ca2-a870-040bf63291a0":{
+            "x":856,
+            "y":696.015625,
+            "connections":{
+               "true":"42d22a17-4022-4d9a-8cc2-2ef7b2fd331c",
+               "false":"e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"Send OTP"
+         },
+         "42d22a17-4022-4d9a-8cc2-2ef7b2fd331c":{
+            "x":1013,
+            "y":369.015625,
+            "connections":{
+               "false":"2eaa7c69-f97d-4bbf-b8b0-2214832cbc6f",
+               "true":"997cc39b-afde-4935-b9b5-a0d4e3034072"
+            },
+            "nodeType":"PageNode",
+            "displayName":"OTP page"
+         },
+         "2eaa7c69-f97d-4bbf-b8b0-2214832cbc6f":{
+            "x":1106,
+            "y":630.015625,
+            "connections":{
+               "true":"42d22a17-4022-4d9a-8cc2-2ef7b2fd331c"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"OTP not valid"
+         },
+         "5c7f4247-3b01-4dae-b18b-1d90ee710891":{
+            "x":508,
+            "y":485.015625,
+            "connections":{
+               "true":"27ec8bc7-d2ed-4877-b8bd-ebd84d5b9994",
+               "false":"e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"Create Notify JWT - SMS"
+         }
+      },
+      "staticNodes":{
+         "startNode":{
+            "x":70,
+            "y":80
+         },
+         "70e691a5-1e33-4ac3-a356-e7b6d60d92e0":{
+            "x":1615,
+            "y":726
+         },
+         "e301438c-0bd0-429c-ab0c-66126501069a":{
+            "x":1901,
+            "y":502
          }
       }
    }
