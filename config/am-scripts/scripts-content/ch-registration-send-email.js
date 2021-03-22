@@ -29,7 +29,7 @@ try{
   email = sharedState.get("objectAttributes").get("mail");
   fullName = sharedState.get("objectAttributes").get("givenName");
   phone = sharedState.get("objectAttributes").get("telephoneNumber");
-  logger.error("mail : " + email);
+  logger.error("mail : " + email + " - name: "+fullName+" = phone: "+phone);
 } catch(e){
   logger.error("[REGISTRATION] error in fetching objectAttributes : " + e); 
   errorFound = true;
