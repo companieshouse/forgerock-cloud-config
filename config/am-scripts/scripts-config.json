@@ -65,7 +65,7 @@
             "payload": {
                 "_id": "b276c566-622e-11eb-ae93-0242ac130002",
                 "name": "CH - Send MFA text",
-                "description": "Send MFA text",
+                "description": "Send an MFA code to a user via SMS",
                 "script": "<replace>",
                 "language": "JAVASCRIPT",
                 "context": "AUTHENTICATION_TREE_DECISION_NODE",
@@ -75,6 +75,21 @@
                 "lastModifiedDate": 1436807766258
             },
             "filename": "ch-send-mfa-sms.js"
+        },
+        {
+            "payload": {
+                "_id": "a5778ce7-addf-4fb6-a7db-92929f1314c4",
+                "name": "CH - Send MFA email",
+                "description": "Send an MFA code to a user via email",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "ch-send-mfa-email.js"
         },
         {
             "payload": {

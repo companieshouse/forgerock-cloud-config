@@ -127,10 +127,37 @@
 				"outputs": ["*"],
 				"script": "d7da3b35-af63-499b-aa0a-bb03666508db"
 			}
+		},
+		{
+			"_id": "b6c21d0e-4e55-47c0-8a58-e86939c93c14",
+			"nodeType": "ScriptedDecisionNode",
+			"details": {
+				"outcomes": ["true", "false"],
+				"inputs": ["*"],
+				"outputs": ["*"],
+				"script": "df67765e-df3a-4503-9ba5-35c992b39259"
+			}
+		},
+		{
+			"_id": "c8e1a748-a423-41ff-9971-b4a879ec01d7",
+			"nodeType": "OneTimePasswordGeneratorNode",
+			"details": {
+				"length": 6
+			}
+		},
+		{
+			"_id": "1cf909f8-28a3-45de-9c61-8653f8fe2398",
+			"nodeType": "ScriptedDecisionNode",
+			"details": {
+				"outcomes": ["true", "false"],
+				"inputs": ["*"],
+				"outputs": ["*"],
+				"script": "a5778ce7-addf-4fb6-a7db-92929f1314c4"
+			}
 		}
 	],
   "tree": {
-		"_id": "LoginMFA",
+		"_id": "CHLoginMFA",
 		"description": "Platform Login Tree",
 		"identityResource": "managed/alpha_user",
 		"entryNodeId": "a6eb5385-ac12-4359-8f0f-9a588ca5a334",
@@ -142,8 +169,8 @@
 		"uiConfig": {},
 		"nodes": {
 			"15993a44-70e7-4799-b35c-a245acb9ccc6": {
-				"x": 2076,
-				"y": 355.5,
+				"x": 2646,
+				"y": 162.5,
 				"connections": {
 					"outcome": "0c25a25f-7673-4bff-9d20-b4eecf9b6ca5"
 				},
@@ -151,7 +178,7 @@
 				"displayName": "Increment Login Count"
 			},
 			"5c3d2eda-3ea6-4fdc-8421-e29a5b2aecda": {
-				"x": 1634,
+				"x": 2121,
 				"y": 137.5,
 				"connections": {
 					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
@@ -181,8 +208,8 @@
 				"displayName": "Identify Existing User"
 			},
 			"9e7e7c6c-fe82-4ea0-9199-c99e438ece95": {
-				"x": 1903,
-				"y": 137.5,
+				"x": 2409,
+				"y": 219.5,
 				"connections": {
 					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
 					"true": "15993a44-70e7-4799-b35c-a245acb9ccc6"
@@ -192,7 +219,7 @@
 			},
 			"a6eb5385-ac12-4359-8f0f-9a588ca5a334": {
 				"x": 210,
-				"y": 83.5,
+				"y": 110,
 				"connections": {
 					"outcome": "77f75f06-34de-4045-a9f2-73b01bf79a3b"
 				},
@@ -200,17 +227,17 @@
 				"displayName": "Page Node"
 			},
 			"c3f22327-1e32-4f18-957f-731aa9c97dd5": {
-				"x": 938,
-				"y": 137.5,
+				"x": 1189,
+				"y": 246.5,
 				"connections": {
-					"false": "15993a44-70e7-4799-b35c-a245acb9ccc6",
-					"true": "fdcf16b0-de65-4219-a8e6-713f20235fe4"
+					"true": "49c6d69c-b4f1-4e9e-9421-b072f8e4de36",
+					"false": "b6c21d0e-4e55-47c0-8a58-e86939c93c14"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Has Phone Number"
 			},
 			"de45e2b0-1462-4423-a397-80df1255f4ea": {
-				"x": 2418,
+				"x": 3135,
 				"y": 137.5,
 				"connections": {
 					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
@@ -220,7 +247,7 @@
 				"displayName": "Inner Tree Evaluator"
 			},
 			"f8cba5d7-0906-40c0-bd61-df601a04cf9f": {
-				"x": 1404,
+				"x": 1891,
 				"y": 162.5,
 				"connections": {
 					"outcome": "5c3d2eda-3ea6-4fdc-8421-e29a5b2aecda"
@@ -229,18 +256,18 @@
 				"displayName": "HOTP Generator"
 			},
 			"fdcf16b0-de65-4219-a8e6-713f20235fe4": {
-				"x": 1174,
-				"y": 137.5,
+				"x": 1637,
+				"y": 136.5,
 				"connections": {
 					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
 					"true": "f8cba5d7-0906-40c0-bd61-df601a04cf9f"
 				},
 				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Setup Notify"
+				"displayName": "Create Notify JWT - SMS"
 			},
 			"028a75de-c133-4e3f-8569-158ee1094b78": {
-				"x": 852,
-				"y": 390.015625,
+				"x": 938,
+				"y": 137.5,
 				"connections": {
 					"true": "c3f22327-1e32-4f18-957f-731aa9c97dd5",
 					"false": "15993a44-70e7-4799-b35c-a245acb9ccc6"
@@ -249,13 +276,52 @@
 				"displayName": "Require MFA"
 			},
 			"0c25a25f-7673-4bff-9d20-b4eecf9b6ca5": {
-				"x": 2323,
-				"y": 347.015625,
+				"x": 2905,
+				"y": 162.5,
 				"connections": {
 					"true": "de45e2b0-1462-4423-a397-80df1255f4ea"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Update Last Login"
+			},
+			"49c6d69c-b4f1-4e9e-9421-b072f8e4de36": {
+				"x": 1404,
+				"y": 137.5,
+				"connections": {
+					"Use mobile": "fdcf16b0-de65-4219-a8e6-713f20235fe4",
+					"Use email": "b6c21d0e-4e55-47c0-8a58-e86939c93c14"
+				},
+				"nodeType": "ChoiceCollectorNode",
+				"displayName": "Choice Collector"
+			},
+			"b6c21d0e-4e55-47c0-8a58-e86939c93c14": {
+				"x": 1625,
+				"y": 284.015625,
+				"connections": {
+					"true": "c8e1a748-a423-41ff-9971-b4a879ec01d7",
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Create Notify JWT - Email"
+			},
+			"c8e1a748-a423-41ff-9971-b4a879ec01d7": {
+				"x": 1917,
+				"y": 304.015625,
+				"connections": {
+					"outcome": "1cf909f8-28a3-45de-9c61-8653f8fe2398"
+				},
+				"nodeType": "OneTimePasswordGeneratorNode",
+				"displayName": "HOTP Generator"
+			},
+			"1cf909f8-28a3-45de-9c61-8653f8fe2398": {
+				"x": 2127,
+				"y": 277.015625,
+				"connections": {
+					"true": "9e7e7c6c-fe82-4ea0-9199-c99e438ece95",
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Send MFA email via Notify"
 			}
 		}
 	}
