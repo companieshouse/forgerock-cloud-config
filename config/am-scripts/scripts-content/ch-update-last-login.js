@@ -2,19 +2,18 @@ var fr = JavaImporter(
     org.forgerock.openam.auth.node.api.Action
 )
 
-logger.error("Update last login");
 var userId = sharedState.get("_id");
 
 try {
     // Get current time in RFC-4517 format
     var lastLogin = formatDate();
 
-    logger.error("Seting last login to " + lastLogin + " for user " + userId);
+    logger.error("[UPDATE LAST LOGIN] Seting last login to " + lastLogin + " for user " + userId);
 
     // Use AM representation of attribute
     idRepository.setAttribute(userId, "fr-attr-idate1", [lastLogin]); 
 } catch(e) {
-    logger.error("Update Last Login error: " + e)
+    logger.error("[UPDATE LAST LOGIN] Update Last Login error: " + e)
 }
 
 function formatDate() {

@@ -11,7 +11,7 @@ try {
     if (idRepository.getAttribute(userId, "fr-attr-idate1").iterator().hasNext()) {
         var lastLogin = String(idRepository.getAttribute(userId, "fr-attr-idate1").iterator().next());
         
-        logger.error("lastLogin: " + lastLogin); // e.g. 20210317114005Z
+        logger.error("[MFA-CHECK] lastLogin: " + lastLogin); // e.g. 20210317114005Z
 
         if (lastLogin.length > 0) {
             var year = lastLogin.substring(0, 4);
@@ -31,10 +31,10 @@ try {
 
             var delta = now.getTime() - lastLoginDateUTC; // Difference in ms
             if (delta > intervalInMillis) {
-                logger.error("User requires MFA check");
+                logger.error("[MFA-CHECK] User requires MFA check");
                 checkMFA = true;
             } else {
-                logger.error("User doesn't require MFA check");
+                logger.error("[MFA-CHECK] User doesn't require MFA check");
             }
         }
     }
@@ -45,6 +45,6 @@ try {
         outcome = "false"; 
     }
 } catch(e) {
-    logger.error("Require MFA Check error: " + e);
+    logger.error("[MFA-CHECK] Require MFA Check error: " + e);
     outcome = "false";
 }
