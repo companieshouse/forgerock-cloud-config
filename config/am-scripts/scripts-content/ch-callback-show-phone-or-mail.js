@@ -16,33 +16,32 @@ try{
   if (mfaRoute == "sms") {
     if (idRepository.getAttribute(userId, "telephoneNumber").iterator().hasNext()) {
         phoneNumber = idRepository.getAttribute(userId, "telephoneNumber").iterator().next();
-      } else {
+        logger.error("[LOGIN MFA] phoneNumber : " + phoneNumber);
+    } else {
         logger.error("[LOGIN MFA] Couldn't find telephoneNumber");
         // TODO Better handling of error
-      }
+    }
   } else if (mfaRoute == "email") {
-    logger.error("[LOGIN MFA] TODO Get email");
     if (idRepository.getAttribute(userId, "mail").iterator().hasNext()) {
-        phoneNumber = idRepository.getAttribute(userId, "mail").iterator().next();
-      } else {
-        logger.error("[LOGIN MFA] Couldn't find telephoneNumber");
+        emailAddress = idRepository.getAttribute(userId, "mail").iterator().next();
+        logger.error("[LOGIN MFA] emailAddress : " + emailAddress);
+    } else {
+        logger.error("[LOGIN MFA] Couldn't find emailAddress");
         // TODO Better handling of error
-      }
+    }
   } else {
     logger.error("[LOGIN MFA] Couldn't determine route used for sending MFA code");
   }
-}catch(e){
+} catch(e) {
   logger.error("[LOGIN MFA] Error retrieving user details: " + e);
 }
 
-logger.error("[LOGIN MFA] phoneNumber : " + phoneNumber);
-
-if(otpError){
+if (otpError) {
     if (callbacks.isEmpty()) {
         action = fr.Action.send(
             new fr.HiddenValueCallback (
                 "pagePropsJSON",
-                JSON.stringify({ 'errors': [{ label: otpError, anchor: "IDToken3" }], "phoneNumber": phoneNumber })
+                JSON.stringify({ 'errors': [{ label: otpError, anchor: "IDToken3" }], "phoneNumber": phoneNumber, "emailAddress": emailAddress })
             ),
             new fr.TextOutputCallback(
                 fr.TextOutputCallback.ERROR,
@@ -54,7 +53,7 @@ if(otpError){
     action = fr.Action.send(
         new fr.HiddenValueCallback (
             "pagePropsJSON",
-            JSON.stringify({"phoneNumber": phoneNumber}) 
+            JSON.stringify({"phoneNumber": phoneNumber, "email": emailAddress})
         ),
         new fr.HiddenValueCallback (
             "notificationId",
