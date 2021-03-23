@@ -18,7 +18,8 @@
 				},
 				"pageHeader": {
 					"en": "Sign In"
-				}
+				},
+				"stage": "LOGIN_MFA_1"
 			}
 		},
 		{
@@ -154,6 +155,82 @@
 				"outputs": ["*"],
 				"script": "a5778ce7-addf-4fb6-a7db-92929f1314c4"
 			}
+		},
+		{
+			"_id": "bed7617c-467f-49df-bb86-2e42de21d706",
+			"nodeType": "PageNode",
+			"details": {
+				"nodes": [{
+					"_id": "e78833e1-01dc-4a67-8c17-61ff03db90f2",
+					"nodeType": "ChoiceCollectorNode",
+					"displayName": "Choice Collector"
+				}],
+				"pageHeader": {
+					"header": "How do you want to confirm it's you?"
+				},
+				"pageDescription": {
+					"desc": "How do you want to confirm it's you?"
+				},
+			    "stage": "LOGIN_MFA_2"
+			}
+		},
+		{
+			"_id": "e78833e1-01dc-4a67-8c17-61ff03db90f2",
+			"nodeType": "ChoiceCollectorNode",
+			"details": {
+				"choices": ["email", "text"],
+				"defaultChoice": "email",
+				"prompt": "How do you want to confirm it's you?"
+			}
+		},
+		{
+			"_id": "82b05c8c-258d-41fd-a38e-5d3326a709bc",
+			"nodeType": "PageNode",
+			"details": {
+				"nodes": [{
+					"_id": "de3eacd3-368d-4ddf-b135-bf6b7a7ac2bf",
+					"nodeType": "ScriptedDecisionNode",
+					"displayName": "Scripted Decision"
+				}, {
+					"_id": "3bfabc18-f160-426f-8806-8b176585c7bd",
+					"nodeType": "OneTimePasswordCollectorDecisionNode",
+					"displayName": "OTP Collector Decision"
+				}],
+				"pageHeader": {
+					"header": "Please enter your code"
+				},
+				"pageDescription": {
+					"desc": "Please enter the code you received"
+				},
+				"stage": "LOGIN_MFA_3"
+			}
+		},
+		{
+			"_id": "de3eacd3-368d-4ddf-b135-bf6b7a7ac2bf",
+			"nodeType": "ScriptedDecisionNode",
+			"details": {
+				"outcomes": ["True"],
+				"inputs": ["*"],
+				"outputs": ["*"],
+				"script": "ace951c8-d169-4426-9357-d5b44e0aa728"
+			}
+		},
+		{
+			"_id": "3bfabc18-f160-426f-8806-8b176585c7bd",
+			"nodeType": "OneTimePasswordCollectorDecisionNode",
+			"details": {
+				"passwordExpiryTime": 30
+			}
+		},
+		{
+			"_id": "6982586f-8c46-4f87-b315-bfba9ea0a704",
+			"nodeType": "ScriptedDecisionNode",
+			"details": {
+				"inputs": ["*"],
+				"outcomes": ["true"],
+				"outputs": ["*"],
+				"script": "bf6c0ac8-8e13-4f11-8d99-d01b23e02a5c"
+			}
 		}
 	],
   "tree": {
@@ -191,7 +268,7 @@
 				"y": 80,
 				"connections": {
 					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"true": "9e7e7c6c-fe82-4ea0-9199-c99e438ece95"
+					"true": "82b05c8c-258d-41fd-a38e-5d3326a709bc"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Send MFA text via Notify"
@@ -216,16 +293,6 @@
 				"nodeType": "IdentifyExistingUserNode",
 				"displayName": "Identify Existing User"
 			},
-			"9e7e7c6c-fe82-4ea0-9199-c99e438ece95": {
-				"x": 2416,
-				"y": 172.5,
-				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"true": "15993a44-70e7-4799-b35c-a245acb9ccc6"
-				},
-				"nodeType": "OneTimePasswordCollectorDecisionNode",
-				"displayName": "OTP Collector Decision"
-			},
 			"a6eb5385-ac12-4359-8f0f-9a588ca5a334": {
 				"x": 210,
 				"y": 145,
@@ -239,8 +306,8 @@
 				"x": 1168,
 				"y": 172.5,
 				"connections": {
-					"true": "49c6d69c-b4f1-4e9e-9421-b072f8e4de36",
-					"false": "b6c21d0e-4e55-47c0-8a58-e86939c93c14"
+					"false": "b6c21d0e-4e55-47c0-8a58-e86939c93c14",
+					"true": "bed7617c-467f-49df-bb86-2e42de21d706"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Has Phone Number"
@@ -275,7 +342,7 @@
 				"displayName": "Create Notify JWT - SMS"
 			},
 			"028a75de-c133-4e3f-8569-158ee1094b78": {
-				"x": 938,
+				"x": 939,
 				"y": 172.5,
 				"connections": {
 					"true": "c3f22327-1e32-4f18-957f-731aa9c97dd5",
@@ -292,16 +359,6 @@
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Update Last Login"
-			},
-			"49c6d69c-b4f1-4e9e-9421-b072f8e4de36": {
-				"x": 1404,
-				"y": 172.5,
-				"connections": {
-					"Use mobile": "fdcf16b0-de65-4219-a8e6-713f20235fe4",
-					"Use email": "b6c21d0e-4e55-47c0-8a58-e86939c93c14"
-				},
-				"nodeType": "ChoiceCollectorNode",
-				"displayName": "Choice Collector"
 			},
 			"b6c21d0e-4e55-47c0-8a58-e86939c93c14": {
 				"x": 1637,
@@ -326,11 +383,40 @@
 				"x": 2136,
 				"y": 265,
 				"connections": {
-					"true": "9e7e7c6c-fe82-4ea0-9199-c99e438ece95",
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a"
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "82b05c8c-258d-41fd-a38e-5d3326a709bc"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Send MFA email via Notify"
+			},
+			"bed7617c-467f-49df-bb86-2e42de21d706": {
+				"x": 1402,
+				"y": 46.015625,
+				"connections": {
+					"email": "b6c21d0e-4e55-47c0-8a58-e86939c93c14",
+					"text": "fdcf16b0-de65-4219-a8e6-713f20235fe4"
+				},
+				"nodeType": "PageNode",
+				"displayName": "Choose Email/SMS"
+			},
+			"82b05c8c-258d-41fd-a38e-5d3326a709bc": {
+				"x": 2457,
+				"y": 63.015625,
+				"connections": {
+					"true": "15993a44-70e7-4799-b35c-a245acb9ccc6",
+					"false": "6982586f-8c46-4f87-b315-bfba9ea0a704"
+				},
+				"nodeType": "PageNode",
+				"displayName": "Enter OTP"
+			},
+			"6982586f-8c46-4f87-b315-bfba9ea0a704": {
+				"x": 2476,
+				"y": 331.015625,
+				"connections": {
+					"true": "82b05c8c-258d-41fd-a38e-5d3326a709bc"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Raise Error"
 			}
 		}
 	}

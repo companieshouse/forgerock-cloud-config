@@ -52,6 +52,7 @@ try{
   notificationId = JSON.parse(response.getEntity().getString()).id;
   logger.error("[SEND SMS] Notify ID: " + notificationId);
   transientState.put("notificationId", notificationId);
+  transientState.put("mfa-route", "sms");
 }catch(e){
   logger.error("[SEND SMS] Error while parsing Notify response: " + e);
 }

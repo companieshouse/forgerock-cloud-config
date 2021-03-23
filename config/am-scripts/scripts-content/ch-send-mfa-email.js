@@ -46,6 +46,7 @@ try{
   notificationId = JSON.parse(response.getEntity().getString()).id;
   logger.error("[SEND EMAIL] Notify ID: " + notificationId);
   transientState.put("notificationId", notificationId);
+  transientState.put("mfa-route", "email");
 }catch(e){
   logger.error("[SEND EMAIL] Error while parsing Notify response: " + e);
 }
