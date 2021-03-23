@@ -4,22 +4,16 @@ var fr = JavaImporter(
 
 var notifyJWT = transientState.get("notifyJWT");
 var templates = transientState.get("notifyTemplates");
-// var isRegistrationMFA = transientState.get("registrationMFA");
 var code = sharedState.get("oneTimePassword");
 var userId = sharedState.get("_id");
 var emailAddress = "";
 
-// if (isRegistrationMFA) {
-//   // if I'm in the registration journey, I need ro read the email address from sharedState
-//   emailAddress = sharedState.get("objectAttributes").get("emailAddress");
-// } else {
-  if (idRepository.getAttribute(userId, "mail").iterator().hasNext()) {
-    emailAddress = idRepository.getAttribute(userId, "mail").iterator().next();
-  } else {
-    logger.error("[SEND EMAIL] Couldn't find email address");
-    // TODO Better handling of error
-  }
-// }
+if (idRepository.getAttribute(userId, "mail").iterator().hasNext()) {
+  emailAddress = idRepository.getAttribute(userId, "mail").iterator().next();
+} else {
+  logger.error("[SEND EMAIL] Couldn't find email address");
+  // TODO Better handling of error
+}
 
 logger.error("[SEND EMAIL] User email address: " + emailAddress);
 logger.error("[SEND EMAIL] JWT from transient state: " + notifyJWT);
