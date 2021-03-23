@@ -65,7 +65,7 @@
             "payload": {
                 "_id": "b276c566-622e-11eb-ae93-0242ac130002",
                 "name": "CH - Send MFA text",
-                "description": "Send MFA text",
+                "description": "Send an MFA code to a user via SMS",
                 "script": "<replace>",
                 "language": "JAVASCRIPT",
                 "context": "AUTHENTICATION_TREE_DECISION_NODE",
@@ -75,6 +75,21 @@
                 "lastModifiedDate": 1436807766258
             },
             "filename": "ch-send-mfa-sms.js"
+        },
+        {
+            "payload": {
+                "_id": "a5778ce7-addf-4fb6-a7db-92929f1314c4",
+                "name": "CH - Send MFA email",
+                "description": "Send an MFA code to a user via email",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "ch-send-mfa-email.js"
         },
         {
             "payload": {
@@ -186,6 +201,38 @@
                 "lastModifiedDate":1615378956486
             },
             "filename": "ch-callback-otp-not-valid.js"
+        },
+        {
+            "payload": {
+                "_id":"20a3599f-b742-4554-a8b7-27862f248dd5",
+                "name":"CH - Require MFA Check",
+                "description":"Check whether the user has logged in within a certain time period.",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1615378956486
+            },
+            "filename": "ch-require-mfa-check.js"
+        },
+        {
+            "payload": {
+                "_id": "d7da3b35-af63-499b-aa0a-bb03666508db",
+                "name": "CH - Update Last Login",
+                "description": "Update user last login date",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1616152574918
+            },
+            "filename": "ch-update-last-login.js"
         },
         {
             "payload": {

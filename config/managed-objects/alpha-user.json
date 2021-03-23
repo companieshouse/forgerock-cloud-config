@@ -807,9 +807,9 @@
         "viewable": true
       },
       "frIndexedDate1": {
-        "description": "Generic Indexed Date 1",
+        "description": "Last login",
         "isPersonal": false,
-        "title": "Generic Indexed Date 1",
+        "title": "Last login",
         "type": "string",
         "usageDescription": null,
         "userEditable": true,
