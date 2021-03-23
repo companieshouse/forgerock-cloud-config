@@ -231,6 +231,13 @@
 				"outputs": ["*"],
 				"script": "bf6c0ac8-8e13-4f11-8d99-d01b23e02a5c"
 			}
+		},
+		{
+			"_id": "cec99933-f999-4718-840b-2327746a9a98",
+			"nodeType": "RetryLimitDecisionNode",
+			"details": {
+				"retryLimit": 3
+			}
 		}
 	],
   "tree": {
@@ -404,19 +411,29 @@
 				"y": 63.015625,
 				"connections": {
 					"true": "15993a44-70e7-4799-b35c-a245acb9ccc6",
-					"false": "6982586f-8c46-4f87-b315-bfba9ea0a704"
+					"false": "cec99933-f999-4718-840b-2327746a9a98"
 				},
 				"nodeType": "PageNode",
 				"displayName": "Enter OTP"
 			},
 			"6982586f-8c46-4f87-b315-bfba9ea0a704": {
-				"x": 2476,
-				"y": 331.015625,
+				"x": 2823,
+				"y": 347.015625,
 				"connections": {
 					"true": "82b05c8c-258d-41fd-a38e-5d3326a709bc"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Raise Error"
+			},
+			"cec99933-f999-4718-840b-2327746a9a98": {
+				"x": 2604,
+				"y": 314.015625,
+				"connections": {
+					"Retry": "6982586f-8c46-4f87-b315-bfba9ea0a704",
+					"Reject": "e301438c-0bd0-429c-ab0c-66126501069a"
+				},
+				"nodeType": "RetryLimitDecisionNode",
+				"displayName": "Retry Limit Decision"
 			}
 		}
 	}
