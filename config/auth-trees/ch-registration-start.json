@@ -142,6 +142,13 @@
             "outputs":["*"],
             "script":"bf6c0ac8-8e13-4f11-8d99-d01b23e02a5c"
          }    
+      },
+      {
+         "_id":"14a23247-eeb0-436c-99dd-1b046fc1204f",
+         "nodeType": "RetryLimitDecisionNode", 
+         "details": {
+            "retryLimit": 3
+         }
       }
    ],
    "tree": {
@@ -213,8 +220,8 @@
             "x":1013,
             "y":369.015625,
             "connections":{
-               "false":"2eaa7c69-f97d-4bbf-b8b0-2214832cbc6f",
-               "true":"997cc39b-afde-4935-b9b5-a0d4e3034072"
+               "true":"997cc39b-afde-4935-b9b5-a0d4e3034072",
+               "false":"14a23247-eeb0-436c-99dd-1b046fc1204f"
             },
             "nodeType":"PageNode",
             "displayName":"OTP page"
@@ -237,6 +244,16 @@
             },
             "nodeType":"ScriptedDecisionNode",
             "displayName":"Create Notify JWT - SMS"
+         },
+         "14a23247-eeb0-436c-99dd-1b046fc1204f":{
+            "x":1305,
+            "y":400.015625,
+            "connections":{
+               "Retry":"2eaa7c69-f97d-4bbf-b8b0-2214832cbc6f",
+               "Reject":"e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType":"RetryLimitDecisionNode",
+            "displayName":"Retry Limit Decision"
          }
       },
       "staticNodes":{
