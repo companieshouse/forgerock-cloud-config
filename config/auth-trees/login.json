@@ -60,49 +60,66 @@
 				"tree": "ProgressiveProfile"
 			}
 		}
-   ],
-   "tree": {
-		"_id": "Login",
+    ],
+    "tree": {
+		"_id":"Login",
 		"description":"Platform Login Tree",
-		"entryNodeId":"a12bc72f-ad97-4f1e-a789-a1fa3dd566c8",
 		"identityResource":"managed/alpha_user",
-		"staticNodes": {
-			"startNode": {},
-			"70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {},
-			"e301438c-0bd0-429c-ab0c-66126501069a": {}
-		},
-		"uiConfig": {},
-		"nodes": {
+		"uiConfig":{},
+		"entryNodeId":"a12bc72f-ad97-4f1e-a789-a1fa3dd566c8",
+		"nodes":{
 			"2998c1c9-f4c8-4a00-b2c6-3426783ee49d":{
+				"x":634,
+				"y":144,
 				"connections":{
-				   "false":"e301438c-0bd0-429c-ab0c-66126501069a",
-				   "true":"bba3e0d8-8525-4e82-bf48-ac17f7988917"
+					"false":"e301438c-0bd0-429c-ab0c-66126501069a",
+					"true":"bba3e0d8-8525-4e82-bf48-ac17f7988917"
 				},
-				"displayName":"Data Store Decision",
-				"nodeType":"DataStoreDecisionNode"
-			 },
-			 "33b24514-3e50-4180-8f08-ab6f4e51b07e":{
+				"nodeType":"DataStoreDecisionNode",
+				"displayName":"Data Store Decision"
+			},
+			"33b24514-3e50-4180-8f08-ab6f4e51b07e":{
+				"x":1119,
+				"y":35.015625,
 				"connections":{
-				   "false":"e301438c-0bd0-429c-ab0c-66126501069a",
-				   "true":"70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+					"true":"70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
+					"false":"e301438c-0bd0-429c-ab0c-66126501069a"
 				},
-				"displayName":"Inner Tree Evaluator",
-				"nodeType":"InnerTreeEvaluatorNode"
-			 },
-			 "a12bc72f-ad97-4f1e-a789-a1fa3dd566c8":{
+				"nodeType":"InnerTreeEvaluatorNode",
+				"displayName":"Inner Tree Evaluator"
+			},
+			"a12bc72f-ad97-4f1e-a789-a1fa3dd566c8":{
+				"x":285,
+				"y":115,
 				"connections":{
-				   "outcome":"2998c1c9-f4c8-4a00-b2c6-3426783ee49d"
+					"outcome":"2998c1c9-f4c8-4a00-b2c6-3426783ee49d"
 				},
-				"displayName":"Page Node",
-				"nodeType":"PageNode"
-			 },
-			 "bba3e0d8-8525-4e82-bf48-ac17f7988917":{
+				"nodeType":"PageNode",
+				"displayName":"Page Node"
+			},
+			"bba3e0d8-8525-4e82-bf48-ac17f7988917":{
+				"x":869,
+				"y":82,
 				"connections":{
-				   "outcome":"33b24514-3e50-4180-8f08-ab6f4e51b07e"
+					"outcome":"33b24514-3e50-4180-8f08-ab6f4e51b07e"
 				},
-				"displayName":"Increment Login Count",
-				"nodeType":"IncrementLoginCountNode"
-			 }
+				"nodeType":"IncrementLoginCountNode",
+				"displayName":"Increment Login Count"
+			}
+		},
+		"staticNodes":{
+			"startNode":{
+				"x":70,
+				"y":80
+			},
+			"70e691a5-1e33-4ac3-a356-e7b6d60d92e0":{
+				"x":1396,
+				"y":41
+			},
+			"e301438c-0bd0-429c-ab0c-66126501069a":{
+				"x":1398,
+				"y":217
+			}
 		}
-	}
+ 	}
 }
