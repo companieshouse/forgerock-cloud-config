@@ -56,27 +56,7 @@ try {
 logger.error("[SEND MFA SMS] Notify Response: " + response.getStatus().getCode() + response.getCause() + response.getEntity().getString());
 
 if (response.getStatus().getCode() == 201) {
-  // if (callbacks.isEmpty()) {
-  //   action = fr.Action.send(
-  //     new fr.TextOutputCallback(
-  //         fr.TextOutputCallback.INFORMATION,
-  //         "Please check your phone to obtain the MFA code - " + phoneNumber
-  //     ),
-  //     new fr.HiddenValueCallback (
-  //         "stage",
-  //         "LOGIN_MFA_5"
-  //     ),
-  //     new fr.HiddenValueCallback (
-  //         "pagePropsJSON",
-  //         JSON.stringify({"phoneNumber": phoneNumber})
-  //     ),
-  //     new fr.HiddenValueCallback (
-  //       "notificationId",
-  //       notificationId
-  //   )
-  //   ).build()
-  // }
-   outcome = "true";
+  outcome = "true";
 } else {
   if (callbacks.isEmpty()) {
     action = fr.Action.send(

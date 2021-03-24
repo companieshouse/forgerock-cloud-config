@@ -56,26 +56,6 @@ try {
 logger.error("[SEND MFA EMAIL] Notify Response: " + response.getStatus().getCode() + response.getCause() + response.getEntity().getString());
 
 if (response.getStatus().getCode() == 201) {
-  // if (callbacks.isEmpty()) {
-  //   action = fr.Action.send(
-  //     new fr.TextOutputCallback(
-  //         fr.TextOutputCallback.INFORMATION,
-  //         "Please check your email to obtain the MFA code - " + emailAddress
-  //     ),
-  //     new fr.HiddenValueCallback (
-  //         "stage",
-  //         "LOGIN_MFA_4"
-  //     ),
-  //     new fr.HiddenValueCallback (
-  //         "pagePropsJSON",
-  //         JSON.stringify({"email": emailAddress})
-  //     ),
-  //     new fr.HiddenValueCallback (
-  //       "notificationId",
-  //       notificationId
-  //   )
-  //   ).build()
-  // }
   outcome = "true";
 } else {
   if (callbacks.isEmpty()) {
