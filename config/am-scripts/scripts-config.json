@@ -234,6 +234,22 @@
             },
             "filename": "ch-update-last-login.js"
         },
+        { 
+            "payload": {
+                "_id": "ace951c8-d169-4426-9357-d5b44e0aa728",
+                "name": "CH - Callback to show recipient phone number or mail",
+                "description": "Callback to show the phone number or mail used to send the OTP code",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1616507095258
+            },
+            "filename": "ch-callback-show-phone-or-mail.js"
+        },
         {
             "payload": {
                 "_id": "b480d9f7-5908-45cf-91d1-bc1fe56fe8de",
