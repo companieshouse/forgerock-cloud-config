@@ -266,6 +266,118 @@
         },
         {
             "payload": {
+                "_id":"c4001e02-469c-4cc4-bf95-9f43d7e46568",
+                "name":"CH - Check for session",
+                "description":"Checks for an existing session",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1616675205613
+             },
+            "filename": "ch-check-for-session.js"
+        },
+        {
+            "payload": {
+                "_id":"c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149",
+                "name":"CH - Get IDM Access Token",
+                "description":"Gets an IDM Access Token using service user access credentials",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1616675452183
+             },
+            "filename": "ch-get-idm-access-token.js"
+        }, 
+        {
+            "payload": {
+                "_id":"c089f1fe-fa0f-4f61-a3d1-a1fce6e953cf",
+                "name":"CH - Change Password - Check Pwd Policy",
+                "description":"Checks the new password against the IDM password policy",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1616675550921
+             },
+            "filename": "ch-update-pwd-check-password-policy.js"
+        }, 
+        {
+            "payload": {
+                "_id":"1a7ced42-93f3-4739-a9b8-b773b489ed1d",
+                "name":"CH - Change Password - Confirmation",
+                "description":"Shows a password updated confirmation message",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1616675641669
+             },
+            "filename": "ch-update-pwd-confirmation.js"
+        }, 
+        {
+            "payload": {
+                "_id":"52014433-9b16-4f21-a00c-1ab477c918f8",
+                "name":"CH - Change Password - Input Collector",
+                "description":"Display the update password form",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1616675734162
+             },
+            "filename": "ch-update-pwd-input-collector.js"
+        },
+        {
+            "payload": {
+                "_id":"84caf8b3-813a-4998-85ff-a3dd8eee4bcf",
+                "name":"CH - Change Password - Load New Password for Patch",
+                "description":"Loads the new password in preparation for patching the user",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1616675797845
+             },
+            "filename": "ch-update-pwd-load-new-pwd-for-patch.js"
+        },
+        {
+            "payload": {
+                "_id":"04e99c63-2875-43ca-9e5f-84832bf59a34",
+                "name":"CH - Change Password - Error Message",
+                "description":"Displays an error message if the password cannot be updated",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1616675860999
+             },
+            "filename": "ch-update-pwd-password-error-message.js"
+        },
+        {
+            "payload": {
                 "_id":"d22f9a0c-426a-4466-b95e-d0f125b0d5fa",
                 "name":"OAuth2 Access Token Modification Script",
                 "description":"Default global script for OAuth2 Access Token Modification",
