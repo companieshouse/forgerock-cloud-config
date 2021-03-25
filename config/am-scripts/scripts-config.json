@@ -423,6 +423,54 @@
                 "lastModifiedDate":1565386615495
              },
              "filename": "template-oidc-claims-script.groovy"
+        },
+        {
+            "payload": {
+                "_id": "137e1fd5-19f4-425d-96eb-2a8c20cabcf8",
+                "name": "CH - Fetch Hashed Password",
+                "description": "Fetch user hashed (legacy) password value",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1616707782244
+            },
+            "filename": "ch-fetch-hashed-password.js"
+        },
+        {
+            "payload": {
+                "_id": "7f9c55bb-9307-45b7-9b4f-7d1bf4e8ea49",
+                "name": "CH - Callback to prompt for validate credential",
+                "description": "Enter value to validate against hash",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1616707988997
+            },
+            "filename": "ch-callback-prompt-for-validate-credential.js"
+        },
+        {
+            "payload": {
+                "_id": "65d2099f-9583-47d3-8303-8051709cb436",
+                "name": "CH - Validate credential",
+                "description": "Call validation service to validate cleartext against hash",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1616708148417
+            },
+            "filename": "ch-validate-credential.js"
         }
     ]
 }
