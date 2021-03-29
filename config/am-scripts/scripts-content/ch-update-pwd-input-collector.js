@@ -19,13 +19,16 @@ if (callbacks.isEmpty()) {
       level = fr.TextOutputCallback.ERROR
       infoMessage = errorMessage.concat(" Please try again.")
     }
+
     action = fr.Action.send(
-        fr.TextOutputCallback(level, infoMessage),
-        fr.PasswordCallback("Current password", false),
-        fr.PasswordCallback("New password", false),
-        fr.PasswordCallback("Confirm new password", false),
-        fr.HiddenValueCallback ("stage", "CHANGE_PASSWORD_1")
+      fr.TextOutputCallback(level, infoMessage),
+      fr.PasswordCallback("Current password", false),
+      fr.PasswordCallback("New password", false),
+      fr.PasswordCallback("Confirm new password", false),
+      fr.HiddenValueCallback("stage", "CHANGE_PASSWORD_1"),
+      fr.HiddenValueCallback("pagePropsJSON", JSON.stringify({ 'errors': [{ label: infoMessage }] }))
     ).build()
+    
 } else {
     var password = fr.String(callbacks.get(1).getPassword())
     var newPassword = fr.String(callbacks.get(2).getPassword())
@@ -38,6 +41,5 @@ if (callbacks.isEmpty()) {
         transientState.put("password", password)
         transientState.put("newPassword", newPassword)
         action = fr.Action.goTo(NodeOutcome.SUCCESS).build()
-    }
-             
+    }        
 }
