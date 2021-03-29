@@ -25,19 +25,24 @@ function logResponse(response) {
 }
 
 function fetchCompanyAuthCode(companyNumber) {
+    if (companyNumber == null) {
+        logger.error("[FETCH COMPANY AUTH CODE] No company number in shared state");
+        return NodeOutcome.FALSE;
+    }
+
     var userId = sharedState.get("_id");
     logger.error("[FETCH COMPANY AUTH CODE] Found userId: " + userId);
 
     var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
     if (accessToken == null) {
       logger.error("[FETCH COMPANY AUTH CODE] Access token not in shared state")
-      return NodeOutcome.FALSE
+      return NodeOutcome.FALSE;
     }
 
     var fetchCompanyInfo = fetchSecret();
     if (!fetchCompanyInfo) {
         logger.error("[FETCH COMPANY AUTH CODE] validateServiceInfo is invalid");
-        return NodeOutcome.FALSE
+        return NodeOutcome.FALSE;
     }
 
     var request = new org.forgerock.http.protocol.Request();
@@ -61,7 +66,7 @@ function fetchCompanyAuthCode(companyNumber) {
             var authCode = companyResponse.result[0].authCode;
             if (authCode == null) {
                 logger.error("[FETCH COMPANY AUTH CODE] No auth code associated with company")
-                return NodeOutcome.FALSE
+                return NodeOutcome.FALSE;
             }
             
             logger.error("[FETCH COMPANY AUTH CODE] Found authCode: " + authCode);
@@ -69,7 +74,7 @@ function fetchCompanyAuthCode(companyNumber) {
             return NodeOutcome.TRUE;
         } else {
             logger.error("[FETCH COMPANY AUTH CODE] No company results")
-            return NodeOutcome.FALSE
+            return NodeOutcome.FALSE;
         }
     } else if (response.getStatus().getCode() === 401) {
         logger.error("[FETCH COMPANY AUTH CODE] Authentication failed for company fetch");
@@ -79,9 +84,5 @@ function fetchCompanyAuthCode(companyNumber) {
 }
 
 var companyNumber = sharedState.get("companyNumber");
-if (companyNumber == null) {
-    logger.error("[FETCH COMPANY AUTH CODE] No company number in shared state");
-    return NodeOutcome.FALSE;
-}
 
 outcome = fetchCompanyAuthCode(companyNumber);
