@@ -64,7 +64,7 @@ function policyCompliant(pwd) {
         }
     }
     else if (response.getStatus().getCode() === 401) {
-        logger.error("A[CHANGE PWD - POLICY CHECK] uthentication failed for policy lookup");
+        logger.error("A[CHANGE PWD - POLICY CHECK] Authentication failed for policy lookup");
         return NodeOutcome.ERROR;    
     }
   
