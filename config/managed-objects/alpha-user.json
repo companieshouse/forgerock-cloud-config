@@ -594,12 +594,12 @@
         "viewable": true
       },
       "frIndexedString2": {
-        "description": "Generic Indexed String 2",
+        "description": "Legacy CH password",
         "isPersonal": false,
-        "title": "Generic Indexed String 2",
+        "title": "Legacy Password",
         "type": "string",
-        "usageDescription": null,
-        "userEditable": true,
+        "usageDescription": "Password as migrated from CH source",
+        "userEditable": false,
         "viewable": true
       },
       "frIndexedString3": {
