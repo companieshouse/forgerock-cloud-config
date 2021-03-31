@@ -39,7 +39,8 @@ function buildJwt() {
   }
   
   logger.error("parsed: " + JSON.stringify(notifyObj));
-  
+  var issuer = notifyObj.issUuid;
+
   try{
     var secretBuilder = new fr.SecretBuilder;
     secretBuilder.secretKey(new javax.crypto.spec.SecretKeySpec(secretbytes, "Hmac"));
@@ -52,7 +53,6 @@ function buildJwt() {
   }
   
   try{
-    var issuer = notifyObj.issUuid;
     var jwtClaims = new fr.JwtClaimsSet;
     jwtClaims.setIssuer(issuer);
     jwtClaims.setIssuedAtTime(new Date());
