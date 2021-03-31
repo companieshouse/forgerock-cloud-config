@@ -16,6 +16,10 @@ var fr = JavaImporter(
   java.time.Clock
 )
 
+var NodeOutcome = {
+  ERROR: "false"
+}
+
 // function that builds the Password Reset JWT
 function buildPasswordResetToken(email){
   var jwt;
@@ -192,28 +196,22 @@ function sendEmail(){
 
 var request = new org.forgerock.http.protocol.Request();
 var host = requestHeaders.get("origin").get(0); 
-var email;
 var resetPasswordjJwt;
 var returnUrl;
 
-try{
-  email = extractEmailFromState();
-  if(email){
-    resetPasswordjJwt = buildPasswordResetToken(email);
-    if(resetPasswordjJwt){
-      returnUrl = buildReturnUrl(resetPasswordjJwt);
-    }
+var email = extractEmailFromState();
+if(email){
+  resetPasswordjJwt = buildPasswordResetToken(email);
+  if(resetPasswordjJwt){
+    returnUrl = buildReturnUrl(resetPasswordjJwt);
   }
+}
 
-  if(!email || !resetPasswordjJwt || !returnUrl){ 
-    raiseGeneralError();  
-  }else{
-    sendEmail();
-  }
-
-}catch(e){
-  logger.error("[RESET PWD] error - " + e);
+if(!email || !resetPasswordjJwt || !returnUrl){ 
+  raiseGeneralError();  
+}else{
+  sendEmail();
 }
 
 //always return false at the end, because we don't end up with a session
-outcome = "false";
+outcome = NodeOutcome.ERROR;
