@@ -8,7 +8,7 @@ try {
     // Get current time in RFC-4517 format
     var lastLogin = formatDate();
 
-    logger.error("[UPDATE LAST LOGIN] Seting last login to " + lastLogin + " for user " + userId);
+    logger.error("[UPDATE LAST LOGIN] Setting last login to " + lastLogin + " for user " + userId);
 
     // Use AM representation of attribute
     idRepository.setAttribute(userId, "fr-attr-idate1", [lastLogin]); 
