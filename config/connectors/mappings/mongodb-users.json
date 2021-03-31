@@ -17,6 +17,9 @@
 	}, {
 		"target": "mail",
 		"source": "email"
+	}, {
+		"target": "frIndexedString2",
+		"source": "password"
 	}],
 	"policies": [{
 		"action": "EXCEPTION",
