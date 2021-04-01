@@ -8,7 +8,7 @@ var NodeOutcome = {
     SUCCESS: "true"
 }
 
-var infoMessage = "Your password has been changed successfully"
+var infoMessage = "Your full name has been changed successfully"
 
 if (callbacks.isEmpty()) { 
     
@@ -19,7 +19,7 @@ if (callbacks.isEmpty()) {
         ),
         new fr.HiddenValueCallback (
             "stage",
-            "CHANGE_PASSWORD_2" 
+            "CHANGE_NAME_2" 
         )
     ).build()
 } 
