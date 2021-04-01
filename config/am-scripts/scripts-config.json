@@ -394,6 +394,22 @@
         },
         {
             "payload": {
+                "_id":"4d27c5a1-e42c-47cb-90c1-d411902eb674",
+                "name":"CH - Change Full Name - Confirmation",
+                "description":"Shows a full name updated confirmation message",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1616675641669
+             },
+            "filename": "ch-update-name-confirmation.js"
+        }, 
+        {
+            "payload": {
                 "_id":"d22f9a0c-426a-4466-b95e-d0f125b0d5fa",
                 "name":"OAuth2 Access Token Modification Script",
                 "description":"Default global script for OAuth2 Access Token Modification",
