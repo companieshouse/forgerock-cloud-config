@@ -234,6 +234,54 @@
             },
             "filename": "ch-update-last-login.js"
         },
+        {
+            "payload": {
+                "_id": "9bab9cb5-c723-4fb1-aa02-825aaaa7a266",
+                "name": "CH - Update User Password",
+                "description": "Update user password after validation of legacy password",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1617289605774
+            },
+            "filename": "ch-update-user-password.js"
+        },
+        {
+            "payload": {
+                "_id": "c576e0b6-f954-4c5d-b179-1dea2cf90f84",
+                "name": "CH - Fetch Hashed Password Using Token",
+                "description": "Fetch user hashed (legacy) password",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1617289818368
+            },
+            "filename": "ch-fetch-hashed-password-using-token.js"
+        },
+        {
+            "payload": {
+                "_id": "2c9f9d6a-4b93-493a-bf0d-44fe53d8d1d1",
+                "name": "CH - Check Password Status",
+                "description": "",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1617294253241
+            },
+            "filename": "ch-check-password-status.js"
+        },
         { 
             "payload": {
                 "_id": "ace951c8-d169-4426-9357-d5b44e0aa728",

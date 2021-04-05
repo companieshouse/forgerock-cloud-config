@@ -52,7 +52,12 @@ function updateUserPassword(userId, password) {
             "operation": "replace",
             "field": "/password",
             "value": password
-        }
+        },
+        {
+            "operation": "replace",
+            "field": "/frIndexedString3",
+            "value": "migrated"
+        },
     ];
     request.setEntity(requestBodyJson);
 
@@ -72,7 +77,7 @@ function updateUserPassword(userId, password) {
     }
 }
 
-var userId = sharedState.get("userId");
+var userId = sharedState.get("_id");
 var password = sharedState.get("credential");
 
 logger.error("[UPDATE USER PASSWORD] Setting user password for user " + userId);
