@@ -603,11 +603,11 @@
         "viewable": true
       },
       "frIndexedString3": {
-        "description": "Generic Indexed String 3",
+        "description": "Migrated Password Status",
         "isPersonal": false,
-        "title": "Generic Indexed String 3",
+        "title": "Migrated Password Status",
         "type": "string",
-        "usageDescription": null,
+        "usageDescription": "CH password migration status - 'pending' when yet updated, 'migrated' when validated",
         "userEditable": true,
         "viewable": true
       },
