@@ -10,7 +10,7 @@ function fetchSecret() {
     try {
         return JSON.parse(updateUserSecretString);
     } catch (e) {
-        logger.error("[UPDATE USER PASSWORD] Error while parsing secret: " + e);
+        logger.error("[UPDATE LEGACY PASSWORD] Error while parsing secret: " + e);
         return false;
     }
 }
@@ -22,24 +22,24 @@ var NodeOutcome = {
 }
 
 function logResponse(response) {
-    logger.error("[UPDATE USER PASSWORD] Scripted Node HTTP Response: " + response.getStatus() + ", Body: " + response.getEntity().getString());
+    logger.error("[UPDATE LEGACY PASSWORD] Scripted Node HTTP Response: " + response.getStatus() + ", Body: " + response.getEntity().getString());
 }
 
 function updateUserPassword(userId, password) {
     if (userId == null) {
-        logger.error("[UPDATE USER PASSWORD] No user name in shared state");
+        logger.error("[UPDATE LEGACY PASSWORD] No user name in shared state");
         return NodeOutcome.FALSE;
     }
 
     var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
     if (accessToken == null) {
-      logger.error("[UPDATE USER PASSWORD] Access token not in shared state")
+      logger.error("[UPDATE LEGACY PASSWORD] Access token not in shared state")
       return NodeOutcome.FALSE;
     }
 
     var updateUser = fetchSecret();
     if (!updateUser) {
-        logger.error("[UPDATE USER PASSWORD] Service info is invalid");
+        logger.error("[UPDATE LEGACY PASSWORD] Service info is invalid");
         return NodeOutcome.FALSE;
     }
 
@@ -67,16 +67,16 @@ function updateUserPassword(userId, password) {
     logResponse(response);
 
     if (response.getStatus().getCode() === 200) {
-        logger.error("[UPDATE USER PASSWORD] 200 response from IDM");
+        logger.error("[UPDATE LEGACY PASSWORD] 200 response from IDM");
         transientState.put("password", password);
         return NodeOutcome.TRUE;
     } else if (response.getStatus().getCode() === 401) {
-        logger.error("[UPDATE USER PASSWORD] Authentication failed");
+        logger.error("[UPDATE LEGACY PASSWORD] Authentication failed");
         return NodeOutcome.FALSE;
     } else if (response.getStatus().getCode() === 403) {
         var userResponse = JSON.parse(response.getEntity().getString());
         var message = userResponse.message;
-        logger.error("[UPDATE USER PASSWORD] Forbidden: " + message);
+        logger.error("[UPDATE LEGACY PASSWORD] Forbidden: " + message);
         return NodeOutcome.INVALID;
     }
 }
@@ -84,6 +84,6 @@ function updateUserPassword(userId, password) {
 var userId = sharedState.get("_id");
 var password = transientState.get("newPassword");
 
-logger.error("[UPDATE USER PASSWORD] Setting user password for user " + userId);
+logger.error("[UPDATE LEGACY PASSWORD] Setting user password for user " + userId);
 
 outcome = updateUserPassword(userId, password);

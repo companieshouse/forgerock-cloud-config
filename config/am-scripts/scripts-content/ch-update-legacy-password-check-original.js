@@ -9,10 +9,10 @@ var NodeOutcome = {
 
 function checkUserPassword(userEnteredPassword, passwordFromCollector) {
 
-    logger.error("[UPDATE USER PASSWORD CHECK ORIGINAL] Comparing " + userEnteredPassword + " with " + passwordFromCollector);
+    logger.error("[UPDATE LEGACY PASSWORD CHECK ORIGINAL] Comparing " + userEnteredPassword + " with " + passwordFromCollector);
     if (!userEnteredPassword.equals(passwordFromCollector)) {
         sharedState.put("errorMessage","The current password you supplied is incorrect.")
-        logger.error("[UPDATE USER PASSWORD CHECK ORIGINAL] The current password you supplied is correct")
+        logger.error("[UPDATE LEGACY PASSWORD CHECK ORIGINAL] The current password you supplied is correct")
         return NodeOutcome.MISMATCH;
     }
     return NodeOutcome.MATCH;
