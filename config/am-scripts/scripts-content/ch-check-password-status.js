@@ -1,3 +1,14 @@
+/*
+  ** INPUT DATA
+    * SHARED STATE:
+      - '_id' : the user ID we are checking the password status of.
+                Password status is held on frIndexedString3 for users. Can be 'pending' or 'migrated' for CH migrated users, blank for users
+                added to FIDC directly
+  ** OUTCOMES
+    - valid: password either set in FIDC directly, or already updated
+    - update: password needs to be validated against hash then set as user's password
+*/
+
 var NodeOutcome = {
     VALID: "valid",
     UPDATE: "update"

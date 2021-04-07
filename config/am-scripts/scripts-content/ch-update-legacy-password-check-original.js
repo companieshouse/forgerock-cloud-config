@@ -1,3 +1,19 @@
+/*
+  ** INPUT DATA
+    * SHARED STATE:
+      - 'credential' : the user-entered password.
+    * TRANSIENT STATE
+      - 'password' : the password as entered as the user's current password in the password collector
+  ** OUTPUT DATA
+    * TRANSIENT STATE:
+      - 'password': the password successfully set on the user
+    * SHARED STATE:
+      - 'errorMessage': message indicating that the current password supplied is incorrect. Will be displayed subsequently in the collector
+  ** OUTCOMES
+    - match: password values match
+    - mismatch: password values do not match
+*/
+
 var fr = JavaImporter(
     org.forgerock.openam.auth.node.api.Action
 )

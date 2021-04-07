@@ -1,3 +1,10 @@
+/*
+  ** OUTCOMES
+    - true: Will take user on to enter a new (complex) password
+  ** CALLBACKS
+    - info: User password has failed complexity policy validation and needs to be updated
+*/
+
 var fr = JavaImporter(
     org.forgerock.openam.auth.node.api.Action,
     javax.security.auth.callback.TextOutputCallback,

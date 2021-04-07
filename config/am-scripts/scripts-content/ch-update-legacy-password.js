@@ -1,3 +1,18 @@
+/*
+  ** INPUT DATA
+    * SHARED STATE:
+      - '_id' : the user ID we need to update the password of. This can be manually populated or be result of a previous execution of the 'Identify Exisitng User' node
+    * TRANSIENT STATE
+      - 'newPassword' : the new password to set as the user's password
+  ** OUTPUT DATA
+    * TRANSIENT STATE:
+      - 'password': the password successfully set on the user
+  ** OUTCOMES
+    - true: password update successful
+    - false: error during password update
+    - invalid: password fails complexity policy
+*/
+
 var fr = JavaImporter(
     org.forgerock.openam.auth.node.api.Action
 )
