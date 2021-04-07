@@ -412,7 +412,7 @@
             "payload": {
                 "_id":"55801756-11bf-493d-b49c-195488cf939a",
                 "name":"CH - Get Company Data By Company Number",
-                "description":"",
+                "description":"Performs a lookup of a Company in IDM given a company number",
                 "script":"<replace>",
                 "default":false,
                 "language":"JAVASCRIPT",
@@ -428,7 +428,7 @@
             "payload": {
                 "_id":"16975ea5-4f0a-4ac6-861f-00dbf39ca441",
                 "name":"CH - Associate User to Company",
-                "description":"",
+                "description":"Given a User ID and a Company data, creates a relationship between the user and the company",
                 "script":"<replace>",
                 "default":false,
                 "language":"JAVASCRIPT",
