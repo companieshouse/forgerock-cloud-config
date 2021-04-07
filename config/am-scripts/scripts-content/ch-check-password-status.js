@@ -10,11 +10,6 @@ function checkPasswordStatus() {
     var userId = sharedState.get("_id");
     logger.error("[CHECK PASSWORD STATUS] Found userId: " + userId);
 
-    if (idRepository.getAttribute(userId, "sn").iterator().hasNext()) {
-        var sn = idRepository.getAttribute(userId, "sn").iterator().next();
-        logger.error("[CHECK PASSWORD STATUS] Found sn: " + sn);
-    }
-
     if (idRepository.getAttribute(userId, PASSWORD_MIGRATED_FIELD).iterator().hasNext()) {
         var status = idRepository.getAttribute(userId, PASSWORD_MIGRATED_FIELD).iterator().next();
         logger.error("[CHECK PASSWORD STATUS] Found status: " + status);

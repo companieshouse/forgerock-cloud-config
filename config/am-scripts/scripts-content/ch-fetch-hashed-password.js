@@ -20,6 +20,7 @@ function fetchHashedPassword() {
 
         var password = transientState.get("password");
         sharedState.put("credential", password);
+        transientState.put("newPassword", password);
 
         return NodeOutcome.TRUE;
     } else {

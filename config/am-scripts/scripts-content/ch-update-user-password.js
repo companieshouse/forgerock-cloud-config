@@ -17,7 +17,8 @@ function fetchSecret() {
 
 var NodeOutcome = {
     TRUE: "true",
-    FALSE: "false"
+    FALSE: "false",
+    INVALID: "invalid"
 }
 
 function logResponse(response) {
@@ -67,18 +68,21 @@ function updateUserPassword(userId, password) {
 
     if (response.getStatus().getCode() === 200) {
         logger.error("[UPDATE USER PASSWORD] 200 response from IDM");
-        var userResponse = JSON.parse(response.getEntity().getString());
-        logger.error("[UPDATE USER PASSWORD] response: " + response);
-
+        transientState.put("password", password);
         return NodeOutcome.TRUE;
     } else if (response.getStatus().getCode() === 401) {
         logger.error("[UPDATE USER PASSWORD] Authentication failed");
         return NodeOutcome.FALSE;
+    } else if (response.getStatus().getCode() === 403) {
+        var userResponse = JSON.parse(response.getEntity().getString());
+        var message = userResponse.message;
+        logger.error("[UPDATE USER PASSWORD] Forbidden: " + message);
+        return NodeOutcome.INVALID;
     }
 }
 
 var userId = sharedState.get("_id");
-var password = sharedState.get("credential");
+var password = transientState.get("newPassword");
 
 logger.error("[UPDATE USER PASSWORD] Setting user password for user " + userId);
 
