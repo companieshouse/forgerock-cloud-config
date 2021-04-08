@@ -22,7 +22,7 @@ newman.run({
       hideRequestBody: ['Access Token', 'Session Token', 'Authentication to Top-Level Realm', 'Authenticate as ID Cloud Admin and Get Session Token, and Cookie Name'],
       hideResponseBody: ['Access Token', 'Session Token', 'Authentication to Top-Level Realm', 'Authenticate as ID Cloud Admin and Get Session Token, and Cookie Name'],
       showEnvironmentData: true,
-      skipEnvironmentVars: ['access_token', 'ClientId', 'ClientSecret', 'session_token', 'cookie_Name', 'cookie_Name', 'IDCloudAdminUsername', 'IDCloudAdminPassword', 'username', 'password','utils'],
+      skipEnvironmentVars: ['access_token', 'ClientId', 'ClientSecret', 'session_token', 'cookie_Name', 'cookie_Name', 'IDCloudAdminUsername', 'IDCloudAdminPassword', 'username', 'password', 'utils'],
       showGlobalData: false
       // skipGlobalVars: ["API_TOKEN"],
       // skipSensitiveData: true,
