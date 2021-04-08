@@ -1,5 +1,15 @@
+/* 
+  ** OUTPUT DATA
+    * TRANSIENT STATE
+      - 'idmAccessToken' : the IDM Access Token
+      
+  ** OUTCOMES
+    - success: token generated successfully
+    - error: error during token generation
+*/
 
-var clientInfoSecretString = "{\"id\": \"AMTreeAdminClient\",\"secret\": \"Passw0rd123!\",\"tokenEndpoint\": \"https://openam-companieshouse-uk-dev.id.forgerock.io/am/oauth2/realms/root/realms/alpha/access_token\",\"scope\": \"fr:idm:*\",\"serviceUsername\": \"tree-service-user@companieshouse.com\",\"servicePassword\": \"Passw0rd123!\"}"
+var tokenEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/am/oauth2/realms/root/realms/alpha/access_token";
+var clientInfoSecretString = "{\"id\": \"AMTreeAdminClient\",\"secret\": \"Passw0rd123!\",\"scope\": \"fr:idm:*\",\"serviceUsername\": \"tree-service-user@companieshouse.com\",\"servicePassword\": \"Passw0rd123!\"}"
 
 var NodeOutcome = {
   SUCCESS: "success",
@@ -29,7 +39,7 @@ function getAccessToken() {
     logger.message("[GET IDM TOKEN] Secret retrieved: "+JSON.stringify(clientInfo));
     logger.message("[GET IDM TOKEN] Getting IDM Access Token");
     var request = new org.forgerock.http.protocol.Request();
-    request.setUri(clientInfo.tokenEndpoint);
+    request.setUri(tokenEndpoint);
     request.setMethod("POST");
     request.getHeaders().add("Content-Type", "application/x-www-form-urlencoded");
     var params = "grant_type=password" +

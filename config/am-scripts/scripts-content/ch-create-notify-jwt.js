@@ -1,3 +1,18 @@
+/* 
+  ** INPUT DATA
+  ** OUTPUT DATA
+    * TRANSIENT STATE
+      - 'notifyJWT' : the created JWT
+      - 'notifyTemplates': the JSON object containing all the Notify templates defined
+      - 'secretKey': the secret key used to sign all other JWTs created for Registration and Password Reset
+  ** OUTCOMES
+    - true: JWT created successfully
+    - false: error during JWT creation
+  
+  ** CALLBACKS: 
+    - error: error while building JWT
+*/
+
 var fr = JavaImporter(
   org.forgerock.json.jose.builders.JwtBuilderFactory,
   org.forgerock.json.jose.jwt.JwtClaimsSet,
@@ -39,7 +54,8 @@ function buildJwt() {
   }
   
   logger.error("parsed: " + JSON.stringify(notifyObj));
-  
+  var issuer = notifyObj.issUuid;
+
   try{
     var secretBuilder = new fr.SecretBuilder;
     secretBuilder.secretKey(new javax.crypto.spec.SecretKeySpec(secretbytes, "Hmac"));
@@ -52,7 +68,6 @@ function buildJwt() {
   }
   
   try{
-    var issuer = notifyObj.issUuid;
     var jwtClaims = new fr.JwtClaimsSet;
     jwtClaims.setIssuer(issuer);
     jwtClaims.setIssuedAtTime(new Date());

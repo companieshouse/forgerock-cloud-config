@@ -1,3 +1,17 @@
+/* 
+  ** OUTPUT DATA
+    * SHARED STATE:
+      - 'credential' : the company auth code entered by the user
+      - 'companyNumber' : the company number entered by the user
+       
+  ** OUTCOMES
+    - true: input collected
+  
+  ** CALLBACKS: 
+    - input: company auth code
+    - input: company number
+*/
+
 var fr = JavaImporter(
    org.forgerock.openam.auth.node.api.Action,
    javax.security.auth.callback.NameCallback
