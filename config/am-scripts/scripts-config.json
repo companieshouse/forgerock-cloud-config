@@ -407,6 +407,38 @@
                 "lastModifiedDate":1616675641669
              },
             "filename": "ch-update-name-confirmation.js"
+        },
+        {
+            "payload": {
+                "_id":"55801756-11bf-493d-b49c-195488cf939a",
+                "name":"CH - Get Company Data By Company Number",
+                "description":"Performs a lookup of a Company in IDM given a company number",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810393533
+             },
+            "filename": "ch-fetch-company-info.js"
+        }, 
+        {
+            "payload": {
+                "_id":"16975ea5-4f0a-4ac6-861f-00dbf39ca441",
+                "name":"CH - Associate User to Company",
+                "description":"Given a User ID and a Company data, creates a relationship between the user and the company",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-join-company-create-relationship.js"
         }, 
         {
             "payload": {
@@ -619,8 +651,8 @@
         {
             "payload": {
                 "_id": "9dc0bbc6-8894-4d23-a13f-8619a3fcad5b",
-                "name": "CH - Callback to prompt for validate auth code",
-                "description": "",
+                "name": "CH - Prompt for Company Number/Auth Code",
+                "description": "Prompts the user to enter Company Number and Company Auth Code",
                 "script": "<replace>",
                 "default": false,
                 "language": "JAVASCRIPT",
@@ -630,7 +662,7 @@
                 "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
                 "lastModifiedDate": 1617036446946
             },
-            "filename": "ch-callback-prompt-for-validate-auth-code.js"
+            "filename": "ch-callback-prompt-for-company-info.js"
         }
     ]
 }

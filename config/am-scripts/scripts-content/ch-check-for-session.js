@@ -1,3 +1,12 @@
+/* 
+  ** OUTCOMES
+    - hasSession: the user has an active session
+    - noSession: the user does not have an active session
+  
+  ** CALLBACKS: 
+    - error: no active session found
+*/
+
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
   javax.security.auth.callback.TextOutputCallback,
