@@ -20,6 +20,9 @@
 	}, {
 		"target": "frIndexedString2",
 		"source": "password"
+	}, {
+		"target": "frIndexedString3",
+		"default": "pending"
 	}],
 	"policies": [{
 		"action": "EXCEPTION",

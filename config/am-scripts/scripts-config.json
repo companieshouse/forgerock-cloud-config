@@ -234,6 +234,38 @@
             },
             "filename": "ch-update-last-login.js"
         },
+        {
+            "payload": {
+                "_id": "9bab9cb5-c723-4fb1-aa02-825aaaa7a266",
+                "name": "CH - Update Legacy Password",
+                "description": "Update user password after validation of legacy password",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1617289605774
+            },
+            "filename": "ch-update-legacy-password.js"
+        },
+        {
+            "payload": {
+                "_id": "2c9f9d6a-4b93-493a-bf0d-44fe53d8d1d1",
+                "name": "CH - Check Password Status",
+                "description": "Check the user's legacy password status",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1617294253241
+            },
+            "filename": "ch-check-password-status.js"
+        },
         { 
             "payload": {
                 "_id": "ace951c8-d169-4426-9357-d5b44e0aa728",
@@ -663,6 +695,38 @@
                 "lastModifiedDate": 1617036446946
             },
             "filename": "ch-callback-prompt-for-company-info.js"
+        },
+        {
+            "payload": {
+                "_id": "14c3cb5d-1010-459d-9747-6ff19a8de70d",
+                "name": "CH - Update Legacy Password Required",
+                "description": "Inform user that they need to update their legacy password",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1617813412567
+            },
+            "filename": "ch-update-legacy-password-required.js"
+        },
+        {
+            "payload": {
+                "_id": "a5042601-6867-4566-81d1-fad4ecd61487",
+                "name": "CH - Update Legacy Password Check Original",
+                "description": "Check the originally entered user password against the value entered in the update password dialog",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1617813675725
+            },
+            "filename": "ch-update-legacy-password-check-original.js"
         }
     ]
 }
