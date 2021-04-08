@@ -1,0 +1,35 @@
+{
+  "_id": "provisioner.openicf.connectorinfoprovider",
+  "connectorsLocation": "connectors",
+  "remoteConnectorClients": [
+    {
+      "name": "aws-primary",
+      "displayName": "aws-primary",
+      "useSSL": true,
+      "enabled": true
+    },
+    {
+      "name": "aws-secondary",
+      "displayName": "aws-secondary",
+      "useSSL": true,
+      "enabled": true
+    }
+  ],
+  "remoteConnectorServers": [],
+  "remoteConnectorClientsGroups": [
+    {
+      "name": "aws-group",
+      "displayName": "aws-group",
+      "serversList": [
+        {
+          "name": "aws-primary"
+        },
+        {
+          "name": "aws-secondary"
+        }
+      ],
+      "algorithm": "failover"
+    }
+  ],
+  "remoteConnectorServersGroups": []
+}

@@ -1,14 +1,14 @@
 describe('update-cors', () => {
-  jest.mock('node-fetch')
-  const fetch = require('node-fetch')
   jest.mock('fs')
   const fs = require('fs')
   const path = require('path')
   jest.mock('../../helpers/get-access-token')
   jest.mock('../../helpers/get-session-token')
+  jest.mock('../../helpers/fidc-request')
   const getSessionToken = require('../../helpers/get-session-token')
   const getAccessToken = require('../../helpers/get-access-token')
-  const updateCors = require('../../scripts/update-cors/update-cors')
+  const fidcRequest = require('../../helpers/fidc-request')
+  const updateCors = require('../../scripts/update-cors')
   jest.spyOn(console, 'log').mockImplementation(() => {})
   jest.spyOn(console, 'error').mockImplementation(() => {})
   jest.spyOn(process, 'exit').mockImplementation(() => {})
@@ -17,19 +17,15 @@ describe('update-cors', () => {
     fidcUrl: 'https://fidc-test.forgerock.com',
     sessionToken: 'session=1234',
     accessToken: 'blah',
-    realm: '/realms/root/realms/alpha'
+    realm: 'alpha'
   }
 
-  const mockPhase0ConfigFile = path.resolve(
+  const mockConfigFile = path.resolve(
     __dirname,
-    '../../config/phase-0/cors/cors-config.json'
+    '../../config/cors/cors-config.json'
   )
-  // const mockPhase1ConfigFile1 = path.resolve(
-  //   __dirname,
-  //   '../../config/phase-1/cors/cors-config.json'
-  // )
 
-  const mockPhase0Config = {
+  const mockConfig = {
     corsServiceGlobal: {
       enabled: true,
       _id: '',
@@ -41,8 +37,21 @@ describe('update-cors', () => {
     },
     corsServiceConfig: {
       maxAge: 0,
-      acceptedMethods: ['HEAD', 'DELETE', 'POST', 'GET', 'OPTIONS', 'PUT', 'PATCH'],
-      acceptedHeaders: ['authorization', 'accept-api-version', 'content-type', '*'],
+      acceptedMethods: [
+        'HEAD',
+        'DELETE',
+        'POST',
+        'GET',
+        'OPTIONS',
+        'PUT',
+        'PATCH'
+      ],
+      acceptedHeaders: [
+        'authorization',
+        'accept-api-version',
+        'content-type',
+        '*'
+      ],
       enabled: true,
       acceptedOrigins: [
         'https://sdkapp.example.com:8443',
@@ -60,34 +69,25 @@ describe('update-cors', () => {
       }
     },
     idmCorsConfig: {
-      maxAge: 0,
-      acceptedMethods: ['HEAD', 'DELETE', 'POST', 'GET', 'OPTIONS', 'PUT', 'PATCH'],
-      acceptedHeaders: ['authorization', 'accept-api-version', 'content-type', '*'],
-      enabled: true,
-      acceptedOrigins: [
-        'https://sdkapp.example.com:8443',
-        'http://localhost:3000',
-        'https://ui-amido-demo.forgeblocks.com',
-        'https://example.com/stoca'
-      ],
-      allowCredentials: true,
-      exposedHeaders: ['*'],
-      _id: 'org-ui',
-      _type: {
-        _id: 'configuration',
-        name: 'Cors Configuration',
-        collection: true
-      }
+      _id: 'servletfilter/cors',
+      classPathURLs: [],
+      systemProperties: {},
+      requestAttributes: {},
+      scriptExtensions: {},
+      initParams: {
+        allowedOrigins: 'https://localhost:&{openidm.port.https},https://sdkapp.example.com:8443,http://localhost:8888',
+        allowedMethods: 'GET,POST,PUT,DELETE,PATCH,OPTIONS,HEAD',
+        allowedHeaders: 'accept,x-openidm-password,x-openidm-nosession,x-openidm-username,content-type,origin,x-requested-with,authorization',
+        allowCredentials: true,
+        chainPreflight: false
+      },
+      urlPatterns: ['/*'],
+      filterClass: 'org.eclipse.jetty.servlets.CrossOriginFilter'
     }
   }
 
   beforeEach(() => {
-    fetch.mockImplementation(() =>
-      Promise.resolve({
-        status: 200,
-        statusText: 'OK'
-      })
-    )
+    fidcRequest.mockImplementation(() => Promise.resolve())
     getSessionToken.mockImplementation(() =>
       Promise.resolve(mockValues.sessionToken)
     )
@@ -95,9 +95,8 @@ describe('update-cors', () => {
       Promise.resolve(mockValues.accessToken)
     )
     process.env.FIDC_URL = mockValues.fidcUrl
-    delete process.env.PHASE
     fs.readdirSync.mockReturnValue(['cors-config.json'])
-    jest.mock(mockPhase0ConfigFile, () => mockPhase0Config, { virtual: true })
+    jest.mock(mockConfigFile, () => mockConfig, { virtual: true })
   })
 
   afterEach(() => {
@@ -113,16 +112,6 @@ describe('update-cors', () => {
     process.exit.mockRestore()
   })
 
-  it('should error if missing FIDC_URL environment variable', async () => {
-    expect.assertions(2)
-    delete process.env.FIDC_URL
-    await updateCors(mockValues)
-    expect(console.error).toHaveBeenCalledWith(
-      'Missing FIDC_URL environment variable'
-    )
-    expect(process.exit).toHaveBeenCalledWith(1)
-  })
-
   it('should error if getSessionToken functions fails', async () => {
     expect.assertions(2)
     const errorMessage = 'Invalid user'
@@ -134,64 +123,52 @@ describe('update-cors', () => {
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 
-  it('should call AM API with phase 0 config by default', async () => {
-    expect.assertions(1)
-    const expectedUrl = `${mockValues.fidcUrl}/am/json/global-config/services/CorsService`
-    const expectedApiOptions = {
-      method: 'put',
-      headers: {
-        'content-type': 'application/json',
-        'x-requested-with': 'XMLHttpRequest',
-        'Accept-API-Version': 'protocol=1.0,resource=1.0',
-        cookie: mockValues.sessionToken
-      },
-      body: JSON.stringify(mockPhase0Config.corsServiceGlobal)
-    }
-    await updateCors(mockValues)
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions)
-  })
-
-  it('should call AM API 2 with phase 0 config by default', async () => {
-    expect.assertions(1)
-    const expectedUrl = `${mockValues.fidcUrl}/am/json/global-config/services/CorsService/configuration/${mockPhase0Config.corsServiceConfig._id}`
-    const expectedApiOptions = {
-      method: 'put',
-      headers: {
-        'content-type': 'application/json',
-        'x-requested-with': 'XMLHttpRequest',
-        'Accept-API-Version': 'protocol=1.0,resource=1.0',
-        cookie: mockValues.sessionToken
-      },
-      body: JSON.stringify(mockPhase0Config.corsServiceConfig)
-    }
-    await updateCors(mockValues)
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions)
-  })
-
-  it('should call IDM API with phase 0 config by default', async () => {
-    expect.assertions(1)
-    const expectedUrl = `${mockValues.fidcUrl}/openidm/config/servletfilter/cors`
-    const expectedApiOptions = {
-      method: 'put',
-      headers: {
-        Authorization: `Bearer ${mockValues.accessToken}`,
-        'Content-Type': 'application/json',
-        'Accept-API-Version': 'resource=1.0'
-      },
-      body: JSON.stringify(mockPhase0Config.idmCorsConfig)
-    }
-    await updateCors(mockValues)
-    expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions)
-  })
-
-  it('should error if API response is not 200', async () => {
-    fetch.mockImplementation(() =>
-      Promise.resolve({
-        status: 401,
-        statusText: 'Unauthorized'
-      })
+  it('should error if getAccessToken functions fails', async () => {
+    expect.assertions(2)
+    const errorMessage = 'Invalid user'
+    getAccessToken.mockImplementation(() =>
+      Promise.reject(new Error(errorMessage))
     )
     await updateCors(mockValues)
+    expect(console.error).toHaveBeenCalledWith(errorMessage)
+    expect(process.exit).toHaveBeenCalledWith(1)
+  })
+
+  it('should call AM API using config file', async () => {
+    expect.assertions(4)
+    const expectedServiceUrl = `${mockValues.fidcUrl}/am/json/global-config/services/CorsService`
+    const expectedServiceConfigUrl = `${expectedServiceUrl}/configuration/${mockConfig.corsServiceConfig._id}`
+    const expectedIdmUrl = `${mockValues.fidcUrl}/openidm/config/servletfilter/cors`
+    await updateCors(mockValues)
+    expect(fidcRequest.mock.calls.length).toEqual(3)
+    expect(fidcRequest.mock.calls[0]).toEqual([
+      expectedServiceUrl,
+      mockConfig.corsServiceGlobal,
+      mockValues.sessionToken,
+      true
+    ])
+    expect(fidcRequest.mock.calls[1]).toEqual([
+      expectedServiceConfigUrl,
+      mockConfig.corsServiceConfig,
+      mockValues.sessionToken,
+      true
+    ])
+    expect(fidcRequest.mock.calls[2]).toEqual([
+      expectedIdmUrl,
+      mockConfig.idmCorsConfig,
+      mockValues.accessToken,
+      false
+    ])
+  })
+
+  it('should error if API request fails', async () => {
+    expect.assertions(2)
+    const errorMessage = 'testing request failed'
+    fidcRequest.mockImplementation(() =>
+      Promise.reject(new Error(errorMessage))
+    )
+    await updateCors(mockValues)
+    expect(console.error).toHaveBeenCalledWith(errorMessage)
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 })

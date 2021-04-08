@@ -1,0 +1,193 @@
+{
+  "iconClass": "fa fa-database",
+  "name": "Company",
+  "schema": {
+    "$schema": "http://forgerock.org/json-schema#",
+    "type": "object",
+    "title": "Company",
+    "description": "A company",
+    "icon": "fa-building",
+    "properties": {
+      "name": {
+        "deleteQueryConfig": false,
+        "description": "The name of the company",
+        "isVirtual": false,
+        "searchable": true,
+        "title": "Company Name",
+        "type": "string",
+        "userEditable": true,
+        "viewable": true
+      },
+      "number": {
+        "deleteQueryConfig": false,
+        "description": "The unique number allocated to a company on incorporation",
+        "isVirtual": false,
+        "searchable": true,
+        "title": "Company Number",
+        "type": "string",
+        "userEditable": true,
+        "viewable": true
+      },
+      "type": {
+        "searchable": true,
+        "title": "Type",
+        "type": "string",
+        "userEditable": true,
+        "viewable": true
+      },
+      "status": {
+        "searchable": true,
+        "title": "Status",
+        "type": "string",
+        "userEditable": true,
+        "viewable": true
+      },
+      "authCode": {
+        "searchable": true,
+        "title": "Authentication Code",
+        "type": "string",
+        "userEditable": true,
+        "viewable": true
+      },
+      "authCodeIsActive": {
+        "searchable": true,
+        "title": "Authentication Code Active",
+        "type": "boolean",
+        "userEditable": true,
+        "viewable": true
+      },
+      "authCodeValidFrom": {
+        "searchable": true,
+        "title": "Authentication Code Valid From",
+        "type": "string",
+        "userEditable": true,
+        "viewable": true
+      },
+      "authorisedUsers": {
+        "description": "Authorised Users are Users that are associated with a Company",
+        "title": "Has Authorised User",
+        "viewable": true,
+        "searchable": false,
+        "userEditable": false,
+        "policies": [],
+        "returnByDefault": false,
+        "minLength": null,
+        "type": "array",
+        "items": {
+          "type": "relationship",
+          "reverseRelationship": true,
+          "reversePropertyName": "isAuthorisedUserOf",
+          "validate": false,
+          "properties": {
+            "_ref": {
+              "type": "string"
+            },
+            "_refProperties": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "required": false,
+                  "propName": "_id"
+                },
+                "permissionFiling": {
+                  "label": "File Financial Statments",
+                  "type": "string",
+                  "required": false,
+                  "propName": "permissionFiling"
+                },
+                "permissionAdmin": {
+                  "label": "Administer the Company",
+                  "type": "string",
+                  "required": false,
+                  "propName": "permissionAdmin"
+                },
+                "permissionUpdate": {
+                  "label": "Update company details",
+                  "type": "string",
+                  "required": false,
+                  "propName": "permissionUpdate"
+                }
+              }
+            }
+          },
+          "resourceCollection": [
+            {
+              "path": "managed/alpha_user",
+              "label": "Alpha_user",
+              "query": {
+                "queryFilter": "true",
+                "fields": [
+                  "_id"
+                ],
+                "sortKeys": []
+              },
+              "notify": false
+            }
+          ],
+          "notifySelf": false
+        },
+        "requiredByParent": false,
+        "isVirtual": false,
+        "referencedRelationshipFields": null,
+        "referencedObjectFields": null,
+        "deleteQueryConfig": false
+      },
+      "locality": {
+        "title": "Locality",
+        "type": "string",
+        "viewable": true,
+        "searchable": true,
+        "userEditable": true
+      },
+      "postalCode": {
+        "title": "Postal Code",
+        "type": "string",
+        "viewable": true,
+        "searchable": true,
+        "userEditable": true
+      },
+      "addressLine1": {
+        "title": "Address Line 1",
+        "type": "string",
+        "viewable": true,
+        "searchable": true,
+        "userEditable": true
+      },
+      "addressLine2": {
+        "title": "Address Line 2",
+        "type": "string",
+        "viewable": true,
+        "searchable": true,
+        "userEditable": true
+      },
+      "region": {
+        "title": "Region",
+        "type": "string",
+        "viewable": true,
+        "searchable": true,
+        "userEditable": true
+      }
+    },
+    "order": [
+      "name",
+      "number",
+      "type",
+      "status",
+      "authCode",
+      "authCodeIsActive",
+      "authCodeValidFrom",
+      "authorisedUsers",
+      "locality",
+      "postalCode",
+      "addressLine1",
+      "addressLine2",
+      "region"
+    ],
+    "required": [
+      "name",
+      "number"
+    ]
+  },
+  "type": "Managed Object"
+}

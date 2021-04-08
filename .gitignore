@@ -1,2 +1,8 @@
 node_modules
 coverage
+.DS_Store
+.env
+
+# Sensitive config files
+config/services/oauth2-provider.json
+config/applications/sdk-client.json

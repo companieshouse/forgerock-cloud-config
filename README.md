@@ -14,14 +14,20 @@ The following need to be installed/configured for local use:
 
 ### Environment Variables
 
-| Name     | Description                                        | Default Value | Required           |
-| -------- | -------------------------------------------------- | ------------- | ------------------ |
-| FIDC_URL | ForgeRock Identity Cloud URL.                      | N/A           | :white_check_mark: |
-| PHASE    | Phase number (0-4). Controls which config is used. | 0             |                    |
+A `.env` file can be used for setting environment variables when running locally. Copy the `.env.sample` file to a new file called `.env` and update the values for the environment. 
+
+| Name             | Description                           | Default Value | Required           |
+| ---------------- | ------------------------------------- | ------------- | ------------------ |
+| FIDC_URL         | ForgeRock Identity Cloud URL          | N/A           | :white_check_mark: |
+| UI_URL           | CH Account UI URL                     | N/A           | :white_check_mark: |
+| OAUTH2_HASH_SALT | Hash salt to be use by OAuth2 service | N/A           | :white_check_mark: |
 
 ### Install Dependencies
 
-`npm install`
+```
+npm install
+npm link
+```
 
 ### Run tests locally
 
@@ -29,55 +35,8 @@ The following need to be installed/configured for local use:
 
 ## Scripts
 
-All scripts can also be ran locally with the correct arguments and environment variables.
+All scripts can also be ran locally using the CLI with the correct arguments and environment variables.
 
-### Update Managed Objects
+The available CLI commands can be found using the help option: `update-fidc -h`
 
-Calls the Identity Management endpoint to update Managed Objects. The configuration is stored in JSON files in the `config/managed-objects` directory.
-
-**This command will update all Managed Objects and delete any not present in the directory.**
-
-**Help Message:**
-`update-managed-objects -h`
-
-### Update Auth Trees
-
-Calls the Access Management endpoint to update Authentication Trees. The configuration is stored in JSON files in the `config/auth-trees` directory.
-
-**Help Message:**
-`update-auth-trees -h`
-
-### User Roles
-
-Calls the Identity Management endpoint to update User Roles. The configuration is stored in JSON files in the `config/user-roles` directory.
-
-**Help Message:**
-`update-user-roles -h`
-
-### Internal Roles
-
-Calls the Identity Management endpoint to update Internal Roles. The configuration is stored in JSON files in the `config/internal-roles` directory.
-
-**Help Message:**
-`update-internal-roles -h`
-
-### Update AM Scripts
-
-Calls the Access Management endpoint to update AM Scripts. The configuration is stored in JSON files in the `config/am-scripts` directory.
-
-**Help Message:**
-`scripts/update-scripts -h`
-
-### Update AM CORS Configuration
-
-Calls the Access Management endpoint to update AM CORS Configuration. The configuration is stored in JSON files in the `config/cors` directory.
-
-**Help Message:**
-`scripts/update-cors -h`
-
-### Update Applications Configuration
-
-Calls the Access Management endpoint to update applications. The configuration is stored in JSON files in the `config/application` directory.
-
-**Help Message:**
-`scripts/update-application -h`
+Each command also has it's own help option, for example: `update-fidc applications -h`

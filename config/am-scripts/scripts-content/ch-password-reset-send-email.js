@@ -1,0 +1,217 @@
+var fr = JavaImporter(
+  org.forgerock.openam.auth.node.api.Action,
+  java.lang.Math,
+  org.forgerock.openam.auth.node.api,
+  javax.security.auth.callback.TextOutputCallback,
+  com.sun.identity.authentication.callbacks.HiddenValueCallback,
+  org.forgerock.json.jose.builders.JwtBuilderFactory,
+  org.forgerock.json.jose.jwt.JwtClaimsSet,
+  org.forgerock.json.jose.jws.JwsAlgorithm,
+  org.forgerock.secrets.SecretBuilder,
+  javax.crypto.spec.SecretKeySpec,
+  org.forgerock.secrets.keys.SigningKey,
+  org.forgerock.json.jose.jws.handlers.SecretHmacSigningHandler,
+  org.forgerock.util.encode.Base64,
+  java.time.temporal.ChronoUnit,
+  java.time.Clock
+)
+
+var NodeOutcome = {
+  ERROR: "false"
+}
+
+// function that builds the Password Reset JWT
+function buildPasswordResetToken(email){
+  var jwt;
+  var signingHandler;
+  var secret = transientState.get("secretKey");
+  try{
+    var secretbytes = java.lang.String(secret).getBytes();
+    var secretBuilder = new fr.SecretBuilder;
+    secretBuilder.secretKey(new javax.crypto.spec.SecretKeySpec(secretbytes, "Hmac"));
+    secretBuilder.stableId(host).expiresIn(5, fr.ChronoUnit.MINUTES, fr.Clock.systemUTC());
+    var key = new fr.SigningKey(secretBuilder); 
+    signingHandler = new fr.SecretHmacSigningHandler(key);
+  }catch(e){
+    logger.error("[RESET PWD] Error while creating signing handler: " + e);
+    return false;
+  }
+  
+  var jwtClaims = new fr.JwtClaimsSet;
+  try{
+    jwtClaims.setIssuer(host);
+    var dateNow = new Date();
+    jwtClaims.setIssuedAtTime(dateNow);
+    jwtClaims.setSubject(email);
+    jwtClaims.setClaim("creationDate", new Date().toString());
+  }catch(e){
+    logger.error("[RESET PWD] Error while adding claims to JWT: " + e);
+    return false;
+  }
+  
+  try{
+    jwt = new fr.JwtBuilderFactory()
+          .jws(signingHandler)
+          .headers()
+          .alg(fr.JwsAlgorithm.HS256)
+          .done()
+          .claims(jwtClaims)
+          .build();
+    logger.error("[RESET PWD] JWT from reg: " + jwt);
+  }catch(e){
+    logger.error("[RESET PWD] Error while creating JWT: " + e);
+    return false;
+  }
+  return jwt;
+}
+
+//extracts the email from shared state
+function extractEmailFromState(){
+  logger.error("[RESET PWD] host: " + host);
+  logger.error("[RESET PWD] shared: " + sharedState.get("objectAttributes"));
+  
+  try{
+    email = sharedState.get("objectAttributes").get("mail");
+    logger.error("[RESET PWD] mail : " + email);
+  } catch(e){
+    logger.error("[RESET PWD] error in fetching objectAttributes : " + e); 
+    return false;
+  }
+  return email;
+}
+
+//builds the URL which will be sent via email
+function buildReturnUrl(jwt){
+  try{
+    returnUrl = host.concat("/am/XUI/?realm=/alpha&service=CHResetPassword&token=", jwt)
+    logger.error("[RESET PWD] URL: " + returnUrl);
+    return returnUrl;
+  }catch(e){
+    logger.error("[RESET PWD] Error while extracting host: " + e);
+    return false;
+  }
+}
+
+// raise the geenric error callbacks
+function raiseGeneralError(){
+  if (callbacks.isEmpty()) {
+    action = fr.Action.send(
+      new fr.HiddenValueCallback (
+            "stage",
+            "RESET_PASSWORD_ERROR" 
+        ),
+        new fr.TextOutputCallback(
+          fr.TextOutputCallback.ERROR,
+          "An error has occurred! Please try again later"
+        ),
+        new fr.HiddenValueCallback (
+          "pagePropsJSON",
+          JSON.stringify({ 'errors': [{ label: "An error has occurred! Please try again later" }] })
+        )
+      ).build()
+    }
+}
+
+//send the email
+function sendEmail(){
+  var notifyJWT = transientState.get("notifyJWT");
+  var templates = transientState.get("notifyTemplates");
+  
+  logger.error("[RESET PWD] Notify JWT from transient state: " + notifyJWT);
+  logger.error("[RESET PWD] Templates from transient state: " + templates);
+
+  request.setUri("https://api.notifications.service.gov.uk/v2/notifications/email");
+  try{
+    var requestBodyJson = {
+      "email_address": email,
+      "template_id": JSON.parse(templates).resetPwd,
+      "personalisation": {
+          "link": returnUrl
+      }
+    }
+  }catch(e){
+    logger.error("[RESET PWD] Error while preparing request for Notify: " + e);
+    return false;
+  }
+
+  request.setMethod("POST");
+  request.getHeaders().add("Content-Type", "application/json");
+  request.getHeaders().add("Authorization", "Bearer " + notifyJWT);
+  request.getEntity().setString(JSON.stringify(requestBodyJson))
+
+  var response = httpClient.send(request).get();
+  var notificationId;
+  logger.error("[RESET PWD] Response: " + response.getStatus().getCode() + " - " + response.getCause() + " - " +response.getEntity().getString());
+
+  try{
+    notificationId = JSON.parse(response.getEntity().getString()).id;
+    logger.error("[RESET PWD] Notify ID: " + notificationId);
+  }catch(e){
+    logger.error("[RESET PWD] Error while parsing Notify response: " + e);
+    return false;
+  }
+
+  if(response.getStatus().getCode() == 201){
+    if (callbacks.isEmpty()) {
+      action = fr.Action.send(
+        new fr.TextOutputCallback(
+            fr.TextOutputCallback.INFORMATION,
+            "Please check your email to complete reset password - "+email 
+        ),
+        new fr.HiddenValueCallback (
+            "stage",
+            "RESET_PASSWORD_6" 
+        ),
+        new fr.HiddenValueCallback (
+            "pagePropsJSON",
+            JSON.stringify({"email": email}) 
+        ),
+        new fr.HiddenValueCallback (
+          "notificationId",
+          notificationId 
+      )
+      ).build()
+    } 
+  }else{
+    if (callbacks.isEmpty()) {
+      action = fr.Action.send(
+        new fr.HiddenValueCallback (
+            "stage",
+            "RESET_PASSWORD_ERROR" 
+        ),
+          new fr.TextOutputCallback(
+            fr.TextOutputCallback.ERROR,
+            "The email could not be sent: "+response.getEntity().getString()
+        ),
+        new fr.HiddenValueCallback (
+            "pagePropsJSON",
+            JSON.stringify({ 'errors': [{ label: "An error occurred while sending the email. Please try again."} ] })
+        )
+      ).build()
+    } 
+  }
+}
+
+// main execution flow
+
+var request = new org.forgerock.http.protocol.Request();
+var host = requestHeaders.get("origin").get(0); 
+var resetPasswordjJwt;
+var returnUrl;
+
+var email = extractEmailFromState();
+if(email){
+  resetPasswordjJwt = buildPasswordResetToken(email);
+  if(resetPasswordjJwt){
+    returnUrl = buildReturnUrl(resetPasswordjJwt);
+  }
+}
+
+if(!email || !resetPasswordjJwt || !returnUrl){ 
+  raiseGeneralError();  
+}else{
+  sendEmail();
+}
+
+//always return false at the end, because we don't end up with a session
+outcome = NodeOutcome.ERROR;

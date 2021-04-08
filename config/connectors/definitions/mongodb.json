@@ -1,0 +1,162 @@
+{
+	"_id": "provisioner.openicf/CHSUser",
+	"connectorRef": {
+		"connectorHostRef": "aws-group",
+		"displayName": "CHS User Connector",
+		"bundleVersion": "1.5.19.7-SNAPSHOT",
+		"systemType": "provisioner.openicf",
+		"bundleName": "org.forgerock.openicf.connectors.mongodb-connector",
+		"connectorName": "org.forgerock.openicf.connectors.mongodb.MongoDBConnector"
+	},
+	"poolConfigOption": {
+		"maxObjects": 10,
+		"maxIdle": 10,
+		"maxWait": 150000,
+		"minEvictableIdleTimeMillis": 120000,
+		"minIdle": 1
+	},
+	"resultsHandlerConfig": {
+		"enableNormalizingResultsHandler": false,
+		"enableFilteredResultsHandler": false,
+		"enableCaseInsensitiveFilter": false,
+		"enableAttributesToGetSearchResultsHandler": true
+	},
+	"operationTimeout": {
+		"CREATE": -1,
+		"UPDATE": -1,
+		"DELETE": -1,
+		"TEST": -1,
+		"SCRIPT_ON_CONNECTOR": -1,
+		"SCRIPT_ON_RESOURCE": -1,
+		"GET": -1,
+		"RESOLVEUSERNAME": -1,
+		"AUTHENTICATE": -1,
+		"SEARCH": -1,
+		"VALIDATE": -1,
+		"SYNC": -1,
+		"SCHEMA": -1
+	},
+	"configurationProperties": {
+		"customSensitiveConfiguration": null,
+		"createScriptFileName": "CreateMongoDB.groovy",
+		"targetDirectory": null,
+		"customizerScriptFileName": null,
+		"warningLevel": "1",
+		"authenticateScriptFileName": null,
+		"scriptExtensions": "groovy",
+		"scriptOnResourceScriptFileName": null,
+		"minimumRecompilationInterval": "100",
+		"deleteScriptFileName": "DeleteMongoDB.groovy",
+		"scriptBaseClass": null,
+		"scriptRoots": [
+			"jar:file:connectors/mongodb-connector-1.5.19.7-SNAPSHOT.jar\u0021/scripts/mongodb/"
+		],
+		"customConfiguration": null,
+		"resolveUsernameScriptFileName": null,
+		"searchScriptFileName": "SearchMongoDB.groovy",
+		"tolerance": "10",
+		"updateScriptFileName": "UpdateMongoDB.groovy",
+		"debug": "false",
+		"classpath": [],
+		"disabledGlobalASTTransformations": null,
+		"schemaScriptFileName": "SchemaMongoDB.groovy",
+		"verbose": false,
+		"testScriptFileName": "TestMongoDB.groovy",
+		"sourceEncoding": "UTF-8",
+		"syncScriptFileName": null,
+		"recompileGroovySource": "false",
+		"connectionURI": "mongodb://mongo-db1-amido.development.aws.internal:27017",
+		"host": "mongo-db1-amido.development.aws.internal",
+		"port": "27017",
+		"userDatabase": "admin",
+		"clusterAddresses": null,
+		"dateAttributes": [],
+		"database": "account",
+		"arrayAttributes": [],
+		"includeNullValue": "false",
+		"includeEmptyList": "false",
+		"dateFormat": "yyyy-MM-dd'T'HH:mm:ss'Z'",
+		"timeZone": "UTC",
+		"ICFName": "name",
+		"sslEnabled": "true",
+		"sslHostNameValidation": "true",
+		"maxConnectionIdleTime": "0",
+		"maxConnectionLifeTime": "0",
+		"minConnectionsPerHost": "0",
+		"maxConnectionsPerHost": "5"
+	},
+	"enabled": true,
+	"objectTypes": {
+		"users": {
+			"$schema": "http://json-schema.org/draft-03/schema",
+			"id": "users",
+			"nativeType": "users",
+			"properties": {
+				"_id": {
+					"flags": [],
+					"nativeName": "_id",
+					"nativeType": "string",
+					"required": true,
+					"runAsUser": false,
+					"type": "string"
+				},
+				"email": {
+					"flags": [],
+					"nativeName": "email",
+					"nativeType": "string",
+					"required": true,
+					"runAsUser": false,
+					"type": "string"
+				},
+				"forename": {
+					"nativeName": "forename",
+					"nativeType": "string",
+					"required": false,
+					"type": "string"
+				},
+				"password": {
+					"nativeName": "password",
+					"nativeType": "JAVA_TYPE_GUARDEDSTRING",
+					"required": true,
+					"runAsUser": false,
+					"type": "string"
+				},
+				"roles": {
+					"flags": [],
+					"items": {
+						"nativeType": "string",
+						"type": "string"
+					},
+					"nativeName": "roles",
+					"nativeType": "string",
+					"required": false,
+					"runAsUser": false,
+					"type": "array"
+				},
+				"surname": {
+					"nativeName": "surname",
+					"nativeType": "string",
+					"required": false,
+					"type": "string"
+				},
+				"test_data": {
+					"nativeName": "test_data",
+					"nativeType": "boolean",
+					"required": false,
+					"type": "boolean"
+				},
+				"user": {
+					"flags": [
+						"NOT_UPDATEABLE"
+					],
+					"nativeName": "user",
+					"nativeType": "string",
+					"required": false,
+					"runAsUser": false,
+					"type": "string"
+				}
+			},
+			"type": "object"
+		}
+	}
+}
