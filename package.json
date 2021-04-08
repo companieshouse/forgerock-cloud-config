@@ -4,7 +4,10 @@
   "description": "",
   "scripts": {
     "lint": "standard",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "set-qa-tests-env": "newman-env run ./qa-tests/env.postman_environment.json",
+    "clear-qa-tests-env": "newman-env run ./qa-tests/env.postman_environment.json --env-var platformUrl=null --env-var ClientId=null --env-var username=null --env-var password=null --env-var realm=realms/root/realms/alpha --env-var IDCloudAdminUsername=null --env-var IDCloudAdminPassword=null --env-var cookie_Name=null --env-var ClientSecret=null",
+    "qa-tests": "node ./qa-tests/TestRunner.js"
   },
   "bin": {
     "update-fidc": "./index.js"
@@ -21,6 +24,9 @@
   "devDependencies": {
     "husky": "^4.3.8",
     "jest": "^26.6.3",
+    "newman": "^5.2.2",
+    "newman-env": "^1.0.1",
+    "newman-reporter-htmlextra": "^1.20.1",
     "standard": "^16.0.3"
   },
   "standard": {
