@@ -36,7 +36,7 @@ function checkCompanyAlreadyExists(userId, company){
     var ACCESS_TOKEN_STATE_FIELD = "idmAccessToken";
     var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
     if (accessToken == null) {
-        logger.error("[CHECK COMPANY DUPLICATE] Access token not in shared state")
+        logger.error("[CHECK COMPANY DUPLICATE] Access token not in transient state")
         return NodeOutcome.FALSE;
     }
     request.setMethod('GET');

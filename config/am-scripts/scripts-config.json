@@ -474,6 +474,22 @@
         }, 
         {
             "payload": {
+                "_id":"10f63087-b21b-40eb-9c90-8e3fb3fabfa1",
+                "name":"CH - Callback for User Associated to Company",
+                "description":"Confirmation that the company has been added to the user account successfully",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-join-company-confirmation.js"
+        }, 
+        {
+            "payload": {
                 "_id":"d22f9a0c-426a-4466-b95e-d0f125b0d5fa",
                 "name":"OAuth2 Access Token Modification Script",
                 "description":"Default global script for OAuth2 Access Token Modification",
