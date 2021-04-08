@@ -254,7 +254,7 @@
             "payload": {
                 "_id": "2c9f9d6a-4b93-493a-bf0d-44fe53d8d1d1",
                 "name": "CH - Check Password Status",
-                "description": "",
+                "description": "Check the user's legacy password status",
                 "script": "<replace>",
                 "default": false,
                 "language": "JAVASCRIPT",
@@ -668,7 +668,7 @@
             "payload": {
                 "_id": "a5042601-6867-4566-81d1-fad4ecd61487",
                 "name": "CH - Update Legacy Password Check Original",
-                "description": "",
+                "description": "Check the originally entered user password against the value entered in the update password dialog",
                 "script": "<replace>",
                 "default": false,
                 "language": "JAVASCRIPT",
