@@ -1,6 +1,7 @@
 describe('get-access-token', () => {
   jest.mock('node-fetch')
   const fetch = require('node-fetch')
+  jest.spyOn(console, 'log').mockImplementation(() => {})
 
   const getAccessToken = require('../../helpers/get-access-token')
 
