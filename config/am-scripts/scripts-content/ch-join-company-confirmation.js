@@ -32,7 +32,7 @@ if (callbacks.isEmpty()) {
         ),
         new fr.HiddenValueCallback (
             "stage",
-            "COMPANY_ASSOCIATION_CONFIRM" 
+            "COMPANY_ASSOCIATION_4" 
         ),
         new fr.HiddenValueCallback (
             "pagePropsJSON",

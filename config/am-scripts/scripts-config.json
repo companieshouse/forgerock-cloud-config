@@ -490,6 +490,54 @@
         }, 
         {
             "payload": {
+                "_id":"838ab622-d892-44e6-a5c5-f45238aed210",
+                "name":"CH - Prompt for Company Number",
+                "description":"Prompts the user to enter the Company Number",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-join-company-prompt-for-company-no.js"
+        }, 
+        {
+            "payload": {
+                "_id":"ad7a63a6-fae2-46c0-be70-bec1f059f064",
+                "name":"CH - Prompt for Company Auth Code",
+                "description":"Prompts the user to enter the Company Auth Code",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-join-company-prompt-for-company-authcode.js"
+        }, 
+        {
+            "payload": {
+                "_id":"917f36a9-f21e-43e4-bed5-9b2171228387",
+                "name":"CH - Prompt Error Message for wrong Company Auth Code",
+                "description":"Prompts the user an error message when the Company Auth Code is not valid",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-join-company-wrong-code-error-message.js"
+        }, 
+        {
+            "payload": {
                 "_id":"d22f9a0c-426a-4466-b95e-d0f125b0d5fa",
                 "name":"OAuth2 Access Token Modification Script",
                 "description":"Default global script for OAuth2 Access Token Modification",
