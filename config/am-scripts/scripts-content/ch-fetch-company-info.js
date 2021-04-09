@@ -8,11 +8,13 @@
   ** OUTPUT DATA
     * SHARED STATE:
     - 'companyData': the company data, result of the lookup
+    - 'hashedCredential': the company auth code
+    - [optional] 'errorMessage': error message to display from previous attempts
 
   ** OUTCOMES
     - true: user confirms to go ahdead with association
-    - false: user goes back
-    - error: generic error
+    - false: user goes back to company selection, or no company number found in context, auth code not set for company, company cannot be found in IDM, generic error
+    - error: IDM token not found
   
   ** CALLBACKS:
     - Output INFO: Display of company information
@@ -62,24 +64,25 @@ function fetchIDMToken(){
     var ACCESS_TOKEN_STATE_FIELD = "idmAccessToken";
     var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
     if (accessToken == null) {
-        logger.error("[CHECK COMPANY DUPLICATE] Access token not in transient state")
+        logger.error("[FETCH COMPANY] Access token not in transient state")
         return false;
     }
     return accessToken;
 }
 
 // fetch the Company object given a company number
-function fetchCompany(companyNumber) {
+function fetchCompany(idmToken, companyNumber) {
     if (companyNumber == null) {
-        //logger.error("[FETCH COMPANY] No company number in shared state");
-        buildErrorCallback("COMPANY_LOOKUP_ERROR", "No company number in shared state");
+        logger.error("[FETCH COMPANY] No company number in shared state");
+        sharedState.put("errorMessage","No company number in shared state.");
+        return false;
     }
 
     var request = new org.forgerock.http.protocol.Request();
     request.setMethod('GET');
     var searchTerm = "?_queryFilter=number+eq+%22" + companyNumber + "%22";
     request.setUri(idmCompanyEndpoint + searchTerm);
-    request.getHeaders().add("Authorization", "Bearer " + accessToken);
+    request.getHeaders().add("Authorization", "Bearer " + idmToken);
     request.getHeaders().add("Content-Type", "application/json");
 
     var response = httpClient.send(request).get();
@@ -92,14 +95,24 @@ function fetchCompany(companyNumber) {
 
         if (companyResponse.resultCount > 0) {
             logger.error("[FETCH COMPANY] Got a result: "+JSON.stringify(companyResponse.result[0]));       
+            
+            var authCode = companyResponse.result[0].authCode;
+            logger.error("[FETCH COMPANY] Found authCode: " + authCode);
+
+            if (authCode == null) {
+                logger.error("[FETCH COMPANY] No auth code associated with company")
+                sharedState.put("errorMessage","No auth code associated with company "+companyNumber+".");
+                return false;
+            }
+            
             sharedState.put("companyData", JSON.stringify(companyResponse.result[0]));
-            companyFound = JSON.stringify(companyResponse.result[0]);
+            sharedState.put("hashedCredential", authCode);
 
             if (callbacks.isEmpty()) {
                 action = fr.Action.send(
                     new fr.HiddenValueCallback (
                         "stage",
-                        "DISPLAY_COMPANY" 
+                        "COMPANY_ASSOCIATION_2" 
                     ),
                     new fr.TextOutputCallback(
                         fr.TextOutputCallback.INFORMATION,
@@ -119,38 +132,43 @@ function fetchCompany(companyNumber) {
             }  
         } else {
             logger.error("[FETCH COMPANY] No company results for company number "+companyNumber);
-            buildErrorCallback("COMPANY_NOT_FOUND", "The company " + companyNumber + " could not be found");
+            sharedState.put("errorMessage","The company " + companyNumber + " could not be found.");
+            return false;
         }
     } else if (response.getStatus().getCode() === 401) {
         logger.error("[FETCH COMPANY] Error while retrieving company with ID "+companyNumber);
-        buildErrorCallback("COMPANY_LOOKUP_ERROR", "Error while retrieving company with ID "+companyNumber);
+        sharedState.put("errorMessage","Error while retrieving company "+companyNumber+".");
+        return false;
     }
 }
 
 // main execution flow
 var YES_OPTION_INDEX = 0;
-var accessToken = fetchIDMToken();
 var idmCompanyEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/Company/";
 
 // if the user has selected to proceed with association or to not go ahead, callbacks will be not empty
 if(!callbacks.isEmpty()){
-    logger.error("[FETCH COMPANY] callbacks "+callbacks.toString());
     var selection = callbacks.get(3).getSelectedIndex();
     logger.error("[FETCH COMPANY] selection "+selection);
     if(selection === YES_OPTION_INDEX){
         logger.error("[FETCH COMPANY] selected YES! ");
-        //sharedState.put("companyData", JSON.stringify(companyFound);
+        sharedState.put("errorMessage",null);
         outcome = NodeOutcome.TRUE;   
     }else{
         outcome = NodeOutcome.FALSE;   
     }
 } else {
     // if the user has started the journey, the callbacks will be empty, then fetch company info    
+    var accessToken = fetchIDMToken();
     if (!accessToken) {
         logger.error("[FETCH COMPANY] Access token not in transient state")
         outcome = NodeOutcome.ERROR;
     } else {
         var companyNumber = sharedState.get("companyNumber");
-        fetchCompany(companyNumber);
+        //fetchCompany can only result in callbacks, does not transition anywhere
+        if(!fetchCompany(accessToken, companyNumber)){
+            logger.error("[FETCH COMPANY] error while fetching company")
+            outcome = NodeOutcome.FALSE;
+        }
     }
 }

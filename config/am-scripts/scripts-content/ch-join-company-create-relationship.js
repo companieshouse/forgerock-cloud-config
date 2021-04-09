@@ -5,10 +5,13 @@
       - '_id' : the user ID we need to create the asscoiation for. This can be manually populated or be result of a previous execution of the 'Identify Exisitng User' node
     * TRANSIENT STATE
       - 'idmAccessToken' : the IDM Access Token, which can be obtained by executing a scripted decision node configured with the script 'CH - Get IDM Access Token'
-      
+  ** OUTPUT DATA:
+    * SHARED STATE
+      - 'errorMessage': set if an error is raised which needs to be displayed to the user
   ** OUTCOMES
     - true: association successful
-    - false: error during association
+    - error: error during association (IDM token not found, error during relationship creation)
+    - already_associated: company is already associated with the user
   
   ** CALLBACKS: 
     - error: user is already associated with a company
@@ -23,7 +26,8 @@ var fr = JavaImporter(
 
 var NodeOutcome = {
     TRUE: "true",
-    FALSE: "false"
+    ERROR: "error",
+    COMPANY_ALREADY_ASSOCIATED: "already_associated"
 }
 
 function logResponse(response) {
@@ -33,12 +37,7 @@ function logResponse(response) {
 // checks whether the user has already the company associated with their profile
 function checkCompanyAlreadyExists(userId, company){
     var request = new org.forgerock.http.protocol.Request();
-    var ACCESS_TOKEN_STATE_FIELD = "idmAccessToken";
-    var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
-    if (accessToken == null) {
-        logger.error("[CHECK COMPANY DUPLICATE] Access token not in transient state")
-        return NodeOutcome.FALSE;
-    }
+    
     request.setMethod('GET');
     logger.error("[CHECK COMPANY DUPLICATE] calling endpoint " + idmUserEndpoint + userId + "?_fields=isAuthorisedUserOf/_id");
     request.setUri(idmUserEndpoint + userId + "?_fields=isAuthorisedUserOf/_id");
@@ -69,7 +68,7 @@ function addRelationshipToCompany(userId, company){
     var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
     if (accessToken == null) {
         logger.error("[ADD RELATIONSHIP] Access token not in shared state")
-        return NodeOutcome.FALSE;
+        return NodeOutcome.ERROR;
     }
 
     var requestBodyJson = [
@@ -101,8 +100,39 @@ function addRelationshipToCompany(userId, company){
     }
     else {
         logger.error("[ADD RELATIONSHIP] Error during relationship creation");
-        return NodeOutcome.FALSE;
+        return NodeOutcome.ERROR;
     }
+}
+
+// builds an error callback given a stage name and a message text
+function buildErrorCallback(stageName, message) {
+    if (callbacks.isEmpty()) {
+        action = fr.Action.send(
+            new fr.HiddenValueCallback (
+                "stage",
+                stageName 
+            ),
+              new fr.TextOutputCallback(
+                fr.TextOutputCallback.ERROR,
+                message
+            ),
+            new fr.HiddenValueCallback (
+                "pagePropsJSON",
+                JSON.stringify({ 'errors': [{ label: message} ] })
+            )
+        ).build()
+    }
+}
+
+//fetches the IDM access token from transient state
+function fetchIDMToken(){
+    var ACCESS_TOKEN_STATE_FIELD = "idmAccessToken";
+    var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
+    if (accessToken == null) {
+        logger.error("[CHECK COMPANY DUPLICATE] Access token not in transient state")
+        return false;
+    }
+    return accessToken;
 }
 
 // main execution flow
@@ -112,27 +142,17 @@ var companyData = sharedState.get("companyData");
 logger.error("[ADD RELATIONSHIP] Incoming company data :" +companyData);
 logger.error("[ADD RELATIONSHIP] Incoming company id :" +JSON.parse(companyData)._id);
 
-var userId = sharedState.get("_id");
-
-if(!checkCompanyAlreadyExists(userId, JSON.parse(companyData))){
-    logger.error("[CHECK COMPANY DUPLICATE] company is not already associated : " + JSON.parse(companyData).name );
-    outcome = addRelationshipToCompany(userId, JSON.parse(companyData));
-} else {
-    logger.error("[CHECK COMPANY DUPLICATE] The company " + JSON.parse(companyData).name + " is already associated with this user");
-    if (callbacks.isEmpty()) {
-        action = fr.Action.send(
-            new fr.HiddenValueCallback (
-                "stage",
-                "COMPANY_ASSOCIATION_ERROR" 
-            ),
-            new fr.TextOutputCallback(
-                fr.TextOutputCallback.ERROR,
-                "The company " + JSON.parse(companyData).name + " is already associated with the user"
-            ),
-            new fr.HiddenValueCallback (
-                "pagePropsJSON",
-                JSON.stringify({ 'errors': [{ label: "The company " + JSON.parse(companyData).name + " is already associated with this user"} ] })
-            )
-        ).build()
+var accessToken = fetchIDMToken();
+if(!accessToken){
+    outcome = NodeOutcome.ERROR;
+}else{
+    var userId = sharedState.get("_id");
+    if(!checkCompanyAlreadyExists(userId, JSON.parse(companyData))){
+        logger.error("[CHECK COMPANY DUPLICATE] company is not already associated : " + JSON.parse(companyData).name );
+        outcome = addRelationshipToCompany(userId, JSON.parse(companyData));
+    } else {
+        logger.error("[CHECK COMPANY DUPLICATE] The company " + JSON.parse(companyData).name + " is already associated with this user");
+        sharedState.put("errorMessage","The company " + JSON.parse(companyData).name + " is already associated with the user.");
+        outcome = NodeOutcome.COMPANY_ALREADY_ASSOCIATED
     }
 }
