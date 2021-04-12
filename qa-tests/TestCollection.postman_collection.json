@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "815f180e-d4f0-469c-9d1d-c5f52faa737c",
+		"_postman_id": "33ff78bf-fcf3-4b95-af10-3bc90948e0c9",
 		"name": "FR Configuration Test",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -1300,6 +1300,76 @@
 										"exec": [
 											"const JSONResponse = JSON.parse(responseBody);",
 											"",
+											"// Did request have a callback?",
+											"if(JSONResponse.authId && JSONResponse.authId != \"\")",
+											"{",
+											"  // Set `authId` variable",
+											"  pm.environment.set(\"authId\", JSONResponse.authId);",
+											"}",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableCookies": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "Specifies that the `/json/authenticate` endpoint uses JSON format for requests.",
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"description": "Specifies the version of the `/json/authenticate` endpoint to use.",
+										"key": "Accept-API-Version",
+										"value": "resource=2.1, protocol=1.0",
+										"disabled": true
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"authId\": \"{{authId}}\",\n    \"callbacks\": [\n        {\n            \"type\": \"NameCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"User Name\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken1\",\n                    \"value\": \"{{IDCloudAdminUsername}}\"\n                }\n            ],\n            \"_id\": 0\n        },\n        {\n            \"type\": \"PasswordCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"Password\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken2\",\n                    \"value\": \"{{IDCloudAdminPassword}}\"\n                }\n            ],\n            \"_id\": 1\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{platformUrl}}/am/json/authenticate",
+									"host": [
+										"{{platformUrl}}"
+									],
+									"path": [
+										"am",
+										"json",
+										"authenticate"
+									]
+								},
+								"description": "Return the callback, specifying the credentials of an administrative user.\nThis request obtains the name used in headers to specify the session token. To manually provide the session token name, in the ID Cloud console, navigate to **Tenant Settings**, and copy the *Cookie Name* value. Use this value in the `cookieName` variable in your Postman Collection."
+							},
+							"response": []
+						},
+						{
+							"name": "Skip 2-step verification prompt",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const JSONResponse = JSON.parse(responseBody);",
+											"",
 											"// Did request return SSO Token?",
 											"if(JSONResponse.tokenId && JSONResponse.tokenId != \"\")",
 											"{",
@@ -1343,7 +1413,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"authId\": \"{{authId}}\",\n    \"callbacks\": [\n        {\n            \"type\": \"NameCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"User Name\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken1\",\n                    \"value\": \"{{IDCloudAdminUsername}}\"\n                }\n            ],\n            \"_id\": 0\n        },\n        {\n            \"type\": \"PasswordCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"Password\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken2\",\n                    \"value\": \"{{IDCloudAdminPassword}}\"\n                }\n            ],\n            \"_id\": 1\n        }\n    ]\n}",
+									"raw": "{\n  \"authId\": \"{{authId}}\",\n  \"callbacks\": [\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"message\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"0\"\n        }\n      ]\n    },\n    {\n      \"type\": \"ConfirmationCallback\",\n      \"output\": [\n        {\n          \"name\": \"prompt\",\n          \"value\": \"\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": 0\n        },\n        {\n          \"name\": \"options\",\n          \"value\": [\n            \"Set up\"\n          ]\n        },\n        {\n          \"name\": \"optionType\",\n          \"value\": -1\n        },\n        {\n          \"name\": \"defaultOption\",\n          \"value\": 0\n        }\n      ],\n      \"input\": [\n        {\n          \"name\": \"IDToken2\",\n          \"value\": 0\n        }\n      ]\n    },\n    {\n      \"type\": \"HiddenValueCallback\",\n      \"output\": [\n        {\n          \"name\": \"value\",\n          \"value\": \"false\"\n        },\n        {\n          \"name\": \"id\",\n          \"value\": \"skip-input\"\n        }\n      ],\n      \"input\": [\n        {\n          \"name\": \"IDToken3\",\n          \"value\": \"Skip\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"var skipContainer = document.createElement(\\\"div\\\");skipContainer.style = \\\"width: 100%\\\";skipContainer.innerHTML = \\\"<button id='skip-link' class='btn btn-block btn-link' type='submit'>Skip for now</button>\\\";document.getElementById(\\\"skip-input\\\").parentNode.append(skipContainer);document.getElementsByClassName(\\\"callback-component\\\").forEach(  function (e) {    var message = e.firstElementChild;    if (message.firstChild && message.firstChild.nodeName == \\\"#text\\\" && message.firstChild.nodeValue.trim() == \\\"message\\\") {      message.align = \\\"center\\\";      message.innerHTML = \\\"<h2 class='h2'>Set up 2-step verification</h2><div style='margin-bottom:1em'>Protect your account by adding a second step after entering your password to verify it's you signing in.</div>\\\";    }  })\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"4\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"document.getElementById(\\\"skip-link\\\").onclick = function() {  document.getElementById(\\\"skip-input\\\").value = \\\"Skip\\\";  document.getElementById(\\\"loginButton_0\\\").click();  return false;}\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"4\"\n        }\n      ]\n    }\n  ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1776,6 +1846,288 @@
 					"name": "Login",
 					"item": [
 						{
+							"name": "Reset Password",
+							"item": [
+								{
+									"name": "Authentication to Top-Level Realm",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"const JSONResponse = JSON.parse(responseBody);",
+													"",
+													"// Did request have a callback?",
+													"if(JSONResponse.authId && JSONResponse.authId != \"\")",
+													"{",
+													"  // Set `authId` variable",
+													"  pm.environment.set(\"authId\", JSONResponse.authId);",
+													"}",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableCookies": true
+									},
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "The media type of the resource.",
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "This collection documents version 2.1 of the authentication resource.",
+												"key": "Accept-API-Version",
+												"value": "resource=2.1",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{platformUrl}}/am/json/authenticate",
+											"host": [
+												"{{platformUrl}}"
+											],
+											"path": [
+												"am",
+												"json",
+												"authenticate"
+											]
+										},
+										"description": "To get started, request the callbacks from the top-level realm."
+									},
+									"response": []
+								},
+								{
+									"name": "Authenticate as ID Cloud Admin and Get Session Token, and Cookie Name",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"const JSONResponse = JSON.parse(responseBody);",
+													"",
+													"// Did request have a callback?",
+													"if(JSONResponse.authId && JSONResponse.authId != \"\")",
+													"{",
+													"  // Set `authId` variable",
+													"  pm.environment.set(\"authId\", JSONResponse.authId);",
+													"}",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableCookies": true
+									},
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "Specifies that the `/json/authenticate` endpoint uses JSON format for requests.",
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "Specifies the version of the `/json/authenticate` endpoint to use.",
+												"key": "Accept-API-Version",
+												"value": "resource=2.1, protocol=1.0",
+												"disabled": true
+											},
+											{
+												"key": "",
+												"value": "",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"authId\": \"{{authId}}\",\n    \"callbacks\": [\n        {\n            \"type\": \"NameCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"User Name\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken1\",\n                    \"value\": \"{{IDCloudAdminUsername}}\"\n                }\n            ],\n            \"_id\": 0\n        },\n        {\n            \"type\": \"PasswordCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"Password\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken2\",\n                    \"value\": \"{{IDCloudAdminPassword}}\"\n                }\n            ],\n            \"_id\": 1\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{platformUrl}}/am/json/authenticate",
+											"host": [
+												"{{platformUrl}}"
+											],
+											"path": [
+												"am",
+												"json",
+												"authenticate"
+											]
+										},
+										"description": "Return the callback, specifying the credentials of an administrative user.\nThis request obtains the name used in headers to specify the session token. To manually provide the session token name, in the ID Cloud console, navigate to **Tenant Settings**, and copy the *Cookie Name* value. Use this value in the `cookieName` variable in your Postman Collection."
+									},
+									"response": []
+								},
+								{
+									"name": "Skip 2-step verification prompt",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"const JSONResponse = JSON.parse(responseBody);",
+													"",
+													"// Did request return SSO Token?",
+													"if(JSONResponse.tokenId && JSONResponse.tokenId != \"\")",
+													"{",
+													"  // Set `session token` variable",
+													"  pm.environment.set(\"session_token\", JSONResponse.tokenId);",
+													"",
+													"  // Remove `authId` variable",
+													"  pm.environment.unset(\"authId\");",
+													"",
+													"}",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableCookies": true
+									},
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "Specifies that the `/json/authenticate` endpoint uses JSON format for requests.",
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "Specifies the version of the `/json/authenticate` endpoint to use.",
+												"key": "Accept-API-Version",
+												"value": "resource=2.1, protocol=1.0",
+												"disabled": true
+											},
+											{
+												"key": "",
+												"value": "",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"authId\": \"{{authId}}\",\n  \"callbacks\": [\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"message\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"0\"\n        }\n      ]\n    },\n    {\n      \"type\": \"ConfirmationCallback\",\n      \"output\": [\n        {\n          \"name\": \"prompt\",\n          \"value\": \"\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": 0\n        },\n        {\n          \"name\": \"options\",\n          \"value\": [\n            \"Set up\"\n          ]\n        },\n        {\n          \"name\": \"optionType\",\n          \"value\": -1\n        },\n        {\n          \"name\": \"defaultOption\",\n          \"value\": 0\n        }\n      ],\n      \"input\": [\n        {\n          \"name\": \"IDToken2\",\n          \"value\": 0\n        }\n      ]\n    },\n    {\n      \"type\": \"HiddenValueCallback\",\n      \"output\": [\n        {\n          \"name\": \"value\",\n          \"value\": \"false\"\n        },\n        {\n          \"name\": \"id\",\n          \"value\": \"skip-input\"\n        }\n      ],\n      \"input\": [\n        {\n          \"name\": \"IDToken3\",\n          \"value\": \"Skip\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"var skipContainer = document.createElement(\\\"div\\\");skipContainer.style = \\\"width: 100%\\\";skipContainer.innerHTML = \\\"<button id='skip-link' class='btn btn-block btn-link' type='submit'>Skip for now</button>\\\";document.getElementById(\\\"skip-input\\\").parentNode.append(skipContainer);document.getElementsByClassName(\\\"callback-component\\\").forEach(  function (e) {    var message = e.firstElementChild;    if (message.firstChild && message.firstChild.nodeName == \\\"#text\\\" && message.firstChild.nodeValue.trim() == \\\"message\\\") {      message.align = \\\"center\\\";      message.innerHTML = \\\"<h2 class='h2'>Set up 2-step verification</h2><div style='margin-bottom:1em'>Protect your account by adding a second step after entering your password to verify it's you signing in.</div>\\\";    }  })\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"4\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"document.getElementById(\\\"skip-link\\\").onclick = function() {  document.getElementById(\\\"skip-input\\\").value = \\\"Skip\\\";  document.getElementById(\\\"loginButton_0\\\").click();  return false;}\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"4\"\n        }\n      ]\n    }\n  ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{platformUrl}}/am/json/authenticate",
+											"host": [
+												"{{platformUrl}}"
+											],
+											"path": [
+												"am",
+												"json",
+												"authenticate"
+											]
+										},
+										"description": "Return the callback, specifying the credentials of an administrative user.\nThis request obtains the name used in headers to specify the session token. To manually provide the session token name, in the ID Cloud console, navigate to **Tenant Settings**, and copy the *Cookie Name* value. Use this value in the `cookieName` variable in your Postman Collection."
+									},
+									"response": []
+								},
+								{
+									"name": "CHResetPassword",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"const jsonData = JSON.parse(responseBody);\r",
+													"\r",
+													"pm.test(\"AuthTree -> CHResetPassword contains correct subnodes\", () => {\r",
+													"    const actual = jsonData;\r",
+													"    const expected = JSON.parse(pm.collectionVariables.get(\"AuthTree_CHResetPassword\"));\r",
+													"\r",
+													"    let utils = eval(environment.utils)();\r",
+													"    pm.expect(utils.compare.deepEqualAuthTree(actual, expected), `AuthTree -> CHResetPassword contains incorrect subnodes,  \r",
+													"            Expected => ${JSON.stringify(expected)}   \r",
+													"            Actual => ${JSON.stringify(actual)}`).to.be.true;\r",
+													"\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "cookie",
+												"value": "{{cookie_Name}} = {{session_token}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{platformUrl}}/am/json/{{realm}}/realm-config/authentication/authenticationtrees/trees/CHResetPassword",
+											"host": [
+												"{{platformUrl}}"
+											],
+											"path": [
+												"am",
+												"json",
+												"{{realm}}",
+												"realm-config",
+												"authentication",
+												"authenticationtrees",
+												"trees",
+												"CHResetPassword"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
 							"name": "CHLoginMFA",
 							"event": [
 								{
@@ -1837,217 +2189,6 @@
 										"authenticationtrees",
 										"trees",
 										"chloginmfa"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Reset Password",
-					"item": [
-						{
-							"name": "Authentication to Top-Level Realm",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"const JSONResponse = JSON.parse(responseBody);",
-											"",
-											"// Did request have a callback?",
-											"if(JSONResponse.authId && JSONResponse.authId != \"\")",
-											"{",
-											"  // Set `authId` variable",
-											"  pm.environment.set(\"authId\", JSONResponse.authId);",
-											"}",
-											"",
-											"",
-											""
-										],
-										"type": "text/javascript"
-									}
-								},
-								{
-									"listen": "prerequest",
-									"script": {
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"protocolProfileBehavior": {
-								"disableCookies": true
-							},
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"description": "The media type of the resource.",
-										"key": "Content-Type",
-										"value": "application/json"
-									},
-									{
-										"description": "This collection documents version 2.1 of the authentication resource.",
-										"key": "Accept-API-Version",
-										"value": "resource=2.1",
-										"disabled": true
-									}
-								],
-								"url": {
-									"raw": "{{platformUrl}}/am/json/authenticate",
-									"host": [
-										"{{platformUrl}}"
-									],
-									"path": [
-										"am",
-										"json",
-										"authenticate"
-									]
-								},
-								"description": "To get started, request the callbacks from the top-level realm."
-							},
-							"response": []
-						},
-						{
-							"name": "Authenticate as ID Cloud Admin and Get Session Token, and Cookie Name",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"const JSONResponse = JSON.parse(responseBody);",
-											"",
-											"// Did request return SSO Token?",
-											"if(JSONResponse.tokenId && JSONResponse.tokenId != \"\")",
-											"{",
-											"  // Set `session token` variable",
-											"  pm.environment.set(\"session_token\", JSONResponse.tokenId);",
-											"",
-											"  // Remove `authId` variable",
-											"  pm.environment.unset(\"authId\");",
-											"",
-											"}",
-											"",
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"protocolProfileBehavior": {
-								"disableCookies": true
-							},
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"description": "Specifies that the `/json/authenticate` endpoint uses JSON format for requests.",
-										"key": "Content-Type",
-										"value": "application/json"
-									},
-									{
-										"description": "Specifies the version of the `/json/authenticate` endpoint to use.",
-										"key": "Accept-API-Version",
-										"value": "resource=2.1, protocol=1.0",
-										"disabled": true
-									},
-									{
-										"key": "",
-										"value": "",
-										"type": "text",
-										"disabled": true
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"authId\": \"{{authId}}\",\n    \"callbacks\": [\n        {\n            \"type\": \"NameCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"User Name\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken1\",\n                    \"value\": \"{{IDCloudAdminUsername}}\"\n                }\n            ],\n            \"_id\": 0\n        },\n        {\n            \"type\": \"PasswordCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"Password\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken2\",\n                    \"value\": \"{{IDCloudAdminPassword}}\"\n                }\n            ],\n            \"_id\": 1\n        }\n    ]\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{platformUrl}}/am/json/authenticate",
-									"host": [
-										"{{platformUrl}}"
-									],
-									"path": [
-										"am",
-										"json",
-										"authenticate"
-									]
-								},
-								"description": "Return the callback, specifying the credentials of an administrative user.\nThis request obtains the name used in headers to specify the session token. To manually provide the session token name, in the ID Cloud console, navigate to **Tenant Settings**, and copy the *Cookie Name* value. Use this value in the `cookieName` variable in your Postman Collection."
-							},
-							"response": []
-						},
-						{
-							"name": "CHResetPassword",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"const jsonData = JSON.parse(responseBody);\r",
-											"\r",
-											"pm.test(\"AuthTree -> CHResetPassword contains correct subnodes\", () => {\r",
-											"    const actual = jsonData;\r",
-											"    const expected = JSON.parse(pm.collectionVariables.get(\"AuthTree_CHResetPassword\"));\r",
-											"\r",
-											"    let utils = eval(environment.utils)();\r",
-											"    pm.expect(utils.compare.deepEqualAuthTree(actual, expected), `AuthTree -> CHResetPassword contains incorrect subnodes,  \r",
-											"            Expected => ${JSON.stringify(expected)}   \r",
-											"            Actual => ${JSON.stringify(actual)}`).to.be.true;\r",
-											"\r",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "cookie",
-										"value": "{{cookie_Name}} = {{session_token}}",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{platformUrl}}/am/json/{{realm}}/realm-config/authentication/authenticationtrees/trees/CHResetPassword",
-									"host": [
-										"{{platformUrl}}"
-									],
-									"path": [
-										"am",
-										"json",
-										"{{realm}}",
-										"realm-config",
-										"authentication",
-										"authenticationtrees",
-										"trees",
-										"CHResetPassword"
 									]
 								}
 							},
@@ -2138,6 +2279,74 @@
 										"exec": [
 											"const JSONResponse = JSON.parse(responseBody);",
 											"",
+											"// Did request have a callback?",
+											"if(JSONResponse.authId && JSONResponse.authId != \"\")",
+											"{",
+											"  // Set `authId` variable",
+											"  pm.environment.set(\"authId\", JSONResponse.authId);",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableCookies": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "Specifies that the `/json/authenticate` endpoint uses JSON format for requests.",
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"description": "Specifies the version of the `/json/authenticate` endpoint to use.",
+										"key": "Accept-API-Version",
+										"value": "resource=2.1, protocol=1.0",
+										"disabled": true
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"authId\": \"{{authId}}\",\n    \"callbacks\": [\n        {\n            \"type\": \"NameCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"User Name\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken1\",\n                    \"value\": \"{{IDCloudAdminUsername}}\"\n                }\n            ],\n            \"_id\": 0\n        },\n        {\n            \"type\": \"PasswordCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"Password\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken2\",\n                    \"value\": \"{{IDCloudAdminPassword}}\"\n                }\n            ],\n            \"_id\": 1\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{platformUrl}}/am/json/authenticate",
+									"host": [
+										"{{platformUrl}}"
+									],
+									"path": [
+										"am",
+										"json",
+										"authenticate"
+									]
+								},
+								"description": "Return the callback, specifying the credentials of an administrative user.\nThis request obtains the name used in headers to specify the session token. To manually provide the session token name, in the ID Cloud console, navigate to **Tenant Settings**, and copy the *Cookie Name* value. Use this value in the `cookieName` variable in your Postman Collection."
+							},
+							"response": []
+						},
+						{
+							"name": "Skip 2-step verification prompt",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const JSONResponse = JSON.parse(responseBody);",
+											"",
 											"// Did request return SSO Token?",
 											"if(JSONResponse.tokenId && JSONResponse.tokenId != \"\")",
 											"{",
@@ -2148,7 +2357,6 @@
 											"  pm.environment.unset(\"authId\");",
 											"",
 											"}",
-											"",
 											"",
 											""
 										],
@@ -2182,7 +2390,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"authId\": \"{{authId}}\",\n    \"callbacks\": [\n        {\n            \"type\": \"NameCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"User Name\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken1\",\n                    \"value\": \"{{IDCloudAdminUsername}}\"\n                }\n            ],\n            \"_id\": 0\n        },\n        {\n            \"type\": \"PasswordCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"Password\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken2\",\n                    \"value\": \"{{IDCloudAdminPassword}}\"\n                }\n            ],\n            \"_id\": 1\n        }\n    ]\n}",
+									"raw": "{\n  \"authId\": \"{{authId}}\",\n  \"callbacks\": [\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"message\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"0\"\n        }\n      ]\n    },\n    {\n      \"type\": \"ConfirmationCallback\",\n      \"output\": [\n        {\n          \"name\": \"prompt\",\n          \"value\": \"\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": 0\n        },\n        {\n          \"name\": \"options\",\n          \"value\": [\n            \"Set up\"\n          ]\n        },\n        {\n          \"name\": \"optionType\",\n          \"value\": -1\n        },\n        {\n          \"name\": \"defaultOption\",\n          \"value\": 0\n        }\n      ],\n      \"input\": [\n        {\n          \"name\": \"IDToken2\",\n          \"value\": 0\n        }\n      ]\n    },\n    {\n      \"type\": \"HiddenValueCallback\",\n      \"output\": [\n        {\n          \"name\": \"value\",\n          \"value\": \"false\"\n        },\n        {\n          \"name\": \"id\",\n          \"value\": \"skip-input\"\n        }\n      ],\n      \"input\": [\n        {\n          \"name\": \"IDToken3\",\n          \"value\": \"Skip\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"var skipContainer = document.createElement(\\\"div\\\");skipContainer.style = \\\"width: 100%\\\";skipContainer.innerHTML = \\\"<button id='skip-link' class='btn btn-block btn-link' type='submit'>Skip for now</button>\\\";document.getElementById(\\\"skip-input\\\").parentNode.append(skipContainer);document.getElementsByClassName(\\\"callback-component\\\").forEach(  function (e) {    var message = e.firstElementChild;    if (message.firstChild && message.firstChild.nodeName == \\\"#text\\\" && message.firstChild.nodeValue.trim() == \\\"message\\\") {      message.align = \\\"center\\\";      message.innerHTML = \\\"<h2 class='h2'>Set up 2-step verification</h2><div style='margin-bottom:1em'>Protect your account by adding a second step after entering your password to verify it's you signing in.</div>\\\";    }  })\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"4\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"document.getElementById(\\\"skip-link\\\").onclick = function() {  document.getElementById(\\\"skip-input\\\").value = \\\"Skip\\\";  document.getElementById(\\\"loginButton_0\\\").click();  return false;}\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"4\"\n        }\n      ]\n    }\n  ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -3512,17 +3720,12 @@
 												"exec": [
 													"const JSONResponse = JSON.parse(responseBody);",
 													"",
-													"// Did request return SSO Token?",
-													"if(JSONResponse.tokenId && JSONResponse.tokenId != \"\")",
+													"// Did request have a callback?",
+													"if(JSONResponse.authId && JSONResponse.authId != \"\")",
 													"{",
-													"  // Set `session token` variable",
-													"  pm.environment.set(\"session_token\", JSONResponse.tokenId);",
-													"",
-													"  // Remove `authId` variable",
-													"  pm.environment.unset(\"authId\");",
-													"",
-													"}",
-													""
+													"  // Set `authId` variable",
+													"  pm.environment.set(\"authId\", JSONResponse.authId);",
+													"}"
 												],
 												"type": "text/javascript"
 											}
@@ -3555,6 +3758,80 @@
 										"body": {
 											"mode": "raw",
 											"raw": "{\n    \"authId\": \"{{authId}}\",\n    \"callbacks\": [\n        {\n            \"type\": \"NameCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"User Name\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken1\",\n                    \"value\": \"{{IDCloudAdminUsername}}\"\n                }\n            ],\n            \"_id\": 0\n        },\n        {\n            \"type\": \"PasswordCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"Password\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken2\",\n                    \"value\": \"{{IDCloudAdminPassword}}\"\n                }\n            ],\n            \"_id\": 1\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{platformUrl}}/am/json/authenticate",
+											"host": [
+												"{{platformUrl}}"
+											],
+											"path": [
+												"am",
+												"json",
+												"authenticate"
+											]
+										},
+										"description": "Return the callback, specifying the credentials of an administrative user.\nThis request obtains the name used in headers to specify the session token. To manually provide the session token name, in the ID Cloud console, navigate to **Tenant Settings**, and copy the *Cookie Name* value. Use this value in the `cookieName` variable in your Postman Collection."
+									},
+									"response": []
+								},
+								{
+									"name": "Skip 2-step verification prompt",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"const JSONResponse = JSON.parse(responseBody);",
+													"",
+													"// Did request return SSO Token?",
+													"if(JSONResponse.tokenId && JSONResponse.tokenId != \"\")",
+													"{",
+													"  // Set `session token` variable",
+													"  pm.environment.set(\"session_token\", JSONResponse.tokenId);",
+													"",
+													"  // Remove `authId` variable",
+													"  pm.environment.unset(\"authId\");",
+													"",
+													"}",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableCookies": true
+									},
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "Specifies that the `/json/authenticate` endpoint uses JSON format for requests.",
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "Specifies the version of the `/json/authenticate` endpoint to use.",
+												"key": "Accept-API-Version",
+												"value": "resource=2.1, protocol=1.0",
+												"disabled": true
+											},
+											{
+												"key": "",
+												"value": "",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"authId\": \"{{authId}}\",\n  \"callbacks\": [\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"message\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"0\"\n        }\n      ]\n    },\n    {\n      \"type\": \"ConfirmationCallback\",\n      \"output\": [\n        {\n          \"name\": \"prompt\",\n          \"value\": \"\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": 0\n        },\n        {\n          \"name\": \"options\",\n          \"value\": [\n            \"Set up\"\n          ]\n        },\n        {\n          \"name\": \"optionType\",\n          \"value\": -1\n        },\n        {\n          \"name\": \"defaultOption\",\n          \"value\": 0\n        }\n      ],\n      \"input\": [\n        {\n          \"name\": \"IDToken2\",\n          \"value\": 0\n        }\n      ]\n    },\n    {\n      \"type\": \"HiddenValueCallback\",\n      \"output\": [\n        {\n          \"name\": \"value\",\n          \"value\": \"false\"\n        },\n        {\n          \"name\": \"id\",\n          \"value\": \"skip-input\"\n        }\n      ],\n      \"input\": [\n        {\n          \"name\": \"IDToken3\",\n          \"value\": \"Skip\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"var skipContainer = document.createElement(\\\"div\\\");skipContainer.style = \\\"width: 100%\\\";skipContainer.innerHTML = \\\"<button id='skip-link' class='btn btn-block btn-link' type='submit'>Skip for now</button>\\\";document.getElementById(\\\"skip-input\\\").parentNode.append(skipContainer);document.getElementsByClassName(\\\"callback-component\\\").forEach(  function (e) {    var message = e.firstElementChild;    if (message.firstChild && message.firstChild.nodeName == \\\"#text\\\" && message.firstChild.nodeValue.trim() == \\\"message\\\") {      message.align = \\\"center\\\";      message.innerHTML = \\\"<h2 class='h2'>Set up 2-step verification</h2><div style='margin-bottom:1em'>Protect your account by adding a second step after entering your password to verify it's you signing in.</div>\\\";    }  })\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"4\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"document.getElementById(\\\"skip-link\\\").onclick = function() {  document.getElementById(\\\"skip-input\\\").value = \\\"Skip\\\";  document.getElementById(\\\"loginButton_0\\\").click();  return false;}\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"4\"\n        }\n      ]\n    }\n  ]\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -4546,17 +4823,12 @@
 												"exec": [
 													"const JSONResponse = JSON.parse(responseBody);",
 													"",
-													"// Did request return SSO Token?",
-													"if(JSONResponse.tokenId && JSONResponse.tokenId != \"\")",
+													"// Did request have a callback?",
+													"if(JSONResponse.authId && JSONResponse.authId != \"\")",
 													"{",
-													"  // Set `session token` variable",
-													"  pm.environment.set(\"session_token\", JSONResponse.tokenId);",
-													"",
-													"  // Remove `authId` variable",
-													"  pm.environment.unset(\"authId\");",
-													"",
-													"}",
-													""
+													"  // Set `authId` variable",
+													"  pm.environment.set(\"authId\", JSONResponse.authId);",
+													"}"
 												],
 												"type": "text/javascript"
 											}
@@ -4589,6 +4861,80 @@
 										"body": {
 											"mode": "raw",
 											"raw": "{\n    \"authId\": \"{{authId}}\",\n    \"callbacks\": [\n        {\n            \"type\": \"NameCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"User Name\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken1\",\n                    \"value\": \"{{IDCloudAdminUsername}}\"\n                }\n            ],\n            \"_id\": 0\n        },\n        {\n            \"type\": \"PasswordCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"Password\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken2\",\n                    \"value\": \"{{IDCloudAdminPassword}}\"\n                }\n            ],\n            \"_id\": 1\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{platformUrl}}/am/json/authenticate",
+											"host": [
+												"{{platformUrl}}"
+											],
+											"path": [
+												"am",
+												"json",
+												"authenticate"
+											]
+										},
+										"description": "Return the callback, specifying the credentials of an administrative user.\nThis request obtains the name used in headers to specify the session token. To manually provide the session token name, in the ID Cloud console, navigate to **Tenant Settings**, and copy the *Cookie Name* value. Use this value in the `cookieName` variable in your Postman Collection."
+									},
+									"response": []
+								},
+								{
+									"name": "Skip 2-step verification prompt",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"const JSONResponse = JSON.parse(responseBody);",
+													"",
+													"// Did request return SSO Token?",
+													"if(JSONResponse.tokenId && JSONResponse.tokenId != \"\")",
+													"{",
+													"  // Set `session token` variable",
+													"  pm.environment.set(\"session_token\", JSONResponse.tokenId);",
+													"",
+													"  // Remove `authId` variable",
+													"  pm.environment.unset(\"authId\");",
+													"",
+													"}",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableCookies": true
+									},
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "Specifies that the `/json/authenticate` endpoint uses JSON format for requests.",
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "Specifies the version of the `/json/authenticate` endpoint to use.",
+												"key": "Accept-API-Version",
+												"value": "resource=2.1, protocol=1.0",
+												"disabled": true
+											},
+											{
+												"key": "",
+												"value": "",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"authId\": \"{{authId}}\",\n  \"callbacks\": [\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"message\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"0\"\n        }\n      ]\n    },\n    {\n      \"type\": \"ConfirmationCallback\",\n      \"output\": [\n        {\n          \"name\": \"prompt\",\n          \"value\": \"\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": 0\n        },\n        {\n          \"name\": \"options\",\n          \"value\": [\n            \"Set up\"\n          ]\n        },\n        {\n          \"name\": \"optionType\",\n          \"value\": -1\n        },\n        {\n          \"name\": \"defaultOption\",\n          \"value\": 0\n        }\n      ],\n      \"input\": [\n        {\n          \"name\": \"IDToken2\",\n          \"value\": 0\n        }\n      ]\n    },\n    {\n      \"type\": \"HiddenValueCallback\",\n      \"output\": [\n        {\n          \"name\": \"value\",\n          \"value\": \"false\"\n        },\n        {\n          \"name\": \"id\",\n          \"value\": \"skip-input\"\n        }\n      ],\n      \"input\": [\n        {\n          \"name\": \"IDToken3\",\n          \"value\": \"Skip\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"var skipContainer = document.createElement(\\\"div\\\");skipContainer.style = \\\"width: 100%\\\";skipContainer.innerHTML = \\\"<button id='skip-link' class='btn btn-block btn-link' type='submit'>Skip for now</button>\\\";document.getElementById(\\\"skip-input\\\").parentNode.append(skipContainer);document.getElementsByClassName(\\\"callback-component\\\").forEach(  function (e) {    var message = e.firstElementChild;    if (message.firstChild && message.firstChild.nodeName == \\\"#text\\\" && message.firstChild.nodeValue.trim() == \\\"message\\\") {      message.align = \\\"center\\\";      message.innerHTML = \\\"<h2 class='h2'>Set up 2-step verification</h2><div style='margin-bottom:1em'>Protect your account by adding a second step after entering your password to verify it's you signing in.</div>\\\";    }  })\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"4\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"document.getElementById(\\\"skip-link\\\").onclick = function() {  document.getElementById(\\\"skip-input\\\").value = \\\"Skip\\\";  document.getElementById(\\\"loginButton_0\\\").click();  return false;}\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"4\"\n        }\n      ]\n    }\n  ]\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -5114,6 +5460,74 @@
 										"exec": [
 											"const JSONResponse = JSON.parse(responseBody);",
 											"",
+											"// Did request have a callback?",
+											"if(JSONResponse.authId && JSONResponse.authId != \"\")",
+											"{",
+											"  // Set `authId` variable",
+											"  pm.environment.set(\"authId\", JSONResponse.authId);",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableCookies": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "Specifies that the `/json/authenticate` endpoint uses JSON format for requests.",
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"description": "Specifies the version of the `/json/authenticate` endpoint to use.",
+										"key": "Accept-API-Version",
+										"value": "resource=2.1, protocol=1.0",
+										"disabled": true
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"authId\": \"{{authId}}\",\n    \"callbacks\": [\n        {\n            \"type\": \"NameCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"User Name\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken1\",\n                    \"value\": \"{{IDCloudAdminUsername}}\"\n                }\n            ],\n            \"_id\": 0\n        },\n        {\n            \"type\": \"PasswordCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"Password\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken2\",\n                    \"value\": \"{{IDCloudAdminPassword}}\"\n                }\n            ],\n            \"_id\": 1\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{platformUrl}}/am/json/authenticate",
+									"host": [
+										"{{platformUrl}}"
+									],
+									"path": [
+										"am",
+										"json",
+										"authenticate"
+									]
+								},
+								"description": "Return the callback, specifying the credentials of an administrative user.\nThis request obtains the name used in headers to specify the session token. To manually provide the session token name, in the ID Cloud console, navigate to **Tenant Settings**, and copy the *Cookie Name* value. Use this value in the `cookieName` variable in your Postman Collection."
+							},
+							"response": []
+						},
+						{
+							"name": "Skip 2-step verification prompt",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const JSONResponse = JSON.parse(responseBody);",
+											"",
 											"// Did request return SSO Token?",
 											"if(JSONResponse.tokenId && JSONResponse.tokenId != \"\")",
 											"{",
@@ -5124,7 +5538,6 @@
 											"  pm.environment.unset(\"authId\");",
 											"",
 											"}",
-											"",
 											"",
 											""
 										],
@@ -5158,7 +5571,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"authId\": \"{{authId}}\",\n    \"callbacks\": [\n        {\n            \"type\": \"NameCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"User Name\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken1\",\n                    \"value\": \"{{IDCloudAdminUsername}}\"\n                }\n            ],\n            \"_id\": 0\n        },\n        {\n            \"type\": \"PasswordCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"Password\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken2\",\n                    \"value\": \"{{IDCloudAdminPassword}}\"\n                }\n            ],\n            \"_id\": 1\n        }\n    ]\n}",
+									"raw": "{\n  \"authId\": \"{{authId}}\",\n  \"callbacks\": [\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"message\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"0\"\n        }\n      ]\n    },\n    {\n      \"type\": \"ConfirmationCallback\",\n      \"output\": [\n        {\n          \"name\": \"prompt\",\n          \"value\": \"\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": 0\n        },\n        {\n          \"name\": \"options\",\n          \"value\": [\n            \"Set up\"\n          ]\n        },\n        {\n          \"name\": \"optionType\",\n          \"value\": -1\n        },\n        {\n          \"name\": \"defaultOption\",\n          \"value\": 0\n        }\n      ],\n      \"input\": [\n        {\n          \"name\": \"IDToken2\",\n          \"value\": 0\n        }\n      ]\n    },\n    {\n      \"type\": \"HiddenValueCallback\",\n      \"output\": [\n        {\n          \"name\": \"value\",\n          \"value\": \"false\"\n        },\n        {\n          \"name\": \"id\",\n          \"value\": \"skip-input\"\n        }\n      ],\n      \"input\": [\n        {\n          \"name\": \"IDToken3\",\n          \"value\": \"Skip\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"var skipContainer = document.createElement(\\\"div\\\");skipContainer.style = \\\"width: 100%\\\";skipContainer.innerHTML = \\\"<button id='skip-link' class='btn btn-block btn-link' type='submit'>Skip for now</button>\\\";document.getElementById(\\\"skip-input\\\").parentNode.append(skipContainer);document.getElementsByClassName(\\\"callback-component\\\").forEach(  function (e) {    var message = e.firstElementChild;    if (message.firstChild && message.firstChild.nodeName == \\\"#text\\\" && message.firstChild.nodeValue.trim() == \\\"message\\\") {      message.align = \\\"center\\\";      message.innerHTML = \\\"<h2 class='h2'>Set up 2-step verification</h2><div style='margin-bottom:1em'>Protect your account by adding a second step after entering your password to verify it's you signing in.</div>\\\";    }  })\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"4\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"document.getElementById(\\\"skip-link\\\").onclick = function() {  document.getElementById(\\\"skip-input\\\").value = \\\"Skip\\\";  document.getElementById(\\\"loginButton_0\\\").click();  return false;}\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"4\"\n        }\n      ]\n    }\n  ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -6508,6 +6921,74 @@
 										"exec": [
 											"const JSONResponse = JSON.parse(responseBody);",
 											"",
+											"// Did request have a callback?",
+											"if(JSONResponse.authId && JSONResponse.authId != \"\")",
+											"{",
+											"  // Set `authId` variable",
+											"  pm.environment.set(\"authId\", JSONResponse.authId);",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableCookies": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "Specifies that the `/json/authenticate` endpoint uses JSON format for requests.",
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"description": "Specifies the version of the `/json/authenticate` endpoint to use.",
+										"key": "Accept-API-Version",
+										"value": "resource=2.1, protocol=1.0",
+										"disabled": true
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"authId\": \"{{authId}}\",\n    \"callbacks\": [\n        {\n            \"type\": \"NameCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"User Name\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken1\",\n                    \"value\": \"{{IDCloudAdminUsername}}\"\n                }\n            ],\n            \"_id\": 0\n        },\n        {\n            \"type\": \"PasswordCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"Password\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken2\",\n                    \"value\": \"{{IDCloudAdminPassword}}\"\n                }\n            ],\n            \"_id\": 1\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{platformUrl}}/am/json/authenticate",
+									"host": [
+										"{{platformUrl}}"
+									],
+									"path": [
+										"am",
+										"json",
+										"authenticate"
+									]
+								},
+								"description": "Return the callback, specifying the credentials of an administrative user.\nThis request obtains the name used in headers to specify the session token. To manually provide the session token name, in the ID Cloud console, navigate to **Tenant Settings**, and copy the *Cookie Name* value. Use this value in the `cookieName` variable in your Postman Collection."
+							},
+							"response": []
+						},
+						{
+							"name": "Skip 2-step verification prompt",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const JSONResponse = JSON.parse(responseBody);",
+											"",
 											"// Did request return SSO Token?",
 											"if(JSONResponse.tokenId && JSONResponse.tokenId != \"\")",
 											"{",
@@ -6551,7 +7032,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"authId\": \"{{authId}}\",\n    \"callbacks\": [\n        {\n            \"type\": \"NameCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"User Name\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken1\",\n                    \"value\": \"{{IDCloudAdminUsername}}\"\n                }\n            ],\n            \"_id\": 0\n        },\n        {\n            \"type\": \"PasswordCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"Password\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken2\",\n                    \"value\": \"{{IDCloudAdminPassword}}\"\n                }\n            ],\n            \"_id\": 1\n        }\n    ]\n}",
+									"raw": "{\n  \"authId\": \"{{authId}}\",\n  \"callbacks\": [\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"message\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"0\"\n        }\n      ]\n    },\n    {\n      \"type\": \"ConfirmationCallback\",\n      \"output\": [\n        {\n          \"name\": \"prompt\",\n          \"value\": \"\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": 0\n        },\n        {\n          \"name\": \"options\",\n          \"value\": [\n            \"Set up\"\n          ]\n        },\n        {\n          \"name\": \"optionType\",\n          \"value\": -1\n        },\n        {\n          \"name\": \"defaultOption\",\n          \"value\": 0\n        }\n      ],\n      \"input\": [\n        {\n          \"name\": \"IDToken2\",\n          \"value\": 0\n        }\n      ]\n    },\n    {\n      \"type\": \"HiddenValueCallback\",\n      \"output\": [\n        {\n          \"name\": \"value\",\n          \"value\": \"false\"\n        },\n        {\n          \"name\": \"id\",\n          \"value\": \"skip-input\"\n        }\n      ],\n      \"input\": [\n        {\n          \"name\": \"IDToken3\",\n          \"value\": \"Skip\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"var skipContainer = document.createElement(\\\"div\\\");skipContainer.style = \\\"width: 100%\\\";skipContainer.innerHTML = \\\"<button id='skip-link' class='btn btn-block btn-link' type='submit'>Skip for now</button>\\\";document.getElementById(\\\"skip-input\\\").parentNode.append(skipContainer);document.getElementsByClassName(\\\"callback-component\\\").forEach(  function (e) {    var message = e.firstElementChild;    if (message.firstChild && message.firstChild.nodeName == \\\"#text\\\" && message.firstChild.nodeValue.trim() == \\\"message\\\") {      message.align = \\\"center\\\";      message.innerHTML = \\\"<h2 class='h2'>Set up 2-step verification</h2><div style='margin-bottom:1em'>Protect your account by adding a second step after entering your password to verify it's you signing in.</div>\\\";    }  })\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"4\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"document.getElementById(\\\"skip-link\\\").onclick = function() {  document.getElementById(\\\"skip-input\\\").value = \\\"Skip\\\";  document.getElementById(\\\"loginButton_0\\\").click();  return false;}\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"4\"\n        }\n      ]\n    }\n  ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -6985,6 +7466,74 @@
 										"exec": [
 											"const JSONResponse = JSON.parse(responseBody);",
 											"",
+											"// Did request have a callback?",
+											"if(JSONResponse.authId && JSONResponse.authId != \"\")",
+											"{",
+											"  // Set `authId` variable",
+											"  pm.environment.set(\"authId\", JSONResponse.authId);",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableCookies": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "Specifies that the `/json/authenticate` endpoint uses JSON format for requests.",
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"description": "Specifies the version of the `/json/authenticate` endpoint to use.",
+										"key": "Accept-API-Version",
+										"value": "resource=2.1, protocol=1.0",
+										"disabled": true
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"authId\": \"{{authId}}\",\n    \"callbacks\": [\n        {\n            \"type\": \"NameCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"User Name\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken1\",\n                    \"value\": \"{{IDCloudAdminUsername}}\"\n                }\n            ],\n            \"_id\": 0\n        },\n        {\n            \"type\": \"PasswordCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"Password\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken2\",\n                    \"value\": \"{{IDCloudAdminPassword}}\"\n                }\n            ],\n            \"_id\": 1\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{platformUrl}}/am/json/authenticate",
+									"host": [
+										"{{platformUrl}}"
+									],
+									"path": [
+										"am",
+										"json",
+										"authenticate"
+									]
+								},
+								"description": "Return the callback, specifying the credentials of an administrative user.\nThis request obtains the name used in headers to specify the session token. To manually provide the session token name, in the ID Cloud console, navigate to **Tenant Settings**, and copy the *Cookie Name* value. Use this value in the `cookieName` variable in your Postman Collection."
+							},
+							"response": []
+						},
+						{
+							"name": "Skip 2-step verification prompt",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const JSONResponse = JSON.parse(responseBody);",
+											"",
 											"// Did request return SSO Token?",
 											"if(JSONResponse.tokenId && JSONResponse.tokenId != \"\")",
 											"{",
@@ -7028,7 +7577,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"authId\": \"{{authId}}\",\n    \"callbacks\": [\n        {\n            \"type\": \"NameCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"User Name\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken1\",\n                    \"value\": \"{{IDCloudAdminUsername}}\"\n                }\n            ],\n            \"_id\": 0\n        },\n        {\n            \"type\": \"PasswordCallback\",\n            \"output\": [\n                {\n                    \"name\": \"prompt\",\n                    \"value\": \"Password\"\n                }\n            ],\n            \"input\": [\n                {\n                    \"name\": \"IDToken2\",\n                    \"value\": \"{{IDCloudAdminPassword}}\"\n                }\n            ],\n            \"_id\": 1\n        }\n    ]\n}",
+									"raw": "{\n  \"authId\": \"{{authId}}\",\n  \"callbacks\": [\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"message\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"0\"\n        }\n      ]\n    },\n    {\n      \"type\": \"ConfirmationCallback\",\n      \"output\": [\n        {\n          \"name\": \"prompt\",\n          \"value\": \"\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": 0\n        },\n        {\n          \"name\": \"options\",\n          \"value\": [\n            \"Set up\"\n          ]\n        },\n        {\n          \"name\": \"optionType\",\n          \"value\": -1\n        },\n        {\n          \"name\": \"defaultOption\",\n          \"value\": 0\n        }\n      ],\n      \"input\": [\n        {\n          \"name\": \"IDToken2\",\n          \"value\": 0\n        }\n      ]\n    },\n    {\n      \"type\": \"HiddenValueCallback\",\n      \"output\": [\n        {\n          \"name\": \"value\",\n          \"value\": \"false\"\n        },\n        {\n          \"name\": \"id\",\n          \"value\": \"skip-input\"\n        }\n      ],\n      \"input\": [\n        {\n          \"name\": \"IDToken3\",\n          \"value\": \"Skip\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"var skipContainer = document.createElement(\\\"div\\\");skipContainer.style = \\\"width: 100%\\\";skipContainer.innerHTML = \\\"<button id='skip-link' class='btn btn-block btn-link' type='submit'>Skip for now</button>\\\";document.getElementById(\\\"skip-input\\\").parentNode.append(skipContainer);document.getElementsByClassName(\\\"callback-component\\\").forEach(  function (e) {    var message = e.firstElementChild;    if (message.firstChild && message.firstChild.nodeName == \\\"#text\\\" && message.firstChild.nodeValue.trim() == \\\"message\\\") {      message.align = \\\"center\\\";      message.innerHTML = \\\"<h2 class='h2'>Set up 2-step verification</h2><div style='margin-bottom:1em'>Protect your account by adding a second step after entering your password to verify it's you signing in.</div>\\\";    }  })\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"4\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextOutputCallback\",\n      \"output\": [\n        {\n          \"name\": \"message\",\n          \"value\": \"document.getElementById(\\\"skip-link\\\").onclick = function() {  document.getElementById(\\\"skip-input\\\").value = \\\"Skip\\\";  document.getElementById(\\\"loginButton_0\\\").click();  return false;}\"\n        },\n        {\n          \"name\": \"messageType\",\n          \"value\": \"4\"\n        }\n      ]\n    }\n  ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
