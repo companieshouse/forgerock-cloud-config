@@ -155,6 +155,7 @@ if(!callbacks.isEmpty()){
         sharedState.put("errorMessage",null);
         outcome = NodeOutcome.TRUE;   
     }else{
+        sharedState.put("errorMessage",null);
         outcome = NodeOutcome.FALSE;   
     }
 } else {
