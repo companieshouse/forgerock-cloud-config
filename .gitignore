@@ -2,6 +2,7 @@ node_modules
 coverage
 .DS_Store
 .env
+qa-tests/Reports
 
 # Sensitive config files
 config/services/oauth2-provider.json
