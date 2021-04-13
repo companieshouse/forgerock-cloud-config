@@ -7,15 +7,15 @@
     },
     "defaultScopes": {
       "inherited": false,
-      "value": []
-    },
-    "refreshTokenLifetime": {
-      "inherited": false,
       "value":[
         "email",
         "profile",
         "phone"
       ]
+    },
+    "refreshTokenLifetime": {
+      "inherited": false,
+      "value": 0
     },
     "scopes": {
       "inherited": false,
