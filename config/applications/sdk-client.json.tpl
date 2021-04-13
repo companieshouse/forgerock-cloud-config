@@ -11,13 +11,20 @@
     },
     "refreshTokenLifetime": {
       "inherited": false,
-      "value": 0
+      "value":[
+        "email",
+        "profile",
+        "phone"
+      ]
     },
     "scopes": {
       "inherited": false,
       "value": [
         "openid",
-        "fr:idm:*"
+        "fr:idm:*",
+        "email",
+        "profile",
+        "phone"
       ]
     },
     "status": {
