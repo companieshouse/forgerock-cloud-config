@@ -32,6 +32,35 @@
         },
         {
             "payload": {
+                "_id": "8b203967-fa57-4ce2-9dad-2f387ca52a61",
+                "name": "CH - Registration - Sent Email Confirmation",
+                "description": "Displays a confirmation message when registration email is sent",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "ch-registration-confirmation-email-sent.js"
+        },
+        {
+            "payload": {
+                "_id": "d67457d4-b0ed-4b77-9ca1-23295246c9fd",
+                "name": "CH - Registration - Set User Existing Flag",
+                "description": "Sets a flag in transient state to mark the user as already existing",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "ch-registration-mark-user-existing.js"
+        },        {
+            "payload": {
                 "_id": "181f73fa-ec30-4ef4-b78a-9790a4918b23",
                 "name": "CH - Callback for User Already Exists",
                 "description": "Callback to return the existing user message during registration",
@@ -125,7 +154,7 @@
         {
             "payload": {
                 "_id":"a39f3f71-1782-46dc-97cf-7cc417d4ca4a",
-                "name":"CH - Callback for Reset Password Email sent",
+                "name":"CH - Reset Password - Confirmation of Email Sent",
                 "description":"Callback to show confirmation the password reset email has been sent",
                 "script":"<replace>",
                 "default":false,
@@ -136,7 +165,7 @@
                 "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
                 "lastModifiedDate":1615203506316
              },
-            "filename": "ch-password-reset-email-sent.js"
+            "filename": "ch-password-reset-confirmation-email-sent.js"
         },
         {
             "payload": {
