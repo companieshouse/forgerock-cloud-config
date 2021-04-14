@@ -730,22 +730,6 @@
         },
         {
             "payload": {
-                "_id": "0771b655-768c-407b-800b-89b70bbe1407",
-                "name": "CH - Fetch Company Auth Code",
-                "description": "Fetch a company auth code",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
-                "lastModifiedDate": 1617036236032
-            },
-            "filename": "ch-fetch-company-auth-code.js"
-        },
-        {
-            "payload": {
                 "_id": "9dc0bbc6-8894-4d23-a13f-8619a3fcad5b",
                 "name": "CH - Prompt for Company Number/Auth Code",
                 "description": "Prompts the user to enter Company Number and Company Auth Code",
