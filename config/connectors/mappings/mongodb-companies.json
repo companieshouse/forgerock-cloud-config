@@ -6,76 +6,84 @@
 	"icon": null,
 	"displayName": "systemChscompanyCompany_profile_managedCompany",
 	"properties": [{
+		"source": "data",
 		"target": "name",
-		"source": "data",
 		"transform": {
-			"type": "text/javascript",
 			"globals": {},
-			"source": "source.company_name"
+			"source": "source.company_name",
+			"type": "text/javascript"
 		}
 	}, {
+		"source": "data",
 		"target": "number",
-		"source": "data",
 		"transform": {
-			"type": "text/javascript",
 			"globals": {},
-			"source": "source.company_number"
+			"source": "source.company_number",
+			"type": "text/javascript"
 		}
 	}, {
+		"source": "data",
 		"target": "type",
-		"source": "data",
 		"transform": {
-			"type": "text/javascript",
 			"globals": {},
-			"source": "source.type"
+			"source": "source.type",
+			"type": "text/javascript"
 		}
 	}, {
+		"source": "data",
 		"target": "status",
-		"source": "data",
 		"transform": {
-			"type": "text/javascript",
 			"globals": {},
-			"source": "source.company_status"
+			"source": "source.company_status",
+			"type": "text/javascript"
 		}
 	}, {
+		"source": "data",
 		"target": "locality",
-		"source": "data",
 		"transform": {
-			"type": "text/javascript",
 			"globals": {},
-			"source": "source.registered_office_address.locality"
+			"source": "source.registered_office_address.locality",
+			"type": "text/javascript"
 		}
 	}, {
+		"source": "data",
 		"target": "postalCode",
-		"source": "data",
 		"transform": {
-			"type": "text/javascript",
 			"globals": {},
-			"source": "source.registered_office_address.postal_code"
+			"source": "source.registered_office_address.postal_code",
+			"type": "text/javascript"
 		}
 	}, {
+		"source": "data",
 		"target": "addressLine1",
-		"source": "data",
 		"transform": {
-			"type": "text/javascript",
 			"globals": {},
-			"source": "source.registered_office_address.address_line_1"
+			"source": "source.registered_office_address.address_line_1",
+			"type": "text/javascript"
 		}
 	}, {
+		"source": "data",
 		"target": "addressLine2",
-		"source": "data",
 		"transform": {
-			"type": "text/javascript",
 			"globals": {},
-			"source": "source.registered_office_address.address_line_2"
+			"source": "source.registered_office_address.address_line_2",
+			"type": "text/javascript"
 		}
 	}, {
+		"source": "data",
 		"target": "region",
+		"transform": {
+			"globals": {},
+			"source": "source.registered_office_address.region",
+			"type": "text/javascript"
+		}
+	}, {
+		"target": "creationDate",
 		"source": "data",
 		"transform": {
 			"type": "text/javascript",
 			"globals": {},
-			"source": "source.registered_office_address.region"
+			"source": "source.date_of_creation"
 		}
 	}],
 	"policies": [{
