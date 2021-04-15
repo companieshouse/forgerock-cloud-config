@@ -21,19 +21,25 @@ var fr = JavaImporter(
 )
 
 if (callbacks.isEmpty()) {
-  var infoMessage = "Please enter the company number."
-  var errorMessage = sharedState.get("errorMessage")
-  var level = fr.TextOutputCallback.INFORMATION
+  var infoMessage = "Please enter the company number.";
+  var errorMessage = sharedState.get("errorMessage");
+  var level = fr.TextOutputCallback.INFORMATION;
   if (errorMessage != null) {
-     level = fr.TextOutputCallback.ERROR
-     infoMessage = errorMessage.concat(" Please try again.")
+     level = fr.TextOutputCallback.ERROR;
+     infoMessage = errorMessage.concat(" Please try again.");
+     action = fr.Action.send(
+      new fr.TextOutputCallback(level, infoMessage),
+      new fr.NameCallback("Enter Company number"),
+      new fr.HiddenValueCallback ("stage", "COMPANY_ASSOCIATION_1"),
+      new fr.HiddenValueCallback("pagePropsJSON", JSON.stringify({ 'errors': [{ label: infoMessage }] }))
+    ).build();
+  } else {
+    action = fr.Action.send(
+      new fr.TextOutputCallback(level, infoMessage),
+      new fr.NameCallback("Enter Company number"),
+      new fr.HiddenValueCallback ("stage", "COMPANY_ASSOCIATION_1")
+    ).build();
   }
-  action = fr.Action.send(
-    new fr.TextOutputCallback(level, infoMessage),
-    new fr.NameCallback("Enter Company number"),
-    new fr.HiddenValueCallback ("stage", "COMPANY_ASSOCIATION_1"),
-    new fr.HiddenValueCallback("pagePropsJSON", JSON.stringify({ 'errors': [{ label: infoMessage }] }))
-  ).build();
 } else {
   var companyNumber = callbacks.get(1).getName();
   logger.error("[ENTER COMPANY NO CALLBACK] companyNumber: " + companyNumber);
