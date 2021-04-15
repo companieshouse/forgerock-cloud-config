@@ -71,7 +71,7 @@
             "nodeType": "ScriptedDecisionNode", 
             "details": {
                 "inputs":["*"],
-                "outcomes":["true","error","already_associated"],
+                "outcomes":["true","error","already_associated", "auth_code_inactive"],
                 "outputs":["*"],
                 "script":"16975ea5-4f0a-4ac6-861f-00dbf39ca441"
             }            
@@ -125,155 +125,156 @@
         }
     ],
     "tree": {
-        "_id":"CHCompanyAssociation",
-        "description":"As an authenticated user, enter a company number, company auth code and create an association with that company",
-        "identityResource":"managed/alpha_user",
-        "uiConfig":{},
-        "entryNodeId":"0207683b-7437-4441-aa6b-a143ac0ab576",
-        "nodes":{
-           "0207683b-7437-4441-aa6b-a143ac0ab576":{
-              "x":175,
-              "y":402.015625,
-              "connections":{
-                 "hasSession":"54a93ee3-d273-49b6-8d23-0fd1dcb6320b",
-                 "noSession":"e301438c-0bd0-429c-ab0c-66126501069a"
-              },
-              "nodeType":"ScriptedDecisionNode",
-              "displayName":"check session"
-           },
-           "3f37ce1b-c569-4229-a331-9bedf3ceb9af":{
-              "x":559,
-              "y":26.015625,
-              "connections":{
-                 "true":"ef37be85-8d9f-4140-aa6a-b8c8cc19a695",
-                 "false":"e301438c-0bd0-429c-ab0c-66126501069a"
-              },
-              "nodeType":"ScriptedDecisionNode",
-              "displayName":"Enter company No"
-           },
-           "48ef280d-22c2-4e03-8b04-7b04758040ee":{
-              "x":1299,
-              "y":108,
-              "connections":{
-                 "true":"e5c64e99-5259-4e93-bb25-1871b370f7cd",
-                 "false":"c5f729d0-922d-44f8-a480-aa34d2ca02d8"
-              },
-              "nodeType":"ScriptedDecisionNode",
-              "displayName":"Validate Auth Code"
-           },
-           "54a93ee3-d273-49b6-8d23-0fd1dcb6320b":{
-              "x":222,
-              "y":238.015625,
-              "connections":{
-                 "outcome":"e04ef6d2-daec-403e-93a1-f8b60a8f634b"
-              },
-              "nodeType":"SessionDataNode",
-              "displayName":"Get Session Data"
-           },
-           "55ab38cb-458d-4c6c-ba34-3586bf34b06c":{
-              "x":1097,
-              "y":30,
-              "connections":{
-                 "false":"e301438c-0bd0-429c-ab0c-66126501069a",
-                 "true":"48ef280d-22c2-4e03-8b04-7b04758040ee"
-              },
-              "nodeType":"ScriptedDecisionNode",
-              "displayName":"Enter Auth Code"
-           },
-           "78204b08-ebbd-4b61-8b1b-080a1061987a":{
-              "x":1665,
-              "y":460.015625,
-              "connections":{
-                 "true":"70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
-              },
-              "nodeType":"ScriptedDecisionNode",
-              "displayName":"Confirmation"
-           },
-           "a011052d-bbf2-4dd9-93fc-bf96e3d9b7f6":{
-              "x":916,
-              "y":182.015625,
-              "connections":{
-                 "error":"e301438c-0bd0-429c-ab0c-66126501069a",
-                 "false":"3f37ce1b-c569-4229-a331-9bedf3ceb9af",
-                 "true":"55ab38cb-458d-4c6c-ba34-3586bf34b06c"
-              },
-              "nodeType":"ScriptedDecisionNode",
-              "displayName":"get company data"
-           },
-           "b2401c4a-636f-43e4-b129-be18fccf30f3":{
-              "x":1636,
-              "y":198.015625,
-              "connections":{
-                 "already_associated":"3f37ce1b-c569-4229-a331-9bedf3ceb9af",
-                 "true":"78204b08-ebbd-4b61-8b1b-080a1061987a",
-                 "error":"e301438c-0bd0-429c-ab0c-66126501069a"
-              },
-              "nodeType":"ScriptedDecisionNode",
-              "displayName":"Create Association"
-           },
-           "ba60739d-61f1-4ede-bf94-3f3dc628a38d":{
-              "x":1299,
-              "y":314.015625,
-              "connections":{
-                 "Reject":"e301438c-0bd0-429c-ab0c-66126501069a",
-                 "Retry":"55ab38cb-458d-4c6c-ba34-3586bf34b06c"
-              },
-              "nodeType":"RetryLimitDecisionNode",
-              "displayName":"Retry Limit Decision"
-           },
-           "e04ef6d2-daec-403e-93a1-f8b60a8f634b":{
-              "x":299.40625,
-              "y":37.015625,
-              "connections":{
-                 "false":"e301438c-0bd0-429c-ab0c-66126501069a",
-                 "true":"3f37ce1b-c569-4229-a331-9bedf3ceb9af"
-              },
-              "nodeType":"IdentifyExistingUserNode",
-              "displayName":"Identify Existing User"
-           },
-           "e5c64e99-5259-4e93-bb25-1871b370f7cd":{
-              "x":1444,
-              "y":9.015625,
-              "connections":{
-                 "error":"e301438c-0bd0-429c-ab0c-66126501069a",
-                 "success":"b2401c4a-636f-43e4-b129-be18fccf30f3"
-              },
-              "nodeType":"ScriptedDecisionNode",
-              "displayName":"get IDM token again"
-           },
-           "ef37be85-8d9f-4140-aa6a-b8c8cc19a695":{
-              "x":790,
-              "y":22.015625,
-              "connections":{
-                 "error":"e301438c-0bd0-429c-ab0c-66126501069a",
-                 "success":"a011052d-bbf2-4dd9-93fc-bf96e3d9b7f6"
-              },
-              "nodeType":"ScriptedDecisionNode",
-              "displayName":"get IDM token"
-           },
-           "c5f729d0-922d-44f8-a480-aa34d2ca02d8":{
-              "x":1297,
-              "y":243,
-              "connections":{
-                 "true":"ba60739d-61f1-4ede-bf94-3f3dc628a38d"
-              },
-              "nodeType":"ScriptedDecisionNode",
-              "displayName":"Auth Code Error Message"
-           }
-        },
-        "staticNodes":{
-           "startNode":{
-              "x":50,
-              "y":250
-           },
-           "70e691a5-1e33-4ac3-a356-e7b6d60d92e0":{
-              "x":2020,
-              "y":128
-           },
-           "e301438c-0bd0-429c-ab0c-66126501069a":{
-              "x":1135,
-              "y":759
-           }
-        }
-    }
+      "_id":"CHCompanyAssociation",
+      "description":"As an authenticated user, enter a company number, company auth code and create an association with that company",
+      "identityResource":"managed/alpha_user",
+      "uiConfig":{},
+      "entryNodeId":"0207683b-7437-4441-aa6b-a143ac0ab576",
+      "nodes":{
+         "0207683b-7437-4441-aa6b-a143ac0ab576":{
+            "x":175,
+            "y":402.015625,
+            "connections":{
+               "hasSession":"54a93ee3-d273-49b6-8d23-0fd1dcb6320b",
+               "noSession":"e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"check session"
+         },
+         "3f37ce1b-c569-4229-a331-9bedf3ceb9af":{
+            "x":559,
+            "y":26.015625,
+            "connections":{
+               "true":"ef37be85-8d9f-4140-aa6a-b8c8cc19a695",
+               "false":"e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"Enter company No"
+         },
+         "48ef280d-22c2-4e03-8b04-7b04758040ee":{
+            "x":1299,
+            "y":108,
+            "connections":{
+               "true":"e5c64e99-5259-4e93-bb25-1871b370f7cd",
+               "false":"c5f729d0-922d-44f8-a480-aa34d2ca02d8"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"Validate Auth Code"
+         },
+         "54a93ee3-d273-49b6-8d23-0fd1dcb6320b":{
+            "x":222,
+            "y":238.015625,
+            "connections":{
+               "outcome":"e04ef6d2-daec-403e-93a1-f8b60a8f634b"
+            },
+            "nodeType":"SessionDataNode",
+            "displayName":"Get Session Data"
+         },
+         "55ab38cb-458d-4c6c-ba34-3586bf34b06c":{
+            "x":1097,
+            "y":30,
+            "connections":{
+               "false":"e301438c-0bd0-429c-ab0c-66126501069a",
+               "true":"48ef280d-22c2-4e03-8b04-7b04758040ee"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"Enter Auth Code"
+         },
+         "78204b08-ebbd-4b61-8b1b-080a1061987a":{
+            "x":1665,
+            "y":460.015625,
+            "connections":{
+               "true":"70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"Confirmation"
+         },
+         "a011052d-bbf2-4dd9-93fc-bf96e3d9b7f6":{
+            "x":916,
+            "y":182.015625,
+            "connections":{
+               "error":"e301438c-0bd0-429c-ab0c-66126501069a",
+               "false":"3f37ce1b-c569-4229-a331-9bedf3ceb9af",
+               "true":"55ab38cb-458d-4c6c-ba34-3586bf34b06c"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"get company data"
+         },
+         "b2401c4a-636f-43e4-b129-be18fccf30f3":{
+            "x":1636,
+            "y":198.015625,
+            "connections":{
+               "already_associated":"3f37ce1b-c569-4229-a331-9bedf3ceb9af",
+               "true":"78204b08-ebbd-4b61-8b1b-080a1061987a",
+               "error":"e301438c-0bd0-429c-ab0c-66126501069a",
+               "auth_code_inactive":"3f37ce1b-c569-4229-a331-9bedf3ceb9af"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"Create Association"
+         },
+         "ba60739d-61f1-4ede-bf94-3f3dc628a38d":{
+            "x":1299,
+            "y":314.015625,
+            "connections":{
+               "Reject":"e301438c-0bd0-429c-ab0c-66126501069a",
+               "Retry":"55ab38cb-458d-4c6c-ba34-3586bf34b06c"
+            },
+            "nodeType":"RetryLimitDecisionNode",
+            "displayName":"Retry Limit Decision"
+         },
+         "e04ef6d2-daec-403e-93a1-f8b60a8f634b":{
+            "x":299.40625,
+            "y":37.015625,
+            "connections":{
+               "false":"e301438c-0bd0-429c-ab0c-66126501069a",
+               "true":"3f37ce1b-c569-4229-a331-9bedf3ceb9af"
+            },
+            "nodeType":"IdentifyExistingUserNode",
+            "displayName":"Identify Existing User"
+         },
+         "e5c64e99-5259-4e93-bb25-1871b370f7cd":{
+            "x":1444,
+            "y":9.015625,
+            "connections":{
+               "error":"e301438c-0bd0-429c-ab0c-66126501069a",
+               "success":"b2401c4a-636f-43e4-b129-be18fccf30f3"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"get IDM token again"
+         },
+         "ef37be85-8d9f-4140-aa6a-b8c8cc19a695":{
+            "x":790,
+            "y":22.015625,
+            "connections":{
+               "error":"e301438c-0bd0-429c-ab0c-66126501069a",
+               "success":"a011052d-bbf2-4dd9-93fc-bf96e3d9b7f6"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"get IDM token"
+         },
+         "c5f729d0-922d-44f8-a480-aa34d2ca02d8":{
+            "x":1297,
+            "y":243,
+            "connections":{
+               "true":"ba60739d-61f1-4ede-bf94-3f3dc628a38d"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"Auth Code Error Message"
+         }
+      },
+      "staticNodes":{
+         "startNode":{
+            "x":50,
+            "y":250
+         },
+         "70e691a5-1e33-4ac3-a356-e7b6d60d92e0":{
+            "x":2020,
+            "y":128
+         },
+         "e301438c-0bd0-429c-ab0c-66126501069a":{
+            "x":1135,
+            "y":759
+         }
+      }
+   }
 }

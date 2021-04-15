@@ -27,7 +27,8 @@ var fr = JavaImporter(
 var NodeOutcome = {
     TRUE: "true",
     ERROR: "error",
-    COMPANY_ALREADY_ASSOCIATED: "already_associated"
+    COMPANY_ALREADY_ASSOCIATED: "already_associated",
+    AUTH_CODE_INACTIVE: "auth_code_inactive"
 }
 
 function logResponse(response) {
@@ -145,14 +146,20 @@ logger.error("[ADD RELATIONSHIP] Incoming company id :" +JSON.parse(companyData)
 var accessToken = fetchIDMToken();
 if(!accessToken){
     outcome = NodeOutcome.ERROR;
-}else{
+} else {
     var userId = sharedState.get("_id");
-    if(!checkCompanyAlreadyExists(userId, JSON.parse(companyData))){
-        logger.error("[CHECK COMPANY DUPLICATE] company is not already associated : " + JSON.parse(companyData).name );
-        outcome = addRelationshipToCompany(userId, JSON.parse(companyData));
-    } else {
-        logger.error("[CHECK COMPANY DUPLICATE] The company " + JSON.parse(companyData).name + " is already associated with this user");
+    
+    if(checkCompanyAlreadyExists(userId, JSON.parse(companyData))){
+        logger.error("[ADD RELATIONSHIP] The company " + JSON.parse(companyData).name + " is already associated with this user");
         sharedState.put("errorMessage","The company " + JSON.parse(companyData).name + " is already associated with the user.");
-        outcome = NodeOutcome.COMPANY_ALREADY_ASSOCIATED
+        action = fr.Action.goTo(NodeOutcome.COMPANY_ALREADY_ASSOCIATED).build();
     }
+
+    if(!JSON.parse(companyData).authCodeIsActive){
+        logger.error("[ADD RELATIONSHIP] The company " + JSON.parse(companyData).name + " does not have an active auth code");
+        sharedState.put("errorMessage","The company " + JSON.parse(companyData).name + " does not have an active auth code.");
+        action = fr.Action.goTo(NodeOutcome.AUTH_CODE_INACTIVE).build();        
+    } 
+    
+    outcome = addRelationshipToCompany(userId, JSON.parse(companyData));
 }
