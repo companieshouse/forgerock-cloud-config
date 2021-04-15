@@ -120,7 +120,7 @@ function fetchCompany(idmToken, companyNumber) {
                     ),
                     new fr.HiddenValueCallback (
                         "pagePropsJSON",
-                        JSON.stringify({"company": JSON.stringify(companyResponse.result[0])}) 
+                        JSON.stringify({"company": companyResponse.result[0]}) 
                     ),
                     new fr.ConfirmationCallback(
                         "Do you want to file for this company?",

@@ -1,3 +1,21 @@
+/* 
+  ** INPUT DATA
+    * SHARED STATE
+     - 'objectAttributes.mail': the email address entered by the user in the password reset page
+    * TRANSIENT STATE
+      - 'secretKey': key to sing the JWT
+      - 'notifyJWT': JWT to use for the Notify call
+      - 'notifyTemplates': list of Notify templates available
+       
+  ** OUTCOMES
+    - success: email sent correctly
+    - error: general error while sending email
+  
+  ** CALLBACKS: 
+    - output: email sending error
+    - output: general error
+*/
+
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
   java.lang.Math,
@@ -17,6 +35,7 @@ var fr = JavaImporter(
 )
 
 var NodeOutcome = {
+  SUCCESS: "true",
   ERROR: "false"
 }
 
@@ -65,7 +84,7 @@ function buildPasswordResetToken(email){
   return jwt;
 }
 
-//extracts the email from shared state
+//extracts the email address from shared state
 function extractEmailFromState(){
   logger.error("[RESET PWD] host: " + host);
   logger.error("[RESET PWD] shared: " + sharedState.get("objectAttributes"));
@@ -108,8 +127,8 @@ function raiseGeneralError(){
           "pagePropsJSON",
           JSON.stringify({ 'errors': [{ label: "An error has occurred! Please try again later" }] })
         )
-      ).build()
-    }
+    ).build()
+  }
 }
 
 //send the email
@@ -117,18 +136,27 @@ function sendEmail(){
   var notifyJWT = transientState.get("notifyJWT");
   var templates = transientState.get("notifyTemplates");
   
-  logger.error("[RESET PWD] Notify JWT from transient state: " + notifyJWT);
+  logger.error("[RESET PWD] Notify JWT from transient state: " + notifyJWT); 
   logger.error("[RESET PWD] Templates from transient state: " + templates);
-
+  var isUserExisting = transientState.get("isUserExisting");
   request.setUri("https://api.notifications.service.gov.uk/v2/notifications/email");
   try{
-    var requestBodyJson = {
+    var requestBodyJson = isUserExisting ? {
+      "email_address": email,
+      "template_id": JSON.parse(templates).existingUser,
+      "personalisation": {
+          "link": returnUrl,
+          "email": email
+      }
+    } : 
+    {
       "email_address": email,
       "template_id": JSON.parse(templates).resetPwd,
       "personalisation": {
           "link": returnUrl
       }
-    }
+    };
+
   }catch(e){
     logger.error("[RESET PWD] Error while preparing request for Notify: " + e);
     return false;
@@ -145,6 +173,7 @@ function sendEmail(){
 
   try{
     notificationId = JSON.parse(response.getEntity().getString()).id;
+    transientState.put("notificationId", notificationId);
     logger.error("[RESET PWD] Notify ID: " + notificationId);
   }catch(e){
     logger.error("[RESET PWD] Error while parsing Notify response: " + e);
@@ -152,26 +181,7 @@ function sendEmail(){
   }
 
   if(response.getStatus().getCode() == 201){
-    if (callbacks.isEmpty()) {
-      action = fr.Action.send(
-        new fr.TextOutputCallback(
-            fr.TextOutputCallback.INFORMATION,
-            "Please check your email to complete reset password - "+email 
-        ),
-        new fr.HiddenValueCallback (
-            "stage",
-            "RESET_PASSWORD_6" 
-        ),
-        new fr.HiddenValueCallback (
-            "pagePropsJSON",
-            JSON.stringify({"email": email}) 
-        ),
-        new fr.HiddenValueCallback (
-          "notificationId",
-          notificationId 
-      )
-      ).build()
-    } 
+    return true;
   }else{
     if (callbacks.isEmpty()) {
       action = fr.Action.send(
@@ -210,7 +220,9 @@ if(email){
 if(!email || !resetPasswordjJwt || !returnUrl){ 
   raiseGeneralError();  
 }else{
-  sendEmail();
+  if(sendEmail()){
+    action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
+  }
 }
 
 //always return false at the end, because we don't end up with a session

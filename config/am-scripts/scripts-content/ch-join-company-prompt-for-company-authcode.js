@@ -2,12 +2,15 @@
   ** OUTPUT DATA
     * SHARED STATE:
       - 'credential' : the company auth code entered by the user
+      - [optional] 'errorMessage': error message to display from previous attempts
        
   ** OUTCOMES
     - true: input collected
   
   ** CALLBACKS: 
     - input: company auth code
+    - output: prompt to enter auth code, or error message (if any)
+    - output: stage name and page props for UI
 */
 
 var fr = JavaImporter(
@@ -16,8 +19,6 @@ var fr = JavaImporter(
   javax.security.auth.callback.TextOutputCallback,
   com.sun.identity.authentication.callbacks.HiddenValueCallback
 )
-
-
 
 if (callbacks.isEmpty()) {
    var infoMessage = "Please enter the company auth code."
