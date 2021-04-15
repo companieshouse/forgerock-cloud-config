@@ -64,105 +64,112 @@
         "viewable": true
       },
       "authorisedUsers": {
+        "deleteQueryConfig": false,
         "description": "Authorised Users are Users that are associated with a Company",
-        "title": "Has Authorised User",
-        "viewable": true,
-        "searchable": false,
-        "userEditable": false,
-        "policies": [],
-        "returnByDefault": false,
-        "minLength": null,
-        "type": "array",
+        "isVirtual": false,
         "items": {
-          "type": "relationship",
-          "reverseRelationship": true,
-          "reversePropertyName": "isAuthorisedUserOf",
-          "validate": false,
+          "notifySelf": false,
           "properties": {
             "_ref": {
               "type": "string"
             },
             "_refProperties": {
-              "type": "object",
               "properties": {
                 "_id": {
-                  "type": "string",
+                  "propName": "_id",
                   "required": false,
-                  "propName": "_id"
-                },
-                "permissionFiling": {
-                  "label": "File Financial Statments",
-                  "type": "string",
-                  "required": false,
-                  "propName": "permissionFiling"
+                  "type": "string"
                 },
                 "permissionAdmin": {
                   "label": "Administer the Company",
-                  "type": "string",
+                  "propName": "permissionAdmin",
                   "required": false,
-                  "propName": "permissionAdmin"
+                  "type": "string"
+                },
+                "permissionFiling": {
+                  "label": "File Financial Statments",
+                  "propName": "permissionFiling",
+                  "required": false,
+                  "type": "string"
                 },
                 "permissionUpdate": {
                   "label": "Update company details",
-                  "type": "string",
+                  "propName": "permissionUpdate",
                   "required": false,
-                  "propName": "permissionUpdate"
+                  "type": "string"
                 }
-              }
+              },
+              "type": "object"
             }
           },
           "resourceCollection": [
             {
-              "path": "managed/alpha_user",
               "label": "Alpha_user",
+              "notify": false,
+              "path": "managed/alpha_user",
               "query": {
-                "queryFilter": "true",
                 "fields": [
                   "_id"
                 ],
+                "queryFilter": "true",
                 "sortKeys": []
-              },
-              "notify": false
+              }
             }
           ],
-          "notifySelf": false
+          "reversePropertyName": "isAuthorisedUserOf",
+          "reverseRelationship": true,
+          "type": "relationship",
+          "validate": false
         },
-        "requiredByParent": false,
-        "isVirtual": false,
-        "referencedRelationshipFields": null,
+        "minLength": null,
+        "policies": [],
         "referencedObjectFields": null,
-        "deleteQueryConfig": false
+        "referencedRelationshipFields": null,
+        "requiredByParent": false,
+        "returnByDefault": false,
+        "searchable": false,
+        "title": "Has Authorised User",
+        "type": "array",
+        "userEditable": false,
+        "viewable": true
       },
       "locality": {
+        "searchable": true,
         "title": "Locality",
         "type": "string",
-        "viewable": true,
-        "searchable": true,
-        "userEditable": true
+        "userEditable": true,
+        "viewable": true
       },
       "postalCode": {
+        "searchable": true,
         "title": "Postal Code",
         "type": "string",
-        "viewable": true,
-        "searchable": true,
-        "userEditable": true
+        "userEditable": true,
+        "viewable": true
       },
       "addressLine1": {
+        "searchable": true,
         "title": "Address Line 1",
         "type": "string",
-        "viewable": true,
-        "searchable": true,
-        "userEditable": true
+        "userEditable": true,
+        "viewable": true
       },
       "addressLine2": {
+        "searchable": true,
         "title": "Address Line 2",
         "type": "string",
-        "viewable": true,
-        "searchable": true,
-        "userEditable": true
+        "userEditable": true,
+        "viewable": true
       },
       "region": {
+        "searchable": true,
         "title": "Region",
+        "type": "string",
+        "userEditable": true,
+        "viewable": true
+      },
+      "creationDate": {
+        "title": "Creation Date",
         "type": "string",
         "viewable": true,
         "searchable": true,
@@ -182,7 +189,8 @@
       "postalCode",
       "addressLine1",
       "addressLine2",
-      "region"
+      "region",
+      "creationDate"
     ],
     "required": [
       "name",
