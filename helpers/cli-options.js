@@ -35,6 +35,11 @@ const cliOptions = (requestedOptions) => {
       alias: 's',
       demandOption: true,
       describe: 'IDM Admin Client Secret'
+    },
+    versionNumber: {
+      alias: 'v',
+      demandOption: true,
+      describe: 'FIDC Config Version Number'
     }
   }
 

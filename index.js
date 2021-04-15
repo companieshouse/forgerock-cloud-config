@@ -142,6 +142,7 @@ yargs
       'idmPassword',
       'adminClientId',
       'adminClientSecret',
+      'versionNumber',
       'realm'
     ]),
     handler: (argv) => updateTermsAndConditions(argv)
