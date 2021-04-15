@@ -7,7 +7,7 @@
   ** OUTCOMES
     - true: input collected
   
-  ** CALLBACKS: s
+  ** CALLBACKS: 
     - input: company number
     - output: prompt to enter company no, or error message (if any)
     - output: stage name and page props for UI

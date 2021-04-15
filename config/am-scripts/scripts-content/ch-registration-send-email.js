@@ -17,7 +17,8 @@ var fr = JavaImporter(
 )
 
 var NodeOutcome = {
-  ERROR: "false"
+  ERROR: "false",
+  SUCCESS: "true"
 }
 
 //extracts the email from shared state
@@ -98,14 +99,6 @@ function buildRegistrationToken(email, phone, fullName){
     return false;
   }
   
-  // try{
-  //   returnUrl = host.concat("/am/XUI/?realm=/alpha&&service=CHVerifyReg&token=", jwt)
-  //   logger.error("[REGISTRATION] RETURN URL: " + returnUrl);
-  // }catch(e){
-  //   logger.error("[REGISTRATION] Error while extracting host: " + e);
-  //   errorFound = true;
-  // }
-  
 }
 
 function raiseGeneralError(){
@@ -162,6 +155,7 @@ function sendEmail(jwt){
 
   try{
     notificationId = JSON.parse(response.getEntity().getString()).id;
+    transientState.put("notificationId", notificationId);
     logger.error("[REGISTRATION] Notify ID: " + notificationId);
   }catch(e){
     logger.error("[REGISTRATION] Error while parsing Notify response: " + e);
@@ -170,26 +164,9 @@ function sendEmail(jwt){
   
   if(response.getStatus().getCode() == 201){
     if (callbacks.isEmpty()) {
-      action = fr.Action.send(
-	      new fr.TextOutputCallback(
-            fr.TextOutputCallback.INFORMATION,
-            "Please check your email to complete registration - "+email 
-        ),
-        new fr.HiddenValueCallback (
-            "stage",
-            "REGISTRATION_3" 
-        ),
-        new fr.HiddenValueCallback (
-            "pagePropsJSON",
-            JSON.stringify({"email": email}) 
-        ),
-        new fr.HiddenValueCallback (
-            "notificationId",
-            notificationId 
-        )
-      ).build();
+      return true;
     } 
-  }else{
+  } else {
     if (callbacks.isEmpty()) {
       action = fr.Action.send(
         new fr.HiddenValueCallback (
@@ -207,7 +184,6 @@ function sendEmail(jwt){
       ).build()
     } 
   }
-  return response.getStatus().getCode();
 }
 
 // mian execution flow
@@ -228,9 +204,8 @@ if(regData){
 if(!regData || !registrationJwt){
   raiseGeneralError();
 }else{
-  var res = sendEmail(registrationJwt);
-  if(!res){
-    raiseGeneralError();
+  if(sendEmail(registrationJwt)){
+    action = fr.Action.goTo(NodeOutcome.SUCCESS).build();  
   }
 }
 
