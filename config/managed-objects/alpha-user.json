@@ -108,7 +108,7 @@
         "description": "Last Name",
         "isPersonal": true,
         "searchable": true,
-        "title": "Last Name (optional)",
+        "title": "Last Name",
         "type": "string",
         "usageDescription": null,
         "userEditable": true,
@@ -1141,6 +1141,7 @@
     ],
     "required": [
       "userName",
+      "sn",
       "mail"
     ]
   },
