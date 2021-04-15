@@ -29,6 +29,7 @@ const updateScripts = async (argv) => {
               `${dir}/scripts-content/${script.filename}`,
               { encoding: 'base64' }
             )
+            console.log(`updating script : ${script.payload.name}`)
             const requestUrl = `${baseUrl}/scripts/${script.payload._id}`
             return await fidcRequest(
               requestUrl,

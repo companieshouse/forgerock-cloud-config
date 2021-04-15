@@ -139,16 +139,24 @@ function sendEmail(){
   logger.error("[RESET PWD] Notify JWT from transient state: " + notifyJWT); 
   logger.error("[RESET PWD] Templates from transient state: " + templates);
   var isUserExisting = transientState.get("isUserExisting");
-  var templateId = isUserExisting ? JSON.parse(templates).existingUser : JSON.parse(templates).resetPwd;
   request.setUri("https://api.notifications.service.gov.uk/v2/notifications/email");
   try{
-    var requestBodyJson = {
+    var requestBodyJson = isUserExisting ? {
       "email_address": email,
-      "template_id": templateId,
+      "template_id": JSON.parse(templates).existingUser,
+      "personalisation": {
+          "link": returnUrl,
+          "email": email
+      }
+    } : 
+    {
+      "email_address": email,
+      "template_id": JSON.parse(templates).resetPwd,
       "personalisation": {
           "link": returnUrl
       }
-    }
+    };
+
   }catch(e){
     logger.error("[RESET PWD] Error while preparing request for Notify: " + e);
     return false;

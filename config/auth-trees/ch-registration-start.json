@@ -159,6 +159,44 @@
             "outputs":["*"],
             "script":"8b203967-fa57-4ce2-9dad-2f387ca52a61"
          }    
+      },
+      {
+         "_id":"817f8595-f2cc-45ce-b4f8-ad7aa6fdd1ea",
+         "nodeType": "IdentifyExistingUserNode", 
+         "details": {
+            "identifier":"userName",
+            "identityAttribute":"mail"
+         }
+      },
+      {
+         "_id":"453352a5-1e8a-4696-a439-0f09555ebc4f",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes":["true"],
+            "outputs":["*"],
+            "script":"d67457d4-b0ed-4b77-9ca1-23295246c9fd"
+         }    
+      },
+      {
+         "_id":"26f0bca6-8070-4d16-a5bc-8c3136e0057e",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes":["true","false"],
+            "outputs":["*"],
+            "script":"df67765e-df3a-4503-9ba5-35c992b39259"
+         }
+      },   
+      {
+         "_id":"24595c6d-40a2-4592-a8f2-7823bb5d84be",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes":["true","false"],
+            "outputs":["*"],
+            "script":"c056951c-622e-11eb-ae93-0242ac130002"
+         }
       }
    ],
    "tree": {
@@ -178,6 +216,26 @@
             "nodeType":"RetryLimitDecisionNode",
             "displayName":"Retry Limit Decision"
          },
+         "24595c6d-40a2-4592-a8f2-7823bb5d84be":{
+            "x":674,
+            "y":799.015625,
+            "connections":{
+               "false":"e301438c-0bd0-429c-ab0c-66126501069a",
+               "true":"30518af8-5af3-45e1-bd23-d404e13d922b"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"Send Pwd Reset email"
+         },
+         "26f0bca6-8070-4d16-a5bc-8c3136e0057e":{
+            "x":436,
+            "y":601.015625,
+            "connections":{
+               "true":"24595c6d-40a2-4592-a8f2-7823bb5d84be",
+               "false":"e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"Create Notify JWT"
+         },
          "27ec8bc7-d2ed-4877-b8bd-ebd84d5b9994":{
             "x":772,
             "y":586.015625,
@@ -195,6 +253,15 @@
             },
             "nodeType":"ScriptedDecisionNode",
             "displayName":"OTP not valid"
+         },
+         "30518af8-5af3-45e1-bd23-d404e13d922b":{
+            "x":1556,
+            "y":157.015625,
+            "connections":{
+               
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"Email Sent Confirmation"
          },
          "37a1f12f-1e7b-4ca2-a870-040bf63291a0":{
             "x":981,
@@ -216,6 +283,15 @@
             "nodeType":"PageNode",
             "displayName":"OTP page"
          },
+         "453352a5-1e8a-4696-a439-0f09555ebc4f":{
+            "x":342,
+            "y":484.015625,
+            "connections":{
+               "true":"26f0bca6-8070-4d16-a5bc-8c3136e0057e"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"Set User Existing"
+         },
          "5c7f4247-3b01-4dae-b18b-1d90ee710891":{
             "x":654,
             "y":365.015625,
@@ -231,10 +307,10 @@
             "y":244.015625,
             "connections":{
                "false":"a87fa542-b6d3-49a1-bbdf-30370ae7042e",
-               "true":"a87fa542-b6d3-49a1-bbdf-30370ae7042e"
+               "true":"453352a5-1e8a-4696-a439-0f09555ebc4f"
             },
             "nodeType":"IdentifyExistingUserNode",
-            "displayName":"Lookup User"
+            "displayName":"Identify Existing User"
          },
          "997cc39b-afde-4935-b9b5-a0d4e3034072":{
             "x":894,
@@ -274,15 +350,6 @@
             },
             "nodeType":"PageNode",
             "displayName":"Email Collector"
-         },
-         "30518af8-5af3-45e1-bd23-d404e13d922b":{
-            "x":1556,
-            "y":157.015625,
-            "connections":{
-               
-            },
-            "nodeType":"ScriptedDecisionNode",
-            "displayName":"Email Sent Confirmation"
          }
       },
       "staticNodes":{
@@ -300,5 +367,4 @@
          }
       }
    }
-   
 }
