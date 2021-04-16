@@ -140,26 +140,25 @@ function fetchIDMToken(){
 
 var idmUserEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_user/";
 var companyData = sharedState.get("companyData");
+var userId = sharedState.get("_id");
 logger.error("[ADD RELATIONSHIP] Incoming company data :" +companyData);
 logger.error("[ADD RELATIONSHIP] Incoming company id :" +JSON.parse(companyData)._id);
 
 var accessToken = fetchIDMToken();
 if(!accessToken){
-    outcome = NodeOutcome.ERROR;
-} else {
-    var userId = sharedState.get("_id");
-    
-    if(checkCompanyAlreadyExists(userId, JSON.parse(companyData))){
-        logger.error("[ADD RELATIONSHIP] The company " + JSON.parse(companyData).name + " is already associated with this user");
-        sharedState.put("errorMessage","The company " + JSON.parse(companyData).name + " is already associated with the user.");
-        action = fr.Action.goTo(NodeOutcome.COMPANY_ALREADY_ASSOCIATED).build();
-    }
+    action = fr.Action.goTo(NodeOutcome.NodeOutcome.ERROR).build();
+} 
 
-    if(!JSON.parse(companyData).authCodeIsActive){
-        logger.error("[ADD RELATIONSHIP] The company " + JSON.parse(companyData).name + " does not have an active auth code");
-        sharedState.put("errorMessage","The company " + JSON.parse(companyData).name + " does not have an active auth code.");
-        action = fr.Action.goTo(NodeOutcome.AUTH_CODE_INACTIVE).build();        
-    } 
-    
-    outcome = addRelationshipToCompany(userId, JSON.parse(companyData));
+if(checkCompanyAlreadyExists(userId, JSON.parse(companyData))){
+    logger.error("[ADD RELATIONSHIP] The company " + JSON.parse(companyData).name + " is already associated with this user");
+    sharedState.put("errorMessage","The company " + JSON.parse(companyData).name + " is already associated with the user.");
+    action = fr.Action.goTo(NodeOutcome.COMPANY_ALREADY_ASSOCIATED).build();
 }
+
+if(!JSON.parse(companyData).authCodeIsActive){
+    logger.error("[ADD RELATIONSHIP] The company " + JSON.parse(companyData).name + " does not have an active auth code");
+    sharedState.put("errorMessage","The company " + JSON.parse(companyData).name + " does not have an active auth code.");
+    action = fr.Action.goTo(NodeOutcome.AUTH_CODE_INACTIVE).build();        
+} 
+
+outcome = addRelationshipToCompany(userId, JSON.parse(companyData));
