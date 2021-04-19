@@ -152,12 +152,16 @@ if(!accessToken){
 if(checkCompanyAlreadyExists(userId, JSON.parse(companyData))){
     logger.error("[ADD RELATIONSHIP] The company " + JSON.parse(companyData).name + " is already associated with this user");
     sharedState.put("errorMessage","The company " + JSON.parse(companyData).name + " is already associated with the user.");
+    sharedState.put("createRelationshipErrorType", "COMPANY_ALREADY_ASSOCIATED");
+    sharedState.put("createRelationshipErrorField", "IDToken2");
     action = fr.Action.goTo(NodeOutcome.COMPANY_ALREADY_ASSOCIATED).build();
 }
 
 if(!JSON.parse(companyData).authCodeIsActive){
     logger.error("[ADD RELATIONSHIP] The company " + JSON.parse(companyData).name + " does not have an active auth code");
     sharedState.put("errorMessage","The company " + JSON.parse(companyData).name + " does not have an active auth code.");
+    sharedState.put("createRelationshipErrorType", "AUTH_CODE_INACTIVE");
+    sharedState.put("createRelationshipErrorField", "IDToken1");
     action = fr.Action.goTo(NodeOutcome.AUTH_CODE_INACTIVE).build();        
 } 
 
