@@ -24,14 +24,17 @@ if (callbacks.isEmpty()) {
   var infoMessage = "Please enter the company auth code.";
   var errorMessage = sharedState.get("errorMessage");
   var level = fr.TextOutputCallback.INFORMATION;
+  var errorType, errorField;
   if (errorMessage != null) {
     level = fr.TextOutputCallback.ERROR;
+    errorType = sharedState.get("createRelationshipErrorType");
+    errorField = sharedState.get("createRelationshipErrorField");
     infoMessage = errorMessage.concat(" Please try again.");
     action = fr.Action.send(
       new fr.TextOutputCallback(level, infoMessage), 
       new fr.NameCallback("Enter Auth Code"),
       new fr.HiddenValueCallback ("stage", "COMPANY_ASSOCIATION_3"),
-      new fr.HiddenValueCallback("pagePropsJSON", JSON.stringify({ 'errors': [{ label: infoMessage }] }))
+      new fr.HiddenValueCallback("pagePropsJSON", JSON.stringify({ 'errors': [{ label: infoMessage, token: errorType, fieldName: errorField, anchor: errorField }] }))
     ).build();
   } else { 
     action = fr.Action.send(

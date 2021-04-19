@@ -133,6 +133,8 @@ function fetchCompany(idmToken, companyNumber) {
         } else {
             logger.error("[FETCH COMPANY] No company results for company number "+companyNumber);
             sharedState.put("errorMessage","The company " + companyNumber + " could not be found.");
+            sharedState.put("createRelationshipErrorType", "COMPANY_NOT_FOUND");
+            sharedState.put("createRelationshipErrorField", "IDToken2");
             return false;
         }
     } else if (response.getStatus().getCode() === 401) {
@@ -153,6 +155,8 @@ if(!callbacks.isEmpty()){
     if(selection === YES_OPTION_INDEX){
         logger.error("[FETCH COMPANY] selected YES! ");
         sharedState.put("errorMessage",null);
+        sharedState.put("createRelationshipErrorType", null);
+        sharedState.put("createRelationshipErrorField", null);
         outcome = NodeOutcome.TRUE;   
     }else{
         sharedState.put("errorMessage",null);
