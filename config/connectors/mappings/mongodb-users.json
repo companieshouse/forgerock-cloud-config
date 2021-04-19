@@ -9,6 +9,12 @@
 		"target": "userName",
 		"source": "email"
 	}, {
+		"target": "sn",
+		"source": "email"
+	}, {
+		"target": "mail",
+		"source": "email"
+	}, {
 		"target": "givenName",
 		"transform": {
 			"type": "text/javascript",
@@ -16,12 +22,6 @@
 			"source": "if (source.forename && source.surname) {\n  source.forename + \" \" + source.surname\n} else if (source.forename) {\n  source.forename\n} else if (source.surname) {\n  source.surname\n}"
 		},
 		"source": ""
-	}, {
-		"target": "sn",
-		"source": "surname"
-	}, {
-		"target": "mail",
-		"source": "email"
 	}, {
 		"target": "frIndexedString2",
 		"source": "password"
