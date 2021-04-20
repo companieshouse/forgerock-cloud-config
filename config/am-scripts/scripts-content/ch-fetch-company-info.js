@@ -43,24 +43,24 @@ function logResponse(response) {
 function buildErrorCallback(stageName, message) {
     if (callbacks.isEmpty()) {
         action = fr.Action.send(
-            new fr.HiddenValueCallback (
+            new fr.HiddenValueCallback(
                 "stage",
-                stageName 
+                stageName
             ),
-              new fr.TextOutputCallback(
+            new fr.TextOutputCallback(
                 fr.TextOutputCallback.ERROR,
                 message
             ),
-            new fr.HiddenValueCallback (
+            new fr.HiddenValueCallback(
                 "pagePropsJSON",
-                JSON.stringify({ 'errors': [{ label: message} ] })
+                JSON.stringify({ 'errors': [{ label: message }] })
             )
         ).build()
     }
 }
 
 //fetches the IDM access token from transient state
-function fetchIDMToken(){
+function fetchIDMToken() {
     var ACCESS_TOKEN_STATE_FIELD = "idmAccessToken";
     var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
     if (accessToken == null) {
@@ -74,7 +74,7 @@ function fetchIDMToken(){
 function fetchCompany(idmToken, companyNumber) {
     if (companyNumber == null) {
         logger.error("[FETCH COMPANY] No company number in shared state");
-        sharedState.put("errorMessage","No company number in shared state.");
+        sharedState.put("errorMessage", "No company number in shared state.");
         return false;
     }
 
@@ -94,33 +94,35 @@ function fetchCompany(idmToken, companyNumber) {
         var companyResponse = JSON.parse(response.getEntity().getString());
 
         if (companyResponse.resultCount > 0) {
-            logger.error("[FETCH COMPANY] Got a result: "+JSON.stringify(companyResponse.result[0]));       
-            
+            logger.error("[FETCH COMPANY] Got a result: " + JSON.stringify(companyResponse.result[0]));
+
             var authCode = companyResponse.result[0].authCode;
             logger.error("[FETCH COMPANY] Found authCode: " + authCode);
 
             if (authCode == null) {
                 logger.error("[FETCH COMPANY] No auth code associated with company")
-                sharedState.put("errorMessage","No auth code associated with company "+companyNumber+".");
+                sharedState.put("errorMessage", "No auth code associated with company " + companyNumber + ".");
+                sharedState.put("createRelationshipErrorType", "AUTH_CODE_NOT_DEFINED");
+                sharedState.put("createRelationshipErrorField", "IDToken2");
                 return false;
             }
-            
+
             sharedState.put("companyData", JSON.stringify(companyResponse.result[0]));
             sharedState.put("hashedCredential", authCode);
 
             if (callbacks.isEmpty()) {
                 action = fr.Action.send(
-                    new fr.HiddenValueCallback (
+                    new fr.HiddenValueCallback(
                         "stage",
-                        "COMPANY_ASSOCIATION_2" 
+                        "COMPANY_ASSOCIATION_2"
                     ),
                     new fr.TextOutputCallback(
                         fr.TextOutputCallback.INFORMATION,
                         JSON.stringify(companyResponse.result[0])
                     ),
-                    new fr.HiddenValueCallback (
+                    new fr.HiddenValueCallback(
                         "pagePropsJSON",
-                        JSON.stringify({"company": companyResponse.result[0]}) 
+                        JSON.stringify({ "company": companyResponse.result[0] })
                     ),
                     new fr.ConfirmationCallback(
                         "Do you want to file for this company?",
@@ -129,17 +131,19 @@ function fetchCompany(idmToken, companyNumber) {
                         YES_OPTION_INDEX
                     )
                 ).build()
-            }  
+            }
         } else {
-            logger.error("[FETCH COMPANY] No company results for company number "+companyNumber);
-            sharedState.put("errorMessage","The company " + companyNumber + " could not be found.");
+            logger.error("[FETCH COMPANY] No company results for company number " + companyNumber);
+            sharedState.put("errorMessage", "The company " + companyNumber + " could not be found.");
             sharedState.put("createRelationshipErrorType", "COMPANY_NOT_FOUND");
             sharedState.put("createRelationshipErrorField", "IDToken2");
             return false;
         }
     } else if (response.getStatus().getCode() === 401) {
-        logger.error("[FETCH COMPANY] Error while retrieving company with ID "+companyNumber);
-        sharedState.put("errorMessage","Error while retrieving company "+companyNumber+".");
+        logger.error("[FETCH COMPANY] Error while retrieving company with ID " + companyNumber);
+        sharedState.put("errorMessage", "Error while retrieving company " + companyNumber + ".");
+        sharedState.put("createRelationshipErrorType", "COMPANY_FETCH_ERROR");
+        sharedState.put("createRelationshipErrorField", "IDToken2");
         return false;
     }
 }
@@ -149,18 +153,18 @@ var YES_OPTION_INDEX = 0;
 var idmCompanyEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/Company/";
 
 // if the user has selected to proceed with association or to not go ahead, callbacks will be not empty
-if(!callbacks.isEmpty()){
+if (!callbacks.isEmpty()) {
     var selection = callbacks.get(3).getSelectedIndex();
-    logger.error("[FETCH COMPANY] selection "+selection);
-    if(selection === YES_OPTION_INDEX){
-        logger.error("[FETCH COMPANY] selected YES! ");
-        sharedState.put("errorMessage",null);
+    logger.error("[FETCH COMPANY] selection " + selection);
+    if (selection === YES_OPTION_INDEX) {
+        logger.error("[FETCH COMPANY] selected YES");
+        sharedState.put("errorMessage", null);
         sharedState.put("createRelationshipErrorType", null);
         sharedState.put("createRelationshipErrorField", null);
-        outcome = NodeOutcome.TRUE;   
-    }else{
-        sharedState.put("errorMessage",null);
-        outcome = NodeOutcome.FALSE;   
+        outcome = NodeOutcome.TRUE;
+    } else {
+        sharedState.put("errorMessage", null);
+        outcome = NodeOutcome.FALSE;
     }
 } else {
     // if the user has started the journey, the callbacks will be empty, then fetch company info    
@@ -171,7 +175,7 @@ if(!callbacks.isEmpty()){
     } else {
         var companyNumber = sharedState.get("companyNumber");
         //fetchCompany can only result in callbacks, does not transition anywhere
-        if(!fetchCompany(accessToken, companyNumber)){
+        if (!fetchCompany(accessToken, companyNumber)) {
             logger.error("[FETCH COMPANY] error while fetching company")
             outcome = NodeOutcome.FALSE;
         }
