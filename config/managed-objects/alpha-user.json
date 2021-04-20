@@ -84,10 +84,13 @@
         "isPersonal": true,
         "searchable": true,
         "title": "Full Name (optional)",
-        "type": "string",
+        "type": ["string", "null"],
         "usageDescription": null,
         "userEditable": true,
-        "viewable": true
+        "viewable": true,
+        "isVirtual": false,
+        "deleteQueryConfig": false,
+        "default": null
       },
       "cn": {
         "description": "Common Name",
