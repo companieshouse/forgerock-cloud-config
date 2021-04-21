@@ -72,7 +72,7 @@
                 "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
                 "lastModifiedDate": 1436807766258
             },
-            "filename": "ch-callback-user-exists.js"
+            "filename": "ch-registration-error-user-exists.js"
         },
         {
             "payload": {

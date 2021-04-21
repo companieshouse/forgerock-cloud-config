@@ -1,3 +1,26 @@
+/* 
+  ** INPUT DATA
+    * SHARED STATE:
+      - 'objectAttributes.telephoneNumber': the user telephone number (entered in a previous screen)
+      - 'objectAttributes.givenName': the user full name (entered in a previous screen)
+      - 'objectAttributes.mail': the user email (entered in a previous screen)
+
+    * TRANSIENT STATE
+      - 'notifyJWT': the Notify JWT to be used for requests to Notify
+      - 'templates': the list of all Notify templates 
+
+  ** OUTPUT DATA
+    * TRANSIENT STATE:
+      - 'notificationId': the notification ID returned by Notify if the call was successful
+    
+  ** OUTCOMES
+    - true: message sent successfully
+  
+  ** CALLBACKS:
+    - error while sending (SEND_MFA_SMS_ERROR)
+    - generic error (REGISTRATION_ERROR)
+*/
+
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
   java.lang.Math,
@@ -21,106 +44,108 @@ var NodeOutcome = {
   SUCCESS: "true"
 }
 
-//extracts the email from shared state
-function extractRegDataFromState(){
+// extracts the email from shared state
+function extractRegDataFromState() {
   logger.error("host: " + host);
   logger.error("shared: " + sharedState.get("objectAttributes"));
 
-  try{
+  try {
     email = sharedState.get("objectAttributes").get("mail");
     fullName = sharedState.get("objectAttributes").get("givenName");
     phone = sharedState.get("objectAttributes").get("telephoneNumber");
-    logger.error("mail : " + email + " - name: "+fullName+" - phone: "+phone);
-    return {email: email, phone: phone, fullName: fullName }
-  } catch(e){
-    logger.error("[REGISTRATION] error in fetching objectAttributes : " + e); 
+    logger.error("mail : " + email + " - name: " + fullName + " - phone: " + phone);
+    return { email: email, phone: phone, fullName: fullName }
+  } catch (e) {
+    logger.error("[REGISTRATION] error in fetching objectAttributes : " + e);
     return false;
   }
 }
 
-//builds the URL which will be sent via email
-function buildReturnUrl(jwt){
-  try{
+// builds the URL which will be sent via email
+function buildReturnUrl(jwt) {
+  try {
     returnUrl = host.concat("/am/XUI/?realm=/alpha&&service=CHVerifyReg&token=", jwt)
     logger.error("[REGISTRATION] RETURN URL: " + returnUrl);
     return returnUrl;
-  }catch(e){
+  } catch (e) {
     logger.error("[REGISTRATION] Error while extracting host: " + e);
     return false;
   }
 }
 
-// function that builds the Password Reset JWT
-function buildRegistrationToken(email, phone, fullName){
+// builds the Password Reset JWT
+function buildRegistrationToken(email, phone, fullName) {
   var jwt;
   var signingHandler;
   var secret = transientState.get("secretKey");
-  try{
+  try {
     var secretbytes = java.lang.String(secret).getBytes();
     var secretBuilder = new fr.SecretBuilder;
     secretBuilder.secretKey(new javax.crypto.spec.SecretKeySpec(secretbytes, "Hmac"));
     secretBuilder.stableId(host).expiresIn(5, fr.ChronoUnit.MINUTES, fr.Clock.systemUTC());
-    var key = new fr.SigningKey(secretBuilder); 
+    var key = new fr.SigningKey(secretBuilder);
     signingHandler = new fr.SecretHmacSigningHandler(key);
-  }catch(e){
+  } catch (e) {
     logger.error("[REGISTRATION] Error while creating signing handler: " + e);
     return false;
   }
   var jwtClaims = new fr.JwtClaimsSet;
-  try{
+  try {
     jwtClaims.setIssuer(host);
     var dateNow = new Date();
     jwtClaims.setIssuedAtTime(dateNow);
     jwtClaims.setSubject(email);
-    if(fullName){ 
+    if (fullName) {
       jwtClaims.setClaim("fullName", fullName);
     }
-    if(phone){
+    if (phone) {
       jwtClaims.setClaim("phone", phone);
     }
     jwtClaims.setClaim("creationDate", new Date().toString());
-  }catch(e){
+  } catch (e) {
     logger.error("[REGISTRATION] Error while adding claims to JWT: " + e);
     return false;
   }
-  
-  try{
+
+  try {
     jwt = new fr.JwtBuilderFactory()
-          .jws(signingHandler)
-          .headers()
-          .alg(fr.JwsAlgorithm.HS256)
-          .done()
-          .claims(jwtClaims)
-          .build();
+      .jws(signingHandler)
+      .headers()
+      .alg(fr.JwsAlgorithm.HS256)
+      .done()
+      .claims(jwtClaims)
+      .build();
     logger.error("[REGISTRATION] JWT from reg: " + jwt);
     return jwt;
-  }catch(e){
+  } catch (e) {
     logger.error("[REGISTRATION] Error while creating JWT: " + e);
     return false;
   }
-  
+
 }
 
-function raiseGeneralError(){
+//raises a generic registration error
+function sendErrorCallbacks(stage, message) {
   if (callbacks.isEmpty()) {
     action = fr.Action.send(
-      new fr.HiddenValueCallback (
-            "stage",
-            "REGISTRATION_ERROR" 
-        ),
-        new fr.TextOutputCallback(
-          fr.TextOutputCallback.ERROR,
-          "An error has occurred! Please try again later"
-        ),
-        new fr.HiddenValueCallback (
-          "pagePropsJSON",
-          JSON.stringify({ 'errors': [{ label: "An error has occurred! Please try again later" }] })
-        )
-   ).build()
+      new fr.HiddenValueCallback(
+        "stage",
+        stage
+      ),
+      new fr.TextOutputCallback(
+        fr.TextOutputCallback.ERROR,
+        message
+      ),
+      new fr.HiddenValueCallback(
+        "pagePropsJSON",
+        JSON.stringify({ 'errors': [{ label: message, token: stage }] })
+      )
+    ).build()
   }
 }
 
-function sendEmail(jwt){
+//sends the email (via Notify) to the recipient using the given registration JWT
+function sendEmail(jwt) {
 
   var notifyJWT = transientState.get("notifyJWT");
   var templates = transientState.get("notifyTemplates");
@@ -131,15 +156,15 @@ function sendEmail(jwt){
   logger.error("[REGISTRATION] RETURN URL: " + returnUrl);
 
   request.setUri("https://api.notifications.service.gov.uk/v2/notifications/email");
-  try{
+  try {
     var requestBodyJson = {
       "email_address": email,
       "template_id": JSON.parse(templates).verifyReg,
       "personalisation": {
-          "link": returnUrl
+        "link": returnUrl
       }
     }
-  }catch(e){
+  } catch (e) {
     logger.error("[REGISTRATION] Error while preparing request for Notify: " + e);
     return false;
   }
@@ -151,63 +176,41 @@ function sendEmail(jwt){
 
   var response = httpClient.send(request).get();
   var notificationId;
-  logger.error("[REGISTRATION] Notify Response: " + response.getStatus().getCode() + " - " +response.getEntity().getString());
+  logger.error("[REGISTRATION] Notify Response: " + response.getStatus().getCode() + " - " + response.getEntity().getString());
 
-  try{
+  try {
     notificationId = JSON.parse(response.getEntity().getString()).id;
     transientState.put("notificationId", notificationId);
     logger.error("[REGISTRATION] Notify ID: " + notificationId);
-  }catch(e){
+  } catch (e) {
     logger.error("[REGISTRATION] Error while parsing Notify response: " + e);
     return false;
   }
-  
-  if(response.getStatus().getCode() == 201){
-    if (callbacks.isEmpty()) {
-      return true;
-    } 
-  } else {
-    if (callbacks.isEmpty()) {
-      action = fr.Action.send(
-        new fr.HiddenValueCallback (
-            "stage",
-            "REGISTRATION_ERROR" 
-        ),
-        new fr.TextOutputCallback(
-            fr.TextOutputCallback.ERROR,
-            "The email could not be sent: "+response.getEntity().getString()
-        ),
-        new fr.HiddenValueCallback (
-            "pagePropsJSON",
-            JSON.stringify({ 'errors': [{ label: "An error occurred while sending the email. Please try again."} ] })
-        )
-      ).build()
-    } 
-  }
+
+  return (response.getStatus().getCode() == 201);
 }
 
-// mian execution flow
+// main execution flow
 
 var returnUrl;
 var registrationJwt;
-var host = requestHeaders.get("origin").get(0); 
+var host = requestHeaders.get("origin").get(0);
 var request = new org.forgerock.http.protocol.Request();
 
 logger.error("host: " + host);
 logger.error("shared: " + sharedState.get("objectAttributes"));
 
 var regData = extractRegDataFromState();
-if(regData){
+if (regData) {
   registrationJwt = buildRegistrationToken(regData.email, regData.phone, regData.fullName);
 }
 
-if(!regData || !registrationJwt){
-  raiseGeneralError();
-}else{
-  if(sendEmail(registrationJwt)){
-    action = fr.Action.goTo(NodeOutcome.SUCCESS).build();  
+if (!regData || !registrationJwt) {
+  sendErrorCallbacks("REGISTRATION_ERROR", "An error has occurred! Please try again later.");
+} else {
+  if (sendEmail(registrationJwt)) {
+    action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
+  }else{
+    sendErrorCallbacks("SEND_MFA_SMS_ERROR",  "An error occurred while sending the email. Please try again.");
   }
 }
-
-//always return false at the end, because we don't end up with a session
-outcome = NodeOutcome.ERROR;

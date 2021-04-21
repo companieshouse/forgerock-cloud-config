@@ -31,27 +31,27 @@ var fr = JavaImporter(
 )
 
 // sends the error callbacks
-function sendErrorCallbacks(){
+function sendErrorCallbacks() {
   if (callbacks.isEmpty()) {
     action = fr.Action.send(
-      new fr.HiddenValueCallback (
-          "stage",
-          "SEND_MFA_SMS_ERROR"
+      new fr.HiddenValueCallback(
+        "stage",
+        "SEND_MFA_SMS_ERROR"
       ),
-        new fr.TextOutputCallback(
-          fr.TextOutputCallback.ERROR,
-          "The email could not be sent: " + response.getEntity().getString()
+      new fr.TextOutputCallback(
+        fr.TextOutputCallback.ERROR,
+        "The SMS could not be sent. Please try again."
       ),
-      new fr.HiddenValueCallback (
-          "pagePropsJSON",
-          JSON.stringify({ 'errors': [{ label: "An error occurred while sending the SMS. Please try again."} ] })
+      new fr.HiddenValueCallback(
+        "pagePropsJSON",
+        JSON.stringify({ 'errors': [{ label: "An error occurred while sending the SMS. Please try again.", token: "SEND_MFA_SMS_ERROR" }] })
       )
     ).build()
   }
 }
 
 // sends the OTP code via text to the number specified
-function sendTextMessage(phoneNumber, code){
+function sendTextMessage(phoneNumber, code) {
   var notifyJWT = transientState.get("notifyJWT");
   var templates = transientState.get("notifyTemplates");
   logger.error("[SEND MFA SMS] JWT from transient state: " + notifyJWT);
@@ -63,10 +63,10 @@ function sendTextMessage(phoneNumber, code){
       "phone_number": phoneNumber,
       "template_id": JSON.parse(templates).otpSms,
       "personalisation": {
-          "code": code
+        "code": code
       }
     }
-  } catch(e) {
+  } catch (e) {
     logger.error("[SEND MFA SMS] Error while preparing request for Notify: " + e);
     return false;
   }
@@ -85,29 +85,29 @@ function sendTextMessage(phoneNumber, code){
     logger.error("[SEND MFA SMS] Notify ID: " + notificationId);
     transientState.put("notificationId", notificationId);
     transientState.put("mfa-route", "sms");
-  } catch(e) {
+  } catch (e) {
     logger.error("[SEND MFA SMS] Error while parsing Notify response: " + e);
     return false;
   }
 
   logger.error("[SEND MFA SMS] Notify Response: " + response.getStatus().getCode() + response.getCause() + response.getEntity().getString());
 
-  if (response.getStatus().getCode() == 201) {    
-    return true;;
-  } 
-  
+  if (response.getStatus().getCode() == 201) {
+    return true;
+  }
+
   return false;
 }
 
 // extracts the number from the user profile (for password reset) or from shared state (for registration)
-function extractPhoneNumber(){
+function extractPhoneNumber() {
   var userId = sharedState.get("_id");
   var isRegistrationMFA = transientState.get("registrationMFA");
-  if(isRegistrationMFA){
+  if (isRegistrationMFA) {
     return sharedState.get("objectAttributes").get("telephoneNumber");
   } else {
     if (idRepository.getAttribute(userId, "telephoneNumber").iterator().hasNext()) {
-        return idRepository.getAttribute(userId, "telephoneNumber").iterator().next();
+      return idRepository.getAttribute(userId, "telephoneNumber").iterator().next();
     } else {
       logger.error("[SEND MFA SMS] Couldn't find telephoneNumber");
       return false;
@@ -120,14 +120,20 @@ var code = sharedState.get("oneTimePassword");
 logger.error("[SEND MFA SMS] Code: " + code);
 
 var phoneNumber = extractPhoneNumber();
-if(!phoneNumber || !code){
+if (!phoneNumber || !code) {
   sendErrorCallbacks();
 }
 
 logger.error("[SEND MFA SMS] User phoneNumber: " + phoneNumber);
 
-if (sendTextMessage(phoneNumber, code)) {
-  action = fr.Action.goTo("true").build();
-} else {
-  sendErrorCallbacks();
+try {
+  if (sendTextMessage(phoneNumber, code)) {
+    action = fr.Action.goTo("true").build();
+  } else {
+    logger.error("BEFORE CALLBACKS")
+    sendErrorCallbacks();
+  }
+  logger.error("AFTER CALLBACKS");
+} catch (e) {
+  logger.error("error: " + e);
 }
