@@ -106,6 +106,17 @@ function fetchCompany(idmToken, companyNumber) {
                 sharedState.put("createRelationshipErrorField", "IDToken2");
                 return false;
             }
+            
+            var companyStatus = companyResponse.result[0].status;
+            logger.error("[FETCH COMPANY] Found status: " + companyStatus);
+
+            if (companyStatus !== "active") {
+                logger.error("[FETCH COMPANY] The company is not active")
+                sharedState.put("errorMessage", "The company " + companyNumber + " is not active.");
+                sharedState.put("createRelationshipErrorType", "COMPANY_NOT_ACTIVE");
+                sharedState.put("createRelationshipErrorField", "IDToken2");
+                return false;
+            }
 
             sharedState.put("companyData", JSON.stringify(companyResponse.result[0]));
             sharedState.put("hashedCredential", authCode);
