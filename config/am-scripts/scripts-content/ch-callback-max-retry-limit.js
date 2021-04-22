@@ -8,7 +8,7 @@ var fr = JavaImporter(
     action = fr.Action.send(
       new fr.TextOutputCallback(
           fr.TextOutputCallback.ERROR,
-          "Password Reset failed - Cannot find a user with this email" 
+          "Exceeded number of attempts - please try again later." 
       ),
       new fr.HiddenValueCallback (
           "stage",
@@ -16,7 +16,7 @@ var fr = JavaImporter(
       ),
       new fr.HiddenValueCallback (
           "pagePropsJSON",
-          JSON.stringify({"errors": [{"label": "Password Reset failed - Cannot find a user with this email", "token": "USER_EMAIL_NOT_FOUND"}]})
+          JSON.stringify({"errors": [{"label": "Exceeded number of attempts - please try again later.", "token": "MAX_ATTEMPTS_EXCEEDED"}]})
       )
     ).build()
   } else { 

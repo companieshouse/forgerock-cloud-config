@@ -169,6 +169,22 @@
         },
         {
             "payload": {
+                "_id":"fdac4efb-d8b8-478b-8300-e11a4c3503df",
+                "name":"CH - Max number of login attempts",
+                "description":"Callback to show error when the maximum number of consecutive access attempts has been reached",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1615203506316
+             },
+            "filename": "ch-callback-max-retry-limit.js"
+        },
+        {
+            "payload": {
                 "_id":"24b1421b-8130-4eae-a999-a44dc6e94fa6",
                 "name":"CH - Callback to show recipient Phone Number",
                 "description":"Callback to show the phone number used to sent the OTP code",
