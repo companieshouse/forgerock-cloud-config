@@ -5,7 +5,7 @@ sharedState.put("pagePropsJSON", JSON.stringify(
     {
         'errors': [{
             label: "Enter a correct username and password.",
-            token: "LEGACY_PASSWORD_ERROR",
+            token: "PASSWORD_CHECK_ERROR",
             fieldName: "IDToken2",
             anchor: "IDToken2"
         }]
