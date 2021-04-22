@@ -3,7 +3,10 @@
   "meta": {
     "property": "_meta",
     "resourceCollection": "managed/bravo_usermeta",
-    "trackedProperties": ["createDate", "lastChanged"]
+    "trackedProperties": [
+      "createDate",
+      "lastChanged"
+    ]
   },
   "name": "bravo_user",
   "notifications": {},
@@ -46,6 +49,10 @@
       "kbaInfo",
       "preferences",
       "consentedMappings",
+      "ownerOfOrg",
+      "adminOfOrg",
+      "memberOfOrg",
+      "memberOfOrgIDs",
       "frIndexedString1",
       "frIndexedString2",
       "frIndexedString3",
@@ -93,7 +100,11 @@
         "isPersonal": false,
         "policies": [
           {
-            "params": { "forbiddenChars": ["/"] },
+            "params": {
+              "forbiddenChars": [
+                "/"
+              ]
+            },
             "policyId": "cannot-contain-characters"
           }
         ],
@@ -116,7 +127,10 @@
       "aliasList": {
         "description": "List of identity aliases used primarily to record social IdP subjects for this user",
         "isVirtual": false,
-        "items": { "title": "User Alias Names Items", "type": "string" },
+        "items": {
+          "title": "User Alias Names Items",
+          "type": "string"
+        },
         "returnByDefault": false,
         "searchable": false,
         "title": "User Alias Names List",
@@ -152,7 +166,12 @@
               "conditionalAssociationField": "condition",
               "label": "Internal Role",
               "path": "internal/role",
-              "query": { "fields": ["name"], "queryFilter": "true" }
+              "query": {
+                "fields": [
+                  "name"
+                ],
+                "queryFilter": "true"
+              }
             }
           ],
           "reversePropertyName": "authzMembers",
@@ -198,7 +217,10 @@
         "isVirtual": false,
         "items": {
           "items": {
-            "order": ["mapping", "consentDate"],
+            "order": [
+              "mapping",
+              "consentDate"
+            ],
             "properties": {
               "consentDate": {
                 "description": "Consent Date",
@@ -217,7 +239,10 @@
                 "viewable": true
               }
             },
-            "required": ["mapping", "consentDate"],
+            "required": [
+              "mapping",
+              "consentDate"
+            ],
             "title": "Consented Mappings Item",
             "type": "object"
           },
@@ -260,8 +285,13 @@
           "type": "object"
         },
         "queryConfig": {
-          "referencedObjectFields": ["*"],
-          "referencedRelationshipFields": ["roles", "assignments"]
+          "referencedObjectFields": [
+            "*"
+          ],
+          "referencedRelationshipFields": [
+            "roles",
+            "assignments"
+          ]
         },
         "returnByDefault": true,
         "title": "Effective Assignments",
@@ -273,8 +303,15 @@
         "description": "Effective Roles",
         "isPersonal": false,
         "isVirtual": true,
-        "items": { "title": "Effective Roles Items", "type": "object" },
-        "queryConfig": { "referencedRelationshipFields": ["roles"] },
+        "items": {
+          "title": "Effective Roles Items",
+          "type": "object"
+        },
+        "queryConfig": {
+          "referencedRelationshipFields": [
+            "roles"
+          ]
+        },
         "returnByDefault": true,
         "title": "Effective Roles",
         "type": "array",
@@ -374,7 +411,9 @@
       "frIndexedMultivalued1": {
         "description": "Generic Indexed Multivalue 1",
         "isPersonal": false,
-        "items": { "type": "string" },
+        "items": {
+          "type": "string"
+        },
         "title": "Generic Indexed Multivalue 1",
         "type": "array",
         "usageDescription": "",
@@ -384,7 +423,9 @@
       "frIndexedMultivalued2": {
         "description": "Generic Indexed Multivalue 2",
         "isPersonal": false,
-        "items": { "type": "string" },
+        "items": {
+          "type": "string"
+        },
         "title": "Generic Indexed Multivalue 2",
         "type": "array",
         "usageDescription": "",
@@ -394,7 +435,9 @@
       "frIndexedMultivalued3": {
         "description": "Generic Indexed Multivalue 3",
         "isPersonal": false,
-        "items": { "type": "string" },
+        "items": {
+          "type": "string"
+        },
         "title": "Generic Indexed Multivalue 3",
         "type": "array",
         "usageDescription": "",
@@ -404,7 +447,9 @@
       "frIndexedMultivalued4": {
         "description": "Generic Indexed Multivalue 4",
         "isPersonal": false,
-        "items": { "type": "string" },
+        "items": {
+          "type": "string"
+        },
         "title": "Generic Indexed Multivalue 4",
         "type": "array",
         "usageDescription": "",
@@ -414,7 +459,9 @@
       "frIndexedMultivalued5": {
         "description": "Generic Indexed Multivalue 5",
         "isPersonal": false,
-        "items": { "type": "string" },
+        "items": {
+          "type": "string"
+        },
         "title": "Generic Indexed Multivalue 5",
         "type": "array",
         "usageDescription": "",
@@ -559,7 +606,9 @@
       "frUnindexedMultivalued1": {
         "description": "Generic Unindexed Multivalue 1",
         "isPersonal": false,
-        "items": { "type": "string" },
+        "items": {
+          "type": "string"
+        },
         "title": "Generic Unindexed Multivalue 1",
         "type": "array",
         "usageDescription": "",
@@ -569,7 +618,9 @@
       "frUnindexedMultivalued2": {
         "description": "Generic Unindexed Multivalue 2",
         "isPersonal": false,
-        "items": { "type": "string" },
+        "items": {
+          "type": "string"
+        },
         "title": "Generic Unindexed Multivalue 2",
         "type": "array",
         "usageDescription": "",
@@ -579,7 +630,9 @@
       "frUnindexedMultivalued3": {
         "description": "Generic Unindexed Multivalue 3",
         "isPersonal": false,
-        "items": { "type": "string" },
+        "items": {
+          "type": "string"
+        },
         "title": "Generic Unindexed Multivalue 3",
         "type": "array",
         "usageDescription": "",
@@ -589,7 +642,9 @@
       "frUnindexedMultivalued4": {
         "description": "Generic Unindexed Multivalue 4",
         "isPersonal": false,
-        "items": { "type": "string" },
+        "items": {
+          "type": "string"
+        },
         "title": "Generic Unindexed Multivalue 4",
         "type": "array",
         "usageDescription": "",
@@ -599,7 +654,9 @@
       "frUnindexedMultivalued5": {
         "description": "Generic Unindexed Multivalue 5",
         "isPersonal": false,
-        "items": { "type": "string" },
+        "items": {
+          "type": "string"
+        },
         "title": "Generic Unindexed Multivalue 5",
         "type": "array",
         "usageDescription": "",
@@ -665,14 +722,24 @@
         "description": "KBA Info",
         "isPersonal": true,
         "items": {
-          "order": ["answer", "customQuestion", "questionId"],
+          "order": [
+            "answer",
+            "customQuestion",
+            "questionId"
+          ],
           "properties": {
-            "answer": { "description": "Answer", "type": "string" },
+            "answer": {
+              "description": "Answer",
+              "type": "string"
+            },
             "customQuestion": {
               "description": "Custom question",
               "type": "string"
             },
-            "questionId": { "description": "Question ID", "type": "string" }
+            "questionId": {
+              "description": "Question ID",
+              "type": "string"
+            }
           },
           "required": [],
           "title": "KBA Info Items",
@@ -686,7 +753,10 @@
       "lastSync": {
         "description": "Last Sync timestamp",
         "isPersonal": false,
-        "order": ["effectiveAssignments", "timestamp"],
+        "order": [
+          "effectiveAssignments",
+          "timestamp"
+        ],
         "properties": {
           "effectiveAssignments": {
             "description": "Effective Assignments",
@@ -697,7 +767,10 @@
             "title": "Effective Assignments",
             "type": "array"
           },
-          "timestamp": { "description": "Timestamp", "type": "string" }
+          "timestamp": {
+            "description": "Timestamp",
+            "type": "string"
+          }
         },
         "required": [],
         "scope": "private",
@@ -710,7 +783,11 @@
       "mail": {
         "description": "Email Address",
         "isPersonal": true,
-        "policies": [{ "policyId": "valid-email-address-format" }],
+        "policies": [
+          {
+            "policyId": "valid-email-address-format"
+          }
+        ],
         "searchable": true,
         "title": "Email Address",
         "type": "string",
@@ -743,7 +820,11 @@
             "label": "User",
             "path": "managed/bravo_user",
             "query": {
-              "fields": ["userName", "givenName", "sn"],
+              "fields": [
+                "userName",
+                "givenName",
+                "sn"
+              ],
               "queryFilter": "true"
             }
           }
@@ -791,7 +872,10 @@
       "preferences": {
         "description": "Preferences",
         "isPersonal": false,
-        "order": ["updates", "marketing"],
+        "order": [
+          "updates",
+          "marketing"
+        ],
         "properties": {
           "marketing": {
             "description": "Send me special offers and services",
@@ -837,7 +921,11 @@
               "label": "User",
               "path": "managed/bravo_user",
               "query": {
-                "fields": ["userName", "givenName", "sn"],
+                "fields": [
+                  "userName",
+                  "givenName",
+                  "sn"
+                ],
                 "queryFilter": "true"
               }
             }
@@ -889,7 +977,12 @@
               "conditionalAssociationField": "condition",
               "label": "Role",
               "path": "managed/bravo_role",
-              "query": { "fields": ["name"], "queryFilter": "true" }
+              "query": {
+                "fields": [
+                  "name"
+                ],
+                "queryFilter": "true"
+              }
             }
           ],
           "reversePropertyName": "members",
@@ -940,13 +1033,29 @@
         "isPersonal": true,
         "minLength": 1,
         "policies": [
-          { "policyId": "valid-username" },
           {
-            "params": { "forbiddenChars": ["/"] },
+            "policyId": "valid-username"
+          },
+          {
+            "params": {
+              "forbiddenChars": [
+                "/"
+              ]
+            },
             "policyId": "cannot-contain-characters"
           },
-          { "params": { "minLength": 1 }, "policyId": "minimum-length" },
-          { "params": { "maxLength": 255 }, "policyId": "maximum-length" }
+          {
+            "params": {
+              "minLength": 1
+            },
+            "policyId": "minimum-length"
+          },
+          {
+            "params": {
+              "maxLength": 255
+            },
+            "policyId": "maximum-length"
+          }
         ],
         "searchable": true,
         "title": "Username",
@@ -954,9 +1063,172 @@
         "usageDescription": "",
         "userEditable": true,
         "viewable": true
+      },
+      "ownerOfOrg": {
+        "title": "Organizations I Own",
+        "viewable": true,
+        "searchable": false,
+        "userEditable": false,
+        "policies": [],
+        "returnByDefault": false,
+        "type": "array",
+        "items": {
+          "type": "relationship",
+          "notifySelf": false,
+          "reverseRelationship": true,
+          "reversePropertyName": "owners",
+          "validate": true,
+          "properties": {
+            "_ref": {
+              "type": "string"
+            },
+            "_refProperties": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "required": false,
+                  "propName": "_id"
+                }
+              }
+            }
+          },
+          "resourceCollection": [
+            {
+              "notify": true,
+              "path": "managed/bravo_organization",
+              "label": "Organization",
+              "query": {
+                "queryFilter": "true",
+                "fields": [
+                  "name"
+                ],
+                "sortKeys": []
+              }
+            }
+          ]
+        }
+      },
+      "adminOfOrg": {
+        "title": "Organizations I Administer",
+        "viewable": true,
+        "searchable": false,
+        "userEditable": false,
+        "policies": [],
+        "returnByDefault": false,
+        "type": "array",
+        "items": {
+          "type": "relationship",
+          "notifySelf": false,
+          "reverseRelationship": true,
+          "reversePropertyName": "admins",
+          "validate": true,
+          "properties": {
+            "_ref": {
+              "type": "string"
+            },
+            "_refProperties": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "required": false,
+                  "propName": "_id"
+                }
+              }
+            }
+          },
+          "resourceCollection": [
+            {
+              "notify": true,
+              "path": "managed/bravo_organization",
+              "label": "Organization",
+              "query": {
+                "queryFilter": "true",
+                "fields": [
+                  "name"
+                ],
+                "sortKeys": []
+              }
+            }
+          ]
+        }
+      },
+      "memberOfOrg": {
+        "title": "Organizations to which I Belong",
+        "viewable": true,
+        "searchable": false,
+        "userEditable": false,
+        "policies": [],
+        "returnByDefault": false,
+        "type": "array",
+        "items": {
+          "type": "relationship",
+          "notifySelf": true,
+          "reverseRelationship": true,
+          "reversePropertyName": "members",
+          "validate": true,
+          "properties": {
+            "_ref": {
+              "type": "string"
+            },
+            "_refProperties": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "required": false,
+                  "propName": "_id"
+                }
+              }
+            }
+          },
+          "resourceCollection": [
+            {
+              "notify": false,
+              "path": "managed/bravo_organization",
+              "label": "Organization",
+              "query": {
+                "queryFilter": "true",
+                "fields": [
+                  "name"
+                ],
+                "sortKeys": []
+              }
+            }
+          ]
+        }
+      },
+      "memberOfOrgIDs": {
+        "title": "MemberOfOrgIDs",
+        "type": "array",
+        "viewable": false,
+        "searchable": false,
+        "userEditable": false,
+        "isVirtual": true,
+        "returnByDefault": true,
+        "queryConfig": {
+          "referencedRelationshipFields": [
+            "memberOfOrg"
+          ],
+          "referencedObjectFields": [
+            "_id",
+            "parentIDs"
+          ],
+          "flattenProperties": true
+        },
+        "items": {
+          "type": "string",
+          "title": "org identifiers"
+        }
       }
     },
-    "required": ["userName", "givenName", "sn", "mail"],
+    "required": [
+      "userName",
+      "givenName",
+      "sn",
+      "mail"
+    ],
     "title": "Bravo realm - User",
     "type": "object",
     "viewable": true
