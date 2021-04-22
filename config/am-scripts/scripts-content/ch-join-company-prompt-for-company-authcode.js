@@ -24,11 +24,8 @@ if (callbacks.isEmpty()) {
   var infoMessage = "Please enter the company auth code.";
   var errorMessage = sharedState.get("errorMessage");
   var level = fr.TextOutputCallback.INFORMATION;
-  //var errorType, errorField;
   if (errorMessage != null) {
     level = fr.TextOutputCallback.ERROR;
-    // errorType = sharedState.get("createRelationshipErrorType");
-    // errorField = sharedState.get("createRelationshipErrorField");
     var errorProps = sharedState.get("pagePropsJSON");
     infoMessage = errorMessage.concat(" Please try again.");
     action = fr.Action.send(
