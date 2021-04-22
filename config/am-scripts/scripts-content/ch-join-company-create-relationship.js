@@ -152,16 +152,36 @@ if(!accessToken){
 if(checkCompanyAlreadyExists(userId, JSON.parse(companyData))){
     logger.error("[ADD RELATIONSHIP] The company " + JSON.parse(companyData).name + " is already associated with this user");
     sharedState.put("errorMessage","The company " + JSON.parse(companyData).name + " is already associated with the user.");
-    sharedState.put("createRelationshipErrorType", "COMPANY_ALREADY_ASSOCIATED");
-    sharedState.put("createRelationshipErrorField", "IDToken2");
+    sharedState.put("pagePropsJSON", JSON.stringify(
+        {
+            'errors': [{
+                label: "The company ${companyNumber} is already associated with this user",
+                token: "COMPANY_ALREADY_ASSOCIATED",
+                fieldName: "IDToken2",
+                anchor: "IDToken2"
+            }],
+            'companyNumber': JSON.parse(companyData).name
+        }));
+    // sharedState.put("createRelationshipErrorType", "COMPANY_ALREADY_ASSOCIATED");
+    // sharedState.put("createRelationshipErrorField", "IDToken2");
     action = fr.Action.goTo(NodeOutcome.COMPANY_ALREADY_ASSOCIATED).build();
 }
 
 if(!JSON.parse(companyData).authCodeIsActive){
     logger.error("[ADD RELATIONSHIP] The company " + JSON.parse(companyData).name + " does not have an active auth code");
     sharedState.put("errorMessage","The company " + JSON.parse(companyData).name + " does not have an active auth code.");
-    sharedState.put("createRelationshipErrorType", "AUTH_CODE_INACTIVE");
-    sharedState.put("createRelationshipErrorField", "IDToken1");
+    // sharedState.put("createRelationshipErrorType", "AUTH_CODE_INACTIVE");
+    // sharedState.put("createRelationshipErrorField", "IDToken1");
+    sharedState.put("pagePropsJSON", JSON.stringify(
+        {
+            'errors': [{
+                label: "The company ${companyNumber} does not have an active auth code.",
+                token: "AUTH_CODE_INACTIVE",
+                fieldName: "IDToken1",
+                anchor: "IDToken1"
+            }],
+            'companyNumber': JSON.parse(companyData).name
+        }));
     action = fr.Action.goTo(NodeOutcome.AUTH_CODE_INACTIVE).build();        
 } 
 
