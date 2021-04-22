@@ -25,14 +25,13 @@ if (callbacks.isEmpty()) {
     var infoMessage, errorType, errorField;
     if (errorMessage != null) {
       level = fr.TextOutputCallback.ERROR;
-      errorType = sharedState.get("loginErrorType");
-      errorField = sharedState.get("loginErrorField");
+      errorProps = sharedState.get("pagePropsJSON");
       infoMessage = errorMessage;
       action = fr.Action.send(
         new fr.TextOutputCallback(level, infoMessage),
         new fr.HiddenValueCallback ("stage", "CH_LOGIN_1"),
-        new fr.HiddenValueCallback("pagePropsJSON", JSON.stringify({ 'errors': [{ label: infoMessage, token: errorType, fieldName: errorField, anchor: errorField }] }))
-      ).build();
+        new fr.HiddenValueCallback("pagePropsJSON", errorProps)
+        ).build();
     }
 }
 

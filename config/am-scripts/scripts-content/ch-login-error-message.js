@@ -1,15 +1,30 @@
 var username = sharedState.get("username");
 var password = transientState.get("password");
 
-if (username && password) {
-    sharedState.put("errorMessage","Enter a correct username and password.")
-    sharedState.put("loginErrorType", "USER_CREDENTIALS_INCORRECT");
-} else {
-    sharedState.put("errorMessage","Enter a username and password.")
-    sharedState.put("loginErrorType", "USER_CREDENTIALS_INCOMPLETE");
-}
-sharedState.put("loginErrorField", "IDToken2");
+logger.error("[LOGIN] Enter correct credentials.");
 
-logger.error("[LOGIN] Enter a correct username and password.");
+if (username && password) {
+    sharedState.put("errorMessage", "Enter a correct username and password.")
+    sharedState.put("pagePropsJSON", JSON.stringify(
+        {
+            'errors': [{
+                label: "Enter a correct username and password.",
+                token: "USER_CREDENTIALS_INCORRECT",
+                fieldName: "IDToken2",
+                anchor: "IDToken2"
+            }]
+        }));
+} else {
+    sharedState.put("errorMessage", "Enter a username and password.")
+    sharedState.put("pagePropsJSON", JSON.stringify(
+        {
+            'errors': [{
+                label: "Enter a username and password.",
+                token: "USER_CREDENTIALS_INCOMPLETE",
+                fieldName: "IDToken2",
+                anchor: "IDToken2"
+            }]
+        }));
+}
 
 outcome = "true";

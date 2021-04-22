@@ -1,7 +1,14 @@
-sharedState.put("errorMessage","Enter a correct username and password.")
-sharedState.put("loginErrorType", "LEGACY_PASSWORD_ERROR");
-sharedState.put("loginErrorField", "IDToken2");
-
 logger.error("[UPDATE LEGACY PASSWORD] Enter a correct username and password.");
+
+sharedState.put("errorMessage", "Enter a correct username and password.")
+sharedState.put("pagePropsJSON", JSON.stringify(
+    {
+        'errors': [{
+            label: "Enter a correct username and password.",
+            token: "LEGACY_PASSWORD_ERROR",
+            fieldName: "IDToken2",
+            anchor: "IDToken2"
+        }]
+    }));
 
 outcome = "true";
