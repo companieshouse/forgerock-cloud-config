@@ -102,19 +102,35 @@ function fetchCompany(idmToken, companyNumber) {
             if (authCode == null) {
                 logger.error("[FETCH COMPANY] No auth code associated with company")
                 sharedState.put("errorMessage", "No auth code associated with company " + companyNumber + ".");
-                sharedState.put("createRelationshipErrorType", "AUTH_CODE_NOT_DEFINED");
-                sharedState.put("createRelationshipErrorField", "IDToken2");
+                sharedState.put("pagePropsJSON", JSON.stringify(
+                    {
+                        'errors': [{
+                            label: "No auth code associated with company ${companyNumber}",
+                            token: "AUTH_CODE_NOT_DEFINED",
+                            fieldName: "IDToken2",
+                            anchor: "IDToken2"
+                        }],
+                        'companyNumber': companyNumber
+                    }));
                 return false;
             }
-            
+
             var companyStatus = companyResponse.result[0].status;
             logger.error("[FETCH COMPANY] Found status: " + companyStatus);
 
             if (companyStatus !== "active") {
                 logger.error("[FETCH COMPANY] The company is not active")
                 sharedState.put("errorMessage", "The company " + companyNumber + " is not active.");
-                sharedState.put("createRelationshipErrorType", "COMPANY_NOT_ACTIVE");
-                sharedState.put("createRelationshipErrorField", "IDToken2");
+                sharedState.put("pagePropsJSON", JSON.stringify(
+                    {
+                        'errors': [{
+                            label: "The company ${companyNumber} is not active.",
+                            token: "COMPANY_NOT_ACTIVE",
+                            fieldName: "IDToken2",
+                            anchor: "IDToken2"
+                        }],
+                        'companyNumber': companyNumber
+                    }));
                 return false;
             }
 
@@ -146,15 +162,31 @@ function fetchCompany(idmToken, companyNumber) {
         } else {
             logger.error("[FETCH COMPANY] No company results for company number " + companyNumber);
             sharedState.put("errorMessage", "The company " + companyNumber + " could not be found.");
-            sharedState.put("createRelationshipErrorType", "COMPANY_NOT_FOUND");
-            sharedState.put("createRelationshipErrorField", "IDToken2");
+            sharedState.put("pagePropsJSON", JSON.stringify(
+                {
+                    'errors': [{
+                        label: "The company ${companyNumber} could not be found.",
+                        token: "COMPANY_NOT_FOUND",
+                        fieldName: "IDToken2",
+                        anchor: "IDToken2"
+                    }],
+                    'companyNumber': companyNumber
+                }));
             return false;
         }
     } else if (response.getStatus().getCode() === 401) {
         logger.error("[FETCH COMPANY] Error while retrieving company with ID " + companyNumber);
         sharedState.put("errorMessage", "Error while retrieving company " + companyNumber + ".");
-        sharedState.put("createRelationshipErrorType", "COMPANY_FETCH_ERROR");
-        sharedState.put("createRelationshipErrorField", "IDToken2");
+        sharedState.put("pagePropsJSON", JSON.stringify(
+            {
+                'errors': [{
+                    label: "Error while retrieving company ${companyNumber}.",
+                    token: "COMPANY_FETCH_ERROR",
+                    fieldName: "IDToken2",
+                    anchor: "IDToken2"
+                }],
+                'companyNumber': companyNumber
+            }));
         return false;
     }
 }
@@ -170,8 +202,7 @@ if (!callbacks.isEmpty()) {
     if (selection === YES_OPTION_INDEX) {
         logger.error("[FETCH COMPANY] selected YES");
         sharedState.put("errorMessage", null);
-        sharedState.put("createRelationshipErrorType", null);
-        sharedState.put("createRelationshipErrorField", null);
+        sharedState.put("pagePropsJSON", null);
         outcome = NodeOutcome.TRUE;
     } else {
         sharedState.put("errorMessage", null);

@@ -126,14 +126,8 @@ if (!phoneNumber || !code) {
 
 logger.error("[SEND MFA SMS] User phoneNumber: " + phoneNumber);
 
-try {
-  if (sendTextMessage(phoneNumber, code)) {
-    action = fr.Action.goTo("true").build();
-  } else {
-    logger.error("BEFORE CALLBACKS")
-    sendErrorCallbacks();
-  }
-  logger.error("AFTER CALLBACKS");
-} catch (e) {
-  logger.error("error: " + e);
+if (sendTextMessage(phoneNumber, code)) {
+  action = fr.Action.goTo("true").build();
+} else {
+  sendErrorCallbacks();
 }

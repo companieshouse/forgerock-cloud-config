@@ -14,33 +14,31 @@
 */
 
 var fr = JavaImporter(
-   org.forgerock.openam.auth.node.api.Action,
-   javax.security.auth.callback.NameCallback,
-   javax.security.auth.callback.TextOutputCallback,
-   com.sun.identity.authentication.callbacks.HiddenValueCallback
+  org.forgerock.openam.auth.node.api.Action,
+  javax.security.auth.callback.NameCallback,
+  javax.security.auth.callback.TextOutputCallback,
+  com.sun.identity.authentication.callbacks.HiddenValueCallback
 )
 
 if (callbacks.isEmpty()) {
   var infoMessage = "Please enter the company number.";
   var errorMessage = sharedState.get("errorMessage");
   var level = fr.TextOutputCallback.INFORMATION;
-  var errorType, errorField;
   if (errorMessage != null) {
-    errorType = sharedState.get("createRelationshipErrorType");
-    errorField = sharedState.get("createRelationshipErrorField");
+    var errorProps = sharedState.get("pagePropsJSON");
     level = fr.TextOutputCallback.ERROR;
     infoMessage = errorMessage.concat(" Please try again.");
     action = fr.Action.send(
       new fr.TextOutputCallback(level, infoMessage),
       new fr.NameCallback("Enter Company number"),
-      new fr.HiddenValueCallback ("stage", "COMPANY_ASSOCIATION_1"),
-      new fr.HiddenValueCallback("pagePropsJSON", JSON.stringify({ 'errors': [{ label: infoMessage, token: errorType, fieldName: errorField, anchor: errorField }] }))
+      new fr.HiddenValueCallback("stage", "COMPANY_ASSOCIATION_1"),
+      new fr.HiddenValueCallback("pagePropsJSON", errorProps)
     ).build();
   } else {
     action = fr.Action.send(
       new fr.TextOutputCallback(level, infoMessage),
       new fr.NameCallback("Enter Company number"),
-      new fr.HiddenValueCallback ("stage", "COMPANY_ASSOCIATION_1")
+      new fr.HiddenValueCallback("stage", "COMPANY_ASSOCIATION_1")
     ).build();
   }
 } else {

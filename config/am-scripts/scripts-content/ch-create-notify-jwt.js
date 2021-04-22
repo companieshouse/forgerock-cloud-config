@@ -44,42 +44,42 @@ function buildJwt() {
   var signingHandler;
   var secretbytes;
   var secret;
-  try{
+  try {
     notifyObj = JSON.parse(notifyDetails);
     secret = notifyObj.secretKey;
     secretbytes = java.lang.String(secret).getBytes()
-  }catch(e){
+  } catch (e) {
     logger.error("Error while parsing secret: " + e);
     return false;
   }
-  
+
   logger.error("parsed: " + JSON.stringify(notifyObj));
   var issuer = notifyObj.issUuid;
 
-  try{
+  try {
     var secretBuilder = new fr.SecretBuilder;
     secretBuilder.secretKey(new javax.crypto.spec.SecretKeySpec(secretbytes, "Hmac"));
     secretBuilder.stableId(issuer).expiresIn(5, fr.ChronoUnit.MINUTES, fr.Clock.systemUTC());
-    var key = new fr.SigningKey(secretBuilder); 
+    var key = new fr.SigningKey(secretBuilder);
     signingHandler = new fr.SecretHmacSigningHandler(key);
-  }catch(e){
+  } catch (e) {
     logger.error("Error while creating signing handler: " + e);
     return false;
   }
-  
-  try{
+
+  try {
     var jwtClaims = new fr.JwtClaimsSet;
     jwtClaims.setIssuer(issuer);
     jwtClaims.setIssuedAtTime(new Date());
     var jwt = new fr.JwtBuilderFactory()
-          .jws(signingHandler)
-          .headers()
-          .alg(fr.JwsAlgorithm.HS256)
-          .done()
-          .claims(jwtClaims)
-          .build();
+      .jws(signingHandler)
+      .headers()
+      .alg(fr.JwsAlgorithm.HS256)
+      .done()
+      .claims(jwtClaims)
+      .build();
     logger.error("JWT for Notify: " + jwt);
-  }catch(e){
+  } catch (e) {
     logger.error("Error while building JWT - " + e);
     return false;
   }
@@ -87,12 +87,12 @@ function buildJwt() {
 }
 
 // saves the JWT to transient state for future use
-function saveState(jwt){
-  try{
+function saveState(jwt) {
+  try {
     transientState.put("notifyJWT", jwt);
     transientState.put("notifyTemplates", JSON.stringify(notifyObj.templates));
     transientState.put("secretKey", notifyObj.secretKey);
-  }catch(e){
+  } catch (e) {
     logger.error("Error while setting state - " + e);
     return NodeOutcome.ERROR;
   }
@@ -102,20 +102,20 @@ function saveState(jwt){
 //main execution flow
 
 var jwt = buildJwt();
-if(!jwt){
+if (!jwt) {
   if (callbacks.isEmpty()) {
     action = fr.Action.send(
       new fr.TextOutputCallback(
-          fr.TextOutputCallback.ERROR,
-          "Journey failed - Error while creating Notify JWT" 
+        fr.TextOutputCallback.ERROR,
+        "Journey failed - Error while creating Notify JWT"
       ),
-      new fr.HiddenValueCallback (
-          "stage",
-          "GENERIC_ERROR" 
+      new fr.HiddenValueCallback(
+        "stage",
+        "GENERIC_ERROR"
       ),
-      new fr.HiddenValueCallback (
-          "pagePropsJSON",
-          JSON.stringify({"errors": [{"label": "Error while creating Notify JWT"}]})
+      new fr.HiddenValueCallback(
+        "pagePropsJSON",
+        JSON.stringify({ "errors": [{ "label": "Error while creating Notify JWT" }] })
       )
     ).build()
   }

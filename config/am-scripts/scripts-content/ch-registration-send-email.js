@@ -210,7 +210,7 @@ if (!regData || !registrationJwt) {
 } else {
   if (sendEmail(registrationJwt)) {
     action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
-  }else{
-    sendErrorCallbacks("SEND_MFA_SMS_ERROR",  "An error occurred while sending the email. Please try again.");
+  } else {
+    sendErrorCallbacks("SEND_EMAIL_ERROR", "An error occurred while sending the email. Please try again.");
   }
 }
