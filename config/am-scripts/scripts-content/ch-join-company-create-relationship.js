@@ -16,7 +16,7 @@
   ** CALLBACKS: 
     - error: user is already associated with a company
 */
-ßßß
+
 var fr = JavaImporter(
     org.forgerock.openam.auth.node.api.Action,
     javax.security.auth.callback.TextOutputCallback,
