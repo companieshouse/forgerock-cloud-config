@@ -713,7 +713,7 @@
             "payload": {
                 "_id": "188d3f9d-ca04-4df7-bcd7-eed3fe27e21e",
                 "name": "CH - Login Error Message",
-                "description": null,
+                "description": "Create error message structure for login page",
                 "script": "<replace>",
                 "default": false,
                 "language": "JAVASCRIPT",
@@ -729,7 +729,7 @@
             "payload": {
                 "_id": "064705f3-93d3-482c-ad3f-4531a28ce0a0",
                 "name": "CH - Callback Login Error",
-                "description": null,
+                "description": "Handle error message structure for login page",
                 "script": "<replace>",
                 "default": false,
                 "language": "JAVASCRIPT",
@@ -745,7 +745,7 @@
             "payload": {
                 "_id": "13e9d2a5-e93a-47f2-894d-4d732918c383",
                 "name": "CH - Update Legacy Password Error Message",
-                "description": null,
+                "description": "Create error message structure for login page from update legacy password journey",
                 "script": "<replace>",
                 "default": false,
                 "language": "JAVASCRIPT",
