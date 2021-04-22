@@ -708,6 +708,54 @@
                 "lastModifiedDate": 1617813675725
             },
             "filename": "ch-update-legacy-password-check-original.js"
+        },
+        {
+            "payload": {
+                "_id": "188d3f9d-ca04-4df7-bcd7-eed3fe27e21e",
+                "name": "CH - Login Error Message",
+                "description": null,
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "null",
+                "lastModifiedDate": 0
+            },
+            "filename": "ch-login-error-message.js"
+        },
+        {
+            "payload": {
+                "_id": "064705f3-93d3-482c-ad3f-4531a28ce0a0",
+                "name": "CH - Callback Login Error",
+                "description": null,
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "null",
+                "lastModifiedDate": 0
+            },
+            "filename": "ch-callback-login-error.js"
+        },
+        {
+            "payload": {
+                "_id": "13e9d2a5-e93a-47f2-894d-4d732918c383",
+                "name": "CH - Update Legacy Password Error Message",
+                "description": null,
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "null",
+                "lastModifiedDate": 0
+            },
+            "filename": "ch-update-legacy-password-error-message.js"
         }
     ]
 }
