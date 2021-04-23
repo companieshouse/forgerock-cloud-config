@@ -1,0 +1,113 @@
+{
+  "target": "system/DSBackup/account",
+  "source": "managed/alpha_user",
+  "name": "managedAlpha_user_systemDsbackupAccount",
+  "consentRequired": false,
+  "icon": null,
+  "displayName": "managedAlpha_user_systemDsbackupAccount",
+  "properties": [
+    {
+      "target": "dn",
+      "source": "userName",
+      "transform": {
+        "type": "text/javascript",
+        "source": "\"uid=\" + source + \",dc=companieshouse,dc=gov,dc=uk\""
+      }
+    },
+    {
+      "target": "cn",
+      "transform": {
+        "type": "text/javascript",
+        "source": "source.givenName + ' ' + source.sn"
+      },
+      "source": ""
+    },
+    {
+      "target": "sn",
+      "source": "sn"
+    },
+    {
+      "target": "givenName",
+      "source": "givenName"
+    },
+    {
+      "target": "mail",
+      "source": "mail"
+    },
+    {
+      "target": "uid",
+      "source": "userName"
+    },
+    {
+      "target": "userPassword",
+      "source": "password"
+    }
+  ],
+  "policies": [
+    {
+      "action": "EXCEPTION",
+      "situation": "AMBIGUOUS"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "SOURCE_MISSING"
+    },
+    {
+      "action": "CREATE",
+      "situation": "MISSING"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "FOUND_ALREADY_LINKED"
+    },
+    {
+      "action": "DELETE",
+      "situation": "UNQUALIFIED"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "UNASSIGNED"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "LINK_ONLY"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "TARGET_IGNORED"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "SOURCE_IGNORED"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "ALL_GONE"
+    },
+    {
+      "action": "UPDATE",
+      "situation": "CONFIRMED"
+    },
+    {
+      "action": "UPDATE",
+      "situation": "FOUND"
+    },
+    {
+      "action": "CREATE",
+      "situation": "ABSENT"
+    }
+  ],
+  "correlationQuery": [
+    {
+      "linkQualifier": "default",
+      "expressionTree": {
+        "any": [
+          "mail"
+        ]
+      },
+      "mapping": "managedAlpha_user_systemDsbackupAccount",
+      "type": "text/javascript",
+      "file": "ui/correlateTreeToQueryFilter.js"
+    }
+  ]
+}
