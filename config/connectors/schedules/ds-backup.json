@@ -1,0 +1,19 @@
+{
+  "isCron": true,
+  "enabled": true,
+  "persisted": true,
+  "type": "cron",
+  "misfirePolicy": "fireAndProceed",
+  "invokeService": "sync",
+  "invokeLogLevel": "info",
+  "timeZone": null,
+  "startTime": null,
+  "endTime": null,
+  "concurrentExecution": false,
+  "invokeContext": {
+    "action": "reconcile",
+    "mapping": "managedAlpha_user_systemDsbackupAccount"
+  },
+  "_id": "ds-backup",
+  "schedule": "0 0 * * * ?"
+}

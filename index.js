@@ -6,6 +6,7 @@ const {
   updateAuthTrees,
   updateConnectorDefinitions,
   updateConnectorMappings,
+  updateConnectorSchedules,
   updateCors,
   updateInternalRoles,
   updateManagedObjects,
@@ -69,6 +70,18 @@ yargs
       'realm'
     ]),
     handler: (argv) => updateConnectorMappings(argv)
+  })
+  .command({
+    command: 'connector-schedules',
+    desc: 'Update IDM Connector Mappings (./config/connectors/schedules)',
+    builder: cliOptions([
+      'idmUsername',
+      'idmPassword',
+      'adminClientId',
+      'adminClientSecret',
+      'realm'
+    ]),
+    handler: (argv) => updateConnectorSchedules(argv)
   })
   .command({
     command: 'cors',
