@@ -125,7 +125,7 @@ function buildRegistrationToken(email, phone, fullName) {
 }
 
 //raises a generic registration error
-function sendErrorCallbacks(stage, message) {
+function sendErrorCallbacks(stage, token, message) {
   if (callbacks.isEmpty()) {
     action = fr.Action.send(
       new fr.HiddenValueCallback(
@@ -138,7 +138,7 @@ function sendErrorCallbacks(stage, message) {
       ),
       new fr.HiddenValueCallback(
         "pagePropsJSON",
-        JSON.stringify({ 'errors': [{ label: message, token: stage }] })
+        JSON.stringify({ 'errors': [{ label: message, token: token }] })
       )
     ).build()
   }
@@ -206,11 +206,11 @@ if (regData) {
 }
 
 if (!regData || !registrationJwt) {
-  sendErrorCallbacks("REGISTRATION_ERROR", "An error has occurred! Please try again later.");
+  sendErrorCallbacks("REGISTRATION_ERROR", "REGISTRATION_GENERAL_ERROR", "An error has occurred! Please try again later.");
 } else {
   if (sendEmail(registrationJwt)) {
     action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
   } else {
-    sendErrorCallbacks("SEND_EMAIL_ERROR", "An error occurred while sending the email. Please try again.");
+    sendErrorCallbacks("REGISTRATION_ERROR", "REGISTRATION_SEND_EMAIL_ERROR", "An error occurred while sending the email. Please try again later.");
   }
 }

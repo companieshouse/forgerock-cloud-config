@@ -70,7 +70,7 @@ if (response.getStatus().getCode() == 201) {
       ),
       new fr.HiddenValueCallback (
           "pagePropsJSON",
-          JSON.stringify({ 'errors': [{ label: "An error occurred while sending the email. Please try again."} ] })
+          JSON.stringify({ 'errors': [{ label: "An error occurred while sending the email. Please try again.", token: "SEND_MFA_EMAIL_ERROR"} ] })
       )
     ).build()
   }

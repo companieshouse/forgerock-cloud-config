@@ -28,7 +28,7 @@ function extractTokenParameter(){
           ),
           new fr.HiddenValueCallback (
             "pagePropsJSON",
-            JSON.stringify({"error": "Token parameter not found"}) 
+            JSON.stringify({"error": "No Registration Token found in request.", "token": "REGISTRATION_NO_TOKEN_ERROR"}) 
           ),
           new fr.TextOutputCallback(
             fr.TextOutputCallback.ERROR,
@@ -80,7 +80,7 @@ function raiseTokenExpiredError(){
       ),
       new fr.HiddenValueCallback (
         "pagePropsJSON",
-        JSON.stringify({"error": "The registration token has expired"}) 
+        JSON.stringify({"error": "The registration token has expired. Please restart the registration process.", "token" : "REGISTRATION_TOKEN_EXPIRED_ERROR"}) 
       ),
       new fr.TextOutputCallback(
         fr.TextOutputCallback.ERROR,
@@ -136,7 +136,7 @@ if(token) {
         ),
         new fr.HiddenValueCallback (
           "pagePropsJSON",
-          JSON.stringify({"error": "Error While parsing token"}) 
+          JSON.stringify({"error": "An error occurred while parsing the registration token. Please restart the registration process", "token": "REGISTRATION_TOKEN_PARSING_ERROR"}) 
         )
       ).build()
     }

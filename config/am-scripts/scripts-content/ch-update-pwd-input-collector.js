@@ -15,10 +15,8 @@ if (callbacks.isEmpty()) {
     var infoMessage = "Please enter your current password, together with your new password (and confirmation)";
     var level = fr.TextOutputCallback.INFORMATION;
     var errorMessage = sharedState.get("errorMessage");
-    var errorType, errorField;
     if (errorMessage != null) {
-      errorType = sharedState.get("changePwdErrorType");
-      errorField = sharedState.get("changePwdErrorField");
+      var errorProps = sharedState.get("pagePropsJSON");
       level = fr.TextOutputCallback.ERROR;
       infoMessage = errorMessage.concat(" Please try again.");
       action = fr.Action.send(
@@ -27,7 +25,7 @@ if (callbacks.isEmpty()) {
         fr.PasswordCallback("New password", false),
         fr.PasswordCallback("Confirm new password", false),
         fr.HiddenValueCallback("stage", "CHANGE_PASSWORD_1"),
-        fr.HiddenValueCallback("pagePropsJSON", JSON.stringify({ 'errors': [{ label: infoMessage, token: errorType, fieldName: errorField, anchor: errorField }] }))
+        fr.HiddenValueCallback("pagePropsJSON", errorProps)
       ).build();
     } else {
       action = fr.Action.send(
@@ -43,9 +41,16 @@ if (callbacks.isEmpty()) {
     var newPassword = fr.String(callbacks.get(2).getPassword());
     var confirmNewPassword = fr.String(callbacks.get(3).getPassword());
     if (!confirmNewPassword.equals(newPassword)) {
-        sharedState.put("changePwdErrorType", "PWD_MISMATCH");
-        sharedState.put("changePwdErrorField", "IDToken3");
         sharedState.put("errorMessage", "The new password and confirmation do not match.");
+        sharedState.put("pagePropsJSON", JSON.stringify(
+          {
+              'errors': [{
+                  label: "The new password and confirmation do not match.",
+                  token: "PWD_MISMATCH",
+                  fieldName: "IDToken3",
+                  anchor: "IDToken3"
+              }]
+          }));
         action = fr.Action.goTo(NodeOutcome.MISMATCH).build();
     }
     else {

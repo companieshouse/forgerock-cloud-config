@@ -115,7 +115,7 @@ if (!jwt) {
       ),
       new fr.HiddenValueCallback(
         "pagePropsJSON",
-        JSON.stringify({ "errors": [{ "label": "Error while creating Notify JWT" }] })
+        JSON.stringify({ "errors": [{ "label": "Error while creating Notify JWT" , token:"NOTIFY_JWT_BUILD_ERROR" }] })
       )
     ).build()
   }

@@ -40,44 +40,44 @@ var NodeOutcome = {
 }
 
 // function that builds the Password Reset JWT
-function buildPasswordResetToken(email){
+function buildPasswordResetToken(email) {
   var jwt;
   var signingHandler;
   var secret = transientState.get("secretKey");
-  try{
+  try {
     var secretbytes = java.lang.String(secret).getBytes();
     var secretBuilder = new fr.SecretBuilder;
     secretBuilder.secretKey(new javax.crypto.spec.SecretKeySpec(secretbytes, "Hmac"));
     secretBuilder.stableId(host).expiresIn(5, fr.ChronoUnit.MINUTES, fr.Clock.systemUTC());
-    var key = new fr.SigningKey(secretBuilder); 
+    var key = new fr.SigningKey(secretBuilder);
     signingHandler = new fr.SecretHmacSigningHandler(key);
-  }catch(e){
+  } catch (e) {
     logger.error("[RESET PWD] Error while creating signing handler: " + e);
     return false;
   }
-  
+
   var jwtClaims = new fr.JwtClaimsSet;
-  try{
+  try {
     jwtClaims.setIssuer(host);
     var dateNow = new Date();
     jwtClaims.setIssuedAtTime(dateNow);
     jwtClaims.setSubject(email);
     jwtClaims.setClaim("creationDate", new Date().toString());
-  }catch(e){
+  } catch (e) {
     logger.error("[RESET PWD] Error while adding claims to JWT: " + e);
     return false;
   }
-  
-  try{
+
+  try {
     jwt = new fr.JwtBuilderFactory()
-          .jws(signingHandler)
-          .headers()
-          .alg(fr.JwsAlgorithm.HS256)
-          .done()
-          .claims(jwtClaims)
-          .build();
+      .jws(signingHandler)
+      .headers()
+      .alg(fr.JwsAlgorithm.HS256)
+      .done()
+      .claims(jwtClaims)
+      .build();
     logger.error("[RESET PWD] JWT from reg: " + jwt);
-  }catch(e){
+  } catch (e) {
     logger.error("[RESET PWD] Error while creating JWT: " + e);
     return false;
   }
@@ -85,79 +85,99 @@ function buildPasswordResetToken(email){
 }
 
 //extracts the email address from shared state
-function extractEmailFromState(){
+function extractEmailFromState() {
   logger.error("[RESET PWD] host: " + host);
   logger.error("[RESET PWD] shared: " + sharedState.get("objectAttributes"));
-  
-  try{
+
+  try {
     email = sharedState.get("objectAttributes").get("mail");
     logger.error("[RESET PWD] mail : " + email);
-  } catch(e){
-    logger.error("[RESET PWD] error in fetching objectAttributes : " + e); 
+  } catch (e) {
+    logger.error("[RESET PWD] error in fetching objectAttributes : " + e);
     return false;
   }
   return email;
 }
 
 //builds the URL which will be sent via email
-function buildReturnUrl(jwt){
-  try{
+function buildReturnUrl(jwt) {
+  try {
     returnUrl = host.concat("/am/XUI/?realm=/alpha&service=CHResetPassword&token=", jwt)
     logger.error("[RESET PWD] URL: " + returnUrl);
     return returnUrl;
-  }catch(e){
+  } catch (e) {
     logger.error("[RESET PWD] Error while extracting host: " + e);
     return false;
   }
 }
 
-// raise the geenric error callbacks
-function raiseGeneralError(){
+// raise the generic error callbacks
+function raiseGeneralError() {
   if (callbacks.isEmpty()) {
     action = fr.Action.send(
-      new fr.HiddenValueCallback (
-            "stage",
-            "RESET_PASSWORD_ERROR" 
-        ),
-        new fr.TextOutputCallback(
-          fr.TextOutputCallback.ERROR,
-          "An error has occurred! Please try again later"
-        ),
-        new fr.HiddenValueCallback (
-          "pagePropsJSON",
-          JSON.stringify({ 'errors': [{ label: "An error has occurred! Please try again later" }] })
-        )
+      new fr.HiddenValueCallback(
+        "stage",
+        "RESET_PASSWORD_ERROR"
+      ),
+      new fr.TextOutputCallback(
+        fr.TextOutputCallback.ERROR,
+        "An error has occurred! Please try again later"
+      ),
+      new fr.HiddenValueCallback(
+        "pagePropsJSON",
+        JSON.stringify({ 'errors': [{ label: "An error has occurred while resetting the password. Please try again later.", token: "RESET_PASSWORD_GENERAL_ERROR" }] })
+      )
+    ).build()
+  }
+}
+
+// raise the email send error callbacks
+function raiseEmailSendError() {
+  if (callbacks.isEmpty()) {
+    action = fr.Action.send(
+      new fr.HiddenValueCallback(
+        "stage",
+        "RESET_PASSWORD_ERROR"
+      ),
+      new fr.TextOutputCallback(
+        fr.TextOutputCallback.ERROR,
+        "An error occurred while sending the email. Please try again."
+      ),
+      new fr.HiddenValueCallback(
+        "pagePropsJSON",
+        JSON.stringify({ 'errors': [{ label: "An error occurred while sending the email. Please try again.", token: "RESET_PASSWORD_EMAIL_SEND_ERROR" }] })
+      )
     ).build()
   }
 }
 
 //send the email
-function sendEmail(){
+function sendEmail() {
   var notifyJWT = transientState.get("notifyJWT");
   var templates = transientState.get("notifyTemplates");
-  
-  logger.error("[RESET PWD] Notify JWT from transient state: " + notifyJWT); 
+
+  logger.error("[RESET PWD] Notify JWT from transient state: " + notifyJWT);
   logger.error("[RESET PWD] Templates from transient state: " + templates);
   var isUserExisting = transientState.get("isUserExisting");
   request.setUri("https://api.notifications.service.gov.uk/v2/notifications/email");
-  try{
+  try {
     var requestBodyJson = isUserExisting ? {
       "email_address": email,
       "template_id": JSON.parse(templates).existingUser,
       "personalisation": {
-          "link": returnUrl,
-          "email": email
+        "link": returnUrl,
+        "email": email
       }
-    } : 
-    {
-      "email_address": email,
-      "template_id": JSON.parse(templates).resetPwd,
-      "personalisation": {
+    } :
+      {
+        "email_address": email,
+        "template_id": JSON.parse(templates).resetPwd,
+        "personalisation": {
           "link": returnUrl
-      }
-    };
+        }
+      };
 
-  }catch(e){
+  } catch (e) {
     logger.error("[RESET PWD] Error while preparing request for Notify: " + e);
     return false;
   }
@@ -169,59 +189,42 @@ function sendEmail(){
 
   var response = httpClient.send(request).get();
   var notificationId;
-  logger.error("[RESET PWD] Response: " + response.getStatus().getCode() + " - " + response.getCause() + " - " +response.getEntity().getString());
+  logger.error("[RESET PWD] Response: " + response.getStatus().getCode() + " - " + response.getCause() + " - " + response.getEntity().getString());
 
-  try{
+  try {
     notificationId = JSON.parse(response.getEntity().getString()).id;
     transientState.put("notificationId", notificationId);
     logger.error("[RESET PWD] Notify ID: " + notificationId);
-  }catch(e){
+  } catch (e) {
     logger.error("[RESET PWD] Error while parsing Notify response: " + e);
     return false;
   }
 
-  if(response.getStatus().getCode() == 201){
-    return true;
-  }else{
-    if (callbacks.isEmpty()) {
-      action = fr.Action.send(
-        new fr.HiddenValueCallback (
-            "stage",
-            "RESET_PASSWORD_ERROR" 
-        ),
-          new fr.TextOutputCallback(
-            fr.TextOutputCallback.ERROR,
-            "The email could not be sent: "+response.getEntity().getString()
-        ),
-        new fr.HiddenValueCallback (
-            "pagePropsJSON",
-            JSON.stringify({ 'errors': [{ label: "An error occurred while sending the email. Please try again."} ] })
-        )
-      ).build()
-    } 
-  }
+  return (response.getStatus().getCode() == 201);
 }
 
 // main execution flow
 
 var request = new org.forgerock.http.protocol.Request();
-var host = requestHeaders.get("origin").get(0); 
+var host = requestHeaders.get("origin").get(0);
 var resetPasswordjJwt;
 var returnUrl;
 
 var email = extractEmailFromState();
-if(email){
+if (email) {
   resetPasswordjJwt = buildPasswordResetToken(email);
-  if(resetPasswordjJwt){
+  if (resetPasswordjJwt) {
     returnUrl = buildReturnUrl(resetPasswordjJwt);
   }
 }
 
-if(!email || !resetPasswordjJwt || !returnUrl){ 
-  raiseGeneralError();  
-}else{
-  if(sendEmail()){
+if (!email || !resetPasswordjJwt || !returnUrl) {
+  raiseGeneralError();
+} else {
+  if (sendEmail()) {
     action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
+  }else{
+    raiseEmailSendError();
   }
 }
 

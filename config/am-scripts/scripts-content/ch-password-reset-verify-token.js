@@ -49,7 +49,7 @@ var fr = JavaImporter(
             ),
             new fr.HiddenValueCallback (
                 "pagePropsJSON",
-                JSON.stringify({ 'errors': [{ label: "An error occurred while parsing the token" }] })
+                JSON.stringify({ 'errors': [{ label: "An error occurred while parsing the token. Please try again.", token: "RESET_PASSWORD_TOKEN_PARSING_ERROR" }] })
             )
         ).build()
       }
@@ -72,7 +72,7 @@ var fr = JavaImporter(
             ),
             new fr.HiddenValueCallback (
                 "pagePropsJSON",
-                JSON.stringify({ 'errors': [{ label: "The password reset token has expired" }] })
+                JSON.stringify({ 'errors': [{ label: "The password reset token has expired. Please restart the reset password process.", token: "RESET_PASSWORD_TOKEN_EXPIRED_ERROR" }] })
             ),
             new fr.TextOutputCallback(
               fr.TextOutputCallback.ERROR,

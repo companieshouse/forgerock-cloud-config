@@ -11,13 +11,13 @@
             }            
         },
         {
-			"_id":"54a93ee3-d273-49b6-8d23-0fd1dcb6320b",
-			"nodeType": "SessionDataNode", 
-			"details": {
-				"sharedStateKey":"userName",
-				"sessionDataKey":"UserToken"
-			}				
-		},
+            "_id":"54a93ee3-d273-49b6-8d23-0fd1dcb6320b",
+            "nodeType": "SessionDataNode", 
+            "details": {
+               "sharedStateKey":"userName",
+               "sessionDataKey":"UserToken"
+            }				
+        },
         {
             "_id":"e04ef6d2-daec-403e-93a1-f8b60a8f634b",
             "nodeType": "IdentifyExistingUserNode", 
@@ -122,9 +122,19 @@
             "details": {
                 "retryLimit":3
             }
-        }
-    ],
-    "tree": {
+        },
+        {
+         "_id":"c7714228-4b3d-403c-8807-39c028bf549c",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes":["true"],
+             "outputs":["*"],
+             "script":"fdac4efb-d8b8-478b-8300-e11a4c3503df"
+         }            
+      }
+   ],
+   "tree": {
       "_id":"CHCompanyAssociation",
       "description":"As an authenticated user, enter a company number, company auth code and create an association with that company",
       "identityResource":"managed/alpha_user",
@@ -216,8 +226,8 @@
             "x":1299,
             "y":314.015625,
             "connections":{
-               "Reject":"e301438c-0bd0-429c-ab0c-66126501069a",
-               "Retry":"55ab38cb-458d-4c6c-ba34-3586bf34b06c"
+               "Retry":"55ab38cb-458d-4c6c-ba34-3586bf34b06c",
+               "Reject":"c7714228-4b3d-403c-8807-39c028bf549c"
             },
             "nodeType":"RetryLimitDecisionNode",
             "displayName":"Retry Limit Decision"
@@ -260,6 +270,15 @@
             },
             "nodeType":"ScriptedDecisionNode",
             "displayName":"Auth Code Error Message"
+         },
+         "c7714228-4b3d-403c-8807-39c028bf549c":{
+            "x":1436,
+            "y":629.015625,
+            "connections":{
+               
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"max attempts message"
          }
       },
       "staticNodes":{
