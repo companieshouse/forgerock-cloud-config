@@ -8,8 +8,6 @@ var NodeOutcome = {
 }
 ​
 var VAR_PASSWORD = "newPassword";
-var VAR_POLICY_ERROR_FIELD = "errorMessage";
-var VAR_POLICY_ERROR_FIELD_ID = "changePwdErrorField";
 ​
 function logResponse(response) {
     logger.error("[CHANGE PWD - POLICY CHECK] Scripted Node HTTP Response: " + response.getStatus() + ", Body: " + response.getEntity().getString());
@@ -17,9 +15,16 @@ function logResponse(response) {
 ​
 function setPolicyErrorMessage(policyResponse) {
   // Add code here if more granular advice required
-  var errorMessage = "The new password does not meet the password policy requirements."
-  sharedState.put(VAR_POLICY_ERROR_FIELD, errorMessage);
-  sharedState.put(VAR_POLICY_ERROR_FIELD_ID, "IDToken3");
+  sharedState.put("errorMessage", "The new password does not meet the password policy requirements.");
+  sharedState.put("pagePropsJSON", JSON.stringify(
+    {
+        'errors': [{
+            label: "The new password does not meet the password policy requirements.",
+            token: "PWD_POLICY_ERROR",
+            fieldName: "IDToken3",
+            anchor: "IDToken3"
+        }]
+    }));
 }
 ​
 function policyCompliant(pwd) {

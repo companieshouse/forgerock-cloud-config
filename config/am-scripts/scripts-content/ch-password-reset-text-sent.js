@@ -51,7 +51,7 @@ if(!phoneNumber){
         action = fr.Action.send(
             new fr.HiddenValueCallback (
                 "pagePropsJSON",
-                JSON.stringify({ 'errors': [{ label: "No phone number could be found in context." }]})
+                JSON.stringify({ 'errors': [{ label: "No phone number could be found in context.", token: "OTP_SMS_NO_PHONE_FOUND" }]})
             ),
             new fr.TextOutputCallback(
                 fr.TextOutputCallback.ERROR,
