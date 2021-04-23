@@ -5,6 +5,10 @@
 			"nodeType": "PageNode",
 			"details": {
 				"nodes": [{
+					"_id": "3b1940b6-a238-455e-8d13-ceb0f2848be4",
+					"nodeType": "ScriptedDecisionNode",
+					"displayName": "Error Handling"
+				}, {
 					"_id": "a346e4e7-8490-4ec6-962f-ebb9ba51dbe6",
 					"nodeType": "ValidatedUsernameNode",
 					"displayName": "Platform Username"
@@ -233,6 +237,26 @@
 			"details": {
 				"tree": "ProgressiveProfile"
 			}
+		},
+		{
+			"_id": "3b1940b6-a238-455e-8d13-ceb0f2848be4",
+			"nodeType": "ScriptedDecisionNode",
+			"details": {
+				"outcomes": ["true"],
+				"inputs": ["*"],
+				"outputs": ["*"],
+				"script": "064705f3-93d3-482c-ad3f-4531a28ce0a0"
+			}
+		},
+		{
+			"_id": "c99c82c6-20f5-456d-a94e-680c4f4a6307",
+			"nodeType": "ScriptedDecisionNode",
+			"details": {
+				"outcomes": ["true"],
+				"inputs": ["*"],
+				"outputs": ["*"],
+				"script": "188d3f9d-ca04-4df7-bcd7-eed3fe27e21e"
+			}
 		}
 	],
     "tree": {
@@ -402,11 +426,11 @@
 				"displayName": "Choose Email/SMS"
 			},
 			"4f019558-f468-46f2-8000-5bba1d9dac45": {
-				"x": 462,
-				"y": 179.015625,
+				"x": 511,
+				"y": 184.015625,
 				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"true": "758e3d0a-3211-4850-8847-86981f75888e"
+					"true": "758e3d0a-3211-4850-8847-86981f75888e",
+					"false": "c99c82c6-20f5-456d-a94e-680c4f4a6307"
 				},
 				"nodeType": "IdentifyExistingUserNode",
 				"displayName": "Identify Existing User"
@@ -421,14 +445,23 @@
 				"displayName": "Update Last Login"
 			},
 			"758e3d0a-3211-4850-8847-86981f75888e": {
-				"x": 707,
-				"y": 123.015625,
+				"x": 760,
+				"y": 401.015625,
 				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"true": "c32fab79-8836-4657-bef0-9f03a1e1165f"
+					"true": "c32fab79-8836-4657-bef0-9f03a1e1165f",
+					"false": "94a5f48e-d6e3-4bf4-8edc-45c028a70900"
 				},
 				"nodeType": "InnerTreeEvaluatorNode",
 				"displayName": "Update Legacy Password"
+			},
+			"c99c82c6-20f5-456d-a94e-680c4f4a6307": {
+				"x": 196,
+				"y": 461.015625,
+				"connections": {
+					"true": "94a5f48e-d6e3-4bf4-8edc-45c028a70900"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Generate Error Message"
 			}
 		}
 	}
