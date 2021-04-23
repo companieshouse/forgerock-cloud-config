@@ -136,7 +136,7 @@ if(token) {
         ),
         new fr.HiddenValueCallback (
           "pagePropsJSON",
-          JSON.stringify({"error": "An error while parsing the registration token. Please restart the registration process", "token": "REGISTRATION_TOKEN_PARSING_ERROR"}) 
+          JSON.stringify({"error": "An error occurred while parsing the registration token. Please restart the registration process", "token": "REGISTRATION_TOKEN_PARSING_ERROR"}) 
         )
       ).build()
     }
