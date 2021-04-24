@@ -21,6 +21,7 @@ var fr = JavaImporter(
 )
 
 if (callbacks.isEmpty()) {
+  var companyData = sharedState.get("companyData");
   var infoMessage = "Please enter the company auth code.";
   var errorMessage = sharedState.get("errorMessage");
   var level = fr.TextOutputCallback.INFORMATION;
@@ -38,7 +39,8 @@ if (callbacks.isEmpty()) {
     action = fr.Action.send(
       new fr.TextOutputCallback(level, infoMessage),
       new fr.NameCallback("Enter Auth Code"),
-      new fr.HiddenValueCallback("stage", "COMPANY_ASSOCIATION_3")
+      new fr.HiddenValueCallback("stage", "COMPANY_ASSOCIATION_3"),
+      new fr.HiddenValueCallback("pagePropsJSON", JSON.stringify({"company": JSON.parse(companyData)}))
     ).build();
   }
 } else {
