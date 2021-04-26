@@ -16,7 +16,8 @@ var fr = JavaImporter(
 
 var NodeOutcome = {
     TRUE: "true",
-    FALSE: "false"
+    FALSE: "false",
+    ERROR: "error"
 }
 
 var validateServiceSecretString = "{\"endpoint\": \"https://btazausqwf.execute-api.eu-west-2.amazonaws.com/cidev/\",\"apiKey\": \"kIEW1gAYcT5DGoCVZ8wDT1Rq1aw6IX242qPDiSHA\"}";
@@ -57,7 +58,11 @@ function validateCredential(credential, hash){
     if (response.getStatus().getCode() == 200) {
         var validationResponse = JSON.parse(response.getEntity().getString());
         logger.error("[VALIDATE CREDENTIAL] validationResponse: " + validationResponse);
-    
+        if(validationResponse.errorMessage){
+            logger.error("[VALIDATE CREDENTIAL] cannot parse hash: " + hash);
+            return NodeOutcome.FALSE; //TOD return error outcome and handle it in tree
+        }
+
         if (validationResponse == "true") {
             logger.error("[VALIDATE CREDENTIAL] Credential VALID");
             return NodeOutcome.TRUE;

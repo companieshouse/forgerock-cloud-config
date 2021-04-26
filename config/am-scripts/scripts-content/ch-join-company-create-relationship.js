@@ -155,12 +155,12 @@ if (checkCompanyAlreadyExists(userId, JSON.parse(companyData))) {
     sharedState.put("pagePropsJSON", JSON.stringify(
         {
             'errors': [{
-                label: "The company ${companyNumber} is already associated with this user",
+                label: "The company " + JSON.parse(companyData).name + " is already associated with this user",
                 token: "COMPANY_ALREADY_ASSOCIATED",
                 fieldName: "IDToken2",
                 anchor: "IDToken2"
             }],
-            'companyNumber': JSON.parse(companyData).name
+            'company': JSON.parse(companyData)
         }));
     action = fr.Action.goTo(NodeOutcome.COMPANY_ALREADY_ASSOCIATED).build();
 } else if (!JSON.parse(companyData).authCodeIsActive) {
@@ -169,15 +169,14 @@ if (checkCompanyAlreadyExists(userId, JSON.parse(companyData))) {
     sharedState.put("pagePropsJSON", JSON.stringify(
         {
             'errors': [{
-                label: "The company ${companyNumber} does not have an active auth code.",
+                label: "The company " + JSON.parse(companyData).name + "does not have an active auth code.",
                 token: "AUTH_CODE_INACTIVE",
                 fieldName: "IDToken1",
                 anchor: "IDToken1"
             }],
-            'companyNumber': JSON.parse(companyData).name
+            'company': JSON.parse(companyData)
         }));
     action = fr.Action.goTo(NodeOutcome.AUTH_CODE_INACTIVE).build();
 } else {
-    logger.error("[ADD RELATIONSHIP] ALL GOOD - CREATING RELATIONSHIP...");
     outcome = addRelationshipToCompany(userId, JSON.parse(companyData));
 }
