@@ -12,13 +12,11 @@ var NodeOutcome = {
   FAIL: "fail"
 }
 
-function isMobile(v) {
-  //var phone_valid = /^(\(?(0|\+44)[1-9]{1}\d{1,4}?\)?\s?\d{3,4}\s?\d{3,4})$/.test(v);
-  var mobile_valid = /^((0|\+44)7\d{3}\s?\d{6})$/.test(v);
-  if (mobile_valid) {
+function isMobile(number) {
+  var mobileValid = /^((0|\+44)7\d{3}\s?\d{6})$/.test(number);
+  if (mobileValid) {
       return true;
   }
-
   return false;
 }
 
