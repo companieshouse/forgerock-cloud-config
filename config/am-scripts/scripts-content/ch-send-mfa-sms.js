@@ -103,7 +103,10 @@ function sendTextMessage(phoneNumber, code) {
 function extractPhoneNumber() {
   var userId = sharedState.get("_id");
   var isRegistrationMFA = transientState.get("registrationMFA");
+  var isUpdatePhoneNumber = transientState.get("updatePhoneNumber");
   if (isRegistrationMFA) {
+    return sharedState.get("objectAttributes").get("telephoneNumber");
+  } else if (isUpdatePhoneNumber) {
     return sharedState.get("objectAttributes").get("telephoneNumber");
   } else {
     if (idRepository.getAttribute(userId, "telephoneNumber").iterator().hasNext()) {

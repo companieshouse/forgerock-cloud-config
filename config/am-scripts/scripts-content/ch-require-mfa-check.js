@@ -4,12 +4,14 @@ var fr = JavaImporter(
 
 var userId = sharedState.get("_id");
 
+// Use AM representation of attribute
+var LAST_LOGIN_FIELD = "fr-attr-idate1";
+
 var checkMFA = false;
 
 try {
-    // Use AM representation of attribute
-    if (idRepository.getAttribute(userId, "fr-attr-idate1").iterator().hasNext()) {
-        var lastLogin = String(idRepository.getAttribute(userId, "fr-attr-idate1").iterator().next());
+    if (idRepository.getAttribute(userId, LAST_LOGIN_FIELD).iterator().hasNext()) {
+        var lastLogin = String(idRepository.getAttribute(userId, LAST_LOGIN_FIELD).iterator().next());
         
         logger.error("[MFA-CHECK] lastLogin: " + lastLogin); // e.g. 20210317114005Z
 

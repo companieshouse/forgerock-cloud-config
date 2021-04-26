@@ -1,0 +1,350 @@
+{
+	"nodes": [
+        {
+            "_id": "6e941621-19ff-4354-bf46-8368756a4c37",
+            "nodeType": "ScriptedDecisionNode",
+			"details": {
+                "inputs": ["*"],
+                "outcomes": ["hasSession", "noSession"],
+                "outputs": ["*"],
+                "script": "c4001e02-469c-4cc4-bf95-9f43d7e46568"
+            }
+        },
+        {
+            "_id": "87c675c7-4c21-4ed4-8795-cc85c1f3ca7e",
+            "nodeType": "SessionDataNode",
+			"details": {
+                "sessionDataKey": "UserToken",
+                "sharedStateKey": "userName"
+            }
+        },
+        {
+            "_id": "697a1140-9e54-4150-805f-6d5ea7cee7a0",
+            "nodeType": "IdentifyExistingUserNode",
+			"details": {
+                "identifier": "userName",
+                "identityAttribute": "mail"
+            }
+        },
+        {
+            "_id": "173f27f6-a619-4e73-9008-e55252030161",
+            "nodeType": "ScriptedDecisionNode",
+			"details": {
+                "inputs": ["*"],
+                "outcomes": ["success", "fail"],
+                "outputs": ["*"],
+                "script": "f1413023-6fa4-43de-92a9-1f63f889c8b4"
+            }
+        },
+        {
+            "_id": "2fa15e3f-2b3d-48c6-93ee-9661538e2255",
+            "nodeType": "RetryLimitDecisionNode",
+			"details": {
+                "retryLimit": 3
+            }
+        },
+        {
+            "_id": "de15cac3-ec51-4d79-9a25-271ba0b3d850",
+            "nodeType": "DataStoreDecisionNode",
+			"details": {
+            }
+        },
+        {
+            "_id": "40828bf9-7d43-4435-8f17-9ba01d42d288",
+            "nodeType": "ScriptedDecisionNode",
+			"details": {
+                "inputs": ["*"],
+                "outcomes": ["true"],
+                "outputs": ["*"],
+                "script": "353f5e9a-5d80-4d43-a77f-7968d05b1157"
+            }
+        },
+        {
+            "_id": "de7e3330-23c0-4e74-9f88-a670e75d9537",
+            "nodeType": "ScriptedDecisionNode",
+			"details": {
+                "inputs": ["*"],
+                "outcomes": ["true", "false"],
+                "outputs": ["*"],
+                "script": "df67765e-df3a-4503-9ba5-35c992b39259"
+            }
+        },
+        {
+            "_id": "06cb5370-bf77-4aff-8ff3-18aa7a468206",
+            "nodeType": "OneTimePasswordGeneratorNode",
+			"details": {
+                "length": 6
+            }
+        },
+        {
+            "_id": "e9f5c1e1-7073-4dad-bb7f-b959ee1db928",
+            "nodeType": "ScriptedDecisionNode",
+			"details": {
+                "inputs": ["*"],
+                "outcomes": ["true", "false"],
+                "outputs": ["*"],
+                "script": "b276c566-622e-11eb-ae93-0242ac130002"
+            }
+        },
+        {
+            "_id": "8d26d3b0-d201-4436-b651-4f41a063a16f",
+            "nodeType": "PageNode",
+			"details": {
+                "nodes": [{
+                    "_id": "f2d5f0d4-ee0b-4984-b1f3-1a726c3e8d47",
+                    "nodeType": "ScriptedDecisionNode",
+                    "displayName": "Callback Show Number"
+                }, {
+                    "_id": "46073fd7-0f1a-4c3b-9a0e-9fb7f3d33129",
+                    "nodeType": "OneTimePasswordCollectorDecisionNode",
+                    "displayName": "OTP Collector Decision"
+                }],
+                "pageDescription": {
+                    "desc": "Please enter the code you received"
+                },
+                "pageHeader": {
+                    "header": "Please enter your code"
+                }
+            }
+        },
+        {
+            "_id": "f2d5f0d4-ee0b-4984-b1f3-1a726c3e8d47",
+            "nodeType": "ScriptedDecisionNode",
+			"details": {
+                "inputs": ["*"],
+                "outcomes": ["True"],
+                "outputs": ["*"],
+                "script": "72e60c8b-f4e9-4696-8218-6efee1f5d97b"
+            }
+        },
+        {
+            "_id": "46073fd7-0f1a-4c3b-9a0e-9fb7f3d33129",
+            "nodeType": "OneTimePasswordCollectorDecisionNode",
+			"details": {
+                "passwordExpiryTime": 5
+            }
+        },
+        {
+            "_id": "8fe21f7c-e4ac-4456-afd2-67dc27b9db8e",
+            "nodeType": "PatchObjectNode",
+			"details": {
+                "identityAttribute": "userName",
+                "identityResource": "managed/alpha_user",
+                "ignoredFields": ["userName"],
+                "patchAsObject": false
+            }
+        },
+        {
+            "_id": "0539d36b-436a-4e70-80e6-f6bfdbca1e96",
+            "nodeType": "RetryLimitDecisionNode",
+			"details": {
+                "retryLimit": 3
+            }
+        },
+        {
+            "_id": "62575601-f56f-4e29-bc98-301b11c22b0d",
+            "nodeType": "ScriptedDecisionNode",
+			"details": {
+                "inputs": ["*"],
+                "outcomes": ["true"],
+                "outputs": ["*"],
+                "script": "bf6c0ac8-8e13-4f11-8d99-d01b23e02a5c"
+            }
+        },
+        {
+            "_id": "7e29ba19-c500-4a3c-b963-66d341b3b764",
+            "nodeType": "ScriptedDecisionNode",
+			"details": {
+                "inputs": ["*"],
+                "outcomes": ["true"],
+                "outputs": ["*"],
+                "script": "fdac4efb-d8b8-478b-8300-e11a4c3503df"
+            }
+        },
+        {
+            "_id": "4a256d89-2e4a-41d4-bb48-ef024969af95",
+            "nodeType": "ScriptedDecisionNode",
+			"details": {
+                "outcomes": ["true"],
+                "inputs": ["*"],
+                "outputs": ["*"],
+                "script": "6811d9da-4d44-488e-9e32-19a199dc0b3f"
+            }
+        }
+	],
+	"tree": {
+		"_id": "CHChangePhoneNumber",
+		"description": "Add a new phone number to existing account",
+		"identityResource": "managed/alpha_user",
+		"entryNodeId": "6e941621-19ff-4354-bf46-8368756a4c37",
+		"staticNodes": {
+			"startNode": {
+				"x": 62,
+				"y": 103
+			},
+			"70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
+				"x": 2196,
+				"y": 254
+			},
+			"e301438c-0bd0-429c-ab0c-66126501069a": {
+				"x": 1615,
+				"y": 836
+			}
+		},
+		"uiConfig": {},
+        "nodes": {
+            "0539d36b-436a-4e70-80e6-f6bfdbca1e96": {
+                "x": 1873,
+                "y": 620.015625,
+                "connections": {
+                    "Reject": "7e29ba19-c500-4a3c-b963-66d341b3b764",
+                    "Retry": "62575601-f56f-4e29-bc98-301b11c22b0d"
+                },
+                "nodeType": "RetryLimitDecisionNode",
+                "displayName": "Retry Limit Decision"
+            },
+            "06cb5370-bf77-4aff-8ff3-18aa7a468206": {
+                "x": 1241,
+                "y": 73.015625,
+                "connections": {
+                    "outcome": "e9f5c1e1-7073-4dad-bb7f-b959ee1db928"
+                },
+                "nodeType": "OneTimePasswordGeneratorNode",
+                "displayName": "HOTP Generator"
+            },
+            "173f27f6-a619-4e73-9008-e55252030161": {
+                "x": 653,
+                "y": 176.015625,
+                "connections": {
+                    "fail": "2fa15e3f-2b3d-48c6-93ee-9661538e2255",
+                    "success": "de15cac3-ec51-4d79-9a25-271ba0b3d850"
+                },
+                "nodeType": "ScriptedDecisionNode",
+                "displayName": "Update Phone Input Collector"
+            },
+            "2fa15e3f-2b3d-48c6-93ee-9661538e2255": {
+                "x": 682,
+                "y": 382.015625,
+                "connections": {
+                    "Reject": "7e29ba19-c500-4a3c-b963-66d341b3b764",
+                    "Retry": "173f27f6-a619-4e73-9008-e55252030161"
+                },
+                "nodeType": "RetryLimitDecisionNode",
+                "displayName": "Retry Limit Decision"
+            },
+            "40828bf9-7d43-4435-8f17-9ba01d42d288": {
+                "x": 1163,
+                "y": 510.015625,
+                "connections": {
+                    "true": "173f27f6-a619-4e73-9008-e55252030161"
+                },
+                "nodeType": "ScriptedDecisionNode",
+                "displayName": "Login Error"
+            },
+            "62575601-f56f-4e29-bc98-301b11c22b0d": {
+                "x": 2098,
+                "y": 653.015625,
+                "connections": {
+                    "true": "8d26d3b0-d201-4436-b651-4f41a063a16f"
+                },
+                "nodeType": "ScriptedDecisionNode",
+                "displayName": "Raise OTP Error"
+            },
+            "6e941621-19ff-4354-bf46-8368756a4c37": {
+                "x": 74,
+                "y": 548.015625,
+                "connections": {
+                    "hasSession": "87c675c7-4c21-4ed4-8795-cc85c1f3ca7e",
+                    "noSession": "e301438c-0bd0-429c-ab0c-66126501069a"
+                },
+                "nodeType": "ScriptedDecisionNode",
+                "displayName": "Check for Session"
+            },
+            "7e29ba19-c500-4a3c-b963-66d341b3b764": {
+                "x": 1643,
+                "y": 1025.015625,
+                "connections": {},
+                "nodeType": "ScriptedDecisionNode",
+                "displayName": "Max Number Exceeded"
+            },
+            "87c675c7-4c21-4ed4-8795-cc85c1f3ca7e": {
+                "x": 249,
+                "y": 414.015625,
+                "connections": {
+                    "outcome": "697a1140-9e54-4150-805f-6d5ea7cee7a0"
+                },
+                "nodeType": "SessionDataNode",
+                "displayName": "Get Session Data"
+            },
+            "8d26d3b0-d201-4436-b651-4f41a063a16f": {
+                "x": 1648,
+                "y": 172.015625,
+                "connections": {
+                    "false": "0539d36b-436a-4e70-80e6-f6bfdbca1e96",
+                    "true": "8fe21f7c-e4ac-4456-afd2-67dc27b9db8e"
+                },
+                "nodeType": "PageNode",
+                "displayName": "Enter OTP"
+            },
+            "8fe21f7c-e4ac-4456-afd2-67dc27b9db8e": {
+                "x": 1912,
+                "y": 230.015625,
+                "connections": {
+                    "FAILURE": "e301438c-0bd0-429c-ab0c-66126501069a",
+                    "PATCHED": "4a256d89-2e4a-41d4-bb48-ef024969af95"
+                },
+                "nodeType": "PatchObjectNode",
+                "displayName": "Patch Object"
+            },
+            "de15cac3-ec51-4d79-9a25-271ba0b3d850": {
+                "x": 973,
+                "y": 322.015625,
+                "connections": {
+                    "false": "40828bf9-7d43-4435-8f17-9ba01d42d288",
+                    "true": "de7e3330-23c0-4e74-9f88-a670e75d9537"
+                },
+                "nodeType": "DataStoreDecisionNode",
+                "displayName": "Data Store Decision"
+            },
+            "de7e3330-23c0-4e74-9f88-a670e75d9537": {
+                "x": 988,
+                "y": 182.015625,
+                "connections": {
+                    "false": "e301438c-0bd0-429c-ab0c-66126501069a",
+                    "true": "06cb5370-bf77-4aff-8ff3-18aa7a468206"
+                },
+                "nodeType": "ScriptedDecisionNode",
+                "displayName": "Create Notify JWT - SMS"
+            },
+            "e9f5c1e1-7073-4dad-bb7f-b959ee1db928": {
+                "x": 1386,
+                "y": 193.015625,
+                "connections": {
+                    "false": "e301438c-0bd0-429c-ab0c-66126501069a",
+                    "true": "8d26d3b0-d201-4436-b651-4f41a063a16f"
+                },
+                "nodeType": "ScriptedDecisionNode",
+                "displayName": "Send OTP"
+            },
+            "697a1140-9e54-4150-805f-6d5ea7cee7a0": {
+                "x": 401,
+                "y": 229.015625,
+                "connections": {
+                    "true": "173f27f6-a619-4e73-9008-e55252030161",
+                    "false": "e301438c-0bd0-429c-ab0c-66126501069a"
+                },
+                "nodeType": "IdentifyExistingUserNode",
+                "displayName": "Identify Existing User"
+            },
+            "4a256d89-2e4a-41d4-bb48-ef024969af95": {
+                "x": 2078,
+                "y": 61.015625,
+                "connections": {
+                    "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+                },
+                "nodeType": "ScriptedDecisionNode",
+                "displayName": "Update Phone Confirmation"
+            }
+        }
+	}
+}
