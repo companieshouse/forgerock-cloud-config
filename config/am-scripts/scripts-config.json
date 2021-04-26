@@ -820,6 +820,22 @@
                 "lastModifiedDate": 1619453115206
             },
             "filename": "ch-update-phone-input-collector.js"
+        },
+        {
+            "payload": {
+                "_id": "6811d9da-4d44-488e-9e32-19a199dc0b3f",
+                "name": "CH - Update Phone Confirmation",
+                "description": "Confirmation of updated phone number",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1619454785434
+            },
+            "filename": "ch-update-phone-confirmation.js"
         }
     ]
 }
