@@ -9,7 +9,7 @@
     "connectorHostRef": "aws-group"
   },
   "configurationProperties": {
-    "host": "forgerock-data-ds-backup-3dec8e84a985d94b.elb.eu-west-2.amazonaws.com",
+    "host": "forgerock-data-ds-backup-a40b0b52539efe2f.elb.eu-west-2.amazonaws.com",
     "port": "389",
     "ssl": false,
     "principal": "uid=admin",
