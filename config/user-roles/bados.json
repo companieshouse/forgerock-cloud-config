@@ -1,0 +1,10 @@
+{
+    "_id": "bados-user",
+    "name": "BADOS",
+    "permissions": [
+        "/admin/officer-search/scottish-bankrupt-officer",
+        "/admin/view_json"
+    ],
+    "description": "search bankrupt and disqualified officers, search in CHS",
+    "realm": "alpha"
+}

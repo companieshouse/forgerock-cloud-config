@@ -1,0 +1,10 @@
+{
+    "_id": "appeals-team",
+    "name": "Appeals Team",
+    "permissions": [
+        "/admin/appeals-download",
+        "/admin/appeals-view"
+    ],
+    "description": "download data resources relating to LFP appeals submitted via CHS, view data resources relating to LFP appeals submitted via CHS",
+    "realm": "alpha"    
+}
