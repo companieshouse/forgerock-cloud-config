@@ -772,6 +772,54 @@
                 "lastModifiedDate": 0
             },
             "filename": "ch-update-legacy-password-error-message.js"
+        },
+        {
+            "payload": {
+                "_id": "72e60c8b-f4e9-4696-8218-6efee1f5d97b",
+                "name": "CH - Callback update phone show number",
+                "description": "Feedback for the update phone number journey",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "null",
+                "lastModifiedDate": 0
+            },
+            "filename": "ch-callback-update-phone-show-number.js"
+        },
+        {
+            "payload": {
+                "_id": "353f5e9a-5d80-4d43-a77f-7968d05b1157",
+                "name": "CH - Update Phone Error Message",
+                "description": "Update phone error message",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "null",
+                "lastModifiedDate": 0
+            },
+            "filename": "ch-update-phone-error-message.js"
+        },
+        {
+            "payload": {
+                "_id": "f1413023-6fa4-43de-92a9-1f63f889c8b4",
+                "name": "CH - Update Phone Input Collector",
+                "description": "Capture phone number and user's current password",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1619453115206
+            },
+            "filename": "ch-update-phone-input-collector.js"
         }
     ]
 }
