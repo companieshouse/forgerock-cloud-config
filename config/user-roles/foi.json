@@ -1,0 +1,17 @@
+{
+    "_id": "foi",
+    "name": "FOI (freedom of information)",
+    "permissions": [
+        "/admin/images",
+        "/admin/transaction-reprocess",
+        "/admin/extensions-view",
+        "/admin/company",
+        "/admin/filing/resubmit",
+        "/admin/search",
+        "/admin/filing/resend",
+        "/admin/view_json",
+        "/admin/transaction-lookup"
+    ],
+    "description": "view images of document filings, reprocess document submissions, download forms (submitted via CHS) which request/justify an extension to a company’ filing deadline to file accounts, refresh the data of a specific company (Should be restricted to FESS only), resubmit a document submission, search for submission via Barcode or Submission number, resend Acceptance/Rejection email, search in CHS,view the JSON resources relating to incoming transactions on CHS",
+    "realm": "alpha"
+}

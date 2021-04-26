@@ -1,0 +1,9 @@
+{
+    "_id": "strike-off-objections-admin",
+    "name": "Strike Off Objections Admin",
+    "permissions": [
+        "/admin/strike-off-objections-download"
+    ],
+    "description": "download forms (submitted via CHS) which request/justify an extension to a company’ filing deadline to file accounts",
+    "realm": "alpha"
+}

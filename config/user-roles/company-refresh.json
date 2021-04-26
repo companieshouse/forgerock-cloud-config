@@ -1,0 +1,9 @@
+{
+    "_id": "company-refresh",
+    "name": "Company Refresh",
+    "permissions": [
+        "/admin/company"
+    ],
+    "description": "Authorises a user to access functionality which enables them to refresh the data of a specific company (Should be restricted to FESS only)",
+    "realm": "alpha"
+}

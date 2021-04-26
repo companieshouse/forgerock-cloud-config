@@ -1,0 +1,9 @@
+{
+    "_id": "restriced-word",
+    "name": "Restriced Word",
+    "permissions": [
+        "/admin/restricted-word"
+    ],
+    "description": "Authorises a user to access functionality which enables them to view, add and delete restricted words to be used for validation of company names on incorporation and when companies are attempting to change their name).",
+    "realm": "alpha"
+}

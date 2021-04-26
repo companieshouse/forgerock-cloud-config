@@ -1,0 +1,9 @@
+{
+    "_id": "csi_support",
+    "name": "CSI Support",
+    "permissions": [
+        "/admin/images"
+    ],
+    "description": "view images of document filings",
+    "realm": "alpha"
+}
