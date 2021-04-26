@@ -2,6 +2,7 @@ const updateApplications = require('./update-applications')
 const updateAuthTrees = require('./update-auth-trees')
 const updateConnectorDefinitions = require('./update-connector-definitions')
 const updateConnectorMappings = require('./update-connector-mappings')
+const updateConnectorSchedules = require('./update-connector-schedules')
 const updateCors = require('./update-cors')
 const updateInternalRoles = require('./update-internal-roles')
 const updateManagedObjects = require('./update-managed-objects')
@@ -17,6 +18,7 @@ module.exports = {
   updateAuthTrees,
   updateConnectorDefinitions,
   updateConnectorMappings,
+  updateConnectorSchedules,
   updateCors,
   updateInternalRoles,
   updateManagedObjects,
