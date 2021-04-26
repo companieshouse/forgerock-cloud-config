@@ -2,10 +2,6 @@
    "_id":"15007107-ef48-4113-a71f-cc1905354a30",
    "name":"IDAM_FRONT_END_SUPPORT",
    "description":"IDAM Front end support",
-   "temporalConstraints":[
-      
-   ],
-   "condition":null,
    "privileges":[
       {
          "path":"managed/alpha_role",

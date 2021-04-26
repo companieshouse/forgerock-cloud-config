@@ -19,6 +19,7 @@ const updateInternalRoles = async (argv) => {
 
     await Promise.all(
       internalRolesFileContent.map(async (internalRoleFile) => {
+        console.log(`Updating role ${internalRoleFile.name}`)
         const requestUrl = `${FIDC_URL}/openidm/internal/role/${internalRoleFile._id}`
         await fidcRequest(requestUrl, internalRoleFile, accessToken)
       })
