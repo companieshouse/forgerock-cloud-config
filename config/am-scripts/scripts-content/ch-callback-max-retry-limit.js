@@ -12,7 +12,7 @@ var fr = JavaImporter(
       ),
       new fr.HiddenValueCallback (
           "stage",
-          "RESET_PASSWORD_ERROR" 
+          "LIMIT_EXCEEDED_ERROR" 
       ),
       new fr.HiddenValueCallback (
           "pagePropsJSON",
