@@ -93,43 +93,45 @@ function fetchCompany(idmToken, companyNumber) {
         logger.error("[FETCH COMPANY] 200 response from IDM");
         var companyResponse = JSON.parse(response.getEntity().getString());
 
-        if (companyResponse.resultCount > 0) {
-            logger.error("[FETCH COMPANY] Got a result: " + JSON.stringify(companyResponse.result[0]));
 
+        if (companyResponse.resultCount > 0) {
+            var companyStatus = companyResponse.result[0].status;
             var authCode = companyResponse.result[0].authCode;
+            var companyName = companyResponse.result[0].name;
+            logger.error("[FETCH COMPANY] Got a result: " + JSON.stringify(companyResponse.result[0]));
             logger.error("[FETCH COMPANY] Found authCode: " + authCode);
 
             if (authCode == null) {
                 logger.error("[FETCH COMPANY] No auth code associated with company")
-                sharedState.put("errorMessage", "No auth code associated with company " + companyNumber + ".");
+                sharedState.put("errorMessage", "No auth code associated with company " + companyName + ".");
                 sharedState.put("pagePropsJSON", JSON.stringify(
                     {
                         'errors': [{
-                            label: "No auth code associated with company ${companyNumber}",
+                            label: "No auth code associated with company " + companyName,
                             token: "AUTH_CODE_NOT_DEFINED",
                             fieldName: "IDToken2",
                             anchor: "IDToken2"
                         }],
-                        'companyNumber': companyNumber
+                        'company': { name: companyName }
                     }));
                 return false;
             }
 
-            var companyStatus = companyResponse.result[0].status;
+            
             logger.error("[FETCH COMPANY] Found status: " + companyStatus);
 
             if (companyStatus !== "active") {
                 logger.error("[FETCH COMPANY] The company is not active")
-                sharedState.put("errorMessage", "The company " + companyNumber + " is not active.");
+                sharedState.put("errorMessage", "The company " + companyName + " is not active.");
                 sharedState.put("pagePropsJSON", JSON.stringify(
                     {
                         'errors': [{
-                            label: "The company ${companyNumber} is not active.",
+                            label: "The company " + companyName + " is not active.",
                             token: "COMPANY_NOT_ACTIVE",
                             fieldName: "IDToken2",
                             anchor: "IDToken2"
                         }],
-                        'companyNumber': companyNumber
+                        'company': { name: companyName }
                     }));
                 return false;
             }
@@ -170,7 +172,7 @@ function fetchCompany(idmToken, companyNumber) {
                         fieldName: "IDToken2",
                         anchor: "IDToken2"
                     }],
-                    'companyNumber': companyNumber
+                    'company': { number: companyNumber }
                 }));
             return false;
         }
@@ -180,12 +182,12 @@ function fetchCompany(idmToken, companyNumber) {
         sharedState.put("pagePropsJSON", JSON.stringify(
             {
                 'errors': [{
-                    label: "Error while retrieving company ${companyNumber}.",
+                    label: "Error while retrieving company " + companyNumber + ".",
                     token: "COMPANY_FETCH_ERROR",
                     fieldName: "IDToken2",
                     anchor: "IDToken2"
                 }],
-                'companyNumber': companyNumber
+                'company': { number: companyNumber }
             }));
         return false;
     }

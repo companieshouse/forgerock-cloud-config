@@ -32,7 +32,7 @@ var NodeOutcome = {
 }
 
 function logResponse(response) {
-    logger.error("[FETCH COMPANY] Scripted Node HTTP Response: " + response.getStatus() + ", Body: " + response.getEntity().getString());
+    logger.error("[ADD RELATIONSHIP] Scripted Node HTTP Response: " + response.getStatus() + ", Body: " + response.getEntity().getString());
 }
 
 // checks whether the user has already the company associated with their profile
@@ -40,7 +40,7 @@ function checkCompanyAlreadyExists(userId, company) {
     var request = new org.forgerock.http.protocol.Request();
 
     request.setMethod('GET');
-    logger.error("[CHECK COMPANY DUPLICATE] calling endpoint " + idmUserEndpoint + userId + "?_fields=isAuthorisedUserOf/_id");
+    logger.error("[ADD RELATIONSHIP] Check duplicate associations - calling endpoint " + idmUserEndpoint + userId + "?_fields=isAuthorisedUserOf/_id");
     request.setUri(idmUserEndpoint + userId + "?_fields=isAuthorisedUserOf/_id");
     request.getHeaders().add("Authorization", "Bearer " + accessToken);
     request.getHeaders().add("Content-Type", "application/json");
@@ -52,7 +52,7 @@ function checkCompanyAlreadyExists(userId, company) {
 
     var userProfile = JSON.parse(response.getEntity().getString());
 
-    logger.error("[CHECK COMPANY DUPLICATE] User companies: " + userProfile.isAuthorisedUserOf.length);
+    logger.error("[ADD RELATIONSHIP] Check duplicate associations - User companies: " + userProfile.isAuthorisedUserOf.length);
     for (var index = 0; index < userProfile.isAuthorisedUserOf.length; index++) {
         var userCompanyId = userProfile.isAuthorisedUserOf[index]._id;
         if (userCompanyId.equals(company._id)) {
@@ -130,7 +130,7 @@ function fetchIDMToken() {
     var ACCESS_TOKEN_STATE_FIELD = "idmAccessToken";
     var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
     if (accessToken == null) {
-        logger.error("[CHECK COMPANY DUPLICATE] Access token not in transient state")
+        logger.error("[ADD RELATIONSHIP] Access token not in transient state")
         return false;
     }
     return accessToken;
@@ -155,30 +155,28 @@ if (checkCompanyAlreadyExists(userId, JSON.parse(companyData))) {
     sharedState.put("pagePropsJSON", JSON.stringify(
         {
             'errors': [{
-                label: "The company ${companyNumber} is already associated with this user",
+                label: "The company " + JSON.parse(companyData).name + " is already associated with this user",
                 token: "COMPANY_ALREADY_ASSOCIATED",
                 fieldName: "IDToken2",
                 anchor: "IDToken2"
             }],
-            'companyNumber': JSON.parse(companyData).name
+            'company': JSON.parse(companyData)
         }));
     action = fr.Action.goTo(NodeOutcome.COMPANY_ALREADY_ASSOCIATED).build();
-}
-
-if (!JSON.parse(companyData).authCodeIsActive) {
+} else if (!JSON.parse(companyData).authCodeIsActive) {
     logger.error("[ADD RELATIONSHIP] The company " + JSON.parse(companyData).name + " does not have an active auth code");
     sharedState.put("errorMessage", "The company " + JSON.parse(companyData).name + " does not have an active auth code.");
     sharedState.put("pagePropsJSON", JSON.stringify(
         {
             'errors': [{
-                label: "The company ${companyNumber} does not have an active auth code.",
+                label: "The company " + JSON.parse(companyData).name + "does not have an active auth code.",
                 token: "AUTH_CODE_INACTIVE",
                 fieldName: "IDToken1",
                 anchor: "IDToken1"
             }],
-            'companyNumber': JSON.parse(companyData).name
+            'company': JSON.parse(companyData)
         }));
     action = fr.Action.goTo(NodeOutcome.AUTH_CODE_INACTIVE).build();
+} else {
+    outcome = addRelationshipToCompany(userId, JSON.parse(companyData));
 }
-
-outcome = addRelationshipToCompany(userId, JSON.parse(companyData));
