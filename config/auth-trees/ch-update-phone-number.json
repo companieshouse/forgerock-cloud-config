@@ -173,25 +173,25 @@
         }
 	],
 	"tree": {
-		"_id": "CHChangePhoneNumber",
-		"description": "Add a new phone number to existing account",
-		"identityResource": "managed/alpha_user",
-		"entryNodeId": "6e941621-19ff-4354-bf46-8368756a4c37",
-		"staticNodes": {
-			"startNode": {
-				"x": 62,
-				"y": 103
-			},
-			"70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
-				"x": 2196,
-				"y": 254
-			},
-			"e301438c-0bd0-429c-ab0c-66126501069a": {
-				"x": 1615,
-				"y": 836
-			}
-		},
-		"uiConfig": {},
+        "_id": "CHChangePhoneNumber",
+        "description": "Add a new phone number to existing account",
+        "identityResource": "managed/alpha_user",
+        "entryNodeId": "6e941621-19ff-4354-bf46-8368756a4c37",
+        "staticNodes": {
+            "startNode": {
+                "x": 62,
+                "y": 103
+            },
+            "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
+                "x": 2196,
+                "y": 254
+            },
+            "e301438c-0bd0-429c-ab0c-66126501069a": {
+                "x": 1615,
+                "y": 836
+            }
+        },
+        "uiConfig": {},
         "nodes": {
             "0539d36b-436a-4e70-80e6-f6bfdbca1e96": {
                 "x": 1873,
@@ -233,10 +233,10 @@
                 "displayName": "Retry Limit Decision"
             },
             "40828bf9-7d43-4435-8f17-9ba01d42d288": {
-                "x": 1163,
-                "y": 510.015625,
+                "x": 617,
+                "y": 578.015625,
                 "connections": {
-                    "true": "173f27f6-a619-4e73-9008-e55252030161"
+                    "true": "2fa15e3f-2b3d-48c6-93ee-9661538e2255"
                 },
                 "nodeType": "ScriptedDecisionNode",
                 "displayName": "Login Error"
