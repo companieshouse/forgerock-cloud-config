@@ -85,6 +85,14 @@
 			"globals": {},
 			"source": "source.date_of_creation"
 		}
+	}, {
+		"target": "jurisdiction",
+		"source": "data",
+		"transform": {
+			"type": "text/javascript",
+			"globals": {},
+			"source": "source.jurisdiction"
+		}
 	}],
 	"policies": [{
 		"action": "EXCEPTION",

@@ -400,9 +400,16 @@
 				"viewable": true,
 				"searchable": true,
 				"userEditable": true
+			},
+			"jurisdiction": {
+				"title": "Jurisdiction",
+				"type": "string",
+				"viewable": true,
+				"searchable": true,
+				"userEditable": true
 			}
 		},
-		"order": ["name", "description", "owners", "admins", "members", "parent", "children", "adminIDs", "ownerIDs", "parentAdminIDs", "parentOwnerIDs", "parentIDs", "number", "type", "status", "authCode", "authCodeIsActive", "authCodeValidFrom", "locality", "postalCode", "addressLine1", "addressLine2", "region", "creationDate"],
+		"order": ["name", "description", "owners", "admins", "members", "parent", "children", "adminIDs", "ownerIDs", "parentAdminIDs", "parentOwnerIDs", "parentIDs", "number", "type", "status", "authCode", "authCodeIsActive", "authCodeValidFrom", "locality", "postalCode", "addressLine1", "addressLine2", "region", "creationDate", "jurisdiction"],
 		"required": ["name", "number"]
 	}
 }
