@@ -172,7 +172,7 @@ function fetchCompany(idmToken, companyNumber) {
                         fieldName: "IDToken2",
                         anchor: "IDToken2"
                     }],
-                    'companyNumber': { number: companyNumber }
+                    'company': { number: companyNumber }
                 }));
             return false;
         }
