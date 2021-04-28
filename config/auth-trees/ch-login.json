@@ -277,6 +277,36 @@
 				"outputs": ["*"],
 				"script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149"
 			}
+		},
+		{
+			"_id": "fa88fc01-a7a2-429f-b7cc-546fe67a70b4",
+			"nodeType": "ScriptedDecisionNode",
+			"details": {
+				"outcomes": ["locked", "error", "lock_expired", "not_locked"],
+				"inputs": ["*"],
+				"outputs": ["*"],
+				"script": "7837ccb6-2e56-44bf-a5df-7cfdb0bfc38b"
+			}
+		},
+		{
+			"_id": "fc36693f-b04c-46f8-a683-1e1c1498c8bd",
+			"nodeType": "ScriptedDecisionNode",
+			"details": {
+				"outcomes": ["success", "error"],
+				"inputs": ["*"],
+				"outputs": ["*"],
+				"script": "329154d4-5e55-4cc5-a17e-19d4fd3729aa"
+			}
+		},
+		{
+			"_id": "6486165d-fb00-4248-93c8-4f36ad2b2cb1",
+			"nodeType": "ScriptedDecisionNode",
+			"details": {
+				"outcomes": ["success", "error"],
+				"inputs": ["*"],
+				"outputs": ["*"],
+				"script": "329154d4-5e55-4cc5-a17e-19d4fd3729aa"
+			}
 		}
 	],
     "tree": {
@@ -335,8 +365,8 @@
 				"displayName": "Page Node"
 			},
 			"c32fab79-8836-4657-bef0-9f03a1e1165f": {
-				"x": 1003,
-				"y": 47.5,
+				"x": 1032,
+				"y": 39.5,
 				"connections": {
 					"false": "ae62ed05-3a04-456b-8642-7bc222e0dd43",
 					"true": "0e91440f-8d40-4946-88c9-1a7e22da57bc"
@@ -354,8 +384,8 @@
 				"displayName": "HOTP Generator"
 			},
 			"0e91440f-8d40-4946-88c9-1a7e22da57bc": {
-				"x": 1238,
-				"y": 56.5,
+				"x": 1240,
+				"y": 31.5,
 				"connections": {
 					"false": "1031a228-600a-4325-82da-c93e6a13ab5b",
 					"true": "9339d5b3-f917-46a5-918e-a8b4ce884d81"
@@ -432,11 +462,11 @@
 				"displayName": "Choose Email/SMS"
 			},
 			"4f019558-f468-46f2-8000-5bba1d9dac45": {
-				"x": 511,
-				"y": 184.015625,
+				"x": 429,
+				"y": 94.015625,
 				"connections": {
-					"true": "758e3d0a-3211-4850-8847-86981f75888e",
-					"false": "c99c82c6-20f5-456d-a94e-680c4f4a6307"
+					"false": "c99c82c6-20f5-456d-a94e-680c4f4a6307",
+					"true": "bd940aa3-c854-4934-b67a-1183d89be21f"
 				},
 				"nodeType": "IdentifyExistingUserNode",
 				"displayName": "Identify Existing User"
@@ -451,18 +481,18 @@
 				"displayName": "Update Last Login"
 			},
 			"758e3d0a-3211-4850-8847-86981f75888e": {
-				"x": 760,
-				"y": 401.015625,
+				"x": 894,
+				"y": 394.015625,
 				"connections": {
-					"true": "c32fab79-8836-4657-bef0-9f03a1e1165f",
-					"false": "bd940aa3-c854-4934-b67a-1183d89be21f"
+					"true": "6486165d-fb00-4248-93c8-4f36ad2b2cb1",
+					"false": "d1f2eef5-5ad7-4ad6-bc5a-e65710879ff4"
 				},
 				"nodeType": "InnerTreeEvaluatorNode",
 				"displayName": "Update Legacy Password"
 			},
 			"c99c82c6-20f5-456d-a94e-680c4f4a6307": {
-				"x": 196,
-				"y": 461.015625,
+				"x": 237,
+				"y": 447.015625,
 				"connections": {
 					"true": "94a5f48e-d6e3-4bf4-8edc-45c028a70900"
 				},
@@ -470,24 +500,56 @@
 				"displayName": "Generate Error Message"
 			},
 			"d1f2eef5-5ad7-4ad6-bc5a-e65710879ff4": {
-				"x": 886,
-				"y": 643.015625,
+				"x": 700,
+				"y": 552.015625,
 				"connections": {
 					"true": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
 					"error": "94a5f48e-d6e3-4bf4-8edc-45c028a70900"
 				},
 				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Soft Lock counter"
+				"displayName": "Soft Lock Increment Counter"
 			},
 			"bd940aa3-c854-4934-b67a-1183d89be21f": {
-				"x": 1121,
-				"y": 516.015625,
+				"x": 614,
+				"y": 13.015625,
 				"connections": {
-					"success": "d1f2eef5-5ad7-4ad6-bc5a-e65710879ff4",
-					"error": "e301438c-0bd0-429c-ab0c-66126501069a"
+					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"success": "fa88fc01-a7a2-429f-b7cc-546fe67a70b4"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Get IDM Token"
+			},
+			"fa88fc01-a7a2-429f-b7cc-546fe67a70b4": {
+				"x": 788,
+				"y": 120.015625,
+				"connections": {
+					"error": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
+					"locked": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
+					"lock_expired": "fc36693f-b04c-46f8-a683-1e1c1498c8bd",
+					"not_locked": "758e3d0a-3211-4850-8847-86981f75888e"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Check soft lock"
+			},
+			"fc36693f-b04c-46f8-a683-1e1c1498c8bd": {
+				"x": 691,
+				"y": 316.015625,
+				"connections": {
+					"success": "758e3d0a-3211-4850-8847-86981f75888e",
+					"error": "94a5f48e-d6e3-4bf4-8edc-45c028a70900"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Reset Counter"
+			},
+			"6486165d-fb00-4248-93c8-4f36ad2b2cb1": {
+				"x": 1025,
+				"y": 226.015625,
+				"connections": {
+					"success": "c32fab79-8836-4657-bef0-9f03a1e1165f",
+					"error": "94a5f48e-d6e3-4bf4-8edc-45c028a70900"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Reset Counter after login OK"
 			}
 		},
 		"staticNodes": {

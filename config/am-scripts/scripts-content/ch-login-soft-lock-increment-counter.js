@@ -122,70 +122,63 @@ function performSoftLock(userId, accessToken) {
 }
 
 // main execution flow
-try {
-    var SOFT_LOCK_THRESHOLD = 5;
-    var errorMessage = sharedState.get("errorMessage");
-    logger.error("[UPDATE SOFT LOCK COUNTER] error message from login flow: " + errorMessage);
 
-    if (errorMessage.equals("Enter a correct username and password.")) {
-        var userId = sharedState.get("_id");
+var SOFT_LOCK_THRESHOLD = 5;
+var errorMessage = sharedState.get("errorMessage");
+logger.error("[UPDATE SOFT LOCK COUNTER] error message from login flow: " + errorMessage);
 
-        if (userId == null) {
-            logger.error("[UPDATE SOFT LOCK COUNTER] No user name in shared state");
+if (errorMessage.equals("Enter a correct username and password.")) {
+    var userId = sharedState.get("_id");
+
+    if (userId == null) {
+        logger.error("[UPDATE SOFT LOCK COUNTER] No user name in shared state");
+        action = fr.Action.goTo(NodeOutcome.ERROR).build();
+    }
+
+    var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
+    if (accessToken == null) {
+        logger.error("[UPDATE SOFT LOCK COUNTER] Access token not in shared state")
+        action = fr.Action.goTo(NodeOutcome.ERROR).build();
+    }
+
+    var counter = getCounterValue(userId, accessToken);
+    logger.error("[UPDATE SOFT LOCK COUNTER] Value of counter: " + counter);
+    if (counter === false) {
+        action = fr.Action.goTo(NodeOutcome.ERROR).build();
+    } else {
+        var newCounter = updateCounterValue(userId, counter + 1, accessToken);
+        if (!newCounter) {
             action = fr.Action.goTo(NodeOutcome.ERROR).build();
-        }
-
-        var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
-        if (accessToken == null) {
-            logger.error("[UPDATE SOFT LOCK COUNTER] Access token not in shared state")
-            action = fr.Action.goTo(NodeOutcome.ERROR).build();
-        }
-
-        var counter = getCounterValue(userId, accessToken);
-        logger.error("[UPDATE SOFT LOCK COUNTER] Value of counter: " + counter);
-        if (counter === false) {
-            //buildErrorCallback("SOFT_LOCK_ERROR", "Error while getting counter value");
-            action = fr.Action.goTo(NodeOutcome.ERROR).build();
-        } else {
-            var newCounter = updateCounterValue(userId, counter + 1, accessToken);
-            if (!newCounter) {
-                //buildErrorCallback("SOFT_LOCK_ERROR", "Error while incrementing counter value");
-                action = fr.Action.goTo(NodeOutcome.ERROR).build();
-            } else if (newCounter === SOFT_LOCK_THRESHOLD) {
-                outcome = performSoftLock(userId, accessToken);
-                if (outcome === NodeOutcome.TRUE) {
-                    logger.error("[UPDATE SOFT LOCK COUNTER] soft lock performed successfully");
-                    sharedState.put("errorMessage", "Your account has been locked temporarily. Try again later.");
-                    sharedState.put("pagePropsJSON", JSON.stringify(
-                        {
-                            'errors': [{
-                                label: "Your account has been locked temporarily. Try again later.",
-                                token: "SOFT_LOCK_ERROR",
-                                fieldName: "IDToken2",
-                                anchor: "IDToken2"
-                            }]
-                        }));
-                }
-            } else {
-                sharedState.put("errorMessage", "Enter a correct username and password. Remaining attempts: " + (SOFT_LOCK_THRESHOLD - newCounter));
+        } else if (newCounter === SOFT_LOCK_THRESHOLD) {
+            outcome = performSoftLock(userId, accessToken);
+            if (outcome === NodeOutcome.TRUE) {
+                logger.error("[UPDATE SOFT LOCK COUNTER] soft lock performed successfully");
+                sharedState.put("errorMessage", "Your account has been locked temporarily. Try again later.");
                 sharedState.put("pagePropsJSON", JSON.stringify(
                     {
                         'errors': [{
-                            label: "Enter a correct username and password. Remaining attempts: " + (SOFT_LOCK_THRESHOLD - newCounter),
-                            token: "SOFT_LOCK_REMAINING_ATTEMPTS",
+                            label: "Your account has been locked temporarily. Try again later.",
+                            token: "SOFT_LOCK_ERROR",
                             fieldName: "IDToken2",
                             anchor: "IDToken2"
-                        }],
-                        "remaningAttempts": (SOFT_LOCK_THRESHOLD - newCounter)
+                        }]
                     }));
-                action = fr.Action.goTo(NodeOutcome.TRUE).build();
             }
+        } else {
+            sharedState.put("errorMessage", "Enter a correct username and password. Remaining attempts: " + (SOFT_LOCK_THRESHOLD - newCounter));
+            sharedState.put("pagePropsJSON", JSON.stringify(
+                {
+                    'errors': [{
+                        label: "Enter a correct username and password. Remaining attempts: " + (SOFT_LOCK_THRESHOLD - newCounter),
+                        token: "SOFT_LOCK_REMAINING_ATTEMPTS",
+                        fieldName: "IDToken2",
+                        anchor: "IDToken2"
+                    }],
+                    "remaningAttempts": (SOFT_LOCK_THRESHOLD - newCounter)
+                }));
+            action = fr.Action.goTo(NodeOutcome.TRUE).build();
         }
     }
-} catch (e) {
-    logger.error("[UPDATE SOFT LOCK COUNTER] error: " + e);
 }
 
-
-
-outcome = "true";
+outcome = NodeOutcome.TRUE;
