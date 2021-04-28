@@ -743,6 +743,22 @@
         },
         {
             "payload": {
+                "_id": "a1ebbcd2-39c1-47c2-a152-4bebcf8cfb5b",
+                "name": "CH - Login - Soft Lock counter increment",
+                "description": "Increments the invalid login attempts and sets the soft lock field",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "null",
+                "lastModifiedDate": 0
+            },
+            "filename": "ch-login-soft-lock-increment-counter.js"
+        },
+        {
+            "payload": {
                 "_id": "064705f3-93d3-482c-ad3f-4531a28ce0a0",
                 "name": "CH - Callback Login Error",
                 "description": "Handle error message structure for login page",

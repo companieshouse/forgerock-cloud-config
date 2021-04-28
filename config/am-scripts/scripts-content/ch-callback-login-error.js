@@ -12,7 +12,6 @@
 
 var fr = JavaImporter(
     org.forgerock.openam.auth.node.api.Action,
-    javax.security.auth.callback.NameCallback,
     javax.security.auth.callback.TextOutputCallback,
     com.sun.identity.authentication.callbacks.HiddenValueCallback
   )
@@ -22,7 +21,7 @@ logger.error("[LOGIN ERROR CALLBACK] Enter a correct username and password.");
 if (callbacks.isEmpty()) {
     var errorMessage = sharedState.get("errorMessage");
     var level = fr.TextOutputCallback.INFORMATION;
-    var infoMessage, errorType, errorField;
+    var infoMessage;
     if (errorMessage != null) {
       level = fr.TextOutputCallback.ERROR;
       errorProps = sharedState.get("pagePropsJSON");

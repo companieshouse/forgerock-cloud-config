@@ -1,6 +1,6 @@
-logger.error("[UPDATE LEGACY PASSWORD] Enter a correct username and password.");
+logger.error("[UPDATE LEGACY PASSWORD] The username / password provided are invalid.");
 
-sharedState.put("errorMessage", "Enter a correct username and password.")
+sharedState.put("errorMessage", "Enter a correct username and password.");
 sharedState.put("pagePropsJSON", JSON.stringify(
     {
         'errors': [{
