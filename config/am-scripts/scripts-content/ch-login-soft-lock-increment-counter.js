@@ -125,7 +125,7 @@ function performSoftLock(userId, accessToken) {
 try {
     var SOFT_LOCK_THRESHOLD = 5;
     var errorMessage = sharedState.get("errorMessage");
-    logger.error("[UPDATE SOFT LOCK COUNTER] error message form login flow: " + errorMessage);
+    logger.error("[UPDATE SOFT LOCK COUNTER] error message from login flow: " + errorMessage);
 
     if (errorMessage.equals("Enter a correct username and password.")) {
         var userId = sharedState.get("_id");
@@ -143,7 +143,7 @@ try {
 
         var counter = getCounterValue(userId, accessToken);
         logger.error("[UPDATE SOFT LOCK COUNTER] Value of counter: " + counter);
-        if (!counter) {
+        if (counter === false) {
             //buildErrorCallback("SOFT_LOCK_ERROR", "Error while getting counter value");
             action = fr.Action.goTo(NodeOutcome.ERROR).build();
         } else {
