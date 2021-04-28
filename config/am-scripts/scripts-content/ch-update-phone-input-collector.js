@@ -13,7 +13,7 @@ var NodeOutcome = {
 }
 
 function isMobile(number) {
-  var mobileValid = /^((0|\+44)7\d{3}\s?\d{6})$/.test(number);
+  var mobileValid = /^((0044|0|\+44)7\d{3}\s?\d{6})$/.test(number);
   if (mobileValid) {
       return true;
   }
@@ -93,7 +93,7 @@ if (callbacks.isEmpty()) {
       sharedState.put("pagePropsJSON", JSON.stringify(
         {
             'errors': [{
-                label: "IInvalid mobile number entered",
+                label: "Invalid mobile number entered",
                 token: "UPDATE_PHONE_INVALID_MOBILE_NUMBER",
                 fieldName: "IDToken1",
                 anchor: "IDToken1"
