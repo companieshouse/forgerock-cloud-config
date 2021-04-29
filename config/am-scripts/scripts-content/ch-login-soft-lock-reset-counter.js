@@ -1,3 +1,21 @@
+/* 
+  ** INPUT DATA
+    * SHARED STATE:
+      - '_id"': the user ID which has been looked up in a previous step
+
+    * TRANSIENT STATE
+      - 'idmAccessToken': the IDM access token
+
+  ** OUTPUT DATA
+    * SHARED STATE:
+      - 'errorMessage': the 'account locked' message, or the 'generic error' message
+      - 'pagePropsJSON': the JSON props for the UI to consume via callbacks
+    
+  ** OUTCOMES
+    - success: the user soft lock date and counter have been successfully reset
+    - error: error while resetting user soft lock status
+*/
+
 var fr = JavaImporter(
     org.forgerock.openam.auth.node.api.Action,
     javax.security.auth.callback.TextOutputCallback,

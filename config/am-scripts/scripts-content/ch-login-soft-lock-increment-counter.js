@@ -1,3 +1,22 @@
+/* 
+  ** INPUT DATA
+    * SHARED STATE:
+      - 'errorMessage': the error message rekated to the failed login attempt
+      - '_id"': the user ID which has been looked up in a previous step
+
+    * TRANSIENT STATE
+      - 'idmAccessToken': the IDM access token
+
+  ** OUTPUT DATA
+    * SHARED STATE:
+      - 'errorMessage': the 'account locked' message, or the 'remaining attempts' message
+      - 'pagePropsJSON': the JSON props for the UI to consume via callbacks
+    
+  ** OUTCOMES
+    - true: counter incremented successfully
+    - error: error while incrementing counter
+*/
+
 var fr = JavaImporter(
     org.forgerock.openam.auth.node.api.Action,
     javax.security.auth.callback.TextOutputCallback,
@@ -15,26 +34,6 @@ var NodeOutcome = {
 
 function logResponse(response) {
     logger.error("[UPDATE SOFT LOCK COUNTER] Scripted Node HTTP Response: " + response.getStatus() + ", Body: " + response.getEntity().getString());
-}
-
-// builds an error callback given a stage name and a message text
-function buildErrorCallback(stageName, message) {
-    if (callbacks.isEmpty()) {
-        action = fr.Action.send(
-            new fr.HiddenValueCallback(
-                "stage",
-                stageName
-            ),
-            new fr.TextOutputCallback(
-                fr.TextOutputCallback.ERROR,
-                message
-            ),
-            new fr.HiddenValueCallback(
-                "pagePropsJSON",
-                JSON.stringify({ 'errors': [{ label: message }] })
-            )
-        ).build()
-    }
 }
 
 // reads the current invalid login attempts counter from frUnindexedInteger1

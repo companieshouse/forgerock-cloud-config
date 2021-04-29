@@ -1,3 +1,23 @@
+/* 
+  ** INPUT DATA
+    * SHARED STATE:
+      - '_id"': the user ID which has been looked up in a previous step
+
+    * TRANSIENT STATE
+      - 'idmAccessToken': the IDM access token
+
+  ** OUTPUT DATA
+    * SHARED STATE:
+      - 'errorMessage': the 'account locked' message, or the 'generic error' message
+      - 'pagePropsJSON': the JSON props for the UI to consume via callbacks
+    
+  ** OUTCOMES
+    - locked: the user is currently soft locked
+    - lock_expired: the user is soft locked but the lock has expired
+    - not_locked: the user is currently not soft locked
+    - error: error while checking user soft lock status
+*/
+
 var fr = JavaImporter(
     org.forgerock.openam.auth.node.api.Action,
     javax.security.auth.callback.TextOutputCallback,
@@ -19,10 +39,11 @@ function logResponse(response) {
     logger.error("[UPDATE SOFT LOCK STATUS] Scripted Node HTTP Response: " + response.getStatus() + ", Body: " + response.getEntity().getString());
 }
 
-// checks whether the user is locked, by checking the frIndexedString4 (lock date) is populated and whether the date of lock is less than 5 mins ago
-// return FALSE if the date field is not set, or if the time difference from the current time is MORE than SOFT_LOCK_MINUTES 
-// return TRUE if the date field is set and the time difference from the current time is LESS than SOFT_LOCK_MINUTES 
-// return ERROR if there is an error in reading the soft lock date
+// checks the user soft lock status, by checking the frIndexedString4 (lock date) is populated and whether the date of lock is less than 5 mins ago
+// return 'not_locked' if the date field is not set
+// return 'lock_expired' if the time difference from the current time is MORE than SOFT_LOCK_MINUTES 
+// return 'locked' if the date field is set and the time difference from the current time is LESS than SOFT_LOCK_MINUTES 
+// return 'error' if there is an error in checking the soft lock status
 function checkUserLockStatus(userId, accessToken) {
 
     var request = new org.forgerock.http.protocol.Request();
