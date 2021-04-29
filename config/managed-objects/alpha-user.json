@@ -661,12 +661,12 @@
         "viewable": true
       },
       "frIndexedString4": {
-        "description": "Generic Indexed String 4",
+        "description": "Soft Lock Date",
         "isPersonal": false,
-        "title": "Generic Indexed String 4",
+        "title": "Date of soft account lock",
         "type": "string",
-        "usageDescription": null,
-        "userEditable": true,
+        "usageDescription": "Set to the date of the user last 'soft lock' event. Set to null if the user is not soft locked.",
+        "userEditable": false,
         "viewable": true
       },
       "frIndexedString5": {
@@ -724,12 +724,12 @@
         "viewable": true
       },
       "frUnindexedInteger1": {
-        "description": "Generic Unindexed Integer 1",
+        "description": "Invalid Login Counter",
         "isPersonal": false,
-        "title": "Generic Unindexed Integer 1",
+        "title": "Invalid Login Counter",
         "type": "number",
-        "usageDescription": null,
-        "userEditable": true,
+        "usageDescription": "Counter which gets increased when an invalid login attempt occurs. Set to 0 if the last login was successful.",
+        "userEditable": false,
         "viewable": true
       },
       "frUnindexedInteger2": {

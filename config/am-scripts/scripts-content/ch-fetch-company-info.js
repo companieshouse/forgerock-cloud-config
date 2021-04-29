@@ -176,7 +176,7 @@ function fetchCompany(idmToken, companyNumber) {
                 }));
             return false;
         }
-    } else if (response.getStatus().getCode() === 401) {
+    } else {
         logger.error("[FETCH COMPANY] Error while retrieving company with ID " + companyNumber);
         sharedState.put("errorMessage", "Error while retrieving company " + companyNumber + ".");
         sharedState.put("pagePropsJSON", JSON.stringify(

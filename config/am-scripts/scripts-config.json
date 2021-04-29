@@ -743,6 +743,54 @@
         },
         {
             "payload": {
+                "_id": "a1ebbcd2-39c1-47c2-a152-4bebcf8cfb5b",
+                "name": "CH - Login - Soft Lock - Increment Counter",
+                "description": "Increments the invalid login attempts and sets the soft lock field",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "null",
+                "lastModifiedDate": 0
+            },
+            "filename": "ch-login-soft-lock-increment-counter.js"
+        },
+        {
+            "payload": {
+                "_id": "7837ccb6-2e56-44bf-a5df-7cfdb0bfc38b",
+                "name": "CH - Login - Soft Lock - Check Lock Status",
+                "description": "Increments the invalid login attempts and sets the soft lock field",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "null",
+                "lastModifiedDate": 0
+            },
+            "filename": "ch-login-soft-lock-check.js"
+        },        
+        {
+            "payload": {
+                "_id": "329154d4-5e55-4cc5-a17e-19d4fd3729aa",
+                "name": "CH - Login - Soft Lock - Reset Counter",
+                "description": "Resets to zero the number invalid login attempts and empties the soft lock date",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "null",
+                "lastModifiedDate": 0
+            },
+            "filename": "ch-login-soft-lock-reset-counter.js"
+        },     
+        {
+            "payload": {
                 "_id": "064705f3-93d3-482c-ad3f-4531a28ce0a0",
                 "name": "CH - Callback Login Error",
                 "description": "Handle error message structure for login page",
