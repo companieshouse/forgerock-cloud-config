@@ -1,0 +1,71 @@
+{
+	"target": "managed/alpha_organization",
+	"source": "system/CHSAuthCode/company_auth_codes",
+	"name": "systemChsauthcodeCompany_auth_codes_managedAlpha_",
+	"consentRequired": false,
+	"icon": null,
+	"displayName": "systemChsauthcodeCompany_auth_codes_managedAlpha_",
+	"properties": [{
+		"target": "authCode",
+		"source": "auth_code"
+	}, {
+		"target": "authCodeIsActive",
+		"source": "is_active",
+		"default": false
+	}, {
+		"target": "authCodeValidFrom",
+		"source": "valid_from"
+	}, {
+		"target": "number",
+		"source": "_id"
+	}],
+	"policies": [{
+		"action": "EXCEPTION",
+		"situation": "AMBIGUOUS"
+	}, {
+		"action": "EXCEPTION",
+		"situation": "SOURCE_MISSING"
+	}, {
+		"action": "EXCEPTION",
+		"situation": "MISSING"
+	}, {
+		"action": "EXCEPTION",
+		"situation": "FOUND_ALREADY_LINKED"
+	}, {
+		"action": "DELETE",
+		"situation": "UNQUALIFIED"
+	}, {
+		"action": "EXCEPTION",
+		"situation": "UNASSIGNED"
+	}, {
+		"action": "EXCEPTION",
+		"situation": "LINK_ONLY"
+	}, {
+		"action": "IGNORE",
+		"situation": "TARGET_IGNORED"
+	}, {
+		"action": "IGNORE",
+		"situation": "SOURCE_IGNORED"
+	}, {
+		"action": "IGNORE",
+		"situation": "ALL_GONE"
+	}, {
+		"action": "UPDATE",
+		"situation": "CONFIRMED"
+	}, {
+		"action": "UPDATE",
+		"situation": "FOUND"
+	}, {
+		"action": "CREATE",
+		"situation": "ABSENT"
+	}],
+	"correlationQuery": [{
+		"linkQualifier": "default",
+		"expressionTree": {
+			"any": ["number"]
+		},
+		"mapping": "systemChsauthcodeCompany_auth_codes_managedAlpha_",
+		"type": "text/javascript",
+		"file": "ui/correlateTreeToQueryFilter.js"
+	}]
+}
