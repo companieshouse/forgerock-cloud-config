@@ -39,26 +39,6 @@ function logResponse(response) {
     logger.error("[FETCH COMPANY] Scripted Node HTTP Response: " + response.getStatus() + ", Body: " + response.getEntity().getString());
 }
 
-// builds an error callback given a stage name and a message text
-function buildErrorCallback(stageName, message) {
-    if (callbacks.isEmpty()) {
-        action = fr.Action.send(
-            new fr.HiddenValueCallback(
-                "stage",
-                stageName
-            ),
-            new fr.TextOutputCallback(
-                fr.TextOutputCallback.ERROR,
-                message
-            ),
-            new fr.HiddenValueCallback(
-                "pagePropsJSON",
-                JSON.stringify({ 'errors': [{ label: message }] })
-            )
-        ).build()
-    }
-}
-
 //fetches the IDM access token from transient state
 function fetchIDMToken() {
     var ACCESS_TOKEN_STATE_FIELD = "idmAccessToken";
@@ -117,7 +97,6 @@ function fetchCompany(idmToken, companyNumber) {
                 return false;
             }
 
-            
             logger.error("[FETCH COMPANY] Found status: " + companyStatus);
 
             if (companyStatus !== "active") {
@@ -195,7 +174,7 @@ function fetchCompany(idmToken, companyNumber) {
 
 // main execution flow
 var YES_OPTION_INDEX = 0;
-var idmCompanyEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/Company/";
+var idmCompanyEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_organization/";
 
 // if the user has selected to proceed with association or to not go ahead, callbacks will be not empty
 if (!callbacks.isEmpty()) {
