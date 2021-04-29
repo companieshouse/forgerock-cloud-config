@@ -92,8 +92,7 @@
       "frUnindexedInteger3",
       "frUnindexedInteger4",
       "frUnindexedInteger5",
-      "aliasList",
-      "isAuthorisedUserOf"
+      "aliasList"
     ],
     "properties": {
       "_id": {
@@ -257,6 +256,12 @@
                   "type": "string",
                   "required": false,
                   "propName": "_id"
+                },
+                "membershipStatus": {
+                  "label": "Memberhip Status",
+                  "propName": "membershipStatus",
+                  "required": false,
+                  "type": "string"
                 }
               }
             }
@@ -899,75 +904,6 @@
         ],
         "usageDescription": null,
         "userEditable": true,
-        "viewable": true
-      },
-      "isAuthorisedUserOf": {
-        "deleteQueryConfig": false,
-        "description": "Authorised Users are Users that are associated with a Company",
-        "isVirtual": false,
-        "items": {
-          "notifySelf": false,
-          "properties": {
-            "_ref": {
-              "type": "string"
-            },
-            "_refProperties": {
-              "properties": {
-                "_id": {
-                  "propName": "_id",
-                  "required": false,
-                  "type": "string"
-                },
-                "permissionAdmin": {
-                  "label": "Administer the Company",
-                  "propName": "permissionAdmin",
-                  "required": false,
-                  "type": "string"
-                },
-                "permissionFiling": {
-                  "label": "File Financial Statments",
-                  "propName": "permissionFiling",
-                  "required": false,
-                  "type": "string"
-                },
-                "permissionUpdate": {
-                  "label": "Update company details",
-                  "propName": "permissionUpdate",
-                  "required": false,
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            }
-          },
-          "resourceCollection": [
-            {
-              "label": "Company",
-              "notify": false,
-              "path": "managed/Company",
-              "query": {
-                "fields": [
-                  "name",
-                  "number"
-                ],
-                "queryFilter": "true",
-                "sortKeys": []
-              }
-            }
-          ],
-          "reversePropertyName": "authorisedUsers",
-          "reverseRelationship": true,
-          "type": "relationship",
-          "validate": false
-        },
-        "referencedObjectFields": null,
-        "referencedRelationshipFields": null,
-        "requiredByParent": false,
-        "returnByDefault": false,
-        "searchable": false,
-        "title": "Authorised User Of",
-        "type": "array",
-        "userEditable": false,
         "viewable": true
       },
       "kbaInfo": {

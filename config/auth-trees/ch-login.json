@@ -4,19 +4,23 @@
 			"_id": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
 			"nodeType": "PageNode",
 			"details": {
-				"nodes": [{
-					"_id": "3b1940b6-a238-455e-8d13-ceb0f2848be4",
-					"nodeType": "ScriptedDecisionNode",
-					"displayName": "Error Handling"
-				}, {
-					"_id": "a346e4e7-8490-4ec6-962f-ebb9ba51dbe6",
-					"nodeType": "ValidatedUsernameNode",
-					"displayName": "Platform Username"
-				}, {
-					"_id": "d28720a1-ad25-406b-baea-d3691f5122ea",
-					"nodeType": "ValidatedPasswordNode",
-					"displayName": "Platform Password"
-				}],
+				"nodes": [ 
+					{
+						"_id": "a346e4e7-8490-4ec6-962f-ebb9ba51dbe6",
+						"nodeType": "ValidatedUsernameNode",
+						"displayName": "Platform Username"
+					}, 
+					{
+						"_id": "d28720a1-ad25-406b-baea-d3691f5122ea",
+						"nodeType": "ValidatedPasswordNode",
+						"displayName": "Platform Password"
+					},
+					{
+						"_id": "3b1940b6-a238-455e-8d13-ceb0f2848be4",
+						"nodeType": "ScriptedDecisionNode",
+						"displayName": "Error Handling"
+					}
+				],
 				"pageDescription": {
 					"en": "New here? <a href=\"#/service/Registration\">Create an account</a><br><a href=\"#/service/ForgottenUsername\">Forgot username?</a><a href=\"#/service/ResetPassword\"> Forgot password?</a>"
 				},
@@ -356,13 +360,13 @@
 				"displayName": "Enter OTP"
 			},
 			"94a5f48e-d6e3-4bf4-8edc-45c028a70900": {
-				"x": 223,
-				"y": 141,
+				"x": 218,
+				"y": 136,
 				"connections": {
-					"outcome": "4f019558-f468-46f2-8000-5bba1d9dac45"
+					"true": "4f019558-f468-46f2-8000-5bba1d9dac45"
 				},
 				"nodeType": "PageNode",
-				"displayName": "Page Node"
+				"displayName": "Login Form"
 			},
 			"c32fab79-8836-4657-bef0-9f03a1e1165f": {
 				"x": 1032,

@@ -40,8 +40,8 @@ function checkCompanyAlreadyExists(userId, company) {
     var request = new org.forgerock.http.protocol.Request();
 
     request.setMethod('GET');
-    logger.error("[ADD RELATIONSHIP] Check duplicate associations - calling endpoint " + idmUserEndpoint + userId + "?_fields=isAuthorisedUserOf/_id");
-    request.setUri(idmUserEndpoint + userId + "?_fields=isAuthorisedUserOf/_id");
+    logger.error("[ADD RELATIONSHIP] Check duplicate associations - calling endpoint " + idmUserEndpoint + userId + "?_fields=memberOfOrg/_id");
+    request.setUri(idmUserEndpoint + userId + "?_fields=memberOfOrg/_id");
     request.getHeaders().add("Authorization", "Bearer " + accessToken);
     request.getHeaders().add("Content-Type", "application/json");
     request.getHeaders().add("Accept-API-Version", "resource=1.0");
@@ -52,9 +52,9 @@ function checkCompanyAlreadyExists(userId, company) {
 
     var userProfile = JSON.parse(response.getEntity().getString());
 
-    logger.error("[ADD RELATIONSHIP] Check duplicate associations - User companies: " + userProfile.isAuthorisedUserOf.length);
-    for (var index = 0; index < userProfile.isAuthorisedUserOf.length; index++) {
-        var userCompanyId = userProfile.isAuthorisedUserOf[index]._id;
+    logger.error("[ADD RELATIONSHIP] Check duplicate associations - User companies: " + userProfile.memberOfOrg.length);
+    for (var index = 0; index < userProfile.memberOfOrg.length; index++) {
+        var userCompanyId = userProfile.memberOfOrg[index]._id;
         if (userCompanyId.equals(company._id)) {
             return true;
         }
@@ -75,9 +75,9 @@ function addRelationshipToCompany(userId, company) {
     var requestBodyJson = [
         {
             "operation": "add",
-            "field": "/isAuthorisedUserOf/-",
+            "field": "/memberOfOrg/-",
             "value": {
-                "_ref": "managed/Company/" + company._id,
+                "_ref": "managed/alpha_organization/" + company._id,
                 "_refProperties": {
                     "permissionAdmin": "true"
                 }

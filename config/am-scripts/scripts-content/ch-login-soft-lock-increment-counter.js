@@ -1,7 +1,7 @@
 /* 
   ** INPUT DATA
     * SHARED STATE:
-      - 'errorMessage': the error message rekated to the failed login attempt
+      - 'errorMessage': the error message related to the failed login attempt
       - '_id"': the user ID which has been looked up in a previous step
 
     * TRANSIENT STATE
