@@ -201,7 +201,7 @@ yargs
   })
   .command({
     command: 'idm-access-config',
-    desc: 'Update IDM Endpoints (./config/idm-access-config)',
+    desc: 'Update IDM Access Configuration (./config/idm-access-config)',
     builder: cliOptions([
       'idmUsername',
       'idmPassword',
