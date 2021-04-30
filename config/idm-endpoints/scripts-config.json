@@ -1,0 +1,8 @@
+{
+    "endpoints": [
+        {
+            "endpointName": "companyauth",
+            "scriptFileName": "companyauth.js"
+        }
+    ]
+}
