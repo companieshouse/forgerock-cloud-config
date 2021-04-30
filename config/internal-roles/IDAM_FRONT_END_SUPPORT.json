@@ -50,8 +50,8 @@
          "actions": [],
          "permissions": [
             "VIEW",
-            "UPDATE",
             "CREATE",
+            "UPDATE",
             "DELETE"
          ],
          "accessFlags": [
@@ -149,6 +149,22 @@
             },
             {
                "attribute": "consentedMappings",
+               "readOnly": false
+            },
+            {
+               "attribute": "ownerOfOrg",
+               "readOnly": false
+            },
+            {
+               "attribute": "adminOfOrg",
+               "readOnly": false
+            },
+            {
+               "attribute": "memberOfOrg",
+               "readOnly": false
+            },
+            {
+               "attribute": "memberOfOrgIDs",
                "readOnly": false
             },
             {
@@ -314,26 +330,6 @@
             {
                "attribute": "aliasList",
                "readOnly": false
-            },
-            {
-               "attribute": "isAuthorisedUserOf",
-               "readOnly": false
-            },
-            {
-               "attribute": "ownerOfOrg",
-               "readOnly": false
-            },
-            {
-               "attribute": "adminOfOrg",
-               "readOnly": false
-            },
-            {
-               "attribute": "memberOfOrg",
-               "readOnly": false
-            },
-            {
-               "attribute": "memberOfOrgIDs",
-               "readOnly": false
             }
          ]
       },
@@ -341,6 +337,7 @@
          "path": "internal/role",
          "name": "Internal Roles",
          "actions": [],
+         "filter": "!(/name sw \"openidm\")",
          "permissions": [
             "VIEW"
          ],
@@ -369,19 +366,63 @@
                "attribute": "condition",
                "readOnly": true
             }
-         ],
-         "filter": "!(/name sw \"openidm\")"
+         ]
       },
       {
-         "path": "managed/Company",
-         "name": "Companies",
+         "path": "managed/alpha_organization",
+         "name": "CH Companies",
          "actions": [],
+         "filter": "/status eq \"active\"",
          "permissions": [
             "VIEW"
          ],
          "accessFlags": [
             {
                "attribute": "name",
+               "readOnly": true
+            },
+            {
+               "attribute": "description",
+               "readOnly": true
+            },
+            {
+               "attribute": "owners",
+               "readOnly": true
+            },
+            {
+               "attribute": "admins",
+               "readOnly": true
+            },
+            {
+               "attribute": "members",
+               "readOnly": true
+            },
+            {
+               "attribute": "parent",
+               "readOnly": true
+            },
+            {
+               "attribute": "children",
+               "readOnly": true
+            },
+            {
+               "attribute": "adminIDs",
+               "readOnly": true
+            },
+            {
+               "attribute": "ownerIDs",
+               "readOnly": true
+            },
+            {
+               "attribute": "parentAdminIDs",
+               "readOnly": true
+            },
+            {
+               "attribute": "parentOwnerIDs",
+               "readOnly": true
+            },
+            {
+               "attribute": "parentIDs",
                "readOnly": true
             },
             {
@@ -409,10 +450,6 @@
                "readOnly": true
             },
             {
-               "attribute": "authorisedUsers",
-               "readOnly": true
-            },
-            {
                "attribute": "locality",
                "readOnly": true
             },
@@ -435,9 +472,12 @@
             {
                "attribute": "creationDate",
                "readOnly": true
+            },
+            {
+               "attribute": "jurisdiction",
+               "readOnly": true
             }
-         ],
-         "filter": "/status eq \"active\""
+         ]
       }
    ]
 }
