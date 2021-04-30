@@ -3,29 +3,6 @@ const path = require('path')
 const getAccessToken = require('../helpers/get-access-token')
 const fidcRequest = require('../helpers/fidc-request')
 
-const convertScript = async (fileName) => {
-  console.log(`converting ${fileName} ...`)
-  let body = fs.readFileSync(fileName, 'utf8', (err, data) => {
-    if (err) {
-      return console.log(err)
-    }
-
-    body = {
-      type: 'text/javascript',
-      source: data
-        .split('\n')
-        .map((line) => {
-          if (line.trim().startsWith('//')) {
-            return ''
-          }
-          return line.trim()
-        })
-        .join(' ')
-    }
-  })
-  return body
-}
-
 const updateScripts = async (argv) => {
   const { FIDC_URL } = process.env
 
@@ -45,19 +22,29 @@ const updateScripts = async (argv) => {
       scriptFileContent.map(async (scriptFile) => {
         await Promise.all(
           scriptFile.endpoints.map(async (endpoint) => {
-            // const compileRequestUrl = `${FIDC_URL}/openidm/script?_action=compile`
             const requestUrl = `${FIDC_URL}/openidm/config/endpoint/${endpoint.endpointName}`
-            const scriptConvertedBody = await convertScript(`${dir}/scripts-content/${endpoint.scriptFileName}`)
-            const requestBody = {
-              type: 'text/javascript',
-              source: scriptConvertedBody
-            }
-            console.log(JSON.stringify(requestBody))
-            // await fidcRequest(compileRequestUrl, requestBody, accessToken)
-            await fidcRequest(requestUrl, requestBody, accessToken)
+
+            fs.readFile(`${dir}/scripts-content/${endpoint.scriptFileName}`, 'utf8', (err, data) => {
+              if (err) {
+                return console.log(err)
+              }
+              const body = {
+                type: 'text/javascript',
+                source: data
+                  .split('\n')
+                  .map((line) => {
+                    if (line.trim().startsWith('//')) {
+                      return ''
+                    }
+                    return line.trim()
+                  })
+                  .join(' ')
+              }
+              fidcRequest(requestUrl, body, accessToken)
+              console.log('IDM endpoint updated')
+            })
           })
         )
-        console.log('IDM endpoint updated')
         return Promise.resolve()
       })
     )

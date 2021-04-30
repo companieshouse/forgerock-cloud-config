@@ -16,7 +16,8 @@ const {
   updateTermsAndConditions,
   updatePasswordPolicy,
   updateUserRoles,
-  updateIdmEndpoints
+  updateIdmEndpoints,
+  updateIdmAccessConfig
 } = require('./scripts')
 
 require('dotenv').config()
@@ -197,6 +198,18 @@ yargs
       'realm'
     ]),
     handler: (argv) => updateIdmEndpoints(argv)
+  })
+  .command({
+    command: 'idm-access-config',
+    desc: 'Update IDM Endpoints (./config/idm-access-config)',
+    builder: cliOptions([
+      'idmUsername',
+      'idmPassword',
+      'adminClientId',
+      'adminClientSecret',
+      'realm'
+    ]),
+    handler: (argv) => updateIdmAccessConfig(argv)
   })
   .demandCommand()
   .parse()

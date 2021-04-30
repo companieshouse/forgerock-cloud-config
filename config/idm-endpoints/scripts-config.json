@@ -3,6 +3,10 @@
         {
             "endpointName": "companyauth",
             "scriptFileName": "companyauth.js"
+        },
+        {
+            "endpointName": "echo",
+            "scriptFileName": "echo.js"
         }
     ]
 }
