@@ -96,14 +96,14 @@ try{
     var lockStatus = checkUserLockStatus(userId, accessToken);
     logger.error("[CHECK SOFT LOCK STATUS] Is user locked: " + lockStatus);
     if (lockStatus === NodeOutcome.LOCKED) {
-        sharedState.put("errorMessage", "Your account is temporarily locked. Try again later.");
+        sharedState.put("errorMessage", "You have entered incorrect details too many times. Your account is now locked for ".concat(String(SOFT_LOCK_MINUTES), " minutes."));
         sharedState.put("pagePropsJSON", JSON.stringify(
             {
                 'errors': [{
-                    label: "Your account is temporarily locked. Try again later.",
+                    label: "You have entered incorrect details too many times. Your account is now locked for ".concat(String(SOFT_LOCK_MINUTES), " minutes."),
                     token: "ACCOUNT_LOCKED_ERROR",
-                    fieldName: "IDToken2",
-                    anchor: "IDToken2"
+                    fieldName: "IDToken1",
+                    anchor: "IDToken1"
                 }]
             }));
     } else if (lockStatus === NodeOutcome.ERROR) {
@@ -113,8 +113,8 @@ try{
                 'errors': [{
                     label: "An error occurred. Try again later.",
                     token: "LOGIN_GENERAL_ERROR",
-                    fieldName: "IDToken2",
-                    anchor: "IDToken2"
+                    fieldName: "IDToken1",
+                    anchor: "IDToken1"
                 }]
             }));
     }

@@ -18,6 +18,7 @@ var fr = JavaImporter(
   
 logger.error("[LOGIN ERROR CALLBACK] Enter a correct username and password.");
 
+try{
 if (callbacks.isEmpty()) {
     var errorMessage = sharedState.get("errorMessage");
     var level = fr.TextOutputCallback.INFORMATION;
@@ -32,6 +33,9 @@ if (callbacks.isEmpty()) {
         new fr.HiddenValueCallback("pagePropsJSON", errorProps)
         ).build();
     }
+}
+}catch(e){
+  logger.error("[LOGIN ERROR CALLBACK] error - "+e);
 }
 
 outcome = "true";
