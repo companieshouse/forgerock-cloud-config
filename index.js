@@ -22,11 +22,7 @@ const {
 
 require('dotenv').config()
 
-if (
-  !process.env.FIDC_URL ||
-  !process.env.UI_URL ||
-  !process.env.OAUTH2_HASH_SALT
-) {
+if (!process.env.FIDC_URL || !process.env.UI_URL) {
   console.error('Missing required environment variable(s)')
   process.exit(1)
 }

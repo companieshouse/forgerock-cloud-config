@@ -266,7 +266,7 @@
 			"_id": "d1f2eef5-5ad7-4ad6-bc5a-e65710879ff4",
 			"nodeType": "ScriptedDecisionNode",
 			"details": {
-				"outcomes": ["true", "false", "error"],
+				"outcomes": ["true", "error"],
 				"inputs": ["*"],
 				"outputs": ["*"],
 				"script": "a1ebbcd2-39c1-47c2-a152-4bebcf8cfb5b"
