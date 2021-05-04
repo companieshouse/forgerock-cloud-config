@@ -123,6 +123,7 @@ function performSoftLock(userId, accessToken) {
 // main execution flow
 
 var SOFT_LOCK_THRESHOLD = 5;
+var SOFT_LOCK_MINUTES = 5;
 var errorMessage = sharedState.get("errorMessage");
 logger.error("[UPDATE SOFT LOCK COUNTER] error message from login flow: " + errorMessage);
 
@@ -152,28 +153,38 @@ if (errorMessage.equals("Enter a correct username and password.")) {
             outcome = performSoftLock(userId, accessToken);
             if (outcome === NodeOutcome.TRUE) {
                 logger.error("[UPDATE SOFT LOCK COUNTER] soft lock performed successfully");
-                sharedState.put("errorMessage", "Your account has been locked temporarily. Try again later.");
+                sharedState.put("errorMessage", "You have entered incorrect details too many times. Your account is now locked for ".concat(String(SOFT_LOCK_MINUTES), " minutes."));
                 sharedState.put("pagePropsJSON", JSON.stringify(
                     {
                         'errors': [{
-                            label: "Your account has been locked temporarily. Try again later.",
+                            label: "You have entered incorrect details too many times. Your account is now locked for ".concat(String(SOFT_LOCK_MINUTES), " minutes."),
                             token: "SOFT_LOCK_ERROR",
-                            fieldName: "IDToken2",
-                            anchor: "IDToken2"
+                            fieldName: "IDToken1",
+                            anchor: "IDToken1"
                         }]
                     }));
             }
         } else {
-            sharedState.put("errorMessage", "Enter a correct username and password. Remaining attempts: " + (SOFT_LOCK_THRESHOLD - newCounter));
+            var softLockMsg = "";
+            var softLockToken = "";
+            var remainingAttempts = (SOFT_LOCK_THRESHOLD - newCounter);        
+            if(newCounter === SOFT_LOCK_THRESHOLD - 1){
+                softLockMsg = "Enter a correct email address and password. You have 1 attempt left. If the details you enter are incorrect again your account will be locked for ".concat(String(SOFT_LOCK_MINUTES), " minutes.");
+                softLockToken = "SOFT_LOCK_LAST_ATTEMPT";
+            }else{
+                softLockMsg = "Enter a correct email address and password. You have ".concat(String(remainingAttempts), " attempts left.");
+                softLockToken = "SOFT_LOCK_REMAINING_ATTEMPTS";
+            }
+            sharedState.put("errorMessage", softLockMsg);
             sharedState.put("pagePropsJSON", JSON.stringify(
                 {
                     'errors': [{
-                        label: "Enter a correct username and password. Remaining attempts: " + (SOFT_LOCK_THRESHOLD - newCounter),
-                        token: "SOFT_LOCK_REMAINING_ATTEMPTS",
-                        fieldName: "IDToken2",
-                        anchor: "IDToken2"
+                        label: softLockMsg,
+                        token: softLockToken,
+                        fieldName: "IDToken1",
+                        anchor: "IDToken1"
                     }],
-                    "remaningAttempts": (SOFT_LOCK_THRESHOLD - newCounter)
+                    "remainingAttempts": (SOFT_LOCK_THRESHOLD - newCounter)
                 }));
             action = fr.Action.goTo(NodeOutcome.TRUE).build();
         }
