@@ -21,8 +21,8 @@ if (username && password) {
             'errors': [{
                 label: "Enter a username and password.",
                 token: "USER_CREDENTIALS_INCOMPLETE",
-                fieldName: "IDToken2",
-                anchor: "IDToken2"
+                fieldName: "IDToken1",
+                anchor: "IDToken1"
             }]
         }));
 }
