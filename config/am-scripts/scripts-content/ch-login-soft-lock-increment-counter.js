@@ -153,7 +153,7 @@ if (errorMessage.equals("Enter a correct username and password.")) {
             outcome = performSoftLock(userId, accessToken);
             if (outcome === NodeOutcome.TRUE) {
                 logger.error("[UPDATE SOFT LOCK COUNTER] soft lock performed successfully");
-                sharedState.put("errorMessage", "You have entered incorrect details too many times. Your account is now locked for".concat(String(SOFT_LOCK_MINUTES), " minutes."));
+                sharedState.put("errorMessage", "You have entered incorrect details too many times. Your account is now locked for ".concat(String(SOFT_LOCK_MINUTES), " minutes."));
                 sharedState.put("pagePropsJSON", JSON.stringify(
                     {
                         'errors': [{
