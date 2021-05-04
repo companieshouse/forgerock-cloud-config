@@ -9,6 +9,10 @@ const updateServices = async (argv) => {
   const { FIDC_URL, OAUTH2_HASH_SALT } = process.env
 
   try {
+    if (!OAUTH2_HASH_SALT) {
+      throw new Error('Missing OAUTH2_HASH_SALT environment variable')
+    }
+
     const sessionToken = await getSessionToken(argv)
 
     // Read JSON files
