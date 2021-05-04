@@ -161,7 +161,8 @@ if (errorMessage.equals("Enter a correct username and password.")) {
                             token: "SOFT_LOCK_ERROR",
                             fieldName: "IDToken1",
                             anchor: "IDToken1"
-                        }]
+                        }],
+                        "softLockMinutes": SOFT_LOCK_MINUTES
                     }));
             }
         } else {
@@ -184,7 +185,8 @@ if (errorMessage.equals("Enter a correct username and password.")) {
                         fieldName: "IDToken1",
                         anchor: "IDToken1"
                     }],
-                    "remainingAttempts": (SOFT_LOCK_THRESHOLD - newCounter)
+                    "remainingAttempts": (SOFT_LOCK_THRESHOLD - newCounter),
+                    "softLockMinutes": SOFT_LOCK_MINUTES
                 }));
             action = fr.Action.goTo(NodeOutcome.TRUE).build();
         }
