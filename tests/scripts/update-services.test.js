@@ -16,6 +16,7 @@ describe('update-services', () => {
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
+    oauth2HashSalt: 'some-salt',
     sessionToken: 'session=1234',
     realm: 'alpha'
   }
@@ -52,6 +53,7 @@ describe('update-services', () => {
     )
     replaceSensitiveValues.mockImplementation(() => Promise.resolve())
     process.env.FIDC_URL = mockValues.fidcUrl
+    process.env.OAUTH2_HASH_SALT = mockValues.oauth2HashSalt
     fs.readdirSync.mockReturnValue(['oauth2-provider.json'])
     jest.mock(mockConfigFile, () => mockConfig, { virtual: true })
   })
@@ -67,6 +69,16 @@ describe('update-services', () => {
     console.log.mockRestore()
     console.error.mockRestore()
     process.exit.mockRestore()
+  })
+
+  it('should error if missing environment variable', async () => {
+    expect.assertions(2)
+    delete process.env.OAUTH2_HASH_SALT
+    await updateServices(mockValues)
+    expect(console.error).toHaveBeenCalledWith(
+      'Missing OAUTH2_HASH_SALT environment variable'
+    )
+    expect(process.exit).toHaveBeenCalledWith(1)
   })
 
   it('should error if getSessionToken function fails', async () => {
