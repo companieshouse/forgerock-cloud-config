@@ -104,7 +104,8 @@ try{
                     token: "ACCOUNT_LOCKED_ERROR",
                     fieldName: "IDToken1",
                     anchor: "IDToken1"
-                }]
+                }],
+                "softLockMinutes": SOFT_LOCK_MINUTES
             }));
     } else if (lockStatus === NodeOutcome.ERROR) {
         sharedState.put("errorMessage", "An error occurred. Try again later.");
