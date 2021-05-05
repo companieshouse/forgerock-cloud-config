@@ -12,6 +12,8 @@ const updateServices = require('./update-services')
 const updateTermsAndConditions = require('./update-terms-and-conditions')
 const updatePasswordPolicy = require('./update-password-policy')
 const updateUserRoles = require('./update-user-roles')
+const updateIdmEndpoints = require('./update-idm-endpoints')
+const updateIdmAccessConfig = require('./update-idm-access-config')
 
 module.exports = {
   updateApplications,
@@ -27,5 +29,7 @@ module.exports = {
   updateServices,
   updateTermsAndConditions,
   updatePasswordPolicy,
-  updateUserRoles
+  updateUserRoles,
+  updateIdmEndpoints,
+  updateIdmAccessConfig
 }
