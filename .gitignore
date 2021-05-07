@@ -8,4 +8,3 @@ qa-tests/Reports
 config/services/oauth2-provider.json
 config/applications/sdk-client.json
 config/consent/terms-and-conditions.json
-config/services/base-url.json
