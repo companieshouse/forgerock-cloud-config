@@ -1,6 +1,6 @@
 {
+	"source": "REQUEST_VALUES",
 	"contextPath": "/am",
-	"source": "X_FORWARDED_HEADERS",
 	"fixedValue": "https://identity.amido.aws.chdev.org",
 	"_id": "baseurl",
 	"_type": {
