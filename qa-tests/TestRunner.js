@@ -22,12 +22,16 @@ newman.run(
         hideRequestBody: [
           'Access Token',
           'Session Token',
+          'Skip MFA Set up',
           'Authentication to Top-Level Realm',
           'Authenticate as ID Cloud Admin and Get Session Token, and Cookie Name'
         ],
         hideResponseBody: [
           'Access Token',
           'Session Token',
+          'Skip MFA Set up',
+          'CHSUser Connector',
+          'CHSRoles Connector',
           'Authentication to Top-Level Realm',
           'Authenticate as ID Cloud Admin and Get Session Token, and Cookie Name'
         ],
