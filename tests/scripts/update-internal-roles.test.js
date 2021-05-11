@@ -28,8 +28,8 @@ describe('update-internal-roles', () => {
     description: 'Admin role for internal users',
     privileges: [
       {
-        path: 'managed/Company',
-        name: 'Companies',
+        path: 'managed/alpha_organization',
+        name: 'Organizations',
         permissions: ['ALL']
       }
     ]
