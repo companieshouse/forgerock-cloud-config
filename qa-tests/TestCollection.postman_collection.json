@@ -700,7 +700,7 @@
 													"pm.test(\"CHLogin contains correct number of nodes \", function () {\r",
 													"    var length = Object.keys(AuthTreeNodes).length\r",
 													"    console.log(length);\r",
-													"    pm.expect(length, 'CHLogin contains incorrect number of nodes').to.be.eql(21);\r",
+													"    pm.expect(length, 'CHLogin contains incorrect number of nodes').to.be.eql(24);\r",
 													"});\r",
 													"\r",
 													"pm.test(\"CHLogin -> Node  -> Retry Limit Decision exists\", function () {\r",
@@ -718,13 +718,13 @@
 													"        .to.contain.key('ae62ed05-3a04-456b-8642-7bc222e0dd43');\r",
 													"});\r",
 													"\r",
-													"pm.test(\"CHLogin -> Node  ->Enter OTP exists\", function () {\r",
+													"pm.test(\"CHLogin -> Node  -> Enter OTP exists\", function () {\r",
 													"    pm.expect(AuthTreeNodes, 'CHLogin does not contain Enter OTP => 35194bf4-8dcc-41a2-8545-4a965b8f6ec0')\r",
 													"        .to.contain.key('35194bf4-8dcc-41a2-8545-4a965b8f6ec0');\r",
 													"});\r",
 													"\r",
-													"pm.test(\"CHLogin -> Node  -> Page Node exists\", function () {\r",
-													"    pm.expect(AuthTreeNodes, 'CHLogin does not contain Page Node => 94a5f48e-d6e3-4bf4-8edc-45c028a70900')\r",
+													"pm.test(\"CHLogin -> Node  -> Page Node (Login Form) exists\", function () {\r",
+													"    pm.expect(AuthTreeNodes, 'CHLogin does not contain Page Node (Login Form) => 94a5f48e-d6e3-4bf4-8edc-45c028a70900')\r",
 													"        .to.contain.key('94a5f48e-d6e3-4bf4-8edc-45c028a70900');\r",
 													"});\r",
 													"\r",
@@ -808,11 +808,20 @@
 													"        .to.contain.key('bd940aa3-c854-4934-b67a-1183d89be21f');\r",
 													"});\r",
 													"\r",
+													"pm.test(\"CHLogin -> Node  -> Reset Counter after login OK exists\", function () {\r",
+													"    pm.expect(AuthTreeNodes, 'CHLogin does not contain Reset Counter after login OK => 6486165d-fb00-4248-93c8-4f36ad2b2cb1')\r",
+													"        .to.contain.key('6486165d-fb00-4248-93c8-4f36ad2b2cb1');\r",
+													"});\r",
 													"\r",
+													"pm.test(\"CHLogin -> Node  -> Check soft lock exists\", function () {\r",
+													"    pm.expect(AuthTreeNodes, 'CHLogin does not contain Check soft lock => fa88fc01-a7a2-429f-b7cc-546fe67a70b4')\r",
+													"        .to.contain.key('fa88fc01-a7a2-429f-b7cc-546fe67a70b4');\r",
+													"});\r",
 													"\r",
-													"\r",
-													"\r",
-													"\r",
+													"pm.test(\"CHLogin -> Node  -> Reset Counter exists\", function () {\r",
+													"    pm.expect(AuthTreeNodes, 'CHLogin does not Reset Counter => fc36693f-b04c-46f8-a683-1e1c1498c8bd')\r",
+													"        .to.contain.key('fc36693f-b04c-46f8-a683-1e1c1498c8bd');\r",
+													"});\r",
 													"\r",
 													"\r",
 													"\r",
@@ -5382,6 +5391,100 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "CHSCompany Connector",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"const response = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.test(\"Connector -> CHSRoles exists \", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.expect(response._id).to.eql('provisioner.openicf/CHSCompany');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{platformUrl}}/openidm/config/provisioner.openicf/CHSCompany",
+							"host": [
+								"{{platformUrl}}"
+							],
+							"path": [
+								"openidm",
+								"config",
+								"provisioner.openicf",
+								"CHSCompany"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DSBackup Connector",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"const response = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.test(\"Connector -> CHSRoles exists \", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.expect(response._id).to.eql('provisioner.openicf/DSBackup');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{platformUrl}}/openidm/config/provisioner.openicf/DSBackup",
+							"host": [
+								"{{platformUrl}}"
+							],
+							"path": [
+								"openidm",
+								"config",
+								"provisioner.openicf",
+								"DSBackup"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
@@ -5407,5 +5510,6 @@
 				]
 			}
 		}
-	]
+	],
+	"variable": []
 }
