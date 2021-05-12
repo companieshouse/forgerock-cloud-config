@@ -503,6 +503,22 @@
         }, 
         {
             "payload": {
+                "_id":"4ec1ca31-0009-4266-8790-3cca5f931f2f",
+                "name":"CH - Get Company Data - Set Implicit Confirm",
+                "description":"Performs a lookup of a Company in IDM given a company number",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810393533
+             },
+            "filename": "ch-fetch-company-set-implicit-confirm.js"
+        }, 
+        {
+            "payload": {
                 "_id":"16975ea5-4f0a-4ac6-861f-00dbf39ca441",
                 "name":"CH - Associate User to Company",
                 "description":"Given a User ID and a Company data, creates a relationship between the user and the company",
@@ -580,6 +596,70 @@
                 "lastModifiedDate":1617810491969
              },
             "filename": "ch-join-company-wrong-code-error-message.js"
+        }, 
+        {
+            "payload": {
+                "_id":"3607eaf7-49ae-448e-8919-18a8e39bd359",
+                "name":"CH - Invite User - Input Collector",
+                "description":"Prompts the user to enter the email and full name of the user to invite.",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-invite-user-prompt-for-email.js"
+        }, 
+        {
+            "payload": {
+                "_id":"bf5841ef-c6a4-4e4c-9c5e-15ca35ba9ca9",
+                "name":"CH - Invite User - Create Relationships",
+                "description":"Creates relationships between the user and the company",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-invite-user-manage-relationships.js"
+        }, 
+        {
+            "payload": {
+                "_id":"1a4c078c-6667-4246-8069-105c4c80473e",
+                "name":"CH - Invite User - Send Invitation Email",
+                "description":"Sends the invitation email to the target user",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-invite-user-send-email.js"
+        }, 
+        {
+            "payload": {
+                "_id":"164f8d89-f0d6-4094-aeed-0ec94149c590",
+                "name":"CH - Invite User - Email sent confirmation",
+                "description":"Displaye hte user a confirmation message when the invite has been sent.",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-invite-user-email-sent.js"
         }, 
         {
             "payload": {

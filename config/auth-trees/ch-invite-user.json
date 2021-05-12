@@ -1,0 +1,241 @@
+{
+    "nodes": [
+      {
+         "_id":"09a97976-efb6-4f22-8f2d-8a3998dab2bc",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes":["hasSession","noSession"],
+             "outputs":["*"],
+             "script":"c4001e02-469c-4cc4-bf95-9f43d7e46568"
+         }            
+     },
+     {
+         "_id":"7642452e-cb6e-4909-9b89-854d3e526af5",
+         "nodeType": "SessionDataNode", 
+         "details": {
+            "sharedStateKey":"userName",
+            "sessionDataKey":"UserToken"
+         }				
+     },
+     {
+         "_id":"493621c1-ad2e-4e12-854a-18d120bcccc8",
+         "nodeType": "IdentifyExistingUserNode", 
+         "details": {
+             "identifier":"userName",
+             "identityAttribute":"mail"
+         }
+     },
+     {
+         "_id":"948ed6a4-fe12-4cc2-9c39-aeafeec87822",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes":["error","success"],
+            "outputs":["*"],
+            "script":"3607eaf7-49ae-448e-8919-18a8e39bd359"
+         }            
+     },
+     {
+         "_id":"40b3ada0-ed4a-4237-b61f-1641047856eb",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes":["success","error"],
+            "outputs":["*"],
+            "script":"c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149"
+         }            
+      },
+      {
+         "_id":"d6a2349a-0adf-49fb-972e-6342ab9c6efe",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes":["true"],
+             "outputs":["*"],
+             "script":"4ec1ca31-0009-4266-8790-3cca5f931f2f"
+         }
+      },
+      {
+         "_id":"05291c48-d514-432e-8fee-b7068088ae66",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes":["true","false","error"],
+             "outputs":["*"],
+             "script":"55801756-11bf-493d-b49c-195488cf939a"
+         }
+      },
+      {
+         "_id": "a7a24982-63e4-409d-9867-d1f42a121bc1",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["success", "error", "unauthorized"],
+             "outputs":["*"],
+             "script": "bf5841ef-c6a4-4e4c-9c5e-15ca35ba9ca9"
+         }
+      },
+      {
+         "_id": "9227e96a-960d-4502-8003-38b6857ca644",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["true", "false"],
+             "outputs":["*"],
+             "script": "df67765e-df3a-4503-9ba5-35c992b39259"
+         }
+      },
+      {
+         "_id": "64794662-6859-4db2-81c9-413b61184a01",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["false", "true"],
+             "outputs":["*"],
+             "script": "1a4c078c-6667-4246-8069-105c4c80473e"
+         }
+      },
+      {
+         "_id":"d2c6f979-c746-408b-9199-7fde3da69dc5",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["true"],
+             "outputs":["*"],
+             "script": "164f8d89-f0d6-4094-aeed-0ec94149c590"
+         }
+      }
+   ],
+   "tree": {
+      "_id": "CHInviteUser",
+      "description": "Journey to allow company authorised users to invite other users to become authorised.",
+      "identityResource": "managed/alpha_user",
+      "uiConfig": {},
+      "entryNodeId": "09a97976-efb6-4f22-8f2d-8a3998dab2bc",
+      "nodes": {
+         "05291c48-d514-432e-8fee-b7068088ae66": {
+            "x": 1352,
+            "y": 34.015625,
+            "connections": {
+               "error": "948ed6a4-fe12-4cc2-9c39-aeafeec87822",
+               "false": "948ed6a4-fe12-4cc2-9c39-aeafeec87822",
+               "true": "a7a24982-63e4-409d-9867-d1f42a121bc1"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Get Company Data"
+         },
+         "09a97976-efb6-4f22-8f2d-8a3998dab2bc": {
+            "x": 202,
+            "y": 271.015625,
+            "connections": {
+               "hasSession": "7642452e-cb6e-4909-9b89-854d3e526af5"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "check session"
+         },
+         "40b3ada0-ed4a-4237-b61f-1641047856eb": {
+            "x": 941,
+            "y": 16,
+            "connections": {
+               "error": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "success": "d6a2349a-0adf-49fb-972e-6342ab9c6efe"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Get IDM Token"
+         },
+         "493621c1-ad2e-4e12-854a-18d120bcccc8": {
+            "x": 466,
+            "y": 91.015625,
+            "connections": {
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "true": "948ed6a4-fe12-4cc2-9c39-aeafeec87822"
+            },
+            "nodeType": "IdentifyExistingUserNode",
+            "displayName": "Identify Existing User"
+         },
+         "64794662-6859-4db2-81c9-413b61184a01": {
+            "x": 1922,
+            "y": 39.015625,
+            "connections": {
+               "false": "948ed6a4-fe12-4cc2-9c39-aeafeec87822",
+               "true": "d2c6f979-c746-408b-9199-7fde3da69dc5"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Send Email"
+         },
+         "7642452e-cb6e-4909-9b89-854d3e526af5": {
+            "x": 300,
+            "y": 189.015625,
+            "connections": {
+               "outcome": "493621c1-ad2e-4e12-854a-18d120bcccc8"
+            },
+            "nodeType": "SessionDataNode",
+            "displayName": "Get Session Data"
+         },
+         "9227e96a-960d-4502-8003-38b6857ca644": {
+            "x": 1679,
+            "y": 43.015625,
+            "connections": {
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "true": "64794662-6859-4db2-81c9-413b61184a01"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Create Notify JWT"
+         },
+         "948ed6a4-fe12-4cc2-9c39-aeafeec87822": {
+            "x": 736,
+            "y": 23.015625,
+            "connections": {
+               "error": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "success": "40b3ada0-ed4a-4237-b61f-1641047856eb"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Collect Input"
+         },
+         "a7a24982-63e4-409d-9867-d1f42a121bc1": {
+            "x": 1547,
+            "y": 181.015625,
+            "connections": {
+               "error": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "success": "9227e96a-960d-4502-8003-38b6857ca644",
+               "unauthorized": "948ed6a4-fe12-4cc2-9c39-aeafeec87822"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Create Relationship"
+         },
+         "d6a2349a-0adf-49fb-972e-6342ab9c6efe": {
+            "x": 1128,
+            "y": 13.015625,
+            "connections": {
+               "true": "05291c48-d514-432e-8fee-b7068088ae66"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Set Implicit Confirm"
+         },
+         "d2c6f979-c746-408b-9199-7fde3da69dc5": {
+            "x": 1971,
+            "y": 210.015625,
+            "connections": {
+               "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Confirmation"
+         }
+      },
+      "staticNodes": {
+         "startNode": {
+            "x": 50,
+            "y": 250
+         },
+         "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
+            "x": 2137,
+            "y": 130
+         },
+         "e301438c-0bd0-429c-ab0c-66126501069a": {
+            "x": 1193,
+            "y": 681
+         }
+      }
+   }
+}

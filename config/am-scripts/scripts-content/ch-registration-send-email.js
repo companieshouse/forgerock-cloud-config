@@ -46,9 +46,6 @@ var NodeOutcome = {
 
 // extracts the email from shared state
 function extractRegDataFromState() {
-  logger.error("host: " + host);
-  logger.error("shared: " + sharedState.get("objectAttributes"));
-
   try {
     email = sharedState.get("objectAttributes").get("mail");
     fullName = sharedState.get("objectAttributes").get("givenName");
@@ -57,18 +54,6 @@ function extractRegDataFromState() {
     return { email: email, phone: phone, fullName: fullName }
   } catch (e) {
     logger.error("[REGISTRATION] error in fetching objectAttributes : " + e);
-    return false;
-  }
-}
-
-// builds the URL which will be sent via email
-function buildReturnUrl(jwt) {
-  try {
-    returnUrl = host.concat("/am/XUI/?realm=/alpha&&service=CHVerifyReg&token=", jwt)
-    logger.error("[REGISTRATION] RETURN URL: " + returnUrl);
-    return returnUrl;
-  } catch (e) {
-    logger.error("[REGISTRATION] Error while extracting host: " + e);
     return false;
   }
 }

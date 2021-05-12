@@ -2,6 +2,8 @@
   ** INPUT DATA
     * SHARED STATE:
     - 'companyNumber' : the company number we need to lookup 
+    - 'implicitConfirmSelection': 
+    
     * TRANSIENT STATE
     - 'idmAccessToken' : the IDM Access Token, which can be obtained by executing a scripted decision node configured with the script 'CH - Get IDM Access Token'
 
@@ -51,7 +53,7 @@ function fetchIDMToken() {
 }
 
 // fetch the Company object given a company number
-function fetchCompany(idmToken, companyNumber) {
+function fetchCompany(idmToken, companyNumber, skipConfirmation) {
     if (companyNumber == null) {
         logger.error("[FETCH COMPANY] No company number in shared state");
         sharedState.put("errorMessage", "No company number in shared state.");
@@ -118,27 +120,31 @@ function fetchCompany(idmToken, companyNumber) {
             sharedState.put("companyData", JSON.stringify(companyResponse.result[0]));
             sharedState.put("hashedCredential", authCode);
 
-            if (callbacks.isEmpty()) {
-                action = fr.Action.send(
-                    new fr.HiddenValueCallback(
-                        "stage",
-                        "COMPANY_ASSOCIATION_2"
-                    ),
-                    new fr.TextOutputCallback(
-                        fr.TextOutputCallback.INFORMATION,
-                        JSON.stringify(companyResponse.result[0])
-                    ),
-                    new fr.HiddenValueCallback(
-                        "pagePropsJSON",
-                        JSON.stringify({ "company": companyResponse.result[0] })
-                    ),
-                    new fr.ConfirmationCallback(
-                        "Do you want to file for this company?",
-                        fr.ConfirmationCallback.INFORMATION,
-                        ["YES", "NO"],
-                        YES_OPTION_INDEX
-                    )
-                ).build()
+            if (!skipConfirmation) {
+                if (callbacks.isEmpty()) {
+                    action = fr.Action.send(
+                        new fr.HiddenValueCallback(
+                            "stage",
+                            "COMPANY_ASSOCIATION_2"
+                        ),
+                        new fr.TextOutputCallback(
+                            fr.TextOutputCallback.INFORMATION,
+                            JSON.stringify(companyResponse.result[0])
+                        ),
+                        new fr.HiddenValueCallback(
+                            "pagePropsJSON",
+                            JSON.stringify({ "company": companyResponse.result[0] })
+                        ),
+                        new fr.ConfirmationCallback(
+                            "Do you want to file for this company?",
+                            fr.ConfirmationCallback.INFORMATION,
+                            ["YES", "NO"],
+                            YES_OPTION_INDEX
+                        )
+                    ).build()
+                }
+            } else {
+                return true;
             }
         } else {
             logger.error("[FETCH COMPANY] No company results for company number " + companyNumber);
@@ -176,21 +182,40 @@ function fetchCompany(idmToken, companyNumber) {
 var YES_OPTION_INDEX = 0;
 var idmCompanyEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_organization/";
 
-// if the user has selected to proceed with association or to not go ahead, callbacks will be not empty
-if (!callbacks.isEmpty()) {
-    var selection = callbacks.get(3).getSelectedIndex();
-    logger.error("[FETCH COMPANY] selection " + selection);
-    if (selection === YES_OPTION_INDEX) {
-        logger.error("[FETCH COMPANY] selected YES");
-        sharedState.put("errorMessage", null);
-        sharedState.put("pagePropsJSON", null);
-        outcome = NodeOutcome.TRUE;
+var skipConfirmation = sharedState.get("skipConfirmation");
+
+// if the selection must be confirmed automatically
+if (!skipConfirmation) {
+    // if the user has selected to proceed with association or to not go ahead, callbacks will be not empty
+    if (!callbacks.isEmpty()) {
+        var selection = callbacks.get(3).getSelectedIndex();
+        logger.error("[FETCH COMPANY] selection " + selection);
+        if (selection === YES_OPTION_INDEX) {
+            logger.error("[FETCH COMPANY] selected YES");
+            sharedState.put("errorMessage", null);
+            sharedState.put("pagePropsJSON", null);
+            outcome = NodeOutcome.TRUE;
+        } else {
+            sharedState.put("errorMessage", null);
+            outcome = NodeOutcome.FALSE;
+        }
     } else {
-        sharedState.put("errorMessage", null);
-        outcome = NodeOutcome.FALSE;
+        // if the user has started the journey, the callbacks will be empty, then fetch company info    
+        var accessToken = fetchIDMToken();
+        if (!accessToken) {
+            logger.error("[FETCH COMPANY] Access token not in transient state")
+            outcome = NodeOutcome.ERROR;
+        } else {
+            var companyNumber = sharedState.get("companyNumber");
+            //fetchCompany can only result in callbacks, does not transition anywhere
+            if (!fetchCompany(accessToken, companyNumber, skipConfirmation)) {
+                logger.error("[FETCH COMPANY] error while fetching company")
+                outcome = NodeOutcome.FALSE;
+            }
+        }
     }
 } else {
-    // if the user has started the journey, the callbacks will be empty, then fetch company info    
+    logger.error("[FETCH COMPANY] SKIP USER CONFIRMATION")
     var accessToken = fetchIDMToken();
     if (!accessToken) {
         logger.error("[FETCH COMPANY] Access token not in transient state")
@@ -198,9 +223,12 @@ if (!callbacks.isEmpty()) {
     } else {
         var companyNumber = sharedState.get("companyNumber");
         //fetchCompany can only result in callbacks, does not transition anywhere
-        if (!fetchCompany(accessToken, companyNumber)) {
+        if (!fetchCompany(accessToken, companyNumber, skipConfirmation)) {
             logger.error("[FETCH COMPANY] error while fetching company")
             outcome = NodeOutcome.FALSE;
+        } else {
+            logger.error("[FETCH COMPANY] company fecthed successfully")
+            outcome = NodeOutcome.TRUE;
         }
     }
 }

@@ -1,4 +1,4 @@
-(function(){
+(function () {
 
     // Configuration
 
@@ -6,32 +6,36 @@
     var OBJECT_COMPANY = "alpha_organization";
     var USER_RELATIONSHIP = "memberOfOrg";
     var COMPANY_RELATIONSHIP = "members";
-    var INTERNAL_ROLE_MEMBERSHIP_ADMIN = "internal/role/ch-membership-admin";
+    // var INTERNAL_ROLE_MEMBERSHIP_ADMIN = "internal/role/ch-membership-admin";
+    var INTERNAL_IDM_ADMIN = "internal/role/openidm-admin";
 
     // Values for the memberOfOrg/members relationship property "status"
 
     var AuthorisationStatus = {
-        APPROVED: "approved",
+        CONFIRMED: "confirmed",
         PENDING: "pending",
-        INVITED: "invited",
+        //      INVITED: "invited",
         NONE: "none"
     };
 
     // Endpoint actions
 
     var RequestAction = {
-        GET_STATUS: "getStatus",
-        SET_STATUS: "setStatus",
-        GET_USERS: "getUsers",
-        GET_COMPANIES: "getCompanies",
-        GET_USER: "getUser",
-        GET_COMPANY: "getCompany"
+        GET_STATUS_BY_USERNAME: "getCompanyStatusByUsername",
+        GET_STATUS_BY_USERID: "getCompanyStatusByUserId",
+        SET_STATUS_BY_USERNAME: "setCompanyStatusByUsername",
+        SET_STATUS_BY_USERID: "setCompanyStatusByUserId"
+
+        // GET_USERS: "getUsers",
+        // GET_COMPANIES: "getCompanies",
+        // GET_USER: "getUser",
+        // GET_COMPANY: "getCompany"
     };
 
     // Debug loggers
 
     function log(message) {
-        logger.debug("AUTHEND " + message);
+        logger.error("AUTHEND " + message);
     }
 
     function logResponse(response) {
@@ -40,26 +44,26 @@
 
     // Fetch current status for user vs. company
 
-    function getStatus(user,company) {
+    function getStatus(user, companyId) {
 
         var status = AuthorisationStatus.NONE;
         var membership = null;
 
         var response = openidm.query("managed/" + OBJECT_USER + "/" + user + "/" + USER_RELATIONSHIP,
-            { "_queryFilter": "true"},
-            ["_refProperties/status"]);
+            { "_queryFilter": "true" },
+            ["_refProperties/membershipStatus"]);
 
-        logResponse(response);
+        logResponse("IDM User membershipStatus found: " + response);
 
         if (response.resultCount === 0) {
-            log ("No companies currently authorised");
+            log("No companies currently authorised");
         }
         else {
             response.result.forEach(function (entry) {
-                log("Got company " + entry._refResourceId);
-                if (entry._refResourceId === company) {
-                    status = entry._refProperties.status;
-                    log("Got a match - status " + status);
+                // log("Got company " + entry._refResourceId);
+                if (entry._refResourceId === companyId) {
+                    status = entry._refProperties.membershipStatus;
+                    log("Got a match for company " + companyId + ": membership status: " + status);
                     membership = entry._id;
                 }
             });
@@ -71,63 +75,82 @@
 
     // Update status for user vs. company
 
-    function setStatus(user,company,status) {
+    function setStatus(callerId, subjectId, companyId, newStatus) {
 
-        var statusResponse = getStatus(user,company);
-
-        if (statusResponse.status === AuthorisationStatus.NONE) {
-            log("Creating new relationship for company " + company + " with status " + status);
-            openidm.create("managed/" + OBJECT_USER + "/" + user + "/" + USER_RELATIONSHIP,
+        var currentStatusResponse = getStatus(subjectId, companyId);
+        if (currentStatusResponse.status === AuthorisationStatus.NONE) {
+            log("Creating new relationship for company " + companyId + " with status " + newStatus);
+            openidm.create("managed/" + OBJECT_USER + "/" + subjectId + "/" + USER_RELATIONSHIP,
                 null,
                 {
-                    "_ref": "managed/" + OBJECT_COMPANY + "/" + company,
+                    "_ref": "managed/" + OBJECT_COMPANY + "/" + companyId,
                     "_refProperties": {
-                        "status": status
+                        "membershipStatus": newStatus,
+                        "inviterId": callerId
                     }
                 });
         }
-        else if (statusResponse.status === status) {
-            log("Status already " + status);
+        else if (currentStatusResponse.status === newStatus) {
+            log("Status already " + newStatus);
         }
         else {
-            log("Updating status from " + statusResponse.status + " to " + status + " for company " + company);
-
-            var newobject = openidm.patch("managed/" + OBJECT_USER + "/" + user + "/" + USER_RELATIONSHIP + "/" + statusResponse.membership,
+            log("Updating status from " + currentStatusResponse.status + " to " + newStatus + " for company " + companyId);
+            var newobject = openidm.patch("managed/" + OBJECT_USER + "/" + subjectId + "/" + USER_RELATIONSHIP + "/" + currentStatusResponse.membership,
                 null,
                 [{
                     operation: "replace",
-                    field: "/_refProperties/status",
-                    value: status
+                    field: "/_refProperties/membershipStatus",
+                    value: newStatus
+                },
+                {
+                    operation: "replace",
+                    field: "/_refProperties/inviterId",
+                    value: callerId
                 }]);
         }
 
-
-        return { success: true, oldStatus: statusResponse.status};
-
+        return {
+            success: true,
+            newobject: newobject,
+            oldStatus: currentStatusResponse.status
+        };
     }
 
     // Look up a uid from a username
-
-    function getUser(username) {
-        log("Looking up  user " + username);
+    function getUserByUsername(username) {
+        // log("Looking up user " + username);
         var response = openidm.query("managed/" + OBJECT_USER,
-            { "_queryFilter": "/userName eq \"" + username + "\""},
-            ["_id"]);
+            { "_queryFilter": "/userName eq \"" + username + "\"" },
+            ["_id", "userName", "givenName"]);
 
         if (response.resultCount !== 1) {
             log("Bad result count " + response.resultCount);
             return null;
         }
 
-        return response.result[0]._id;
+        return response.result[0];
+    }
+
+    // Look up a uid from a username
+    function getUserById(userId) {
+        // log("Looking up user " + userId);
+        var response = openidm.query("managed/" + OBJECT_USER,
+            { "_queryFilter": "/_id eq \"" + userId + "\"" },
+            ["_id", "userName", "givenName", "roles", "authzRoles"]);
+
+        if (response.resultCount !== 1) {
+            log("Bad result count " + response.resultCount);
+            return null;
+        }
+
+        return response.result[0];
     }
 
     // Look up a company uid from a company number
-
     function getCompany(number) {
-        log("Looking up  company " + number);
+        // log("Looking up  company " + number);
         var response = openidm.query("managed/" + OBJECT_COMPANY,
-            { "_queryFilter": "/number eq \"" + number + "\""},
+            { "_queryFilter": "/number eq \"" + number + "\"" },
             ["_id"]);
 
         if (response.resultCount !== 1) {
@@ -140,20 +163,19 @@
 
     // Fetch all users who are associated with a given company
     // Optionally filter on status
-
-    function getAuthorisedUsers(company,status) {
+    function getAuthorisedUsers(company, status) {
         var users = [];
 
         // Fetch all records and filter results (can't search on relationship property)
 
         var response = openidm.query("managed/" + OBJECT_COMPANY + "/" + company + "/" + COMPANY_RELATIONSHIP,
-            { "_queryFilter": "true"},
+            { "_queryFilter": "true" },
             ["userName", "_refProperties/status"]);
 
         logResponse(response);
 
         if (response.resultCount === 0) {
-            log ("No users currently authorised");
+            log("No users currently authorised");
         }
         else {
             response.result.forEach(function (entry) {
@@ -173,24 +195,23 @@
     }
 
     // Get all the companies with which a user is associated
-
     function getAuthorisedCompanies(subject) {
         var companies = [];
 
 
         var response = openidm.query("managed/" + OBJECT_USER + "/" + subject + "/" + USER_RELATIONSHIP,
-            { "_queryFilter": "true"},
+            { "_queryFilter": "true" },
             ["name", "number", "_refProperties/status"]);
 
         logResponse(response);
 
         if (response.resultCount === 0) {
-            log ("No companies currently authorised");
+            log("No companies currently authorised");
         }
         else {
             response.result.forEach(function (entry) {
                 log("Got company " + entry._refResourceId);
-                companies.push({number: entry.number, name: entry.name, uid: entry._refResourceId,status: entry._refProperties.status})
+                companies.push({ number: entry.number, name: entry.name, uid: entry._refResourceId, status: entry._refProperties.status })
             });
         }
 
@@ -198,170 +219,286 @@
     }
 
     // Authorisation logic for a user changing the current status of membership
-
     function allowStatusChange(callerStatus, subjectStatus, newStatus, isAdminUser, isMe) {
 
         log("Access control for callerStatus " + callerStatus + " subjectStatus " + subjectStatus + " newStatus " + newStatus + " isAdminUser " + isAdminUser + " isMe " + isMe);
 
         if (isAdminUser) {
-            log("Allowing status change by admin");
-            return true;
+            log("Caller is admin - changing from '" + subjectStatus + "' to '" + newStatus + "' allowed");
+            return {
+                allowed: true
+            };
         }
 
-        if (callerStatus === AuthorisationStatus.APPROVED &&
-            newStatus === AuthorisationStatus.INVITED) {
-            log("Allowing invitation");
-            return true;
-        }
-
-        if (callerStatus === AuthorisationStatus.APPROVED &&
+        if (callerStatus === AuthorisationStatus.CONFIRMED &&
             subjectStatus === AuthorisationStatus.PENDING &&
-            newStatus === AuthorisationStatus.APPROVED) {
-            log("Allowing approval");
-            return true;
+            newStatus === AuthorisationStatus.CONFIRMED) {
+            log("Caller is already authorised - changing from PENDING to CONFIRMED allowed");
+            return {
+                allowed: true
+            };
         }
 
-        if (isMe &&
-            subjectStatus === AuthorisationStatus.INVITED &&
-            newStatus === AuthorisationStatus.APPROVED) {
-            log("Allowing invitation acceptance");
-            return true;
-        }
-
-        if (isMe &&
+        if (callerStatus === AuthorisationStatus.CONFIRMED &&
+            subjectStatus === AuthorisationStatus.NONE &&
             newStatus === AuthorisationStatus.PENDING) {
-            log("Allowing application");
-            return true;
+            log("Caller is already authorised - changing from NONE to PENDING allowed");
+            return {
+                allowed: true
+            };
         }
 
-        return false;
+        if (callerStatus === AuthorisationStatus.CONFIRMED &&
+            subjectStatus === AuthorisationStatus.CONFIRMED &&
+            newStatus === AuthorisationStatus.PENDING) {
+            log("Caller is already authorised - subject status for company is already CONFIRMED, cannot set it to PENDING - Status change denied");
+            return {
+                allowed: false,
+                message: "subject status for company is already CONFIRMED, cannot set it to PENDING"
+            };
+        }
+
+        if (callerStatus === AuthorisationStatus.CONFIRMED &&
+            subjectStatus === AuthorisationStatus.PENDING &&
+            newStatus === AuthorisationStatus.PENDING) {
+            log("Caller is already authorised - subject status for company is already PENDING - Status change allowed");
+            return {
+                allowed: true
+            };
+        }
+        // if (isMe &&
+        //     newStatus === AuthorisationStatus.PENDING) {
+        //     log("Allowing application");
+        //     return true;
+        // }
+
+        return {
+            allowed: false
+        };
 
     }
 
     // Entrypoint
-
-    var callingUser = context.security.authenticationId;
-    var isAdminUser = (context.security.authorization.roles.indexOf(INTERNAL_ROLE_MEMBERSHIP_ADMIN) !== -1);
-    var subject = request.content.subject;
-    var isMe = false;
-
-    if (!subject || subject === callingUser) {
-        log("Calling on own behalf");
-        isMe = true;
-        subject = callingUser;
-    }
-
-    log("Endpoint starting - calling user " + callingUser + " subject " + subject + " action " + request.action);
-    log("Admin: " + isAdminUser + " roles " + context.security.authorization.roles);
+    log("Incoming request: " + request.content);
 
     if (!request.action) {
         log("No action");
-        throw { code : 400, message : "Bad request - no _action parameter" };
+        throw { code: 400, message: "Bad request - no _action parameter" };
     }
 
-    if (request.action === RequestAction.GET_USER) {
+    // GET MEMBERSHIP STATUS BY USERNAME AND COMPANY NUMBER
+    if (request.action === RequestAction.GET_STATUS_BY_USERNAME) {
 
-        log("Get user request");
+        log("Get status request by Username");
 
-        return {
-            caller: callingUser,
-            subject: getUser(request.content.username)
-        };
-    }
-    else if (request.action === RequestAction.GET_COMPANY) {
+        var callingUser = getUserById(context.security.authenticationId);
+        //var callingUser = getUserById(request.content.callerId);
+        log("Caller Id: " + callingUser._id + "(username: " + callingUser.userName + ")");
+        var isAdminUser = (callingUser.roles.indexOf(INTERNAL_IDM_ADMIN) !== -1);
+        log("Is Caller an Admin (openidm-admin role): " + isAdminUser);
 
-        log("Get company request");
-
-        return {
-            caller: callingUser,
-            company: getCompany(request.content.number)
-        };
-    }
-    else if (request.action === RequestAction.GET_STATUS) {
-
-        log("Get status request");
+        if (!request.content.userName || !request.content.companyNumber) {
+            log("Invalid parameters - Expected: userName, companyNumber");
+            throw { code: 400, message: "Invalid Parameters - Expected: userName, companyNumber" };
+        }
 
         // Authorisation check - must be admin or getting own status
+        var subject = getUserByUsername(request.content.userName);
+        log("User found: " + subject._id);
 
-        if (!(isAdminUser || isMe)) {
-            log("Blocked status request by user " + callingUser);
-            throw { code : 403, message : "Forbidden" };
-        }
+        var isMe = (subject._id === callingUser._id);
 
-        var statusResponse = getStatus(subject,request.content.company);
+        var companyId = getCompany(request.content.companyNumber);
+        log("Company found: " + companyId);
+
+        // if (!(isAdminUser || isMe)) {
+        //     log("Blocked status request by user " + callingUser._id);
+        //     throw { code: 403, message: "Forbidden" };
+        // }
+
+        var statusResponse = getStatus(subject._id, companyId);
+        log("Membership status: " + JSON.stringify(statusResponse));
 
         return {
-            caller: callingUser,
-            subject: subject,
-            company: request.content.company,
-            status: statusResponse.status
+            caller: {
+                id: callingUser._id,
+                userName: callingUser.userName,
+                fullName: callingUser.givenName
+            },
+            subject: {
+                id: subject._id,
+                userName: subject.userName,
+                fullName: subject.givenName
+            },
+            company: {
+                id: companyId,
+                number: request.content.companyNumber,
+                status: statusResponse.status
+            }
         };
     }
-    else if (request.action === RequestAction.SET_STATUS) {
+    // GET MEMBERSHIP STATUS BY USERID AND COMPANY NUMBER
+    else if (request.action === RequestAction.GET_STATUS_BY_USERID) {
 
-        log("Set status request");
+        log("Get status request by UserID");
+
+        var callingUser = getUserById(context.security.authenticationId);
+        //var callingUser = getUserById(request.content.callerId);
+        log("Caller Id: " + callingUser._id + "(username: " + callingUser.userName + ")");
+        var isAdminUser = (callingUser.roles.indexOf(INTERNAL_IDM_ADMIN) !== -1);
+        log("Is Caller an Admin (openidm-admin role): " + isAdminUser);
+
+        if (!request.content.userId || !request.content.companyNumber) {
+            log("Invalid parameters - Expected: userId, companyNumber");
+            throw { code: 400, message: "Invalid Parameters - Expected: userId, companyNumber" };
+        }
+
+        // Authorisation check - must be admin or getting own status
+        var subject = getUserById(request.content.userId);
+        var isMe = (subject._id === callingUser._id);
+
+        log("User found: " + subject._id);
+
+        var companyId = getCompany(request.content.companyNumber);
+        log("Company found: " + companyId);
+
+        // if (!(isAdminUser || isMe)) {
+        //     log("Blocked status request by user " + callingUser._id);
+        //     throw { code: 403, message: "Forbidden" };
+        // }
+
+        var statusResponse = getStatus(subject._id, companyId);
+        log("Membership status: " + JSON.stringify(statusResponse));
+
+        return {
+            caller: {
+                id: callingUser._id,
+                userName: callingUser.userName,
+                fullName: callingUser.givenName
+            },
+            subject: {
+                id: subject._id,
+                userName: subject.userName,
+                fullName: subject.givenName
+            },
+            company: {
+                id: companyId,
+                number: request.content.companyNumber,
+                status: statusResponse.status
+            }
+        };
+    }
+    // SET MEMBERSHIP STATUS
+    else if (request.action === RequestAction.SET_STATUS_BY_USERID) {
+
+        log("Set membership status request by userid");
+
+        var actor = getUserById(request.content.callerId);
+        var isAdminUser = JSON.stringify(actor.authzRoles).indexOf(INTERNAL_IDM_ADMIN) !== -1;
+        log("Is Caller an Admin (openidm-admin role): " + isAdminUser);
+
+        if (!request.content.callerId || !request.content.subjectId || !request.content.companyNumber || !request.content.status) {
+            log("Invalid parameters - Expected: userName, companyNumber");
+            throw { code: 400, message: "Invalid Parameters - Expected: callerId, subjectId, companyNumber, status" };
+        }
+
+        if (request.content.status !== AuthorisationStatus.PENDING) {
+            log("Invalid parameters - The status can only be 'pending'");
+            throw { code: 400, message: "Invalid Parameters - The status can only be 'pending'" };
+        }
 
         // Authorisation check
+        var companyId = getCompany(request.content.companyNumber);
+        var subject = getUserById(request.content.subjectId);
+        var isMe = (subject._id === actor._id);
 
-        var subjectStatus = getStatus(subject,request.content.company).status;
-        var callerStatus = (isMe) ? subjectStatus : getStatus(callingUser,request.content.company).status;
+        var subjectStatus = getStatus(subject._id, companyId).status;
+        var callerStatus = (isMe) ? subjectStatus : getStatus(actor._id, companyId).status;
         var newStatus = request.content.status;
 
-        if (!allowStatusChange(callerStatus, subjectStatus, newStatus, isAdminUser, isMe)) {
-            log("Blocked status update by user " + callingUser);
-            throw { code : 403, message : "Forbidden" };
+        var statusChangeResult = allowStatusChange(callerStatus, subjectStatus, newStatus, isAdminUser, isMe);
+        if (!statusChangeResult.allowed) {
+            log("Blocked status update by user " + actor._id);
+            throw { code: 403, message: "Status update denied: " + statusChangeResult.message };
         }
 
-        var statusResponse = setStatus(subject, request.content.company, request.content.status);
+        var statusResponse = setStatus(actor._id, subject._id, companyId, request.content.status);
 
         return {
-            caller: callingUser,
-            subject: subject,
-            company: request.content.company,
-            status: request.content.status,
-            previousstatus: statusResponse.oldStatus,
-            success: statusResponse.success
+            caller: {
+                id: actor._id,
+                userName: actor.userName,
+                fullName: actor.givenName
+            },
+            subject: {
+                id: subject._id,
+                userName: subject.userName,
+                fullName: subject.givenName
+            },
+            company: {
+                id: companyId,
+                number: request.content.companyNumber,
+                status: request.content.status,
+                previousStatus: statusResponse.oldStatus,
+                success: statusResponse.success
+            }
         };
     }
-    else if (request.action === RequestAction.GET_USERS) {
-        log("Get users request");
+    else if (request.action === RequestAction.SET_STATUS_BY_USERNAME) {
 
-        // Authorisation check - must be admin or approved member for company
+        log("Set membership status request by username");
 
-        if (!isAdminUser && getStatus(subject,request.content.company).status !== AuthorisationStatus.APPROVED) {
-            log("Blocked users query user " + callingUser);
-            throw { code : 403, message : "Forbidden" };
+        var actor = getUserById(request.content.callerId);
+        var isAdminUser = JSON.stringify(actor.authzRoles).indexOf(INTERNAL_IDM_ADMIN) !== -1;
+
+        if (!request.content.callerId || !request.content.subjectUserName || !request.content.companyNumber || !request.content.status) {
+            log("Invalid parameters - Expected: callerId, subjectUserName, companyNumber, status");
+            throw { code: 400, message: "Invalid Parameters - Expected: callerId, subjectUserName, companyNumber, status" };
         }
 
-        var response = getAuthorisedUsers(request.content.company, request.content.status);
-
-        return {
-            caller: callingUser,
-            subject: subject,
-            company: request.content.company,
-            status: request.content.status,
-            users: response
-        };
-    }
-    else if (request.action === RequestAction.GET_COMPANIES) {
-        log("Get companies request");
-
-        // Authorisation check - must be admin or getting own companies
-
-        if (!(isAdminUser || isMe)) {
-            log("Blocked companies request by user " + callingUser);
-            throw { code : 403, message : "Forbidden" };
+        if (request.content.status !== AuthorisationStatus.PENDING) {
+            log("Invalid parameters - The status can only be 'pending'");
+            throw { code: 400, message: "Invalid Parameters - The status can only be 'pending'" };
         }
 
-        var response = getAuthorisedCompanies(subject);
+        // Authorisation check
+        var companyId = getCompany(request.content.companyNumber);
+        var subject = getUserByUsername(request.content.subjectUserName);
+        var isMe = (subject._id === actor._id);
+
+        var subjectStatus = getStatus(subject._id, companyId).status;
+        var callerStatus = getStatus(actor._id, companyId).status;
+        var newStatus = request.content.status;
+
+        var statusChangeResult = allowStatusChange(callerStatus, subjectStatus, newStatus, isAdminUser, isMe);
+        if (!statusChangeResult.allowed) {
+            log("Blocked status update by user " + actor._id);
+            throw { code: 403, message: "status update denied: " + statusChangeResult.message };
+        }
+
+        var statusResponse = setStatus(actor._id, subject._id, companyId, request.content.status);
 
         return {
-            caller: callingUser,
-            subject: subject,
-            companies: response
+            caller: {
+                id: actor._id,
+                userName: actor.userName,
+                fullName: actor.givenName
+            },
+            subject: {
+                id: subject._id,
+                userName: subject.userName,
+                fullName: subject.givenName
+            },
+            company: {
+                id: companyId,
+                number: request.content.companyNumber,
+                status: request.content.status,
+                previousStatus: statusResponse.oldStatus,
+                success: statusResponse.success
+            }
         };
     }
     else {
-        throw { code : 400, message : "Unknown action " + request.action };
+        throw { code: 400, message: "Unknown action " + request.action };
     }
 })();
