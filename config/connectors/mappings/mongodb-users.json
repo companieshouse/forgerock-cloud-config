@@ -1,10 +1,10 @@
 {
 	"target": "managed/alpha_user",
 	"source": "system/CHSUser/users",
-	"name": "chsUsers_managedAlpha_user",
+	"name": "chsUsers_alphaUser",
 	"consentRequired": false,
 	"icon": null,
-	"displayName": "chsUsers_managedAlpha_user",
+	"displayName": "chsUsers_alphaUser",
 	"properties": [{
 		"target": "userName",
 		"source": "email"
@@ -74,7 +74,7 @@
 		"expressionTree": {
 			"any": ["userName"]
 		},
-		"mapping": "chsUsers_managedAlpha_user",
+		"mapping": "chsUsers_alphaUser",
 		"type": "text/javascript",
 		"file": "ui/correlateTreeToQueryFilter.js"
 	}],
