@@ -1,10 +1,10 @@
 {
 	"target": "managed/alpha_role",
 	"source": "system/CHSRoles/roles",
-	"name": "systemChsrolesRoles_managedAlpha_role",
+	"name": "chsRoles_managedAlpha_role",
 	"consentRequired": false,
 	"icon": null,
-	"displayName": "systemChsrolesRoles_managedAlpha_role",
+	"displayName": "chsRoles_managedAlpha_role",
 	"properties": [{
 		"target": "_id",
 		"source": "_id"

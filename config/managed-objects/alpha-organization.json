@@ -319,7 +319,9 @@
 				"type": "string",
 				"viewable": true,
 				"searchable": true,
-				"userEditable": true
+				"userEditable": true,
+				"deleteQueryConfig": false,
+				"isVirtual": false
 			},
 			"type": {
 				"title": "Company Type",
@@ -388,7 +390,7 @@
 				"userEditable": true
 			},
 			"region": {
-				"title": "region",
+				"title": "Region",
 				"type": "string",
 				"viewable": true,
 				"searchable": true,
@@ -409,7 +411,7 @@
 				"userEditable": true
 			}
 		},
-		"order": ["name", "description", "owners", "admins", "members", "parent", "children", "adminIDs", "ownerIDs", "parentAdminIDs", "parentOwnerIDs", "parentIDs", "number", "type", "status", "authCode", "authCodeIsActive", "authCodeValidFrom", "locality", "postalCode", "addressLine1", "addressLine2", "region", "creationDate", "jurisdiction"],
+		"order": ["name", "number", "description", "owners", "admins", "members", "parent", "children", "adminIDs", "ownerIDs", "parentAdminIDs", "parentOwnerIDs", "parentIDs", "type", "status", "authCode", "authCodeIsActive", "authCodeValidFrom", "locality", "postalCode", "addressLine1", "addressLine2", "region", "creationDate", "jurisdiction"],
 		"required": ["name", "number"]
 	}
 }
