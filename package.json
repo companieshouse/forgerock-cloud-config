@@ -5,8 +5,6 @@
   "scripts": {
     "lint": "standard",
     "test": "jest --coverage",
-    "set-qa-tests-env": "newman-env run ./qa-tests/env.postman_environment.json",
-    "clear-qa-tests-env": "newman-env run ./qa-tests/env.postman_environment.json --env-var platformUrl=null --env-var ClientId=null --env-var username=null --env-var password=null --env-var realm=realms/root/realms/alpha --env-var IDCloudAdminUsername=null --env-var IDCloudAdminPassword=null --env-var cookie_Name=null --env-var ClientSecret=null",
     "qa-tests": "node ./qa-tests/TestRunner.js"
   },
   "bin": {

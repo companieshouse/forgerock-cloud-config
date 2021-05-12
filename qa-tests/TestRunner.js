@@ -1,15 +1,19 @@
 const newman = require('newman')
+const path = require('path')
 const replaceSensitiveValues = require('../helpers/replace-sensitive-values')
 
 const testRunner = async () => {
+  const envFile = path.resolve(__dirname, '.env')
+  require('dotenv').config({ path: envFile })
+
   const {
     PLATFORM_URL,
     CLIENT_ID,
     IDM_USERNAME,
     IDM_PASSWORD,
     REALM,
-    ID_CLOUD_ADMIN_USERNAME,
-    ID_CLOUD_ADMIN_PASSWORD,
+    ADMIN_USERNAME,
+    ADMIN_PASSWORD,
     COOKIE,
     VERSION
   } = process.env
@@ -22,8 +26,8 @@ const testRunner = async () => {
       '{REPLACEMENT_IDM_USERNAME}',
       '{REPLACEMENT_IDM_PASSWORD}',
       '{REPLACEMENT_REALM}',
-      '{REPLACEMENT_ID_CLOUD_ADMIN_USERNAME}',
-      '{REPLACEMENT_ID_CLOUD_ADMIN_PASSWORD}',
+      '{REPLACEMENT_ADMIN_USERNAME}',
+      '{REPLACEMENT_ADMIN_PASSWORD}',
       '{REPLACEMENT_COOKIE}',
       '{REPLACEMENT_VERSION}'
     ],
@@ -33,8 +37,8 @@ const testRunner = async () => {
       IDM_USERNAME,
       IDM_PASSWORD,
       REALM,
-      ID_CLOUD_ADMIN_USERNAME,
-      ID_CLOUD_ADMIN_PASSWORD,
+      ADMIN_USERNAME,
+      ADMIN_PASSWORD,
       COOKIE,
       VERSION
     ]

@@ -44,12 +44,12 @@
     },
     {
       "key": "IDCloudAdminUsername",
-      "value": "{REPLACEMENT_ID_CLOUD_ADMIN_USERNAME}",
+      "value": "{REPLACEMENT_ADMIN_USERNAME}",
       "enabled": true
     },
     {
       "key": "IDCloudAdminPassword",
-      "value": "{REPLACEMENT_ID_CLOUD_ADMIN_PASSWORD}",
+      "value": "{REPLACEMENT_ADMIN_PASSWORD}",
       "enabled": true
     },
     {
