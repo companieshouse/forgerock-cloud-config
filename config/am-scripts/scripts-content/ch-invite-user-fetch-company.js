@@ -90,36 +90,56 @@ function getCompanyInfo(userId, companyNo) {
   var companyResponse = JSON.parse(response.getEntity().getString());
   if (response.getStatus().getCode() === 200) {
     logger.error("[INVITE USER - GET COMPANY DETAILS] 200 response from IDM");
-    return companyResponse.company;
-  }
-  else {
-    logger.error("[INVITE USER - GET COMPANY DETAILS] Error during company lookup");
-    var errorProps = JSON.stringify(
-      {
-        'errors': [{
-          label: companyResponse.message,
-          token: "INVITE_USER_COMPANY_LOOKUP_ERROR"
-        }]
-      });
 
+    if (companyResponse.success) {
+      return companyResponse.company;
+    } else {
+      logger.error("[INVITE USER - GET COMPANY DETAILS] Error during company lookup");
+      var errorProps = JSON.stringify(
+        {
+          'errors': [{
+            label: companyResponse.message,
+            token: "INVITE_USER_COMPANY_LOOKUP_ERROR"
+          }]
+        });
+
+      if (callbacks.isEmpty()) {
+        action = fr.Action.send(
+          new fr.TextOutputCallback(fr.TextOutputCallback.ERROR, companyResponse.message),
+          new fr.HiddenValueCallback("stage", "INVITE_USER_ERROR"),
+          new fr.HiddenValueCallback("pagePropsJSON", errorProps)
+        ).build();
+      }
+    }
+  } else {
+    return false;
+  }
+}
+
+try {
+  // main execution flow
+  var companyNumber = fetchCompanyParameter();
+  var sessionOwner = sharedState.get("_id");
+  var companyData = getCompanyInfo(sessionOwner, companyNumber);
+  if(!companyData){
     if (callbacks.isEmpty()) {
+      var errorProps = JSON.stringify(
+        {
+          'errors': [{
+            label: "An error occurreed while looking up the company data.",
+            token: "INVITE_USER_COMPANY_LOOKUP_ERROR"
+          }]
+        });
       action = fr.Action.send(
-        new fr.TextOutputCallback(fr.TextOutputCallback.ERROR, companyResponse.message),
+        new fr.TextOutputCallback(fr.TextOutputCallback.ERROR, "An error occurreed while looking up the company data."),
         new fr.HiddenValueCallback("stage", "INVITE_USER_ERROR"),
         new fr.HiddenValueCallback("pagePropsJSON", errorProps)
       ).build();
     }
   }
-}
+  sharedState.put("companyData", JSON.stringify(companyData));
 
-try{
-// main execution flow
-var companyNumber = fetchCompanyParameter();
-var sessionOwner = sharedState.get("_id");
-var companyData = getCompanyInfo(sessionOwner, companyNumber);
-sharedState.put("companyData", JSON.stringify(companyData));
-
-outcome = NodeOutcome.SUCCESS
-}catch(e){
+  outcome = NodeOutcome.SUCCESS
+} catch (e) {
   logger.error("[INVITE USER - GET COMPANY DETAILS] Error " + e);
 }
