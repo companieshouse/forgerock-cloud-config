@@ -16,7 +16,6 @@
       - 'errorMessage': the error message to be displayed
       - 'pagePropsJSON': the JSON props for the UI
 
- 
   ** OUTCOMES
     - success: input collected
     - error: an error occurred
@@ -39,67 +38,78 @@ var NodeOutcome = {
   ERROR: "error"
 }
 
-function extractCompanyParameter() {
-  var companyNo = requestParameters.get("companyNumber");
-  if (!companyNo) {
-    sharedState.put("errorMessage", "Enter a username and password.")
-    sharedState.put("pagePropsJSON", JSON.stringify(
-      {
-        'errors': [{
-          label: "No Company Number found in request.",
-          token: "INVITE_USER_NO_INPUT_COMPANY_FOUND_ERROR",
-          fieldName: "IDToken2",
-          anchor: "IDToken2"
-        }]
-      }));
-    return false;
-  } else {
-    return companyNo.get(0);
-  }
-}
+// function extractCompanyParameter() {
+//   var companyNo = requestParameters.get("companyNumber");
+//   if (!companyNo) {
+//     var errorMessage = "Enter a username and password.";
+//     var errorProps = JSON.stringify(
+//       {
+//         'errors': [{
+//           label: "No Company Number found in request.",
+//           token: "INVITE_USER_NO_INPUT_COMPANY_FOUND_ERROR",
+//           fieldName: "IDToken2",
+//           anchor: "IDToken2"
+//         }]
+//       });
+
+//       action = fr.Action.send(
+//         new fr.TextOutputCallback(fr.TextOutputCallback.ERROR, errorMessage),
+//         new fr.NameCallback("Full Name"),
+//         new fr.NameCallback("Email Address"),
+//         new fr.HiddenValueCallback("stage", "INVITE_USER_1"),
+//         new fr.HiddenValueCallback("pagePropsJSON", errorProps)
+//       ).build();
+
+//   } else {
+//     return companyNo.get(0);
+//   }
+// }
 
 // main execution flow
+//var companyNumber = extractCompanyParameter();
+try {
+  var companyData = sharedState.get("companyData");
+  logger.error("[INVITE USER INPUT] company data: " + companyData);
+  var companyName =  JSON.parse(companyData).name;
 
-if (callbacks.isEmpty()) {
-  var infoMessage = "What are the details of the person you want to authorise to file for this company?";
-  var errorMessage = sharedState.get("errorMessage");
-  var level = fr.TextOutputCallback.INFORMATION;
-  if (errorMessage != null) {
-    var errorProps = sharedState.get("pagePropsJSON");
-    level = fr.TextOutputCallback.ERROR;
-    infoMessage = errorMessage.concat(" Please try again.");
-    action = fr.Action.send(
-      new fr.TextOutputCallback(level, infoMessage),
-      new fr.NameCallback("Full Name"),
-      new fr.NameCallback("Email Address"),
-      new fr.HiddenValueCallback("stage", "INVITE_USER_1"),
-      new fr.HiddenValueCallback("pagePropsJSON", errorProps)
-    ).build();
+  if (callbacks.isEmpty()) {
+    var infoMessage = "What are the details of the person you want to authorise to file for this company?";
+    var errorMessage = sharedState.get("errorMessage");
+    var level = fr.TextOutputCallback.INFORMATION;
+    if (errorMessage != null) {
+      var errorProps = sharedState.get("pagePropsJSON");
+      level = fr.TextOutputCallback.ERROR;
+      infoMessage = errorMessage.concat(" Please try again.");
+      action = fr.Action.send(
+        new fr.TextOutputCallback(level, infoMessage),
+        new fr.NameCallback("Full Name"),
+        new fr.NameCallback("Email Address"),
+        new fr.HiddenValueCallback("stage", "INVITE_USER_1"),
+        new fr.HiddenValueCallback("pagePropsJSON", errorProps)
+      ).build();
+    } else {
+      action = fr.Action.send(
+        new fr.TextOutputCallback(level, infoMessage),
+        new fr.NameCallback("Full Name"),
+        new fr.NameCallback("Email Address"),
+        new fr.HiddenValueCallback("stage", "INVITE_USER_1")
+      ).build();
+    }
   } else {
-    action = fr.Action.send(
-      new fr.TextOutputCallback(level, infoMessage),
-      new fr.NameCallback("Full Name"),
-      new fr.NameCallback("Email Address"),
-      new fr.HiddenValueCallback("stage", "INVITE_USER_1")
-    ).build();
-  }
-} else {
-  var companyNumber = extractCompanyParameter();
-  var fullName = callbacks.get(1).getName();
-  var email = callbacks.get(2).getName();
-  var userId = sharedState.get("_id");
 
-  logger.error("[INVITE USER INPUT] company number: " + companyNumber);
-  logger.error("[INVITE USER INPUT] invited email: " + email);
-  logger.error("[INVITE USER INPUT] invited full name: " + fullName);
-  logger.error("[INVITE USER INPUT] inviter ID: " + userId);
+    var fullName = callbacks.get(1).getName();
+    var email = callbacks.get(2).getName();
+    var userId = sharedState.get("_id");
 
-  if (!companyNumber) {
-    action = fr.Action.goTo(NodeOutcome.ERROR).build();
-  } else {
-    sharedState.put("companyNumber", companyNumber);
+    logger.error("[INVITE USER INPUT] company number: " + JSON.parse(companyData).number);
+    logger.error("[INVITE USER INPUT] invited email: " + email);
+    logger.error("[INVITE USER INPUT] invited full name: " + fullName);
+    logger.error("[INVITE USER INPUT] inviter ID: " + userId);
+
     sharedState.put("email", email);
     sharedState.put("fullName", fullName);
     action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
   }
+} catch (e) {
+  logger.error("[INVITE USER INPUT] error: " + e);
 }

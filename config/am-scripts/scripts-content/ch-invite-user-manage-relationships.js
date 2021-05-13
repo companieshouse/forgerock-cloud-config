@@ -142,21 +142,24 @@ function performAuthzCheck(inviterUserId, invitedEmail, companyData) {
     return false;
   }
   //store the subject username in shared state
+
+  logger.error("[INVITE USER CHECK MEMBERSHIP] ***** before call: " + JSON.stringify(inviterMembership));
+
   sharedState.put("inviterName", inviterMembership.subject.fullName || inviterMembership.subject.userName);
-  logger.error("[INVITE USER CHECK MEMBERSHIP] Inviter membership to company: " + inviterMembership);
+  logger.error("[INVITE USER CHECK MEMBERSHIP] Inviter membership to company: " + JSON.stringify(inviterMembership));
   // check whether the caller (user owning the session in which the inveter journey has been started) is already authroised for the company
   if (inviterMembership.company.status !== MembershipStatus.CONFIRMED) {
     logger.error("[INVITE USER CHECK MEMBERSHIP] The Inviter is not authorised for the company!");
-    sharedState.put("errorMessage", "You are not authorised for Company ''" + JSON.parse(company).name + "'");
+    sharedState.put("errorMessage", "You are not authorised for Company ''" + JSON.parse(companyData).name + "'");
     sharedState.put("pagePropsJSON", JSON.stringify(
       {
         'errors': [{
-          label: "You are not authorised for Company ''" + JSON.parse(company).name + "'",
+          label: "You are not authorised for Company ''" + JSON.parse(companyData).name + "'",
           token: "INVITE_USER_INVITER_NOT_AUTHZ_ERROR",
           fieldName: "IDToken2",
           anchor: "IDToken2"
         }],
-        'company': { number: companyNumber }
+        'company': { number: JSON.parse(companyData).number }
       }));
     return false;
   }
@@ -200,7 +203,6 @@ function buildInfoCallback(message) {
 }
 
 // main execution flow
-logger.error("[INVITE USER CHECK MEMBERSHIP] START!");
 
 try {
   var idmCompanyAuthEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/endpoint/companyauth/";
@@ -232,6 +234,6 @@ try {
     }
   }
 } catch (e) {
-  logger.error("[INVITE USER] error " + e)
+  logger.error("[INVITE USER CHECK MEMBERSHIP] error " + e)
   outcome = NodeOutcome.ERROR;
 }

@@ -47,26 +47,6 @@
          }            
       },
       {
-         "_id":"d6a2349a-0adf-49fb-972e-6342ab9c6efe",
-         "nodeType": "ScriptedDecisionNode", 
-         "details": {
-             "inputs":["*"],
-             "outcomes":["true"],
-             "outputs":["*"],
-             "script":"4ec1ca31-0009-4266-8790-3cca5f931f2f"
-         }
-      },
-      {
-         "_id":"05291c48-d514-432e-8fee-b7068088ae66",
-         "nodeType": "ScriptedDecisionNode", 
-         "details": {
-             "inputs":["*"],
-             "outcomes":["true","false","error"],
-             "outputs":["*"],
-             "script":"55801756-11bf-493d-b49c-195488cf939a"
-         }
-      },
-      {
          "_id": "a7a24982-63e4-409d-9867-d1f42a121bc1",
          "nodeType": "ScriptedDecisionNode", 
          "details": {
@@ -105,6 +85,26 @@
              "outputs":["*"],
              "script": "164f8d89-f0d6-4094-aeed-0ec94149c590"
          }
+      },
+      {
+         "_id":"3b3108db-5661-4211-9ce7-0534882f9783",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["success", "error"],
+             "outputs":["*"],
+             "script": "0b0cf5cd-c570-475c-851e-e3e8035113d2"
+         }
+      },
+      {
+         "_id":"84f53938-bf5a-424a-ad29-f494ec1f426b",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["success", "error"],
+             "outputs":["*"],
+             "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149"
+         }
       }
    ],
    "tree": {
@@ -114,17 +114,6 @@
       "uiConfig": {},
       "entryNodeId": "09a97976-efb6-4f22-8f2d-8a3998dab2bc",
       "nodes": {
-         "05291c48-d514-432e-8fee-b7068088ae66": {
-            "x": 1352,
-            "y": 34.015625,
-            "connections": {
-               "error": "948ed6a4-fe12-4cc2-9c39-aeafeec87822",
-               "false": "948ed6a4-fe12-4cc2-9c39-aeafeec87822",
-               "true": "a7a24982-63e4-409d-9867-d1f42a121bc1"
-            },
-            "nodeType": "ScriptedDecisionNode",
-            "displayName": "Get Company Data"
-         },
          "09a97976-efb6-4f22-8f2d-8a3998dab2bc": {
             "x": 202,
             "y": 271.015625,
@@ -135,11 +124,11 @@
             "displayName": "check session"
          },
          "40b3ada0-ed4a-4237-b61f-1641047856eb": {
-            "x": 941,
-            "y": 16,
+            "x": 683,
+            "y": 32,
             "connections": {
                "error": "e301438c-0bd0-429c-ab0c-66126501069a",
-               "success": "d6a2349a-0adf-49fb-972e-6342ab9c6efe"
+               "success": "3b3108db-5661-4211-9ce7-0534882f9783"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Get IDM Token"
@@ -149,7 +138,7 @@
             "y": 91.015625,
             "connections": {
                "false": "e301438c-0bd0-429c-ab0c-66126501069a",
-               "true": "948ed6a4-fe12-4cc2-9c39-aeafeec87822"
+               "true": "40b3ada0-ed4a-4237-b61f-1641047856eb"
             },
             "nodeType": "IdentifyExistingUserNode",
             "displayName": "Identify Existing User"
@@ -184,18 +173,18 @@
             "displayName": "Create Notify JWT"
          },
          "948ed6a4-fe12-4cc2-9c39-aeafeec87822": {
-            "x": 736,
-            "y": 23.015625,
+            "x": 1197,
+            "y": 29.015625,
             "connections": {
                "error": "e301438c-0bd0-429c-ab0c-66126501069a",
-               "success": "40b3ada0-ed4a-4237-b61f-1641047856eb"
+               "success": "84f53938-bf5a-424a-ad29-f494ec1f426b"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Collect Input"
          },
          "a7a24982-63e4-409d-9867-d1f42a121bc1": {
-            "x": 1547,
-            "y": 181.015625,
+            "x": 1480,
+            "y": 121.015625,
             "connections": {
                "error": "e301438c-0bd0-429c-ab0c-66126501069a",
                "success": "9227e96a-960d-4502-8003-38b6857ca644",
@@ -203,15 +192,6 @@
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Create Relationship"
-         },
-         "d6a2349a-0adf-49fb-972e-6342ab9c6efe": {
-            "x": 1128,
-            "y": 13.015625,
-            "connections": {
-               "true": "05291c48-d514-432e-8fee-b7068088ae66"
-            },
-            "nodeType": "ScriptedDecisionNode",
-            "displayName": "Set Implicit Confirm"
          },
          "d2c6f979-c746-408b-9199-7fde3da69dc5": {
             "x": 1971,
@@ -221,6 +201,26 @@
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Confirmation"
+         },
+         "3b3108db-5661-4211-9ce7-0534882f9783": {
+            "x": 941,
+            "y": 78.015625,
+            "connections": {
+               "success": "948ed6a4-fe12-4cc2-9c39-aeafeec87822",
+               "error": "e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Lookup company"
+         },
+         "84f53938-bf5a-424a-ad29-f494ec1f426b": {
+            "x": 1330,
+            "y": 255.015625,
+            "connections": {
+               "success": "a7a24982-63e4-409d-9867-d1f42a121bc1",
+               "error": "e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "get IDM token"
          }
       },
       "staticNodes": {

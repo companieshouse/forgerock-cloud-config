@@ -227,7 +227,7 @@ if (!skipConfirmation) {
             logger.error("[FETCH COMPANY] error while fetching company")
             outcome = NodeOutcome.FALSE;
         } else {
-            logger.error("[FETCH COMPANY] company fecthed successfully")
+            logger.error("[FETCH COMPANY] company fetched successfully")
             outcome = NodeOutcome.TRUE;
         }
     }

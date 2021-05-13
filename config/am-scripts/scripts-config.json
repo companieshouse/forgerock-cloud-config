@@ -649,7 +649,7 @@
             "payload": {
                 "_id":"164f8d89-f0d6-4094-aeed-0ec94149c590",
                 "name":"CH - Invite User - Email sent confirmation",
-                "description":"Displaye hte user a confirmation message when the invite has been sent.",
+                "description":"Displays the user a confirmation message when the invite has been sent.",
                 "script":"<replace>",
                 "default":false,
                 "language":"JAVASCRIPT",
@@ -660,6 +660,22 @@
                 "lastModifiedDate":1617810491969
              },
             "filename": "ch-invite-user-email-sent.js"
+        }, 
+        {
+            "payload": {
+                "_id":"0b0cf5cd-c570-475c-851e-e3e8035113d2",
+                "name":"CH - Invite User - Check parameter and Lookup Company",
+                "description":"Checks the presence of company number and looks the company up.",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-invite-user-fetch-company.js"
         }, 
         {
             "payload": {

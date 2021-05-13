@@ -24,8 +24,8 @@
         GET_STATUS_BY_USERNAME: "getCompanyStatusByUsername",
         GET_STATUS_BY_USERID: "getCompanyStatusByUserId",
         SET_STATUS_BY_USERNAME: "setCompanyStatusByUsername",
-        SET_STATUS_BY_USERID: "setCompanyStatusByUserId"
-
+        SET_STATUS_BY_USERID: "setCompanyStatusByUserId",
+        GET_COMPANY: "getCompanyByNumber"
         // GET_USERS: "getUsers",
         // GET_COMPANIES: "getCompanies",
         // GET_USER: "getUser",
@@ -146,19 +146,19 @@
         return response.result[0];
     }
 
-    // Look up a company uid from a company number
+    // Look up a company from a company number
     function getCompany(number) {
         // log("Looking up  company " + number);
         var response = openidm.query("managed/" + OBJECT_COMPANY,
             { "_queryFilter": "/number eq \"" + number + "\"" },
-            ["_id"]);
+            ["_id", "number", "name", "authCode", "status", "members"]);
 
-        if (response.resultCount !== 1) {
-            log("Bad result count " + response.resultCount);
+        if (response.resultCount === 0) {
+            log("Bad result count: " + response.resultCount);
             return null;
         }
 
-        return response.result[0]._id;
+        return response.result[0];
     }
 
     // Fetch all users who are associated with a given company
@@ -308,7 +308,7 @@
 
         var isMe = (subject._id === callingUser._id);
 
-        var companyId = getCompany(request.content.companyNumber);
+        var companyId = getCompany(request.content.companyNumber)._id;
         log("Company found: " + companyId);
 
         // if (!(isAdminUser || isMe)) {
@@ -359,7 +359,7 @@
 
         log("User found: " + subject._id);
 
-        var companyId = getCompany(request.content.companyNumber);
+        var companyId = getCompany(request.content.companyNumber)._id;
         log("Company found: " + companyId);
 
         // if (!(isAdminUser || isMe)) {
@@ -408,7 +408,7 @@
         }
 
         // Authorisation check
-        var companyId = getCompany(request.content.companyNumber);
+        var companyId = getCompany(request.content.companyNumber)._id;
         var subject = getUserById(request.content.subjectId);
         var isMe = (subject._id === actor._id);
 
@@ -462,7 +462,7 @@
         }
 
         // Authorisation check
-        var companyId = getCompany(request.content.companyNumber);
+        var companyId = getCompany(request.content.companyNumber)._id;
         var subject = getUserByUsername(request.content.subjectUserName);
         var isMe = (subject._id === actor._id);
 
@@ -496,6 +496,55 @@
                 previousStatus: statusResponse.oldStatus,
                 success: statusResponse.success
             }
+        };
+    }
+    else if (request.action === RequestAction.GET_COMPANY) {
+
+        log("Get company request");
+
+        if (!request.content.companyNumber) {
+            log("Invalid parameters - Expected: companyNumber");
+            throw { code: 400, message: "Invalid Parameters - Expected: companyNumber" };
+        }
+
+        //if we pass a callerId, that is the actor, otherwise the session owner is
+        var actor;
+        if (request.content.callerId) {
+            actor = getUserById(request.content.callerId);
+        } else {
+            actor = getUserById(context.security.authenticationId);
+        }
+
+        var companyData = getCompany(request.content.companyNumber);
+        if (!companyData) {
+            return {
+                success: false,
+                message: "The company with number " + request.content.companyNumber + " could not be found."
+            };
+        }
+
+        if (companyData.authCode == null) {
+            return {
+                success: false,
+                message: "No auth code associated with company " + request.content.companyNumber
+            };           
+        }
+
+        if (companyData.status !== "active") {
+            return {
+                success: false,
+                message: "The company " + request.content.companyNumber + " is not active."
+            };  
+        }
+
+        return {
+            success: true,
+            caller: {
+                id: actor._id,
+                userName: actor.userName,
+                fullName: actor.givenName
+            },
+            company: companyData
         };
     }
     else {
