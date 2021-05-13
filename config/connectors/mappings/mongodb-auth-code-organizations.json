@@ -1,10 +1,10 @@
 {
 	"target": "managed/alpha_organization",
 	"source": "system/CHSAuthCode/company_auth_codes",
-	"name": "systemChsauthcodeCompany_auth_codes_managedAlpha_",
+	"name": "chsMongoAuthCode_alphaOrg",
 	"consentRequired": false,
 	"icon": null,
-	"displayName": "systemChsauthcodeCompany_auth_codes_managedAlpha_",
+	"displayName": "chsMongoAuthCode_alphaOrg",
 	"properties": [{
 		"target": "authCode",
 		"source": "auth_code"
@@ -64,7 +64,7 @@
 		"expressionTree": {
 			"any": ["number"]
 		},
-		"mapping": "systemChsauthcodeCompany_auth_codes_managedAlpha_",
+		"mapping": "chsMongoAuthCode_alphaOrg",
 		"type": "text/javascript",
 		"file": "ui/correlateTreeToQueryFilter.js"
 	}]

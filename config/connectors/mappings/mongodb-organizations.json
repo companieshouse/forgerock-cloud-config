@@ -1,10 +1,10 @@
 {
 	"target": "managed/alpha_organization",
 	"source": "system/CHSCompany/company_profile",
-	"name": "systemChscompanyCompany_profile_managedAlpha_orga",
+	"name": "chsMongoCompanyProfile_alphaOrg",
 	"consentRequired": false,
 	"icon": null,
-	"displayName": "systemChscompanyCompany_profile_managedAlpha_orga",
+	"displayName": "chsMongoCompanyProfile_alphaOrg",
 	"properties": [{
 		"target": "name",
 		"source": "data",
