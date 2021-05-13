@@ -33,7 +33,7 @@ describe('update-services', () => {
       name: 'OAuth2 Provider'
     },
     advancedOAuth2Config: {
-      customLoginUrlTemplate: 'https://ch-account-ui.gov.uk/account/login/',
+      customLoginUrlTemplate: 'https://idam-ui.gov.uk/account/login/',
       passwordGrantAuthService: 'PasswordGrant',
       tlsCertificateBoundAccessTokensEnabled: true
     },

@@ -6,7 +6,7 @@
     "collection": false
   },
   "advancedOAuth2Config": {
-    "customLoginUrlTemplate": "https://ch-account-ui.amido.aws.chdev.org/account/login/?goto=${goto}<#if acrValues??>&acr_values=${acrValues}</#if><#if realm??>&realm=${realm}</#if><#if module??>&module=${module}</#if><#if service??>&service=${service}</#if><#if locale??>&locale=${locale}</#if>",
+    "customLoginUrlTemplate": "https://idam-ui.amido.aws.chdev.org/account/login/?goto=${goto}<#if acrValues??>&acr_values=${acrValues}</#if><#if realm??>&realm=${realm}</#if><#if module??>&module=${module}</#if><#if service??>&service=${service}</#if><#if locale??>&locale=${locale}</#if>",
     "displayNameAttribute": "cn",
     "tlsOcspResponderUri": "",
     "tokenValidatorClasses": [
