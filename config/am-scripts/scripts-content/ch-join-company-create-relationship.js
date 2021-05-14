@@ -79,7 +79,7 @@ function addRelationshipToCompany(userId, company) {
             "value": {
                 "_ref": "managed/alpha_organization/" + company._id,
                 "_refProperties": {
-                    "permissionAdmin": "true"
+                    "membershipStatus": "confirmed"
                 }
             }
         }

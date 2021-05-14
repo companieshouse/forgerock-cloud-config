@@ -22,9 +22,7 @@ const updateScripts = async (argv) => {
       scriptFileContent.map(async (scriptFile) => {
         await Promise.all(
           scriptFile.endpoints.map(async (endpoint) => {
-            const requestUrl = `${FIDC_URL}/openidm/config/endpoint/${endpoint.endpointName}`
-
-            fs.readFile(`${dir}/scripts-content/${endpoint.scriptFileName}`, 'utf8', (err, data) => {
+            fs.readFile(`${dir}/scripts-content/${endpoint.scriptFileName}`, 'utf8', async (err, data) => {
               if (err) {
                 return console.log(err)
               }
@@ -40,8 +38,10 @@ const updateScripts = async (argv) => {
                   })
                   .join(' ')
               }
-              fidcRequest(requestUrl, body, accessToken)
-              console.log('IDM endpoint updated')
+              // console.log(`IDM endpoint code: ${JSON.stringify(body)}`)
+              const requestUrl = `${FIDC_URL}/openidm/config/endpoint/${endpoint.endpointName}`
+              await fidcRequest(requestUrl, body, accessToken)
+              console.log(`IDM endpoint updated: ${endpoint.endpointName}`)
             })
           })
         )

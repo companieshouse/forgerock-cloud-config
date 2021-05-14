@@ -258,8 +258,14 @@
                   "propName": "_id"
                 },
                 "membershipStatus": {
-                  "label": "Memberhip Status",
+                  "label": "Membership Status",
                   "propName": "membershipStatus",
+                  "required": false,
+                  "type": "string"
+                },
+                "inviterId": {
+                  "label": "Inviter ID",
+                  "propName": "inviterId",
                   "required": false,
                   "type": "string"
                 }
