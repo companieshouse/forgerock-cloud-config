@@ -105,6 +105,16 @@
              "outputs":["*"],
              "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149"
          }
+      },
+      {
+         "_id":"32ad868f-335a-4ca4-8775-df42aa0a4ba5",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["true"],
+             "outputs":["*"],
+             "script": "6049a931-e9e9-4c28-a4de-5dff15134236"
+         }
       }
    ],
    "tree": {
@@ -176,8 +186,8 @@
             "x": 1197,
             "y": 29.015625,
             "connections": {
-               "error": "e301438c-0bd0-429c-ab0c-66126501069a",
-               "success": "84f53938-bf5a-424a-ad29-f494ec1f426b"
+               "success": "84f53938-bf5a-424a-ad29-f494ec1f426b",
+               "error": "32ad868f-335a-4ca4-8775-df42aa0a4ba5"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Collect Input"
@@ -203,8 +213,8 @@
             "displayName": "Confirmation"
          },
          "3b3108db-5661-4211-9ce7-0534882f9783": {
-            "x": 941,
-            "y": 78.015625,
+            "x": 950,
+            "y": 61.015625,
             "connections": {
                "success": "948ed6a4-fe12-4cc2-9c39-aeafeec87822",
                "error": "e301438c-0bd0-429c-ab0c-66126501069a"
@@ -221,6 +231,15 @@
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "get IDM token"
+         },
+         "32ad868f-335a-4ca4-8775-df42aa0a4ba5": {
+            "x": 1131,
+            "y": 186.015625,
+            "connections": {
+               "true": "948ed6a4-fe12-4cc2-9c39-aeafeec87822"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Params error"
          }
       },
       "staticNodes": {

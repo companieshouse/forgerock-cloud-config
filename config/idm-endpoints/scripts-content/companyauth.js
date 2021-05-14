@@ -281,6 +281,16 @@
     // Entrypoint
     log("Incoming request: " + request.content);
 
+    var actor;
+    if (request.content.callerId) {
+        actor = getUserById(request.content.callerId);
+    } else {
+        actor = getUserById(context.security.authenticationId);
+    }
+    log("Caller Id: " + actor._id + "(username: " + actor.userName + ")");
+    var isAdminUser = JSON.stringify(actor.authzRoles).indexOf(INTERNAL_IDM_ADMIN) !== -1;
+    log("Is Caller an Admin (openidm-admin role): " + isAdminUser);
+
     if (!request.action) {
         log("No action");
         throw { code: 400, message: "Bad request - no _action parameter" };
@@ -291,11 +301,7 @@
 
         log("Get status request by Username");
 
-        var callingUser = getUserById(context.security.authenticationId);
-        //var callingUser = getUserById(request.content.callerId);
-        log("Caller Id: " + callingUser._id + "(username: " + callingUser.userName + ")");
-        var isAdminUser = (callingUser.roles.indexOf(INTERNAL_IDM_ADMIN) !== -1);
-        log("Is Caller an Admin (openidm-admin role): " + isAdminUser);
+        log("Caller Id: " + actor._id + "(username: " + actor.userName + ")");
 
         if (!request.content.userName || !request.content.companyNumber) {
             log("Invalid parameters - Expected: userName, companyNumber");
@@ -306,7 +312,7 @@
         var subject = getUserByUsername(request.content.userName);
         log("User found: " + subject._id);
 
-        var isMe = (subject._id === callingUser._id);
+        var isMe = (subject._id === actor._id);
 
         var companyId = getCompany(request.content.companyNumber)._id;
         log("Company found: " + companyId);
@@ -321,9 +327,9 @@
 
         return {
             caller: {
-                id: callingUser._id,
-                userName: callingUser.userName,
-                fullName: callingUser.givenName
+                id: actor._id,
+                userName: actor.userName,
+                fullName: actor.givenName
             },
             subject: {
                 id: subject._id,
@@ -342,12 +348,6 @@
 
         log("Get status request by UserID");
 
-        var callingUser = getUserById(context.security.authenticationId);
-        //var callingUser = getUserById(request.content.callerId);
-        log("Caller Id: " + callingUser._id + "(username: " + callingUser.userName + ")");
-        var isAdminUser = (callingUser.roles.indexOf(INTERNAL_IDM_ADMIN) !== -1);
-        log("Is Caller an Admin (openidm-admin role): " + isAdminUser);
-
         if (!request.content.userId || !request.content.companyNumber) {
             log("Invalid parameters - Expected: userId, companyNumber");
             throw { code: 400, message: "Invalid Parameters - Expected: userId, companyNumber" };
@@ -355,7 +355,7 @@
 
         // Authorisation check - must be admin or getting own status
         var subject = getUserById(request.content.userId);
-        var isMe = (subject._id === callingUser._id);
+        var isMe = (subject._id === actor._id);
 
         log("User found: " + subject._id);
 
@@ -372,9 +372,9 @@
 
         return {
             caller: {
-                id: callingUser._id,
-                userName: callingUser.userName,
-                fullName: callingUser.givenName
+                id: actor._id,
+                userName: actor.userName,
+                fullName: actor.givenName
             },
             subject: {
                 id: subject._id,
@@ -392,14 +392,10 @@
     else if (request.action === RequestAction.SET_STATUS_BY_USERID) {
 
         log("Set membership status request by userid");
-
-        var actor = getUserById(request.content.callerId);
-        var isAdminUser = JSON.stringify(actor.authzRoles).indexOf(INTERNAL_IDM_ADMIN) !== -1;
-        log("Is Caller an Admin (openidm-admin role): " + isAdminUser);
-
-        if (!request.content.callerId || !request.content.subjectId || !request.content.companyNumber || !request.content.status) {
-            log("Invalid parameters - Expected: userName, companyNumber");
-            throw { code: 400, message: "Invalid Parameters - Expected: callerId, subjectId, companyNumber, status" };
+         
+        if (!request.content.subjectId || !request.content.companyNumber || !request.content.status) {
+            log("Invalid parameters - Expected: subjectId, companyNumber, status");
+            throw { code: 400, message: "Invalid Parameters - Expected: subjectId, companyNumber, status" };
         }
 
         if (request.content.status !== AuthorisationStatus.PENDING) {
@@ -448,12 +444,9 @@
 
         log("Set membership status request by username");
 
-        var actor = getUserById(request.content.callerId);
-        var isAdminUser = JSON.stringify(actor.authzRoles).indexOf(INTERNAL_IDM_ADMIN) !== -1;
-
-        if (!request.content.callerId || !request.content.subjectUserName || !request.content.companyNumber || !request.content.status) {
-            log("Invalid parameters - Expected: callerId, subjectUserName, companyNumber, status");
-            throw { code: 400, message: "Invalid Parameters - Expected: callerId, subjectUserName, companyNumber, status" };
+        if (!request.content.subjectUserName || !request.content.companyNumber || !request.content.status) {
+            log("Invalid parameters - Expected: subjectUserName, companyNumber, status");
+            throw { code: 400, message: "Invalid Parameters - Expected: subjectUserName, companyNumber, status" };
         }
 
         if (request.content.status !== AuthorisationStatus.PENDING) {
@@ -505,14 +498,6 @@
         if (!request.content.companyNumber) {
             log("Invalid parameters - Expected: companyNumber");
             throw { code: 400, message: "Invalid Parameters - Expected: companyNumber" };
-        }
-
-        //if we pass a callerId, that is the actor, otherwise the session owner is
-        var actor;
-        if (request.content.callerId) {
-            actor = getUserById(request.content.callerId);
-        } else {
-            actor = getUserById(context.security.authenticationId);
         }
 
         var companyData = getCompany(request.content.companyNumber);

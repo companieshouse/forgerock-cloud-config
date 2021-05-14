@@ -38,11 +38,16 @@ var NodeOutcome = {
   ERROR: "error"
 }
 
+function validateEmail(email) {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
+
 // main execution flow
 try {
   var companyData = sharedState.get("companyData");
   logger.error("[INVITE USER INPUT] company data: " + companyData);
-  var companyName =  JSON.parse(companyData).name;
+  var companyName = JSON.parse(companyData).name;
 
   if (callbacks.isEmpty()) {
     var infoMessage = "What are the details of the person you want to authorise to file for this company?";
@@ -72,15 +77,19 @@ try {
     var fullName = callbacks.get(1).getName();
     var email = callbacks.get(2).getName();
     var userId = sharedState.get("_id");
+    if (!validateEmail(email)) {
+      logger.error("[INVITE USER INPUT] Invalid email: " + email);
+      action = fr.Action.goTo(NodeOutcome.ERROR).build();
+    } else {
+      logger.error("[INVITE USER INPUT] company number: " + JSON.parse(companyData).number);
+      logger.error("[INVITE USER INPUT] invited email: " + email);
+      logger.error("[INVITE USER INPUT] invited full name: " + fullName);
+      logger.error("[INVITE USER INPUT] inviter ID: " + userId);
 
-    logger.error("[INVITE USER INPUT] company number: " + JSON.parse(companyData).number);
-    logger.error("[INVITE USER INPUT] invited email: " + email);
-    logger.error("[INVITE USER INPUT] invited full name: " + fullName);
-    logger.error("[INVITE USER INPUT] inviter ID: " + userId);
-
-    sharedState.put("email", email);
-    sharedState.put("fullName", fullName);
-    action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
+      sharedState.put("email", email);
+      sharedState.put("fullName", fullName);
+      action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
+    }
   }
 } catch (e) {
   logger.error("[INVITE USER INPUT] error: " + e);
