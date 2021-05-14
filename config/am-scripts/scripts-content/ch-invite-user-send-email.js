@@ -147,13 +147,13 @@ function sendErrorCallbacks(stage, token, message) {
 }
 
 //sends the email (via Notify) to the recipient using the given registration JWT
-function sendEmail(invitedEmail, companyName, inviterName) {
+function sendEmail(invitedEmail, companyName, companyNumber, inviterName) {
 
   logger.error("[COMPANY INVITE - SEND EMAIL] params: " + invitedEmail + " - " + companyName + " - " + inviterName);
 
   var notifyJWT = transientState.get("notifyJWT");
   var templates = transientState.get("notifyTemplates");
-  var returnUrl = host.concat("/account/login/?goto=/account/your-companies/")
+  var returnUrl = host.concat("/account/login/?goto=/account/your-companies/?companyNumber=", companyNumber);
 
   logger.error("[COMPANY INVITE - SEND EMAIL] JWT from transient state: " + notifyJWT);
   logger.error("[COMPANY INVITE - SEND EMAIL] Templates from transient state: " + templates);
@@ -212,7 +212,7 @@ try {
   if (!inviteData) {
     sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ERROR", "An error has occurred! Please try again later.");
   } else {
-    if (sendEmail(inviteData.invitedEmail, inviteData.companyName, inviteData.inviterName)) {
+    if (sendEmail(inviteData.invitedEmail, inviteData.companyName, inviteData.companyNumber, inviteData.inviterName)) {
       action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
     } else {
       sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ERROR", "An error occurred while sending the email. Please try again later.");
