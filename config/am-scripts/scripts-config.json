@@ -980,6 +980,22 @@
                 "lastModifiedDate": 1619454785434
             },
             "filename": "ch-update-phone-confirmation.js"
+        },
+        {
+            "payload": {
+                "_id": "256dac17-1055-4798-9b98-a1321f3a8f09",
+                "name": "CH - Reset Password Clear Parameters",
+                "description": "When resetting password, clear soft-lock parameters and migrated password status parameter",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1621011931193
+            },
+            "filename": "ch-reset-password-clear-parameters.js"
         }
     ]
 }
