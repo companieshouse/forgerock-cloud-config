@@ -153,7 +153,7 @@ function sendEmail(invitedEmail, companyName, companyNumber, inviterName) {
 
   var notifyJWT = transientState.get("notifyJWT");
   var templates = transientState.get("notifyTemplates");
-  var returnUrl = host.concat("/account/login/?goto=/account/your-companies/?companyNumber=", companyNumber);
+  var returnUrl = host.concat("/account/login/?goto=/account/your-companies/&companyNumber=", companyNumber);
 
   logger.error("[COMPANY INVITE - SEND EMAIL] JWT from transient state: " + notifyJWT);
   logger.error("[COMPANY INVITE - SEND EMAIL] Templates from transient state: " + templates);
