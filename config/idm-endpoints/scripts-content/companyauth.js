@@ -14,7 +14,6 @@
     var AuthorisationStatus = {
         CONFIRMED: "confirmed",
         PENDING: "pending",
-        //      INVITED: "invited",
         NONE: "none"
     };
 
@@ -23,10 +22,10 @@
     var RequestAction = {
         GET_STATUS_BY_USERNAME: "getCompanyStatusByUsername",
         GET_STATUS_BY_USERID: "getCompanyStatusByUserId",
-        SET_STATUS_BY_USERNAME: "setCompanyStatusByUsername",
-        SET_STATUS_BY_USERID: "setCompanyStatusByUserId",
-        GET_COMPANY: "getCompanyByNumber"
-        // GET_USERS: "getUsers",
+        INVITE_USER_BY_USERNAME: "inviteUserByUsername",
+        INVITE_USER_BY_USERID: "inviteUserByUserId",
+        GET_COMPANY: "getCompanyByNumber",
+        ACCEPT_INVITE: "acceptInvite",
         // GET_COMPANIES: "getCompanies",
         // GET_USER: "getUser",
         // GET_COMPANY: "getCompany"
@@ -218,46 +217,78 @@
         return companies;
     }
 
-    // Authorisation logic for a user changing the current status of membership
-    function allowStatusChange(callerStatus, subjectStatus, newStatus, isAdminUser, isMe) {
+    // Authorisation logic to allow a user (caller) to accept an invitation to a Company
+    function allowInviteAcceptance(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe) {
+        log("ACCEPT INVITE AUTHZ CHECK: callerStatus " + callerStatus + " subjectStatus " + subjectStatus + " newStatus " + newStatus + " isAdminUser " + isCallerAdminUser + " isMe " + isMe);
 
-        log("Access control for callerStatus " + callerStatus + " subjectStatus " + subjectStatus + " newStatus " + newStatus + " isAdminUser " + isAdminUser + " isMe " + isMe);
-
-        if (isAdminUser) {
+        if (isCallerAdminUser &&
+            subjectStatus === AuthorisationStatus.PENDING &&
+            newStatus === AuthorisationStatus.CONFIRMED) {
             log("Caller is admin - changing from '" + subjectStatus + "' to '" + newStatus + "' allowed");
             return {
                 allowed: true
             };
         }
 
+        if (isMe &&
+            subjectStatus === AuthorisationStatus.PENDING &&
+            newStatus === AuthorisationStatus.CONFIRMED) {
+            log("Caller is also subject - changing from '" + subjectStatus + "' to '" + newStatus + "' allowed");
+            return {
+                allowed: true
+            };
+        }
+
+        // if caller is authorised, allow subject transition from NONE to PENDING
         if (callerStatus === AuthorisationStatus.CONFIRMED &&
             subjectStatus === AuthorisationStatus.PENDING &&
             newStatus === AuthorisationStatus.CONFIRMED) {
-            log("Caller is already authorised - changing from PENDING to CONFIRMED allowed");
+            log("Caller is already authorised - changing subject relationship from PENDING to CONFIRMED: status change allowed");
             return {
                 allowed: true
             };
         }
 
+        // if caller is authorised, deny subject transition from PENDING to PENDING
+        if (callerStatus === AuthorisationStatus.CONFIRMED &&
+            subjectStatus === AuthorisationStatus.CONFIRMED &&
+            newStatus === AuthorisationStatus.CONFIRMED) {
+            log("Caller is already authorised - subject status for company is already CONFIRMED - Status change allowed");
+            return {
+                allowed: true
+            };
+        }
+
+        // for any other combination, deny the request
+        return {
+            allowed: false
+        };
+    }
+
+    // Authorisation logic to allow a user (caller) to invite another user (subject) to a Company
+    function allowInvite(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe) {
+
+        log("INVITE AUTHZ CHECK: callerStatus " + callerStatus + " subjectStatus " + subjectStatus + " newStatus " + newStatus + " isAdminUser " + isCallerAdminUser + " isMe " + isMe);
+
+        // if the caller is an admin, allow to invite any user to any company
+        if (isCallerAdminUser) {
+            log("Caller is admin - changing from '" + subjectStatus + "' to '" + newStatus + "' allowed");
+            return {
+                allowed: true
+            };
+        }
+
+        // if caller is authorised, allow subject transition from NONE to PENDING
         if (callerStatus === AuthorisationStatus.CONFIRMED &&
             subjectStatus === AuthorisationStatus.NONE &&
             newStatus === AuthorisationStatus.PENDING) {
-            log("Caller is already authorised - changing from NONE to PENDING allowed");
+            log("Caller is already authorised - changing subject relationship from NONE to PENDING: status change allowed");
             return {
                 allowed: true
             };
         }
 
-        if (callerStatus === AuthorisationStatus.CONFIRMED &&
-            subjectStatus === AuthorisationStatus.CONFIRMED &&
-            newStatus === AuthorisationStatus.PENDING) {
-            log("Caller is already authorised - subject status for company is already CONFIRMED, cannot set it to PENDING - Status change denied");
-            return {
-                allowed: false,
-                message: "subject status for company is already CONFIRMED, cannot set it to PENDING"
-            };
-        }
-
+        // if caller is authorised, deny subject transition from PENDING to PENDING
         if (callerStatus === AuthorisationStatus.CONFIRMED &&
             subjectStatus === AuthorisationStatus.PENDING &&
             newStatus === AuthorisationStatus.PENDING) {
@@ -266,12 +297,19 @@
                 allowed: true
             };
         }
-        // if (isMe &&
-        //     newStatus === AuthorisationStatus.PENDING) {
-        //     log("Allowing application");
-        //     return true;
-        // }
 
+        // if caller is authorised, deny subject transition from NONE to PENDING
+        if (callerStatus === AuthorisationStatus.CONFIRMED &&
+            subjectStatus === AuthorisationStatus.CONFIRMED &&
+            newStatus === AuthorisationStatus.PENDING) {
+            log("Caller is already authorised - subject status for company is already CONFIRMED, cannot set it to PENDING: status change denied");
+            return {
+                allowed: false,
+                message: "subject status for company is already CONFIRMED, cannot set it to PENDING"
+            };
+        }
+
+        // for any other combination, deny the request
         return {
             allowed: false
         };
@@ -288,8 +326,9 @@
         actor = getUserById(context.security.authenticationId);
     }
     log("Caller Id: " + actor._id + "(username: " + actor.userName + ")");
-    var isAdminUser = JSON.stringify(actor.authzRoles).indexOf(INTERNAL_IDM_ADMIN) !== -1;
-    log("Is Caller an Admin (openidm-admin role): " + isAdminUser);
+    
+    var isCallerAdminUser = JSON.stringify(actor.authzRoles).indexOf(INTERNAL_IDM_ADMIN) !== -1;
+    log("Is Caller an Admin (openidm-admin role): " + isCallerAdminUser);
 
     if (!request.action) {
         log("No action");
@@ -299,7 +338,7 @@
     // GET MEMBERSHIP STATUS BY USERNAME AND COMPANY NUMBER
     if (request.action === RequestAction.GET_STATUS_BY_USERNAME) {
 
-        log("Get status request by Username");
+        log("Request to read subject company membership status by userName");
 
         log("Caller Id: " + actor._id + "(username: " + actor.userName + ")");
 
@@ -316,11 +355,6 @@
 
         var companyId = getCompany(request.content.companyNumber)._id;
         log("Company found: " + companyId);
-
-        // if (!(isAdminUser || isMe)) {
-        //     log("Blocked status request by user " + callingUser._id);
-        //     throw { code: 403, message: "Forbidden" };
-        // }
 
         var statusResponse = getStatus(subject._id, companyId);
         log("Membership status: " + JSON.stringify(statusResponse));
@@ -346,7 +380,7 @@
     // GET MEMBERSHIP STATUS BY USERID AND COMPANY NUMBER
     else if (request.action === RequestAction.GET_STATUS_BY_USERID) {
 
-        log("Get status request by UserID");
+        log("Request to read subject company membership status by userId");
 
         if (!request.content.userId || !request.content.companyNumber) {
             log("Invalid parameters - Expected: userId, companyNumber");
@@ -361,11 +395,6 @@
 
         var companyId = getCompany(request.content.companyNumber)._id;
         log("Company found: " + companyId);
-
-        // if (!(isAdminUser || isMe)) {
-        //     log("Blocked status request by user " + callingUser._id);
-        //     throw { code: 403, message: "Forbidden" };
-        // }
 
         var statusResponse = getStatus(subject._id, companyId);
         log("Membership status: " + JSON.stringify(statusResponse));
@@ -389,18 +418,18 @@
         };
     }
     // SET MEMBERSHIP STATUS
-    else if (request.action === RequestAction.SET_STATUS_BY_USERID) {
+    else if (request.action === RequestAction.INVITE_USER_BY_USERID) {
 
-        log("Set membership status request by userid");
-         
+        log("Request to aet membership status request to PENDING (send invitation) by userId");
+
         if (!request.content.subjectId || !request.content.companyNumber || !request.content.status) {
             log("Invalid parameters - Expected: subjectId, companyNumber, status");
             throw { code: 400, message: "Invalid Parameters - Expected: subjectId, companyNumber, status" };
         }
 
         if (request.content.status !== AuthorisationStatus.PENDING) {
-            log("Invalid parameters - The status can only be 'pending'");
-            throw { code: 400, message: "Invalid Parameters - The status can only be 'pending'" };
+            log("Invalid parameters - The status for an invitation request can only be 'pending'");
+            throw { code: 400, message: "Invalid Parameters - The status for an invitation request can only be 'pending'" };
         }
 
         // Authorisation check
@@ -412,7 +441,7 @@
         var callerStatus = (isMe) ? subjectStatus : getStatus(actor._id, companyId).status;
         var newStatus = request.content.status;
 
-        var statusChangeResult = allowStatusChange(callerStatus, subjectStatus, newStatus, isAdminUser, isMe);
+        var statusChangeResult = allowInvite(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe);
         if (!statusChangeResult.allowed) {
             log("Blocked status update by user " + actor._id);
             throw { code: 403, message: "Status update denied: " + statusChangeResult.message };
@@ -440,9 +469,9 @@
             }
         };
     }
-    else if (request.action === RequestAction.SET_STATUS_BY_USERNAME) {
+    else if (request.action === RequestAction.INVITE_USER_BY_USERNAME) {
 
-        log("Set membership status request by username");
+        log("Request to set membership status to PENDING (send invitation) by subject userName");
 
         if (!request.content.subjectUserName || !request.content.companyNumber || !request.content.status) {
             log("Invalid parameters - Expected: subjectUserName, companyNumber, status");
@@ -450,8 +479,8 @@
         }
 
         if (request.content.status !== AuthorisationStatus.PENDING) {
-            log("Invalid parameters - The status can only be 'pending'");
-            throw { code: 400, message: "Invalid Parameters - The status can only be 'pending'" };
+            log("Invalid parameters - The status for an invitation request can only be 'pending' for invitation requests");
+            throw { code: 400, message: "Invalid Parameters - The status for an invitation request can only be 'pending' for invitation requests" };
         }
 
         // Authorisation check
@@ -463,7 +492,7 @@
         var callerStatus = getStatus(actor._id, companyId).status;
         var newStatus = request.content.status;
 
-        var statusChangeResult = allowStatusChange(callerStatus, subjectStatus, newStatus, isAdminUser, isMe);
+        var statusChangeResult = allowInvite(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe);
         if (!statusChangeResult.allowed) {
             log("Blocked status update by user " + actor._id);
             throw { code: 403, message: "status update denied: " + statusChangeResult.message };
@@ -493,7 +522,7 @@
     }
     else if (request.action === RequestAction.GET_COMPANY) {
 
-        log("Get company request");
+        log("Request to get company data");
 
         if (!request.content.companyNumber) {
             log("Invalid parameters - Expected: companyNumber");
@@ -512,14 +541,14 @@
             return {
                 success: false,
                 message: "No auth code associated with company " + request.content.companyNumber
-            };           
+            };
         }
 
         if (companyData.status !== "active") {
             return {
                 success: false,
                 message: "The company " + request.content.companyNumber + " is not active."
-            };  
+            };
         }
 
         return {
@@ -530,6 +559,57 @@
                 fullName: actor.givenName
             },
             company: companyData
+        };
+    }
+    else if (request.action === RequestAction.ACCEPT_INVITE) {
+
+        log("Request to set membership status to CONFIRMED (accept invite)");
+
+        if (!request.content.subjectId || !request.content.companyNumber || !request.content.status) {
+            log("Invalid parameters - Expected: subjectId, companyNumber, status");
+            throw { code: 400, message: "Invalid Parameters - Expected: subjectId, companyNumber, status" };
+        }
+
+        if (request.content.status !== AuthorisationStatus.CONFIRMED) {
+            log("Invalid parameters - The target status can only be 'confirmed' for invitation acceptance requests");
+            throw { code: 400, message: "Invalid Parameters - The status can only be 'confirmed' for invitation acceptance requests" };
+        }
+
+        // Authorisation check
+        var companyId = getCompany(request.content.companyNumber)._id;
+        var subject = getUserById(request.content.subjectId);
+        var isMe = (subject._id === actor._id);
+
+        var subjectStatus = getStatus(subject._id, companyId).status;
+        var callerStatus = getStatus(actor._id, companyId).status;
+        var newStatus = request.content.status;
+
+        var statusChangeResult = allowInviteAcceptance(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe);
+        if (!statusChangeResult.allowed) {
+            log("Blocked status update by user " + actor._id);
+            throw { code: 403, message: "status update denied: " + statusChangeResult.message };
+        }
+
+        var statusResponse = setStatus(actor._id, subject._id, companyId, request.content.status);
+
+        return {
+            caller: {
+                id: actor._id,
+                userName: actor.userName,
+                fullName: actor.givenName
+            },
+            subject: {
+                id: subject._id,
+                userName: subject.userName,
+                fullName: subject.givenName
+            },
+            company: {
+                id: companyId,
+                number: request.content.companyNumber,
+                status: request.content.status,
+                previousStatus: statusResponse.oldStatus,
+                success: statusResponse.success
+            }
         };
     }
     else {
