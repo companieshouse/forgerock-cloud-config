@@ -40,12 +40,13 @@ var NodeOutcome = {
 function fetchCompanyParameter() {
   var companyNo = requestParameters.get("companyNumber");
   if (!companyNo) {
-    var errorMessage = "Enter a username and password.";
+    logger.error("[INVITE USER - GET COMPANY DETAILS] No Company Number found in request.");
+    var errorMessage = "No Company Number found in request.";
     var errorProps = JSON.stringify(
       {
         'errors': [{
           label: "No Company Number found in request.",
-          token: "INVITE_USER_NO_INPUT_COMPANY_FOUND_ERROR"
+          token: "INVITE_USER_NO_COMPANY_IN_REQUEST_ERROR"
         }]
       });
 
@@ -63,7 +64,7 @@ function fetchCompanyParameter() {
 
 // gets company information
 function getCompanyInfo(userId, companyNo) {
-  var idmCompanyAuthEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/endpoint/companyauth/";
+  
   var request = new org.forgerock.http.protocol.Request();
   var ACCESS_TOKEN_STATE_FIELD = "idmAccessToken";
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
@@ -116,30 +117,17 @@ function getCompanyInfo(userId, companyNo) {
   }
 }
 
+// main execution flow
 try {
-  // main execution flow
+  var idmCompanyAuthEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/endpoint/companyauth/";
   var companyNumber = fetchCompanyParameter();
   var sessionOwner = sharedState.get("_id");
   var companyData = getCompanyInfo(sessionOwner, companyNumber);
-  if(!companyData){
-    if (callbacks.isEmpty()) {
-      var errorProps = JSON.stringify(
-        {
-          'errors': [{
-            label: "An error occurreed while looking up the company data.",
-            token: "INVITE_USER_COMPANY_LOOKUP_ERROR"
-          }]
-        });
-      action = fr.Action.send(
-        new fr.TextOutputCallback(fr.TextOutputCallback.ERROR, "An error occurreed while looking up the company data."),
-        new fr.HiddenValueCallback("stage", "INVITE_USER_ERROR"),
-        new fr.HiddenValueCallback("pagePropsJSON", errorProps)
-      ).build();
-    }
-  }
-  sharedState.put("companyData", JSON.stringify(companyData));
 
-  outcome = NodeOutcome.SUCCESS
+  if(companyData){
+    sharedState.put("companyData", JSON.stringify(companyData));
+    outcome = NodeOutcome.SUCCESS
+  }
 } catch (e) {
   logger.error("[INVITE USER - GET COMPANY DETAILS] Error " + e);
 }

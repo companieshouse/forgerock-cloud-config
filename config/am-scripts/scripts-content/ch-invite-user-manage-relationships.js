@@ -147,7 +147,7 @@ function performAuthzCheck(inviterUserId, invitedEmail, companyData) {
 
   sharedState.put("inviterName", inviterMembership.subject.fullName || inviterMembership.subject.userName);
   logger.error("[INVITE USER CHECK MEMBERSHIP] Inviter membership to company: " + JSON.stringify(inviterMembership));
-  // check whether the caller (user owning the session in which the inveter journey has been started) is already authroised for the company
+  // check whether the caller (user owning the session in which the inviter journey has been started) is already authorised for the company
   if (inviterMembership.company.status !== MembershipStatus.CONFIRMED) {
     logger.error("[INVITE USER CHECK MEMBERSHIP] The Inviter is not authorised for the company!");
     sharedState.put("errorMessage", "You are not authorised for Company ''" + JSON.parse(companyData).name + "'");
@@ -171,7 +171,7 @@ function performAuthzCheck(inviterUserId, invitedEmail, companyData) {
     return false;
   }
   sharedState.put("invitedName", invitedMembership.subject.fullName || invitedMembership.subject.userName);
-  logger.error("[INVITE USER CHECK MEMBERSHIP] Inviter membership to company: " + inviterMembership);
+  logger.error("[INVITE USER CHECK MEMBERSHIP] Invited membership to company: " + invitedMembership);
   if (invitedMembership.company.status === MembershipStatus.CONFIRMED) {
     logger.error("[INVITE USER CHECK MEMBERSHIP] The Invited user must be not already authorised in order to be invited.");
     sharedState.put("errorMessage", "The Invited user must be not already authorised in order to be invited.");
@@ -187,7 +187,6 @@ function performAuthzCheck(inviterUserId, invitedEmail, companyData) {
       }));
     return false;
   }
-  //buildInfoCallback("Inviter membership to company: " + inviterMembership + " - invited membership: " + invitedMembership);
   return true;
 }
 

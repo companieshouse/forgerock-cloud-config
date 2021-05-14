@@ -38,35 +38,7 @@ var NodeOutcome = {
   ERROR: "error"
 }
 
-// function extractCompanyParameter() {
-//   var companyNo = requestParameters.get("companyNumber");
-//   if (!companyNo) {
-//     var errorMessage = "Enter a username and password.";
-//     var errorProps = JSON.stringify(
-//       {
-//         'errors': [{
-//           label: "No Company Number found in request.",
-//           token: "INVITE_USER_NO_INPUT_COMPANY_FOUND_ERROR",
-//           fieldName: "IDToken2",
-//           anchor: "IDToken2"
-//         }]
-//       });
-
-//       action = fr.Action.send(
-//         new fr.TextOutputCallback(fr.TextOutputCallback.ERROR, errorMessage),
-//         new fr.NameCallback("Full Name"),
-//         new fr.NameCallback("Email Address"),
-//         new fr.HiddenValueCallback("stage", "INVITE_USER_1"),
-//         new fr.HiddenValueCallback("pagePropsJSON", errorProps)
-//       ).build();
-
-//   } else {
-//     return companyNo.get(0);
-//   }
-// }
-
 // main execution flow
-//var companyNumber = extractCompanyParameter();
 try {
   var companyData = sharedState.get("companyData");
   logger.error("[INVITE USER INPUT] company data: " + companyData);
