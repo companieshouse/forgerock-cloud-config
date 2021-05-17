@@ -133,5 +133,12 @@
 	}, {
 		"action": "CREATE",
 		"situation": "ABSENT"
-	}]
+	}],
+	"clusteredSourceReconEnabled": true,
+	"reconSourceQueryPageSize": 10000,
+	"sourceQueryFullEntry": true,
+	"sourceQuery": {
+	  "_queryFilter": "true"
+	},
+	"taskThreads": 20
 }
