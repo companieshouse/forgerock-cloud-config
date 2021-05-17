@@ -17,6 +17,11 @@
         NONE: "none"
     };
 
+    var InviteActions = {
+        ACCEPT: "accept",
+        DECLINE: "decline"
+    };
+
     // Endpoint actions
 
     var RequestAction = {
@@ -25,7 +30,7 @@
         INVITE_USER_BY_USERNAME: "inviteUserByUsername",
         INVITE_USER_BY_USERID: "inviteUserByUserId",
         GET_COMPANY: "getCompanyByNumber",
-        ACCEPT_INVITE: "acceptInvite",
+        ACCEPT_INVITE: "respondToInvite"
         // GET_COMPANIES: "getCompanies",
         // GET_USER: "getUser",
         // GET_COMPANY: "getCompany"
@@ -91,22 +96,26 @@
         }
         else if (currentStatusResponse.status === newStatus) {
             log("Status already " + newStatus);
-        }
-        else {
+        } else {
             log("Updating status from " + currentStatusResponse.status + " to " + newStatus + " for company " + companyId);
+
+            var statusUpdate = {
+                operation: "replace",
+                field: "/_refProperties/membershipStatus",
+                value: newStatus
+            };
+
+            var inviterUpdate = {
+                operation: "replace",
+                field: "/_refProperties/inviterId",
+                value: callerId
+            };
+
+            // update the 'inviterId' relationshoip property only when an invitation is created, do not override it when invite is accepted
             var newobject = openidm.patch("managed/" + OBJECT_USER + "/" + subjectId + "/" + USER_RELATIONSHIP + "/" + currentStatusResponse.membership,
                 null,
-                [{
-                    operation: "replace",
-                    field: "/_refProperties/membershipStatus",
-                    value: newStatus
-                },
-                {
-                    operation: "replace",
-                    field: "/_refProperties/inviterId",
-                    value: callerId
-                }]);
-        }
+                (newStatus === AuthorisationStatus.CONFIRMED) ? [statusUpdate] : [statusUpdate, inviterUpdate]);
+        };
 
         return {
             success: true,
@@ -160,63 +169,6 @@
         return response.result[0];
     }
 
-    // Fetch all users who are associated with a given company
-    // Optionally filter on status
-    function getAuthorisedUsers(company, status) {
-        var users = [];
-
-        // Fetch all records and filter results (can't search on relationship property)
-
-        var response = openidm.query("managed/" + OBJECT_COMPANY + "/" + company + "/" + COMPANY_RELATIONSHIP,
-            { "_queryFilter": "true" },
-            ["userName", "_refProperties/status"]);
-
-        logResponse(response);
-
-        if (response.resultCount === 0) {
-            log("No users currently authorised");
-        }
-        else {
-            response.result.forEach(function (entry) {
-                var entryStatus = entry._refProperties.status;
-                log("Got user " + entry._refResourceId + " status " + entryStatus);
-                if (!status || entryStatus === status) {
-                    users.push({
-                        username: entry.userName,
-                        uid: entry._refResourceId,
-                        status: entryStatus
-                    });
-                }
-            });
-        }
-
-        return users;
-    }
-
-    // Get all the companies with which a user is associated
-    function getAuthorisedCompanies(subject) {
-        var companies = [];
-
-
-        var response = openidm.query("managed/" + OBJECT_USER + "/" + subject + "/" + USER_RELATIONSHIP,
-            { "_queryFilter": "true" },
-            ["name", "number", "_refProperties/status"]);
-
-        logResponse(response);
-
-        if (response.resultCount === 0) {
-            log("No companies currently authorised");
-        }
-        else {
-            response.result.forEach(function (entry) {
-                log("Got company " + entry._refResourceId);
-                companies.push({ number: entry.number, name: entry.name, uid: entry._refResourceId, status: entry._refProperties.status })
-            });
-        }
-
-        return companies;
-    }
-
     // Authorisation logic to allow a user (caller) to accept an invitation to a Company
     function allowInviteAcceptance(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe) {
         log("ACCEPT INVITE AUTHZ CHECK: callerStatus " + callerStatus + " subjectStatus " + subjectStatus + " newStatus " + newStatus + " isAdminUser " + isCallerAdminUser + " isMe " + isMe);
@@ -262,6 +214,7 @@
 
         // for any other combination, deny the request
         return {
+            message: "Caller is not authorised for the company, is not an admin or is not the subject. Status change denied",
             allowed: false
         };
     }
@@ -312,6 +265,7 @@
 
         // for any other combination, deny the request
         return {
+            message: "Caller is not authorised for the company, is not an admin, or the state transition is not allowed. Status change denied",
             allowed: false
         };
 
@@ -327,7 +281,7 @@
         actor = getUserById(context.security.authenticationId);
     }
     log("Caller Id: " + actor._id + "(username: " + actor.userName + ")");
-    
+
     var isCallerAdminUser = JSON.stringify(actor.authzRoles).indexOf(INTERNAL_IDM_ADMIN) !== -1;
     log("Is Caller an Admin (openidm-admin role): " + isCallerAdminUser);
 
@@ -423,14 +377,9 @@
 
         log("Request to set membership status request to PENDING (send invitation) by userId");
 
-        if (!request.content.subjectId || !request.content.companyNumber || !request.content.status) {
-            log("Invalid parameters - Expected: subjectId, companyNumber, status");
-            throw { code: 400, message: "Invalid Parameters - Expected: subjectId, companyNumber, status" };
-        }
-
-        if (request.content.status !== AuthorisationStatus.PENDING) {
-            log("Invalid parameters - The status for an invitation request can only be 'pending'");
-            throw { code: 400, message: "Invalid Parameters - The status for an invitation request can only be 'pending'" };
+        if (!request.content.subjectId || !request.content.companyNumber) {
+            log("Invalid parameters - Expected: subjectId, companyNumber");
+            throw { code: 400, message: "Invalid Parameters - Expected: subjectId, companyNumber" };
         }
 
         // Authorisation check
@@ -440,7 +389,7 @@
 
         var subjectStatus = getStatus(subject._id, companyId).status;
         var callerStatus = (isMe) ? subjectStatus : getStatus(actor._id, companyId).status;
-        var newStatus = request.content.status;
+        var newStatus = AuthorisationStatus.PENDING;
 
         var statusChangeResult = allowInvite(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe);
         if (!statusChangeResult.allowed) {
@@ -448,40 +397,42 @@
             throw { code: 403, message: "Status update denied: " + statusChangeResult.message };
         }
 
-        var statusResponse = setStatus(actor._id, subject._id, companyId, request.content.status);
+        try {
+            var statusResponse = setStatus(actor._id, subject._id, companyId, AuthorisationStatus.PENDING);
 
-        return {
-            caller: {
-                id: actor._id,
-                userName: actor.userName,
-                fullName: actor.givenName
-            },
-            subject: {
-                id: subject._id,
-                userName: subject.userName,
-                fullName: subject.givenName
-            },
-            company: {
-                id: companyId,
-                number: request.content.companyNumber,
-                status: request.content.status,
-                previousStatus: statusResponse.oldStatus,
-                success: statusResponse.success
-            }
-        };
+            return {
+                success: statusResponse.success,
+                caller: {
+                    id: actor._id,
+                    userName: actor.userName,
+                    fullName: actor.givenName
+                },
+                subject: {
+                    id: subject._id,
+                    userName: subject.userName,
+                    fullName: subject.givenName
+                },
+                company: {
+                    id: companyId,
+                    number: request.content.companyNumber,
+                    status: AuthorisationStatus.PENDING,
+                    previousStatus: statusResponse.oldStatus
+                }
+            };
+        } catch (e) {
+            return {
+                success: false,
+                message: "An error occurred while creating the relationship"
+            };
+        }
     }
     else if (request.action === RequestAction.INVITE_USER_BY_USERNAME) {
 
         log("Request to set membership status to PENDING (send invitation) by subject userName");
 
-        if (!request.content.subjectUserName || !request.content.companyNumber || !request.content.status) {
-            log("Invalid parameters - Expected: subjectUserName, companyNumber, status");
-            throw { code: 400, message: "Invalid Parameters - Expected: subjectUserName, companyNumber, status" };
-        }
-
-        if (request.content.status !== AuthorisationStatus.PENDING) {
-            log("Invalid parameters - The status for an invitation request can only be 'pending'");
-            throw { code: 400, message: "Invalid Parameters - The status for an invitation request can only be 'pending'" };
+        if (!request.content.subjectUserName || !request.content.companyNumber) {
+            log("Invalid parameters - Expected: subjectUserName, companyNumber");
+            throw { code: 400, message: "Invalid Parameters - Expected: subjectUserName, companyNumber" };
         }
 
         // Authorisation check
@@ -491,7 +442,7 @@
 
         var subjectStatus = getStatus(subject._id, companyId).status;
         var callerStatus = getStatus(actor._id, companyId).status;
-        var newStatus = request.content.status;
+        var newStatus = AuthorisationStatus.PENDING;
 
         var statusChangeResult = allowInvite(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe);
         if (!statusChangeResult.allowed) {
@@ -499,27 +450,34 @@
             throw { code: 403, message: "status update denied: " + statusChangeResult.message };
         }
 
-        var statusResponse = setStatus(actor._id, subject._id, companyId, request.content.status);
+        try {
+            var statusResponse = setStatus(actor._id, subject._id, companyId, AuthorisationStatus.PENDING);
 
-        return {
-            caller: {
-                id: actor._id,
-                userName: actor.userName,
-                fullName: actor.givenName
-            },
-            subject: {
-                id: subject._id,
-                userName: subject.userName,
-                fullName: subject.givenName
-            },
-            company: {
-                id: companyId,
-                number: request.content.companyNumber,
-                status: request.content.status,
-                previousStatus: statusResponse.oldStatus,
-                success: statusResponse.success
-            }
-        };
+            return {
+                success: statusResponse.success,
+                caller: {
+                    id: actor._id,
+                    userName: actor.userName,
+                    fullName: actor.givenName
+                },
+                subject: {
+                    id: subject._id,
+                    userName: subject.userName,
+                    fullName: subject.givenName
+                },
+                company: {
+                    id: companyId,
+                    number: request.content.companyNumber,
+                    status: AuthorisationStatus.PENDING,
+                    previousStatus: statusResponse.oldStatus
+                }
+            };
+        } catch (e) {
+            return {
+                success: false,
+                message: "An error occurred while creating the relationship"
+            };
+        }
     }
     else if (request.action === RequestAction.GET_COMPANY) {
 
@@ -566,14 +524,14 @@
 
         log("Request to set membership status to CONFIRMED (accept invite)");
 
-        if (!request.content.subjectId || !request.content.companyNumber || !request.content.status) {
-            log("Invalid parameters - Expected: subjectId, companyNumber, status");
-            throw { code: 400, message: "Invalid Parameters - Expected: subjectId, companyNumber, status" };
+        if (!request.content.subjectId || !request.content.companyNumber || !request.content.action) {
+            log("Invalid parameters - Expected: subjectId, companyNumber, action");
+            throw { code: 400, message: "Invalid Parameters - Expected: subjectId, companyNumber, action" };
         }
 
-        if (request.content.status !== AuthorisationStatus.CONFIRMED) {
-            log("Invalid parameters - The target status can only be 'confirmed' for invitation acceptance requests");
-            throw { code: 400, message: "Invalid Parameters - The status can only be 'confirmed' for invitation acceptance requests" };
+        if (request.content.action !== InviteActions.ACCEPT && request.content.action !== InviteActions.DECLINE) {
+            log("Invalid parameters - The actions allowed on an invitation can only be 'accept' or 'decline'");
+            throw { code: 400, message: "Invalid Parameters - The actions allowed on an invitation can only be 'accept' or 'decline'" };
         }
 
         // Authorisation check
@@ -583,35 +541,45 @@
 
         var subjectStatus = getStatus(subject._id, companyId).status;
         var callerStatus = getStatus(actor._id, companyId).status;
-        var newStatus = request.content.status;
+        var newStatus = AuthorisationStatus.CONFIRMED;
 
-        var statusChangeResult = allowInviteAcceptance(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe);
-        if (!statusChangeResult.allowed) {
-            log("Blocked status update by user " + actor._id);
-            throw { code: 403, message: "status update denied: " + statusChangeResult.message };
-        }
-
-        var statusResponse = setStatus(actor._id, subject._id, companyId, request.content.status);
-
-        return {
-            caller: {
-                id: actor._id,
-                userName: actor.userName,
-                fullName: actor.givenName
-            },
-            subject: {
-                id: subject._id,
-                userName: subject.userName,
-                fullName: subject.givenName
-            },
-            company: {
-                id: companyId,
-                number: request.content.companyNumber,
-                status: request.content.status,
-                previousStatus: statusResponse.oldStatus,
-                success: statusResponse.success
+        if (request.content.action === InviteActions.ACCEPT) {
+            var statusChangeResult = allowInviteAcceptance(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe);
+            if (!statusChangeResult.allowed) {
+                log("Blocked status update by user " + actor._id);
+                throw { code: 403, message: "status update denied: " + statusChangeResult.message };
             }
-        };
+
+            var statusResponse = setStatus(actor._id, subject._id, companyId, AuthorisationStatus.CONFIRMED);
+            try {
+                return {
+                    success: statusResponse.success,
+                    caller: {
+                        id: actor._id,
+                        userName: actor.userName,
+                        fullName: actor.givenName
+                    },
+                    subject: {
+                        id: subject._id,
+                        userName: subject.userName,
+                        fullName: subject.givenName
+                    },
+                    company: {
+                        id: companyId,
+                        number: request.content.companyNumber,
+                        status: AuthorisationStatus.CONFIRMED,
+                        previousStatus: statusResponse.oldStatus
+                    }
+                };
+            } catch (e) {
+                return {
+                    success: false,
+                    message: "An error occurred while accepting/declining the invite"
+                };
+            }
+        } else {
+            throw { code: 400, message: "not implemented" };
+        }
     }
     else {
         throw { code: 400, message: "Unknown action " + request.action };

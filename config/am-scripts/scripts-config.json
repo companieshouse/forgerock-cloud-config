@@ -616,8 +616,8 @@
         {
             "payload": {
                 "_id":"bf5841ef-c6a4-4e4c-9c5e-15ca35ba9ca9",
-                "name":"CH - Invite User - Create Relationships",
-                "description":"Creates relationships between the user and the company",
+                "name":"CH - Invite User - Create Pending Relationship",
+                "description":"Create a 'pending' relationship between the user and the company",
                 "script":"<replace>",
                 "default":false,
                 "language":"JAVASCRIPT",
@@ -627,7 +627,7 @@
                 "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
                 "lastModifiedDate":1617810491969
              },
-            "filename": "ch-invite-user-manage-relationships.js"
+            "filename": "ch-invite-user-create-pending-relationship.js"
         }, 
         {
             "payload": {
@@ -692,6 +692,22 @@
                 "lastModifiedDate":1617810491969
              },
             "filename": "ch-invite-user-invalid-email-error-message.js"
+        }, 
+        {
+            "payload": {
+                "_id":"f2e4ee99-bcbb-4f3b-9ea8-36c1d547d620",
+                "name":"CH - Invite User - Respond to invite (accept/decline)",
+                "description":"Processes the user response to the invite.",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-invite-user-accept-invite.js"
         }, 
         {
             "payload": {

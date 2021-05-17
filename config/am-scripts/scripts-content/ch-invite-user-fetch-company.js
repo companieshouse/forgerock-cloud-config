@@ -39,6 +39,7 @@ var NodeOutcome = {
 
 function fetchCompanyParameter() {
   var companyNo = requestParameters.get("companyNumber");
+  
   if (!companyNo) {
     logger.error("[INVITE USER - GET COMPANY DETAILS] No Company Number found in request.");
     var errorMessage = "No Company Number found in request.";
