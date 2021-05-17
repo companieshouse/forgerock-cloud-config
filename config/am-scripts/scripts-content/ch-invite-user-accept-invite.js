@@ -48,14 +48,18 @@ function fetchActionParameter() {
     logger.error("[INVITE USER - ACCEPT INVITE] No invite action found in request");
     return false;
   } else {
-    if (!action.get(0) === 'accept' && !action.get(0) === 'decline') {
+    if (!action.get(0).equals("accept") && !action.get(0).equals("decline")) {
       logger.error("[INVITE USER - ACCEPT INVITE] Unsupported action found in request: " + action.get(0));
+      return "error"
     }
   }
   logger.error("[INVITE USER - ACCEPT INVITE] Invite action found in request: " + action.get(0));
   return action.get(0);
 }
 
+function logResponse(response) {
+  logger.error("[INVITE USER - ACCEPT INVITE] Scripted Node HTTP Response: " + response.getStatus() + ", Body: " + response.getEntity().getString());
+}
 
 function acceptInvite(callerId, company) {
   var request = new org.forgerock.http.protocol.Request();
@@ -76,7 +80,7 @@ function acceptInvite(callerId, company) {
   }
 
   request.setMethod('POST');
-  logger.error("[INVITE USER - ACCEPT INVITE] Adding user " + callerId + " to company " + companyNo + " with status " + status);
+  logger.error("[INVITE USER - ACCEPT INVITE] Adding user " + callerId + " to company " + companyNo + " with status confirmed");
   request.setUri(idmCompanyAuthEndpoint + "?_action=respondToInvite");
   request.getHeaders().add("Authorization", "Bearer " + accessToken);
   request.getHeaders().add("Content-Type", "application/json");
@@ -88,8 +92,8 @@ function acceptInvite(callerId, company) {
   logResponse(response);
   if (response.getStatus().getCode() === 200) {
     logger.error("[INVITE USER - ACCEPT INVITE] 200 response from IDM");
-    var membershipResponse = JSON.parse(response.getEntity().getString());
-    return membershipResponse.status;
+    var acceptResponse = JSON.parse(response.getEntity().getString());
+    return acceptResponse.success;
   } else {
     logger.error("[INVITE USER - ACCEPT INVITE] Error during relationship creation");
     return false;
@@ -100,19 +104,39 @@ function acceptInvite(callerId, company) {
 try {
   var idmCompanyAuthEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/endpoint/companyauth/";
   var actionParam = fetchActionParameter();
+  var companyData = sharedState.get("companyData");
+  var invitedEmail = sharedState.get("email");
+  var userId = sharedState.get("_id");
   // if there is no 'action' parameter or the 'action' parameter is set to 'send', skip the accept/reject logic, and proceed to sending the invite
   if (!actionParam || actionParam === 'send') {
     outcome = NodeOutcome.SKIP_ACCEPT;
+  } else if (actionParam === "error") {
+    if (callbacks.isEmpty()) {
+      action = fr.Action.send(
+        new fr.TextOutputCallback(
+          fr.TextOutputCallback.ERROR,
+          "Unsupported action found in request"
+        ),
+        new fr.HiddenValueCallback(
+          "stage",
+          "INVITE_USER_ERROR"
+        ),
+        new fr.HiddenValueCallback(
+          "pagePropsJSON",
+          JSON.stringify({ "company": JSON.parse(companyData) })
+        )
+      ).build()
+    }
   } else {
-    var companyData = sharedState.get("companyData");
-    var invitedEmail = sharedState.get("email");
-    var userId = sharedState.get("_id");
+
     if (actionParam === 'accept') {
-      var acceptResponse = acceptInvite(userId, company);
+      var acceptResponse = acceptInvite(userId, companyData);
       if (!acceptResponse) {
         logger.error("[INVITE USER - ACCEPT INVITE] Error while setting relationship status to confirmed");
       } else {
-        var infoMessage = "The You are now authorised to file for " + JSON.parse(companyData).name + ". This company has been added to your account.";
+        var infoMessage = "The You are now authorised to file for "
+          .concat(JSON.parse(companyData).name)
+          .concat(". This company has been added to your account.");
         if (callbacks.isEmpty()) {
           action = fr.Action.send(
             new fr.TextOutputCallback(
@@ -131,7 +155,7 @@ try {
         }
       }
     } else if (actionParam === 'decline') {
-      // TODOååå
+      // TODO
     }
 
   }

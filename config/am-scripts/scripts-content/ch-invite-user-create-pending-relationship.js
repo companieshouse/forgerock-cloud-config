@@ -141,9 +141,6 @@ function performAuthzCheck(inviterUserId, invitedEmail, companyData) {
     return false;
   }
   //store the subject username in shared state
-
-  logger.error("[INVITE USER CHECK MEMBERSHIP] ***** before call: " + JSON.stringify(inviterMembership));
-
   sharedState.put("inviterName", inviterMembership.subject.fullName || inviterMembership.subject.userName);
   logger.error("[INVITE USER CHECK MEMBERSHIP] Inviter membership to company: " + JSON.stringify(inviterMembership));
   // check whether the caller (user owning the session in which the inviter journey has been started) is already authorised for the company
