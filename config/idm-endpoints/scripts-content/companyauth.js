@@ -230,6 +230,7 @@
             };
         }
 
+        // if caller is also subject, and the current status is PENDING and the target is CONFIRMED
         if (isMe &&
             subjectStatus === AuthorisationStatus.PENDING &&
             newStatus === AuthorisationStatus.CONFIRMED) {
@@ -288,7 +289,7 @@
             };
         }
 
-        // if caller is authorised, deny subject transition from PENDING to PENDING
+        // if caller is authorised, allow subject transition from PENDING to PENDING
         if (callerStatus === AuthorisationStatus.CONFIRMED &&
             subjectStatus === AuthorisationStatus.PENDING &&
             newStatus === AuthorisationStatus.PENDING) {
@@ -420,7 +421,7 @@
     // SET MEMBERSHIP STATUS
     else if (request.action === RequestAction.INVITE_USER_BY_USERID) {
 
-        log("Request to aet membership status request to PENDING (send invitation) by userId");
+        log("Request to set membership status request to PENDING (send invitation) by userId");
 
         if (!request.content.subjectId || !request.content.companyNumber || !request.content.status) {
             log("Invalid parameters - Expected: subjectId, companyNumber, status");
@@ -479,8 +480,8 @@
         }
 
         if (request.content.status !== AuthorisationStatus.PENDING) {
-            log("Invalid parameters - The status for an invitation request can only be 'pending' for invitation requests");
-            throw { code: 400, message: "Invalid Parameters - The status for an invitation request can only be 'pending' for invitation requests" };
+            log("Invalid parameters - The status for an invitation request can only be 'pending'");
+            throw { code: 400, message: "Invalid Parameters - The status for an invitation request can only be 'pending'" };
         }
 
         // Authorisation check
