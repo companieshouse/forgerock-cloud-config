@@ -115,7 +115,7 @@ function addUserToCompanyWithStatus(callerId, userName, company, status) {
 
   request.setMethod('POST');
   logger.error("[INVITE USER ADD MEMBERSHIP] Adding user " + userName + " to company " + companyNo + " with status " + status);
-  request.setUri(idmCompanyAuthEndpoint + "?_action=setCompanyStatusByUsername");
+  request.setUri(idmCompanyAuthEndpoint + "?_action=inviteUserByUsername");
   request.getHeaders().add("Authorization", "Bearer " + accessToken);
   request.getHeaders().add("Content-Type", "application/json");
   request.getHeaders().add("Accept-API-Version", "resource=1.0");

@@ -48,7 +48,8 @@ function validateCredential(credential, hash){
     
     var requestBodyJson = {
         "password": credential,
-        "hash": hash
+        "hash": hash,
+        "method": "CHS"
     }
     request.getEntity().setString(JSON.stringify(requestBodyJson));
     
