@@ -81,18 +81,18 @@
 	"onCreate": {
 		"type": "text/javascript",
 		"globals": {},
-		"source": "var incomingRoles = source.roles;\nvar rolesLength = incomingRoles.length;\n\nvar fidcRoles = [];\n\nfor (var i = 0; i < rolesLength; i++) {\n    var role = incomingRoles[i];\n\n    var existingRole = openidm.query('managed/alpha_role',{\"_queryFilter\": '/name eq \"' + role + '\"' }, [\"*\"]);\n    if (existingRole.result.length > 0) {\n      existingRoleId = existingRole.result[0]._id\n\n      var fidcRole = {\n        _ref: \"managed/alpha_role/\" + existingRoleId\n      };\n\n      fidcRoles.push(fidcRole);\n    }\n}\n\nif (fidcRoles.length > 0) {\n  target.roles = fidcRoles;\n}"
+		"source": "var incomingRoles = source.roles;\n\nif (incomingRoles != null) {\n  var rolesLength = incomingRoles.length;\n\n  var fidcRoles = [];\n\n  for (var i = 0; i < rolesLength; i++) {\n      var role = incomingRoles[i];\n\n      var existingRole = openidm.query('managed/alpha_role',{\"_queryFilter\": '/name eq \"' + role + '\"' }, [\"*\"]);\n      if (existingRole.result.length > 0) {\n        existingRoleId = existingRole.result[0]._id\n\n        var fidcRole = {\n          _ref: \"managed/alpha_role/\" + existingRoleId\n        };\n\n        fidcRoles.push(fidcRole);\n      }\n  }\n\n  if (fidcRoles.length > 0) {\n    target.roles = fidcRoles;\n  }\n}"
 	},
 	"onUpdate": {
 		"type": "text/javascript",
 		"globals": {},
-		"source": "var incomingRoles = source.roles;\nvar rolesLength = incomingRoles.length;\n\nvar fidcRoles = [];\n\nfor (var i = 0; i < rolesLength; i++) {\n    var role = incomingRoles[i];\n\n    var existingRole = openidm.query('managed/alpha_role',{\"_queryFilter\": '/name eq \"' + role + '\"' }, [\"*\"]);\n    if (existingRole.result.length > 0) {\n      existingRoleId = existingRole.result[0]._id\n\n      var fidcRole = {\n        _ref: \"managed/alpha_role/\" + existingRoleId\n      };\n\n      fidcRoles.push(fidcRole);\n    }\n}\n\nif (fidcRoles.length > 0) {\n  target.roles = fidcRoles;\n}"
+		"source": "var incomingRoles = source.roles;\n\nif (incomingRoles != null) {\n  var rolesLength = incomingRoles.length;\n\n  var fidcRoles = [];\n\n  for (var i = 0; i < rolesLength; i++) {\n      var role = incomingRoles[i];\n\n      var existingRole = openidm.query('managed/alpha_role',{\"_queryFilter\": '/name eq \"' + role + '\"' }, [\"*\"]);\n      if (existingRole.result.length > 0) {\n        existingRoleId = existingRole.result[0]._id\n\n        var fidcRole = {\n          _ref: \"managed/alpha_role/\" + existingRoleId\n        };\n\n        fidcRoles.push(fidcRole);\n      }\n  }\n\n  if (fidcRoles.length > 0) {\n    target.roles = fidcRoles;\n  }\n}"
 	},
 	"clusteredSourceReconEnabled": true,
 	"reconSourceQueryPageSize": 10000,
 	"sourceQueryFullEntry": true,
 	"sourceQuery": {
-	  "_queryFilter": "true"
+		"_queryFilter": "true"
 	},
 	"taskThreads": 20
 }
