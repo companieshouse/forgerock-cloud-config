@@ -3,14 +3,26 @@
   "connectorsLocation": "connectors",
   "remoteConnectorClients": [
     {
-      "name": "aws-primary",
-      "displayName": "aws-primary",
+      "name": "chs-primary",
+      "displayName": "chs-primary",
       "useSSL": true,
       "enabled": true
     },
     {
-      "name": "aws-secondary",
-      "displayName": "aws-secondary",
+      "name": "chs-secondary",
+      "displayName": "chs-secondary",
+      "useSSL": true,
+      "enabled": true
+    },
+    {
+      "name": "ewf-primary",
+      "displayName": "ewf-primary",
+      "useSSL": true,
+      "enabled": true
+    },
+    {
+      "name": "ewf-secondary",
+      "displayName": "ewf-secondary",
       "useSSL": true,
       "enabled": true
     }
@@ -18,14 +30,27 @@
   "remoteConnectorServers": [],
   "remoteConnectorClientsGroups": [
     {
-      "name": "aws-group",
-      "displayName": "aws-group",
+      "name": "chs-group",
+      "displayName": "chs-group",
       "serversList": [
         {
-          "name": "aws-primary"
+          "name": "chs-primary"
         },
         {
-          "name": "aws-secondary"
+          "name": "chs-secondary"
+        }
+      ],
+      "algorithm": "failover"
+    },
+    {
+      "name": "ewf-group",
+      "displayName": "ewf-group",
+      "serversList": [
+        {
+          "name": "ewf-primary"
+        },
+        {
+          "name": "ewf-secondary"
         }
       ],
       "algorithm": "failover"

@@ -6,7 +6,7 @@
     "bundleName": "org.forgerock.openicf.connectors.ldap-connector",
     "bundleVersion": "[1.5.19.0,1.6.0.0)",
     "connectorName": "org.identityconnectors.ldap.LdapConnector",
-    "connectorHostRef": "aws-group"
+    "connectorHostRef": "chs-group"
   },
   "configurationProperties": {
     "host": "forgerock-data-ds-backup-a40b0b52539efe2f.elb.eu-west-2.amazonaws.com",
