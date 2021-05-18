@@ -3,7 +3,7 @@
     * SHARED STATE:
     - 'credential' : the plaintext credential entered by the user 
     - 'hashedCredential' : the hashed credentials to compare against
-    - 'validateMethod' : the validation method ('CHS' or other for standard BCrypt)
+    - 'validateMethod' : the validation method ('CHS' for CH BCrypt, or any other value for standard BCrypt)
    
   ** OUTCOMES
     - true: comparison successful
