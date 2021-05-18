@@ -115,6 +115,16 @@
              "outputs":["*"],
              "script": "6049a931-e9e9-4c28-a4de-5dff15134236"
          }
+      },
+      {
+         "_id":"e72032ec-18b5-4d90-bf65-6d589de17e89",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["skip_accept_invite", "error"],
+             "outputs":["*"],
+             "script": "f2e4ee99-bcbb-4f3b-9ea8-36c1d547d620"
+         }
       }
    ],
    "tree": {
@@ -132,6 +142,25 @@
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "check session"
+         },
+         "32ad868f-335a-4ca4-8775-df42aa0a4ba5": {
+            "x": 1299,
+            "y": 167.015625,
+            "connections": {
+               "true": "948ed6a4-fe12-4cc2-9c39-aeafeec87822"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Params error"
+         },
+         "3b3108db-5661-4211-9ce7-0534882f9783": {
+            "x": 950,
+            "y": 61.015625,
+            "connections": {
+               "error": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "success": "e72032ec-18b5-4d90-bf65-6d589de17e89"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Lookup company"
          },
          "40b3ada0-ed4a-4237-b61f-1641047856eb": {
             "x": 683,
@@ -172,9 +201,19 @@
             "nodeType": "SessionDataNode",
             "displayName": "Get Session Data"
          },
+         "84f53938-bf5a-424a-ad29-f494ec1f426b": {
+            "x": 1422,
+            "y": 233.015625,
+            "connections": {
+               "error": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "success": "a7a24982-63e4-409d-9867-d1f42a121bc1"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "get IDM token"
+         },
          "9227e96a-960d-4502-8003-38b6857ca644": {
-            "x": 1679,
-            "y": 43.015625,
+            "x": 1713,
+            "y": 0,
             "connections": {
                "false": "e301438c-0bd0-429c-ab0c-66126501069a",
                "true": "64794662-6859-4db2-81c9-413b61184a01"
@@ -183,18 +222,18 @@
             "displayName": "Create Notify JWT"
          },
          "948ed6a4-fe12-4cc2-9c39-aeafeec87822": {
-            "x": 1197,
-            "y": 29.015625,
+            "x": 1316,
+            "y": 21.015625,
             "connections": {
-               "success": "84f53938-bf5a-424a-ad29-f494ec1f426b",
-               "error": "32ad868f-335a-4ca4-8775-df42aa0a4ba5"
+               "error": "32ad868f-335a-4ca4-8775-df42aa0a4ba5",
+               "success": "84f53938-bf5a-424a-ad29-f494ec1f426b"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Collect Input"
          },
          "a7a24982-63e4-409d-9867-d1f42a121bc1": {
-            "x": 1480,
-            "y": 121.015625,
+            "x": 1578,
+            "y": 120.015625,
             "connections": {
                "error": "e301438c-0bd0-429c-ab0c-66126501069a",
                "success": "9227e96a-960d-4502-8003-38b6857ca644",
@@ -212,34 +251,15 @@
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Confirmation"
          },
-         "3b3108db-5661-4211-9ce7-0534882f9783": {
-            "x": 950,
-            "y": 61.015625,
+         "e72032ec-18b5-4d90-bf65-6d589de17e89": {
+            "x": 1104,
+            "y": 179.015625,
             "connections": {
-               "success": "948ed6a4-fe12-4cc2-9c39-aeafeec87822",
-               "error": "e301438c-0bd0-429c-ab0c-66126501069a"
+               "error": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "skip_accept_invite": "948ed6a4-fe12-4cc2-9c39-aeafeec87822"
             },
             "nodeType": "ScriptedDecisionNode",
-            "displayName": "Lookup company"
-         },
-         "84f53938-bf5a-424a-ad29-f494ec1f426b": {
-            "x": 1330,
-            "y": 255.015625,
-            "connections": {
-               "success": "a7a24982-63e4-409d-9867-d1f42a121bc1",
-               "error": "e301438c-0bd0-429c-ab0c-66126501069a"
-            },
-            "nodeType": "ScriptedDecisionNode",
-            "displayName": "get IDM token"
-         },
-         "32ad868f-335a-4ca4-8775-df42aa0a4ba5": {
-            "x": 1131,
-            "y": 186.015625,
-            "connections": {
-               "true": "948ed6a4-fe12-4cc2-9c39-aeafeec87822"
-            },
-            "nodeType": "ScriptedDecisionNode",
-            "displayName": "Params error"
+            "displayName": "Accept/Decline/Skip"
          }
       },
       "staticNodes": {
