@@ -3,6 +3,7 @@
     * SHARED STATE:
     - 'credential' : the plaintext credential entered by the user 
     - 'hashedCredential' : the hashed credentials to compare against
+    - 'validateMethod' : the validation method ('CHS' for CH BCrypt, or any other value for standard BCrypt)
    
   ** OUTCOMES
     - true: comparison successful
@@ -33,7 +34,7 @@ function fetchSecret() {
 }
 
 // perform the credentials comparison against an external service
-function validateCredential(credential, hash){
+function validateCredential(credential, hash, validateMethod){
     var validateServiceInfo = fetchSecret();
     if (!validateServiceInfo) {
         logger.error("[VALIDATE CREDENTIAL] validateServiceInfo is invalid");
@@ -49,7 +50,7 @@ function validateCredential(credential, hash){
     var requestBodyJson = {
         "password": credential,
         "hash": hash,
-        "method": "CHS"
+        "method": validateMethod
     }
     request.getEntity().setString(JSON.stringify(requestBodyJson));
     
@@ -80,7 +81,10 @@ function validateCredential(credential, hash){
 // main execution flow
 var credential = sharedState.get("credential");
 var hash = sharedState.get("hashedCredential");
+var validateMethod = sharedState.get("validateMethod");
+
 logger.error("[VALIDATE CREDENTIAL] credential: " + credential);
 logger.error("[VALIDATE CREDENTIAL] hashedCredential: " + hash);
+logger.error("[VALIDATE CREDENTIAL] validateMethod: " + validateMethod);
 
-outcome = validateCredential(credential, hash);
+outcome = validateCredential(credential, hash, validateMethod);

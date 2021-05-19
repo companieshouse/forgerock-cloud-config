@@ -681,11 +681,11 @@
         "viewable": true
       },
       "frIndexedString5": {
-        "description": "Generic Indexed String 5",
+        "description": "Origin",
         "isPersonal": false,
-        "title": "Generic Indexed String 5",
+        "title": "Origin",
         "type": "string",
-        "usageDescription": null,
+        "usageDescription": "Indicates origin system of user e.g. webfiling",
         "userEditable": true,
         "viewable": true
       },

@@ -11,6 +11,7 @@
     * SHARED STATE:
     - 'companyData': the company data, result of the lookup
     - 'hashedCredential': the company auth code
+    - 'validateMethod': the hashing type ('CHS' for auth codes)
     - [optional] 'errorMessage': error message to display from previous attempts
 
   ** OUTCOMES
@@ -75,7 +76,6 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
         logger.error("[FETCH COMPANY] 200 response from IDM");
         var companyResponse = JSON.parse(response.getEntity().getString());
 
-
         if (companyResponse.resultCount > 0) {
             var companyStatus = companyResponse.result[0].status;
             var authCode = companyResponse.result[0].authCode;
@@ -119,6 +119,7 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
 
             sharedState.put("companyData", JSON.stringify(companyResponse.result[0]));
             sharedState.put("hashedCredential", authCode);
+            sharedState.put("validateMethod", "CHS");
 
             if (!skipConfirmation) {
                 if (callbacks.isEmpty()) {

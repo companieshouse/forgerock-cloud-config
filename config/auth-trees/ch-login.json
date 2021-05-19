@@ -311,6 +311,16 @@
 				"outputs": ["*"],
 				"script": "329154d4-5e55-4cc5-a17e-19d4fd3729aa"
 			}
+		},
+		{
+			"_id": "9d8e176e-3175-45a5-8ff3-ca0138c1b300",
+			"nodeType": "ScriptedDecisionNode",
+			"details": {
+				"outcomes": ["success", "error"],
+				"inputs": ["*"],
+				"outputs": ["*"],
+				"script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149"
+			}
 		}
 	],
     "tree": {
@@ -320,69 +330,11 @@
 		"uiConfig": {},
 		"entryNodeId": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
 		"nodes": {
-			"a2adb2e2-a3f7-4214-927c-0a47d5d0e1dc": {
-				"x": 2732,
-				"y": 318.015625,
+			"0e167098-4f1b-4a6d-a383-9a415b143dda": {
+				"x": 1992,
+				"y": 108.33333333333334,
 				"connections": {
-					"Reject": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"Retry": "739919ca-5a2b-4788-a447-36fe83a011f9"
-				},
-				"nodeType": "RetryLimitDecisionNode",
-				"displayName": "Retry Limit Decision"
-			},
-			"860b9b8a-260a-4123-85f5-7cf50e20a291": {
-				"x": 2246,
-				"y": 83,
-				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"true": "35194bf4-8dcc-41a2-8545-4a965b8f6ec0"
-				},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Send MFA text via Notify"
-			},
-			"ae62ed05-3a04-456b-8642-7bc222e0dd43": {
-				"x": 2810,
-				"y": 195.5,
-				"connections": {
-					"outcome": "bf46b661-96c6-443a-b012-3b5608b7051f"
-				},
-				"nodeType": "IncrementLoginCountNode",
-				"displayName": "Increment Login Count"
-			},
-			"35194bf4-8dcc-41a2-8545-4a965b8f6ec0": {
-				"x": 2540,
-				"y": 64.015625,
-				"connections": {
-					"false": "a2adb2e2-a3f7-4214-927c-0a47d5d0e1dc",
-					"true": "ae62ed05-3a04-456b-8642-7bc222e0dd43"
-				},
-				"nodeType": "PageNode",
-				"displayName": "Enter OTP"
-			},
-			"94a5f48e-d6e3-4bf4-8edc-45c028a70900": {
-				"x": 218,
-				"y": 136,
-				"connections": {
-					"true": "4f019558-f468-46f2-8000-5bba1d9dac45"
-				},
-				"nodeType": "PageNode",
-				"displayName": "Login Form"
-			},
-			"c32fab79-8836-4657-bef0-9f03a1e1165f": {
-				"x": 1032,
-				"y": 39.5,
-				"connections": {
-					"false": "ae62ed05-3a04-456b-8642-7bc222e0dd43",
-					"true": "0e91440f-8d40-4946-88c9-1a7e22da57bc"
-				},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Require MFA"
-			},
-			"c20b82fd-458d-4a46-8d0f-41d589f3976b": {
-				"x": 1994,
-				"y": 285.66666666666663,
-				"connections": {
-					"outcome": "5e76d32e-9180-4a20-b0bd-ff9b89773cbb"
+					"outcome": "860b9b8a-260a-4123-85f5-7cf50e20a291"
 				},
 				"nodeType": "OneTimePasswordGeneratorNode",
 				"displayName": "HOTP Generator"
@@ -396,44 +348,6 @@
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Has Phone Number"
-			},
-			"5e76d32e-9180-4a20-b0bd-ff9b89773cbb": {
-				"x": 2239,
-				"y": 260,
-				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"true": "35194bf4-8dcc-41a2-8545-4a965b8f6ec0"
-				},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Send MFA email via Notify"
-			},
-			"739919ca-5a2b-4788-a447-36fe83a011f9": {
-				"x": 2967,
-				"y": 351.015625,
-				"connections": {
-					"true": "35194bf4-8dcc-41a2-8545-4a965b8f6ec0"
-				},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Raise Error"
-			},
-			"0e167098-4f1b-4a6d-a383-9a415b143dda": {
-				"x": 1992,
-				"y": 108.33333333333334,
-				"connections": {
-					"outcome": "860b9b8a-260a-4123-85f5-7cf50e20a291"
-				},
-				"nodeType": "OneTimePasswordGeneratorNode",
-				"displayName": "HOTP Generator"
-			},
-			"f8d1e6a3-14d1-4eda-9515-6e0dfacad539": {
-				"x": 3311,
-				"y": 172.5,
-				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
-				},
-				"nodeType": "InnerTreeEvaluatorNode",
-				"displayName": "Inner Tree Evaluator"
 			},
 			"1031a228-600a-4325-82da-c93e6a13ab5b": {
 				"x": 1732,
@@ -455,15 +369,15 @@
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Create Notify JWT - SMS"
 			},
-			"9339d5b3-f917-46a5-918e-a8b4ce884d81": {
-				"x": 1469,
-				"y": 52.015625,
+			"35194bf4-8dcc-41a2-8545-4a965b8f6ec0": {
+				"x": 2540,
+				"y": 64.015625,
 				"connections": {
-					"email": "1031a228-600a-4325-82da-c93e6a13ab5b",
-					"text": "3147767a-bb7b-47b2-9b43-6d297e7cc2fa"
+					"false": "a2adb2e2-a3f7-4214-927c-0a47d5d0e1dc",
+					"true": "ae62ed05-3a04-456b-8642-7bc222e0dd43"
 				},
 				"nodeType": "PageNode",
-				"displayName": "Choose Email/SMS"
+				"displayName": "Enter OTP"
 			},
 			"4f019558-f468-46f2-8000-5bba1d9dac45": {
 				"x": 429,
@@ -475,6 +389,103 @@
 				"nodeType": "IdentifyExistingUserNode",
 				"displayName": "Identify Existing User"
 			},
+			"5e76d32e-9180-4a20-b0bd-ff9b89773cbb": {
+				"x": 2239,
+				"y": 260,
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "35194bf4-8dcc-41a2-8545-4a965b8f6ec0"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Send MFA email via Notify"
+			},
+			"6486165d-fb00-4248-93c8-4f36ad2b2cb1": {
+				"x": 1239,
+				"y": 251.015625,
+				"connections": {
+					"error": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
+					"success": "c32fab79-8836-4657-bef0-9f03a1e1165f"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Reset Counter after login OK"
+			},
+			"739919ca-5a2b-4788-a447-36fe83a011f9": {
+				"x": 2967,
+				"y": 351.015625,
+				"connections": {
+					"true": "35194bf4-8dcc-41a2-8545-4a965b8f6ec0"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Raise Error"
+			},
+			"758e3d0a-3211-4850-8847-86981f75888e": {
+				"x": 894,
+				"y": 394.015625,
+				"connections": {
+					"false": "d1f2eef5-5ad7-4ad6-bc5a-e65710879ff4",
+					"true": "9d8e176e-3175-45a5-8ff3-ca0138c1b300"
+				},
+				"nodeType": "InnerTreeEvaluatorNode",
+				"displayName": "Update Legacy Password"
+			},
+			"860b9b8a-260a-4123-85f5-7cf50e20a291": {
+				"x": 2246,
+				"y": 83,
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "35194bf4-8dcc-41a2-8545-4a965b8f6ec0"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Send MFA text via Notify"
+			},
+			"9339d5b3-f917-46a5-918e-a8b4ce884d81": {
+				"x": 1469,
+				"y": 52.015625,
+				"connections": {
+					"email": "1031a228-600a-4325-82da-c93e6a13ab5b",
+					"text": "3147767a-bb7b-47b2-9b43-6d297e7cc2fa"
+				},
+				"nodeType": "PageNode",
+				"displayName": "Choose Email/SMS"
+			},
+			"94a5f48e-d6e3-4bf4-8edc-45c028a70900": {
+				"x": 218,
+				"y": 136,
+				"connections": {
+					"true": "4f019558-f468-46f2-8000-5bba1d9dac45"
+				},
+				"nodeType": "PageNode",
+				"displayName": "Login Form"
+			},
+			"a2adb2e2-a3f7-4214-927c-0a47d5d0e1dc": {
+				"x": 2732,
+				"y": 318.015625,
+				"connections": {
+					"Reject": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"Retry": "739919ca-5a2b-4788-a447-36fe83a011f9"
+				},
+				"nodeType": "RetryLimitDecisionNode",
+				"displayName": "Retry Limit Decision"
+			},
+			"ae62ed05-3a04-456b-8642-7bc222e0dd43": {
+				"x": 2810,
+				"y": 195.5,
+				"connections": {
+					"outcome": "bf46b661-96c6-443a-b012-3b5608b7051f"
+				},
+				"nodeType": "IncrementLoginCountNode",
+				"displayName": "Increment Login Count"
+			},
+			"bd940aa3-c854-4934-b67a-1183d89be21f": {
+				"x": 614,
+				"y": 13.015625,
+				"connections": {
+					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"success": "fa88fc01-a7a2-429f-b7cc-546fe67a70b4"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Get IDM Token"
+			},
 			"bf46b661-96c6-443a-b012-3b5608b7051f": {
 				"x": 3059,
 				"y": 194.5,
@@ -484,15 +495,24 @@
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Update Last Login"
 			},
-			"758e3d0a-3211-4850-8847-86981f75888e": {
-				"x": 894,
-				"y": 394.015625,
+			"c20b82fd-458d-4a46-8d0f-41d589f3976b": {
+				"x": 1994,
+				"y": 285.66666666666663,
 				"connections": {
-					"true": "6486165d-fb00-4248-93c8-4f36ad2b2cb1",
-					"false": "d1f2eef5-5ad7-4ad6-bc5a-e65710879ff4"
+					"outcome": "5e76d32e-9180-4a20-b0bd-ff9b89773cbb"
 				},
-				"nodeType": "InnerTreeEvaluatorNode",
-				"displayName": "Update Legacy Password"
+				"nodeType": "OneTimePasswordGeneratorNode",
+				"displayName": "HOTP Generator"
+			},
+			"c32fab79-8836-4657-bef0-9f03a1e1165f": {
+				"x": 1032,
+				"y": 39.5,
+				"connections": {
+					"false": "ae62ed05-3a04-456b-8642-7bc222e0dd43",
+					"true": "0e91440f-8d40-4946-88c9-1a7e22da57bc"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Require MFA"
 			},
 			"c99c82c6-20f5-456d-a94e-680c4f4a6307": {
 				"x": 237,
@@ -507,29 +527,29 @@
 				"x": 700,
 				"y": 552.015625,
 				"connections": {
-					"true": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
-					"error": "94a5f48e-d6e3-4bf4-8edc-45c028a70900"
+					"error": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
+					"true": "94a5f48e-d6e3-4bf4-8edc-45c028a70900"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Soft Lock Increment Counter"
 			},
-			"bd940aa3-c854-4934-b67a-1183d89be21f": {
-				"x": 614,
-				"y": 13.015625,
+			"f8d1e6a3-14d1-4eda-9515-6e0dfacad539": {
+				"x": 3311,
+				"y": 172.5,
 				"connections": {
-					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"success": "fa88fc01-a7a2-429f-b7cc-546fe67a70b4"
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
 				},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Get IDM Token"
+				"nodeType": "InnerTreeEvaluatorNode",
+				"displayName": "Inner Tree Evaluator"
 			},
 			"fa88fc01-a7a2-429f-b7cc-546fe67a70b4": {
 				"x": 788,
 				"y": 120.015625,
 				"connections": {
 					"error": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
-					"locked": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
 					"lock_expired": "fc36693f-b04c-46f8-a683-1e1c1498c8bd",
+					"locked": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
 					"not_locked": "758e3d0a-3211-4850-8847-86981f75888e"
 				},
 				"nodeType": "ScriptedDecisionNode",
@@ -539,21 +559,21 @@
 				"x": 691,
 				"y": 316.015625,
 				"connections": {
-					"success": "758e3d0a-3211-4850-8847-86981f75888e",
-					"error": "94a5f48e-d6e3-4bf4-8edc-45c028a70900"
+					"error": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
+					"success": "758e3d0a-3211-4850-8847-86981f75888e"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Reset Counter"
 			},
-			"6486165d-fb00-4248-93c8-4f36ad2b2cb1": {
-				"x": 1025,
-				"y": 226.015625,
+			"9d8e176e-3175-45a5-8ff3-ca0138c1b300": {
+				"x": 1171,
+				"y": 422.015625,
 				"connections": {
-					"success": "c32fab79-8836-4657-bef0-9f03a1e1165f",
-					"error": "94a5f48e-d6e3-4bf4-8edc-45c028a70900"
+					"success": "6486165d-fb00-4248-93c8-4f36ad2b2cb1",
+					"error": "e301438c-0bd0-429c-ab0c-66126501069a"
 				},
 				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Reset Counter after login OK"
+				"displayName": "Get New IDM Token"
 			}
 		},
 		"staticNodes": {
