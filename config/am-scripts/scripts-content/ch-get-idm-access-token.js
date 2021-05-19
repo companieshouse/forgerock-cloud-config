@@ -44,10 +44,10 @@ function getAccessToken() {
     request.getHeaders().add("Content-Type", "application/x-www-form-urlencoded");
     var params = "grant_type=password" +
         "&client_id=" + clientInfo.id +
-        "&client_secret=" + clientInfo.secret +
+        "&client_secret=" + encodeURIComponent(clientInfo.secret) +
         "&scope=" + clientInfo.scope +
         "&username=" + clientInfo.serviceUsername +
-        "&password=" + clientInfo.servicePassword;
+        "&password=" + encodeURIComponent(clientInfo.servicePassword);
     request.setEntity(params);
     var response = httpClient.send(request).get();
     logResponse(response);
