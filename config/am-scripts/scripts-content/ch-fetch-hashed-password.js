@@ -25,12 +25,12 @@ function fetchHashedPassword() {
         if (idRepository.getAttribute(userId, ORIGIN_FIELD).iterator().hasNext()) {
             var origin = idRepository.getAttribute(userId, ORIGIN_FIELD).iterator().next();
             logger.error("[FETCH HASHED PASSWORD] origin: " + origin);
-            if (origin === WEBFILING_USER) {
+            if (origin == WEBFILING_USER) {
                 validateMethod = WEBFILING_USER;
             }
         }
-        sharedState.put("validateMethod", validateMethod);
         logger.error("[FETCH HASHED PASSWORD] validateMethod: " + validateMethod);
+        sharedState.put("validateMethod", validateMethod);
 
         var password = transientState.get("password");
         sharedState.put("credential", password);
