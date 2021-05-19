@@ -123,14 +123,19 @@ function createPendingRelationship(callerId, userName, company) {
   var response = httpClient.send(request).get();
 
   logResponse(response);
+  var membershipResponse = JSON.parse(response.getEntity().getString());
   if (response.getStatus().getCode() === 200) {
     logger.error("[INVITE USER CHECK MEMBERSHIP] 200 response from IDM");
-    var membershipResponse = JSON.parse(response.getEntity().getString());
-    return membershipResponse.success;
+    return {
+      success: membershipResponse.success
+    }
   }
   else {
     logger.error("[INVITE USER CHECK MEMBERSHIP] Error during relationship creation");
-    return false;
+    return {
+      success: false,
+      message: membershipResponse.detail.reason
+    };
   }
 }
 
@@ -199,12 +204,12 @@ try {
     outcome = NodeOutcome.AUTHZ_ERROR;
   } else {
     var inviteUserResult = createPendingRelationship(inviterUserId, invitedEmail, companyData);
-    if (!inviteUserResult) {
-      sharedState.put("errorMessage", "Could not invite the user " + invitedEmail + " to Company ''" + JSON.parse(companyData).name + "'");
+    if (!inviteUserResult.success) {
+      sharedState.put("errorMessage", "Could not invite the user " + invitedEmail + " to Company ''" + JSON.parse(companyData).name + "': "+inviteUserResult.message);
       sharedState.put("pagePropsJSON", JSON.stringify(
         {
           'errors': [{
-            label: "Could not invite the user " + invitedEmail + " to Company ''" + JSON.parse(companyData).name + "'",
+            label: "Could not invite the user " + invitedEmail + " to Company ''" + JSON.parse(companyData).name + "': "+inviteUserResult.message,
             token: "INVITE_USER_ADD_USER_TO_COMPANY_ERROR",
             fieldName: "IDToken2",
             anchor: "IDToken2"

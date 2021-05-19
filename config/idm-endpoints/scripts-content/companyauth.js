@@ -173,7 +173,6 @@
 
         return {
             success: true,
-            newobject: newobject,
             oldStatus: currentStatusResponse.status
         };
     }
@@ -225,7 +224,7 @@
 
     // Authorisation logic to allow a user (caller) to accept an invitation to become authorised for a Company
     function allowInviteAcceptance(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe) {
-        log("ACCEPT INVITE AUTHZ CHECK: callerStatus " + callerStatus + " subjectStatus " + subjectStatus + " newStatus " + newStatus + " isAdminUser " + isCallerAdminUser + " isMe " + isMe);
+        log("ACCEPT INVITE AUTHZ CHECK: callerStatus " + callerStatus + ", subjectStatus " + subjectStatus + ", newStatus " + newStatus + ", isAdminUser " + isCallerAdminUser + ", isMe " + isMe);
 
         if (isCallerAdminUser &&
             subjectStatus === AuthorisationStatus.PENDING &&
@@ -268,7 +267,7 @@
 
         // for any other combination, deny the request
         return {
-            message: "Caller is not authorised for the company, is not an admin or is not the subject. Status change denied",
+            message: "Caller is not authorised for the company, is not an admin or is not the subject.",
             allowed: false
         };
     }
@@ -277,9 +276,9 @@
     function allowInviteDecline(callerStatus, subjectStatus, isCallerAdminUser, isMe) {
         log("DECLINE INVITE AUTHZ CHECK: callerStatus " + callerStatus + ", subjectStatus " + subjectStatus + ", isAdminUser " + isCallerAdminUser + ", isMe " + isMe);
 
-        if (subjectStatus === AuthorisationStatus.NONE){
+        if (subjectStatus === AuthorisationStatus.NONE) {
             return {
-                message: "The subject does not have a relationship with the company. Relationship deletion denied.",
+                message: "The subject does not have a relationship with the company.",
                 allowed: false
             };
         }
@@ -312,7 +311,7 @@
 
         // for any other combination, deny the request
         return {
-            message: "Caller is not authorised for the company, is not an admin or is not the subject. Relationship deletion denied.",
+            message: "Caller is not authorised for the company, is not an admin or is not the subject.",
             allowed: false
         };
     }
@@ -354,7 +353,7 @@
         if (callerStatus === AuthorisationStatus.CONFIRMED &&
             subjectStatus === AuthorisationStatus.CONFIRMED &&
             newStatus === AuthorisationStatus.PENDING) {
-            log("Caller is already authorised - subject status for company is already CONFIRMED, cannot set it to PENDING: status change denied");
+            log("Caller is already authorised - subject status for company is already CONFIRMED, cannot set it to PENDING");
             return {
                 allowed: false,
                 message: "subject status for company is already CONFIRMED, cannot set it to PENDING"
@@ -363,7 +362,7 @@
 
         // for any other combination, deny the request
         return {
-            message: "Caller is not authorised for the company, is not an admin, or the state transition is not allowed. Status change denied",
+            message: "Caller is not authorised for the company, is not an admin, or the state transition is not allowed",
             allowed: false
         };
 
@@ -385,7 +384,10 @@
 
     if (!request.action) {
         log("No action");
-        throw { code: 400, message: "Bad request - no _action parameter" };
+        throw {
+            code: 400,
+            message: "Bad request - no _action parameter"
+        };
     }
 
     // GET MEMBERSHIP STATUS BY USERNAME AND COMPANY NUMBER
@@ -397,7 +399,10 @@
 
         if (!request.content.userName || !request.content.companyNumber) {
             log("Invalid parameters - Expected: userName, companyNumber");
-            throw { code: 400, message: "Invalid Parameters - Expected: userName, companyNumber" };
+            throw {
+                code: 400,
+                message: "Invalid Parameters - Expected: userName, companyNumber"
+            };
         }
 
         // Authorisation check - must be admin or getting own status
@@ -438,7 +443,10 @@
 
         if (!request.content.userId || !request.content.companyNumber) {
             log("Invalid parameters - Expected: userId, companyNumber");
-            throw { code: 400, message: "Invalid Parameters - Expected: userId, companyNumber" };
+            throw {
+                code: 400,
+                message: "Invalid Parameters - Expected: userId, companyNumber"
+            };
         }
 
         // Authorisation check - must be admin or getting own status
@@ -479,7 +487,10 @@
 
         if (!request.content.subjectId || !request.content.companyNumber) {
             log("Invalid parameters - Expected: subjectId, companyNumber");
-            throw { code: 400, message: "Invalid Parameters - Expected: subjectId, companyNumber" };
+            throw {
+                code: 400,
+                message: "Invalid Parameters - Expected: subjectId, companyNumber"
+            };
         }
 
         // Authorisation check
@@ -494,37 +505,48 @@
         var statusChangeAllowedResult = allowInviteSending(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe);
         if (!statusChangeAllowedResult.allowed) {
             log("Blocked status update by user " + actor._id);
-            throw { code: 403, message: "Status update denied: " + statusChangeAllowedResult.message };
-        }
-
-        try {
-            var statusResponse = setStatus(actor._id, subject._id, companyId, AuthorisationStatus.PENDING);
-
-            return {
-                success: statusResponse.success,
-                caller: {
-                    id: actor._id,
-                    userName: actor.userName,
-                    fullName: actor.givenName
-                },
-                subject: {
-                    id: subject._id,
-                    userName: subject.userName,
-                    fullName: subject.givenName
-                },
-                company: {
-                    id: companyId,
-                    number: request.content.companyNumber,
-                    status: AuthorisationStatus.PENDING,
-                    previousStatus: statusResponse.oldStatus
+            throw {
+                code: 403,
+                message: "status update denied",
+                detail: {
+                    reason: statusChangeAllowedResult.message
                 }
             };
+        }
+
+        var statusResponse;
+        try {
+            statusResponse = setStatus(actor._id, subject._id, companyId, AuthorisationStatus.PENDING);
         } catch (e) {
-            return {
-                success: false,
-                message: "An error occurred while creating the relationship"
+            throw {
+                code: 400,
+                message: "status update denied",
+                detail: {
+                    reason: statusResponse.message
+                }
             };
         }
+
+        return {
+            success: statusResponse.success,
+            caller: {
+                id: actor._id,
+                userName: actor.userName,
+                fullName: actor.givenName
+            },
+            subject: {
+                id: subject._id,
+                userName: subject.userName,
+                fullName: subject.givenName
+            },
+            company: {
+                id: companyId,
+                number: request.content.companyNumber,
+                status: AuthorisationStatus.PENDING,
+                previousStatus: statusResponse.oldStatus
+            }
+        };
+
     }
     else if (request.action === RequestAction.INVITE_USER_BY_USERNAME) {
 
@@ -532,7 +554,10 @@
 
         if (!request.content.subjectUserName || !request.content.companyNumber) {
             log("Invalid parameters - Expected: subjectUserName, companyNumber");
-            throw { code: 400, message: "Invalid Parameters - Expected: subjectUserName, companyNumber" };
+            throw {
+                code: 400,
+                message: "Invalid Parameters - Expected: subjectUserName, companyNumber"
+            };
         }
 
         // Authorisation check
@@ -547,37 +572,48 @@
         var statusChangeAllowedResult = allowInviteSending(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe);
         if (!statusChangeAllowedResult.allowed) {
             log("Blocked status update by user " + actor._id);
-            throw { code: 403, message: "status update denied: " + statusChangeAllowedResult.message };
-        }
-
-        try {
-            var statusResponse = setStatus(actor._id, subject._id, companyId, AuthorisationStatus.PENDING);
-
-            return {
-                success: statusResponse.success,
-                caller: {
-                    id: actor._id,
-                    userName: actor.userName,
-                    fullName: actor.givenName
-                },
-                subject: {
-                    id: subject._id,
-                    userName: subject.userName,
-                    fullName: subject.givenName
-                },
-                company: {
-                    id: companyId,
-                    number: request.content.companyNumber,
-                    status: AuthorisationStatus.PENDING,
-                    previousStatus: statusResponse.oldStatus
+            throw {
+                code: 403,
+                message: "status update denied",
+                detail: {
+                    reason: statusChangeAllowedResult.message
                 }
             };
+        }
+
+        var statusResponse;
+        try {
+            statusResponse = setStatus(actor._id, subject._id, companyId, AuthorisationStatus.PENDING);
         } catch (e) {
-            return {
-                success: false,
-                message: "An error occurred while creating the relationship"
+            throw {
+                code: 400,
+                message: "status update denied",
+                detail: {
+                    reason: statusResponse.message
+                }
             };
         }
+
+        return {
+            success: statusResponse.success,
+            caller: {
+                id: actor._id,
+                userName: actor.userName,
+                fullName: actor.givenName
+            },
+            subject: {
+                id: subject._id,
+                userName: subject.userName,
+                fullName: subject.givenName
+            },
+            company: {
+                id: companyId,
+                number: request.content.companyNumber,
+                status: AuthorisationStatus.PENDING,
+                previousStatus: statusResponse.oldStatus
+            }
+        };
+
     }
     else if (request.action === RequestAction.GET_COMPANY) {
 
@@ -585,7 +621,10 @@
 
         if (!request.content.companyNumber) {
             log("Invalid parameters - Expected: companyNumber");
-            throw { code: 400, message: "Invalid Parameters - Expected: companyNumber" };
+            throw {
+                code: 400,
+                message: "Invalid Parameters - Expected: companyNumber"
+            };
         }
 
         var companyData = getCompany(request.content.companyNumber);
@@ -626,12 +665,18 @@
 
         if (!request.content.subjectId || !request.content.companyNumber || !request.content.action) {
             log("Invalid parameters - Expected: subjectId, companyNumber, action");
-            throw { code: 400, message: "Invalid Parameters - Expected: subjectId, companyNumber, action" };
+            throw {
+                code: 400,
+                message: "Invalid Parameters - Expected: subjectId, companyNumber, action"
+            };
         }
 
         if (request.content.action !== InviteActions.ACCEPT && request.content.action !== InviteActions.DECLINE) {
             log("Invalid parameters - The actions allowed on an invitation can only be 'accept' or 'decline'");
-            throw { code: 400, message: "Invalid Parameters - The actions allowed on an invitation can only be 'accept' or 'decline'" };
+            throw {
+                code: 400,
+                message: "Invalid Parameters - The actions allowed on an invitation can only be 'accept' or 'decline'"
+            };
         }
 
         // Authorisation check
@@ -649,9 +694,9 @@
             var statusChangeAllowedResult = allowInviteAcceptance(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe);
             if (!statusChangeAllowedResult.allowed) {
                 log("Blocked status update by user " + actor._id);
-                throw { 
-                    code: 403, 
-                    message: "status update denied", 
+                throw {
+                    code: 403,
+                    message: "status update denied",
                     detail: {
                         reason: statusChangeAllowedResult.message
                     }
@@ -694,15 +739,15 @@
             var statusChangeAllowedResult = allowInviteDecline(callerStatus, subjectStatus, isCallerAdminUser, isMe);
             if (!statusChangeAllowedResult.allowed) {
                 log("Blocked status update by user " + actor._id);
-                throw { 
-                    code: 403, 
+                throw {
+                    code: 403,
                     message: "relationship deletion denied",
                     detail: {
                         reason: statusChangeAllowedResult.message
-                    } 
+                    }
                 };
             }
-            
+
             var deleteRelationshipResult = deleteRelationship(subject._id, companyId);
             if (!deleteRelationshipResult || !deleteRelationshipResult.success) {
                 throw {
@@ -736,6 +781,9 @@
         }
     }
     else {
-        throw { code: 400, message: "Unknown action " + request.action };
+        throw {
+            code: 400,
+            message: "Unknown action " + request.action
+        };
     }
 })();
