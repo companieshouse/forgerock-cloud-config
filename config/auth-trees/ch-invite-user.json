@@ -121,7 +121,7 @@
          "nodeType": "ScriptedDecisionNode", 
          "details": {
              "inputs":["*"],
-             "outcomes": ["skip_accept_invite", "error"],
+             "outcomes": ["skip_respond_invite", "error"],
              "outputs":["*"],
              "script": "f2e4ee99-bcbb-4f3b-9ea8-36c1d547d620"
          }
@@ -256,10 +256,10 @@
             "y": 179.015625,
             "connections": {
                "error": "e301438c-0bd0-429c-ab0c-66126501069a",
-               "skip_accept_invite": "948ed6a4-fe12-4cc2-9c39-aeafeec87822"
+               "skip_respond_invite": "948ed6a4-fe12-4cc2-9c39-aeafeec87822"
             },
             "nodeType": "ScriptedDecisionNode",
-            "displayName": "Accept/Decline/Skip"
+            "displayName": "Respond/Skip"
          }
       },
       "staticNodes": {

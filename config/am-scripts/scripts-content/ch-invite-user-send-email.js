@@ -8,8 +8,7 @@
 
     * TRANSIENT STATE
       - 'notifyJWT': the Notify JWT to be used for requests to Notify
-      - 'secretKey': the signing key for the JWT
-      - 'templates': the list of all Notify templates 
+      - 'notifyTemplates': the list of all Notify templates 
 
   ** OUTPUT DATA
     * TRANSIENT STATE:
@@ -29,13 +28,6 @@ var fr = JavaImporter(
   org.forgerock.openam.auth.node.api,
   javax.security.auth.callback.TextOutputCallback,
   com.sun.identity.authentication.callbacks.HiddenValueCallback,
-  org.forgerock.json.jose.builders.JwtBuilderFactory,
-  org.forgerock.json.jose.jwt.JwtClaimsSet,
-  org.forgerock.json.jose.jws.JwsAlgorithm,
-  org.forgerock.secrets.SecretBuilder,
-  javax.crypto.spec.SecretKeySpec,
-  org.forgerock.secrets.keys.SigningKey,
-  org.forgerock.json.jose.jws.handlers.SecretHmacSigningHandler,
   org.forgerock.util.encode.Base64,
   java.time.temporal.ChronoUnit,
   java.time.Clock
@@ -66,66 +58,6 @@ function extractInviteDataFromState() {
   }
 }
 
-// builds the Password Reset JWT
-// function buildInviteToken(inviteData) {
-//   var jwt;
-//   var signingHandler;
-//   var secret = transientState.get("secretKey");
-//   try {
-//     var secretbytes = java.lang.String(secret).getBytes();
-//     var secretBuilder = new fr.SecretBuilder;
-//     secretBuilder.secretKey(new javax.crypto.spec.SecretKeySpec(secretbytes, "Hmac"));
-//     secretBuilder.stableId(host).expiresIn(5, fr.ChronoUnit.MINUTES, fr.Clock.systemUTC());
-//     var key = new fr.SigningKey(secretBuilder);
-//     signingHandler = new fr.SecretHmacSigningHandler(key);
-//   } catch (e) {
-//     logger.error("[COMPANY INVITE] Error while creating signing handler: " + e);
-//     return false;
-//   }
-//   var jwtClaims = new fr.JwtClaimsSet;
-//   try {
-//     jwtClaims.setIssuer(host);
-//     var dateNow = new Date();
-//     jwtClaims.setIssuedAtTime(dateNow);
-//     jwtClaims.setSubject(inviteData.invitedEmail);
-//     if (inviteData.invitedEmail) {
-//       jwtClaims.setClaim("invitedEmail", inviteData.invitedEmail);
-//     }
-//     if (inviteData.invitedName) {
-//       jwtClaims.setClaim("invitedName", inviteData.invitedName);
-//     }
-//     if (inviteData.inviterUserId) {
-//       jwtClaims.setClaim("inviterUserId", inviteData.inviterUserId);
-//     }
-//     if (inviteData.inviterUserId) {
-//       jwtClaims.setClaim("inviterUserId", inviteData.inviterUserId);
-//     }
-//     if (inviteData.companyNumber) {
-//       jwtClaims.setClaim("companyNumber", inviteData.companyNumber);
-//     }
-//     jwtClaims.setClaim("creationDate", new Date().toString());
-//   } catch (e) {
-//     logger.error("[COMPANY INVITE] Error while adding claims to JWT: " + e);
-//     return false;
-//   }
-
-//   try {
-//     jwt = new fr.JwtBuilderFactory()
-//       .jws(signingHandler)
-//       .headers()
-//       .alg(fr.JwsAlgorithm.HS256)
-//       .done()
-//       .claims(jwtClaims)
-//       .build();
-//     logger.error("[COMPANY INVITE] JWT from reg: " + jwt);
-//     return jwt;
-//   } catch (e) {
-//     logger.error("[COMPANY INVITE] Error while creating JWT: " + e);
-//     return false;
-//   }
-
-// }
-
 //raises a generic registration error
 function sendErrorCallbacks(stage, token, message) {
   if (callbacks.isEmpty()) {
@@ -146,14 +78,14 @@ function sendErrorCallbacks(stage, token, message) {
   }
 }
 
-//sends the email (via Notify) to the recipient using the given registration JWT
+//sends the email (via Notify) to the recipient using the given JWT
 function sendEmail(invitedEmail, companyName, companyNumber, inviterName) {
 
   logger.error("[COMPANY INVITE - SEND EMAIL] params: " + invitedEmail + " - " + companyName + " - " + inviterName);
 
   var notifyJWT = transientState.get("notifyJWT");
   var templates = transientState.get("notifyTemplates");
-  var returnUrl = host.concat("/account/login/?goto=", encodeURIComponent("/account/your-companies/?companyNumber=" + companyNumber));
+  var returnUrl = host.concat("/account/login/?goto=", encodeURIComponent("/account/notifications/#" + companyNumber));
 
   logger.error("[COMPANY INVITE - SEND EMAIL] JWT from transient state: " + notifyJWT);
   logger.error("[COMPANY INVITE - SEND EMAIL] Templates from transient state: " + templates);
@@ -205,9 +137,6 @@ try {
   var request = new org.forgerock.http.protocol.Request();
 
   var inviteData = extractInviteDataFromState();
-  // if (inviteData) {
-  //   inviteJwt = buildInviteToken(inviteData);
-  // }
 
   if (!inviteData) {
     sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ERROR", "An error has occurred! Please try again later.");

@@ -30,7 +30,7 @@
         INVITE_USER_BY_USERNAME: "inviteUserByUsername",
         INVITE_USER_BY_USERID: "inviteUserByUserId",
         GET_COMPANY: "getCompanyByNumber",
-        ACCEPT_INVITE: "respondToInvite"
+        RESPOND_INVITE: "respondToInvite"
         // GET_COMPANIES: "getCompanies",
         // GET_USER: "getUser",
         // GET_COMPANY: "getCompany"
@@ -47,13 +47,13 @@
     }
 
     // Fetch current status for user vs. company
-
-    function getStatus(user, companyId) {
+    function getStatus(userId, companyId) {
 
         var status = AuthorisationStatus.NONE;
         var membership = null;
+        var relationshipEntry;
 
-        var response = openidm.query("managed/" + OBJECT_USER + "/" + user + "/" + USER_RELATIONSHIP,
+        var response = openidm.query("managed/" + OBJECT_USER + "/" + userId + "/" + USER_RELATIONSHIP,
             { "_queryFilter": "true" },
             ["_refProperties/membershipStatus"]);
 
@@ -69,16 +69,63 @@
                     status = entry._refProperties.membershipStatus;
                     log("Got a match for company " + companyId + ": membership status: " + status);
                     membership = entry._id;
+                    relationshipEntry = entry;
                 }
             });
         }
 
-        return { status: status, membership: membership };
+        return {
+            status: status,
+            entry: relationshipEntry,
+            membership: membership
+        };
+
+    }
+
+    // deletes the relationship between the given user and given copmpany if in PENDING status
+    function deleteRelationship(subjectId, companyId) {
+        var currentStatusResponse = getStatus(subjectId, companyId);
+        if (!currentStatusResponse.status === AuthorisationStatus.PENDING) {
+            return {
+                success: false,
+                message: "The relationship with company " + companyId + " must be in PENDING state to be removed"
+            };
+        }
+        log("Deleting relationship for company " + companyId);
+        log("patching: " + "managed/" + OBJECT_USER + "/" + subjectId);
+
+        var payload = [
+            {
+                operation: "remove",
+                field: "/memberOfOrg",
+                value: {
+                    _ref: currentStatusResponse.entry._ref,
+                    _refResourceCollection: currentStatusResponse.entry._refResourceCollection,
+                    _refResourceId: currentStatusResponse.entry._refResourceId,
+                    _refProperties: currentStatusResponse.entry._refProperties
+                }
+            }
+        ];
+
+        var newObject = openidm.patch("managed/" + OBJECT_USER + "/" + subjectId,
+            null,
+            payload);
+
+        // check that the relationship has been removed from the user
+        if (JSON.stringify(newObject.memberOfOrgIDs).indexOf(currentStatusResponse.entry._refResourceId) > -1) {
+            return {
+                success: false,
+                message: "The relationship with company " + companyId + " could not be removed from the user"
+            };
+        }
+
+        return {
+            success: true
+        };
 
     }
 
     // Update status for user vs. company
-
     function setStatus(callerId, subjectId, companyId, newStatus) {
 
         var currentStatusResponse = getStatus(subjectId, companyId);
@@ -90,7 +137,8 @@
                     "_ref": "managed/" + OBJECT_COMPANY + "/" + companyId,
                     "_refProperties": {
                         "membershipStatus": newStatus,
-                        "inviterId": callerId
+                        "inviterId": callerId,
+                        "inviteTimestamp": new Date().toString()
                     }
                 });
         }
@@ -111,10 +159,16 @@
                 value: callerId
             };
 
-            // update the 'inviterId' relationshoip property only when an invitation is created, do not override it when invite is accepted
+            var inviteTimestampUpdate = {
+                operation: "replace",
+                field: "/_refProperties/inviteTimestamp",
+                value: new Date().toString()
+            };
+
+            // update the 'inviterId' and 'inviteTimestamp' relationship property only when an invitation is created, do not override them when invite is accepted
             var newobject = openidm.patch("managed/" + OBJECT_USER + "/" + subjectId + "/" + USER_RELATIONSHIP + "/" + currentStatusResponse.membership,
                 null,
-                (newStatus === AuthorisationStatus.CONFIRMED) ? [statusUpdate] : [statusUpdate, inviterUpdate]);
+                (newStatus === AuthorisationStatus.CONFIRMED) ? [statusUpdate] : [statusUpdate, inviterUpdate, inviteTimestampUpdate]);
         };
 
         return {
@@ -169,7 +223,7 @@
         return response.result[0];
     }
 
-    // Authorisation logic to allow a user (caller) to accept an invitation to a Company
+    // Authorisation logic to allow a user (caller) to accept an invitation to become authorised for a Company
     function allowInviteAcceptance(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe) {
         log("ACCEPT INVITE AUTHZ CHECK: callerStatus " + callerStatus + " subjectStatus " + subjectStatus + " newStatus " + newStatus + " isAdminUser " + isCallerAdminUser + " isMe " + isMe);
 
@@ -219,8 +273,52 @@
         };
     }
 
-    // Authorisation logic to allow a user (caller) to invite another user (subject) to a Company
-    function allowInvite(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe) {
+    // Authorisation logic to allow a user (caller) to decline an invitation to become authorised for a Company
+    function allowInviteDecline(callerStatus, subjectStatus, isCallerAdminUser, isMe) {
+        log("DECLINE INVITE AUTHZ CHECK: callerStatus " + callerStatus + ", subjectStatus " + subjectStatus + ", isAdminUser " + isCallerAdminUser + ", isMe " + isMe);
+
+        if (subjectStatus === AuthorisationStatus.NONE){
+            return {
+                message: "The subject does not have a relationship with the company. Relationship deletion denied.",
+                allowed: false
+            };
+        }
+
+        if (isCallerAdminUser &&
+            subjectStatus === AuthorisationStatus.PENDING) {
+            log("Caller is admin - deleting relationship in status '" + subjectStatus + "' allowed");
+            return {
+                allowed: true
+            };
+        }
+
+        // if caller is also subject, and the current status is PENDING and the target is CONFIRMED
+        if (isMe &&
+            subjectStatus === AuthorisationStatus.PENDING) {
+            log("Caller is also subject - deleting relationship in status '" + subjectStatus + "' allowed");
+            return {
+                allowed: true
+            };
+        }
+
+        // if caller is authorised, allow subject transition from NONE to PENDING
+        if (callerStatus === AuthorisationStatus.CONFIRMED &&
+            subjectStatus === AuthorisationStatus.PENDING) {
+            log("Caller is already authorised - deleting relationship in status PENDING allowed");
+            return {
+                allowed: true
+            };
+        }
+
+        // for any other combination, deny the request
+        return {
+            message: "Caller is not authorised for the company, is not an admin or is not the subject. Relationship deletion denied.",
+            allowed: false
+        };
+    }
+
+    // Authorisation logic to allow a user (caller) to send an invite to another user (subject) to become authorised for a Company
+    function allowInviteSending(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe) {
 
         log("INVITE AUTHZ CHECK: callerStatus " + callerStatus + " subjectStatus " + subjectStatus + " newStatus " + newStatus + " isAdminUser " + isCallerAdminUser + " isMe " + isMe);
 
@@ -315,6 +413,7 @@
         log("Membership status: " + JSON.stringify(statusResponse));
 
         return {
+            success: true,
             caller: {
                 id: actor._id,
                 userName: actor.userName,
@@ -355,6 +454,7 @@
         log("Membership status: " + JSON.stringify(statusResponse));
 
         return {
+            success: true,
             caller: {
                 id: actor._id,
                 userName: actor.userName,
@@ -391,10 +491,10 @@
         var callerStatus = (isMe) ? subjectStatus : getStatus(actor._id, companyId).status;
         var newStatus = AuthorisationStatus.PENDING;
 
-        var statusChangeResult = allowInvite(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe);
-        if (!statusChangeResult.allowed) {
+        var statusChangeAllowedResult = allowInviteSending(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe);
+        if (!statusChangeAllowedResult.allowed) {
             log("Blocked status update by user " + actor._id);
-            throw { code: 403, message: "Status update denied: " + statusChangeResult.message };
+            throw { code: 403, message: "Status update denied: " + statusChangeAllowedResult.message };
         }
 
         try {
@@ -444,10 +544,10 @@
         var callerStatus = getStatus(actor._id, companyId).status;
         var newStatus = AuthorisationStatus.PENDING;
 
-        var statusChangeResult = allowInvite(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe);
-        if (!statusChangeResult.allowed) {
+        var statusChangeAllowedResult = allowInviteSending(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe);
+        if (!statusChangeAllowedResult.allowed) {
             log("Blocked status update by user " + actor._id);
-            throw { code: 403, message: "status update denied: " + statusChangeResult.message };
+            throw { code: 403, message: "status update denied: " + statusChangeAllowedResult.message };
         }
 
         try {
@@ -520,9 +620,9 @@
             company: companyData
         };
     }
-    else if (request.action === RequestAction.ACCEPT_INVITE) {
+    else if (request.action === RequestAction.RESPOND_INVITE) {
 
-        log("Request to set membership status to CONFIRMED (accept invite)");
+        log("Request to respond to an invite (accept/decline)");
 
         if (!request.content.subjectId || !request.content.companyNumber || !request.content.action) {
             log("Invalid parameters - Expected: subjectId, companyNumber, action");
@@ -541,44 +641,98 @@
 
         var subjectStatus = getStatus(subject._id, companyId).status;
         var callerStatus = getStatus(actor._id, companyId).status;
-        var newStatus = AuthorisationStatus.CONFIRMED;
 
         if (request.content.action === InviteActions.ACCEPT) {
-            var statusChangeResult = allowInviteAcceptance(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe);
-            if (!statusChangeResult.allowed) {
+            var newStatus = AuthorisationStatus.CONFIRMED;
+
+            log("Request to set membership status to CONFIRMED (accept invite)");
+            var statusChangeAllowedResult = allowInviteAcceptance(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe);
+            if (!statusChangeAllowedResult.allowed) {
                 log("Blocked status update by user " + actor._id);
-                throw { code: 403, message: "status update denied: " + statusChangeResult.message };
+                throw { 
+                    code: 403, 
+                    message: "status update denied", 
+                    detail: {
+                        reason: statusChangeAllowedResult.message
+                    }
+                };
             }
 
             var statusResponse = setStatus(actor._id, subject._id, companyId, AuthorisationStatus.CONFIRMED);
-            try {
-                return {
-                    success: statusResponse.success,
-                    caller: {
-                        id: actor._id,
-                        userName: actor.userName,
-                        fullName: actor.givenName
-                    },
-                    subject: {
-                        id: subject._id,
-                        userName: subject.userName,
-                        fullName: subject.givenName
-                    },
-                    company: {
-                        id: companyId,
-                        number: request.content.companyNumber,
-                        status: AuthorisationStatus.CONFIRMED,
-                        previousStatus: statusResponse.oldStatus
+            if (!statusResponse || !statusResponse.success) {
+                throw {
+                    code: 400,
+                    message: "An error occurred while accepting/declining the invite",
+                    detail: {
+                        reason: statusChangeAllowedResult.message
                     }
                 };
-            } catch (e) {
-                return {
-                    success: false,
-                    message: "An error occurred while accepting/declining the invite"
+            }
+
+            return {
+                success: statusResponse.success,
+                caller: {
+                    id: actor._id,
+                    userName: actor.userName,
+                    fullName: actor.givenName
+                },
+                subject: {
+                    id: subject._id,
+                    userName: subject.userName,
+                    fullName: subject.givenName
+                },
+                company: {
+                    id: companyId,
+                    number: request.content.companyNumber,
+                    status: AuthorisationStatus.CONFIRMED,
+                    previousStatus: statusResponse.oldStatus
+                }
+            };
+
+        } else {
+            log("Request to delete PENDING company membership (decline invite)");
+            var statusChangeAllowedResult = allowInviteDecline(callerStatus, subjectStatus, isCallerAdminUser, isMe);
+            if (!statusChangeAllowedResult.allowed) {
+                log("Blocked status update by user " + actor._id);
+                throw { 
+                    code: 403, 
+                    message: "relationship deletion denied",
+                    detail: {
+                        reason: statusChangeAllowedResult.message
+                    } 
                 };
             }
-        } else {
-            throw { code: 400, message: "not implemented" };
+            
+            var deleteRelationshipResult = deleteRelationship(subject._id, companyId);
+            if (!deleteRelationshipResult || !deleteRelationshipResult.success) {
+                throw {
+                    code: 400,
+                    message: "An error occurred while deleting the relationship",
+                    detail: {
+                        reason: deleteRelationshipResult.message
+                    }
+                };
+            }
+
+            return {
+                success: deleteRelationshipResult.success,
+                caller: {
+                    id: actor._id,
+                    userName: actor.userName,
+                    fullName: actor.givenName
+                },
+                subject: {
+                    id: subject._id,
+                    userName: subject.userName,
+                    fullName: subject.givenName
+                },
+                company: {
+                    id: companyId,
+                    number: request.content.companyNumber,
+                    status: AuthorisationStatus.NONE,
+                    previousStatus: subjectStatus
+                }
+            }
         }
     }
     else {

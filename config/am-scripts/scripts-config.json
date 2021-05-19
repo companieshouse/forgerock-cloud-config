@@ -707,7 +707,7 @@
                 "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
                 "lastModifiedDate":1617810491969
              },
-            "filename": "ch-invite-user-accept-invite.js"
+            "filename": "ch-invite-user-respond-invite.js"
         }, 
         {
             "payload": {
