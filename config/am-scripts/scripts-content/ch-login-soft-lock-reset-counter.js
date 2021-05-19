@@ -81,7 +81,7 @@ try{
 
     var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
     if (accessToken == null) {
-        logger.error("[RESET SOFT LOCK COUNTER] Access token not in shared state")
+        logger.error("[RESET SOFT LOCK COUNTER] Access token not in transient state")
         action = fr.Action.goTo(NodeOutcome.ERROR).build();
     }
 
