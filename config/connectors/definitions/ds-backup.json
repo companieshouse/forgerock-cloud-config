@@ -19,12 +19,12 @@
         "value": {
           "cipher": "AES/CBC/PKCS5Padding",
           "stableId": "openidm-sym-default",
-          "salt": "Jb0PEuN5edAFh1V7e0vKdQ==",
-          "data": "Ibuf03SDHB72KUznsbRiZg==",
+          "salt": "uveSwSj5nM7nYdFiaXrvRg==",
+          "data": "63BMZbexU0JcsOR1+O4trEoesmUmURGMjhtrUjBOOvY=",
           "keySize": 16,
           "purpose": "idm.config.encryption",
-          "iv": "ktwGRFHvaAO7BrHw2pFt1A==",
-          "mac": "3Y/ZrOrDxnm9Oyy/dxY02Q=="
+          "iv": "wdSGlhVHbNY5gwPgoaIIwQ==",
+          "mac": "HFIZ3MMw0a6kr5BTGTdJ+Q=="
         }
       }
     },
