@@ -19,7 +19,7 @@ if (callbacks.isEmpty()) {
         ),
         new fr.HiddenValueCallback (
             "stage",
-            "UPDATE_PHONE_2" 
+            "UPDATE_PHONE_3"
         )
     ).build()
 } 

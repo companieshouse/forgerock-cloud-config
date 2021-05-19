@@ -95,8 +95,8 @@ if (callbacks.isEmpty()) {
             'errors': [{
                 label: "Invalid mobile number entered",
                 token: "UPDATE_PHONE_INVALID_MOBILE_NUMBER",
-                fieldName: "IDToken1",
-                anchor: "IDToken1"
+                fieldName: "IDToken2",
+                anchor: "IDToken2"
             }]
         }));
       logger.error("[UPDATE PHONE] FAILED" + currentPassword);

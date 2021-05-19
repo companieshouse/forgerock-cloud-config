@@ -104,7 +104,8 @@
                 },
                 "pageHeader": {
                     "header": "Please enter your code"
-                }
+                },
+                "stage": "UPDATE_PHONE_2"
             }
         },
         {
