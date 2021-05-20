@@ -3,6 +3,16 @@ var fr = JavaImporter(
 )
 
 try{
+  sharedState.put("pagePropsJSON", JSON.stringify(
+    {
+        'errors': [{
+            label: "The OTP provided is not valid. Please try again.",
+            token: "OTP_NOT_VALID",
+            fieldName: "IDToken1",
+            anchor: "IDToken1"
+        }]
+    }));
+
   transientState.put("error", "The OTP provided is not valid. Please try again");
 }catch(e){
   logger.error("[RESET PWD] Error populating transient state: "+ e);
