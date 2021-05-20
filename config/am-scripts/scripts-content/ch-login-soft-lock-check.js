@@ -94,6 +94,13 @@ try{
     }
 
     var lockStatus = checkUserLockStatus(userId, accessToken);
+    
+    try {
+        logger.error("[CHECK SOFT LOCK STATUS] ******* > transientState = " + transientState.toString());
+    } catch (e) {
+        logger.error("[CHECK SOFT LOCK STATUS] ******* > error = " + e);
+    }
+    
     logger.error("[CHECK SOFT LOCK STATUS] Is user locked: " + lockStatus);
     if (lockStatus === NodeOutcome.LOCKED) {
         sharedState.put("errorMessage", "You have entered incorrect details too many times. Your account is now locked for ".concat(String(SOFT_LOCK_MINUTES), " minutes."));
@@ -118,6 +125,11 @@ try{
                     anchor: "IDToken1"
                 }]
             }));
+    }
+
+    if(lockStatus === NodeOutcome.NOT_LOCKED){
+        //need to temporarily transfer the pwd to shared state, for the subtree to pick it up (and clean it up afterwards)
+        sharedState.put("password", transientState.get("password")); 
     }
     action = fr.Action.goTo(lockStatus).build();
 } catch(e){

@@ -11,27 +11,26 @@
 */
 
 var fr = JavaImporter(
-    org.forgerock.openam.auth.node.api.Action,
-    javax.security.auth.callback.TextOutputCallback,
-    com.sun.identity.authentication.callbacks.HiddenValueCallback
-  )
-  
-logger.error("[LOGIN ERROR CALLBACK] Enter a correct username and password.");
+  org.forgerock.openam.auth.node.api.Action,
+  javax.security.auth.callback.TextOutputCallback,
+  com.sun.identity.authentication.callbacks.HiddenValueCallback
+)
 
 if (callbacks.isEmpty()) {
-    var errorMessage = sharedState.get("errorMessage");
-    var level = fr.TextOutputCallback.INFORMATION;
-    var infoMessage;
-    if (errorMessage != null) {
-      level = fr.TextOutputCallback.ERROR;
-      errorProps = sharedState.get("pagePropsJSON");
-      infoMessage = errorMessage;
-      action = fr.Action.send(
-        new fr.TextOutputCallback(level, infoMessage),
-        new fr.HiddenValueCallback ("stage", "CH_LOGIN_1"),
-        new fr.HiddenValueCallback("pagePropsJSON", errorProps)
-        ).build();
-    }
+  var errorMessage = sharedState.get("errorMessage");
+  var level = fr.TextOutputCallback.INFORMATION;
+  var infoMessage;
+  if (errorMessage !== null) {
+    logger.error("[LOGIN ERROR CALLBACK] Generating callback for error: " + errorMessage);
+    level = fr.TextOutputCallback.ERROR;
+    errorProps = sharedState.get("pagePropsJSON");
+    infoMessage = errorMessage;
+    action = fr.Action.send(
+      new fr.TextOutputCallback(level, infoMessage),
+      new fr.HiddenValueCallback("stage", "CH_LOGIN_1"),
+      new fr.HiddenValueCallback("pagePropsJSON", errorProps)
+    ).build();
+  }
 }
 
 outcome = "true";

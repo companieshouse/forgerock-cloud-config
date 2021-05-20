@@ -17,6 +17,14 @@ var NodeOutcome = {
 // frIndexedString3
 var PASSWORD_MIGRATED_FIELD = "fr-attr-istr3";
 
+// restore the password from shared state
+function pwdRestore() {
+    transientState.put("password", sharedState.get("password"));
+    transientState.put("objectAttributes", { "password": sharedState.get("password") });
+    //cleanup the password from shared state
+    sharedState.put("password", null);
+}
+
 function checkPasswordStatus() {
     var userId = sharedState.get("_id");
     logger.error("[CHECK PASSWORD STATUS] Found userId: " + userId);
@@ -24,7 +32,7 @@ function checkPasswordStatus() {
     if (idRepository.getAttribute(userId, PASSWORD_MIGRATED_FIELD).iterator().hasNext()) {
         var status = idRepository.getAttribute(userId, PASSWORD_MIGRATED_FIELD).iterator().next();
         logger.error("[CHECK PASSWORD STATUS] Found status: " + status);
-        if (status == "migrated") {
+        if (status === "migrated") {
             // Migrated user has already validated their password
             return NodeOutcome.VALID;
         } else {
@@ -37,5 +45,8 @@ function checkPasswordStatus() {
         return NodeOutcome.VALID;
     }
 }
+
+// restore the password from shared state
+pwdRestore();
 
 outcome = checkPasswordStatus();

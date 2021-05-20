@@ -15,7 +15,7 @@ if (callbacks.isEmpty()) {
     var infoMessage = "Please enter your current password, together with your new password (and confirmation)";
     var level = fr.TextOutputCallback.INFORMATION;
     var errorMessage = sharedState.get("errorMessage");
-    if (errorMessage != null) {
+    if (errorMessage !== null) {
       var errorProps = sharedState.get("pagePropsJSON");
       level = fr.TextOutputCallback.ERROR;
       infoMessage = errorMessage.concat(" Please try again.");

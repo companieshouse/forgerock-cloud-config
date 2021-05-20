@@ -25,7 +25,7 @@ if (callbacks.isEmpty()) {
   var infoMessage = "Please enter the company auth code.";
   var errorMessage = sharedState.get("errorMessage");
   var level = fr.TextOutputCallback.INFORMATION;
-  if (errorMessage != null) {
+  if (errorMessage !== null) {
     level = fr.TextOutputCallback.ERROR;
     var errorProps = sharedState.get("pagePropsJSON");
     infoMessage = errorMessage.concat(" Please try again.");
