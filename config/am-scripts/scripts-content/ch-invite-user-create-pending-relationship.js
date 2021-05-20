@@ -95,7 +95,7 @@ function getUserMembershipForCompany(userIdentifier, company, idType) {
   }
 }
 
-function addUserToCompanyWithStatus(callerId, userName, company, status) {
+function createPendingRelationship(callerId, userName, company) {
   var request = new org.forgerock.http.protocol.Request();
   var ACCESS_TOKEN_STATE_FIELD = "idmAccessToken";
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
@@ -109,12 +109,11 @@ function addUserToCompanyWithStatus(callerId, userName, company, status) {
   {
     "callerId": callerId,
     "subjectUserName": userName,
-    "companyNumber": companyNo,
-    "status": status
+    "companyNumber": companyNo
   }
 
   request.setMethod('POST');
-  logger.error("[INVITE USER ADD MEMBERSHIP] Adding user " + userName + " to company " + companyNo + " with status " + status);
+  logger.error("[INVITE USER ADD MEMBERSHIP] Creating PENDING relationship between user " + userName + " and company " + companyNo);
   request.setUri(idmCompanyAuthEndpoint + "?_action=inviteUserByUsername");
   request.getHeaders().add("Authorization", "Bearer " + accessToken);
   request.getHeaders().add("Content-Type", "application/json");
@@ -124,14 +123,19 @@ function addUserToCompanyWithStatus(callerId, userName, company, status) {
   var response = httpClient.send(request).get();
 
   logResponse(response);
+  var membershipResponse = JSON.parse(response.getEntity().getString());
   if (response.getStatus().getCode() === 200) {
     logger.error("[INVITE USER CHECK MEMBERSHIP] 200 response from IDM");
-    var membershipResponse = JSON.parse(response.getEntity().getString());
-    return membershipResponse.company.status;
+    return {
+      success: membershipResponse.success
+    }
   }
   else {
     logger.error("[INVITE USER CHECK MEMBERSHIP] Error during relationship creation");
-    return false;
+    return {
+      success: false,
+      message: membershipResponse.detail.reason
+    };
   }
 }
 
@@ -142,9 +146,6 @@ function performAuthzCheck(inviterUserId, invitedEmail, companyData) {
     return false;
   }
   //store the subject username in shared state
-
-  logger.error("[INVITE USER CHECK MEMBERSHIP] ***** before call: " + JSON.stringify(inviterMembership));
-
   sharedState.put("inviterName", inviterMembership.subject.fullName || inviterMembership.subject.userName);
   logger.error("[INVITE USER CHECK MEMBERSHIP] Inviter membership to company: " + JSON.stringify(inviterMembership));
   // check whether the caller (user owning the session in which the inviter journey has been started) is already authorised for the company
@@ -190,17 +191,6 @@ function performAuthzCheck(inviterUserId, invitedEmail, companyData) {
   return true;
 }
 
-function buildInfoCallback(message) {
-  if (callbacks.isEmpty()) {
-    action = fr.Action.send(
-      new fr.TextOutputCallback(
-        fr.TextOutputCallback.INFORMATION,
-        message
-      )
-    ).build()
-  }
-}
-
 // main execution flow
 
 try {
@@ -213,13 +203,13 @@ try {
   if (!performAuthzCheck(inviterUserId, invitedEmail, companyData)) {
     outcome = NodeOutcome.AUTHZ_ERROR;
   } else {
-    var addUserToCompanyResult = addUserToCompanyWithStatus(inviterUserId, invitedEmail, companyData, MembershipStatus.PENDING);
-    if (!addUserToCompanyResult) {
-      sharedState.put("errorMessage", "Could not add the user " + invitedEmail + " to Company ''" + JSON.parse(companyData).name + "'");
+    var inviteUserResult = createPendingRelationship(inviterUserId, invitedEmail, companyData);
+    if (!inviteUserResult.success) {
+      sharedState.put("errorMessage", "Could not invite the user " + invitedEmail + " to Company ''" + JSON.parse(companyData).name + "': "+inviteUserResult.message);
       sharedState.put("pagePropsJSON", JSON.stringify(
         {
           'errors': [{
-            label: "Could not add the user " + invitedEmail + " to Company ''" + JSON.parse(companyData).name + "'",
+            label: "Could not invite the user " + invitedEmail + " to Company ''" + JSON.parse(companyData).name + "': "+inviteUserResult.message,
             token: "INVITE_USER_ADD_USER_TO_COMPANY_ERROR",
             fieldName: "IDToken2",
             anchor: "IDToken2"
@@ -229,7 +219,6 @@ try {
       outcome = NodeOutcome.AUTHZ_ERROR;
     } else {
       outcome = NodeOutcome.SUCCESS;
-      //buildInfoCallback("New user status: " + JSON.stringify(addUserToCompanyResult));
     }
   }
 } catch (e) {
