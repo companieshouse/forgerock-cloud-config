@@ -96,15 +96,6 @@
 				"nodeType": "SessionDataNode",
 				"displayName": "Get Session Data"
 			},
-			"b6390416-8200-421f-800f-fbdb43c73c5f": {
-				"x": 694,
-				"y": 51.015625,
-				"connections": {
-					"outcome": "0e539626-dfd5-4392-ab9a-287306ebf00e"
-				},
-				"nodeType": "PageNode",
-				"displayName": "Change Full Name"
-			},
 			"fed7dc9a-6d5f-465d-8f47-2e332e88e9d4": {
 				"x": 677,
 				"y": 198.015625,
