@@ -32,7 +32,7 @@ function checkPasswordStatus() {
     if (idRepository.getAttribute(userId, PASSWORD_MIGRATED_FIELD).iterator().hasNext()) {
         var status = idRepository.getAttribute(userId, PASSWORD_MIGRATED_FIELD).iterator().next();
         logger.error("[CHECK PASSWORD STATUS] Found status: " + status);
-        if (status === "migrated") {
+        if (status.equals("migrated")) {
             // Migrated user has already validated their password
             return NodeOutcome.VALID;
         } else {
