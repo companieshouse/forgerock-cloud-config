@@ -226,6 +226,13 @@
     function allowInviteAcceptance(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe) {
         log("ACCEPT INVITE AUTHZ CHECK: callerStatus " + callerStatus + ", subjectStatus " + subjectStatus + ", newStatus " + newStatus + ", isAdminUser " + isCallerAdminUser + ", isMe " + isMe);
 
+        if (subjectStatus === AuthorisationStatus.NONE) {
+            return {
+                message: "The subject does not have a relationship with the company.",
+                allowed: false
+            };
+        }
+        
         if (isCallerAdminUser &&
             subjectStatus === AuthorisationStatus.PENDING &&
             newStatus === AuthorisationStatus.CONFIRMED) {

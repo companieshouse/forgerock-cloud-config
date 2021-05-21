@@ -51,7 +51,7 @@ if (callbacks.isEmpty()) {
 
   var errorMessage = sharedState.get("errorMessage");
   var errorType, errorField;
-  if (errorMessage != null) {
+  if (errorMessage !== null) {
     var errorProps = sharedState.get("pagePropsJSON");
     level = fr.TextOutputCallback.ERROR;
     infoMessage = errorMessage.concat(" Please try again.");
