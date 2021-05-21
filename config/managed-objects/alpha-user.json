@@ -910,10 +910,7 @@
         "isVirtual": false,
         "searchable": true,
         "title": "Full Name (optional)",
-        "type": [
-          "string",
-          "null"
-        ],
+        "type": "string",
         "usageDescription": null,
         "userEditable": true,
         "viewable": true
