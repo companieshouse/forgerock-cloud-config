@@ -99,7 +99,7 @@
 			}
 		},
 		"quoting": "NONE",
-		"table": "CHACCOUNT_USERS",
+		"table": "CHACCOUNTUSERS",
 		"keyColumn": "CUSTOMERID",
 		"passwordColumn": null,
 		"disablePaging": false,
