@@ -99,7 +99,7 @@
 			}
 		},
 		"quoting": "NONE",
-		"table": "AMIDOTEST",
+		"table": "CHACCOUNT_USERS",
 		"keyColumn": "CUSTOMERID",
 		"passwordColumn": null,
 		"disablePaging": false,
