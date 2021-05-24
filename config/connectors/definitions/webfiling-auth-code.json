@@ -1,0 +1,141 @@
+{
+	"_id": "provisioner.openicf/WebfilingAuthCode",
+	"configurationProperties": {
+		"abandonWhenPercentageFull": 0,
+		"accessToUnderlyingConnectionAllowed": true,
+		"allNative": false,
+		"alternateUsernameAllowed": false,
+		"changeLogColumn": null,
+		"commitOnReturn": false,
+		"connectionProperties": null,
+		"defaultAutoCommit": null,
+		"defaultCatalog": null,
+		"defaultReadOnly": null,
+		"defaultTransactionIsolation": -1,
+		"disablePaging": false,
+		"driverClassName": "oracle.jdbc.OracleDriver",
+		"enableEmptyString": false,
+		"fairQueue": true,
+		"ignoreExceptionOnPreLoad": false,
+		"inclusiveSync": false,
+		"initSQL": null,
+		"initialSize": "10",
+		"jdbcInterceptors": null,
+		"jmxEnabled": true,
+		"keyColumn": "SHUTTLEID",
+		"logAbandoned": false,
+		"logValidationErrors": false,
+		"maxActive": "100",
+		"maxAge": "0",
+		"maxIdle": "100",
+		"maxWait": "30000",
+		"minEvictableIdleTimeMillis": "60000",
+		"minIdle": "10",
+		"name": "Tomcat Connection Pool[1-999663323]",
+		"nativeTimestamps": false,
+		"numTestsPerEvictionRun": 0,
+		"password": {
+			"$crypto": {
+				"type": "x-simple-encryption",
+				"value": {
+					"cipher": "AES/CBC/PKCS5Padding",
+					"data": "2jsY4mw2r5dGf4/oog6NwA==",
+					"iv": "/bTTyL8L69ZDwO87D4L0Gw==",
+					"keySize": 16,
+					"mac": "1f4nwXkr0NneBmPNv4W2AQ==",
+					"purpose": "idm.config.encryption",
+					"salt": "D5+UPbPspKMUzIWidUD8ng==",
+					"stableId": "openidm-sym-default"
+				}
+			}
+		},
+		"passwordColumn": null,
+		"propagateInterruptState": false,
+		"quoting": "NONE",
+		"removeAbandoned": false,
+		"removeAbandonedTimeout": 60,
+		"rethrowAllSQLExceptions": true,
+		"rollbackOnReturn": false,
+		"suppressPassword": true,
+		"suspectTimeout": 0,
+		"table": "AUTHCODE",
+		"testOnBorrow": false,
+		"testOnConnect": false,
+		"testOnReturn": false,
+		"testWhileIdle": false,
+		"timeBetweenEvictionRunsMillis": "5000",
+		"url": "jdbc:oracle:thin:@//chd-webdb.internal.ch:1521/WEBDEV",
+		"useDisposableConnectionFacade": true,
+		"useEquals": true,
+		"useLock": false,
+		"useStatementFacade": true,
+		"username": "KERMITEWF",
+		"validationInterval": "3000",
+		"validationQuery": null,
+		"validationQueryTimeout": "-1",
+		"validatorClassName": null
+	},
+	"connectorRef": {
+		"bundleName": "org.forgerock.openicf.connectors.databasetable-connector",
+		"bundleVersion": "1.5.19.6",
+		"connectorHostRef": "ewf-group",
+		"connectorName": "org.identityconnectors.databasetable.DatabaseTableConnector",
+		"displayName": "Database Table Connector",
+		"systemType": "provisioner.openicf"
+	},
+	"enabled": true,
+	"objectTypes": {
+		"__ACCOUNT__": {
+			"$schema": "http://json-schema.org/draft-03/schema",
+			"type": "object",
+			"id": "__ACCOUNT__",
+			"nativeType": "__ACCOUNT__",
+			"properties": {
+				"CONUMB": {
+					"type": "string",
+					"nativeName": "CONUMB",
+					"nativeType": "string",
+					"required": false,
+					"flags": [],
+					"runAsUser": false
+				},
+				"AUTHCODE": {
+					"type": "string",
+					"nativeName": "AUTHCODE",
+					"nativeType": "string",
+					"required": false,
+					"flags": [],
+					"runAsUser": false
+				}
+			}
+		}
+	},
+	"operationTimeout": {
+		"AUTHENTICATE": -1,
+		"CREATE": -1,
+		"DELETE": -1,
+		"GET": -1,
+		"RESOLVEUSERNAME": -1,
+		"SCHEMA": -1,
+		"SCRIPT_ON_CONNECTOR": -1,
+		"SCRIPT_ON_RESOURCE": -1,
+		"SEARCH": -1,
+		"SYNC": -1,
+		"TEST": -1,
+		"UPDATE": -1,
+		"VALIDATE": -1
+	},
+	"poolConfigOption": {
+		"maxIdle": 10,
+		"maxObjects": 10,
+		"maxWait": 150000,
+		"minEvictableIdleTimeMillis": 120000,
+		"minIdle": 1
+	},
+	"resultsHandlerConfig": {
+		"enableAttributesToGetSearchResultsHandler": true,
+		"enableCaseInsensitiveFilter": false,
+		"enableFilteredResultsHandler": false,
+		"enableNormalizingResultsHandler": false
+	}
+}
