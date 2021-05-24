@@ -471,6 +471,22 @@
         },
         {
             "payload": {
+                "_id":"db0f9e36-6d51-4f86-99a7-aa66287fad58",
+                "name":"CH - Change Full Name - Input Collectoe",
+                "description":"Prompts the user for the full name",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1616675641669
+             },
+            "filename": "ch-update-name-input-collector.js"
+        },
+        {
+            "payload": {
                 "_id":"4d27c5a1-e42c-47cb-90c1-d411902eb674",
                 "name":"CH - Change Full Name - Confirmation",
                 "description":"Shows a full name updated confirmation message",

@@ -19,38 +19,6 @@
 			}				
 		},
 		{
-			"_id":"b6390416-8200-421f-800f-fbdb43c73c5f",
-			"nodeType":"PageNode",
-			"details": {
-				"nodes":[
-					{
-					   "_id":"9d4dd4ea-f19a-4bb8-837c-f50cf10766d5",
-					   "nodeType":"AttributeCollectorNode",
-					   "displayName":"Attribute Collector"
-					}
-				],
-				"pageHeader":{
-					"header":"Change Full Name"
-				},
-				"pageDescription":{
-					"value":"Please enter the full name"
-				},
-				"stage":"CHANGE_NAME_1"
-			}	
-		},
-		{
-			"_id":"9d4dd4ea-f19a-4bb8-837c-f50cf10766d5",
-			"nodeType":"AttributeCollectorNode",
-			"details":{
-				"attributesToCollect":[
-					"givenName"
-				 ],
-				 "required":false,
-				 "validateInputs":false,
-				 "identityAttribute":"userName"
-			}
-		},
-		{
 			"_id":"0e539626-dfd5-4392-ab9a-287306ebf00e",
 			"nodeType":"PatchObjectNode",
 			"details":{
@@ -71,75 +39,86 @@
                 "outputs":["*"],
                 "script":"4d27c5a1-e42c-47cb-90c1-d411902eb674"
             }            
+        },
+		{
+            "_id":"fed7dc9a-6d5f-465d-8f47-2e332e88e9d4",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["success", "fail"],
+                "outputs":["*"],
+                "script": "db0f9e36-6d51-4f86-99a7-aa66287fad58"
+            }            
         }
 	],
 	"tree":{
-		"_id":"CHChangeName",
-		"description":"Update full name using active session",
-		"identityResource":"managed/alpha_user",
-		"uiConfig":{},
-		"entryNodeId":"19e2c7db-dff3-4c61-831a-2af2a46370b3",
-		"nodes":{
-			"19e2c7db-dff3-4c61-831a-2af2a46370b3":{
-				"x":166,
-				"y":254.015625,
-				"connections":{
-					"hasSession":"34187e7c-13a9-4e61-b61c-6807a0e70aee",
-					"noSession":"e301438c-0bd0-429c-ab0c-66126501069a"
+		"_id": "CHChangeName",
+		"description": "Update full name using active session",
+		"identityResource": "managed/alpha_user",
+		"uiConfig": {},
+		"entryNodeId": "19e2c7db-dff3-4c61-831a-2af2a46370b3",
+		"nodes": {
+			"19e2c7db-dff3-4c61-831a-2af2a46370b3": {
+				"x": 166,
+				"y": 254.015625,
+				"connections": {
+					"hasSession": "34187e7c-13a9-4e61-b61c-6807a0e70aee",
+					"noSession": "e301438c-0bd0-429c-ab0c-66126501069a"
 				},
-				"nodeType":"ScriptedDecisionNode",
-				"displayName":"Check for Session"
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Check for Session"
 			},
-			"0e539626-dfd5-4392-ab9a-287306ebf00e":{
-				"x":983,
-				"y":254.015625,
-				"connections":{
-					"FAILURE":"e301438c-0bd0-429c-ab0c-66126501069a",
-					"PATCHED":"33266e7b-6c8f-4e65-af6f-ac7405fc9906"
+			"0e539626-dfd5-4392-ab9a-287306ebf00e": {
+				"x": 983,
+				"y": 254.015625,
+				"connections": {
+					"FAILURE": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"PATCHED": "33266e7b-6c8f-4e65-af6f-ac7405fc9906"
 				},
-				"nodeType":"PatchObjectNode",
-				"displayName":"Save User"
+				"nodeType": "PatchObjectNode",
+				"displayName": "Save User"
 			},
-			"33266e7b-6c8f-4e65-af6f-ac7405fc9906":{
-				"x":1311,
-				"y":176.015625,
-				"connections":{
-					"true":"70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+			"33266e7b-6c8f-4e65-af6f-ac7405fc9906": {
+				"x": 1311,
+				"y": 176.015625,
+				"connections": {
+					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
 				},
-				"nodeType":"ScriptedDecisionNode",
-				"displayName":"Confirmation"
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Confirmation"
 			},
-			"34187e7c-13a9-4e61-b61c-6807a0e70aee":{
-				"x":373,
-				"y":129.015625,
-				"connections":{
-					"outcome":"b6390416-8200-421f-800f-fbdb43c73c5f"
+			"34187e7c-13a9-4e61-b61c-6807a0e70aee": {
+				"x": 373,
+				"y": 129.015625,
+				"connections": {
+					"outcome": "fed7dc9a-6d5f-465d-8f47-2e332e88e9d4"
 				},
-				"nodeType":"SessionDataNode",
-				"displayName":"Get Session Data"
+				"nodeType": "SessionDataNode",
+				"displayName": "Get Session Data"
 			},
-			"b6390416-8200-421f-800f-fbdb43c73c5f":{
-				"x":638,
-				"y":186.015625,
-				"connections":{
-					"outcome":"0e539626-dfd5-4392-ab9a-287306ebf00e"
+			"fed7dc9a-6d5f-465d-8f47-2e332e88e9d4": {
+				"x": 677,
+				"y": 198.015625,
+				"connections": {
+					"success": "0e539626-dfd5-4392-ab9a-287306ebf00e",
+					"fail": "e301438c-0bd0-429c-ab0c-66126501069a"
 				},
-				"nodeType":"PageNode",
-				"displayName":"Change Full Name"
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Input Collector"
 			}
 		},
-		"staticNodes":{
-			"startNode":{
-				"x":62,
-				"y":103
+		"staticNodes": {
+			"startNode": {
+				"x": 62,
+				"y": 103
 			},
-			"70e691a5-1e33-4ac3-a356-e7b6d60d92e0":{
-				"x":1689,
-				"y":165
+			"70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
+				"x": 1689,
+				"y": 165
 			},
-			"e301438c-0bd0-429c-ab0c-66126501069a":{
-				"x":1492,
-				"y":508
+			"e301438c-0bd0-429c-ab0c-66126501069a": {
+				"x": 1135,
+				"y": 617
 			}
 		}
 	}
