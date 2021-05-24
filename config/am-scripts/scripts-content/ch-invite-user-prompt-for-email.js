@@ -53,7 +53,7 @@ try {
     var infoMessage = "What are the details of the person you want to authorise to file for this company?";
     var errorMessage = sharedState.get("errorMessage");
     var level = fr.TextOutputCallback.INFORMATION;
-    if (errorMessage != null) {
+    if (errorMessage !== null) {
       var errorProps = sharedState.get("pagePropsJSON");
       level = fr.TextOutputCallback.ERROR;
       infoMessage = errorMessage.concat(" Please try again.");

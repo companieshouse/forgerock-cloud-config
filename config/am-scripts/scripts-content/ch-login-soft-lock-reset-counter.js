@@ -101,6 +101,8 @@ try{
             }));
         action = fr.Action.goTo(NodeOutcome.ERROR).build();
     } else {
+        //need to temporarily transfer the pwd to shared state, for the subtree to pick it up (and clean it up afterwards)
+        sharedState.put("password", transientState.get("password")); 
         action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
     }
 }catch(e){
