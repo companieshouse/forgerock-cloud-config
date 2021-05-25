@@ -28,6 +28,9 @@
 	}, {
 		"target": "frIndexedString3",
 		"default": "pending"
+	}, {
+		"target": "frIndexedString5",
+		"default": "chs"
 	}],
 	"policies": [{
 		"action": "EXCEPTION",
