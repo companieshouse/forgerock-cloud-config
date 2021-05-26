@@ -1,0 +1,77 @@
+{
+	"target": "managed/alpha_organization",
+	"source": "system/WebfilingAuthCode/authCode",
+	"name": "webfilingAuthCode_alphaOrg",
+	"consentRequired": false,
+	"icon": null,
+	"displayName": "webfilingAuthCode_alphaOrg",
+	"properties": [{
+		"target": "authCode",
+		"source": "AUTHCODE"
+	}, {
+		"target": "authCodeIsActive",
+		"default": true
+	}, {
+		"target": "authCodeValidFrom",
+		"source": "STARTDTE"
+	}, {
+		"target": "number",
+		"source": "__NAME__"
+	}],
+	"policies": [{
+		"action": "ASYNC",
+		"situation": "ABSENT"
+	}, {
+		"action": "ASYNC",
+		"situation": "ALL_GONE"
+	}, {
+		"action": "ASYNC",
+		"situation": "AMBIGUOUS"
+	}, {
+		"action": "ASYNC",
+		"situation": "CONFIRMED"
+	}, {
+		"action": "ASYNC",
+		"situation": "FOUND"
+	}, {
+		"action": "ASYNC",
+		"situation": "FOUND_ALREADY_LINKED"
+	}, {
+		"action": "ASYNC",
+		"situation": "LINK_ONLY"
+	}, {
+		"action": "ASYNC",
+		"situation": "MISSING"
+	}, {
+		"action": "ASYNC",
+		"situation": "SOURCE_IGNORED"
+	}, {
+		"action": "ASYNC",
+		"situation": "SOURCE_MISSING"
+	}, {
+		"action": "ASYNC",
+		"situation": "TARGET_IGNORED"
+	}, {
+		"action": "ASYNC",
+		"situation": "UNASSIGNED"
+	}, {
+		"action": "ASYNC",
+		"situation": "UNQUALIFIED"
+	}],
+	"correlationQuery": [{
+		"linkQualifier": "default",
+		"expressionTree": {
+			"any": ["number"]
+		},
+		"mapping": "webfilingAuthCode_alphaOrg",
+		"type": "text/javascript",
+		"file": "ui/correlateTreeToQueryFilter.js"
+	}],
+    "clusteredSourceReconEnabled": true,
+	"reconSourceQueryPageSize": 10000,
+	"sourceQueryFullEntry": true,
+	"sourceQuery": {
+	  "_queryFilter": "true"
+	},
+	"taskThreads": 20
+}
