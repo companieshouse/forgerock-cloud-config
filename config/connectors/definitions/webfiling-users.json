@@ -9,11 +9,11 @@
 		"connectorName": "org.identityconnectors.databasetable.DatabaseTableConnector"
 	},
 	"poolConfigOption": {
-		"maxObjects": 10,
-		"maxIdle": 10,
+		"maxObjects": 2,
+		"maxIdle": 2,
 		"maxWait": 150000,
 		"minEvictableIdleTimeMillis": 120000,
-		"minIdle": 1
+		"minIdle": 2
 	},
 	"resultsHandlerConfig": {
 		"enableNormalizingResultsHandler": false,
@@ -46,11 +46,11 @@
 		"jmxEnabled": true,
 		"commitOnReturn": false,
 		"logAbandoned": false,
-		"maxIdle": "100",
+		"maxIdle": "2",
 		"testWhileIdle": false,
 		"removeAbandoned": false,
 		"abandonWhenPercentageFull": 0,
-		"minIdle": "10",
+		"minIdle": "2",
 		"defaultReadOnly": null,
 		"maxWait": "30000",
 		"logValidationErrors": false,
@@ -69,7 +69,7 @@
 		"defaultAutoCommit": null,
 		"testOnConnect": false,
 		"jdbcInterceptors": null,
-		"initialSize": "10",
+		"initialSize": "2",
 		"defaultTransactionIsolation": -1,
 		"numTestsPerEvictionRun": 0,
 		"url": "jdbc:oracle:thin:@//chd-webdb.internal.ch:1521/WEBDEV",
@@ -81,7 +81,7 @@
 		"timeBetweenEvictionRunsMillis": "5000",
 		"testOnReturn": false,
 		"useLock": false,
-		"maxActive": "100",
+		"maxActive": "2",
 		"username": "KERMITEWF",
 		"password": {
 			"$crypto": {

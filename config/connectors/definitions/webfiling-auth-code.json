@@ -19,18 +19,18 @@
 		"ignoreExceptionOnPreLoad": false,
 		"inclusiveSync": false,
 		"initSQL": null,
-		"initialSize": "10",
+		"initialSize": "2",
 		"jdbcInterceptors": null,
 		"jmxEnabled": true,
 		"keyColumn": "SHUTTLEID",
 		"logAbandoned": false,
 		"logValidationErrors": false,
-		"maxActive": "100",
+		"maxActive": "2",
 		"maxAge": "0",
-		"maxIdle": "100",
+		"maxIdle": "2",
 		"maxWait": "30000",
 		"minEvictableIdleTimeMillis": "60000",
-		"minIdle": "10",
+		"minIdle": "2",
 		"name": "Tomcat Connection Pool[1-999663323]",
 		"nativeTimestamps": false,
 		"numTestsPerEvictionRun": 0,
@@ -126,11 +126,11 @@
 		"VALIDATE": -1
 	},
 	"poolConfigOption": {
-		"maxIdle": 10,
-		"maxObjects": 10,
+		"maxIdle": 2,
+		"maxObjects": 2,
 		"maxWait": 150000,
 		"minEvictableIdleTimeMillis": 120000,
-		"minIdle": 1
+		"minIdle": 2
 	},
 	"resultsHandlerConfig": {
 		"enableAttributesToGetSearchResultsHandler": true,
