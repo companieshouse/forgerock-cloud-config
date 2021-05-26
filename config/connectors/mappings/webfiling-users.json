@@ -24,9 +24,6 @@
 		"target": "frIndexedString2",
 		"source": "PASSWORD"
 	}, {
-		"target": "frIndexedString3",
-		"default": "pending"
-	}, {
 		"target": "frIndexedString5",
 		"default": "webfiling"
 	}],
@@ -85,5 +82,10 @@
 		"mapping": "webfilingUser_alphaUser",
 		"type": "text/javascript",
 		"file": "ui/correlateTreeToQueryFilter.js"
-	}]
+	}],
+	"onCreate": {
+		"type": "text/javascript",
+		"globals": {},
+		"source": "target.frIndexedString3 = \"pending\""
+	}
 }
