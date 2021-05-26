@@ -26,9 +26,6 @@
 		"target": "frIndexedString2",
 		"source": "password"
 	}, {
-		"target": "frIndexedString3",
-		"default": "pending"
-	}, {
 		"target": "frIndexedString5",
 		"default": "chs"
 	}],
@@ -84,7 +81,7 @@
 	"onCreate": {
 		"type": "text/javascript",
 		"globals": {},
-		"source": "var incomingRoles = source.roles;\n\nif (incomingRoles != null) {\n  var rolesLength = incomingRoles.length;\n\n  var fidcRoles = [];\n\n  for (var i = 0; i < rolesLength; i++) {\n      var role = incomingRoles[i];\n\n      var existingRole = openidm.query('managed/alpha_role',{\"_queryFilter\": '/name eq \"' + role + '\"' }, [\"*\"]);\n      if (existingRole.result.length > 0) {\n        existingRoleId = existingRole.result[0]._id\n\n        var fidcRole = {\n          _ref: \"managed/alpha_role/\" + existingRoleId\n        };\n\n        fidcRoles.push(fidcRole);\n      }\n  }\n\n  if (fidcRoles.length > 0) {\n    target.roles = fidcRoles;\n  }\n}"
+		"source": "var incomingRoles = source.roles;\n\nif (incomingRoles != null) {\n  var rolesLength = incomingRoles.length;\n\n  var fidcRoles = [];\n\n  for (var i = 0; i < rolesLength; i++) {\n      var role = incomingRoles[i];\n\n      var existingRole = openidm.query('managed/alpha_role',{\"_queryFilter\": '/name eq \"' + role + '\"' }, [\"*\"]);\n      if (existingRole.result.length > 0) {\n        existingRoleId = existingRole.result[0]._id\n\n        var fidcRole = {\n          _ref: \"managed/alpha_role/\" + existingRoleId\n        };\n\n        fidcRoles.push(fidcRole);\n      }\n  }\n\n  if (fidcRoles.length > 0) {\n    target.roles = fidcRoles;\n  }\n}\n\ntarget.frIndexedString3 = \"pending\""
 	},
 	"onUpdate": {
 		"type": "text/javascript",
