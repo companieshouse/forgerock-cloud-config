@@ -22,7 +22,7 @@
 		"initialSize": "10",
 		"jdbcInterceptors": null,
 		"jmxEnabled": true,
-		"keyColumn": "SHUTTLEID",
+		"keyColumn": "CONUMB",
 		"logAbandoned": false,
 		"logValidationErrors": false,
 		"maxActive": "100",
