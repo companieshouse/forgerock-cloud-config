@@ -1,0 +1,92 @@
+{
+	"nodes": [
+		{
+			"_id": "ce2dab5c-3b95-4ab6-9a5c-b58dd9eee84d",
+			"nodeType": "PageNode",
+			"details": {
+				"stage":"EWF_LOGIN_1",
+				"nodes": [
+					{
+						"_id": "47096e1a-1a2d-443e-8bd9-498f0a441772",
+						"nodeType":"ValidatedUsernameNode",
+						"displayName":"Platform Username"
+					 },
+					 {
+						"_id": "bbd5738a-e80c-42e8-8a34-e95f287a2f8f",
+						"nodeType":"ValidatedPasswordNode",
+						"displayName":"Platform Password"
+					 }
+				],
+				"pageDescription": {
+					"en": "New here? <a href=\"#/service/Registration\">Create an account</a><br><a href=\"#/service/ForgottenUsername\">Forgot username?</a><a href=\"#/service/ResetPassword\"> Forgot password?</a>"
+				},
+				"pageHeader": {
+					"en": "Sign In to WebFiling"
+				}
+			}
+		},
+		{
+			"_id": "47096e1a-1a2d-443e-8bd9-498f0a441772",
+			"nodeType": "ValidatedUsernameNode",
+			"details": {
+				"validateInput": false,
+				"usernameAttribute": "userName"
+			}
+		},
+		{
+			"_id": "bbd5738a-e80c-42e8-8a34-e95f287a2f8f",
+			"nodeType": "ValidatedPasswordNode",
+			"details": {
+				"validateInput": false,
+				"passwordAttribute": "password"
+			}
+		},
+		{
+			"_id": "b6943bfa-4890-4e62-8fbe-f32b3a50c7ef",
+			"nodeType": "DataStoreDecisionNode",
+			"details": {}
+		}
+    ],
+    "tree": {
+		"_id": "CHWebFiling",
+		"description": "Journey for WebFiling users",
+		"identityResource": "managed/alpha_user",
+		"uiConfig": {},
+		"entryNodeId": "ce2dab5c-3b95-4ab6-9a5c-b58dd9eee84d",
+		"nodes": {
+			"ce2dab5c-3b95-4ab6-9a5c-b58dd9eee84d": {
+				"x": 285,
+				"y": 115,
+				"connections": {
+					"outcome": "b6943bfa-4890-4e62-8fbe-f32b3a50c7ef"
+				},
+				"nodeType": "PageNode",
+				"displayName": "Page Node"
+			},
+			"b6943bfa-4890-4e62-8fbe-f32b3a50c7ef": {
+				"x": 748,
+				"y": 107,
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+				},
+				"nodeType": "DataStoreDecisionNode",
+				"displayName": "Data Store Decision"
+			}
+		},
+		"staticNodes": {
+			"startNode": {
+				"x": 70,
+				"y": 80
+			},
+			"70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
+				"x": 1396,
+				"y": 41
+			},
+			"e301438c-0bd0-429c-ab0c-66126501069a": {
+				"x": 1398,
+				"y": 217
+			}
+		}
+	}
+}

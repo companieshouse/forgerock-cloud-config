@@ -86,7 +86,9 @@
     "claimsParameterSupported": false,
     "defaultACR": [],
     "idTokenInfoClientAuthenticationEnabled": true,
-    "loaMapping": {},
+    "loaMapping": {
+			"webfiling": "CHWebFiling"
+		},
     "storeOpsTokens": true,
     "supportedRequestParameterEncryptionAlgorithms": [
       "ECDH-ES+A256KW",
