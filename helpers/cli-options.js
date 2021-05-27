@@ -40,6 +40,11 @@ const cliOptions = (requestedOptions) => {
       alias: 'v',
       demandOption: true,
       describe: 'FIDC Config Version Number'
+    },
+    authTreePassword: {
+      alias: 't',
+      demandOption: true,
+      describe: 'Password for the Auth Tree Admin Client'
     }
   }
 

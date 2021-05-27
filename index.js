@@ -36,7 +36,7 @@ yargs
   .command({
     command: 'applications',
     desc: 'Update ForgeRock Applications (./config/applications)',
-    builder: cliOptions(['username', 'password', 'realm']),
+    builder: cliOptions(['username', 'password', 'realm', 'authTreePassword']),
     handler: (argv) => updateApplications(argv)
   })
   .command({
@@ -121,8 +121,7 @@ yargs
   })
   .command({
     command: 'remote-servers',
-    desc:
-      'Update Remote Connector Servers (./config/connectors/remote-servers.json)',
+    desc: 'Update Remote Connector Servers (./config/connectors/remote-servers.json)',
     builder: cliOptions([
       'idmUsername',
       'idmPassword',
@@ -146,8 +145,7 @@ yargs
   })
   .command({
     command: 'terms-and-conditions',
-    desc:
-      'Update IDM Terms and Conditions (./config/consent/terms-and-conditions.json)',
+    desc: 'Update IDM Terms and Conditions (./config/consent/terms-and-conditions.json)',
     builder: cliOptions([
       'idmUsername',
       'idmPassword',
@@ -160,8 +158,7 @@ yargs
   })
   .command({
     command: 'password-policy',
-    desc:
-      'Update IDM Password Policy for Alpha users (./config/password-policy/password-policy.json)',
+    desc: 'Update IDM Password Policy for Alpha users (./config/password-policy/password-policy.json)',
     builder: cliOptions([
       'idmUsername',
       'idmPassword',
