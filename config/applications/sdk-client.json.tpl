@@ -117,7 +117,11 @@
       "value": [
         "forgerock://oidc_callback",
         "{REPLACEMENT_UI_URL}",
-        "http://localhost:3000"
+        "{REPLACEMENT_UI_URL}/account/home",
+        "{REPLACEMENT_UI_URL}/_callback",
+        "http://localhost:3000",
+        "http://localhost:3000/_callback",
+        "http://localhost:3000/account/home"
       ]
     },
     "policyUri": {
