@@ -22,8 +22,8 @@ const {
 
 require('dotenv').config()
 
-if (!process.env.FIDC_URL || !process.env.UI_URL) {
-  console.error('Missing required environment variable(s)')
+if (!process.env.FIDC_URL) {
+  console.error('Missing required environment variable: FIDC_URL')
   process.exit(1)
 }
 

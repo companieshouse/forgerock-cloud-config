@@ -6,9 +6,13 @@ const replaceSensitiveValues = require('../helpers/replace-sensitive-values')
 
 const updateApplications = async (argv) => {
   const { realm, authTreePassword } = argv
-  const { FIDC_URL, UI_URL } = process.env
+  const { FIDC_URL, UI_URL, EWF_URL } = process.env
 
   try {
+    if (!UI_URL || !EWF_URL) {
+      throw new Error('Missing required environment variable(s)')
+    }
+
     const sessionToken = await getSessionToken(argv)
 
     // Read application JSON files
