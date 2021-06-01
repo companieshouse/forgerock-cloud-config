@@ -20,8 +20,8 @@ const updateApplications = async (argv) => {
 
     await replaceSensitiveValues(
       dir,
-      [/{UI_URL}/g, /{AUTH_TREE_PASSWORD}/g],
-      [UI_URL, authTreePassword]
+      [/{UI_URL}/g, /{EWF_URL}/g, /{AUTH_TREE_PASSWORD}/g],
+      [UI_URL, EWF_URL, authTreePassword]
     )
 
     const applicationFileContent = fs
