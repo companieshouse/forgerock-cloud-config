@@ -22,7 +22,11 @@
 		},
 		"scopes": {
 			"inherited": false,
-			"value": ["openid", "profile", "email"]
+			"value": [
+				"openid",
+				"profile",
+				"email"
+			]
 		},
 		"status": {
 			"inherited": false,
@@ -35,9 +39,9 @@
 		"redirectionUris": {
 			"inherited": false,
 			"value": [
-                "http://localhost:8080/oidc/callback", 
-                "{REPLACEMENT_EWF_URL}"
-            ]
+				"http://localhost:8080/oidc/callback",
+				"{EWF_URL}"
+			]
 		},
 		"clientName": {
 			"inherited": false,
@@ -91,7 +95,17 @@
 		},
 		"responseTypes": {
 			"inherited": false,
-			"value": ["code", "token", "id_token", "code token", "token id_token", "code id_token", "code token id_token", "device_code", "device_code id_token"]
+			"value": [
+				"code",
+				"token",
+				"id_token",
+				"code token",
+				"token id_token",
+				"code id_token",
+				"code token id_token",
+				"device_code",
+				"device_code id_token"
+			]
 		},
 		"updateAccessToken": {
 			"inherited": false
@@ -135,7 +149,10 @@
 		},
 		"grantTypes": {
 			"inherited": false,
-			"value": ["authorization_code", "password"]
+			"value": [
+				"authorization_code",
+				"password"
+			]
 		}
 	},
 	"signEncOAuth2ClientConfig": {
@@ -244,7 +261,9 @@
 		},
 		"defaultAcrValues": {
 			"inherited": false,
-			"value": ["webfiling"]
+			"value": [
+				"webfiling"
+			]
 		},
 		"jwtTokenLifetime": {
 			"inherited": false,

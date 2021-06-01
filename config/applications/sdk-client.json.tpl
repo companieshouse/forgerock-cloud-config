@@ -7,7 +7,7 @@
     },
     "defaultScopes": {
       "inherited": false,
-      "value":[
+      "value": [
         "email",
         "profile",
         "phone"
@@ -42,9 +42,9 @@
         "http://localhost:3000",
         "http://localhost:3000/_callback",
         "http://localhost:3000/account/home/",
-        "{REPLACEMENT_UI_URL}",
-        "{REPLACEMENT_UI_URL}/account/home/",
-        "{REPLACEMENT_UI_URL}/_callback"
+        "{UI_URL}",
+        "{UI_URL}/account/home/",
+        "{UI_URL}/_callback"
       ]
     },
     "clientName": {
@@ -116,9 +116,9 @@
       "inherited": false,
       "value": [
         "forgerock://oidc_callback",
-        "{REPLACEMENT_UI_URL}",
-        "{REPLACEMENT_UI_URL}/account/home",
-        "{REPLACEMENT_UI_URL}/_callback",
+        "{UI_URL}",
+        "{UI_URL}/account/home",
+        "{UI_URL}/_callback",
         "http://localhost:3000",
         "http://localhost:3000/_callback",
         "http://localhost:3000/account/home"
@@ -273,8 +273,8 @@
         "forgerock://oidc_callback",
         "http://localhost:3000",
         "http://localhost:3000/_callback",
-        "{REPLACEMENT_UI_URL}",
-        "{REPLACEMENT_UI_URL}/_callback"
+        "{UI_URL}",
+        "{UI_URL}/_callback"
       ]
     }
   },

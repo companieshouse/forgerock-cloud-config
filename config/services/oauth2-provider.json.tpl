@@ -32,7 +32,7 @@
             "urn:ietf:params:oauth:grant-type:uma-ticket",
             "urn:ietf:params:oauth:grant-type:jwt-bearer"
         ],
-        "hashSalt": "{REPLACEMENT_HASH_SALT}",
+        "hashSalt": "{HASH_SALT}",
         "macaroonTokenFormat": "V2",
         "moduleMessageEnabledInPasswordGrant": false,
         "passwordGrantAuthService": "PasswordGrant",

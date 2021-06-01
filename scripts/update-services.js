@@ -18,11 +18,7 @@ const updateServices = async (argv) => {
     // Read JSON files
     const dir = path.resolve(__dirname, '../config/services')
 
-    await replaceSensitiveValues(
-      dir,
-      ['{REPLACEMENT_HASH_SALT}'],
-      [OAUTH2_HASH_SALT]
-    )
+    await replaceSensitiveValues(dir, ['{HASH_SALT}'], [OAUTH2_HASH_SALT])
 
     const servicesFileContent = fs
       .readdirSync(dir)

@@ -1,7 +1,7 @@
 {
    "_id": "AMTreeAdminClient",
    "coreOAuth2ClientConfig": {
-      "userpassword": "{REPLACEMENT_AUTH_TREE_PASSWORD}",
+      "userpassword": "{AUTH_TREE_PASSWORD}",
       "loopbackInterfaceRedirection": {
          "inherited": false,
          "value": false

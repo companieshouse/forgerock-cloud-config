@@ -20,7 +20,7 @@ const updateApplications = async (argv) => {
 
     await replaceSensitiveValues(
       dir,
-      [/{REPLACEMENT_UI_URL}/g, /{REPLACEMENT_AUTH_TREE_PASSWORD}/g],
+      [/{UI_URL}/g, /{AUTH_TREE_PASSWORD}/g],
       [UI_URL, authTreePassword]
     )
 
