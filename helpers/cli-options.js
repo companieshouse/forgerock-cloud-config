@@ -45,6 +45,11 @@ const cliOptions = (requestedOptions) => {
       alias: 't',
       demandOption: true,
       describe: 'Password for the Auth Tree Admin Client'
+    },
+    igOidcPassword: {
+      alias: 'i',
+      demandOption: true,
+      describe: 'Password for the IG OIDC Client'
     }
   }
 

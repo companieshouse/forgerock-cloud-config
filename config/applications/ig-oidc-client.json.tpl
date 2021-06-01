@@ -2,8 +2,7 @@
 	"_id": "oidc_client",
 	"coreOAuth2ClientConfig": {
 		"agentgroup": null,
-		"userpassword": null,
-		"userpassword-encrypted": "AAAAA0FFUwIQ6PrXca0MXVeUeB95oIls1zhaIeTCWfodJAI/Rkiv6vDx1/ZQnvl1iw==",
+		"userpassword": "{IG_OIDC_PASSWORD}",
 		"loopbackInterfaceRedirection": {
 			"inherited": false,
 			"value": false

@@ -36,7 +36,13 @@ yargs
   .command({
     command: 'applications',
     desc: 'Update ForgeRock Applications (./config/applications)',
-    builder: cliOptions(['username', 'password', 'realm', 'authTreePassword']),
+    builder: cliOptions([
+      'username',
+      'password',
+      'realm',
+      'authTreePassword',
+      'igOidcPassword'
+    ]),
     handler: (argv) => updateApplications(argv)
   })
   .command({
