@@ -112,6 +112,18 @@ userAddressClaimResolver = { claim, identity ->
     [:]
 }
 
+webFilingClaimResolver = { claim, identity ->
+    if (identity != null) {
+        return [
+            "company_no" : "08694860",
+            "password" : "DevPass12",
+            "jurisdiction": "EN",
+            "auth_code": "222222"
+        ]
+    }
+    [:]
+}
+
 /*
  * Claim resolver which resolves the value of the claim by looking up the user's profile.
  *
@@ -210,9 +222,11 @@ claimAttributes = [
         "zoneinfo": userProfileClaimResolver.curry("preferredtimezone"),
         "family_name": userProfileClaimResolver.curry("sn"),
         "locale": userProfileClaimResolver.curry("preferredlocale"),
-        "name": userProfileClaimResolver.curry("cn")
+        "name": userProfileClaimResolver.curry("cn"),
+        "webfiling_info": { claim, identity -> [ (claim.getName()) : webFilingClaimResolver(claim, identity)] }
 ]
 
+//https://backstage.forgerock.com/knowledge/kb/book/b66926033#a74498680 
 
 // -------------- UPDATE THIS TO CHANGE SCOPE TO CLAIM MAPPINGS --------------
 /*
@@ -223,9 +237,8 @@ scopeClaimsMap = [
         "email": [ "email" ],
         "address": [ "address" ],
         "phone": [ "phone_number" ],
-        "profile": [ "given_name", "zoneinfo", "family_name", "locale", "name" ]
+        "profile": [ "given_name", "zoneinfo", "family_name", "locale", "name", "webfiling_info" ]
 ]
-
 
 // ---------------- UPDATE BELOW FOR ADVANCED USAGES -------------------
 if (logger.messageEnabled()) {
