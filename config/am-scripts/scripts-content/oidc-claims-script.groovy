@@ -117,7 +117,7 @@ webFilingClaimResolver = { claim, identity ->
         return [
             "company_no" : "08694860",
             "password" : "DevPass12",
-            "jurisdiction": "EN",
+            "jurisdiction": "en",
             "auth_code": "222222"
         ]
     }

@@ -39,7 +39,7 @@
 			"inherited": false,
 			"value": [
 				"http://localhost:8080/oidc/callback",
-				"{EWF_URL}"
+				"{EWF_URL}:443/oidc/callback"
 			]
 		},
 		"clientName": {
