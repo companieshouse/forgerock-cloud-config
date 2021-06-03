@@ -97,16 +97,6 @@
             }            
         },
         {
-            "_id":"48ef280d-22c2-4e03-8b04-7b04758040ee",
-            "nodeType": "ScriptedDecisionNode", 
-            "details": {
-                "inputs":["*"],
-                "outcomes":["true","false"],
-                "outputs":["*"],
-                "script":"65d2099f-9583-47d3-8303-8051709cb436"
-            }            
-        },
-        {
             "_id":"c5f729d0-922d-44f8-a480-aa34d2ca02d8",
             "nodeType": "ScriptedDecisionNode", 
             "details": {
@@ -170,6 +160,16 @@
             },
             "nodeType":"ScriptedDecisionNode",
             "displayName":"Enter company No"
+         },
+         "93328e47-3918-42c3-a27d-b5cf6c1abb67":{
+            "x":1285,
+            "y":33.015625,
+            "connections":{
+               "true":"e5c64e99-5259-4e93-bb25-1871b370f7cd",
+               "false":"c5f729d0-922d-44f8-a480-aa34d2ca02d8"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"Validate Cleartext Auth Code"
          },
          "54a93ee3-d273-49b6-8d23-0fd1dcb6320b":{
             "x":222,
@@ -277,16 +277,6 @@
             },
             "nodeType":"ScriptedDecisionNode",
             "displayName":"get IDM token"
-         },
-         "93328e47-3918-42c3-a27d-b5cf6c1abb67":{
-            "x":1285,
-            "y":33.015625,
-            "connections":{
-               "false":"c5f729d0-922d-44f8-a480-aa34d2ca02d8",
-               "true":"e5c64e99-5259-4e93-bb25-1871b370f7cd"
-            },
-            "nodeType":"ScriptedDecisionNode",
-            "displayName":"Validate cleartext Authcode"
          }
       },
       "staticNodes":{
