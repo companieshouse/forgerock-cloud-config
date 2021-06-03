@@ -232,22 +232,6 @@
             "nodeType":"RetryLimitDecisionNode",
             "displayName":"Retry Limit Decision"
          },
-         "c5f729d0-922d-44f8-a480-aa34d2ca02d8":{
-            "x":1303,
-            "y":247,
-            "connections": {
-               "true":"ba60739d-61f1-4ede-bf94-3f3dc628a38d"
-            },
-            "nodeType":"ScriptedDecisionNode",
-            "displayName":"Auth Code Error Message"
-         },
-         "c7714228-4b3d-403c-8807-39c028bf549c":{
-            "x":1436,
-            "y":629.015625,
-            "connections": {},
-            "nodeType":"ScriptedDecisionNode",
-            "displayName":"max attempts message"
-         },
          "e04ef6d2-daec-403e-93a1-f8b60a8f634b":{
             "x":299.40625,
             "y":37.015625,
@@ -277,6 +261,22 @@
             },
             "nodeType":"ScriptedDecisionNode",
             "displayName":"get IDM token"
+         },
+         "c5f729d0-922d-44f8-a480-aa34d2ca02d8":{
+            "x":1303,
+            "y":247,
+            "connections": {
+               "true":"ba60739d-61f1-4ede-bf94-3f3dc628a38d"
+            },
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"Auth Code Error Message"
+         },
+         "c7714228-4b3d-403c-8807-39c028bf549c":{
+            "x":1436,
+            "y":629.015625,
+            "connections": {},
+            "nodeType":"ScriptedDecisionNode",
+            "displayName":"max attempts message"
          }
       },
       "staticNodes":{
