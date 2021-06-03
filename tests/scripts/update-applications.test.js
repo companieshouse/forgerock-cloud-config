@@ -16,6 +16,8 @@ describe('update-applications', () => {
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
+    uiUrl: 'https://idam-ui.companieshouse.gov.uk',
+    ewfUrl: 'https://ewf.companieshouse.gov.uk',
     sessionToken: 'session=1234',
     realm: 'alpha'
   }
@@ -60,6 +62,8 @@ describe('update-applications', () => {
     fidcRequest.mockImplementation(() => Promise.resolve())
     replaceSensitiveValues.mockImplementation(() => Promise.resolve())
     process.env.FIDC_URL = mockValues.fidcUrl
+    process.env.UI_URL = mockValues.uiUrl
+    process.env.EWF_URL = mockValues.ewfUrl
     fs.readdirSync.mockReturnValue(['sdk-client.json'])
     jest.mock(mockConfigFile, () => mockConfig, { virtual: true })
   })
@@ -75,6 +79,16 @@ describe('update-applications', () => {
     console.log.mockRestore()
     console.error.mockRestore()
     process.exit.mockRestore()
+  })
+
+  it('should error if missing environment variable', async () => {
+    expect.assertions(2)
+    delete process.env.UI_URL
+    await updateApplications(mockValues)
+    expect(console.error).toHaveBeenCalledWith(
+      'Missing required environment variable(s)'
+    )
+    expect(process.exit).toHaveBeenCalledWith(1)
   })
 
   it('should error if getSessionToken functions fails', async () => {

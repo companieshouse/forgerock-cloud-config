@@ -22,8 +22,8 @@ const {
 
 require('dotenv').config()
 
-if (!process.env.FIDC_URL || !process.env.UI_URL) {
-  console.error('Missing required environment variable(s)')
+if (!process.env.FIDC_URL) {
+  console.error('Missing required environment variable: FIDC_URL')
   process.exit(1)
 }
 
@@ -36,7 +36,13 @@ yargs
   .command({
     command: 'applications',
     desc: 'Update ForgeRock Applications (./config/applications)',
-    builder: cliOptions(['username', 'password', 'realm', 'authTreePassword']),
+    builder: cliOptions([
+      'username',
+      'password',
+      'realm',
+      'authTreePassword',
+      'igOidcPassword'
+    ]),
     handler: (argv) => updateApplications(argv)
   })
   .command({

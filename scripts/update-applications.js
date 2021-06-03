@@ -5,10 +5,14 @@ const fidcRequest = require('../helpers/fidc-request')
 const replaceSensitiveValues = require('../helpers/replace-sensitive-values')
 
 const updateApplications = async (argv) => {
-  const { realm, authTreePassword } = argv
-  const { FIDC_URL, UI_URL } = process.env
+  const { realm, authTreePassword, igOidcPassword } = argv
+  const { FIDC_URL, UI_URL, EWF_URL } = process.env
 
   try {
+    if (!UI_URL || !EWF_URL) {
+      throw new Error('Missing required environment variable(s)')
+    }
+
     const sessionToken = await getSessionToken(argv)
 
     // Read application JSON files
@@ -16,8 +20,13 @@ const updateApplications = async (argv) => {
 
     await replaceSensitiveValues(
       dir,
-      [/{REPLACEMENT_UI_URL}/g, /{REPLACEMENT_AUTH_TREE_PASSWORD}/g],
-      [UI_URL, authTreePassword]
+      [
+        /{UI_URL}/g,
+        /{EWF_URL}/g,
+        /{AUTH_TREE_PASSWORD}/g,
+        /{IG_OIDC_PASSWORD}/g
+      ],
+      [UI_URL, EWF_URL, authTreePassword, igOidcPassword]
     )
 
     const applicationFileContent = fs
