@@ -142,7 +142,8 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
                             ["YES", "NO"],
                             YES_OPTION_INDEX
                         )
-                    ).build()
+                    ).build();
+                    return true;
                 }
             } else {
                 return true;
