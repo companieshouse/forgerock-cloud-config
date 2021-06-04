@@ -126,7 +126,7 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
                     action = fr.Action.send(
                         new fr.HiddenValueCallback(
                             "stage",
-                            "COMPANY_ASSOCIATION_2"
+                            isEWF ? "EWF_LOGIN_3" : "COMPANY_ASSOCIATION_2"
                         ),
                         new fr.TextOutputCallback(
                             fr.TextOutputCallback.INFORMATION,
@@ -184,6 +184,7 @@ var YES_OPTION_INDEX = 0;
 var idmCompanyEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_organization/";
 
 var skipConfirmation = sharedState.get("skipConfirmation");
+var isEWF = sharedState.get("EWF-JOURNEY");
 
 // if the selection must be confirmed automatically
 if (!skipConfirmation) {
