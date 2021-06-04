@@ -20,6 +20,8 @@ var fr = JavaImporter(
   com.sun.identity.authentication.callbacks.HiddenValueCallback
 )
 
+var isEWF = sharedState.get("EWF-JOURNEY");
+
 if (callbacks.isEmpty()) {
   var companyData = sharedState.get("companyData");
   var infoMessage = "Please enter the company auth code.";
@@ -32,14 +34,14 @@ if (callbacks.isEmpty()) {
     action = fr.Action.send(
       new fr.TextOutputCallback(level, infoMessage),
       new fr.NameCallback("Enter Auth Code"),
-      new fr.HiddenValueCallback("stage", "COMPANY_ASSOCIATION_3"),
+      new fr.HiddenValueCallback("stage", isEWF ? "EWF_LOGIN_4" : "COMPANY_ASSOCIATION_3"),
       new fr.HiddenValueCallback("pagePropsJSON", errorProps)
     ).build();
   } else {
     action = fr.Action.send(
       new fr.TextOutputCallback(level, infoMessage),
       new fr.NameCallback("Enter Auth Code"),
-      new fr.HiddenValueCallback("stage", "COMPANY_ASSOCIATION_3"),
+      new fr.HiddenValueCallback("stage", isEWF ? "EWF_LOGIN_4" : "COMPANY_ASSOCIATION_3"),
       new fr.HiddenValueCallback("pagePropsJSON", JSON.stringify({"company": JSON.parse(companyData)}))
     ).build();
   }

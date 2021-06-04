@@ -1044,6 +1044,102 @@
                 "lastModifiedDate": 1621011931193
             },
             "filename": "ch-reset-password-clear-parameters.js"
+        },
+        {
+            "payload": {
+                "_id":"ca6cbc1b-d83b-4946-b327-be15402894fa",
+                "name":"CH - EWF: Prompt for Company Number",
+                "description":"Prompts the user to enter the Company Number",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-webfiling-prompt-for-company-no.js"
+        },
+        {
+            "payload": {
+                "_id":"19a9ba97-3eaf-46ed-9b59-ea9315d81407",
+                "name":"CH - EWF: Add password to Session",
+                "description":"stores EWF user password in session",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-webfiling-store-pwd-in-session.js"
+        },
+        {
+            "payload": {
+                "_id":"ddce54ff-70fe-4ef7-bdfe-3c83488ef266",
+                "name":"CH - EWF: Check for Session",
+                "description":"checks if session exists",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-webfiling-check-for-session.js"
+        },
+        {
+            "payload": {
+                "_id":"78da2828-68cc-4f63-b003-b8a250b1753d",
+                "name":"CH - EWF: Prompt for Association Confirmation",
+                "description":"Prompts the user for confirmation to add the company to their account",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-webfiling-prompt-for-link-confirmation.js"
+        },
+        {
+            "payload": {
+                "_id":"460f8d31-5f90-440a-9f47-f5951778ea4f",
+                "name":"CH - EWF: Add auth code to Session",
+                "description":"stores EWF company auth code in session",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-webfiling-store-authcode-in-session.js"
+        },
+        {
+            "payload": {
+                "_id":"d8d0c71c-ddfb-47f6-a577-33aa0b7c2bcd",
+                "name":"CH - EWF: Checks user association with company",
+                "description":"Checks user association with company",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-webfiling-check-for-company-assoc-status.js"
         }
     ]
 }
