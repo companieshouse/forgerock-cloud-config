@@ -334,8 +334,8 @@
 		}
 	],
     "tree": {
-		"_id": "CHWebFIling-Login",
-		"description": "CH WebFiling journey",
+		"_id": "CHWebFiling-Login",
+		"description": "CH WebFiling Login journey",
 		"identityResource": "managed/alpha_user",
 		"uiConfig": {},
 		"entryNodeId": "fb8f7fbe-2fa7-4de8-a5c1-c55c54b1fd3d",
