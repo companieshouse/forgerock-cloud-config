@@ -218,7 +218,7 @@
 				"pageHeader": {
 					"header": "Please enter your code"
 				},
-				"stage": "EWF_LOGIN_OTP_METHOD"
+				"stage": "EWF_LOGIN_OTP"
 			}
 		},
 		{
@@ -253,7 +253,7 @@
 				"pageHeader": {
 					"header": "How do you want to confirm it's you?"
 				},
-				"stage": "EWF_LOGIN_OTP"
+				"stage": "EWF_LOGIN_OTP_METHOD"
 			}
 		},
 		{
