@@ -138,16 +138,6 @@
 			}
 		},
 		{
-			"_id": "65876549-523c-4bd6-99e4-4abb42ac49d6",
-			"nodeType": "ScriptedDecisionNode",
-			"details": {
-				"inputs": ["*"],
-				"outcomes": ["true", "false"],
-				"outputs": ["*"],
-				"script": "20a3599f-b742-4554-a8b7-27862f248dd5"
-			}
-		},
-		{
 			"_id": "6bc10407-960b-4e7d-8290-b8fc554eefa4",
 			"nodeType": "IdentifyExistingUserNode",
 			"details": {
@@ -421,24 +411,14 @@
 				"displayName": "Soft Lock Increment Counter"
 			},
 			"6538e894-475a-49f0-be1c-08d721f615df": {
-				"x": 1239,
-				"y": 251.015625,
+				"x": 1044,
+				"y": 179.015625,
 				"connections": {
 					"error": "fb8f7fbe-2fa7-4de8-a5c1-c55c54b1fd3d",
-					"success": "65876549-523c-4bd6-99e4-4abb42ac49d6"
+					"success": "c57cea8d-a2de-4422-8ccb-5ca9dcad5bde"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Reset Counter after login OK"
-			},
-			"65876549-523c-4bd6-99e4-4abb42ac49d6": {
-				"x": 1032,
-				"y": 39.5,
-				"connections": {
-					"false": "24d11b28-95b9-478c-aede-990c2471109c",
-					"true": "c57cea8d-a2de-4422-8ccb-5ca9dcad5bde"
-				},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Require MFA"
 			},
 			"6bc10407-960b-4e7d-8290-b8fc554eefa4": {
 				"x": 429,
