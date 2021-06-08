@@ -1063,6 +1063,22 @@
         },
         {
             "payload": {
+                "_id": "df75d4ae-8f25-48f4-af14-bb87206e029d",
+                "name": "CH - Validate Authcode",
+                "description": "Validate user-entered cleartext company authcode",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1622752327061
+            },
+            "filename": "ch-validate-authcode.js"
+        },
+        {
+            "payload": {
                 "_id":"ca6cbc1b-d83b-4946-b327-be15402894fa",
                 "name":"CH - EWF: Prompt for Company Number",
                 "description":"Prompts the user to enter the Company Number",

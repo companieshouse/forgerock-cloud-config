@@ -97,16 +97,6 @@
             }            
         },
         {
-            "_id":"48ef280d-22c2-4e03-8b04-7b04758040ee",
-            "nodeType": "ScriptedDecisionNode", 
-            "details": {
-                "inputs":["*"],
-                "outcomes":["true","false"],
-                "outputs":["*"],
-                "script":"65d2099f-9583-47d3-8303-8051709cb436"
-            }            
-        },
-        {
             "_id":"c5f729d0-922d-44f8-a480-aa34d2ca02d8",
             "nodeType": "ScriptedDecisionNode", 
             "details": {
@@ -132,6 +122,16 @@
              "outputs":["*"],
              "script":"fdac4efb-d8b8-478b-8300-e11a4c3503df"
          }            
+      },
+      {
+         "_id": "93328e47-3918-42c3-a27d-b5cf6c1abb67",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "outcomes": ["true", "false"],
+            "inputs": ["*"],
+            "outputs": ["*"],
+            "script": "df75d4ae-8f25-48f4-af14-bb87206e029d"
+         }
       }
    ],
    "tree": {
@@ -161,15 +161,15 @@
             "nodeType":"ScriptedDecisionNode",
             "displayName":"Enter company No"
          },
-         "48ef280d-22c2-4e03-8b04-7b04758040ee":{
-            "x":1299,
-            "y":108,
+         "93328e47-3918-42c3-a27d-b5cf6c1abb67":{
+            "x":1285,
+            "y":33.015625,
             "connections":{
                "true":"e5c64e99-5259-4e93-bb25-1871b370f7cd",
                "false":"c5f729d0-922d-44f8-a480-aa34d2ca02d8"
             },
             "nodeType":"ScriptedDecisionNode",
-            "displayName":"Validate Auth Code"
+            "displayName":"Validate Cleartext Auth Code"
          },
          "54a93ee3-d273-49b6-8d23-0fd1dcb6320b":{
             "x":222,
@@ -185,7 +185,7 @@
             "y":30,
             "connections":{
                "false":"e301438c-0bd0-429c-ab0c-66126501069a",
-               "true":"48ef280d-22c2-4e03-8b04-7b04758040ee"
+               "true":"93328e47-3918-42c3-a27d-b5cf6c1abb67"
             },
             "nodeType":"ScriptedDecisionNode",
             "displayName":"Enter Auth Code"
@@ -223,8 +223,8 @@
             "displayName":"Create Association"
          },
          "ba60739d-61f1-4ede-bf94-3f3dc628a38d":{
-            "x":1299,
-            "y":314.015625,
+            "x":1289,
+            "y":409.015625,
             "connections":{
                "Retry":"55ab38cb-458d-4c6c-ba34-3586bf34b06c",
                "Reject":"c7714228-4b3d-403c-8807-39c028bf549c"
@@ -243,8 +243,8 @@
             "displayName":"Identify Existing User"
          },
          "e5c64e99-5259-4e93-bb25-1871b370f7cd":{
-            "x":1444,
-            "y":9.015625,
+            "x":1534,
+            "y":37.015625,
             "connections":{
                "error":"e301438c-0bd0-429c-ab0c-66126501069a",
                "success":"b2401c4a-636f-43e4-b129-be18fccf30f3"
@@ -263,9 +263,9 @@
             "displayName":"get IDM token"
          },
          "c5f729d0-922d-44f8-a480-aa34d2ca02d8":{
-            "x":1297,
-            "y":243,
-            "connections":{
+            "x":1303,
+            "y":247,
+            "connections": {
                "true":"ba60739d-61f1-4ede-bf94-3f3dc628a38d"
             },
             "nodeType":"ScriptedDecisionNode",
@@ -274,9 +274,7 @@
          "c7714228-4b3d-403c-8807-39c028bf549c":{
             "x":1436,
             "y":629.015625,
-            "connections":{
-               
-            },
+            "connections": {},
             "nodeType":"ScriptedDecisionNode",
             "displayName":"max attempts message"
          }
