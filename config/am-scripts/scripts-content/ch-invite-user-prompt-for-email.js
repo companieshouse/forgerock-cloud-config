@@ -12,7 +12,6 @@
     * SHARED STATE:
       - 'companyNumber' : the company number to invite users for
       - 'email': email of the invited user
-      - 'fullName': name of the invited user
       - 'errorMessage': the error message to be displayed
       - 'pagePropsJSON': the JSON props for the UI
 
@@ -21,8 +20,8 @@
     - error: an error occurred
   
   ** CALLBACKS: 
-    - input: invited full name, invited email address 
-    - output: prompt to enter company no, or error message (if any)
+    - input: invited email address 
+    - output: error message (if any)
     - output: stage name and page props for UI
 */
 
@@ -59,7 +58,6 @@ try {
       infoMessage = errorMessage.concat(" Please try again.");
       action = fr.Action.send(
         new fr.TextOutputCallback(level, infoMessage),
-        new fr.NameCallback("Full Name"),
         new fr.NameCallback("Email Address"),
         new fr.HiddenValueCallback("stage", "INVITE_USER_1"),
         new fr.HiddenValueCallback("pagePropsJSON", errorProps)
@@ -67,15 +65,13 @@ try {
     } else {
       action = fr.Action.send(
         new fr.TextOutputCallback(level, infoMessage),
-        new fr.NameCallback("Full Name"),
         new fr.NameCallback("Email Address"),
         new fr.HiddenValueCallback("stage", "INVITE_USER_1")
       ).build();
     }
   } else {
 
-    var fullName = callbacks.get(1).getName();
-    var email = callbacks.get(2).getName();
+    var email = callbacks.get(1).getName();
     var userId = sharedState.get("_id");
     if (!validateEmail(email)) {
       logger.error("[INVITE USER INPUT] Invalid email: " + email);
@@ -83,11 +79,9 @@ try {
     } else {
       logger.error("[INVITE USER INPUT] company number: " + JSON.parse(companyData).number);
       logger.error("[INVITE USER INPUT] invited email: " + email);
-      logger.error("[INVITE USER INPUT] invited full name: " + fullName);
       logger.error("[INVITE USER INPUT] inviter ID: " + userId);
 
       sharedState.put("email", email);
-      sharedState.put("fullName", fullName);
       action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
     }
   }

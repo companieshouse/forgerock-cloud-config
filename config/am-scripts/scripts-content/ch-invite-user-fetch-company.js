@@ -21,8 +21,6 @@
     - error: an error occurred
   
   ** CALLBACKS: 
-    - input: invited full name, invited email address 
-    - output: prompt to enter company no, or error message (if any)
     - output: stage name and page props for UI
 */
 
