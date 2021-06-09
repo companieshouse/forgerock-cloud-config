@@ -115,10 +115,10 @@ userAddressClaimResolver = { claim, identity ->
 webFilingClaimResolver = { claim, identity ->
     if (identity != null) {
         return [
-            "company_no" : "08694860",
-            "password" : "DevPass12",
-            "jurisdiction": "en",
-            "auth_code": "222222"
+            "company_no" : (sessionPresent ? session.getProperty("companyNumber") : null),
+            "password" : (sessionPresent ? session.getProperty("password") : null),
+            "jurisdiction": (sessionPresent ? session.getProperty("jurisdiction") : null),
+            "auth_code": (sessionPresent ? session.getProperty("authCode") : null)
         ]
     }
     [:]
