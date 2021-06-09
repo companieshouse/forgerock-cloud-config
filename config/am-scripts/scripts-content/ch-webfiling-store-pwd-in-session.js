@@ -19,5 +19,5 @@ else {
 }
 
 action = fr.Action.goTo("true")
-    .putSessionProperty("password", sharedState.get("objectAttributes").get("password"))
+    .putSessionProperty("password", sharedState.get("password"))
     .build()
