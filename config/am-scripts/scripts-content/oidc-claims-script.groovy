@@ -50,12 +50,12 @@ boolean sessionPresent = session != null
  * @param attr The profile attribute name.
  */
 def fromSet = { claim, attr ->
-    if (attr != null && attr.size() == 1){
+    if (attr != null && attr.size() == 1) {
         attr.iterator().next()
-    } else if (attr != null && attr.size() > 1){
+    } else if (attr != null && attr.size() > 1) {
         attr
     } else if (logger.warningEnabled()) {
-        logger.warning("OpenAMScopeValidator.getUserInfo(): Got an empty result for claim=$claim");
+        logger.warning("OpenAMScopeValidator.getUserInfo(): Got an empty result for claim=$claim")
     }
 }
 
@@ -102,10 +102,10 @@ userProfileClaimResolver = { attribute, claim, identity ->
  */
 userAddressClaimResolver = { claim, identity ->
     if (identity != null) {
-        addressFormattedValue = fromSet(claim.getName(), identity.getAttribute("postaladdress"))
+        addressFormattedValue = fromSet(claim.getName(), identity.getAttribute('postaladdress'))
         if (addressFormattedValue != null) {
             return [
-                    "formatted" : addressFormattedValue
+                    'formatted' : addressFormattedValue
             ]
         }
     }
@@ -115,10 +115,10 @@ userAddressClaimResolver = { claim, identity ->
 webFilingClaimResolver = { claim, identity ->
     if (identity != null) {
         return [
-            "company_no" : (sessionPresent ? session.getProperty("companyNumber") : null),
-            "password" : (sessionPresent ? session.getProperty("password") : null),
-            "jurisdiction": (sessionPresent ? session.getProperty("jurisdiction") : null),
-            "auth_code": (sessionPresent ? session.getProperty("authCode") : null)
+            'company_no' : (sessionPresent ? session.getProperty('companyNumber') : null),
+            'password' : (sessionPresent ? session.getProperty('password') : null),
+            'jurisdiction': (sessionPresent ? session.getProperty('jurisdiction') : null),
+            'auth_code': (sessionPresent ? session.getProperty('authCode') : null)
         ]
     }
     [:]
@@ -187,7 +187,7 @@ languageTagClaimResolver = { attribute, claim, identity ->
                     return [(claim.getName()): localeValues.get(claim.getLocale())]
                 } else {
                     entry = localeValues.entrySet().iterator().next()
-                    return [(claim.getName() + "#" + entry.getKey()): entry.getValue()]
+                    return [(claim.getName() + '#' + entry.getKey()): entry.getValue()]
                 }
             } else {
                 entry = localeValues.entrySet().iterator().next()
@@ -202,7 +202,7 @@ languageTagClaimResolver = { attribute, claim, identity ->
  * Given a string "en|English,jp|Japenese,fr_CA|French Canadian" will return map of locale -> value.
  */
 parseLocaleAwareString = { s ->
-    return result = s.split(",").collectEntries { entry ->
+    return result = s.split(',').collectEntries { entry ->
         split = entry.split("\\|")
         [(split[0]): value = split[1]]
     }
@@ -215,18 +215,18 @@ parseLocaleAwareString = { s ->
  */
 // [ {claim}: {attribute retriever}, ... ]
 claimAttributes = [
-        "email": userProfileClaimResolver.curry("mail"),
-        "address": { claim, identity -> [ "address" : userAddressClaimResolver(claim, identity) ] },
-        "phone_number": userProfileClaimResolver.curry("telephonenumber"),
-        "given_name": userProfileClaimResolver.curry("givenname"),
-        "zoneinfo": userProfileClaimResolver.curry("preferredtimezone"),
-        "family_name": userProfileClaimResolver.curry("sn"),
-        "locale": userProfileClaimResolver.curry("preferredlocale"),
-        "name": userProfileClaimResolver.curry("cn"),
-        "webfiling_info": { claim, identity -> [ (claim.getName()) : webFilingClaimResolver(claim, identity)] }
+        'email': userProfileClaimResolver.curry('mail'),
+        'address': { claim, identity -> [ 'address' : userAddressClaimResolver(claim, identity) ] },
+        'phone_number': userProfileClaimResolver.curry('telephonenumber'),
+        'given_name': userProfileClaimResolver.curry('givenname'),
+        'zoneinfo': userProfileClaimResolver.curry('preferredtimezone'),
+        'family_name': userProfileClaimResolver.curry('sn'),
+        'locale': userProfileClaimResolver.curry('preferredlocale'),
+        'name': userProfileClaimResolver.curry('cn'),
+        'webfiling_info': { claim, identity -> [ (claim.getName()) : webFilingClaimResolver(claim, identity)] }
 ]
 
-//https://backstage.forgerock.com/knowledge/kb/book/b66926033#a74498680 
+//https://backstage.forgerock.com/knowledge/kb/book/b66926033#a74498680
 
 // -------------- UPDATE THIS TO CHANGE SCOPE TO CLAIM MAPPINGS --------------
 /*
@@ -234,17 +234,18 @@ claimAttributes = [
  */
 // {scope}: [ {claim}, ... ]
 scopeClaimsMap = [
-        "email": [ "email" ],
-        "address": [ "address" ],
-        "phone": [ "phone_number" ],
-        "profile": [ "given_name", "zoneinfo", "family_name", "locale", "name", "webfiling_info" ]
+        'email': [ 'email' ],
+        'address': [ 'address' ],
+        'phone': [ 'phone_number' ],
+        'profile': [ 'given_name', 'zoneinfo', 'family_name', 'locale', 'name'],
+        'webfiling': [ 'webfiling_info' ]
 ]
 
 // ---------------- UPDATE BELOW FOR ADVANCED USAGES -------------------
 if (logger.messageEnabled()) {
-    scopes.findAll { s -> !("openid".equals(s) || scopeClaimsMap.containsKey(s)) }.each { s ->
+    scopes.findAll { s -> !('openid'.equals(s) || scopeClaimsMap.containsKey(s)) }.each { s ->
         logger.message("OpenAMScopeValidator.getUserInfo()::Message: scope not bound to claims: $s")
-    }
+}
 }
 
 /*
@@ -253,15 +254,15 @@ if (logger.messageEnabled()) {
  */
 def computeClaim = { claim ->
     try {
-        claimResolver = claimAttributes.get(claim.getName(), { claimObj, identity -> defaultClaimResolver(claim)})
+        claimResolver = claimAttributes.get(claim.getName(), { claimObj, identity -> defaultClaimResolver(claim) })
         claimResolver(claim, identity)
     } catch (IdRepoException e) {
         if (logger.warningEnabled()) {
-            logger.warning("OpenAMScopeValidator.getUserInfo(): Unable to retrieve attribute=$attribute", e);
+            logger.warning("OpenAMScopeValidator.getUserInfo(): Unable to retrieve attribute=$attribute", e)
         }
     } catch (SSOException e) {
         if (logger.warningEnabled()) {
-            logger.warning("OpenAMScopeValidator.getUserInfo(): Unable to retrieve attribute=$attribute", e);
+            logger.warning("OpenAMScopeValidator.getUserInfo(): Unable to retrieve attribute=$attribute", e)
         }
     }
 }
@@ -270,11 +271,11 @@ def computeClaim = { claim ->
  * Converts requested scopes into claim objects based on the scope mappings in scopeClaimsMap.
  */
 def convertScopeToClaims = {
-    scopes.findAll { scope -> "openid" != scope && scopeClaimsMap.containsKey(scope) }.collectMany { scope ->
+    scopes.findAll { scope -> 'openid' != scope && scopeClaimsMap.containsKey(scope) }.collectMany { scope ->
         scopeClaimsMap.get(scope).collect { claim ->
             new Claim(claim)
         }
-    }
+}
 }
 
 // Creates a full list of claims to resolve from requested scopes, claims provided by AS and requested claims
