@@ -24,7 +24,8 @@
 			"value": [
 				"openid",
 				"profile",
-				"email"
+				"email",
+				"webfiling"
 			]
 		},
 		"status": {
