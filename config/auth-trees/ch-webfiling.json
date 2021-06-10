@@ -213,6 +213,16 @@
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Get Company Data"
 			},
+			"fbf0037d-0557-4111-bd01-edeb685c836f": {
+				"x": 1308,
+				"y": 302.015625,
+				"connections": {
+					"false": "4b27ff9e-407a-4880-8c81-92be95c0e46f",
+					"true": "9f02e20d-5cee-4608-af7c-3732d3838d88"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Validate Cleartext Auth Code"
+			},
 			"304e305a-a2f4-4380-a5db-3bca9b5da30e": {
 				"x": 1552,
 				"y": 304.015625,
@@ -338,16 +348,6 @@
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Add to Session"
-			},
-			"fbf0037d-0557-4111-bd01-edeb685c836f": {
-				"x": 1308,
-				"y": 302.015625,
-				"connections": {
-					"false": "4b27ff9e-407a-4880-8c81-92be95c0e46f",
-					"true": "9f02e20d-5cee-4608-af7c-3732d3838d88"
-				},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Validate Cleartext Auth Code"
 			}
 		},
 		"staticNodes": {
