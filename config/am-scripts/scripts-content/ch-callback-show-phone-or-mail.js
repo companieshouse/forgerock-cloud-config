@@ -6,7 +6,7 @@ var fr = JavaImporter(
 var phoneNumber = "";
 var emailAddress = "";
 var notificationId = transientState.get("notificationId");
-var mfaRoute = transientState.get("mfa-route");
+var mfaRoute = sharedState.get("mfa-route");
 var otpError = transientState.get("error");
 logger.error("[LOGIN MFA CALLBACK] Found OTP Error : " + otpError);
 

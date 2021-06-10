@@ -1,3 +1,29 @@
+/* 
+  ** INPUT DATA
+    * SHARED STATE:
+      - 'oneTimePassword' : the OTP code to be sent via email
+      - '_id': the user ID to be send the email to (only populated if registrationMFA = false)
+
+    * TRANSIENT STATE
+      - 'registrationMFA' : flag indicating if this script is invoked as part of the registration journey (i.e. the user does not exist in IDM yet)
+      - 'notifyJWT': the Notify JWT to be used for requests to Notify
+      - 'templates': the list of all Notify templates 
+
+  ** OUTPUT DATA
+    * TRANSIENT STATE:
+      - 'notificationId': the notification ID returned by Notify if the call was successful
+      
+    * SHARED STATE:
+      - 'mfa-route': the boolean indicating whether this is a SMS or a Email MFA route (email in this case)
+
+    ** OUTCOMES
+    - true: message sent successfully
+    - false: error in sending message
+  
+  ** CALLBACKS:
+    - error (stage SEND_MFA_SMS_ERROR, error while sending email) 
+*/
+
 var fr = JavaImporter(
     org.forgerock.openam.auth.node.api.Action,
     javax.security.auth.callback.TextOutputCallback,
@@ -48,7 +74,7 @@ try {
   notificationId = JSON.parse(response.getEntity().getString()).id;
   logger.error("[SEND MFA EMAIL] Notify ID: " + notificationId);
   transientState.put("notificationId", notificationId);
-  transientState.put("mfa-route", "email");
+  sharedState.put("mfa-route", "email");
 } catch(e) {
   logger.error("[SEND MFA EMAIL] Error while parsing Notify response: " + e);
 }
