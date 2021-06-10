@@ -91,8 +91,8 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
                         'errors': [{
                             label: "No auth code associated with company " + companyName,
                             token: "AUTH_CODE_NOT_DEFINED",
-                            fieldName: "IDToken2",
-                            anchor: "IDToken2"
+                            fieldName: isEWF ? "IDToken3" : "IDToken2",
+                            anchor: isEWF ? "IDToken3" : "IDToken2"
                         }],
                         'company': { name: companyName }
                     }));
@@ -109,8 +109,8 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
                         'errors': [{
                             label: "The company " + companyName + " is not active.",
                             token: "COMPANY_NOT_ACTIVE",
-                            fieldName: "IDToken2",
-                            anchor: "IDToken2"
+                            fieldName: isEWF ? "IDToken3" : "IDToken2",
+                            anchor: isEWF ? "IDToken3" : "IDToken2"
                         }],
                         'company': { name: companyName }
                     }));
@@ -156,8 +156,8 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
                     'errors': [{
                         label: "The company ${companyNumber} could not be found.",
                         token: "COMPANY_NOT_FOUND",
-                        fieldName: "IDToken2",
-                        anchor: "IDToken2"
+                        fieldName: isEWF ? "IDToken3" : "IDToken2",
+                        anchor: isEWF ? "IDToken3" : "IDToken2"
                     }],
                     'company': { number: companyNumber }
                 }));
@@ -171,8 +171,8 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
                 'errors': [{
                     label: "Error while retrieving company " + companyNumber + ".",
                     token: "COMPANY_FETCH_ERROR",
-                    fieldName: "IDToken2",
-                    anchor: "IDToken2"
+                    fieldName: isEWF ? "IDToken3" : "IDToken2",
+                    anchor: isEWF ? "IDToken3" : "IDToken2"
                 }],
                 'company': { number: companyNumber }
             }));
