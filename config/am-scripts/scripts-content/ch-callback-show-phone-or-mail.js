@@ -6,42 +6,56 @@ var fr = JavaImporter(
 var phoneNumber = "";
 var emailAddress = "";
 var notificationId = transientState.get("notificationId");
-var mfaRoute = transientState.get("mfa-route");
+var mfaRoute = sharedState.get("mfa-route");
 var otpError = transientState.get("error");
 logger.error("[LOGIN MFA CALLBACK] Found OTP Error : " + otpError);
 
-try{
-  var userId = sharedState.get("_id");
+try {
+    var userId = sharedState.get("_id");
 
-  if (mfaRoute == "sms") {
-    if (idRepository.getAttribute(userId, "telephoneNumber").iterator().hasNext()) {
-        phoneNumber = idRepository.getAttribute(userId, "telephoneNumber").iterator().next();
-        logger.error("[LOGIN MFA CALLBACK] phoneNumber : " + phoneNumber);
+    if (mfaRoute == "sms") {
+        if (idRepository.getAttribute(userId, "telephoneNumber").iterator().hasNext()) {
+            phoneNumber = idRepository.getAttribute(userId, "telephoneNumber").iterator().next();
+            logger.error("[LOGIN MFA CALLBACK] phoneNumber : " + phoneNumber);
+        } else {
+            logger.error("[LOGIN MFA CALLBACK] Couldn't find telephoneNumber");
+            // TODO Better handling of error
+        }
+    } else if (mfaRoute == "email") {
+        if (idRepository.getAttribute(userId, "mail").iterator().hasNext()) {
+            emailAddress = idRepository.getAttribute(userId, "mail").iterator().next();
+            logger.error("[LOGIN MFA CALLBACK] emailAddress : " + emailAddress);
+        } else {
+            logger.error("[LOGIN MFA CALLBACK] Couldn't find emailAddress");
+            // TODO Better handling of error
+        }
     } else {
-        logger.error("[LOGIN MFA CALLBACK] Couldn't find telephoneNumber");
-        // TODO Better handling of error
+        logger.error("[LOGIN MFA CALLBACK] Couldn't determine route used for sending MFA code");
     }
-  } else if (mfaRoute == "email") {
-    if (idRepository.getAttribute(userId, "mail").iterator().hasNext()) {
-        emailAddress = idRepository.getAttribute(userId, "mail").iterator().next();
-        logger.error("[LOGIN MFA CALLBACK] emailAddress : " + emailAddress);
-    } else {
-        logger.error("[LOGIN MFA CALLBACK] Couldn't find emailAddress");
-        // TODO Better handling of error
-    }
-  } else {
-    logger.error("[LOGIN MFA CALLBACK] Couldn't determine route used for sending MFA code");
-  }
-} catch(e) {
-  logger.error("[LOGIN MFA CALLBACK] Error retrieving user details: " + e);
+} catch (e) {
+    logger.error("[LOGIN MFA CALLBACK] Error retrieving user details: " + e);
 }
 
 if (otpError) {
     if (callbacks.isEmpty()) {
         action = fr.Action.send(
-            new fr.HiddenValueCallback (
+            new fr.HiddenValueCallback(
                 "pagePropsJSON",
-                JSON.stringify({ 'errors': [{ label: otpError, anchor: "IDToken3" }], "phoneNumber": phoneNumber, "emailAddress": emailAddress })
+                JSON.stringify(
+                    {
+                        'errors': [
+                            {
+                                label: otpError,
+                                token: "OTP_NOT_VALID",
+                                fieldName: "IDToken1",
+                                anchor: "IDToken1"
+                            }
+                        ],
+                        "phoneNumber": phoneNumber,
+                        "emailAddress": emailAddress,
+                        "type": mfaRoute
+                    }
+                )
             ),
             new fr.TextOutputCallback(
                 fr.TextOutputCallback.ERROR,
@@ -58,15 +72,15 @@ if (otpError) {
     }
 
     action = fr.Action.send(
-        new fr.HiddenValueCallback (
+        new fr.HiddenValueCallback(
             "pagePropsJSON",
-            JSON.stringify({"phoneNumber": phoneNumber, "email": emailAddress})
+            JSON.stringify({ "phoneNumber": phoneNumber, "emailAddress": emailAddress, "type": mfaRoute })
         ),
         new fr.TextOutputCallback(
             fr.TextOutputCallback.INFORMATION,
             message
         ),
-        new fr.HiddenValueCallback (
+        new fr.HiddenValueCallback(
             "notificationId",
             notificationId
         )
