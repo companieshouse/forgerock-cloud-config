@@ -74,7 +74,7 @@ if (otpError) {
     action = fr.Action.send(
         new fr.HiddenValueCallback(
             "pagePropsJSON",
-            JSON.stringify({ "phoneNumber": phoneNumber, "email": emailAddress, "type": mfaRoute })
+            JSON.stringify({ "phoneNumber": phoneNumber, "emailAddress": emailAddress, "type": mfaRoute })
         ),
         new fr.TextOutputCallback(
             fr.TextOutputCallback.INFORMATION,
