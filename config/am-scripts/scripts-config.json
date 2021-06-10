@@ -1172,6 +1172,22 @@
                 "lastModifiedDate":1617810491969
              },
             "filename": "ch-webfiling-check-for-company-assoc-status.js"
+        },
+        {
+            "payload": {
+                "_id":"6cd2619d-84ec-4eaf-a377-e6a6230c82a6",
+                "name":"CH - EWF: Prompts the user to complete profile",
+                "description":"Prompts the user to complete profile with full name and phone number",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-webfiling-update-profile.js"
         }
     ]
 }

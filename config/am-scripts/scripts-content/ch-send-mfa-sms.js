@@ -13,10 +13,11 @@
   ** OUTPUT DATA
     * TRANSIENT STATE:
       - 'notificationId': the notification ID returned by Notify if the call was successful
+      
+    * SHARED STATE:
       - 'mfa-route': the boolean indicating whether this is a SMS or a Email MFA route (SMS in this case)
-    
 
-  ** OUTCOMES
+    ** OUTCOMES
     - true: message sent successfully
     - false: error in sending message
   
@@ -84,7 +85,7 @@ function sendTextMessage(phoneNumber, code) {
     notificationId = JSON.parse(response.getEntity().getString()).id;
     logger.error("[SEND MFA SMS] Notify ID: " + notificationId);
     transientState.put("notificationId", notificationId);
-    transientState.put("mfa-route", "sms");
+    sharedState.put("mfa-route", "sms");
   } catch (e) {
     logger.error("[SEND MFA SMS] Error while parsing Notify response: " + e);
     return false;
