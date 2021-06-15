@@ -8,7 +8,7 @@ that will require FR to update FIDC
 environment specific variables.
 -->
 **FIDC Update Required:**
-- [ ] am-scipts
+- [ ] am-scripts
 - [ ] auth-trees
 - [ ] connectors
 - [ ] cors

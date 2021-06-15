@@ -331,6 +331,16 @@
 				"outputs": ["*"],
 				"script": "e0aec02a-ad8b-427d-a72e-cdfd8cb6c0e0"
 			}
+		},
+		{
+			"_id": "979fd32f-2242-4d08-b31b-722c1ed419b4",
+			"nodeType": "ScriptedDecisionNode",
+			"details": {
+				"inputs": ["*"],
+				"outcomes": ["true"],
+				"outputs": ["*"],
+				"script": "fdac4efb-d8b8-478b-8300-e11a4c3503df"
+			}
 		}
 	],
     "tree": {
@@ -454,8 +464,8 @@
 				"x": 2732,
 				"y": 318.015625,
 				"connections": {
-					"Reject": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"Retry": "cdc774a7-c03c-4cf2-8514-9d7654aac599"
+					"Retry": "cdc774a7-c03c-4cf2-8514-9d7654aac599",
+					"Reject": "979fd32f-2242-4d08-b31b-722c1ed419b4"
 				},
 				"nodeType": "RetryLimitDecisionNode",
 				"displayName": "Retry Limit Decision"
@@ -584,6 +594,13 @@
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Email not exist msg"
+			},
+			"979fd32f-2242-4d08-b31b-722c1ed419b4": {
+				"x": 3088,
+				"y": 443.015625,
+				"connections": {},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "max attempts"
 			}
 		},
 		"staticNodes": {

@@ -13,10 +13,11 @@
   ** OUTPUT DATA
     * TRANSIENT STATE:
       - 'notificationId': the notification ID returned by Notify if the call was successful
+      
+    * SHARED STATE:
       - 'mfa-route': the boolean indicating whether this is a SMS or a Email MFA route (SMS in this case)
-    
 
-  ** OUTCOMES
+    ** OUTCOMES
     - true: message sent successfully
     - false: error in sending message
   

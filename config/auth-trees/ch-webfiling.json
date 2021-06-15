@@ -161,6 +161,16 @@
                 "outputs": ["*"],
                 "script": "df75d4ae-8f25-48f4-af14-bb87206e029d"
 			}
+		},
+		{
+			"_id": "bfcdaf66-5730-40b7-a847-00f62cd539ca",
+			"nodeType": "ScriptedDecisionNode",
+            "details": {
+                "outcomes": ["true"],
+                "inputs": ["*"],
+                "outputs": ["*"],
+                "script": "fdac4efb-d8b8-478b-8300-e11a4c3503df"
+			}
 		}
     ],
     "tree": {
@@ -237,8 +247,8 @@
 				"x": 1337,
 				"y": 497.015625,
 				"connections": {
-					"Reject": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"Retry": "fc86f06d-b17e-4cda-b10c-fb9fae255d59"
+					"Retry": "fc86f06d-b17e-4cda-b10c-fb9fae255d59",
+					"Reject": "bfcdaf66-5730-40b7-a847-00f62cd539ca"
 				},
 				"nodeType": "RetryLimitDecisionNode",
 				"displayName": "Retry Limit Decision"
@@ -338,6 +348,13 @@
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Add to Session"
+			},
+			"bfcdaf66-5730-40b7-a847-00f62cd539ca": {
+				"x": 1343,
+				"y": 620.015625,
+				"connections": {},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "max attempts error"
 			}
 		},
 		"staticNodes": {

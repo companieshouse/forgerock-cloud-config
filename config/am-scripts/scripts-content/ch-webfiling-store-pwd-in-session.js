@@ -18,6 +18,9 @@ else {
     logger.error("[EWF SESSION STORE] no session!");
 }
 
+sharedState.put("errorMessage", null);
+sharedState.put("pagePropsJSON", null);
+
 action = fr.Action.goTo("true")
     .putSessionProperty("password", sharedState.get("password"))
     .build()
