@@ -14,7 +14,8 @@ function logResponse(response) {
 }
 ​
 function setPolicyErrorMessage(policyResponse) {
-  // Add code here if more granular advice required
+  var failedPolicyRequirements = policyResponse.failedPolicyRequirements;
+
   sharedState.put("errorMessage", "The new password does not meet the password policy requirements.");
   sharedState.put("pagePropsJSON", JSON.stringify(
     {
@@ -23,7 +24,8 @@ function setPolicyErrorMessage(policyResponse) {
             token: "PWD_POLICY_ERROR",
             fieldName: "IDToken3",
             anchor: "IDToken3"
-        }]
+        }],
+        'failedPolicies': failedPolicyRequirements
     }));
 }
 ​
