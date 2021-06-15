@@ -16,7 +16,16 @@ var fr = JavaImporter(
       ),
       new fr.HiddenValueCallback (
           "pagePropsJSON",
-          JSON.stringify({"errors": [{"label": "Exceeded number of attempts - please try again later.", "token": "MAX_ATTEMPTS_EXCEEDED"}]})
+          JSON.stringify(
+            { 
+              "errors": [
+                {
+                  "label": "Exceeded number of attempts - please try again later.", 
+                  "token": "MAX_ATTEMPTS_EXCEEDED"
+                }
+              ]
+            }
+          )
       )
     ).build()
   } else { 
