@@ -3,7 +3,7 @@
 	"connectorRef": {
 		"connectorHostRef": "ewf-group",
 		"displayName": "Database Table Connector",
-		"bundleVersion": "1.5.19.6",
+		"bundleVersion": "1.5.20.0",
 		"systemType": "provisioner.openicf",
 		"bundleName": "org.forgerock.openicf.connectors.databasetable-connector",
 		"connectorName": "org.identityconnectors.databasetable.DatabaseTableConnector"
@@ -99,7 +99,7 @@
 			}
 		},
 		"quoting": "NONE",
-		"table": "CHACCOUNTUSERS",
+		"table": "CUSTOMER_VIEW",
 		"keyColumn": "CUSTOMERID",
 		"passwordColumn": null,
 		"disablePaging": false,
