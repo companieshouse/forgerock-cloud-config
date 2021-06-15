@@ -75,13 +75,11 @@ try {
       logger.error("[EWF CONFIRM ASSOCIATION] selected YES");
       sharedState.put("errorMessage", null);
       sharedState.put("pagePropsJSON", null);
-      outcome = NodeOutcome.TRUE;
+      action = fr.Action.goTo(NodeOutcome.TRUE).build();
     } else {
       sharedState.put("errorMessage", null);
-      outcome = NodeOutcome.FALSE;
+      action = fr.Action.goTo(NodeOutcome.FALSE).build();
     }
-
-    action = fr.Action.goTo("true").build();
   }
 
 } catch (e) {
