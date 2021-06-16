@@ -6,14 +6,14 @@
 	"icon": null,
 	"displayName": "chsUsers_alphaUser",
 	"properties": [{
-		"source": "email",
-		"target": "userName"
+		"target": "userName",
+		"source": "email"
 	}, {
-		"source": "email",
-		"target": "sn"
+		"target": "sn",
+		"source": "email"
 	}, {
-		"source": "email",
-		"target": "mail"
+		"target": "mail",
+		"source": "email"
 	}, {
 		"source": "",
 		"target": "givenName",
@@ -64,13 +64,13 @@
 		"situation": "ABSENT"
 	}],
 	"correlationQuery": [{
+		"linkQualifier": "default",
 		"expressionTree": {
 			"any": ["userName"]
 		},
-		"file": "ui/correlateTreeToQueryFilter.js",
-		"linkQualifier": "default",
 		"mapping": "chsUsers_alphaUser",
-		"type": "text/javascript"
+		"type": "text/javascript",
+		"file": "ui/correlateTreeToQueryFilter.js"
 	}],
 	"onCreate": {
 		"globals": {},
