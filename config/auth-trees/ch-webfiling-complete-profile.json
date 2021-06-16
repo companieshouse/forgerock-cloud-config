@@ -145,7 +145,7 @@
 		"description": "Add name and phone number to existing account",
 		"identityResource": "managed/alpha_user",
 		"uiConfig": {},
-		"entryNodeId": "b802b783-cae6-4b4e-849c-2ab9c7b80391",
+		"entryNodeId": "3ece9748-a455-43b1-99b2-20fea28ed6ee",
 		"nodes": {
 			"1aeb1667-8dfe-417f-abaf-b02626fa5392": {
 				"x": 1907,
@@ -216,8 +216,8 @@
 				"displayName": "Send OTP"
 			},
 			"9cebfbba-00c4-41a2-9772-7d4e80699e47": {
-				"x": 1643,
-				"y": 1025.015625,
+				"x": 1868,
+				"y": 750.015625,
 				"connections": {},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Max Number Exceeded"

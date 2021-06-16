@@ -22,26 +22,39 @@ function isMobile(number) {
     return false;
 }
 
+function selectTypeCallback(nameFound, phoneFound) {
+    if (!phoneFound && nameFound) {
+        return new fr.HiddenValueCallback("PHONE", "PHONE");
+    } else if (phoneFound && !nameFound) {
+        return new fr.HiddenValueCallback("NAME", "NAME");
+    } else if (!phoneFound && !nameFound) {
+        return new fr.HiddenValueCallback("BOTH", "BOTH");
+    }
+}
+
+// main execution flow
 try {
     var PHONE_NUMBER_FIELD = "telephoneNumber";
     var FULL_NAME_FIELD = "givenName";
     var nameFound = false;
     var phoneFound = false;
+
     var SKIP_OPTION_INDEX = 0;
+    var CONFIRM_OPTION_INDEX = 1;
 
-    var debug = String("Shared state: " + sharedState.toString() + "\\n");
-    logger.error("[EWF UPDATE PROFILE] Shared state: " + debug);
+    var SKIP_CALLBACK_INDEX = 5;
+    var NAME_CALLBACK_INDEX = 2;
+    var PHONE_CALLBACK_INDEX = 3;
 
-    var debug2 = String("Shared state: " + transientState.toString() + "\\n");
-    logger.error("[EWF UPDATE PROFILE]  Transient state: " + debug2);
     var skipCallback = new fr.ConfirmationCallback(
         "Do you want to skip?",
         fr.ConfirmationCallback.INFORMATION,
         ["SKIP", "SUBMIT"],
-        SKIP_OPTION_INDEX
+        CONFIRM_OPTION_INDEX
     );
 
-    var noMissingFields = 0;
+    var placeHolderCallback = new fr.HiddenValueCallback("IGNOREME", "IGNOREME");
+
     var userId = sharedState.get("_id");
     //checks presence of phone number in user profile
     if (idRepository.getAttribute(userId, PHONE_NUMBER_FIELD).iterator().hasNext()) {
@@ -49,7 +62,6 @@ try {
         phoneFound = true;
     } else {
         logger.error("[EWF UPDATE PROFILE] phone number not found");
-        noMissingFields++;
     }
 
     //checks presence of full name in user profile
@@ -58,121 +70,52 @@ try {
         nameFound = true;
     } else {
         logger.error("[EWF UPDATE PROFILE] givenName not found");
-        noMissingFields++;
     }
 
     if (callbacks.isEmpty()) {
-
         if (phoneFound && nameFound) {
             outcome = NodeOutcome.SKIP;
         } else {
-
             //initial callbacks
             var infoMessage = "Update your personal details";
             var level = fr.TextOutputCallback.INFORMATION;
             var errorMessage = sharedState.get("errorMessage");
 
-
             var stageName = "EWF_PROFILE";
             logger.error("[EWF UPDATE PROFILE] userId: " + userId);
 
-            if (!phoneFound && nameFound) {
-                if (errorMessage !== null) {
-                    var errorProps = sharedState.get("pagePropsJSON");
-                    level = fr.TextOutputCallback.ERROR;
-                    infoMessage = errorMessage.concat(" Please try again.");
-                    action = fr.Action.send(
-                        new fr.TextOutputCallback(level, infoMessage),
-                        new fr.HiddenValueCallback("PHONE", "PHONE"),
-                        new fr.NameCallback("What is your mobile number? (optional)"),
-                        new fr.HiddenValueCallback("stage", stageName),
-                        new fr.HiddenValueCallback("pagePropsJSON", errorProps),
-                        skipCallback
-                    ).build();
-                } else {
-                    action = fr.Action.send(
-                        new fr.TextOutputCallback(level, infoMessage),
-                        new fr.HiddenValueCallback("PHONE", "PHONE"),
-                        new fr.NameCallback("What is your mobile number? (optional)"),
-                        new fr.HiddenValueCallback("stage", stageName),
-                        skipCallback
-                    ).build();
-                }
-            } else if (phoneFound && !nameFound) {
-                if (errorMessage !== null) {
-                    var errorProps = sharedState.get("pagePropsJSON");
-                    level = fr.TextOutputCallback.ERROR;
-                    infoMessage = errorMessage.concat(" Please try again.");
-                    action = fr.Action.send(
-                        new fr.TextOutputCallback(level, infoMessage),
-                        new fr.HiddenValueCallback("NAME", "NAME"),
-                        new fr.NameCallback("What is your full name? (optional)"),
-                        new fr.HiddenValueCallback("stage", stageName),
-                        skipCallback,
-                        new fr.HiddenValueCallback("pagePropsJSON", errorProps)
-                    ).build();
-                } else {
-                    action = fr.Action.send(
-                        new fr.TextOutputCallback(level, infoMessage),
-                        new fr.HiddenValueCallback("NAME", "NAME"),
-                        new fr.NameCallback("What is your full name? (optional)"),
-                        new fr.HiddenValueCallback("stage", stageName),
-                        skipCallback
-                    ).build();
-                }
-            } else if (!phoneFound && !nameFound) {
-                if (errorMessage !== null) {
-                    var errorProps = sharedState.get("pagePropsJSON");
-                    level = fr.TextOutputCallback.ERROR;
-                    infoMessage = errorMessage.concat(" Please try again.");
-                    action = fr.Action.send(
-                        new fr.TextOutputCallback(level, infoMessage),
-                        new fr.HiddenValueCallback("BOTH", "BOTH"),
-                        new fr.NameCallback("What is your full name? (optional)"),
-                        new fr.NameCallback("What is your mobile number? (optional)"),
-                        new fr.HiddenValueCallback("stage", stageName),
-                        skipCallback,
-                        new fr.HiddenValueCallback("pagePropsJSON", errorProps)
-                    ).build();
-                } else {
-                    action = fr.Action.send(
-                        new fr.TextOutputCallback(level, infoMessage),
-                        new fr.HiddenValueCallback("BOTH", "BOTH"),
-                        new fr.NameCallback("What is your full name? (optional)"),
-                        new fr.NameCallback("What is your mobile number? (optional)"),
-                        new fr.HiddenValueCallback("stage", stageName),
-                        skipCallback
-                    ).build();
-                }
+            if (errorMessage !== null) {
+                var errorProps = sharedState.get("pagePropsJSON");
+                level = fr.TextOutputCallback.ERROR;
+                infoMessage = errorMessage.concat(" Please try again.");
+                action = fr.Action.send(
+                    new fr.TextOutputCallback(level, infoMessage),
+                    selectTypeCallback(nameFound, phoneFound),
+                    nameFound ? placeHolderCallback : new fr.NameCallback("What is your full name? (optional)"),
+                    phoneFound ? placeHolderCallback : new fr.NameCallback("What is your mobile number? (optional)"),
+                    new fr.HiddenValueCallback("stage", stageName),
+                    skipCallback,
+                    new fr.HiddenValueCallback("pagePropsJSON", errorProps)
+                ).build();
+            } else {
+                action = fr.Action.send(
+                    new fr.TextOutputCallback(level, infoMessage),
+                    selectTypeCallback(nameFound, phoneFound),
+                    nameFound ? placeHolderCallback : new fr.NameCallback("What is your full name? (optional)"),
+                    phoneFound ? placeHolderCallback : new fr.NameCallback("What is your mobile number? (optional)"),
+                    new fr.HiddenValueCallback("stage", stageName),
+                    skipCallback
+                ).build();
             }
         }
     } else {
         // returning callbacks
-
-        logger.error("[EWF UPDATE PROFILE]  callbacks: " + callbacks.toString());
-
-        var indexSkipCallback;
-        var indexNameCallback;
-        var indexPhoneCallback;
-
-        if (noMissingFields === 2) {
-            indexSkipCallback = 5;
-            indexNameCallback = 2;
-            indexPhoneCallback = 3;
-        } else {
-            indexSkipCallback = 4;
-            indexNameCallback = 2;
-            indexPhoneCallback = 2;
-        }
-
-        var selection = callbacks.get(indexSkipCallback).getSelectedIndex();
+        var selection = callbacks.get(SKIP_CALLBACK_INDEX).getSelectedIndex();
         logger.error("[EWF UPDATE PROFILE]  selection " + selection);
         if (selection === SKIP_OPTION_INDEX) {
             logger.error("[EWF UPDATE PROFILE] selected SKIP");
             outcome = NodeOutcome.SKIP;
         } else {
-            logger.error("[EWF UPDATE PROFILE] selected SUBMIT");
-
             logger.error("[EWF UPDATE PROFILE] selected SUBMIT");
             var type = callbacks.get(1).getValue();
             logger.error("[EWF UPDATE PROFILE] type: " + type);
@@ -184,19 +127,19 @@ try {
                         'errors': [{
                             label: "Invalid mobile number entered",
                             token: "UPDATE_PHONE_INVALID_MOBILE_NUMBER",
-                            fieldName: "IDToken".concat(indexPhoneCallback),
-                            anchor: "IDToken".concat(indexPhoneCallback)
+                            fieldName: "IDToken".concat(PHONE_CALLBACK_INDEX),
+                            anchor: "IDToken".concat(PHONE_CALLBACK_INDEX)
                         }]
                     }));
                 action = fr.Action.goTo(NodeOutcome.FAIL).build();
             } else {
                 var newName, newPhoneNumber;
                 if (type === "NAME" || type === "BOTH") {
-                    newName = callbacks.get(indexNameCallback).getName();
+                    newName = callbacks.get(NAME_CALLBACK_INDEX).getName();
                     logger.error("[EWF UPDATE PROFILE] new name: " + newName);
-                } 
+                }
                 if (type === "PHONE" || type === "BOTH") {
-                    newPhoneNumber = callbacks.get(indexPhoneCallback).getName();
+                    newPhoneNumber = callbacks.get(PHONE_CALLBACK_INDEX).getName();
                     logger.error("[EWF UPDATE PROFILE] new phone: " + newPhoneNumber);
                 }
 
