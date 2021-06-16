@@ -38,7 +38,10 @@ try {
     var FULL_NAME_FIELD = "givenName";
     var nameFound = false;
     var phoneFound = false;
+
     var SKIP_OPTION_INDEX = 0;
+    var CONFIRM_OPTION_INDEX = 1;
+
     var SKIP_CALLBACK_INDEX = 5;
     var NAME_CALLBACK_INDEX = 2;
     var PHONE_CALLBACK_INDEX = 3;
@@ -47,7 +50,7 @@ try {
         "Do you want to skip?",
         fr.ConfirmationCallback.INFORMATION,
         ["SKIP", "SUBMIT"],
-        SKIP_OPTION_INDEX
+        CONFIRM_OPTION_INDEX
     );
 
     var placeHolderCallback = new fr.HiddenValueCallback("IGNOREME", "IGNOREME");
@@ -70,7 +73,6 @@ try {
     }
 
     if (callbacks.isEmpty()) {
-
         if (phoneFound && nameFound) {
             outcome = NodeOutcome.SKIP;
         } else {
