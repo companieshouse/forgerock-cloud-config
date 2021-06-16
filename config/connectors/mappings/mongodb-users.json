@@ -6,28 +6,22 @@
 	"icon": null,
 	"displayName": "chsUsers_alphaUser",
 	"properties": [{
-		"target": "userName",
-		"source": "email"
+		"source": "email",
+		"target": "userName"
 	}, {
-		"target": "sn",
-		"source": "email"
+		"source": "email",
+		"target": "sn"
 	}, {
-		"target": "mail",
-		"source": "email"
+		"source": "email",
+		"target": "mail"
 	}, {
+		"source": "",
 		"target": "givenName",
 		"transform": {
-			"type": "text/javascript",
 			"globals": {},
-			"source": "if (source.forename && source.surname) {\n  source.forename + \" \" + source.surname\n} else if (source.forename) {\n  source.forename\n} else if (source.surname) {\n  source.surname\n}"
-		},
-		"source": ""
-	}, {
-		"target": "frIndexedString2",
-		"source": "password"
-	}, {
-		"target": "frIndexedString5",
-		"default": "chs"
+			"source": "if (source.forename && source.surname) {\n  source.forename + \" \" + source.surname\n} else if (source.forename) {\n  source.forename\n} else if (source.surname) {\n  source.surname\n}",
+			"type": "text/javascript"
+		}
 	}],
 	"policies": [{
 		"action": "EXCEPTION",
@@ -70,23 +64,23 @@
 		"situation": "ABSENT"
 	}],
 	"correlationQuery": [{
-		"linkQualifier": "default",
 		"expressionTree": {
 			"any": ["userName"]
 		},
+		"file": "ui/correlateTreeToQueryFilter.js",
+		"linkQualifier": "default",
 		"mapping": "chsUsers_alphaUser",
-		"type": "text/javascript",
-		"file": "ui/correlateTreeToQueryFilter.js"
+		"type": "text/javascript"
 	}],
 	"onCreate": {
-		"type": "text/javascript",
 		"globals": {},
-		"source": "var incomingRoles = source.roles;\n\nif (incomingRoles != null) {\n  var rolesLength = incomingRoles.length;\n\n  var fidcRoles = [];\n\n  for (var i = 0; i < rolesLength; i++) {\n      var role = incomingRoles[i];\n\n      var existingRole = openidm.query('managed/alpha_role',{\"_queryFilter\": '/name eq \"' + role + '\"' }, [\"*\"]);\n      if (existingRole.result.length > 0) {\n        existingRoleId = existingRole.result[0]._id\n\n        var fidcRole = {\n          _ref: \"managed/alpha_role/\" + existingRoleId\n        };\n\n        fidcRoles.push(fidcRole);\n      }\n  }\n\n  if (fidcRoles.length > 0) {\n    target.roles = fidcRoles;\n  }\n}\n\ntarget.frIndexedString3 = \"pending\""
+		"source": "var incomingRoles = source.roles;\n\nif (incomingRoles != null) {\n  var rolesLength = incomingRoles.length;\n\n  var fidcRoles = [];\n\n  for (var i = 0; i < rolesLength; i++) {\n      var role = incomingRoles[i];\n\n      var existingRole = openidm.query('managed/alpha_role',{\"_queryFilter\": '/name eq \"' + role + '\"' }, [\"*\"]);\n      if (existingRole.result.length > 0) {\n        existingRoleId = existingRole.result[0]._id\n\n        var fidcRole = {\n          _ref: \"managed/alpha_role/\" + existingRoleId\n        };\n\n        fidcRoles.push(fidcRole);\n      }\n  }\n\n  if (fidcRoles.length > 0) {\n    target.roles = fidcRoles;\n  }\n}\n\ntarget.frIndexedString2 = source.password;\ntarget.frIndexedString3 = \"pending\";\ntarget.frIndexedString5 = \"chs\";",
+		"type": "text/javascript"
 	},
 	"onUpdate": {
 		"type": "text/javascript",
 		"globals": {},
-		"source": "var incomingRoles = source.roles;\n\nif (incomingRoles != null) {\n  var rolesLength = incomingRoles.length;\n\n  var fidcRoles = [];\n\n  for (var i = 0; i < rolesLength; i++) {\n      var role = incomingRoles[i];\n\n      var existingRole = openidm.query('managed/alpha_role',{\"_queryFilter\": '/name eq \"' + role + '\"' }, [\"*\"]);\n      if (existingRole.result.length > 0) {\n        existingRoleId = existingRole.result[0]._id\n\n        var fidcRole = {\n          _ref: \"managed/alpha_role/\" + existingRoleId\n        };\n\n        fidcRoles.push(fidcRole);\n      }\n  }\n\n  if (fidcRoles.length > 0) {\n    target.roles = fidcRoles;\n  }\n}"
+		"source": "var incomingRoles = source.roles;\n\nif (incomingRoles != null) {\n  var rolesLength = incomingRoles.length;\n\n  var fidcRoles = [];\n\n  for (var i = 0; i < rolesLength; i++) {\n      var role = incomingRoles[i];\n\n      var existingRole = openidm.query('managed/alpha_role',{\"_queryFilter\": '/name eq \"' + role + '\"' }, [\"*\"]);\n      if (existingRole.result.length > 0) {\n        existingRoleId = existingRole.result[0]._id\n\n        var fidcRole = {\n          _ref: \"managed/alpha_role/\" + existingRoleId\n        };\n\n        fidcRoles.push(fidcRole);\n      }\n  }\n\n  if (fidcRoles.length > 0) {\n    target.roles = fidcRoles;\n  }\n}\n\nif (target.frIndexedString5 == \"webfiling\") {\n  // User already exists with same email address in WebFiling\n  if (target.frIndexedString3 != \"migrated\") {\n  \t// User has not yet logged in following migration\n    target.frIndexedString3 = \"resetpwd\"\n  }\n} "
 	},
 	"clusteredSourceReconEnabled": true,
 	"reconSourceQueryPageSize": 10000,
