@@ -82,6 +82,9 @@ try {
             logger.error("[INVITE USER INPUT] inviter ID: " + userId);
 
             sharedState.put("email", email);
+            //put the invited email in shared state for next call of 'Identify Existing User'
+            //sharedState.put("userName", email);
+            //sharedState.put("objectAttributes", { "userName": email });
             action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
         }
     }
