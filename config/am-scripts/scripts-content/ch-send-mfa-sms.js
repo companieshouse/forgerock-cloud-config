@@ -55,6 +55,7 @@ function sendErrorCallbacks() {
 function sendTextMessage(phoneNumber, code) {
   var notifyJWT = transientState.get("notifyJWT");
   var templates = transientState.get("notifyTemplates");
+  var language = 'EN';
   logger.error("[SEND MFA SMS] JWT from transient state: " + notifyJWT);
   logger.error("[SEND MFA SMS] Templates from transient state: " + templates);
   var request = new org.forgerock.http.protocol.Request();
@@ -62,7 +63,7 @@ function sendTextMessage(phoneNumber, code) {
   try {
     var requestBodyJson = {
       "phone_number": phoneNumber,
-      "template_id": JSON.parse(templates).otpSms,
+      "template_id": language === 'EN' ? JSON.parse(templates).en_otpSms : JSON.parse(templates).cy_otpSms, 
       "personalisation": {
         "code": code
       }

@@ -148,6 +148,7 @@ function sendErrorCallbacks(stage, token, message) {
 function sendEmail(invitedEmail, companyName, companyNumber, inviterName) {
     var onboardingJwtResponse = "";
     var returnUrl = "";
+    var language = 'EN';
     //if the user has been onboarded, the link they receive must be to the onboarding journey
     if (isOnboarding) {
         onboardingJwtResponse = buildOnboardingToken(invitedEmail, companyNumber);
@@ -177,7 +178,7 @@ function sendEmail(invitedEmail, companyName, companyNumber, inviterName) {
     try {
         var requestBodyJson = {
             "email_address": invitedEmail,
-            "template_id": JSON.parse(templates).invite,
+            "template_id": language === 'EN' ? JSON.parse(templates).en_invite : JSON.parse(templates).cy_invite,
             "personalisation": {
                 "link": returnUrl,
                 "company": companyName,

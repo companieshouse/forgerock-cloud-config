@@ -134,7 +134,7 @@ function sendEmail(jwt) {
     var notifyJWT = transientState.get("notifyJWT");
     var templates = transientState.get("notifyTemplates");
     var returnUrl = host.concat("/am/XUI/?realm=/alpha&&service=CHVerifyReg&token=", jwt)
-
+    var language = 'EN';
     logger.error("[REGISTRATION] JWT from transient state: " + notifyJWT);
     logger.error("[REGISTRATION] Templates from transient state: " + templates);
     logger.error("[REGISTRATION] RETURN URL: " + returnUrl);
@@ -143,7 +143,7 @@ function sendEmail(jwt) {
     try {
         var requestBodyJson = {
             "email_address": email,
-            "template_id": JSON.parse(templates).verifyReg,
+            "template_id": language === 'EN' ? JSON.parse(templates).en_verifyReg : JSON.parse(templates).cy_verifyReg,
             "personalisation": {
                 "link": returnUrl
             }
