@@ -8,15 +8,13 @@ var companyData = sharedState.get("companyData");
 var inviterUserId = sharedState.get("_id");
 var invitedEmail = sharedState.get("email");
 var inviterName = sharedState.get("inviterName");
-var invitedName = sharedState.get("invitedName");
 var notificationId = transientState.get("notificationId");
-
 
 if (callbacks.isEmpty()) {
   action = fr.Action.send(
     new fr.TextOutputCallback(
       fr.TextOutputCallback.INFORMATION,
-      "An email request has been sent to " + invitedName + " to be authorised to file online for " + JSON.parse(companyData).name + "."
+      "An email request has been sent to " + invitedEmail + " to be authorised to file online for " + JSON.parse(companyData).name + "."
     ),
     new fr.HiddenValueCallback(
       "stage",
@@ -24,7 +22,7 @@ if (callbacks.isEmpty()) {
     ),
     new fr.HiddenValueCallback(
       "pagePropsJSON",
-      JSON.stringify({ "invitedUser": invitedName, "company": { name: JSON.parse(companyData).name } })
+      JSON.stringify({ "invitedUser": invitedEmail, "company": { name: JSON.parse(companyData).name } })
     ),
     new fr.HiddenValueCallback(
       "notificationId",

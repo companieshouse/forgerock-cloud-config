@@ -59,7 +59,8 @@
                 "lastModifiedDate": 1436807766258
             },
             "filename": "ch-registration-mark-user-existing.js"
-        },        {
+        },        
+        {
             "payload": {
                 "_id": "181f73fa-ec30-4ef4-b78a-9790a4918b23",
                 "name": "CH - Callback for User Already Exists",
@@ -724,7 +725,23 @@
                 "lastModifiedDate":1617810491969
              },
             "filename": "ch-invite-user-respond-invite.js"
-        }, 
+        },
+        {
+            "payload": {
+                "_id":"e502a152-bc0a-49b3-82cd-233bafdabcad",
+                "name":"CH - Invite User - Onboard unregistered user",
+                "description":"Onboards an unregistered user as part of the invitation process.",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-invite-user-prepare-user-onboarding.js"
+        },  
         {
             "payload": {
                 "_id":"d22f9a0c-426a-4466-b95e-d0f125b0d5fa",

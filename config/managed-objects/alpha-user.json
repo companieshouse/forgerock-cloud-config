@@ -498,22 +498,22 @@
               "viewable": false
           },
           "frIndexedDate1": {
-              "description": "Last login",
-              "isPersonal": false,
-              "title": "Last login",
-              "type": "string",
-              "usageDescription": null,
-              "userEditable": true,
-              "viewable": true
+               "description": "Last Login Date",
+               "isPersonal": false,
+               "title": "Last Login Date",
+               "type": "string",
+               "usageDescription": "The most recent login date for this user.",
+               "userEditable": true,
+               "viewable": true
           },
           "frIndexedDate2": {
-              "description": "Generic Indexed Date 2",
-              "isPersonal": false,
-              "title": "Generic Indexed Date 2",
-              "type": "string",
-              "usageDescription": null,
-              "userEditable": true,
-              "viewable": true
+               "description": "Onboarding Date",
+               "isPersonal": false,
+               "title": "Onboarding Date",
+               "type": "string",
+               "usageDescription": "The date this user was onboarded via invitation journey.",
+               "userEditable": false,
+               "viewable": true
           },
           "frIndexedDate3": {
               "description": "Generic Indexed Date 3",
