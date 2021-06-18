@@ -34,7 +34,10 @@ var fr = JavaImporter(
     org.forgerock.secrets.SecretBuilder,
     javax.crypto.spec.SecretKeySpec,
     org.forgerock.secrets.keys.SigningKey,
-    org.forgerock.json.jose.jws.handlers.SecretHmacSigningHandler
+    org.forgerock.json.jose.jws.handlers.SecretHmacSigningHandler,
+    org.forgerock.json.jose.builders.JwtBuilderFactory,
+    org.forgerock.json.jose.jwt.JwtClaimsSet,
+    org.forgerock.json.jose.jws.JwsAlgorithm
 )
 
 var NodeOutcome = {
@@ -56,7 +59,10 @@ function buildOnboardingToken(email, companyNo) {
         signingHandler = new fr.SecretHmacSigningHandler(key);
     } catch (e) {
         logger.error("[ONBOARIDNG] Error while creating signing handler: " + e);
-        return false;
+        return {
+            success: false,
+            message: "[ONBOARIDNG] Error while creating signing handler: ".concat(e)
+        };
     }
     var jwtClaims = new fr.JwtClaimsSet;
     try {
@@ -64,13 +70,16 @@ function buildOnboardingToken(email, companyNo) {
         var dateNow = new Date();
         jwtClaims.setIssuedAtTime(dateNow);
         jwtClaims.setSubject(email);
-        if (company) {
+        if (companyNo) {
             jwtClaims.setClaim("companyNo", companyNo);
         }
         jwtClaims.setClaim("creationDate", new Date().toString());
     } catch (e) {
         logger.error("[ONBOARIDNG] Error while adding claims to JWT: " + e);
-        return false;
+        return {
+            success: false,
+            message: "[ONBOARIDNG] Error while adding claims to JWT: ".concat(e)
+        };
     }
 
     try {
@@ -82,10 +91,16 @@ function buildOnboardingToken(email, companyNo) {
             .claims(jwtClaims)
             .build();
         logger.error("[ONBOARIDNG] Onboarding JWT: " + jwt);
-        return jwt;
+        return {
+            success: true,
+            token: jwt
+        };
     } catch (e) {
         logger.error("[ONBOARIDNG] Error while creating JWT: " + e);
-        return false;
+        return {
+            success: false,
+            message: "[ONBOARIDNG] Error while creating JWT: ".concat(e)
+        };
     }
 }
 
@@ -130,14 +145,30 @@ function sendErrorCallbacks(stage, token, message) {
 }
 
 //sends the email (via Notify) to the recipient using the given JWT
-function sendEmail(onboardingJwt, invitedEmail, companyName, companyNumber, inviterName) {
+function sendEmail(invitedEmail, companyName, companyNumber, inviterName) {
+    var onboardingJwtResponse = "";
+    var returnUrl = "";
+    //if the user has been onboarded, the link they receive must be to the onboarding journey
+    if (isOnboarding) {
+        onboardingJwtResponse = buildOnboardingToken(invitedEmail, companyNumber);
+        if (!onboardingJwtResponse.success) {
+            logger.error("[COMPANY INVITE - SEND EMAIL] Error while creating Onboarding JWT");
+            return {
+                success: false,
+                message: onboardingJwtResponse.message
+            };
+        } else {
+            returnUrl = host.concat("/am/XUI/?realm=/alpha&&service=CHOnboardUser&token=", onboardingJwtResponse.token)
+        }
+    } else {
+        returnUrl = host.concat("/account/login/?goto=", encodeURIComponent("/account/notifications/#" + companyNumber));
+    }
 
     logger.error("[COMPANY INVITE - SEND EMAIL] params: " + invitedEmail + " - " + companyName + " - " + inviterName);
 
     var notifyJWT = transientState.get("notifyJWT");
     var templates = transientState.get("notifyTemplates");
-    var returnUrl = host.concat("/account/login/?goto=", encodeURIComponent("/account/notifications/#" + companyNumber));
-
+    
     logger.error("[COMPANY INVITE - SEND EMAIL] JWT from transient state: " + notifyJWT);
     logger.error("[COMPANY INVITE - SEND EMAIL] Templates from transient state: " + templates);
     logger.error("[COMPANY INVITE - SEND EMAIL] RETURN URL: " + returnUrl);
@@ -155,7 +186,10 @@ function sendEmail(onboardingJwt, invitedEmail, companyName, companyNumber, invi
         }
     } catch (e) {
         logger.error("[COMPANY INVITE - SEND EMAIL] Error while preparing request for Notify: " + e);
-        return false;
+        return {
+            success: false,
+            message: "[COMPANY INVITE - SEND EMAIL] Error while preparing request for Notify: ".concat(e)
+        };
     }
 
     request.setMethod("POST");
@@ -173,36 +207,36 @@ function sendEmail(onboardingJwt, invitedEmail, companyName, companyNumber, invi
         logger.error("[COMPANY INVITE - SEND EMAIL] Notify ID: " + notificationId);
     } catch (e) {
         logger.error("[COMPANY INVITE - SEND EMAIL] Error while parsing Notify response: " + e);
-        return false;
+        return {
+            success: false,
+            message: "[COMPANY INVITE - SEND EMAIL] Error while parsing Notify response: ".concat(e)
+        };
     }
 
-    return (response.getStatus().getCode() == 201);
+    return {
+        success: (response.getStatus().getCode() == 201),
+        message: (response.getStatus().getCode() == 201) ? ("Message sent") : ("Cannot send message: " + response.getStatus().getCode())
+    };
 }
 
 // main execution flow
-
 try {
-    var returnUrl;
-    var onboardingJwt;
     var host = requestHeaders.get("origin").get(0);
     var request = new org.forgerock.http.protocol.Request();
-
+    var isOnboarding = sharedState.get("isOnboarding");
     var inviteData = extractInviteDataFromState();
 
     if (!inviteData) {
         sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ERROR", "An error has occurred! Please try again later.");
     } else {
-        onboardingJwt = buildOnboardingToken(inviteData.invitedEmail, inviteData.companyNumber);
-        if (!onboardingJwt) {
-            sendErrorCallbacks("REGISTRATION_ERROR", "REGISTRATION_GENERAL_ERROR", "An error has occurred! Please try again later.");
+        var sendEmailResult = sendEmail(inviteData.invitedEmail, inviteData.companyName, inviteData.companyNumber, inviteData.inviterName)
+        if (sendEmailResult.success) {
+            action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
         } else {
-            if (sendEmail(onboardingJwt, inviteData.invitedEmail, inviteData.companyName, inviteData.companyNumber, inviteData.inviterName)) {
-                action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
-            } else {
-                sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ERROR", "An error occurred while sending the email. Please try again later.");
-            }
+            sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ERROR", JSON.stringify(sendEmailResult));
         }
     }
 } catch (e) {
     logger.error("[COMPANY INVITE - SEND EMAIL] Error : " + e);
+    sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ERROR", e);
 }

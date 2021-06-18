@@ -1,28 +1,22 @@
 /* 
   ** INPUT DATA
-    * QUERY PARAMETERS
-      - companyNumber: the company number to invite users for
 
     * SHARED STATE:
+      - companyNumber: the company number to invite users for
       - '_id' : the id of the user who is invoking the journey (owner of the current session)
       - [optional] 'errorMessage': error message to display from previous attempts
+      - [optional] 'pagePropsJSON': error message to display from previous attempts
  
   ** OUTPUT DATA
    
     * SHARED STATE:
-      - 'companyNumber' : the company number to invite users for
       - 'email': email of the invited user
-      - 'errorMessage': the error message to be displayed
-      - 'pagePropsJSON': the JSON props for the UI
 
   ** OUTCOMES
     - success: input collected
+    - email_invalid: the email address provided has an invalid format
     - error: an error occurred
   
-  ** CALLBACKS: 
-    - input: invited email address 
-    - output: error message (if any)
-    - output: stage name and page props for UI
 */
 
 var fr = JavaImporter(
@@ -34,6 +28,7 @@ var fr = JavaImporter(
 
 var NodeOutcome = {
     SUCCESS: "success",
+    EMAIL_INVALID_ERROR: "email_invalid",
     ERROR: "error"
 }
 
@@ -70,24 +65,21 @@ try {
             ).build();
         }
     } else {
-
         var email = callbacks.get(1).getName();
         var userId = sharedState.get("_id");
         if (!validateEmail(email)) {
             logger.error("[INVITE USER INPUT] Invalid email: " + email);
-            action = fr.Action.goTo(NodeOutcome.ERROR).build();
+            action = fr.Action.goTo(NodeOutcome.EMAIL_INVALID_ERROR).build();
         } else {
             logger.error("[INVITE USER INPUT] company number: " + JSON.parse(companyData).number);
             logger.error("[INVITE USER INPUT] invited email: " + email);
             logger.error("[INVITE USER INPUT] inviter ID: " + userId);
 
             sharedState.put("email", email);
-            //put the invited email in shared state for next call of 'Identify Existing User'
-            //sharedState.put("userName", email);
-            //sharedState.put("objectAttributes", { "userName": email });
             action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
         }
     }
 } catch (e) {
     logger.error("[INVITE USER INPUT] error: " + e);
+    action = fr.Action.goTo(NodeOutcome.ERROR).build();
 }
