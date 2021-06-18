@@ -47,13 +47,13 @@ logger.error("[SEND MFA EMAIL] User email address: " + emailAddress);
 logger.error("[SEND MFA EMAIL] JWT from transient state: " + notifyJWT);
 logger.error("[SEND MFA EMAIL] Templates from transient state: " + templates);
 logger.error("[SEND MFA EMAIL] Code: " + code);
-
+var language = 'EN';
 var request = new org.forgerock.http.protocol.Request();
 request.setUri("https://api.notifications.service.gov.uk/v2/notifications/email");
 try {
   var requestBodyJson = {
     "email_address": emailAddress,
-    "template_id": JSON.parse(templates).otpEmail,
+    "template_id": language === 'EN' ? JSON.parse(templates).en_otpEmail : JSON.parse(templates).cy_otpEmail,
     "personalisation": {
         "code": code
     }

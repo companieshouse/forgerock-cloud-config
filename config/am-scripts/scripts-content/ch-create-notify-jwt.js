@@ -30,7 +30,7 @@ var fr = JavaImporter(
 )
 
 // This variable value will be replaced with the relevant value in the target environment (stored in AM secret store) 
-var notifyDetails = "{ \"keyName\": \"chsidamtest\", \"issUuid\": \"314d829f-4b8c-40fe-b9f5-50ed6001102d\", \"secretKey\": \"0682b662-4502-430d-bceb-4542bc4e9ee7\", \"templates\": { \"invite\": \"6557568c-b9ca-426d-9ced-ac0d686490e4\", \"requestAuthz\": \"5cab9eb4-e648-4a0d-a27b-558980259440\", \"otpEmail\": \"a1f77c64-9268-49d9-bb64-8ddc6bac0166\", \"otpSms\": \"12ac43ec-5b83-48ec-b3db-9a8f3d6624f6\", \"verifyReg\": \"bf9effa7-3c30-4490-b12b-f1f6527f4c69\", \"resetPwd\": \"a17b882f-08a0-4d91-860c-aac9d42c8f0b\", \"existingUser\": \"29f4d50e-73b6-4075-b1fa-3f59168bfdb6\"}}"
+var notifyDetails = "{ \"keyName\": \"chsidamtest\", \"issUuid\": \"314d829f-4b8c-40fe-b9f5-50ed6001102d\", \"secretKey\": \"0682b662-4502-430d-bceb-4542bc4e9ee7\", \"templates\": { \"en_invite\": \"6557568c-b9ca-426d-9ced-ac0d686490e4\",  \"en_otpEmail\": \"a1f77c64-9268-49d9-bb64-8ddc6bac0166\", \"en_otpSms\": \"12ac43ec-5b83-48ec-b3db-9a8f3d6624f6\", \"en_verifyReg\": \"bf9effa7-3c30-4490-b12b-f1f6527f4c69\", \"en_resetPwd\": \"a17b882f-08a0-4d91-860c-aac9d42c8f0b\", \"en_removal\": \"e91edfb0-0a8a-4f93-a9cb-35600ca80e71\", \"en_existingUser\": \"29f4d50e-73b6-4075-b1fa-3f59168bfdb6\", \"cy_invite\": \"dc7b3b54-917b-4882-9063-b7ed265c8c5c\", \"cy_otpEmail\": \"2f6fcd37-0fab-4c09-a9e1-69151d0809db\", \"cy_otpSms\": \"264623ae-599d-4385-a0ba-bb9b83d202e1\", \"cy_verifyReg\": \"d573e9a7-877c-495d-bedd-1a026288db80\", \"cy_resetPwd\": \"8207cef7-1f23-4cf6-8d44-d8fff7a3e8c2\", \"cy_removal\": \"38bd9027-d26c-4dc4-8c9a-7b9fd29bdb00\", \"cy_existingUser\": \"bf33a628-34ca-4aa9-8943-70ea6438c797\" } }"
 var notifyObj;
 var jwt;
 
