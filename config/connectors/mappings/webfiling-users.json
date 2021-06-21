@@ -76,5 +76,10 @@
 		"type": "text/javascript",
 		"globals": {},
 		"source": "target.frIndexedString3 = \"pending\";\ntarget.frIndexedString5 = \"webfiling\";"
+	},
+	"onUpdate": {
+		"type": "text/javascript",
+		"globals": {},
+		"source": "target.frIndexedString3 = \"pending\""
 	}
 }
