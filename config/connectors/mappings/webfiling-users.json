@@ -79,5 +79,10 @@
 		"type": "text/javascript",
 		"globals": {},
 		"source": "target.frIndexedString3 = \"pending\""
+	},
+	"onUpdate": {
+		"type": "text/javascript",
+		"globals": {},
+		"source": "if (target.frIndexedString2 != source.PASSWORD) {\n    // User has changed password in WebFiling\n    target.frIndexedString3 = \"pending\"\n  }\n} "
 	}
 }
