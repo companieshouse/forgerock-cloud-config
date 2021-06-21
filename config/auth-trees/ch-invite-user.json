@@ -31,12 +31,22 @@
          "nodeType": "ScriptedDecisionNode", 
          "details": {
             "inputs":["*"],
-            "outcomes":["error","success"],
+            "outcomes": ["error", "success", "email_invalid"],
             "outputs":["*"],
             "script":"3607eaf7-49ae-448e-8919-18a8e39bd359"
          }            
      },
      {
+         "_id": "d6735f29-5fff-4b52-bff9-4fd1ff03861c",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes": ["success", "error"],
+            "outputs":["*"],
+            "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149"
+         }            
+      },
+      {
          "_id":"40b3ada0-ed4a-4237-b61f-1641047856eb",
          "nodeType": "ScriptedDecisionNode", 
          "details": {
@@ -125,6 +135,31 @@
              "outputs":["*"],
              "script": "f2e4ee99-bcbb-4f3b-9ea8-36c1d547d620"
          }
+      },
+      {
+         "_id": "1b52d107-797e-4e09-bc16-6dbf81dd6821",
+         "nodeType": "IdentifyExistingUserNode", 
+         "details": {
+             "identifier":"userName",
+             "identityAttribute":"mail"
+         }
+     },
+     {
+         "_id": "6ed5e5df-6653-4310-bc73-3cfc85db3748",
+         "nodeType": "CreateObjectNode",
+         "details": {
+            "identityResource":"managed/alpha_user"
+         }
+      },
+      {
+         "_id": "46124ca1-92ae-4ca3-833d-bd9cf7b7b119",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["success", "error"],
+             "outputs":["*"],
+             "script": "e502a152-bc0a-49b3-82cd-233bafdabcad"
+         }
       }
    ],
    "tree": {
@@ -144,8 +179,8 @@
             "displayName": "check session"
          },
          "32ad868f-335a-4ca4-8775-df42aa0a4ba5": {
-            "x": 1299,
-            "y": 167.015625,
+            "x": 1322,
+            "y": 224.015625,
             "connections": {
                "true": "948ed6a4-fe12-4cc2-9c39-aeafeec87822"
             },
@@ -163,8 +198,8 @@
             "displayName": "Lookup company"
          },
          "40b3ada0-ed4a-4237-b61f-1641047856eb": {
-            "x": 683,
-            "y": 32,
+            "x": 725,
+            "y": 66,
             "connections": {
                "error": "e301438c-0bd0-429c-ab0c-66126501069a",
                "success": "3b3108db-5661-4211-9ce7-0534882f9783"
@@ -202,8 +237,8 @@
             "displayName": "Get Session Data"
          },
          "84f53938-bf5a-424a-ad29-f494ec1f426b": {
-            "x": 1422,
-            "y": 233.015625,
+            "x": 1603,
+            "y": 281.015625,
             "connections": {
                "error": "e301438c-0bd0-429c-ab0c-66126501069a",
                "success": "a7a24982-63e4-409d-9867-d1f42a121bc1"
@@ -222,18 +257,19 @@
             "displayName": "Create Notify JWT"
          },
          "948ed6a4-fe12-4cc2-9c39-aeafeec87822": {
-            "x": 1316,
-            "y": 21.015625,
+            "x": 1317,
+            "y": 22.015625,
             "connections": {
-               "error": "32ad868f-335a-4ca4-8775-df42aa0a4ba5",
-               "success": "84f53938-bf5a-424a-ad29-f494ec1f426b"
+               "error": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "email_invalid": "32ad868f-335a-4ca4-8775-df42aa0a4ba5",
+               "success": "d6735f29-5fff-4b52-bff9-4fd1ff03861c"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Collect Input"
          },
          "a7a24982-63e4-409d-9867-d1f42a121bc1": {
-            "x": 1578,
-            "y": 120.015625,
+            "x": 1737,
+            "y": 142.015625,
             "connections": {
                "error": "e301438c-0bd0-429c-ab0c-66126501069a",
                "success": "9227e96a-960d-4502-8003-38b6857ca644",
@@ -260,6 +296,25 @@
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Respond/Skip"
+         },
+         "d6735f29-5fff-4b52-bff9-4fd1ff03861c": {
+            "x": 1351,
+            "y": 303.015625,
+            "connections": {
+               "success": "46124ca1-92ae-4ca3-833d-bd9cf7b7b119"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "get token"
+         },
+         "46124ca1-92ae-4ca3-833d-bd9cf7b7b119": {
+            "x": 1348,
+            "y": 432.015625,
+            "connections": {
+               "success": "84f53938-bf5a-424a-ad29-f494ec1f426b",
+               "error": "e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "onboarding"
          }
       },
       "staticNodes": {
@@ -272,8 +327,8 @@
             "y": 130
          },
          "e301438c-0bd0-429c-ab0c-66126501069a": {
-            "x": 1193,
-            "y": 681
+            "x": 1782,
+            "y": 803
          }
       }
    }

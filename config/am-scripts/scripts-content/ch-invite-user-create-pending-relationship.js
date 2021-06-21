@@ -48,7 +48,7 @@ var IdentifierType = {
 }
 
 function logResponse(response) {
-  logger.error("[ADD RELATIONSHIP] Scripted Node HTTP Response: " + response.getStatus() + ", Body: " + response.getEntity().getString());
+  logger.error("[INVITE - ADD RELATIONSHIP] Scripted Node HTTP Response: " + response.getStatus() + ", Body: " + response.getEntity().getString());
 }
 
 // extracts the user membership status to the given company. User could be provided as a user ID or a username (email) 
