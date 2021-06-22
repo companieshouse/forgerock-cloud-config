@@ -43,7 +43,7 @@
 		"transform": {
 			"type": "text/javascript",
 			"globals": {},
-			"source": "source.registered_office_address.locality"
+			"source": "if (source.registered_office_address) {\n  source.registered_office_address.locality\n}"
 		}
 	}, {
 		"target": "postalCode",
@@ -51,7 +51,7 @@
 		"transform": {
 			"type": "text/javascript",
 			"globals": {},
-			"source": "source.registered_office_address.postal_code"
+			"source": "if (source.registered_office_address) {\n  source.registered_office_address.postal_code\n}"
 		}
 	}, {
 		"target": "addressLine1",
@@ -59,7 +59,7 @@
 		"transform": {
 			"type": "text/javascript",
 			"globals": {},
-			"source": "source.registered_office_address.address_line_1"
+			"source": "if (source.registered_office_address) {\n  source.registered_office_address.address_line_1\n}"
 		}
 	}, {
 		"target": "addressLine2",
@@ -67,7 +67,7 @@
 		"transform": {
 			"type": "text/javascript",
 			"globals": {},
-			"source": "source.registered_office_address.address_line_2"
+			"source": "if (source.registered_office_address) {\n  source.registered_office_address.address_line_2\n}"
 		}
 	}, {
 		"target": "region",
@@ -75,7 +75,7 @@
 		"transform": {
 			"type": "text/javascript",
 			"globals": {},
-			"source": "source.registered_office_address.region"
+			"source": "if (source.registered_office_address) {\n  source.registered_office_address.region\n}"
 		}
 	}, {
 		"target": "creationDate",
@@ -138,7 +138,7 @@
 	"reconSourceQueryPageSize": 10000,
 	"sourceQueryFullEntry": true,
 	"sourceQuery": {
-	  "_queryFilter": "true"
+		"_queryFilter": "true"
 	},
 	"taskThreads": 20
 }
