@@ -15,12 +15,12 @@
 		}
 	}, {
 		"target": "number",
+		"source": "data",
 		"transform": {
 			"type": "text/javascript",
 			"globals": {},
 			"source": "source.company_number"
-		},
-		"source": "data"
+		}
 	}, {
 		"target": "type",
 		"source": "data",
@@ -91,7 +91,7 @@
 		"transform": {
 			"type": "text/javascript",
 			"globals": {},
-			"source": "source.jurisdiction"
+			"source": "if (source.jurisdiction == \"england-wales\") {\n  \"EW\"\n} else if (source.jurisdiction == \"scotland\") {\n  \"SC\"\n} else if (source.jurisdiction == \"scotland\") {\n  \"NI\"\n} else {\n  source.jurisdiction\n}"
 		}
 	}],
 	"policies": [{
