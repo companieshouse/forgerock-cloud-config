@@ -13,19 +13,8 @@
 		"target": "userName",
 		"source": "EMAIL"
 	}, {
-		"target": "givenName",
-		"transform": {
-			"type": "text/javascript",
-			"globals": {},
-			"source": "if (source.FORENAME && source.SURNAME) {\n  source.FORENAME + \" \" + source.SURNAME\n} else if (source.FORENAME) {\n  source.FORENAME\n} else if (source.SURNAME) {\n  source.SURNAME\n}"
-		},
-		"source": ""
-	}, {
 		"target": "frIndexedString2",
 		"source": "PASSWORD"
-	}, {
-		"target": "frIndexedString5",
-		"default": "webfiling"
 	}],
 	"policies": [{
 		"action": "EXCEPTION",
@@ -84,6 +73,11 @@
 		"file": "ui/correlateTreeToQueryFilter.js"
 	}],
 	"onCreate": {
+		"type": "text/javascript",
+		"globals": {},
+		"source": "target.frIndexedString3 = \"pending\";\ntarget.frIndexedString5 = \"webfiling\";"
+	},
+	"onUpdate": {
 		"type": "text/javascript",
 		"globals": {},
 		"source": "target.frIndexedString3 = \"pending\""
