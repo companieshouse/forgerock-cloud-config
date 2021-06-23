@@ -57,16 +57,6 @@
 			}
 		},
 		{
-			"_id": "ca5a5885-e8be-4006-9004-28cf71922e75",
-			"nodeType": "ScriptedDecisionNode",
-			"details": {
-				"outcomes": ["true"],
-				"inputs": ["*"],
-				"outputs": ["*"],
-				"script": "188d3f9d-ca04-4df7-bcd7-eed3fe27e21e"
-			}
-		},
-		{
 			"_id": "01c83c4f-764f-4479-9da3-e6ab1708e741",
 			"nodeType": "ScriptedDecisionNode",
 			"details": {
