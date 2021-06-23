@@ -152,10 +152,9 @@ function raiseEmailSendError() {
 }
 
 //send the email
-function sendEmail() {
+function sendEmail(language) {
     var notifyJWT = transientState.get("notifyJWT");
     var templates = transientState.get("notifyTemplates");
-    var language = 'EN';
     logger.error("[RESET PWD] Notify JWT from transient state: " + notifyJWT);
     logger.error("[RESET PWD] Templates from transient state: " + templates);
     var isUserExisting = transientState.get("isUserExisting");
@@ -203,30 +202,47 @@ function sendEmail() {
     return (response.getStatus().getCode() == 201);
 }
 
+//extracts the language form headers (default to EN)
+function getSelectedLanguage(requestHeaders) {
+    if (requestHeaders && requestHeaders.get("Chosen-Language")) {
+        var lang = requestHeaders.get("Chosen-Language").get(0);
+        logger.error("[RESET PWD] selected language: " + lang);
+        return lang;
+    }
+    logger.error("[RESET PWD] no selected language found - defaulting to EN");
+    return 'EN';
+}
+
 // main execution flow
+try {
+    var request = new org.forgerock.http.protocol.Request();
+    var host = requestHeaders.get("origin").get(0);
 
-var request = new org.forgerock.http.protocol.Request();
-var host = requestHeaders.get("origin").get(0);
-var resetPasswordjJwt;
-var returnUrl;
+    var language = getSelectedLanguage(requestHeaders);
+    var resetPasswordjJwt;
+    var returnUrl;
 
-var email = extractEmailFromState();
-if (email) {
-    resetPasswordjJwt = buildPasswordResetToken(email);
-    if (resetPasswordjJwt) {
-        returnUrl = buildReturnUrl(resetPasswordjJwt);
+    var email = extractEmailFromState();
+    if (email) {
+        resetPasswordjJwt = buildPasswordResetToken(email);
+        if (resetPasswordjJwt) {
+            returnUrl = buildReturnUrl(resetPasswordjJwt);
+        }
     }
-}
 
-if (!email || !resetPasswordjJwt || !returnUrl) {
-    raiseGeneralError();
-} else {
-    if (sendEmail()) {
-        action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
+    if (!email || !resetPasswordjJwt || !returnUrl) {
+        raiseGeneralError();
     } else {
-        raiseEmailSendError();
+        if (sendEmail(language)) {
+            action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
+        } else {
+            raiseEmailSendError();
+        }
     }
-}
 
-//always return false at the end, because we don't end up with a session
-outcome = NodeOutcome.ERROR;
+    //always return false at the end, because we don't end up with a session
+    outcome = NodeOutcome.ERROR;
+} catch (e) {
+    logger.error("[RESET PWD] An error occurred: " + e);
+    action = fr.Action.goTo(NodeOutcome.ERROR).build();
+}

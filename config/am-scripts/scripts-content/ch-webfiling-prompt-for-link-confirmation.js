@@ -29,10 +29,22 @@ var NodeOutcome = {
   ERROR: "error"
 }
 
+//extracts the language form headers (default to EN)
+function getSelectedLanguage(requestHeaders) {
+  if (requestHeaders && requestHeaders.get("Chosen-Language")) {
+      var lang = requestHeaders.get("Chosen-Language").get(0);
+      logger.error("[EWF CONFIRM ASSOCIATION] selected language: " + lang);
+      return lang;
+  }
+  logger.error("[EWF CONFIRM ASSOCIATION] no selected language found - defaulting to EN");
+  return 'EN';
+}
+
 var YES_OPTION_INDEX = 0;
 
 try {
   var companyData = sharedState.get("companyData");
+  var language = getSelectedLanguage(requestHeaders);
   if (callbacks.isEmpty()) {
     var infoMessage = "Do you want to add this company to your Companies House account?";
     var errorMessage = sharedState.get("errorMessage");
@@ -78,7 +90,9 @@ try {
       action = fr.Action.goTo(NodeOutcome.TRUE).build();
     } else {
       sharedState.put("errorMessage", null);
-      action = fr.Action.goTo(NodeOutcome.FALSE).build();
+      action = fr.Action.goTo(NodeOutcome.FALSE)
+        .putSessionProperty("language", language)
+        .build();
     }
   }
 

@@ -113,11 +113,23 @@ function getUserMembershipForCompany(userIdentifier, companyNo) {
     }
 }
 
+//extracts the language form headers (default to EN)
+function getSelectedLanguage(requestHeaders) {
+  if (requestHeaders && requestHeaders.get("Chosen-Language")) {
+      var lang = requestHeaders.get("Chosen-Language").get(0);
+      logger.error("[EWF - CHECK COMPANY MEMBERSHIP] selected language: " + lang);
+      return lang;
+  }
+  logger.error("[EWF - CHECK COMPANY MEMBERSHIP] no selected language found - defaulting to EN");
+  return 'EN';
+}
+
 try {
     var idmCompanyAuthEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/endpoint/companyauth/";
     var companyNo = JSON.parse(sharedState.get("companyData")).number;
     var sessionOwner = sharedState.get("_id");
     logger.error("[EWF - CHECK COMPANY MEMBERSHIP] session owner: " + sessionOwner);
+    var language = getSelectedLanguage(requestHeaders);
 
     var companyMembership = getUserMembershipForCompany(sessionOwner, companyNo);
     if (!companyMembership) {
@@ -132,6 +144,7 @@ try {
             logger.error("[EWF - CHECK COMPANY MEMBERSHIP] User already associated with company!");
             action = fr.Action.goTo(NodeOutcome.USER_ASSOCIATED)
                 .putSessionProperty("authCode",  JSON.parse(sharedState.get("companyData")).authCode)
+                .putSessionProperty("language",  language.toLowerCase())
                 .build();
         }
     }

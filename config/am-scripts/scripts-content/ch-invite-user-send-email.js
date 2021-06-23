@@ -145,10 +145,9 @@ function sendErrorCallbacks(stage, token, message) {
 }
 
 //sends the email (via Notify) to the recipient using the given JWT
-function sendEmail(invitedEmail, companyName, companyNumber, inviterName) {
+function sendEmail(language, invitedEmail, companyName, companyNumber, inviterName) {
     var onboardingJwtResponse = "";
     var returnUrl = "";
-    var language = 'EN';
     //if the user has been onboarded, the link they receive must be to the onboarding journey
     if (isOnboarding) {
         onboardingJwtResponse = buildOnboardingToken(invitedEmail, companyNumber);
@@ -220,17 +219,29 @@ function sendEmail(invitedEmail, companyName, companyNumber, inviterName) {
     };
 }
 
+//extracts the language form headers (default to EN)
+function getSelectedLanguage(requestHeaders) {
+    if (requestHeaders && requestHeaders.get("Chosen-Language")) {
+        var lang = requestHeaders.get("Chosen-Language").get(0);
+        logger.error("[COMPANY INVITE - SEND EMAIL] selected language: " + lang);
+        return lang;
+    }
+    logger.error("[COMPANY INVITE - SEND EMAIL] no selected language found - defaulting to EN");
+    return 'EN';
+}
+
 // main execution flow
 try {
     var host = requestHeaders.get("origin").get(0);
     var request = new org.forgerock.http.protocol.Request();
     var isOnboarding = sharedState.get("isOnboarding");
     var inviteData = extractInviteDataFromState();
+    var language = getSelectedLanguage(requestHeaders);
 
     if (!inviteData) {
         sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ERROR", "An error has occurred! Please try again later.");
     } else {
-        var sendEmailResult = sendEmail(inviteData.invitedEmail, inviteData.companyName, inviteData.companyNumber, inviteData.inviterName)
+        var sendEmailResult = sendEmail(language, inviteData.invitedEmail, inviteData.companyName, inviteData.companyNumber, inviteData.inviterName)
         if (sendEmailResult.success) {
             action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
         } else {
