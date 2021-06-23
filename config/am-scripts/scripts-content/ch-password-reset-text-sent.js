@@ -1,7 +1,6 @@
 /* 
   ** INPUT DATA
     * SHARED STATE:
-      - 'oneTimePassword' : the OTP code to be sent via text
       - '_id': the user ID to be send the text to (only populated if registrationMFA = false)
       - 'objectAttributes.telephoneNumber': the user telephone number (entered in a previous screen)
 

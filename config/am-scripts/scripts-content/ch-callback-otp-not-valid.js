@@ -8,8 +8,8 @@ try {
             'errors': [{
                 label: "The OTP provided is not valid. Please try again.",
                 token: "OTP_NOT_VALID",
-                fieldName: "IDToken1",
-                anchor: "IDToken1"
+                fieldName: "IDToken3",
+                anchor: "IDToken3"
             }]
         }));
 
