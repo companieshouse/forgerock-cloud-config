@@ -118,7 +118,8 @@ webFilingClaimResolver = { claim, identity ->
             'company_no' : (sessionPresent ? session.getProperty('companyNumber') : null),
             'password' : (sessionPresent ? session.getProperty('password') : null),
             'jurisdiction': (sessionPresent ? session.getProperty('jurisdiction') : null),
-            'auth_code': (sessionPresent ? session.getProperty('authCode') : null)
+            'auth_code': (sessionPresent ? session.getProperty('authCode') : null),
+            'language': (sessionPresent ? session.getProperty('language') : null)
         ]
     }
     [:]

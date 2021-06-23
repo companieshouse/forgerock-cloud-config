@@ -136,6 +136,17 @@ function fetchIDMToken() {
     return accessToken;
 }
 
+//extracts the language form headers (default to EN)
+function getSelectedLanguage(requestHeaders) {
+    if (requestHeaders && requestHeaders.get("Chosen-Language")) {
+        var lang = requestHeaders.get("Chosen-Language").get(0);
+        logger.error("[ADD RELATIONSHIP] selected language: " + lang);
+        return lang;
+    }
+    logger.error("[ADD RELATIONSHIP] no selected language found - defaulting to EN");
+    return 'EN';
+}
+
 // main execution flow
 
 var idmUserEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_user/";
@@ -143,6 +154,7 @@ var companyData = sharedState.get("companyData");
 var userId = sharedState.get("_id");
 logger.error("[ADD RELATIONSHIP] Incoming company data :" + companyData);
 logger.error("[ADD RELATIONSHIP] Incoming company id :" + JSON.parse(companyData)._id);
+var language = getSelectedLanguage(requestHeaders);
 
 var accessToken = fetchIDMToken();
 if (!accessToken) {
@@ -162,7 +174,9 @@ if (checkCompanyAlreadyExists(userId, JSON.parse(companyData))) {
             }],
             'company': JSON.parse(companyData)
         }));
-    action = fr.Action.goTo(NodeOutcome.COMPANY_ALREADY_ASSOCIATED).build();
+    action = fr.Action.goTo(NodeOutcome.COMPANY_ALREADY_ASSOCIATED)
+        .putSessionProperty("language", language.toLowerCase())
+        .build();
 } else if (!JSON.parse(companyData).authCodeIsActive) {
     logger.error("[ADD RELATIONSHIP] The company " + JSON.parse(companyData).name + " does not have an active auth code");
     sharedState.put("errorMessage", "The company " + JSON.parse(companyData).name + " does not have an active auth code.");
@@ -178,5 +192,7 @@ if (checkCompanyAlreadyExists(userId, JSON.parse(companyData))) {
         }));
     action = fr.Action.goTo(NodeOutcome.AUTH_CODE_INACTIVE).build();
 } else {
-    outcome = addRelationshipToCompany(userId, JSON.parse(companyData));
+    action = fr.Action.goTo(addRelationshipToCompany(userId, JSON.parse(companyData)))
+        .putSessionProperty("language", language.toLowerCase())
+        .build();
 }
