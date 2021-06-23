@@ -51,11 +51,22 @@ function sendErrorCallbacks() {
   }
 }
 
+//extracts the language form headers (default to EN)
+function getSelectedLanguage(requestHeaders) {
+  if (requestHeaders && requestHeaders.get("Chosen-Language")) {
+      var lang = requestHeaders.get("Chosen-Language").get(0);
+      logger.error("[SEND MFA SMS] selected language: " + lang);
+      return lang;
+  }
+  logger.error("[SEND MFA SMS] no selected language found - defaulting to EN");
+  return 'EN';
+}
+
 // sends the OTP code via text to the number specified
-function sendTextMessage(phoneNumber, code) {
+function sendTextMessage(language, phoneNumber, code) {
   var notifyJWT = transientState.get("notifyJWT");
   var templates = transientState.get("notifyTemplates");
-  var language = 'EN';
+  
   logger.error("[SEND MFA SMS] JWT from transient state: " + notifyJWT);
   logger.error("[SEND MFA SMS] Templates from transient state: " + templates);
   var request = new org.forgerock.http.protocol.Request();
@@ -124,6 +135,8 @@ function extractPhoneNumber() {
 var code = sharedState.get("oneTimePassword");
 logger.error("[SEND MFA SMS] Code: " + code);
 
+var language = getSelectedLanguage(requestHeaders);
+
 var phoneNumber = extractPhoneNumber();
 if (!phoneNumber || !code) {
   sendErrorCallbacks();
@@ -131,7 +144,7 @@ if (!phoneNumber || !code) {
 
 logger.error("[SEND MFA SMS] User phoneNumber: " + phoneNumber);
 
-if (sendTextMessage(phoneNumber, code)) {
+if (sendTextMessage(language, phoneNumber, code)) {
   action = fr.Action.goTo("true").build();
 } else {
   sendErrorCallbacks();

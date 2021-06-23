@@ -53,7 +53,7 @@ function extractRegDataFromState() {
         logger.error("mail : " + email + " - name: " + fullName + " - phone: " + phone);
         return { email: email, phone: phone, fullName: fullName }
     } catch (e) {
-        logger.error("[REGISTRATION] error in fetching objectAttributes : " + e);
+        logger.error("[REGISTRATION - SEND EMAIL] error in fetching objectAttributes : " + e);
         return false;
     }
 }
@@ -71,7 +71,7 @@ function buildRegistrationToken(email, phone, fullName) {
         var key = new fr.SigningKey(secretBuilder);
         signingHandler = new fr.SecretHmacSigningHandler(key);
     } catch (e) {
-        logger.error("[REGISTRATION] Error while creating signing handler: " + e);
+        logger.error("[REGISTRATION - SEND EMAIL] Error while creating signing handler: " + e);
         return false;
     }
     var jwtClaims = new fr.JwtClaimsSet;
@@ -88,7 +88,7 @@ function buildRegistrationToken(email, phone, fullName) {
         }
         jwtClaims.setClaim("creationDate", new Date().toString());
     } catch (e) {
-        logger.error("[REGISTRATION] Error while adding claims to JWT: " + e);
+        logger.error("[REGISTRATION - SEND EMAIL] Error while adding claims to JWT: " + e);
         return false;
     }
 
@@ -100,10 +100,10 @@ function buildRegistrationToken(email, phone, fullName) {
             .done()
             .claims(jwtClaims)
             .build();
-        logger.error("[REGISTRATION] JWT from reg: " + jwt);
+        logger.error("[REGISTRATION - SEND EMAIL] JWT from reg: " + jwt);
         return jwt;
     } catch (e) {
-        logger.error("[REGISTRATION] Error while creating JWT: " + e);
+        logger.error("[REGISTRATION - SEND EMAIL] Error while creating JWT: " + e);
         return false;
     }
 }
@@ -129,15 +129,14 @@ function sendErrorCallbacks(stage, token, message) {
 }
 
 //sends the email (via Notify) to the recipient using the given registration JWT
-function sendEmail(jwt) {
+function sendEmail(language, jwt) {
 
     var notifyJWT = transientState.get("notifyJWT");
     var templates = transientState.get("notifyTemplates");
     var returnUrl = host.concat("/am/XUI/?realm=/alpha&&service=CHVerifyReg&token=", jwt)
-    var language = 'EN';
-    logger.error("[REGISTRATION] JWT from transient state: " + notifyJWT);
-    logger.error("[REGISTRATION] Templates from transient state: " + templates);
-    logger.error("[REGISTRATION] RETURN URL: " + returnUrl);
+    logger.error("[REGISTRATION - SEND EMAIL] JWT from transient state: " + notifyJWT);
+    logger.error("[REGISTRATION - SEND EMAIL] Templates from transient state: " + templates);
+    logger.error("[REGISTRATION - SEND EMAIL] RETURN URL: " + returnUrl);
 
     request.setUri("https://api.notifications.service.gov.uk/v2/notifications/email");
     try {
@@ -149,7 +148,7 @@ function sendEmail(jwt) {
             }
         }
     } catch (e) {
-        logger.error("[REGISTRATION] Error while preparing request for Notify: " + e);
+        logger.error("[REGISTRATION - SEND EMAIL] Error while preparing request for Notify: " + e);
         return false;
     }
 
@@ -160,18 +159,29 @@ function sendEmail(jwt) {
 
     var response = httpClient.send(request).get();
     var notificationId;
-    logger.error("[REGISTRATION] Notify Response: " + response.getStatus().getCode() + " - " + response.getEntity().getString());
+    logger.error("[REGISTRATION - SEND EMAIL] Notify Response: " + response.getStatus().getCode() + " - " + response.getEntity().getString());
 
     try {
         notificationId = JSON.parse(response.getEntity().getString()).id;
         transientState.put("notificationId", notificationId);
-        logger.error("[REGISTRATION] Notify ID: " + notificationId);
+        logger.error("[REGISTRATION - SEND EMAIL] Notify ID: " + notificationId);
     } catch (e) {
-        logger.error("[REGISTRATION] Error while parsing Notify response: " + e);
+        logger.error("[REGISTRATION - SEND EMAIL] Error while parsing Notify response: " + e);
         return false;
     }
 
     return (response.getStatus().getCode() == 201);
+}
+
+//extracts the language form headers (default to EN)
+function getSelectedLanguage(requestHeaders) {
+    if (requestHeaders && requestHeaders.get("Chosen-Language")) {
+        var lang = requestHeaders.get("Chosen-Language").get(0);
+        logger.error("[REGISTRATION - SEND EMAIL] selected language: " + lang);
+        return lang;
+    }
+    logger.error("[REGISTRATION - SEND EMAIL] no selected language found - defaulting to EN");
+    return 'EN';
 }
 
 // main execution flow
@@ -180,9 +190,7 @@ var returnUrl;
 var registrationJwt;
 var host = requestHeaders.get("origin").get(0);
 var request = new org.forgerock.http.protocol.Request();
-
-logger.error("host: " + host);
-logger.error("shared: " + sharedState.get("objectAttributes"));
+var language = getSelectedLanguage(requestHeaders);
 
 var regData = extractRegDataFromState();
 if (regData) {
@@ -192,7 +200,7 @@ if (regData) {
 if (!regData || !registrationJwt) {
     sendErrorCallbacks("REGISTRATION_ERROR", "REGISTRATION_GENERAL_ERROR", "An error has occurred! Please try again later.");
 } else {
-    if (sendEmail(registrationJwt)) {
+    if (sendEmail(language, registrationJwt)) {
         action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
     } else {
         sendErrorCallbacks("REGISTRATION_ERROR", "REGISTRATION_SEND_EMAIL_ERROR", "An error occurred while sending the email. Please try again later.");
