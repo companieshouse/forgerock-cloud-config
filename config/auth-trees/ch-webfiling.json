@@ -178,6 +178,14 @@
 			"details": {
 				"tree": "CHWebFiling-CompleteProfile"
 			}
+		},
+		{
+			"_id": "cd37f8c8-249f-4d7c-be85-4c2bd262225b",
+			"nodeType": "IdentifyExistingUserNode",
+			"details": {
+				"identifier": "userName",
+				"identityAttribute": "mail"
+			}
 		}
     ],
     "tree": {
@@ -311,7 +319,7 @@
 				"x": 380,
 				"y": 34.015625,
 				"connections": {
-					"outcome": "61877889-8233-4048-b76c-39f882081e40"
+					"outcome": "cd37f8c8-249f-4d7c-be85-4c2bd262225b"
 				},
 				"nodeType": "SessionDataNode",
 				"displayName": "Get Session Data"
@@ -372,6 +380,16 @@
 				},
 				"nodeType": "InnerTreeEvaluatorNode",
 				"displayName": "Complete Profile"
+			},
+			"cd37f8c8-249f-4d7c-be85-4c2bd262225b": {
+				"x": 616.640625,
+				"y": 60.015625,
+				"connections": {
+					"true": "61877889-8233-4048-b76c-39f882081e40",
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a"
+				},
+				"nodeType": "IdentifyExistingUserNode",
+				"displayName": "Identify Existing User"
 			}
 		},
 		"staticNodes": {
