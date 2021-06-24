@@ -1,0 +1,218 @@
+{
+	"nodes": [
+		{
+            "_id": "613e061a-3e49-4a9a-8efd-79fc1d7103ec",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["success", "error"],
+                "outputs":["*"],
+                "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149"
+            }            
+        },
+		{
+            "_id": "c93e7a45-b85f-415b-afaf-54f0543d0b7b",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["true", "false"],
+                "outputs":["*"],
+                "script": "9130bbdf-bb9d-4ef9-8226-c95c6192c1d7"
+            }            
+        },
+		{
+            "_id": "578b6f24-db1a-432a-bfb8-9d0f6a2e975c",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["success", "mismatch"],
+                "outputs":["*"],
+				"script": "96b2e801-7ddb-45ee-8255-1e96568dd404"
+            }            
+        },
+		{
+			"_id": "d6caf935-72f5-4c10-aedf-4e4fe1d2ce77",
+			"nodeType": "RetryLimitDecisionNode",
+			"details": {
+				"retryLimit": 3
+			}
+		},
+		{
+            "_id": "705fc746-91b6-4a2b-8253-5b32873cf481",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["true"],
+                "outputs":["*"],
+				"script": "fdac4efb-d8b8-478b-8300-e11a4c3503df"
+            }            
+        },
+		{
+			"_id": "9b8ae301-51d3-4d88-be35-29ebea2e4403",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["success", "error"],
+                "outputs":["*"],
+				"script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149"
+            }            
+        },
+		{
+			"_id": "c09e95cd-622c-4025-b076-c6820b15ceaf",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["pass", "fail", "error"],
+                "outputs":["*"],
+				"script": "c089f1fe-fa0f-4f61-a3d1-a1fce6e953cf"
+            }            
+        },
+		{
+			"_id": "c4a7e675-e42f-4720-ba9d-b4bd3484c0f6",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["true"],
+                "outputs":["*"],
+				"script": "84caf8b3-813a-4998-85ff-a3dd8eee4bcf"
+            }            
+        },
+		{
+            "_id": "5dcc3a70-9881-4661-ba8a-d674e932426e",
+            "nodeType": "PatchObjectNode",
+			"details": {
+                "identityAttribute": "userName",
+                "identityResource": "managed/alpha_user",
+                "ignoredFields": ["userName"],
+                "patchAsObject": false
+            }
+        },
+		{
+			"_id": "90fbab28-de9f-4d6b-9cc6-6519e26fef7f",
+			"nodeType": "InnerTreeEvaluatorNode",
+			"details": {
+				"tree": "CHWebFiling-CompleteProfile"
+			}
+		}
+	],
+	"tree": {
+		"_id": "CHOnboarding",
+		"description": "Onboards an invited user ",
+		"identityResource": "managed/alpha_user",
+		"uiConfig": {},
+		"entryNodeId": "613e061a-3e49-4a9a-8efd-79fc1d7103ec",
+		"nodes": {
+			"578b6f24-db1a-432a-bfb8-9d0f6a2e975c": {
+				"x": 654,
+				"y": 35.015625,
+				"connections": {
+					"mismatch": "d6caf935-72f5-4c10-aedf-4e4fe1d2ce77",
+					"success": "9b8ae301-51d3-4d88-be35-29ebea2e4403"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Create Password"
+			},
+			"5dcc3a70-9881-4661-ba8a-d674e932426e": {
+				"x": 1558,
+				"y": 203.015625,
+				"connections": {
+					"FAILURE": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"PATCHED": "90fbab28-de9f-4d6b-9cc6-6519e26fef7f"
+				},
+				"nodeType": "PatchObjectNode",
+				"displayName": "Patch Object"
+			},
+			"613e061a-3e49-4a9a-8efd-79fc1d7103ec": {
+				"x": 227,
+				"y": 248.015625,
+				"connections": {
+					"error": "c93e7a45-b85f-415b-afaf-54f0543d0b7b",
+					"success": "c93e7a45-b85f-415b-afaf-54f0543d0b7b"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "get IDM token"
+			},
+			"705fc746-91b6-4a2b-8253-5b32873cf481": {
+				"x": 750,
+				"y": 502.015625,
+				"connections": {},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "max attempts message"
+			},
+			"9b8ae301-51d3-4d88-be35-29ebea2e4403": {
+				"x": 960,
+				"y": 270.015625,
+				"connections": {
+					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"success": "c09e95cd-622c-4025-b076-c6820b15ceaf"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Get IDM Access Token"
+			},
+			"c09e95cd-622c-4025-b076-c6820b15ceaf": {
+				"x": 1126,
+				"y": 20,
+				"connections": {
+					"error": "578b6f24-db1a-432a-bfb8-9d0f6a2e975c",
+					"fail": "578b6f24-db1a-432a-bfb8-9d0f6a2e975c",
+					"pass": "c4a7e675-e42f-4720-ba9d-b4bd3484c0f6"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Check Pwd Policy"
+			},
+			"c4a7e675-e42f-4720-ba9d-b4bd3484c0f6": {
+				"x": 1371,
+				"y": 68.015625,
+				"connections": {
+					"true": "5dcc3a70-9881-4661-ba8a-d674e932426e"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Load New Pwd for Patch"
+			},
+			"c93e7a45-b85f-415b-afaf-54f0543d0b7b": {
+				"x": 380,
+				"y": 131.015625,
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "578b6f24-db1a-432a-bfb8-9d0f6a2e975c"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "verify token"
+			},
+			"d6caf935-72f5-4c10-aedf-4e4fe1d2ce77": {
+				"x": 683,
+				"y": 344.015625,
+				"connections": {
+					"Reject": "705fc746-91b6-4a2b-8253-5b32873cf481",
+					"Retry": "578b6f24-db1a-432a-bfb8-9d0f6a2e975c"
+				},
+				"nodeType": "RetryLimitDecisionNode",
+				"displayName": "Retry Limit Decision"
+			},
+			"90fbab28-de9f-4d6b-9cc6-6519e26fef7f": {
+				"x": 1746,
+				"y": 391.015625,
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+				},
+				"nodeType": "InnerTreeEvaluatorNode",
+				"displayName": "Inner Tree Evaluator"
+			}
+		},
+		"staticNodes": {
+			"startNode": {
+				"x": 62,
+				"y": 103
+			},
+			"70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
+				"x": 1867,
+				"y": 257
+			},
+			"e301438c-0bd0-429c-ab0c-66126501069a": {
+				"x": 917,
+				"y": 744
+			}
+		}
+	}
+}
