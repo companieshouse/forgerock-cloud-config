@@ -158,7 +158,8 @@ function sendEmail(language, invitedEmail, companyName, companyNumber, inviterNa
                 message: onboardingJwtResponse.message
             };
         } else {
-            returnUrl = host.concat("/am/XUI/?realm=/alpha&&service=CHOnboardUser&token=", onboardingJwtResponse.token)
+            returnUrl = host.concat("/account/onboarding/?token=", onboardingJwtResponse.token)
+                            .concat("&goto=", encodeURIComponent("/account/notifications/#" + companyNumber));
         }
     } else {
         returnUrl = host.concat("/account/login/?goto=", encodeURIComponent("/account/notifications/#" + companyNumber));

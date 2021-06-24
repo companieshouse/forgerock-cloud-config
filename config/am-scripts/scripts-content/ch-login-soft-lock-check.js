@@ -127,5 +127,7 @@ try{
     }
     action = fr.Action.goTo(lockStatus).build();
 } catch(e){
+    sharedState.put("errorMessage", e.toString());
     logger.error("[CHECK SOFT LOCK STATUS] error - "+e);
+    action = fr.Action.goTo(NodeOutcome.ERROR).build();
 }

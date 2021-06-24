@@ -53,7 +53,7 @@ var fr = JavaImporter(
             )
         ).build()
       }
-    } else if (Math.round(differenceInTime/(1000 * 60)) < 1440000){
+    } else if (Math.round(differenceInTime/(1000 * 60)) < 1440){
       logger.error("The provided token is still valid");
       try{
         // put the read attributes in shared state for the Create Object node to consume

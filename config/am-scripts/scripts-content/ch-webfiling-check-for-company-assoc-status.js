@@ -150,5 +150,6 @@ try {
     }
 } catch (e) {
     logger.error("[EWF - CHECK COMPANY MEMBERSHIP] Error " + e);
+    sharedState.put("errorMessage", e.toString())
     outcome = NodeOutcome.ERROR;
 }

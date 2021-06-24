@@ -46,6 +46,7 @@ try {
     var NAME_CALLBACK_INDEX = 2;
     var PHONE_CALLBACK_INDEX = 3;
 
+    var logPrefix = isOnboarding ? "[ONBOARDING UPDATE PROFILE]" : "[EWF UPDATE PROFILE]"
     var skipCallback = new fr.ConfirmationCallback(
         "Do you want to skip?",
         fr.ConfirmationCallback.INFORMATION,
@@ -58,18 +59,18 @@ try {
     var userId = sharedState.get("_id");
     //checks presence of phone number in user profile
     if (idRepository.getAttribute(userId, PHONE_NUMBER_FIELD).iterator().hasNext()) {
-        logger.error("[EWF UPDATE PROFILE] Found phone number");
+        logger.error(logPrefix + " Found phone number");
         phoneFound = true;
     } else {
-        logger.error("[EWF UPDATE PROFILE] phone number not found");
+        logger.error(logPrefix + " phone number not found");
     }
 
     //checks presence of full name in user profile
     if (idRepository.getAttribute(userId, FULL_NAME_FIELD).iterator().hasNext()) {
-        logger.error("[EWF UPDATE PROFILE] Found givenName");
+        logger.error(logPrefix + " Found givenName");
         nameFound = true;
     } else {
-        logger.error("[EWF UPDATE PROFILE] givenName not found");
+        logger.error(logPrefix + " givenName not found");
     }
 
     if (callbacks.isEmpty()) {
@@ -80,9 +81,10 @@ try {
             var infoMessage = "Update your personal details";
             var level = fr.TextOutputCallback.INFORMATION;
             var errorMessage = sharedState.get("errorMessage");
+            var isOnboarding = sharedState.get("isOnboarding");
 
-            var stageName = "EWF_PROFILE";
-            logger.error("[EWF UPDATE PROFILE] userId: " + userId);
+            var stageName = isOnboarding ? "ONBOARDING_PROFILE" : "EWF_PROFILE";
+            logger.error(logPrefix + " userId: " + userId);
 
             if (errorMessage !== null) {
                 var errorProps = sharedState.get("pagePropsJSON");
@@ -111,14 +113,14 @@ try {
     } else {
         // returning callbacks
         var selection = callbacks.get(SKIP_CALLBACK_INDEX).getSelectedIndex();
-        logger.error("[EWF UPDATE PROFILE]  selection " + selection);
+        logger.error(logPrefix + " selection " + selection);
         if (selection === SKIP_OPTION_INDEX) {
-            logger.error("[EWF UPDATE PROFILE] selected SKIP");
+            logger.error(logPrefix + " selected SKIP");
             outcome = NodeOutcome.SKIP;
         } else {
-            logger.error("[EWF UPDATE PROFILE] selected SUBMIT");
+            logger.error(logPrefix + " selected SUBMIT");
             var type = callbacks.get(1).getValue();
-            logger.error("[EWF UPDATE PROFILE] type: " + type);
+            logger.error(logPrefix + " type: " + type);
             var payload;
             if ((type === "PHONE" || type === "BOTH") && newPhoneNumber && !isMobile(newPhoneNumber)) {
                 sharedState.put("errorMessage", "Invalid mobile number entered.");
@@ -136,11 +138,11 @@ try {
                 var newName, newPhoneNumber;
                 if (type === "NAME" || type === "BOTH") {
                     newName = callbacks.get(NAME_CALLBACK_INDEX).getName();
-                    logger.error("[EWF UPDATE PROFILE] new name: " + newName);
+                    logger.error(logPrefix + " new name: " + newName);
                 }
                 if (type === "PHONE" || type === "BOTH") {
                     newPhoneNumber = callbacks.get(PHONE_CALLBACK_INDEX).getName();
-                    logger.error("[EWF UPDATE PROFILE] new phone: " + newPhoneNumber);
+                    logger.error(logPrefix + " new phone: " + newPhoneNumber);
                 }
 
                 if (type === "BOTH") {
@@ -170,5 +172,6 @@ try {
         }
     }
 } catch (e) {
-    logger.error("[EWF COMPLETE PROFILE] error: " + e);
+    logger.error(logPrefix + " error: " + e);
+    sharedState.put("errorMessage", e.toString())
 }

@@ -80,7 +80,11 @@ function raiseTokenExpiredError(){
       ),
       new fr.HiddenValueCallback (
         "pagePropsJSON",
-        JSON.stringify({"error": "The registration token has expired. Please restart the registration process.", "token" : "REGISTRATION_TOKEN_EXPIRED_ERROR"}) 
+        JSON.stringify(
+          {
+            "error": "The registration token has expired. Please restart the registration process.", 
+            "token" : "REGISTRATION_TOKEN_EXPIRED_ERROR"
+          }) 
       ),
       new fr.TextOutputCallback(
         fr.TextOutputCallback.ERROR,
@@ -144,6 +148,5 @@ if(token) {
     outcome = saveUserDataToState(tokenData); 
   } else {
     raiseTokenExpiredError();
-    outcome = NodeOutcome.ERROR;
   }
 }

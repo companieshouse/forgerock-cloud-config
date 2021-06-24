@@ -58,7 +58,7 @@ function getUserMembershipForCompany(userIdentifier, company, idType) {
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
   var companyNo = JSON.parse(company).number;
   if (accessToken == null) {
-    logger.error("[INVITE USER CHECK MEMBERSHIP] Access token not in shared state");
+    logger.error("[INVITE USER CHECK MEMBERSHIP] Access token not in transient state");
     return NodeOutcome.ERROR;
   }
 
@@ -90,7 +90,7 @@ function getUserMembershipForCompany(userIdentifier, company, idType) {
     return membershipResponse;
   }
   else {
-    logger.error("[INVITE USER CHECK MEMBERSHIP] Error during relationship creation");
+    logger.error("[INVITE USER CHECK MEMBERSHIP] Error during relationship check");
     return false;
   }
 }
@@ -222,6 +222,7 @@ try {
     }
   }
 } catch (e) {
-  logger.error("[INVITE USER CHECK MEMBERSHIP] error " + e)
+  logger.error("[INVITE USER CHECK MEMBERSHIP] error " + e);
+  sharedState.put("errorMessage", e.toString());
   outcome = NodeOutcome.ERROR;
 }

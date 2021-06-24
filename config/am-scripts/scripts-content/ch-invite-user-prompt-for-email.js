@@ -81,5 +81,6 @@ try {
     }
 } catch (e) {
     logger.error("[INVITE USER INPUT] error: " + e);
+    sharedState.put("errorMessage", e.toString());
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
 }

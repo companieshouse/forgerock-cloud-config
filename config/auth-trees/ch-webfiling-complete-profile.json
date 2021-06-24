@@ -82,7 +82,7 @@
                 "pageHeader": {
                     "header": "Please enter your code"
                 },
-                "stage": "UPDATE_PHONE_2"
+                "stage": "PHONE_OTP"
             }
         },
 		{

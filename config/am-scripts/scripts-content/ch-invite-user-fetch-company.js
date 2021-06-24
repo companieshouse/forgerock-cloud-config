@@ -125,8 +125,10 @@ try {
 
     if (companyData) {
         sharedState.put("companyData", JSON.stringify(companyData));
-        outcome = NodeOutcome.SUCCESS
+        outcome = NodeOutcome.SUCCESS;
     }
 } catch (e) {
+    sharedState.put("errorMessage", e.toString());
     logger.error("[INVITE USER - GET COMPANY DETAILS] Error " + e);
+    outcome = NodeOutcome.ERROR;
 }

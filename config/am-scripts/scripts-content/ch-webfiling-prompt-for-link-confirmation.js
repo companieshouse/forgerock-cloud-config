@@ -91,12 +91,13 @@ try {
     } else {
       sharedState.put("errorMessage", null);
       action = fr.Action.goTo(NodeOutcome.FALSE)
-        .putSessionProperty("language", language)
+        .putSessionProperty("language", language.toLowerCase())
         .build();
     }
   }
 
 } catch (e) {
   logger.error("[EWF CONFIRM ASSOCIATION] ERROR: " + e);
+  sharedState.put("errorMessage", e.toString())
   outcome = NodeOutcome.error;
 }
