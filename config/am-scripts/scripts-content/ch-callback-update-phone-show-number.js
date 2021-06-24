@@ -54,5 +54,6 @@ try {
     }
 } catch(e) {
     logger.error("[UPDATE PHONE SHOW NUMBER] An error occurred: " + e);
+    sharedState.put("errorMessage", e.toString())
     outcome = "False";
 }

@@ -198,4 +198,6 @@ try {
   }
 } catch (e) {
   logger.error("[INVITE USER - RESPOND INVITE] Error " + e);
+  sharedState.put("errorMessage", e.toString());
+  outcome = NodeOutcome.ERROR;
 }

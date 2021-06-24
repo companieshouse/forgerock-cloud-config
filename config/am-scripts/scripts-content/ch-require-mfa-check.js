@@ -48,5 +48,6 @@ try {
     }
 } catch(e) {
     logger.error("[MFA-CHECK] Require MFA Check error: " + e);
+    sharedState.put("errorMessage", e.toString())
     outcome = "false";
 }

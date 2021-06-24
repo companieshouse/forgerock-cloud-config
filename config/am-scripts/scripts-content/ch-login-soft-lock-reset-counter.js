@@ -106,5 +106,6 @@ try{
         action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
     }
 }catch(e){
+    sharedState.put("errorMessage", e.toString())
     logger.error("[RESET SOFT LOCK COUNTER] error - "+e);
 }

@@ -62,7 +62,7 @@ function logResponse(response) {
 //checks whether the user with the given email already exists in IDM
 function checkUserExistence(email) {
     try {
-        var idmUserEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_user?_queryFilter=userName+eq+%22" + email + "%22";
+        var idmUserEndpoint = FIDC_ENDPOINT.concat("/openidm/managed/alpha_user?_queryFilter=userName+eq+%22" + email + "%22");
         var request = new org.forgerock.http.protocol.Request();
         var accessToken = fetchIDMToken();
         if (!accessToken) {
@@ -112,7 +112,7 @@ function fetchIDMToken() {
 //creates a new user given an email address
 function createUser(invitedEmail) {
     try {
-        var idmUserEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_user?_action=create";
+        var idmUserEndpoint = FIDC_ENDPOINT.concat("/openidm/managed/alpha_user?_action=create");
         var request = new org.forgerock.http.protocol.Request();
         var accessToken = fetchIDMToken();
         var onboardingDate = formatDate();
@@ -155,6 +155,7 @@ function createUser(invitedEmail) {
 
 //main execution flow
 try {
+    var FIDC_ENDPOINT = "https://openam-companieshouse-uk-dev.id.forgerock.io";
     var onboardingDate = formatDate();
     logger.error("[INVITE USER - CREATE NEW USER] Setting onboarding date to " + onboardingDate);
 
@@ -173,6 +174,7 @@ try {
         action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
     }
 } catch (e) {
-    logger.error(e)
+    logger.error(e);
+    sharedState.put("errorMessage", e.toString());
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
 }

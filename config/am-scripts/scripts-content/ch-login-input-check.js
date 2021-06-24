@@ -54,5 +54,6 @@ try{
     }
 
 }catch(e){
-    logger.error("error: "+e)
+    logger.error("error: "+e);
+    sharedState.put("errorMessage", e.toString());
 }

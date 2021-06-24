@@ -44,4 +44,5 @@ try{
   }
 }catch(e){
   logger.error("[CHECK SESSION] error: "+e);
+  sharedState.put("errorMessage", e.toString())
 }

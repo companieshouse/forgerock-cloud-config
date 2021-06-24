@@ -82,4 +82,5 @@ try {
 
 } catch (e) {
   logger.error("[EWF PROMPT COMPANY NO] ERROR: " + e);
+  sharedState.put("errorMessage", e.toString())
 }

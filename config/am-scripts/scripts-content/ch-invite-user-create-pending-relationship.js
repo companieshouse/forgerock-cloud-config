@@ -222,6 +222,7 @@ try {
     }
   }
 } catch (e) {
-  logger.error("[INVITE USER CHECK MEMBERSHIP] error " + e)
+  logger.error("[INVITE USER CHECK MEMBERSHIP] error " + e);
+  sharedState.put("errorMessage", e.toString());
   outcome = NodeOutcome.ERROR;
 }

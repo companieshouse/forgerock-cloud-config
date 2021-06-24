@@ -94,6 +94,7 @@ else {
     outcome = policyCompliant(newPassword)
   }catch(e){
     logger.error("[CHANGE PWD - POLICY CHECK] error! "+e);
+    sharedState.put("errorMessage", e.toString())
     outcome = NodeOutcome.ERROR;
   }
 }

@@ -244,5 +244,6 @@ try {
     outcome = NodeOutcome.ERROR;
 } catch (e) {
     logger.error("[RESET PWD] An error occurred: " + e);
+    sharedState.put("errorMessage", e.toString())
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
 }
