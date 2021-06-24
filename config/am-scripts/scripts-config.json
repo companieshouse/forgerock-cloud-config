@@ -745,8 +745,8 @@
         {
             "payload": {
                 "_id":"9130bbdf-bb9d-4ef9-8226-c95c6192c1d7",
-                "name":"CH - Onboard User - Verify token and omboarding date",
-                "description":"Verify token and omboarding date",
+                "name":"CH - Onboard User - Verify token",
+                "description":"Verify token, user existence, invite and onboarding date",
                 "script":"<replace>",
                 "default":false,
                 "language":"JAVASCRIPT",

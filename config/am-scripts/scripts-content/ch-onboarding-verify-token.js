@@ -99,7 +99,7 @@ function lookupUser(email) {
         } 
       }
     } else {
-      logger.error("[ONBOARDING-RESUME] Error while lloking up user: " + response.getStatus().getCode())
+      logger.error("[ONBOARDING-RESUME] Error while looking up user: " + response.getStatus().getCode())
       return {
         success: false,
         error: "Error while looking up user: " + response.getStatus().getCode()
@@ -133,7 +133,7 @@ function isUserInvitedForCompany(userEmail, companyNo) {
   };
 
   request.setMethod('POST');
-  logger.error("[ONBOARDING-RESUME - CHECK MEMBERSHIP] Check user " + userEmail + "membership status to company " + companyNo);
+  logger.error("[ONBOARDING-RESUME - CHECK MEMBERSHIP] Check user " + userEmail + " membership status to company " + companyNo);
   request.setUri(idmCompanyAuthEndpoint);
   request.getHeaders().add("Authorization", "Bearer " + accessToken);
   request.getHeaders().add("Content-Type", "application/json");
@@ -222,11 +222,8 @@ function saveUserDataToState(tokenData) {
 
 // reads the onboarding date
 function validateOnboardingDate(user) {
-  //var ONBOARDING_DATE_FIELD = "frIndexedDate2";
-  // if (idRepository.getAttribute(userId, ONBOARDING_DATE_FIELD).iterator().hasNext()) {
   var onboardDate = user.frIndexedDate2;
-
-  logger.error("[ONBOARDING-RESUME] onboarding date: " + onboardDate); // e.g. 20210317114005Z
+  logger.error("[ONBOARDING-RESUME] onboarding date: " + onboardDate);
 
   if (onboardDate.length > 0) {
     var year = onboardDate.substring(0, 4);
