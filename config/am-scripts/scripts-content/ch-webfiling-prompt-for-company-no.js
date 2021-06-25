@@ -50,7 +50,7 @@ try {
           false
         ),
         new fr.NameCallback("Enter Company number"),
-        new fr.HiddenValueCallback("stage", "COMPANY_ASSOCIATION_1"),
+        new fr.HiddenValueCallback("stage", "EWF_LOGIN_2"),
         new fr.HiddenValueCallback("pagePropsJSON", errorProps)
       ).build();
     } else {

@@ -52,7 +52,7 @@
             "nodeType": "ScriptedDecisionNode", 
             "details": {
                 "inputs":["*"],
-                "outcomes": ["true", "false", "error"],
+                "outcomes": ["true", "false", "error", "other"],
                 "outputs":["*"],
                 "script": "55801756-11bf-493d-b49c-195488cf939a"
             }            
@@ -223,20 +223,11 @@
 				"connections": {
 					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
 					"false": "61877889-8233-4048-b76c-39f882081e40",
-					"true": "b13495ba-6ac2-4877-8535-4f63dffb813f"
+					"true": "b13495ba-6ac2-4877-8535-4f63dffb813f",
+					"other": "61877889-8233-4048-b76c-39f882081e40"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Get Company Data"
-			},
-			"fbf0037d-0557-4111-bd01-edeb685c836f": {
-				"x": 1308,
-				"y": 302.015625,
-				"connections": {
-					"false": "4b27ff9e-407a-4880-8c81-92be95c0e46f",
-					"true": "9f02e20d-5cee-4608-af7c-3732d3838d88"
-				},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Validate Cleartext Auth Code"
 			},
 			"304e305a-a2f4-4380-a5db-3bca9b5da30e": {
 				"x": 1552,
@@ -252,8 +243,8 @@
 				"x": 195,
 				"y": 60.015625,
 				"connections": {
-					"noSession": "0a9b70bc-8fc7-4c54-9bfa-3db936cb9d01",
-					"hasSession": "c549d83a-f796-4a27-b6da-91cb626a0bd1"
+					"hasSession": "c549d83a-f796-4a27-b6da-91cb626a0bd1",
+					"noSession": "0a9b70bc-8fc7-4c54-9bfa-3db936cb9d01"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Check Session"
@@ -262,8 +253,8 @@
 				"x": 1337,
 				"y": 497.015625,
 				"connections": {
-					"Retry": "fc86f06d-b17e-4cda-b10c-fb9fae255d59",
-					"Reject": "bfcdaf66-5730-40b7-a847-00f62cd539ca"
+					"Reject": "bfcdaf66-5730-40b7-a847-00f62cd539ca",
+					"Retry": "fc86f06d-b17e-4cda-b10c-fb9fae255d59"
 				},
 				"nodeType": "RetryLimitDecisionNode",
 				"displayName": "Retry Limit Decision"
@@ -285,6 +276,16 @@
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Prompt for Company No"
+			},
+			"67e0aedf-a501-4760-b65d-c362d1d0152e": {
+				"x": 575,
+				"y": 398.015625,
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "61877889-8233-4048-b76c-39f882081e40"
+				},
+				"nodeType": "InnerTreeEvaluatorNode",
+				"displayName": "Complete Profile"
 			},
 			"9e1930dd-6045-417c-9286-d2083f454f01": {
 				"x": 831,
@@ -315,6 +316,13 @@
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Get IDM Token for company check"
 			},
+			"bfcdaf66-5730-40b7-a847-00f62cd539ca": {
+				"x": 1343,
+				"y": 620.015625,
+				"connections": {},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "max attempts error"
+			},
 			"c549d83a-f796-4a27-b6da-91cb626a0bd1": {
 				"x": 380,
 				"y": 34.015625,
@@ -323,6 +331,16 @@
 				},
 				"nodeType": "SessionDataNode",
 				"displayName": "Get Session Data"
+			},
+			"cd37f8c8-249f-4d7c-be85-4c2bd262225b": {
+				"x": 616.640625,
+				"y": 60.015625,
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "61877889-8233-4048-b76c-39f882081e40"
+				},
+				"nodeType": "IdentifyExistingUserNode",
+				"displayName": "Identify Existing User"
 			},
 			"dfb2d5fd-8a2f-4b59-9f7b-347046b69e5c": {
 				"x": 1071,
@@ -345,6 +363,16 @@
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Confirm association"
 			},
+			"fbf0037d-0557-4111-bd01-edeb685c836f": {
+				"x": 1308,
+				"y": 302.015625,
+				"connections": {
+					"false": "4b27ff9e-407a-4880-8c81-92be95c0e46f",
+					"true": "9f02e20d-5cee-4608-af7c-3732d3838d88"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Validate Cleartext Auth Code"
+			},
 			"fc86f06d-b17e-4cda-b10c-fb9fae255d59": {
 				"x": 1335,
 				"y": 178.015625,
@@ -363,33 +391,6 @@
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Add to Session"
-			},
-			"bfcdaf66-5730-40b7-a847-00f62cd539ca": {
-				"x": 1343,
-				"y": 620.015625,
-				"connections": {},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "max attempts error"
-			},
-			"67e0aedf-a501-4760-b65d-c362d1d0152e": {
-				"x": 575,
-				"y": 398.015625,
-				"connections": {
-					"true": "61877889-8233-4048-b76c-39f882081e40",
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a"
-				},
-				"nodeType": "InnerTreeEvaluatorNode",
-				"displayName": "Complete Profile"
-			},
-			"cd37f8c8-249f-4d7c-be85-4c2bd262225b": {
-				"x": 616.640625,
-				"y": 60.015625,
-				"connections": {
-					"true": "61877889-8233-4048-b76c-39f882081e40",
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a"
-				},
-				"nodeType": "IdentifyExistingUserNode",
-				"displayName": "Identify Existing User"
 			}
 		},
 		"staticNodes": {

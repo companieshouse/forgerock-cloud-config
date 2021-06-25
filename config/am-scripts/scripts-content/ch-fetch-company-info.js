@@ -35,7 +35,8 @@ var fr = JavaImporter(
 var NodeOutcome = {
     TRUE: "true",
     FALSE: "false",
-    ERROR: "error"
+    ERROR: "error",
+    OTHER_COMPANY: "other"
 }
 
 function logResponse(response) {
@@ -182,28 +183,47 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
 
 // main execution flow
 var YES_OPTION_INDEX = 0;
+var NO_OPTION_INDEX = 1;
 var idmCompanyEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_organization/";
 
 var skipConfirmation = sharedState.get("skipConfirmation");
 var isEWF = sharedState.get("EWF-JOURNEY");
 
-// if the selection must be confirmed automatically
-if (!skipConfirmation) {
-    // if the user has selected to proceed with association or to not go ahead, callbacks will be not empty
-    if (!callbacks.isEmpty()) {
-        var selection = callbacks.get(3).getSelectedIndex();
-        logger.error("[FETCH COMPANY] selection " + selection);
-        if (selection === YES_OPTION_INDEX) {
-            logger.error("[FETCH COMPANY] selected YES");
-            sharedState.put("errorMessage", null);
-            sharedState.put("pagePropsJSON", null);
-            outcome = NodeOutcome.TRUE;
+try {
+    // if the selection must be confirmed automatically
+    if (!skipConfirmation) {
+        // if the user has selected to proceed with association or to not go ahead, callbacks will be not empty
+        if (!callbacks.isEmpty()) {
+            var fileForThiscompanySelection = callbacks.get(3).getSelectedIndex();
+            logger.error("[FETCH COMPANY] 'File for this company selection' " + fileForThiscompanySelection);
+            if (fileForThiscompanySelection === YES_OPTION_INDEX) {
+                logger.error("[FETCH COMPANY] File for this company: selected YES");
+                sharedState.put("errorMessage", null);
+                sharedState.put("pagePropsJSON", null);
+                outcome = NodeOutcome.TRUE;
+            } else {
+                logger.error("[FETCH COMPANY] File for this company: selected NO");
+                sharedState.put("errorMessage", null);
+                sharedState.put("pagePropsJSON", null);
+                outcome = NodeOutcome.OTHER_COMPANY;
+            }
         } else {
-            sharedState.put("errorMessage", null);
-            outcome = NodeOutcome.FALSE;
+            // if the user has started the journey, the callbacks will be empty, then fetch company info    
+            var accessToken = fetchIDMToken();
+            if (!accessToken) {
+                logger.error("[FETCH COMPANY] Access token not in transient state")
+                outcome = NodeOutcome.ERROR;
+            } else {
+                var companyNumber = sharedState.get("companyNumber");
+                //fetchCompany can only result in callbacks, does not transition anywhere
+                if (!fetchCompany(accessToken, companyNumber, skipConfirmation)) {
+                    logger.error("[FETCH COMPANY] error while fetching company")
+                    outcome = NodeOutcome.FALSE;
+                }
+            }
         }
     } else {
-        // if the user has started the journey, the callbacks will be empty, then fetch company info    
+        logger.error("[FETCH COMPANY] SKIP USER CONFIRMATION")
         var accessToken = fetchIDMToken();
         if (!accessToken) {
             logger.error("[FETCH COMPANY] Access token not in transient state")
@@ -214,24 +234,14 @@ if (!skipConfirmation) {
             if (!fetchCompany(accessToken, companyNumber, skipConfirmation)) {
                 logger.error("[FETCH COMPANY] error while fetching company")
                 outcome = NodeOutcome.FALSE;
+            } else {
+                logger.error("[FETCH COMPANY] company fetched successfully")
+                outcome = NodeOutcome.TRUE;
             }
         }
     }
-} else {
-    logger.error("[FETCH COMPANY] SKIP USER CONFIRMATION")
-    var accessToken = fetchIDMToken();
-    if (!accessToken) {
-        logger.error("[FETCH COMPANY] Access token not in transient state")
-        outcome = NodeOutcome.ERROR;
-    } else {
-        var companyNumber = sharedState.get("companyNumber");
-        //fetchCompany can only result in callbacks, does not transition anywhere
-        if (!fetchCompany(accessToken, companyNumber, skipConfirmation)) {
-            logger.error("[FETCH COMPANY] error while fetching company")
-            outcome = NodeOutcome.FALSE;
-        } else {
-            logger.error("[FETCH COMPANY] company fetched successfully")
-            outcome = NodeOutcome.TRUE;
-        }
-    }
+} catch (e) {
+    logger.error("[FETCH COMPANY] error " + e);
+    sharedState.put("errorMessage", e.toString());
+    outcome = NodeOutcome.ERROR;
 }
