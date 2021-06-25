@@ -32,7 +32,7 @@
             "nodeType": "ScriptedDecisionNode", 
             "details": {
                 "inputs":["*"],
-                "outcomes": ["true"],
+                "outcomes": ["true", "false"],
                 "outputs":["*"],
                 "script": "ca6cbc1b-d83b-4946-b327-be15402894fa"
             }            
@@ -223,8 +223,8 @@
 				"connections": {
 					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
 					"false": "61877889-8233-4048-b76c-39f882081e40",
-					"true": "b13495ba-6ac2-4877-8535-4f63dffb813f",
-					"other": "61877889-8233-4048-b76c-39f882081e40"
+					"other": "61877889-8233-4048-b76c-39f882081e40",
+					"true": "b13495ba-6ac2-4877-8535-4f63dffb813f"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Get Company Data"
@@ -269,10 +269,11 @@
 				"displayName": "Auth code error msg"
 			},
 			"61877889-8233-4048-b76c-39f882081e40": {
-				"x": 809,
-				"y": 192.015625,
+				"x": 810,
+				"y": 147.015625,
 				"connections": {
-					"true": "9e1930dd-6045-417c-9286-d2083f454f01"
+					"true": "9e1930dd-6045-417c-9286-d2083f454f01",
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Prompt for Company No"
