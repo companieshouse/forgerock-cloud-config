@@ -64,7 +64,13 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
 
     var request = new org.forgerock.http.protocol.Request();
     request.setMethod('GET');
+    //if in EWF journey, we need to add the jurisdiction to the query criteria
     var searchTerm = "?_queryFilter=number+eq+%22" + companyNumber + "%22";
+    if (isEWF) {
+        var jurisdiction = sharedState.get("jurisdiction");
+        searchTerm = searchTerm.concat("+and+jurisdiction+eq+%22" + jurisdiction + "%22");
+    }
+    
     request.setUri(idmCompanyEndpoint + searchTerm);
     request.getHeaders().add("Authorization", "Bearer " + idmToken);
     request.getHeaders().add("Content-Type", "application/json");
