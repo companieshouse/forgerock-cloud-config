@@ -74,6 +74,7 @@ try {
     logger.error("[EWF PROMPT COMPANY NO] companyNumber: " + companyNumber);
 
     sharedState.put("companyNumber", companyNumber);
+    sharedState.put("jurisdiction", jurisdictions[jurisdictionIndex]);
     action = fr.Action.goTo("true")
       .putSessionProperty("companyNumber", companyNumber)
       .putSessionProperty("jurisdiction", jurisdictions[jurisdictionIndex])
