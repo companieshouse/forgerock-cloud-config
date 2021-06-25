@@ -82,8 +82,8 @@ if (callbacks.isEmpty()) {
             'errors': [{
                 label: "Invalid credential entered.",
                 token: "UPDATE_PHONE_INVALID_CREDENTIALS",
-                fieldName: "IDToken1",
-                anchor: "IDToken1"
+                fieldName: "IDToken3",
+                anchor: "IDToken3"
             }]
         }));
       logger.error("[UPDATE PHONE] FAILED" + currentPassword);
