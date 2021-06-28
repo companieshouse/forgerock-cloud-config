@@ -69,7 +69,7 @@
 	"correlationQuery": [{
 		"linkQualifier": "default",
 		"expressionTree": {
-			"any": ["mail"]
+			"all": ["frIndexedInteger1"]
 		},
 		"mapping": "webfilingUser_alphaUser",
 		"type": "text/javascript",
