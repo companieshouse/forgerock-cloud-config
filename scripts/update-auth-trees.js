@@ -19,31 +19,30 @@ const updateAuthTrees = async (argv) => {
       .map((filename) => require(path.join(dir, filename))) // Map JSON file content to an array
 
     // Update each auth tree
-    await Promise.all(
-      authTreesFileContent.map(async (authTreeFile) => {
-        const baseUrl = `${FIDC_URL}/am/json/realms/root/realms/${realm}/realm-config/authentication/authenticationtrees`
-        await Promise.all(
-          authTreeFile.nodes.map(async (node) => {
-            const nodeRequestUrl = `${baseUrl}/nodes/${node.nodeType}/${node._id}`
-            const nodeRequestBody = {
-              _id: node._id,
-              ...node.details
-            }
-            return await fidcRequest(
-              nodeRequestUrl,
-              nodeRequestBody,
-              sessionToken,
-              true
-            )
-          })
-        )
-        console.log('nodes updated')
-        const requestUrl = `${baseUrl}/trees/${authTreeFile.tree._id}`
-        await fidcRequest(requestUrl, authTreeFile.tree, sessionToken, true)
-        console.log(`${authTreeFile.tree._id} updated`)
-        return Promise.resolve()
-      })
-    )
+    await authTreesFileContent.reduce(async (previousPromise, authTreeFile) => {
+      await previousPromise
+      const baseUrl = `${FIDC_URL}/am/json/realms/root/realms/${realm}/realm-config/authentication/authenticationtrees`
+      await Promise.all(
+        authTreeFile.nodes.map(async (node) => {
+          const nodeRequestUrl = `${baseUrl}/nodes/${node.nodeType}/${node._id}`
+          const nodeRequestBody = {
+            _id: node._id,
+            ...node.details
+          }
+          return await fidcRequest(
+            nodeRequestUrl,
+            nodeRequestBody,
+            sessionToken,
+            true
+          )
+        })
+      )
+      console.log(`Nodes updated - ${authTreeFile.tree._id}`)
+      const requestUrl = `${baseUrl}/trees/${authTreeFile.tree._id}`
+      await fidcRequest(requestUrl, authTreeFile.tree, sessionToken, true)
+      console.log(`Tree updated - ${authTreeFile.tree._id}`)
+      return Promise.resolve()
+    }, Promise.resolve())
   } catch (error) {
     console.error(error.message)
     process.exit(1)
