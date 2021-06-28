@@ -15,6 +15,9 @@
 	}, {
 		"target": "frIndexedString2",
 		"source": "PASSWORD"
+	}, {
+		"target": "frIndexedInteger1",
+		"source": "CUSTID"
 	}],
 	"policies": [{
 		"action": "EXCEPTION",
