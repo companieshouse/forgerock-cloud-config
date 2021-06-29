@@ -119,28 +119,23 @@
 			"id": "CUSTOMERID",
 			"nativeType": "__ACCOUNT__",
 			"properties": {
-				"SURNAME": {
-					"type": "string",
-					"required": true,
-					"nativeName": "SURNAME",
-					"nativeType": "string"
-				},
 				"EMAIL": {
 					"type": "string",
 					"nativeName": "EMAIL",
-					"nativeType": "string"
-				},
-				"FORENAME": {
-					"type": "string",
-					"required": true,
-					"nativeName": "FORENAME",
-					"nativeType": "string"
+					"nativeType": "string",
+					"required": true
 				},
 				"PASSWORD": {
 					"type": "string",
 					"nativeName": "PASSWORD",
 					"nativeType": "string",
 					"required": true
+				},
+				"CUSTID": {
+					"type": "number",
+					"nativeName": "CUSTID",
+					"nativeType": "string",
+					"required": false
 				}
 			}
 		}

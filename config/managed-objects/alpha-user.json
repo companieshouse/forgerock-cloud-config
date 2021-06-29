@@ -543,14 +543,17 @@
               "viewable": true
           },
           "frIndexedInteger1": {
-              "description": "Generic Indexed Integer 1",
-              "isPersonal": false,
-              "title": "Generic Indexed Integer 1",
-              "type": "number",
-              "usageDescription": null,
-              "userEditable": true,
-              "viewable": true
-          },
+            "description": "WebFiling Customer ID",
+            "isPersonal": false,
+            "title": "WebFiling Customer ID",
+            "type": "number",
+            "usageDescription": null,
+            "userEditable": false,
+            "viewable": true,
+            "searchable": false,
+            "isVirtual": false,
+            "deleteQueryConfig": false
+        },
           "frIndexedInteger2": {
               "description": "Generic Indexed Integer 2",
               "isPersonal": false,
