@@ -83,6 +83,6 @@
 	"onUpdate": {
 		"type": "text/javascript",
 		"globals": {},
-		"source": "target.frIndexedString3 = \"pending\""
+		"source": "if (source.PASSWORD != oldTarget.frIndexedString2) {\n  target.frIndexedString3 = \"pendingGOTCHA\"\n}"
 	}
 }
