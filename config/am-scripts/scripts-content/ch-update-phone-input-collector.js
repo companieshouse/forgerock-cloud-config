@@ -23,10 +23,10 @@ function isMobile(number) {
 var PHONE_NUMBER_FIELD = "telephoneNumber";
 
 var debug = String("Shared state: " + sharedState.toString() + "\\n");
-logger.error("[UPDATE PHONE SHOW NUMBER] Shared state: " + debug);
+logger.error("[UPDATE PHONE SHOW NUMBER] " + debug);
 
 var debug2 = String("Shared state: " + transientState.toString() + "\\n");
-logger.error("[UPDATE PHONE SHOW NUMBER] Transient state: " + debug2);
+logger.error("[UPDATE PHONE SHOW NUMBER] " + debug2);
 
 if (callbacks.isEmpty()) {
   var infoMessage = "Please enter your new phone number. Enter your password to make this change";
@@ -86,7 +86,7 @@ if (callbacks.isEmpty()) {
                 anchor: "IDToken3"
             }]
         }));
-      logger.error("[UPDATE PHONE] FAILED" + currentPassword);
+      logger.error("[UPDATE PHONE] FAILED: Invalid credential entered.");
       action = fr.Action.goTo(NodeOutcome.FAIL).build();
   } else if (!isMobile(newPhoneNumber)) {
       sharedState.put("errorMessage", "Invalid mobile number entered.");
@@ -99,7 +99,7 @@ if (callbacks.isEmpty()) {
                 anchor: "IDToken2"
             }]
         }));
-      logger.error("[UPDATE PHONE] FAILED" + currentPassword);
+      logger.error("[UPDATE PHONE] FAILED - Invalid mobile number entered.");
       action = fr.Action.goTo(NodeOutcome.FAIL).build();
   } else {
       logger.error("[UPDATE PHONE] SUCCESS");

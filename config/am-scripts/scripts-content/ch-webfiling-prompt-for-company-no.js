@@ -6,8 +6,13 @@
   ** OUTPUT DATA
     * SHARED STATE:
       - 'companyNumber' : the company number entered by the user
+      - 'jurisdiction': the selected company jurisdiction
       - [optional] 'errorMessage': error message to display from previous attempts
-       
+      - 'skipConfirmation': the flag used to skip the company selection confirmation step
+    * SESSION:
+      - 'companyNumber': the selected company number
+      - 'jurisdiction': the selected company jurisdiction
+
   ** OUTCOMES
     - true: input collected
   
@@ -33,12 +38,12 @@ var NodeOutcome = {
     FALSE: "false"
 }
 
-//extracts the company number (if present) for the query parameters
+//extracts the company number (if present) from the query parameters
 function fetchCompanyParameters() {
     var companyNo = requestParameters.get("companyNo");
     var jurisdiction = requestParameters.get("jurisdiction");
     if (companyNo && jurisdiction) {
-        logger.error("[INVITE USER - ACCEPT INVITE] company number/jurisdiction found in request: " + companyNo.get(0) + " - " + jurisdiction.get(0));
+        logger.error("[EWF PROMPT COMPANY NO] company number/jurisdiction found in request: " + companyNo.get(0) + " - " + jurisdiction.get(0));
         return {
             companyNo: companyNo.get(0),
             jurisdiction: jurisdiction.get(0)
