@@ -331,6 +331,16 @@
 				"outputs": ["*"],
 				"script": "fdac4efb-d8b8-478b-8300-e11a4c3503df"
 			}
+		},
+		{
+			"_id": "6129ae01-2f10-4e6a-ab4f-eba00524c6b0",
+			"nodeType": "ScriptedDecisionNode",
+			"details": {
+				"inputs": ["*"],
+				"outcomes": ["true"],
+				"outputs": ["*"],
+				"script": "19a9ba97-3eaf-46ed-9b59-ea9315d81407"
+			}
 		}
 	],
     "tree": {
@@ -351,8 +361,8 @@
 				"displayName": "Reset Counter"
 			},
 			"0ac72f4f-039a-4843-a565-037fb0b8805d": {
-				"x": 1171,
-				"y": 422.015625,
+				"x": 1269,
+				"y": 436.015625,
 				"connections": {
 					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
 					"success": "6538e894-475a-49f0-be1c-08d721f615df"
@@ -424,8 +434,8 @@
 				"x": 429,
 				"y": 94.015625,
 				"connections": {
-					"true": "e69f6be3-d125-4f8c-9a54-d5960d481c7a",
-					"false": "a6ab1111-936e-49e9-86cf-45ced5596dde"
+					"false": "a6ab1111-936e-49e9-86cf-45ced5596dde",
+					"true": "e69f6be3-d125-4f8c-9a54-d5960d481c7a"
 				},
 				"nodeType": "IdentifyExistingUserNode",
 				"displayName": "Identify Existing User"
@@ -450,12 +460,28 @@
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Send MFA email via Notify"
 			},
+			"979fd32f-2242-4d08-b31b-722c1ed419b4": {
+				"x": 3088,
+				"y": 443.015625,
+				"connections": {},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "max attempts"
+			},
+			"a6ab1111-936e-49e9-86cf-45ced5596dde": {
+				"x": 258,
+				"y": 555.015625,
+				"connections": {
+					"true": "fb8f7fbe-2fa7-4de8-a5c1-c55c54b1fd3d"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Email not exist msg"
+			},
 			"b07427f0-b984-4be6-a388-083e0111db19": {
 				"x": 2732,
 				"y": 318.015625,
 				"connections": {
-					"Retry": "cdc774a7-c03c-4cf2-8514-9d7654aac599",
-					"Reject": "979fd32f-2242-4d08-b31b-722c1ed419b4"
+					"Reject": "979fd32f-2242-4d08-b31b-722c1ed419b4",
+					"Retry": "cdc774a7-c03c-4cf2-8514-9d7654aac599"
 				},
 				"nodeType": "RetryLimitDecisionNode",
 				"displayName": "Retry Limit Decision"
@@ -465,7 +491,7 @@
 				"y": 394.015625,
 				"connections": {
 					"false": "6170276a-52bc-4311-b479-b6cd4fc6c544",
-					"true": "0ac72f4f-039a-4843-a565-037fb0b8805d"
+					"true": "6129ae01-2f10-4e6a-ab4f-eba00524c6b0"
 				},
 				"nodeType": "InnerTreeEvaluatorNode",
 				"displayName": "Update Legacy Password"
@@ -514,8 +540,8 @@
 				"x": 241,
 				"y": 408.015625,
 				"connections": {
-					"true": "6bc10407-960b-4e7d-8290-b8fc554eefa4",
-					"false": "fb8f7fbe-2fa7-4de8-a5c1-c55c54b1fd3d"
+					"false": "fb8f7fbe-2fa7-4de8-a5c1-c55c54b1fd3d",
+					"true": "6bc10407-960b-4e7d-8290-b8fc554eefa4"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Check Format"
@@ -576,21 +602,14 @@
 				"nodeType": "PageNode",
 				"displayName": "Login Form (EWF)"
 			},
-			"a6ab1111-936e-49e9-86cf-45ced5596dde": {
-				"x": 258,
-				"y": 555.015625,
+			"6129ae01-2f10-4e6a-ab4f-eba00524c6b0": {
+				"x": 1058,
+				"y": 554.015625,
 				"connections": {
-					"true": "fb8f7fbe-2fa7-4de8-a5c1-c55c54b1fd3d"
+					"true": "0ac72f4f-039a-4843-a565-037fb0b8805d"
 				},
 				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Email not exist msg"
-			},
-			"979fd32f-2242-4d08-b31b-722c1ed419b4": {
-				"x": 3088,
-				"y": 443.015625,
-				"connections": {},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "max attempts"
+				"displayName": "Store pwd in session"
 			}
 		},
 		"staticNodes": {
