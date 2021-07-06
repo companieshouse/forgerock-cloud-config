@@ -1,4 +1,8 @@
 /* 
+
+  ** OUTPUT
+    ** SHARED STATE
+     - EWF-JOURNEY: boolean indicating the journey is EWF (set to true)
   ** OUTCOMES
     - hasSession: the user has an active session
     - noSession: the user does not have an active session

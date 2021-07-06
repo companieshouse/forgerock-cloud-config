@@ -20,7 +20,10 @@ else {
 
 sharedState.put("errorMessage", null);
 sharedState.put("pagePropsJSON", null);
+var password = transientState.get("password") ? transientState.get("password") : sharedState.get("password");
+
+logger.error("[EWF SESSION STORE] storing password in session: " + password);
 
 action = fr.Action.goTo("true")
-    .putSessionProperty("password", sharedState.get("password"))
+    .putSessionProperty("password", password)
     .build()
