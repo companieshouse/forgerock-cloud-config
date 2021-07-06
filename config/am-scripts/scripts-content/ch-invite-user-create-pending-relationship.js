@@ -64,11 +64,11 @@ function getUserMembershipForCompany(userIdentifier, company, idType) {
 
   var requestBodyJson = (idType === IdentifierType.USERID) ?
     {
-      "userId": userIdentifier,
+      "subjectId": userIdentifier,
       "companyNumber": companyNo
     } :
     {
-      "userName": userIdentifier,
+      "subjectUserName": userIdentifier,
       "companyNumber": companyNo
     };
 

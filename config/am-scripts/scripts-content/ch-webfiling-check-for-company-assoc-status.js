@@ -87,7 +87,7 @@ function getUserMembershipForCompany(userIdentifier, companyNo) {
     }
 
     var requestBodyJson = {
-        "userId": userIdentifier,
+        "subjectId": userIdentifier,
         "companyNumber": companyNo
     };
 
