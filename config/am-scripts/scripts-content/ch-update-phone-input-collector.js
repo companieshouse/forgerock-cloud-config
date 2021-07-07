@@ -75,20 +75,7 @@ if (callbacks.isEmpty()) {
   var currentPassword = fr.String(callbacks.get(2).getPassword());
 
   logger.error("[UPDATE PHONE] New phone number " + newPhoneNumber);
-  if (!newPhoneNumber || !currentPassword) {
-      sharedState.put("errorMessage", "Invalid credential(s) entered.");
-      sharedState.put("pagePropsJSON", JSON.stringify(
-        {
-            'errors': [{
-                label: "Invalid credential entered.",
-                token: "UPDATE_PHONE_INVALID_CREDENTIALS",
-                fieldName: "IDToken3",
-                anchor: "IDToken3"
-            }]
-        }));
-      logger.error("[UPDATE PHONE] FAILED: Invalid credential entered.");
-      action = fr.Action.goTo(NodeOutcome.FAIL).build();
-  } else if (!isMobile(newPhoneNumber)) {
+  if (!newPhoneNumber || !isMobile(newPhoneNumber)) {
       sharedState.put("errorMessage", "Invalid mobile number entered.");
       sharedState.put("pagePropsJSON", JSON.stringify(
         {
@@ -99,8 +86,21 @@ if (callbacks.isEmpty()) {
                 anchor: "IDToken2"
             }]
         }));
-      logger.error("[UPDATE PHONE] FAILED - Invalid mobile number entered.");
+      logger.error("[UPDATE PHONE] FAILED: Invalid mobile number entered.");
       action = fr.Action.goTo(NodeOutcome.FAIL).build();
+  } else if (!currentPassword) {
+    sharedState.put("errorMessage", "Invalid credential entered.");
+    sharedState.put("pagePropsJSON", JSON.stringify(
+      {
+          'errors': [{
+              label: "Invalid credential entered.",
+              token: "UPDATE_PHONE_INVALID_CREDENTIALS",
+              fieldName: "IDToken3",
+              anchor: "IDToken3"
+          }]
+      }));
+    logger.error("[UPDATE PHONE] FAILED: Invalid credential entered.");
+    action = fr.Action.goTo(NodeOutcome.FAIL).build();
   } else {
       logger.error("[UPDATE PHONE] SUCCESS");
       sharedState.put("objectAttributes", 
