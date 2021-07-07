@@ -555,13 +555,16 @@
             "deleteQueryConfig": false
         },
           "frIndexedInteger2": {
-              "description": "Generic Indexed Integer 2",
+              "description": "WebFiling Auth ID",
               "isPersonal": false,
-              "title": "Generic Indexed Integer 2",
+              "title": "WebFiling Auth ID",
               "type": "number",
               "usageDescription": null,
-              "userEditable": true,
-              "viewable": true
+              "userEditable": false,
+              "viewable": true,
+              "searchable": false,
+              "isVirtual": false,
+              "deleteQueryConfig": false
           },
           "frIndexedInteger3": {
               "description": "Generic Indexed Integer 3",
