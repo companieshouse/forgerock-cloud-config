@@ -136,6 +136,12 @@
 					"nativeName": "CUSTID",
 					"nativeType": "string",
 					"required": false
+				},
+				"AUTHID": {
+					"type": "number",
+					"nativeName": "AUTHID",
+					"nativeType": "string",
+					"required": false
 				}
 			}
 		}

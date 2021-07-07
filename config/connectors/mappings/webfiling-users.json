@@ -18,6 +18,9 @@
 	}, {
 		"target": "frIndexedInteger1",
 		"source": "CUSTID"
+	}, {
+		"target": "frIndexedInteger2",
+		"source": "AUTHID"
 	}],
 	"policies": [{
 		"action": "EXCEPTION",
