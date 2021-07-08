@@ -139,7 +139,7 @@ try {
     var language = getSelectedLanguage(requestHeaders);
 
     if (!removalData) {
-        sendErrorCallbacks("INVITE_USER_ERROR", "Error while extracting data from shared state");
+        sendErrorCallbacks("REMOVE_AUTHZ_USER_ERROR", "Error while extracting data from shared state");
     } else {
         var sendEmailResult = sendEmail(language, removalData.userToRemove, removalData.companyName);
         var userDisplayName = removalData.displayName;
@@ -172,5 +172,5 @@ try {
     }
 } catch (e) {
     logger.error("[REMOVE AUTHZ USER - SEND EMAIL] Error : " + e);
-    sendErrorCallbacks("INVITE_USER_ERROR", e);
+    sendErrorCallbacks("REMOVE_AUTHZ_USER_ERROR", e);
 }

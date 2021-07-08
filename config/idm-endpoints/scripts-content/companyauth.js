@@ -321,7 +321,7 @@
 
         // for any other combination, deny the request
         return {
-            message: "Possile failure reasons: Caller is not authorised for the company, subject is invited and caller is not the inviter, caller is not an admin user.",
+            message: "Possible failure reasons: Caller is not authorised for the company, subject is invited and caller is not the inviter, caller is not an admin user.",
             allowed: false
         };
     }
