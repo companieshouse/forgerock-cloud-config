@@ -8,6 +8,9 @@
 	"properties": [{
 		"target": "PASSWORD",
 		"source": "frIndexedString2"
+	}, {
+		"target": "__NAME__",
+		"source": "frIndexedInteger2"
 	}],
 	"policies": [{
 		"action": "ASYNC",
@@ -48,5 +51,14 @@
 	}, {
 		"action": "ASYNC",
 		"situation": "UNQUALIFIED"
+	}],
+	"correlationQuery": [{
+		"linkQualifier": "default",
+		"expressionTree": {
+			"any": ["__NAME__"]
+		},
+		"mapping": "alphaUser_webfilingAuth",
+		"type": "text/javascript",
+		"file": "ui/correlateTreeToQueryFilter.js"
 	}]
 }
