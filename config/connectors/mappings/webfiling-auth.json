@@ -13,44 +13,44 @@
 		"source": "frIndexedInteger2"
 	}],
 	"policies": [{
-		"action": "ASYNC",
-		"situation": "ABSENT"
-	}, {
-		"action": "ASYNC",
-		"situation": "ALL_GONE"
-	}, {
-		"action": "ASYNC",
+		"action": "EXCEPTION",
 		"situation": "AMBIGUOUS"
 	}, {
-		"action": "ASYNC",
-		"situation": "CONFIRMED"
-	}, {
-		"action": "ASYNC",
-		"situation": "FOUND"
-	}, {
-		"action": "ASYNC",
-		"situation": "FOUND_ALREADY_LINKED"
-	}, {
-		"action": "ASYNC",
-		"situation": "LINK_ONLY"
-	}, {
-		"action": "ASYNC",
-		"situation": "MISSING"
-	}, {
-		"action": "ASYNC",
-		"situation": "SOURCE_IGNORED"
-	}, {
-		"action": "ASYNC",
+		"action": "EXCEPTION",
 		"situation": "SOURCE_MISSING"
 	}, {
-		"action": "ASYNC",
-		"situation": "TARGET_IGNORED"
+		"action": "EXCEPTION",
+		"situation": "MISSING"
 	}, {
-		"action": "ASYNC",
+		"action": "EXCEPTION",
+		"situation": "FOUND_ALREADY_LINKED"
+	}, {
+		"action": "DELETE",
+		"situation": "UNQUALIFIED"
+	}, {
+		"action": "EXCEPTION",
 		"situation": "UNASSIGNED"
 	}, {
-		"action": "ASYNC",
-		"situation": "UNQUALIFIED"
+		"action": "EXCEPTION",
+		"situation": "LINK_ONLY"
+	}, {
+		"action": "IGNORE",
+		"situation": "TARGET_IGNORED"
+	}, {
+		"action": "IGNORE",
+		"situation": "SOURCE_IGNORED"
+	}, {
+		"action": "IGNORE",
+		"situation": "ALL_GONE"
+	}, {
+		"action": "UPDATE",
+		"situation": "CONFIRMED"
+	}, {
+		"action": "UPDATE",
+		"situation": "FOUND"
+	}, {
+		"action": "CREATE",
+		"situation": "ABSENT"
 	}],
 	"correlationQuery": [{
 		"linkQualifier": "default",
