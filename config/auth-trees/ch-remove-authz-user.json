@@ -1,0 +1,164 @@
+{
+    "nodes": [
+      {
+         "_id": "d0a25421-4046-4f97-b1dc-04bb22d62b6f",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes":["hasSession","noSession"],
+             "outputs":["*"],
+             "script":"c4001e02-469c-4cc4-bf95-9f43d7e46568"
+         }            
+     },
+     {
+         "_id": "23759bb2-1d78-401c-ae3e-0a13259c8fc7",
+         "nodeType": "SessionDataNode", 
+         "details": {
+            "sharedStateKey":"userName",
+            "sessionDataKey":"UserToken"
+         }				
+     },
+     {
+         "_id": "299077d4-9c8f-4dea-bfa6-c4c1dfc0e82c",
+         "nodeType": "IdentifyExistingUserNode", 
+         "details": {
+             "identifier":"userName",
+             "identityAttribute":"mail"
+         }
+     },
+     {
+         "_id": "c09e416c-f0ac-4583-88ef-987559b069f5",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes": ["success", "error"],
+            "outputs":["*"],
+            "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149"
+         }            
+     },
+     {
+         "_id": "065dc9a0-bab4-4c67-990e-df6b6c189246",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes": ["confirmed", "missing_confirm", "cancel", "error"],
+            "outputs":["*"],
+            "script": "5000bb7b-29da-4bf4-a2cf-6f028d32a4d9"
+         }            
+      },
+      {
+         "_id": "35140cc8-f08a-406d-beb1-364ed9cd2d32",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes": ["true", "false"],
+            "outputs":["*"],
+            "script": "df67765e-df3a-4503-9ba5-35c992b39259"
+         }            
+      },
+      {
+         "_id": "7bc1ac94-dab8-4504-b02e-4d645cb71f45",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["true", "false"],
+             "outputs":["*"],
+             "script": "a221047b-706f-48f9-8d39-3fcd518543aa"
+         }
+      }
+   ],
+   "tree": {
+      "_id": "CHRemoveAuthorisedUser",
+      "description": "Remove an authorised user from a company",
+      "identityResource": "managed/alpha_user",
+      "uiConfig": {},
+      "entryNodeId": "d0a25421-4046-4f97-b1dc-04bb22d62b6f",
+      "nodes": {
+         "065dc9a0-bab4-4c67-990e-df6b6c189246": {
+            "x": 981,
+            "y": 20.015625,
+            "connections": {
+               "cancel": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
+               "error": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "missing_confirm": "299077d4-9c8f-4dea-bfa6-c4c1dfc0e82c",
+               "confirmed": "35140cc8-f08a-406d-beb1-364ed9cd2d32"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "prompt for removal confirmation"
+         },
+         "23759bb2-1d78-401c-ae3e-0a13259c8fc7": {
+            "x": 249,
+            "y": 414.015625,
+            "connections": {
+               "outcome": "299077d4-9c8f-4dea-bfa6-c4c1dfc0e82c"
+            },
+            "nodeType": "SessionDataNode",
+            "displayName": "Get Session Data"
+         },
+         "299077d4-9c8f-4dea-bfa6-c4c1dfc0e82c": {
+            "x": 401,
+            "y": 229.015625,
+            "connections": {
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "true": "c09e416c-f0ac-4583-88ef-987559b069f5"
+            },
+            "nodeType": "IdentifyExistingUserNode",
+            "displayName": "Identify Existing User"
+         },
+         "c09e416c-f0ac-4583-88ef-987559b069f5": {
+            "x": 673,
+            "y": 38.015625,
+            "connections": {
+               "error": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "success": "065dc9a0-bab4-4c67-990e-df6b6c189246"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Get IDM token"
+         },
+         "d0a25421-4046-4f97-b1dc-04bb22d62b6f": {
+            "x": 74,
+            "y": 548.015625,
+            "connections": {
+               "hasSession": "23759bb2-1d78-401c-ae3e-0a13259c8fc7",
+               "noSession": "e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Check for Session"
+         },
+         "35140cc8-f08a-406d-beb1-364ed9cd2d32": {
+            "x": 1308,
+            "y": 36.015625,
+            "connections": {
+               "true": "7bc1ac94-dab8-4504-b02e-4d645cb71f45",
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Get Notify JWT"
+         },
+         "7bc1ac94-dab8-4504-b02e-4d645cb71f45": {
+            "x": 1609,
+            "y": 51.015625,
+            "connections": {
+               "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Send Notification email"
+         }
+      },
+      "staticNodes": {
+         "startNode": {
+            "x": 62,
+            "y": 103
+         },
+         "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
+            "x": 1809,
+            "y": 352
+         },
+         "e301438c-0bd0-429c-ab0c-66126501069a": {
+            "x": 1093,
+            "y": 610
+         }
+      }
+   }
+}
