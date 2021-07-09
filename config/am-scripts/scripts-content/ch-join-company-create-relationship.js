@@ -36,72 +36,83 @@ function logResponse(response) {
 }
 
 // checks whether the user has already the company associated with their profile
-function checkCompanyAlreadyExists(userId, company) {
+function checkUserAlreadyAuthzForCompany(userId, company) {
     var request = new org.forgerock.http.protocol.Request();
 
-    request.setMethod('GET');
-    logger.error("[ADD RELATIONSHIP] Check duplicate associations - calling endpoint " + idmUserEndpoint + userId + "?_fields=memberOfOrg/_id");
-    request.setUri(idmUserEndpoint + userId + "?_fields=memberOfOrg/_id");
-    request.getHeaders().add("Authorization", "Bearer " + accessToken);
-    request.getHeaders().add("Content-Type", "application/json");
-    request.getHeaders().add("Accept-API-Version", "resource=1.0");
-
-    var response = httpClient.send(request).get();
-
-    logResponse(response);
-
-    var userProfile = JSON.parse(response.getEntity().getString());
-
-    logger.error("[ADD RELATIONSHIP] Check duplicate associations - User companies: " + userProfile.memberOfOrg.length);
-    for (var index = 0; index < userProfile.memberOfOrg.length; index++) {
-        var userCompanyId = userProfile.memberOfOrg[index]._id;
-        if (userCompanyId.equals(company._id)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-//creates the relationship between the user and the given company
-function addRelationshipToCompany(userId, company) {
-    var request = new org.forgerock.http.protocol.Request();
-    var ACCESS_TOKEN_STATE_FIELD = "idmAccessToken";
-    var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
+    var accessToken = transientState.get("idmAccessToken");
     if (accessToken == null) {
-        logger.error("[ADD RELATIONSHIP] Access token not in shared state")
-        return NodeOutcome.ERROR;
+        logger.error("[ADD RELATIONSHIP] Access token not in transient state")
+        return {
+            success: false,
+            message: "Access token not in transient state"
+        };
     }
 
-    var requestBodyJson = [
-        {
-            "operation": "add",
-            "field": "/memberOfOrg/-",
-            "value": {
-                "_ref": "managed/alpha_organization/" + company._id,
-                "_refProperties": {
-                    "membershipStatus": "confirmed"
-                }
-            }
-        }
-    ];
+    var requestBodyJson =
+    {
+        "subjectId": userId,
+        "companyNumber": company.number
+    }
 
-    request.setMethod('PATCH');
-    request.setUri(idmUserEndpoint + userId);
+    request.setMethod('POST');
+
+    request.setUri(idmCompanyAuthEndpoint + "?_action=getCompanyStatusByUserId");
     request.getHeaders().add("Authorization", "Bearer " + accessToken);
     request.getHeaders().add("Content-Type", "application/json");
     request.getHeaders().add("Accept-API-Version", "resource=1.0");
     request.setEntity(requestBodyJson);
 
     var response = httpClient.send(request).get();
-
-    logResponse(response);
+    var actionResponse = JSON.parse(response.getEntity().getString());
     if (response.getStatus().getCode() === 200) {
-        logger.error("[ADD RELATIONSHIP] 200 response from IDM");
-        return NodeOutcome.TRUE;
+        logger.error("[ADD AUTHZ USER] 200 response from IDM");
+        return (actionResponse.success && actionResponse.company.status === "confirmed");
+    } else {
+        logger.error("[ADD AUTHZ USER] Error during action processing");
+        return false;
     }
-    else {
-        logger.error("[ADD RELATIONSHIP] Error during relationship creation");
-        return NodeOutcome.ERROR;
+}
+
+//creates the relationship between the user and the given company
+function addRelationshipToCompany(userId, company) {
+    var request = new org.forgerock.http.protocol.Request();
+
+    var accessToken = transientState.get("idmAccessToken");
+    if (accessToken == null) {
+        logger.error("[ADD RELATIONSHIP] Access token not in transient state")
+        return {
+            success: false,
+            message: "Access token not in transient state"
+        };
+    }
+
+    var requestBodyJson =
+    {
+        "subjectId": userId,
+        "companyNumber": company.number
+    }
+
+    request.setMethod('POST');
+
+    request.setUri(idmCompanyAuthEndpoint + "?_action=addAuthorisedUser");
+    request.getHeaders().add("Authorization", "Bearer " + accessToken);
+    request.getHeaders().add("Content-Type", "application/json");
+    request.getHeaders().add("Accept-API-Version", "resource=1.0");
+    request.setEntity(requestBodyJson);
+
+    var response = httpClient.send(request).get();
+    var actionResponse = JSON.parse(response.getEntity().getString());
+    if (response.getStatus().getCode() === 200) {
+        logger.error("[ADD AUTHZ USER] 200 response from IDM");
+        return {
+            success: actionResponse.success
+        }
+    } else {
+        logger.error("[ADD AUTHZ USER] Error during action processing");
+        return {
+            success: false,
+            message: actionResponse.detail.reason
+        };
     }
 }
 
@@ -123,6 +134,15 @@ function buildErrorCallback(stageName, message) {
             )
         ).build()
     }
+}
+
+function debug(message) {
+    action = fr.Action.send(
+        new fr.TextOutputCallback(
+            fr.TextOutputCallback.ERROR,
+            message
+        )
+    ).build()
 }
 
 //fetches the IDM access token from transient state
@@ -148,51 +168,58 @@ function getSelectedLanguage(requestHeaders) {
 }
 
 // main execution flow
+try {
+    var idmCompanyAuthEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/endpoint/companyauth/";
+    var idmUserEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_user/";
+    var companyData = sharedState.get("companyData");
+    var userId = sharedState.get("_id");
+    logger.error("[ADD RELATIONSHIP] Incoming company data :" + companyData);
+    logger.error("[ADD RELATIONSHIP] Incoming company id :" + JSON.parse(companyData)._id);
+    var language = getSelectedLanguage(requestHeaders);
 
-var idmUserEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_user/";
-var companyData = sharedState.get("companyData");
-var userId = sharedState.get("_id");
-logger.error("[ADD RELATIONSHIP] Incoming company data :" + companyData);
-logger.error("[ADD RELATIONSHIP] Incoming company id :" + JSON.parse(companyData)._id);
-var language = getSelectedLanguage(requestHeaders);
+    var accessToken = fetchIDMToken();
+    if (!accessToken) {
+        action = fr.Action.goTo(NodeOutcome.NodeOutcome.ERROR).build();
+    }
 
-var accessToken = fetchIDMToken();
-if (!accessToken) {
-    action = fr.Action.goTo(NodeOutcome.NodeOutcome.ERROR).build();
-}
-
-if (checkCompanyAlreadyExists(userId, JSON.parse(companyData))) {
-    logger.error("[ADD RELATIONSHIP] The company " + JSON.parse(companyData).name + " is already associated with this user");
-    sharedState.put("errorMessage", "The company " + JSON.parse(companyData).name + " is already associated with the user.");
-    sharedState.put("pagePropsJSON", JSON.stringify(
-        {
-            'errors': [{
-                label: "The company " + JSON.parse(companyData).name + " is already associated with this user",
-                token: "COMPANY_ALREADY_ASSOCIATED",
-                fieldName: "IDToken2",
-                anchor: "IDToken2"
-            }],
-            'company': JSON.parse(companyData)
-        }));
-    action = fr.Action.goTo(NodeOutcome.COMPANY_ALREADY_ASSOCIATED)
-        .putSessionProperty("language", language.toLowerCase())
-        .build();
-} else if (!JSON.parse(companyData).authCodeIsActive) {
-    logger.error("[ADD RELATIONSHIP] The company " + JSON.parse(companyData).name + " does not have an active auth code");
-    sharedState.put("errorMessage", "The company " + JSON.parse(companyData).name + " does not have an active auth code.");
-    sharedState.put("pagePropsJSON", JSON.stringify(
-        {
-            'errors': [{
-                label: "The company " + JSON.parse(companyData).name + "does not have an active auth code.",
-                token: "AUTH_CODE_INACTIVE",
-                fieldName: "IDToken1",
-                anchor: "IDToken1"
-            }],
-            'company': JSON.parse(companyData)
-        }));
-    action = fr.Action.goTo(NodeOutcome.AUTH_CODE_INACTIVE).build();
-} else {
-    action = fr.Action.goTo(addRelationshipToCompany(userId, JSON.parse(companyData)))
-        .putSessionProperty("language", language.toLowerCase())
-        .build();
+    if (checkUserAlreadyAuthzForCompany(userId, JSON.parse(companyData))) {
+        logger.error("[ADD RELATIONSHIP] The user is already authroised (CONFIRMED) for company " + JSON.parse(companyData).name);
+        // sharedState.put("errorMessage", "The company " + JSON.parse(companyData).name + " is already associated with the user.");
+        // sharedState.put("pagePropsJSON", JSON.stringify(
+        //     {
+        //         'errors': [{
+        //             label: "The company " + JSON.parse(companyData).name + " is already associated with this user",
+        //             token: "COMPANY_ALREADY_ASSOCIATED",
+        //             fieldName: "IDToken2",
+        //             anchor: "IDToken2"
+        //         }],
+        //         'company': JSON.parse(companyData)
+        //     }));
+        action = fr.Action.goTo(NodeOutcome.COMPANY_ALREADY_ASSOCIATED)
+            .putSessionProperty("language", language.toLowerCase())
+            .build();
+    } else if (!JSON.parse(companyData).authCodeIsActive) {
+        logger.error("[ADD RELATIONSHIP] The company " + JSON.parse(companyData).name + " does not have an active auth code");
+        sharedState.put("errorMessage", "The company " + JSON.parse(companyData).name + " does not have an active auth code.");
+        sharedState.put("pagePropsJSON", JSON.stringify(
+            {
+                'errors': [{
+                    label: "The company " + JSON.parse(companyData).name + "does not have an active auth code.",
+                    token: "AUTH_CODE_INACTIVE",
+                    fieldName: "IDToken1",
+                    anchor: "IDToken1"
+                }],
+                'company': JSON.parse(companyData)
+            }));
+        action = fr.Action.goTo(NodeOutcome.AUTH_CODE_INACTIVE).build();
+    } else {
+        var addUserResult = addRelationshipToCompany(userId, JSON.parse(companyData));
+        action = fr.Action.goTo(addUserResult.success ? NodeOutcome.TRUE : NodeOutcome.ERROR)
+            .putSessionProperty("language", language.toLowerCase())
+            .build();
+    }
+} catch (e) {
+    logger.error("[ADD RELATIONSHIP] ERROR: " + e);
+    sharedState.put("errorMessage", e.toString());
+    action = fr.Action.goTo(NodeOutcome.ERROR).build();
 }
