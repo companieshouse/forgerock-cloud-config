@@ -30,7 +30,8 @@
         INVITE_USER_BY_USERNAME: "inviteUserByUsername",
         INVITE_USER_BY_USERID: "inviteUserByUserId",
         GET_COMPANY: "getCompanyByNumber",
-        RESPOND_INVITE: "respondToInvite"
+        RESPOND_INVITE: "respondToInvite",
+        REMOVE_AUTHORISED_USER: "removeAuthorisedUser"
         // GET_COMPANIES: "getCompanies",
         // GET_USER: "getUser",
         // GET_COMPANY: "getCompany"
@@ -51,6 +52,8 @@
 
         var status = AuthorisationStatus.NONE;
         var membership = null;
+        var inviterId = null;
+        var inviteTimestamp = null;
         var relationshipEntry;
 
         var response = openidm.query("managed/" + OBJECT_USER + "/" + userId + "/" + USER_RELATIONSHIP,
@@ -67,6 +70,8 @@
                 // log("Got company " + entry._refResourceId);
                 if (entry._refResourceId === companyId) {
                     status = entry._refProperties.membershipStatus;
+                    inviterId = entry._refProperties.inviterId;
+                    inviteTimestamp = entry._refProperties.inviteTimestamp;
                     log("Got a match for company " + companyId + ": membership status: " + status);
                     membership = entry._id;
                     relationshipEntry = entry;
@@ -77,7 +82,9 @@
         return {
             status: status,
             entry: relationshipEntry,
-            membership: membership
+            membership: membership,
+            inviterId: inviterId,
+            inviteTimestamp: inviteTimestamp
         };
 
     }
@@ -85,12 +92,7 @@
     // deletes the relationship between the given user and given copmpany if in PENDING status
     function deleteRelationship(subjectId, companyId) {
         var currentStatusResponse = getStatus(subjectId, companyId);
-        if (!currentStatusResponse.status === AuthorisationStatus.PENDING) {
-            return {
-                success: false,
-                message: "The relationship with company " + companyId + " must be in PENDING state to be removed"
-            };
-        }
+
         log("Deleting relationship for company " + companyId);
         log("patching: " + "managed/" + OBJECT_USER + "/" + subjectId);
 
@@ -117,12 +119,13 @@
                 success: false,
                 message: "The relationship with company " + companyId + " could not be removed from the user"
             };
+        } else {
+            log("Relationship removed");
         }
 
         return {
             success: true
         };
-
     }
 
     // Update status for user vs. company
@@ -185,7 +188,7 @@
             ["_id", "userName", "givenName"]);
 
         if (response.resultCount !== 1) {
-            log("Bad result count " + response.resultCount);
+            log("getUserByUsername: Bad result count: " + response.resultCount);
             return null;
         }
 
@@ -200,7 +203,7 @@
             ["_id", "userName", "givenName", "roles", "authzRoles"]);
 
         if (response.resultCount !== 1) {
-            log("Bad result count " + response.resultCount);
+            log("getUserById: Bad result count: " + response.resultCount);
             return null;
         }
 
@@ -215,7 +218,7 @@
             ["_id", "number", "name", "authCode", "status", "members"]);
 
         if (response.resultCount === 0) {
-            log("Bad result count: " + response.resultCount);
+            log("getCompany: Bad result count: " + response.resultCount);
             return null;
         }
 
@@ -232,7 +235,7 @@
                 allowed: false
             };
         }
-        
+
         if (isCallerAdminUser &&
             subjectStatus === AuthorisationStatus.PENDING &&
             newStatus === AuthorisationStatus.CONFIRMED) {
@@ -275,6 +278,50 @@
         // for any other combination, deny the request
         return {
             message: "Caller is not authorised for the company, is not an admin or is not the subject.",
+            allowed: false
+        };
+    }
+
+    // Authorisation logic to allow a user (caller) to remove an authorised/invited from a Company
+    function allowUserRemoval(callerStatus, callerId, subjectStatus, subjectInviterId, isCallerAdminUser, isMe) {
+        log("REMOVE USER AUTHZ CHECK: callerStatus " + callerStatus + ", subjectStatus " + subjectStatus + ", isAdminUser " + isCallerAdminUser + ", isMe " + isMe);
+
+        // if the caller is an admin and the subject is CONFIRMED, allow the removal
+        if (isCallerAdminUser) {
+            log("Caller is admin - changing from '" + subjectStatus + "' to 'NONE' allowed");
+            return {
+                allowed: true
+            };
+        }
+
+        // the user we are trying to remove from a company does not actually have a relationship with the company
+        if (subjectStatus === AuthorisationStatus.NONE) {
+            return {
+                message: "The subject does not have a relationship with the company - removal not possible.",
+                allowed: false
+            };
+        }
+
+        // if the caller is a company authorised user and and the subject is also authorised, allow the removal
+        if (callerStatus === AuthorisationStatus.CONFIRMED && subjectStatus === AuthorisationStatus.CONFIRMED) {
+            log("Caller is authorised for the company, and subject too - changing from 'CONFIRMED' to 'NONE' allowed");
+            return {
+                allowed: true
+            };
+        }
+
+        // if caller is the creator of the subject invite, and the current subject status is PENDING, allow the removal
+        if (subjectStatus === AuthorisationStatus.PENDING &&
+            callerId === subjectInviterId) {
+            log("Caller is creator of the subject invite - changing from 'PENDING' to 'NONE' allowed");
+            return {
+                allowed: true
+            };
+        }
+
+        // for any other combination, deny the request
+        return {
+            message: "Possible failure reasons: Caller is not authorised for the company, subject is invited and caller is not the inviter, caller is not an admin user.",
             allowed: false
         };
     }
@@ -375,10 +422,15 @@
 
     }
 
-    // Entrypoint
+    // ************************************
+    // ************ Entrypoint ************
+    // ************************************
+
     log("Incoming request: " + request.content);
 
     var actor;
+    var subject;
+    var isMe = false;
     if (request.content.callerId) {
         actor = getUserById(request.content.callerId);
     } else {
@@ -397,29 +449,55 @@
         };
     }
 
+    var company = getCompany(request.content.companyNumber);
+    if (!company) {
+        log("Company could not be found: " + request.content.companyNumber);
+        throw {
+            code: 404,
+            message: "Company could not be found: " + request.content.companyNumber
+        };
+    }
+
+    var companyId = company._id;
+    log("Company found: " + companyId);
+
+    //do not lookup subject for the GET_COMPANY user
+    if (request.action !== RequestAction.GET_COMPANY) {
+        if (request.content.subjectId) {
+            subject = getUserById(request.content.subjectId);
+        } else if (request.content.subjectUserName) {
+            subject = getUserByUsername(request.content.subjectUserName);
+        }
+
+        if (!subject) {
+            log("User could not be found: " + (request.content.subjectUserName ? request.content.subjectUserName : request.content.subjectId));
+            throw {
+                code: 404,
+                message: "User could not be found: " + (request.content.subjectUserName ? request.content.subjectUserName : request.content.subjectId)
+            };
+        }
+
+        log("User found: " + subject);
+    }
+
+    if(subject && actor){
+        isMe = (subject._id === actor._id);
+    }
+
     // GET MEMBERSHIP STATUS BY USERNAME AND COMPANY NUMBER
     if (request.action === RequestAction.GET_STATUS_BY_USERNAME) {
 
         log("Request to read subject company membership status by userName");
 
-        log("Caller Id: " + actor._id + "(username: " + actor.userName + ")");
+        log("Caller Id: " + actor._id + "(subjectUserName: " + actor.userName + ")");
 
-        if (!request.content.userName || !request.content.companyNumber) {
-            log("Invalid parameters - Expected: userName, companyNumber");
+        if (!request.content.subjectUserName || !request.content.companyNumber) {
+            log("Invalid parameters - Expected: subjectUserName, companyNumber");
             throw {
                 code: 400,
-                message: "Invalid Parameters - Expected: userName, companyNumber"
+                message: "Invalid Parameters - Expected: subjectUserName, companyNumber"
             };
         }
-
-        // Authorisation check - must be admin or getting own status
-        var subject = getUserByUsername(request.content.userName);
-        log("User found: " + subject._id);
-
-        var isMe = (subject._id === actor._id);
-
-        var companyId = getCompany(request.content.companyNumber)._id;
-        log("Company found: " + companyId);
 
         var statusResponse = getStatus(subject._id, companyId);
         log("Membership status: " + JSON.stringify(statusResponse));
@@ -439,31 +517,25 @@
             company: {
                 id: companyId,
                 number: request.content.companyNumber,
-                status: statusResponse.status
+                status: statusResponse.status,
+                inviterId: statusResponse.inviterId,
+                inviteTimestamp: statusResponse.inviteTimestamp
             }
         };
+
     }
     // GET MEMBERSHIP STATUS BY USERID AND COMPANY NUMBER
     else if (request.action === RequestAction.GET_STATUS_BY_USERID) {
 
         log("Request to read subject company membership status by userId");
 
-        if (!request.content.userId || !request.content.companyNumber) {
-            log("Invalid parameters - Expected: userId, companyNumber");
+        if (!request.content.subjectId || !request.content.companyNumber) {
+            log("Invalid parameters - Expected: subjectId, companyNumber");
             throw {
                 code: 400,
-                message: "Invalid Parameters - Expected: userId, companyNumber"
+                message: "Invalid Parameters - Expected: subjectId, companyNumber"
             };
         }
-
-        // Authorisation check - must be admin or getting own status
-        var subject = getUserById(request.content.userId);
-        var isMe = (subject._id === actor._id);
-
-        log("User found: " + subject._id);
-
-        var companyId = getCompany(request.content.companyNumber)._id;
-        log("Company found: " + companyId);
 
         var statusResponse = getStatus(subject._id, companyId);
         log("Membership status: " + JSON.stringify(statusResponse));
@@ -483,7 +555,9 @@
             company: {
                 id: companyId,
                 number: request.content.companyNumber,
-                status: statusResponse.status
+                status: statusResponse.status,
+                inviterId: statusResponse.inviterId,
+                inviteTimestamp: statusResponse.inviteTimestamp
             }
         };
     }
@@ -501,10 +575,6 @@
         }
 
         // Authorisation check
-        var companyId = getCompany(request.content.companyNumber)._id;
-        var subject = getUserById(request.content.subjectId);
-        var isMe = (subject._id === actor._id);
-
         var subjectStatus = getStatus(subject._id, companyId).status;
         var callerStatus = (isMe) ? subjectStatus : getStatus(actor._id, companyId).status;
         var newStatus = AuthorisationStatus.PENDING;
@@ -568,10 +638,6 @@
         }
 
         // Authorisation check
-        var companyId = getCompany(request.content.companyNumber)._id;
-        var subject = getUserByUsername(request.content.subjectUserName);
-        var isMe = (subject._id === actor._id);
-
         var subjectStatus = getStatus(subject._id, companyId).status;
         var callerStatus = getStatus(actor._id, companyId).status;
         var newStatus = AuthorisationStatus.PENDING;
@@ -634,22 +700,14 @@
             };
         }
 
-        var companyData = getCompany(request.content.companyNumber);
-        if (!companyData) {
-            return {
-                success: false,
-                message: "The company with number " + request.content.companyNumber + " could not be found."
-            };
-        }
-
-        if (companyData.authCode == null) {
+        if (company.authCode == null) {
             return {
                 success: false,
                 message: "No auth code associated with company " + request.content.companyNumber
             };
         }
 
-        if (companyData.status !== "active") {
+        if (company.status !== "active") {
             return {
                 success: false,
                 message: "The company " + request.content.companyNumber + " is not active."
@@ -663,7 +721,7 @@
                 userName: actor.userName,
                 fullName: actor.givenName
             },
-            company: companyData
+            company: company
         };
     }
     else if (request.action === RequestAction.RESPOND_INVITE) {
@@ -687,10 +745,6 @@
         }
 
         // Authorisation check
-        var companyId = getCompany(request.content.companyNumber)._id;
-        var subject = getUserById(request.content.subjectId);
-        var isMe = (subject._id === actor._id);
-
         var subjectStatus = getStatus(subject._id, companyId).status;
         var callerStatus = getStatus(actor._id, companyId).status;
 
@@ -787,10 +841,70 @@
             }
         }
     }
+    else if (request.action === RequestAction.REMOVE_AUTHORISED_USER) {
+        log("Request to remove an authorised user from a company");
+
+        if (!request.content.subjectId || !request.content.companyNumber) {
+            log("Invalid parameters - Expected: subjectId, companyNumber");
+            throw {
+                code: 400,
+                message: "Invalid Parameters - Expected: subjectId, companyNumber"
+            };
+        }
+
+        // Authorisation check
+        var subjectStatus = getStatus(subject._id, companyId).status;
+        var subjectInviterId = getStatus(subject._id, companyId).inviterId;
+        var callerStatus = getStatus(actor._id, companyId).status;
+        var newStatus = AuthorisationStatus.CONFIRMED;
+
+        var statusChangeAllowedResult = allowUserRemoval(callerStatus, actor._id, subjectStatus, subjectInviterId, isCallerAdminUser, isMe);
+        if (!statusChangeAllowedResult.allowed) {
+            log("Blocked user removal performed by user " + actor._id);
+            throw {
+                code: 403,
+                message: "user removal denied",
+                detail: {
+                    reason: statusChangeAllowedResult.message
+                }
+            };
+        }
+
+        var deleteRelationshipResult = deleteRelationship(subject._id, companyId);
+        if (!deleteRelationshipResult || !deleteRelationshipResult.success) {
+            throw {
+                code: 400,
+                message: "An error occurred while deleting the relationship",
+                detail: {
+                    reason: deleteRelationshipResult.message
+                }
+            };
+        }
+
+        return {
+            success: deleteRelationshipResult.success,
+            caller: {
+                id: actor._id,
+                userName: actor.userName,
+                fullName: actor.givenName
+            },
+            subject: {
+                id: subject._id,
+                userName: subject.userName,
+                fullName: subject.givenName
+            },
+            company: {
+                id: companyId,
+                number: request.content.companyNumber,
+                status: AuthorisationStatus.NONE,
+                previousStatus: AuthorisationStatus.CONFIRMED
+            }
+        };
+    }
     else {
         throw {
             code: 400,
-            message: "Unknown action " + request.action
+            message: "Unknown action: " + request.action
         };
     }
 })();

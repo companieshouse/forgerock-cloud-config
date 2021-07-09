@@ -51,7 +51,7 @@ function getCounterValue(userId, accessToken) {
         var counter = userResponse.frUnindexedInteger1;
         return counter || 0;
     } else {
-        logger.error("[UPDATE SOFT LOCK COUNTER] Erro while getting counter value: " + response.getStatus().getCode())
+        logger.error("[UPDATE SOFT LOCK COUNTER] Error while getting counter value: " + response.getStatus().getCode())
         return false;
     }
 }
@@ -137,7 +137,7 @@ if (errorMessage.equals("Enter a correct username and password.")) {
 
     var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
     if (accessToken == null) {
-        logger.error("[UPDATE SOFT LOCK COUNTER] Access token not in shared state")
+        logger.error("[UPDATE SOFT LOCK COUNTER] Access token not in transient state")
         action = fr.Action.goTo(NodeOutcome.ERROR).build();
     }
 

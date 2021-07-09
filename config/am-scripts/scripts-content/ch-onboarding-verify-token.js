@@ -128,7 +128,7 @@ function isUserInvitedForCompany(userEmail, companyNo) {
   }
 
   var requestBodyJson = {
-    "userName": userEmail,
+    "subjectUserName": userEmail,
     "companyNumber": companyNo
   };
 
