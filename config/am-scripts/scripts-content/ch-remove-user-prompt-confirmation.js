@@ -255,7 +255,7 @@ try {
             if (!userResponse.success) {
                 raiseError(userResponse.message, "USER_NOT_FOUND");
             } else if (!companyLookupResponse.success) {
-                raiseError(companyLookupResponse.message, "COMPANY_NOT_FOUND");
+                raiseError(companyLookupResponse.message, " ");
             } else {
                 sharedState.put("companyData", JSON.stringify(companyLookupResponse.company));
                 sharedState.put("userToRemove", JSON.stringify(userResponse.user));
@@ -275,6 +275,8 @@ try {
                         new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "Do you want to cancel?"),
                         confirmRemoveCallback,
                         new fr.HiddenValueCallback("stage", "REMOVE_USER_CONFIRM"),
+                        new fr.HiddenValueCallback("userDisplayName", userDisplayName),
+                        new fr.HiddenValueCallback("company", JSON.stringify(companyLookupResponse.company)),
                         new fr.HiddenValueCallback("pagePropsJSON", errorProps)
                     ).build();
                 } else {
@@ -285,7 +287,9 @@ try {
                         confirmInfoReadCallback,
                         new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "Do you want to cancel?"),
                         confirmRemoveCallback,
-                        new fr.HiddenValueCallback("stage", "REMOVE_USER_CONFIRM")
+                        new fr.HiddenValueCallback("stage", "REMOVE_USER_CONFIRM"),
+                        new fr.HiddenValueCallback("userDisplayName", userDisplayName),
+                        new fr.HiddenValueCallback("company", JSON.stringify(companyLookupResponse.company))
                     ).build();
                 }
             }
