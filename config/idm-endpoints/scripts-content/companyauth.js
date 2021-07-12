@@ -31,7 +31,8 @@
         INVITE_USER_BY_USERID: "inviteUserByUserId",
         GET_COMPANY: "getCompanyByNumber",
         RESPOND_INVITE: "respondToInvite",
-        REMOVE_AUTHORISED_USER: "removeAuthorisedUser"
+        REMOVE_AUTHORISED_USER: "removeAuthorisedUser",
+        ADD_AUTHORISED_USER: "addAuthorisedUser"
         // GET_COMPANIES: "getCompanies",
         // GET_USER: "getUser",
         // GET_COMPANY: "getCompany"
@@ -128,6 +129,53 @@
         };
     }
 
+    // adds a CONFIRMED relationship between the provided user and company, and replaces it if there's one in PENDING status already
+    function addConfirmedRelationshipToCompany(subjectId, companyId) {
+
+        var currentStatusResponse = getStatus(subjectId, companyId);
+
+        //if the user has a pending relationship with the company, remove it
+        if (currentStatusResponse.status === AuthorisationStatus.PENDING) {
+            log("The user has already a PENDING relationship with the company ");
+            var deleteResponse = deleteRelationship(subjectId, companyId);
+            if (!deleteResponse.success) {
+                return {
+                    success: false
+                }
+            }
+        }
+
+        var payload = [
+            {
+                operation: "add",
+                field: "/memberOfOrg/-",
+                value: {
+                    _ref: "managed/alpha_organization/" + companyId,
+                    _refProperties: {
+                        membershipStatus: AuthorisationStatus.CONFIRMED,
+                        inviterId: null,
+                        inviteTimestamp: null
+                    }
+                }
+            }
+        ];
+
+        var newObject = openidm.patch("managed/" + OBJECT_USER + "/" + subjectId,
+            null,
+            payload);
+
+        if (JSON.stringify(newObject.memberOfOrgIDs).indexOf(companyId) > -1) {
+            return {
+                success: true
+            };
+        }
+
+        return {
+            success: false,
+            message: "The relationship with company " + companyId + " could not be added to the user"
+        }
+    }
+
     // Update status for user vs. company
     function setStatus(callerId, subjectId, companyId, newStatus) {
 
@@ -185,7 +233,7 @@
         // log("Looking up user " + username);
         var response = openidm.query("managed/" + OBJECT_USER,
             { "_queryFilter": "/userName eq \"" + username + "\"" },
-            ["_id", "userName", "givenName"]);
+            ["_id", "userName", "givenName", "roles", "authzRoles", "memberOfOrg", "memberOfOrgIDs"]);
 
         if (response.resultCount !== 1) {
             log("getUserByUsername: Bad result count: " + response.resultCount);
@@ -200,7 +248,7 @@
         // log("Looking up user " + userId);
         var response = openidm.query("managed/" + OBJECT_USER,
             { "_queryFilter": "/_id eq \"" + userId + "\"" },
-            ["_id", "userName", "givenName", "roles", "authzRoles"]);
+            ["_id", "userName", "givenName", "roles", "authzRoles", "memberOfOrg", "memberOfOrgIDs"]);
 
         if (response.resultCount !== 1) {
             log("getUserById: Bad result count: " + response.resultCount);
@@ -310,8 +358,9 @@
             };
         }
 
-        // if caller is the creator of the subject invite, and the current subject status is PENDING, allow the removal
+        // if caller is authroised for company AND the creator of the subject invite, and the current subject status is PENDING, allow the removal
         if (subjectStatus === AuthorisationStatus.PENDING &&
+            callerStatus === AuthorisationStatus.CONFIRMED &&
             callerId === subjectInviterId) {
             log("Caller is creator of the subject invite - changing from 'PENDING' to 'NONE' allowed");
             return {
@@ -322,6 +371,25 @@
         // for any other combination, deny the request
         return {
             message: "Possible failure reasons: Caller is not authorised for the company, subject is invited and caller is not the inviter, caller is not an admin user.",
+            allowed: false
+        };
+    }
+
+    // Authorisation logic to allow a user (caller) to add an authorised/invited to a Company: only possible if the user has an auth code
+    function allowUserAdd(callerStatus, subjectStatus, isCallerAdminUser) {
+        log("ADD USER AUTHZ CHECK: callerStatus " + callerStatus + ", subjectStatus " + subjectStatus + ", isAdminUser " + isCallerAdminUser);
+
+        // if the caller is an admin and the subject is CONFIRMED, allow the removal
+        if (isCallerAdminUser) {
+            log("Caller is admin - changing from '" + subjectStatus + "' to 'CONFIRMED' allowed");
+            return {
+                allowed: true
+            };
+        }
+
+        // for any other combination, deny the request
+        return {
+            message: "Possible failure reasons: Caller is not an admin user.",
             allowed: false
         };
     }
@@ -480,7 +548,7 @@
         log("User found: " + subject);
     }
 
-    if(subject && actor){
+    if (subject && actor) {
         isMe = (subject._id === actor._id);
     }
 
@@ -900,6 +968,60 @@
                 previousStatus: AuthorisationStatus.CONFIRMED
             }
         };
+    } else if (request.action === RequestAction.ADD_AUTHORISED_USER) {
+        log("Request to add an authorised to a company");
+
+        if (!request.content.subjectId || !request.content.companyNumber) {
+            log("Invalid parameters - Expected: subjectId, companyNumber");
+            throw {
+                code: 400,
+                message: "Invalid Parameters - Expected: subjectId, companyNumber"
+            };
+        }
+
+        var statusChangeAllowedResult = allowUserAdd(callerStatus, subjectStatus, isCallerAdminUser);
+        if (!statusChangeAllowedResult.allowed) {
+            log("Blocked user adding performed by user " + actor._id);
+            throw {
+                code: 403,
+                message: "user add denied",
+                detail: {
+                    reason: statusChangeAllowedResult.message
+                }
+            };
+        }
+
+        var addRelationshipResult = addConfirmedRelationshipToCompany(subject._id, companyId);
+        if (!addRelationshipResult || !addRelationshipResult.success) {
+            throw {
+                code: 400,
+                message: "An error occurred while adding the relationship",
+                detail: {
+                    reason: addRelationshipResult.message
+                }
+            };
+        }
+
+        return {
+            success: addRelationshipResult.success,
+            caller: {
+                id: actor._id,
+                userName: actor.userName,
+                fullName: actor.givenName
+            },
+            subject: {
+                id: subject._id,
+                userName: subject.userName,
+                fullName: subject.givenName
+            },
+            company: {
+                id: companyId,
+                number: request.content.companyNumber,
+                status: AuthorisationStatus.CONFIRMED,
+                previousStatus: subjectStatus 
+            }
+        };
+
     }
     else {
         throw {
