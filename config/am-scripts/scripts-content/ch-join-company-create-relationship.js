@@ -183,7 +183,7 @@ try {
     }
 
     if (checkUserAlreadyAuthzForCompany(userId, JSON.parse(companyData))) {
-        logger.error("[ADD RELATIONSHIP] The user is already authroised (CONFIRMED) for company " + JSON.parse(companyData).name);
+        logger.error("[ADD RELATIONSHIP] The user is already authorised (CONFIRMED) for company " + JSON.parse(companyData).name);
         // sharedState.put("errorMessage", "The company " + JSON.parse(companyData).name + " is already associated with the user.");
         // sharedState.put("pagePropsJSON", JSON.stringify(
         //     {
