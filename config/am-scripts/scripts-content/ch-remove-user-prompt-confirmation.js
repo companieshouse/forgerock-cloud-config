@@ -28,7 +28,8 @@ var fr = JavaImporter(
     javax.security.auth.callback.NameCallback,
     javax.security.auth.callback.TextOutputCallback,
     com.sun.identity.authentication.callbacks.HiddenValueCallback,
-    javax.security.auth.callback.ConfirmationCallback
+    javax.security.auth.callback.ConfirmationCallback,
+    org.forgerock.openam.authentication.callbacks.BooleanAttributeInputCallback
 )
 
 var NodeOutcome = {
@@ -269,9 +270,7 @@ try {
                     infoMessage = errorMessage.concat(" Please confirm you have read the information.");
                     action = fr.Action.send(
                         new fr.TextOutputCallback(level, infoMessage),
-                        new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "I confirm that I have read and understood this information."),
-                        //confirmInfoReadCallback,
-                        confirmInfoReadCallback,
+                        new fr.BooleanAttributeInputCallback("agreement", "I confirm that I have read and understood this information.", false, true),
                         new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "Do you want to cancel?"),
                         confirmRemoveCallback,
                         new fr.HiddenValueCallback("stage", "REMOVE_USER_CONFIRM"),
@@ -282,9 +281,7 @@ try {
                 } else {
                     action = fr.Action.send(
                         new fr.TextOutputCallback(level, infoMessage),
-                        new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "I confirm that I have read and understood this information."),
-                        //confirmInfoReadCallback,
-                        confirmInfoReadCallback,
+                        new fr.BooleanAttributeInputCallback("agreement", "I confirm that I have read and understood this information.", false, true),
                         new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "Do you want to cancel?"),
                         confirmRemoveCallback,
                         new fr.HiddenValueCallback("stage", "REMOVE_USER_CONFIRM"),
@@ -296,14 +293,14 @@ try {
         } else {
             var userToRemove = sharedState.get("userToRemove");
 
-            var confirmReadIndex = callbacks.get(2).getName();
-            logger.error("[REMOVE AUTHZ USER] confirm read: " + confirmReadIndex);
+            var confirmRead = callbacks.get(1).getValue().toString() == "true";
+            logger.error("[REMOVE AUTHZ USER] confirm read: " + confirmRead);
 
-            var confirmRemoveIndex = callbacks.get(4).getSelectedIndex();
+            var confirmRemoveIndex = callbacks.get(3).getSelectedIndex();
             logger.error("[REMOVE AUTHZ USER] confirm remove: " + confirmRemoveIndex);
 
             if (confirmRemoveIndex === ConfirmRemoveIndex.SUBMIT) {
-                if (!confirmReadIndex || confirmReadIndex === ConfirmReadIndex.NO) {
+                if (!confirmRead) {
                     sharedState.put("errorMessage", "You need to read the info before proceeding.");
                     sharedState.put("pagePropsJSON", JSON.stringify(
                         {
