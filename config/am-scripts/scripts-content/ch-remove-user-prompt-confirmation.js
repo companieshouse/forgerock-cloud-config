@@ -28,7 +28,8 @@ var fr = JavaImporter(
     javax.security.auth.callback.NameCallback,
     javax.security.auth.callback.TextOutputCallback,
     com.sun.identity.authentication.callbacks.HiddenValueCallback,
-    javax.security.auth.callback.ConfirmationCallback
+    javax.security.auth.callback.ConfirmationCallback,
+    org.forgerock.openam.authentication.callbacks.BooleanAttributeInputCallback
 )
 
 var NodeOutcome = {
@@ -73,11 +74,6 @@ function debug(message) {
         )
     ).build()
 }
-
-var confirmInfoReadCallback = new fr.NameCallback(
-    "Choice (YES/NO)",
-    ConfirmReadIndex.NO
-);
 
 var confirmRemoveCallback = new fr.ConfirmationCallback(
     "Do you want to cancel?",
@@ -255,7 +251,7 @@ try {
             if (!userResponse.success) {
                 raiseError(userResponse.message, "USER_NOT_FOUND");
             } else if (!companyLookupResponse.success) {
-                raiseError(companyLookupResponse.message, "COMPANY_NOT_FOUND");
+                raiseError(companyLookupResponse.message, " ");
             } else {
                 sharedState.put("companyData", JSON.stringify(companyLookupResponse.company));
                 sharedState.put("userToRemove", JSON.stringify(userResponse.user));
@@ -267,47 +263,51 @@ try {
                     var errorProps = sharedState.get("pagePropsJSON");
                     level = fr.TextOutputCallback.ERROR;
                     infoMessage = errorMessage.concat(" Please confirm you have read the information.");
+                    var newJSONProps = JSON.parse(errorProps);     
+                    newJSONProps.company = companyLookupResponse.company;
+                    newJSONProps.userDisplayName = userDisplayName;
                     action = fr.Action.send(
                         new fr.TextOutputCallback(level, infoMessage),
-                        new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "I confirm that I have read and understood this information."),
-                        //confirmInfoReadCallback,
-                        confirmInfoReadCallback,
+                        new fr.BooleanAttributeInputCallback("agreement", "I confirm that I have read and understood this information.", false, true),
                         new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "Do you want to cancel?"),
                         confirmRemoveCallback,
                         new fr.HiddenValueCallback("stage", "REMOVE_USER_CONFIRM"),
-                        new fr.HiddenValueCallback("pagePropsJSON", errorProps)
+                        new fr.HiddenValueCallback("pagePropsJSON", JSON.stringify(newJSONProps))
                     ).build();
                 } else {
+                    var newJSONProps = {
+                        "company": companyLookupResponse.company,
+                        "userDisplayName": userDisplayName
+                    }
                     action = fr.Action.send(
                         new fr.TextOutputCallback(level, infoMessage),
-                        new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "I confirm that I have read and understood this information."),
-                        //confirmInfoReadCallback,
-                        confirmInfoReadCallback,
+                        new fr.BooleanAttributeInputCallback("agreement", "I confirm that I have read and understood this information.", false, true),
                         new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "Do you want to cancel?"),
                         confirmRemoveCallback,
-                        new fr.HiddenValueCallback("stage", "REMOVE_USER_CONFIRM")
+                        new fr.HiddenValueCallback("stage", "REMOVE_USER_CONFIRM"),
+                        new fr.HiddenValueCallback("pagePropsJSON", JSON.stringify(newJSONProps))
                     ).build();
                 }
             }
         } else {
             var userToRemove = sharedState.get("userToRemove");
 
-            var confirmReadIndex = callbacks.get(2).getName();
-            logger.error("[REMOVE AUTHZ USER] confirm read: " + confirmReadIndex);
+            var confirmRead = callbacks.get(1).getValue().toString() == "true";
+            logger.error("[REMOVE AUTHZ USER] confirm read: " + confirmRead);
 
-            var confirmRemoveIndex = callbacks.get(4).getSelectedIndex();
+            var confirmRemoveIndex = callbacks.get(3).getSelectedIndex();
             logger.error("[REMOVE AUTHZ USER] confirm remove: " + confirmRemoveIndex);
 
             if (confirmRemoveIndex === ConfirmRemoveIndex.SUBMIT) {
-                if (!confirmReadIndex || confirmReadIndex === ConfirmReadIndex.NO) {
+                if (!confirmRead) {
                     sharedState.put("errorMessage", "You need to read the info before proceeding.");
                     sharedState.put("pagePropsJSON", JSON.stringify(
                         {
                             'errors': [{
                                 label: "You need to read the info before proceeding.",
                                 token: "MISSING_CONFIRM_READ_ERROR",
-                                fieldName: "IDToken3",
-                                anchor: "IDToken3"
+                                fieldName: "IDToken2",
+                                anchor: "IDToken2"
                             }]
                         }));
                     action = fr.Action.goTo(NodeOutcome.MISSING_CONFIRM).build();

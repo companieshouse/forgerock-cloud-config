@@ -39,6 +39,12 @@ var NodeOutcome = {
     OTHER_COMPANY: "other"
 }
 
+var jurisdictions = {
+    EW: "EW", 
+    SC: "SC", 
+    NI: "NI"
+};
+
 function logResponse(response) {
     logger.error("[FETCH COMPANY] Scripted Node HTTP Response: " + response.getStatus() + ", Body: " + response.getEntity().getString());
 }
@@ -62,12 +68,19 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
         return false;
     }
 
+    var jurisdiction = sharedState.get("jurisdiction");
     var request = new org.forgerock.http.protocol.Request();
+
     request.setMethod('GET');
+
+    if (isEWF && jurisdiction.equals(jurisdictions.SC) && companyNumber.indexOf("SC") !== 0) {
+        logger.error("[FETCH COMPANY] looking for SC company without 'SC' prefix - adding it");
+        companyNumber = "SC".concat(companyNumber);
+    }
+
     //if in EWF journey, we need to add the jurisdiction to the query criteria
     var searchTerm = "?_queryFilter=number+eq+%22" + companyNumber + "%22";
-    if (isEWF) {
-        var jurisdiction = sharedState.get("jurisdiction");
+    if (isEWF) {        
         searchTerm = searchTerm.concat("+and+jurisdiction+eq+%22" + jurisdiction + "%22");
     }
     
@@ -223,7 +236,6 @@ try {
                 var companyNumber = sharedState.get("companyNumber");
                 //fetchCompany can only result in callbacks, does not transition anywhere
                 if (!fetchCompany(accessToken, companyNumber, skipConfirmation)) {
-                    logger.error("[FETCH COMPANY] error while fetching company")
                     outcome = NodeOutcome.FALSE;
                 }
             }
@@ -238,10 +250,9 @@ try {
             var companyNumber = sharedState.get("companyNumber");
             //fetchCompany can only result in callbacks, does not transition anywhere
             if (!fetchCompany(accessToken, companyNumber, skipConfirmation)) {
-                logger.error("[FETCH COMPANY] error while fetching company")
                 outcome = NodeOutcome.FALSE;
             } else {
-                logger.error("[FETCH COMPANY] company fetched successfully")
+                logger.error("[FETCH COMPANY] company fetched successfully");
                 outcome = NodeOutcome.TRUE;
             }
         }
