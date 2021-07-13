@@ -82,7 +82,7 @@ try {
         outcome = NodeOutcome.ERROR;
     } else {
         if (companyMembership.company.status !== MembershipStatus.CONFIRMED) {
-            logger.error("[EWF - CHECK COMPANY MEMBERSHIP] User not associated with company! Current status" + companyMembership.company.status);           
+            logger.error("[EWF - CHECK COMPANY MEMBERSHIP] User not associated with company! Current status: " + companyMembership.company.status);           
             action = fr.Action.goTo(NodeOutcome.USER_NOT_ASSOCIATED)
                 .build();
         } else {
