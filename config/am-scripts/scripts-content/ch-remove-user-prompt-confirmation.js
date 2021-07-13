@@ -75,11 +75,6 @@ function debug(message) {
     ).build()
 }
 
-var confirmInfoReadCallback = new fr.NameCallback(
-    "Choice (YES/NO)",
-    ConfirmReadIndex.NO
-);
-
 var confirmRemoveCallback = new fr.ConfirmationCallback(
     "Do you want to cancel?",
     fr.ConfirmationCallback.INFORMATION,
@@ -268,25 +263,29 @@ try {
                     var errorProps = sharedState.get("pagePropsJSON");
                     level = fr.TextOutputCallback.ERROR;
                     infoMessage = errorMessage.concat(" Please confirm you have read the information.");
+                    var newJSONProps = JSON.parse(errorProps);     
+                    newJSONProps.company = companyLookupResponse.company;
+                    newJSONProps.userDisplayName = userDisplayName;
                     action = fr.Action.send(
                         new fr.TextOutputCallback(level, infoMessage),
                         new fr.BooleanAttributeInputCallback("agreement", "I confirm that I have read and understood this information.", false, true),
                         new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "Do you want to cancel?"),
                         confirmRemoveCallback,
                         new fr.HiddenValueCallback("stage", "REMOVE_USER_CONFIRM"),
-                        new fr.HiddenValueCallback("userDisplayName", userDisplayName),
-                        new fr.HiddenValueCallback("company", JSON.stringify(companyLookupResponse.company)),
-                        new fr.HiddenValueCallback("pagePropsJSON", errorProps)
+                        new fr.HiddenValueCallback("pagePropsJSON", JSON.stringify(newJSONProps))
                     ).build();
                 } else {
+                    var newJSONProps = {
+                        "company": companyLookupResponse.company,
+                        "userDisplayName": userDisplayName
+                    }
                     action = fr.Action.send(
                         new fr.TextOutputCallback(level, infoMessage),
                         new fr.BooleanAttributeInputCallback("agreement", "I confirm that I have read and understood this information.", false, true),
                         new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "Do you want to cancel?"),
                         confirmRemoveCallback,
                         new fr.HiddenValueCallback("stage", "REMOVE_USER_CONFIRM"),
-                        new fr.HiddenValueCallback("userDisplayName", userDisplayName),
-                        new fr.HiddenValueCallback("company", JSON.stringify(companyLookupResponse.company))
+                        new fr.HiddenValueCallback("pagePropsJSON", JSON.stringify(newJSONProps))
                     ).build();
                 }
             }
@@ -307,8 +306,8 @@ try {
                             'errors': [{
                                 label: "You need to read the info before proceeding.",
                                 token: "MISSING_CONFIRM_READ_ERROR",
-                                fieldName: "IDToken3",
-                                anchor: "IDToken3"
+                                fieldName: "IDToken2",
+                                anchor: "IDToken2"
                             }]
                         }));
                     action = fr.Action.goTo(NodeOutcome.MISSING_CONFIRM).build();
