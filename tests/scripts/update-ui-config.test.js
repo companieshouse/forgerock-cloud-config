@@ -51,6 +51,10 @@ describe('update-ui-config', () => {
           alpha_organization: {
             disableRelationshipSortAndSearch: true,
             minimumUIFilterLength: 5
+          },
+          alpha_user: {
+            disableRelationshipSortAndSearch: true,
+            minimumUIFilterLength: 3
           }
         }
       },
