@@ -11,6 +11,7 @@ const updateScripts = require('./update-scripts')
 const updateServices = require('./update-services')
 const updateTermsAndConditions = require('./update-terms-and-conditions')
 const updatePasswordPolicy = require('./update-password-policy')
+const updateUiConfig = require('./update-ui-config')
 const updateUserRoles = require('./update-user-roles')
 const updateIdmEndpoints = require('./update-idm-endpoints')
 const updateIdmAccessConfig = require('./update-idm-access-config')
@@ -29,6 +30,7 @@ module.exports = {
   updateServices,
   updateTermsAndConditions,
   updatePasswordPolicy,
+  updateUiConfig,
   updateUserRoles,
   updateIdmEndpoints,
   updateIdmAccessConfig
