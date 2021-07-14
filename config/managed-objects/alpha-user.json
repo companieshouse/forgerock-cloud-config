@@ -1079,11 +1079,11 @@
               ],
               "properties": {
                   "marketing": {
-                      "description": "Send me special offers and services",
+                      "description": "Emails about marketing, communication campaigns, or user research activities",
                       "type": "boolean"
                   },
                   "updates": {
-                      "description": "Send me news and updates",
+                      "description": "Emails to tell you about a new message in your account",
                       "type": "boolean"
                   }
               },

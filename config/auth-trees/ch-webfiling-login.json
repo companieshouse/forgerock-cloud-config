@@ -341,6 +341,13 @@
 				"outputs": ["*"],
 				"script": "19a9ba97-3eaf-46ed-9b59-ea9315d81407"
 			}
+		},
+		{
+			"_id": "46ecc3d3-5c8a-47bc-bcd0-2cc76e70748b",
+			"nodeType": "InnerTreeEvaluatorNode",
+			"details": {
+				"tree": "CHManageEmailConsent"
+			}
 		}
 	],
     "tree": {
@@ -396,7 +403,7 @@
 				"y": 172.5,
 				"connections": {
 					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+					"true": "46ecc3d3-5c8a-47bc-bcd0-2cc76e70748b"
 				},
 				"nodeType": "InnerTreeEvaluatorNode",
 				"displayName": "Inner Tree Evaluator"
@@ -610,6 +617,16 @@
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Store pwd in session"
+			},
+			"46ecc3d3-5c8a-47bc-bcd0-2cc76e70748b": {
+				"x": 3483,
+				"y": 296.015625,
+				"connections": {
+					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a"
+				},
+				"nodeType": "InnerTreeEvaluatorNode",
+				"displayName": "Email Consent"
 			}
 		},
 		"staticNodes": {

@@ -20,7 +20,7 @@
     - 'confirmed': the user has confirmed the removal
     - 'missing_confirm': the user has tried to confirm removal without acknowledging the information
     - 'cancel': the user has cancelled the operation
-    - 'error': an error has happened duing processing
+    - 'error': an error has happened during processing
 */
 
 var fr = JavaImporter(
