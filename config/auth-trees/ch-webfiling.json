@@ -186,6 +186,13 @@
 				"identifier": "userName",
 				"identityAttribute": "mail"
 			}
+		},
+		{
+			"_id": "22ba2520-ea77-4eb7-b9fb-6767cb98e54e",
+			"nodeType": "InnerTreeEvaluatorNode",
+			"details": {
+				"tree": "CHManageEmailConsent"
+			}
 		}
     ],
     "tree": {
@@ -283,7 +290,7 @@
 				"y": 398.015625,
 				"connections": {
 					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"true": "61877889-8233-4048-b76c-39f882081e40"
+					"true": "22ba2520-ea77-4eb7-b9fb-6767cb98e54e"
 				},
 				"nodeType": "InnerTreeEvaluatorNode",
 				"displayName": "Complete Profile"
@@ -392,6 +399,16 @@
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Add to Session"
+			},
+			"22ba2520-ea77-4eb7-b9fb-6767cb98e54e": {
+				"x": 576,
+				"y": 529.015625,
+				"connections": {
+					"true": "61877889-8233-4048-b76c-39f882081e40",
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a"
+				},
+				"nodeType": "InnerTreeEvaluatorNode",
+				"displayName": "Email Consent"
 			}
 		},
 		"staticNodes": {
