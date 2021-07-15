@@ -22,7 +22,8 @@ try {
                             label: otpError,
                             token: "OTP_NOT_VALID",
                             fieldName: "IDToken3",
-                            anchor: "IDToken3" }],
+                            anchor: "IDToken3" 
+                        }],
                           "phoneNumber": phoneNumber
                         })
                 ),
