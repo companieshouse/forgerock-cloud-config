@@ -11,6 +11,14 @@
          }            
      },
      {
+         "_id": "9880816b-cedd-441c-a560-adc524aaa29b",
+         "nodeType": "SessionDataNode", 
+         "details": {
+            "sharedStateKey":"userName",
+            "sessionDataKey":"UserToken"
+         }				
+     },
+     {
          "_id": "43fcdfa0-6f75-466d-befa-a052a1b08c72",
          "nodeType": "IdentifyExistingUserNode", 
          "details": {
@@ -93,7 +101,7 @@
       "description": "Allows the user to set the consent preferences for the first time, or to change the consent preferences after they have been set.",
       "identityResource": "managed/alpha_user",
       "uiConfig": {},
-      "entryNodeId": "3dab574a-7f56-4904-923e-c65aefde466b",
+      "entryNodeId": "43fcdfa0-6f75-466d-befa-a052a1b08c72",
       "nodes": {
          "b1b8380b-c22f-4254-8fb3-b082886ff615": {
             "x": 640,
@@ -136,11 +144,11 @@
             "displayName": "Attribute Value Decision"
          },
          "3dab574a-7f56-4904-923e-c65aefde466b": {
-            "x": 259,
-            "y": 53.015625,
+            "x": 36,
+            "y": 340.015625,
             "connections": {
                "noSession": "e301438c-0bd0-429c-ab0c-66126501069a",
-               "hasSession": "43fcdfa0-6f75-466d-befa-a052a1b08c72"
+               "hasSession": "9880816b-cedd-441c-a560-adc524aaa29b"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "check session"
@@ -156,8 +164,8 @@
             "displayName": "Patch Object"
          },
          "43fcdfa0-6f75-466d-befa-a052a1b08c72": {
-            "x": 354,
-            "y": 260.015625,
+            "x": 349,
+            "y": 67.015625,
             "connections": {
                "false": "e301438c-0bd0-429c-ab0c-66126501069a",
                "true": "d1144353-a389-49c2-8b1f-3e530bed1aba"
@@ -184,6 +192,15 @@
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "get IDM token"
+         },
+         "9880816b-cedd-441c-a560-adc524aaa29b": {
+            "x": 156,
+            "y": 228.015625,
+            "connections": {
+               "outcome": "43fcdfa0-6f75-466d-befa-a052a1b08c72"
+            },
+            "nodeType": "SessionDataNode",
+            "displayName": "Get Session Data"
          }
       },
       "staticNodes": {
