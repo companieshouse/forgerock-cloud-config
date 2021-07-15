@@ -15,6 +15,7 @@ const {
   updateServices,
   updateTermsAndConditions,
   updatePasswordPolicy,
+  updateUiConfig,
   updateUserRoles,
   updateIdmEndpoints,
   updateIdmAccessConfig
@@ -173,6 +174,18 @@ yargs
       'realm'
     ]),
     handler: (argv) => updatePasswordPolicy(argv)
+  })
+  .command({
+    command: 'ui-config',
+    desc: 'Update UI config (./config/ui/ui-config.json)',
+    builder: cliOptions([
+      'idmUsername',
+      'idmPassword',
+      'adminClientId',
+      'adminClientSecret',
+      'realm'
+    ]),
+    handler: (argv) => updateUiConfig(argv)
   })
   .command({
     command: 'user-roles',

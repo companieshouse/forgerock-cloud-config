@@ -1237,6 +1237,38 @@
                 "lastModifiedDate":1617810491969
              },
             "filename": "ch-webfiling-update-profile.js"
+        },
+        {
+            "payload": {
+                "_id":"5000bb7b-29da-4bf4-a2cf-6f028d32a4d9",
+                "name":"CH - Remove User - Prompt for confirmation",
+                "description":"Prompts the user to confirm user removal from a company",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-remove-user-prompt-confirmation.js"
+        },
+        {
+            "payload": {
+                "_id":"a221047b-706f-48f9-8d39-3fcd518543aa",
+                "name":"CH - Remove User - Send Notification email to removed user",
+                "description":"Send Notification email to removed user",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-remove-user-send-email.js"
         }
     ]
 }
