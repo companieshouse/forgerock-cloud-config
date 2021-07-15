@@ -272,8 +272,8 @@
 				"x": 810,
 				"y": 147.015625,
 				"connections": {
-					"true": "9e1930dd-6045-417c-9286-d2083f454f01",
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a"
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "9e1930dd-6045-417c-9286-d2083f454f01"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Prompt for Company No"
