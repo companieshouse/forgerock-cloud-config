@@ -184,17 +184,17 @@ try {
 
     if (checkUserAlreadyAuthzForCompany(userId, JSON.parse(companyData))) {
         logger.error("[ADD RELATIONSHIP] The user is already authorised (CONFIRMED) for company " + JSON.parse(companyData).name);
-        // sharedState.put("errorMessage", "The company " + JSON.parse(companyData).name + " is already associated with the user.");
-        // sharedState.put("pagePropsJSON", JSON.stringify(
-        //     {
-        //         'errors': [{
-        //             label: "The company " + JSON.parse(companyData).name + " is already associated with this user",
-        //             token: "COMPANY_ALREADY_ASSOCIATED",
-        //             fieldName: "IDToken2",
-        //             anchor: "IDToken2"
-        //         }],
-        //         'company': JSON.parse(companyData)
-        //     }));
+        sharedState.put("errorMessage", "The company " + JSON.parse(companyData).name + " is already associated with the user.");
+        sharedState.put("pagePropsJSON", JSON.stringify(
+            {
+                'errors': [{
+                    label: "The company " + JSON.parse(companyData).name + " is already associated with this user",
+                    token: "COMPANY_ALREADY_ASSOCIATED",
+                    fieldName: "IDToken2",
+                    anchor: "IDToken2"
+                }],
+                'company': JSON.parse(companyData)
+            }));
         action = fr.Action.goTo(NodeOutcome.COMPANY_ALREADY_ASSOCIATED)
             .putSessionProperty("language", language.toLowerCase())
             .build();
