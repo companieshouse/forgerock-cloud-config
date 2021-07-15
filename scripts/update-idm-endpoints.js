@@ -48,6 +48,38 @@ const updateScripts = async (argv) => {
         return Promise.resolve()
       })
     )
+
+    // Update each task
+    await Promise.all(
+      scriptFileContent.map(async (scriptFile) => {
+        await Promise.all(
+          scriptFile.tasks.map(async (task) => {
+            fs.readFile(`${dir}/scripts-content/${task.scriptFileName}`, 'utf8', async (err, data) => {
+              if (err) {
+                return console.log(err)
+              }
+              const body = {
+                type: 'text/javascript',
+                source: data
+                  .split('\n')
+                  .map((line) => {
+                    if (line.trim().startsWith('//')) {
+                      return ''
+                    }
+                    return line.trim()
+                  })
+                  .join(' ')
+              }
+              console.log(`IDM task code: ${JSON.stringify(body)}`)
+              // const requestUrl = `${FIDC_URL}/openidm/scheduler/job/${task.endpointName}Task`
+              // await fidcRequest(requestUrl, body, accessToken)
+              // console.log(`IDM endpoint updated: ${task.endpointName}`)
+            })
+          })
+        )
+        return Promise.resolve()
+      })
+    )
   } catch (error) {
     console.error(error.message)
     process.exit(1)

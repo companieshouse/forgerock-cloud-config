@@ -3,10 +3,12 @@
         {
             "endpointName": "companyauth",
             "scriptFileName": "companyauth.js"
-        },
+        }
+    ],
+    "tasks": [
         {
-            "endpointName": "echo",
-            "scriptFileName": "echo.js"
+            "taskName": "sunset",
+            "scriptFileName": "sunset.js"
         }
     ]
 }
