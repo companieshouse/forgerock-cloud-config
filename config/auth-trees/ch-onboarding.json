@@ -93,6 +93,13 @@
 			"details": {
 				"tree": "CHWebFiling-CompleteProfile"
 			}
+		},
+		{
+			"_id": "d1803b3d-6de4-4644-818b-3fd39819a6a9",
+			"nodeType": "InnerTreeEvaluatorNode",
+			"details": {
+				"tree": "CHManageEmailConsent"
+			}
 		}
 	],
 	"tree": {
@@ -190,14 +197,24 @@
 				"displayName": "Retry Limit Decision"
 			},
 			"90fbab28-de9f-4d6b-9cc6-6519e26fef7f": {
-				"x": 1746,
-				"y": 391.015625,
+				"x": 1581,
+				"y": 379.015625,
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "d1803b3d-6de4-4644-818b-3fd39819a6a9"
+				},
+				"nodeType": "InnerTreeEvaluatorNode",
+				"displayName": "Inner Tree Evaluator"
+			},
+			"d1803b3d-6de4-4644-818b-3fd39819a6a9": {
+				"x": 1808,
+				"y": 375.015625,
 				"connections": {
 					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
 					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
 				},
 				"nodeType": "InnerTreeEvaluatorNode",
-				"displayName": "Inner Tree Evaluator"
+				"displayName": "Email consent"
 			}
 		},
 		"staticNodes": {
@@ -206,8 +223,8 @@
 				"y": 103
 			},
 			"70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
-				"x": 1867,
-				"y": 257
+				"x": 2049,
+				"y": 197
 			},
 			"e301438c-0bd0-429c-ab0c-66126501069a": {
 				"x": 917,

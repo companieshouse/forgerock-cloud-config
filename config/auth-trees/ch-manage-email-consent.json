@@ -1,0 +1,221 @@
+{
+    "nodes": [
+      {
+         "_id": "3dab574a-7f56-4904-923e-c65aefde466b",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes":["hasSession","noSession"],
+             "outputs":["*"],
+             "script":"c4001e02-469c-4cc4-bf95-9f43d7e46568"
+         }            
+     },
+     {
+         "_id": "9880816b-cedd-441c-a560-adc524aaa29b",
+         "nodeType": "SessionDataNode", 
+         "details": {
+            "sharedStateKey":"userName",
+            "sessionDataKey":"UserToken"
+         }				
+     },
+     {
+         "_id": "43fcdfa0-6f75-466d-befa-a052a1b08c72",
+         "nodeType": "IdentifyExistingUserNode", 
+         "details": {
+            "identifier":"userName",
+            "identityAttribute":"mail"
+         }
+      },    
+      {
+         "_id": "d1144353-a389-49c2-8b1f-3e530bed1aba",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes": ["success", "error"],
+            "outputs":["*"],
+            "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149"
+         }            
+      },
+      {
+         "_id": "3b8927aa-d5c0-4cde-965b-f51c54b81f71",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes": ["collect_consent", "cancel", "error"],
+            "outputs":["*"],
+            "script": "bdfa0ec4-ad50-484f-9732-77c789a900cb"
+         }            
+      },
+      {
+         "_id": "883923db-1b96-41ce-bf3a-aa5d369a9ab4",
+         "nodeType": "AttributeValueDecisionNode", 
+         "details": {
+            "comparisonOperation": "PRESENT",
+	         "identityAttribute": "userName",
+	         "comparisonAttribute": "preferences"
+         }            
+      },
+      {
+         "_id":"2bcba502-62a9-4178-afc8-ce59c6d8201f",
+         "nodeType": "PageNode",
+         "details": {
+             "stage":"EMAIL_CONSENT",
+             "nodes":[
+                 {
+                     "_id":"cb1714aa-6593-4d9d-9873-256db95c71cf",
+                     "nodeType":"AttributeCollectorNode",
+                     "displayName":"Email consent"
+                 }
+             ],
+             "pageDescription":{
+                 "en": "Please enter your email preferences"
+             },
+             "pageHeader":{
+                 "en": "Please enter your email preferences"
+             }
+         }
+     },
+     {
+         "_id":"cb1714aa-6593-4d9d-9873-256db95c71cf",
+         "nodeType": "AttributeCollectorNode",
+         "details": {
+            "attributesToCollect": ["preferences/updates", "preferences/marketing"],
+            "identityAttribute": "userName",
+            "required":false,
+            "validateInputs":false
+         }
+      },
+      {
+			"_id": "71724abd-9915-4f8b-b658-9ef2ba270322",
+			"nodeType": "PatchObjectNode", 
+			"details": {
+				"patchAsObject":false,
+				"ignoredFields": [],
+				"identityResource":"managed/alpha_user",
+				"identityAttribute":"userName"
+			}
+		}
+   ],
+   "tree": {
+      "_id": "CHManageEmailConsent",
+      "description": "Allows the user to set the consent preferences for the first time, or to change the consent preferences after they have been set.",
+      "identityResource": "managed/alpha_user",
+      "uiConfig": {},
+      "entryNodeId": "43fcdfa0-6f75-466d-befa-a052a1b08c72",
+      "nodes": {
+         "b1b8380b-c22f-4254-8fb3-b082886ff615": {
+            "x": 640,
+            "y": 607,
+            "connections": {
+               "false": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
+               "true": "2bcba502-62a9-4178-afc8-ce59c6d8201f"
+            },
+            "nodeType": "QueryFilterDecisionNode",
+            "displayName": "Query Filter Decision"
+         },
+         "2bcba502-62a9-4178-afc8-ce59c6d8201f": {
+            "x": 1085,
+            "y": 14,
+            "connections": {
+               "outcome": "71724abd-9915-4f8b-b658-9ef2ba270322"
+            },
+            "nodeType": "PageNode",
+            "displayName": "Show consent"
+         },
+         "3b8927aa-d5c0-4cde-965b-f51c54b81f71": {
+            "x": 631,
+            "y": 160.015625,
+            "connections": {
+               "collect_consent": "883923db-1b96-41ce-bf3a-aa5d369a9ab4",
+               "error": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "cancel": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Change Consent check"
+         },
+         "883923db-1b96-41ce-bf3a-aa5d369a9ab4": {
+            "x": 796.234375,
+            "y": 17.015625,
+            "connections": {
+               "false": "2bcba502-62a9-4178-afc8-ce59c6d8201f",
+               "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+            },
+            "nodeType": "AttributeValueDecisionNode",
+            "displayName": "Attribute Value Decision"
+         },
+         "3dab574a-7f56-4904-923e-c65aefde466b": {
+            "x": 36,
+            "y": 340.015625,
+            "connections": {
+               "noSession": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "hasSession": "9880816b-cedd-441c-a560-adc524aaa29b"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "check session"
+         },
+         "71724abd-9915-4f8b-b658-9ef2ba270322": {
+            "x": 1330,
+            "y": 28,
+            "connections": {
+               "FAILURE": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "PATCHED": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+            },
+            "nodeType": "PatchObjectNode",
+            "displayName": "Patch Object"
+         },
+         "43fcdfa0-6f75-466d-befa-a052a1b08c72": {
+            "x": 349,
+            "y": 67.015625,
+            "connections": {
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "true": "d1144353-a389-49c2-8b1f-3e530bed1aba"
+            },
+            "nodeType": "IdentifyExistingUserNode",
+            "displayName": "Identify Existing User"
+         },
+         "84f8355f-7f17-488f-9c17-f209ef1135ef": {
+            "x": 874,
+            "y": 596,
+            "connections": {
+               "false": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
+               "true": "2bcba502-62a9-4178-afc8-ce59c6d8201f"
+            },
+            "nodeType": "LoginCountDecisionNode",
+            "displayName": "Login Count Decision"
+         },
+         "d1144353-a389-49c2-8b1f-3e530bed1aba": {
+            "x": 407,
+            "y": 443.015625,
+            "connections": {
+               "success": "3b8927aa-d5c0-4cde-965b-f51c54b81f71",
+               "error": "e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "get IDM token"
+         },
+         "9880816b-cedd-441c-a560-adc524aaa29b": {
+            "x": 156,
+            "y": 228.015625,
+            "connections": {
+               "outcome": "43fcdfa0-6f75-466d-befa-a052a1b08c72"
+            },
+            "nodeType": "SessionDataNode",
+            "displayName": "Get Session Data"
+         }
+      },
+      "staticNodes": {
+         "startNode": {
+            "x": 50,
+            "y": 58.5
+         },
+         "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
+            "x": 1205,
+            "y": 330
+         },
+         "e301438c-0bd0-429c-ab0c-66126501069a": {
+            "x": 1640,
+            "y": 174
+         }
+      }
+   }
+}
