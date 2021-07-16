@@ -341,6 +341,20 @@
 				"outputs": ["*"],
 				"script": "19a9ba97-3eaf-46ed-9b59-ea9315d81407"
 			}
+		},
+		{
+			"_id": "318d16a5-37ca-4d58-a3ec-54a4699881e3",
+			"nodeType": "InnerTreeEvaluatorNode",
+			"details": {
+				"tree": "CHWebFiling-CompleteProfile"
+			}
+		},
+		{
+			"_id": "7f0f8fa9-357a-4139-b407-d9a0336faaa9",
+			"nodeType": "InnerTreeEvaluatorNode",
+			"details": {
+				"tree": "CHManageEmailConsent"
+			}
 		}
 	],
     "tree": {
@@ -392,11 +406,11 @@
 				"displayName": "Increment Login Count"
 			},
 			"31fa4b8d-9686-4bec-8db2-45d442533b22": {
-				"x": 3311,
-				"y": 172.5,
+				"x": 3033,
+				"y": 34.5,
 				"connections": {
 					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+					"true": "318d16a5-37ca-4d58-a3ec-54a4699881e3"
 				},
 				"nodeType": "InnerTreeEvaluatorNode",
 				"displayName": "Inner Tree Evaluator"
@@ -409,6 +423,15 @@
 				},
 				"nodeType": "OneTimePasswordGeneratorNode",
 				"displayName": "HOTP Generator"
+			},
+			"6129ae01-2f10-4e6a-ab4f-eba00524c6b0": {
+				"x": 1058,
+				"y": 554.015625,
+				"connections": {
+					"true": "0ac72f4f-039a-4843-a565-037fb0b8805d"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Store pwd in session"
 			},
 			"6170276a-52bc-4311-b479-b6cd4fc6c544": {
 				"x": 700,
@@ -602,14 +625,25 @@
 				"nodeType": "PageNode",
 				"displayName": "Login Form (EWF)"
 			},
-			"6129ae01-2f10-4e6a-ab4f-eba00524c6b0": {
-				"x": 1058,
-				"y": 554.015625,
+			"318d16a5-37ca-4d58-a3ec-54a4699881e3": {
+				"x": 3305,
+				"y": 54.015625,
 				"connections": {
-					"true": "0ac72f4f-039a-4843-a565-037fb0b8805d"
+					"true": "7f0f8fa9-357a-4139-b407-d9a0336faaa9",
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a"
 				},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Store pwd in session"
+				"nodeType": "InnerTreeEvaluatorNode",
+				"displayName": "Complete Profile"
+			},
+			"7f0f8fa9-357a-4139-b407-d9a0336faaa9": {
+				"x": 3406,
+				"y": 203.015625,
+				"connections": {
+					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a"
+				},
+				"nodeType": "InnerTreeEvaluatorNode",
+				"displayName": "Email Consent"
 			}
 		},
 		"staticNodes": {

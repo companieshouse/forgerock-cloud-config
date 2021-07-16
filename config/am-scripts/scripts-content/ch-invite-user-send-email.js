@@ -242,7 +242,7 @@ try {
     if (!inviteData) {
         sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ERROR", "An error has occurred! Please try again later.");
     } else {
-        var sendEmailResult = sendEmail(language, inviteData.invitedEmail, inviteData.companyName, inviteData.companyNumber, inviteData.inviterName)
+        var sendEmailResult = sendEmail(language, inviteData.invitedEmail, inviteData.companyName, inviteData.companyNumber, inviteData.inviterName);
         if (sendEmailResult.success) {
             action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
         } else {
