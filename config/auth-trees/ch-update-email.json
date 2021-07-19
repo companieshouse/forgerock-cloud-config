@@ -1,0 +1,373 @@
+{
+	"nodes": [
+		{
+            "_id": "2fd4b959-5aa4-4046-b363-c733e0c009e9",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes":["hasSession","noSession"],
+                "outputs":["*"],
+                "script":"c4001e02-469c-4cc4-bf95-9f43d7e46568"
+            }            
+        },
+		{
+			"_id": "f86dcabe-c64c-4162-931f-2130135b03d0",
+			"nodeType": "SessionDataNode", 
+			"details": {
+				"sharedStateKey":"_id",
+				"sessionDataKey":"UserId"
+			}				
+		},
+		{
+			"_id": "aad2c6c9-a4ca-43ef-8561-0046a6cfcb32",
+			"nodeType": "IdentifyExistingUserNode",
+			"details": {
+				"identifier": "userName",
+				"identityAttribute": "mail"
+			}
+		},
+		{
+            "_id": "822b42b1-3bc8-4397-b3fe-5dc2feaa17a3",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["success", "mismatch", "email_invalid"],
+                "outputs":["*"],
+                "script": "80333df7-d987-4333-8e65-dcd194e62a07"
+            }            
+        },
+		{
+            "_id": "739b7e82-e0b3-4d94-980a-b052c8771303",
+            "nodeType": "RetryLimitDecisionNode", 
+            "details": {
+                "retryLimit": 3
+            }
+        },
+		{
+			"_id": "27da14cf-69ec-4af2-93f9-8f920d282820",
+			"nodeType": "DataStoreDecisionNode", 
+			"details":{}
+		},
+		{
+            "_id": "2fd8d3ba-efe0-4255-855b-48c3c7b0b154",
+            "nodeType": "RetryLimitDecisionNode", 
+            "details": {
+                "retryLimit": 3
+            }
+        },
+		{
+            "_id": "c9929215-1181-43b4-a2fa-a69b07e5e252",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["true"],
+                "outputs":["*"],
+                "script": "04e99c63-2875-43ca-9e5f-84832bf59a34"
+            }            
+        },
+		{
+            "_id": "d4639469-32e5-4926-8cb7-7a050311acac",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["true"],
+                "outputs":["*"],
+                "script": "fdac4efb-d8b8-478b-8300-e11a4c3503df"
+            }            
+        },
+		{
+            "_id": "4b0697a4-d2f1-4d8e-8541-7768e18af29d",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["true", "false"],
+                "outputs":["*"],
+                "script": "df67765e-df3a-4503-9ba5-35c992b39259"
+            }            
+        },
+		{
+			"_id": "846a0f18-64ae-40ca-b739-a268d8fb6010",
+			"nodeType": "OneTimePasswordGeneratorNode",
+			"details": {
+				"length": 6
+			}
+		},
+		{
+            "_id": "36eeba5f-414f-4798-b76a-50192cd85647",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["true", "false"],
+                "outputs":["*"],
+                "script": "a5778ce7-addf-4fb6-a7db-92929f1314c4"
+            }            
+        },
+		{
+			"_id": "d2fb6dd8-a033-498a-a619-a4634b98bd54",
+			"nodeType": "PageNode",
+			"details": {
+				"nodes": [{
+					"_id": "3e8b24eb-3061-4bbb-b3c1-d71bf00310fd",
+					"nodeType": "ScriptedDecisionNode",
+					"displayName": "Error handling"
+				},
+				{
+					"_id": "19ef7aaf-4ac8-4b2c-a06d-18d90921c079",
+					"nodeType": "OneTimePasswordCollectorDecisionNode",
+					"displayName": "OTP Collector Decision"
+				}],
+				"pageDescription": {
+					"desc": "Email OTP"
+				},
+				"pageHeader": {
+					"header": "Email OTP"
+				},
+				"stage": "CHANGE_EMAIL_INPUT"
+			}
+		},
+		{
+            "_id": "3e8b24eb-3061-4bbb-b3c1-d71bf00310fd",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["True"],
+                "outputs":["*"],
+                "script": "ace951c8-d169-4426-9357-d5b44e0aa728"
+            }            
+        },
+		{
+			"_id": "19ef7aaf-4ac8-4b2c-a06d-18d90921c079",
+			"nodeType": "OneTimePasswordCollectorDecisionNode",
+			"details": {
+				"passwordExpiryTime": 30
+			}
+		},
+		{
+            "_id": "402a58d5-a67a-4cdf-86d3-839edd3fc595",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["success", "error"],
+                "outputs":["*"],
+                "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149"
+            }            
+        },
+		{
+            "_id": "a88db7fb-f4eb-48bd-a2e8-69727ff40068",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["success", "error"],
+                "outputs":["*"],
+                "script": "47d1222b-1825-4522-98ff-1c462c42e4ff"
+            }            
+        },
+		{
+            "_id": "a9bdc41d-e898-4a94-91a2-fc992be6b840",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["true"],
+                "outputs":["*"],
+                "script": "7576d62c-b649-4a9e-b9ea-4efc6bc61fde"
+            }            
+        }
+  	],
+	"tree": {
+		"_id": "CHChangeEmailAddress",
+		"description": "Update email address using active session",
+		"identityResource": "managed/alpha_user",
+		"uiConfig": {},
+		"entryNodeId": "2fd4b959-5aa4-4046-b363-c733e0c009e9",
+		"nodes": {
+			"27da14cf-69ec-4af2-93f9-8f920d282820": {
+				"x": 983,
+				"y": 56.015625,
+				"connections": {
+					"false": "2fd8d3ba-efe0-4255-855b-48c3c7b0b154",
+					"true": "4b0697a4-d2f1-4d8e-8541-7768e18af29d"
+				},
+				"nodeType": "DataStoreDecisionNode",
+				"displayName": "Data Store Decision"
+			},
+			"2fd4b959-5aa4-4046-b363-c733e0c009e9": {
+				"x": 216,
+				"y": 159.015625,
+				"connections": {
+					"hasSession": "f86dcabe-c64c-4162-931f-2130135b03d0",
+					"noSession": "e301438c-0bd0-429c-ab0c-66126501069a"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Check for Session"
+			},
+			"2fd8d3ba-efe0-4255-855b-48c3c7b0b154": {
+				"x": 981,
+				"y": 185.015625,
+				"connections": {
+					"Reject": "d4639469-32e5-4926-8cb7-7a050311acac",
+					"Retry": "c9929215-1181-43b4-a2fa-a69b07e5e252"
+				},
+				"nodeType": "RetryLimitDecisionNode",
+				"displayName": "Retry Limit Decision"
+			},
+			"402a58d5-a67a-4cdf-86d3-839edd3fc595": {
+				"x": 1563,
+				"y": 44.015625,
+				"connections": {
+					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"success": "a88db7fb-f4eb-48bd-a2e8-69727ff40068"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "get IDM token"
+			},
+			"739b7e82-e0b3-4d94-980a-b052c8771303": {
+				"x": 727,
+				"y": 170.015625,
+				"connections": {
+					"Reject": "d4639469-32e5-4926-8cb7-7a050311acac",
+					"Retry": "822b42b1-3bc8-4397-b3fe-5dc2feaa17a3"
+				},
+				"nodeType": "RetryLimitDecisionNode",
+				"displayName": "Retry Limit Decision"
+			},
+			"822b42b1-3bc8-4397-b3fe-5dc2feaa17a3": {
+				"x": 718,
+				"y": 25.015625,
+				"connections": {
+					"email_invalid": "f86dcabe-c64c-4162-931f-2130135b03d0",
+					"mismatch": "739b7e82-e0b3-4d94-980a-b052c8771303",
+					"success": "27da14cf-69ec-4af2-93f9-8f920d282820"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Change Email Collector"
+			},
+			"a88db7fb-f4eb-48bd-a2e8-69727ff40068": {
+				"x": 1591,
+				"y": 170.015625,
+				"connections": {
+					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"success": "a9bdc41d-e898-4a94-91a2-fc992be6b840"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Patch User"
+			},
+			"a9bdc41d-e898-4a94-91a2-fc992be6b840": {
+				"x": 1593,
+				"y": 319.015625,
+				"connections": {
+					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Confirmation"
+			},
+			"aad2c6c9-a4ca-43ef-8561-0046a6cfcb32": {
+				"x": 442,
+				"y": 102.015625,
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "822b42b1-3bc8-4397-b3fe-5dc2feaa17a3"
+				},
+				"nodeType": "IdentifyExistingUserNode",
+				"displayName": "Identify Existing User"
+			},
+			"c9929215-1181-43b4-a2fa-a69b07e5e252": {
+				"x": 981,
+				"y": 316.015625,
+				"connections": {
+					"true": "822b42b1-3bc8-4397-b3fe-5dc2feaa17a3"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Pwd Error Message"
+			},
+			"d4639469-32e5-4926-8cb7-7a050311acac": {
+				"x": 958,
+				"y": 392.015625,
+				"connections": {},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "max attempts message"
+			},
+			"f86dcabe-c64c-4162-931f-2130135b03d0": {
+				"x": 228,
+				"y": 49.015625,
+				"connections": {
+					"outcome": "aad2c6c9-a4ca-43ef-8561-0046a6cfcb32"
+				},
+				"nodeType": "SessionDataNode",
+				"displayName": "Get Session Data"
+			},
+			"4b0697a4-d2f1-4d8e-8541-7768e18af29d": {
+				"x": 1185,
+				"y": 464.015625,
+				"connections": {
+					"true": "846a0f18-64ae-40ca-b739-a268d8fb6010",
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Create Notify JWT"
+			},
+			"846a0f18-64ae-40ca-b739-a268d8fb6010": {
+				"x": 1067,
+				"y": 606.015625,
+				"connections": {
+					"outcome": "36eeba5f-414f-4798-b76a-50192cd85647"
+				},
+				"nodeType": "OneTimePasswordGeneratorNode",
+				"displayName": "HOTP Generator"
+			},
+			"36eeba5f-414f-4798-b76a-50192cd85647": {
+				"x": 1064,
+				"y": 706.015625,
+				"connections": {
+					"true": "d2fb6dd8-a033-498a-a619-a4634b98bd54",
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Send OTP via Email"
+			},
+			"d2fb6dd8-a033-498a-a619-a4634b98bd54": {
+				"x": 1401,
+				"y": 507.015625,
+				"connections": {
+					"false": "d10a5fb1-9074-4e1b-a9d7-af5526392ca7",
+					"true": "402a58d5-a67a-4cdf-86d3-839edd3fc595"
+				},
+				"nodeType": "PageNode",
+				"displayName": "Page Node"
+			},
+			"d10a5fb1-9074-4e1b-a9d7-af5526392ca7": {
+				"x": 1303,
+				"y": 762.015625,
+				"connections": {
+					"Reject": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"Retry": "c8cd1bda-8c8b-439d-b625-aa5602b083fb"
+				},
+				"nodeType": "RetryLimitDecisionNode",
+				"displayName": "Retry Limit Decision"
+			},
+			"c8cd1bda-8c8b-439d-b625-aa5602b083fb": {
+				"x": 1232,
+				"y": 902.015625,
+				"connections": {
+					"true": "d2fb6dd8-a033-498a-a619-a4634b98bd54"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Raise Error"
+			}
+		},
+		"staticNodes": {
+			"startNode": {
+				"x": 62,
+				"y": 103
+			},
+			"70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
+				"x": 1992,
+				"y": 361
+			},
+			"e301438c-0bd0-429c-ab0c-66126501069a": {
+				"x": 1875,
+				"y": 996
+			}
+		}
+	}
+}
+
