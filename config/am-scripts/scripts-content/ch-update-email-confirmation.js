@@ -8,7 +8,7 @@ var NodeOutcome = {
     SUCCESS: "true"
 }
 
-var infoMessage = "Your email has been changed successfully"
+var infoMessage = "Your email has been changed successfully "
 
 if (callbacks.isEmpty()) { 
     

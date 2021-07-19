@@ -98,6 +98,7 @@ try {
             }
             else {
                 transientState.put("password", password);
+                sharedState.put("isChangeEmail", true);
                 sharedState.put("newEmail", newEmail);
                 action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
             }
