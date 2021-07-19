@@ -13,9 +13,6 @@
 		"target": "userName",
 		"source": "EMAIL"
 	}, {
-		"target": "frIndexedString2",
-		"source": "PASSWORD"
-	}, {
 		"target": "frIndexedInteger1",
 		"source": "CUSTID"
 	}, {
@@ -81,7 +78,7 @@
 	"onCreate": {
 		"type": "text/javascript",
 		"globals": {},
-		"source": "target.frIndexedString3 = \"pending\";\ntarget.frIndexedString5 = \"webfiling\";"
+		"source": "target.frIndexedString2 = source.PASSWORD;\ntarget.frIndexedString3 = \"pending\";\ntarget.frIndexedString5 = \"webfiling\";"
 	},
 	"onUpdate": {
 		"type": "text/javascript",
