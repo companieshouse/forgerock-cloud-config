@@ -15,13 +15,10 @@ var NodeOutcome = {
 //updates the username (=email) of the given user 
 function updateUsername(userId, value) {
     var alphaUserUrl = FIDC_ENDPOINT.concat("/openidm/managed/alpha_user/" + userId);
-    var accessToken = transientState.get("idmAccessToken");
+    var accessToken = sharedState.get("idmAccessToken");
     if (accessToken == null) {
         logger.error("[CHANGE EMAIL PATCH] Access token not in shared state")
-        return {
-            success: false,
-            message: "Access token not in transient state"
-        }
+        return false;
     }
     logger.error("[CHANGE EMAIL PATCH] Updating email to " + value);
 
