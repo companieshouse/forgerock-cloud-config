@@ -83,6 +83,6 @@
 	"onUpdate": {
 		"type": "text/javascript",
 		"globals": {},
-		"source": "if (source.PASSWORD != oldTarget.frIndexedString2) {\n  target.frIndexedString3 = \"pending\"\n}"
+		"source": "if (source.PASSWORD != oldTarget.frIndexedString2) {\n  target.frIndexedString3 = \"pending\";\n  target.frIndexedString5 = \"webfiling\";\n}"
 	}
 }
