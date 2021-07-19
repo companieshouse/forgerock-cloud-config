@@ -34,7 +34,7 @@
 		},
 		"accessTokenLifetime": {
 			"inherited": false,
-			"value": 0
+			"value": 2400
 		},
 		"redirectionUris": {
 			"inherited": false,
