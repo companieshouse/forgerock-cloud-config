@@ -59,21 +59,45 @@ const updateScripts = async (argv) => {
                 return console.log(err)
               }
               const body = {
-                type: 'text/javascript',
-                source: data
-                  .split('\n')
-                  .map((line) => {
-                    if (line.trim().startsWith('//')) {
-                      return ''
+                enabled: false,
+                type: 'simple',
+                repeatInterval: 3600000,
+                persisted: true,
+                concurrentExecution: false,
+                invokeService: 'taskscanner',
+                invokeContext: {
+                  waitForCompletion: false,
+                  numberOfThreads: 5,
+                  scan: {
+                    _queryFilter: `((/frIndexedDate1 lt "\${Time.now - 7d}"))`, // eslint-disable-line
+                    object: 'managed/user',
+                    taskState: {
+                      started: '/frUnindexedString1',
+                      completed: '/frUnindexedString2'
+                    },
+                    recovery: {
+                      timeout: '10m'
                     }
-                    return line.trim()
-                  })
-                  .join(' ')
+                  },
+                  task: {
+                    type: 'text/javascript',
+                    source: data
+                      .split('\n')
+                      .map((line) => {
+                        if (line.trim().startsWith('//')) {
+                          return ''
+                        }
+                        return line.trim()
+                      })
+                      .join(' ')
+                  }
+                }
               }
               console.log(`IDM task code: ${JSON.stringify(body)}`)
-              // const requestUrl = `${FIDC_URL}/openidm/scheduler/job/${task.endpointName}Task`
-              // await fidcRequest(requestUrl, body, accessToken)
-              // console.log(`IDM endpoint updated: ${task.endpointName}`)
+
+              const requestUrl = `${FIDC_URL}/openidm/scheduler/job/${task.scriptFileName}Task`
+              await fidcRequest(requestUrl, body, accessToken)
+              console.log(`IDM Task updated: ${task.scriptFileName}`)
             })
           })
         )
