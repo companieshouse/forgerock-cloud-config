@@ -45,6 +45,11 @@ var jurisdictions = {
     NI: "NI"
 };
 
+var CompanyStatus = {
+    ACTIVE: "active", 
+    DORMANT: "dormant"
+};
+
 function logResponse(response) {
     logger.error("[FETCH COMPANY] Scripted Node HTTP Response: " + response.getStatus() + ", Body: " + response.getEntity().getString());
 }
@@ -130,13 +135,13 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
 
             logger.error("[FETCH COMPANY] Found status: " + companyStatus);
 
-            if (companyStatus !== "active") {
-                logger.error("[FETCH COMPANY] The company is not active")
-                sharedState.put("errorMessage", "The company " + companyName + " is not active.");
+            if (!companyStatus.equals(CompanyStatus.ACTIVE) && !companyStatus.equals(CompanyStatus.DORMANT)) {
+                logger.error("[FETCH COMPANY] The company is not active/dormant")
+                sharedState.put("errorMessage", "The company " + companyName + " is not active or dormant.");
                 sharedState.put("pagePropsJSON", JSON.stringify(
                     {
                         'errors': [{
-                            label: "The company " + companyName + " is not active.",
+                            label: "The company " + companyName + " is not active or dormant.",
                             token: "COMPANY_NOT_ACTIVE",
                             fieldName: isEWF ? "IDToken3" : "IDToken2",
                             anchor: isEWF ? "IDToken3" : "IDToken2"
