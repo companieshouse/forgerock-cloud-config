@@ -222,7 +222,8 @@ function removeUserFromCompany(callerId, companyNo, userIdToRemove) {
     if (response.getStatus().getCode() === 200) {
         logger.error("[REMOVE AUTHZ USER] 200 response from IDM");
         return {
-            success: actionResponse.success
+            success: actionResponse.success,
+            removerName: (actionResponse.caller.fullName ? actionResponse.caller.fullName : actionResponse.caller.userName)
         }
     } else {
         logger.error("[REMOVE AUTHZ USER] Error during action processing");
@@ -316,6 +317,7 @@ try {
                     var removeResponse = removeUserFromCompany(sessionOwnerId, companyNo, userIdToRemove);
                     if (removeResponse.success) {
                         sharedState.put("idmAccessToken", null);
+                        sharedState.put("removerName", removeResponse.removerName);
                         action = fr.Action.goTo(NodeOutcome.CONFIRMED).build();
                     } else {
                         raiseError(removeResponse.message, "USER_REMOVAL_FAILED");
