@@ -143,7 +143,7 @@
 			}
 		},
 		{
-            "_id": "402a58d5-a67a-4cdf-86d3-839edd3fc595",
+            "_id": "14f9ca47-e9bc-4e0c-9a1c-796976d540a7",
             "nodeType": "ScriptedDecisionNode", 
             "details": {
                 "inputs":["*"],
@@ -210,15 +210,25 @@
 				"nodeType": "RetryLimitDecisionNode",
 				"displayName": "Retry Limit Decision"
 			},
-			"402a58d5-a67a-4cdf-86d3-839edd3fc595": {
-				"x": 1563,
-				"y": 44.015625,
+			"36eeba5f-414f-4798-b76a-50192cd85647": {
+				"x": 1064,
+				"y": 706.015625,
 				"connections": {
-					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"success": "a88db7fb-f4eb-48bd-a2e8-69727ff40068"
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "d2fb6dd8-a033-498a-a619-a4634b98bd54"
 				},
 				"nodeType": "ScriptedDecisionNode",
-				"displayName": "get IDM token"
+				"displayName": "Send OTP via Email"
+			},
+			"4b0697a4-d2f1-4d8e-8541-7768e18af29d": {
+				"x": 1185,
+				"y": 464.015625,
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "846a0f18-64ae-40ca-b739-a268d8fb6010"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Create Notify JWT"
 			},
 			"739b7e82-e0b3-4d94-980a-b052c8771303": {
 				"x": 727,
@@ -241,9 +251,18 @@
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Change Email Collector"
 			},
+			"846a0f18-64ae-40ca-b739-a268d8fb6010": {
+				"x": 1067,
+				"y": 606.015625,
+				"connections": {
+					"outcome": "36eeba5f-414f-4798-b76a-50192cd85647"
+				},
+				"nodeType": "OneTimePasswordGeneratorNode",
+				"displayName": "HOTP Generator"
+			},
 			"a88db7fb-f4eb-48bd-a2e8-69727ff40068": {
-				"x": 1591,
-				"y": 170.015625,
+				"x": 1657,
+				"y": 386.015625,
 				"connections": {
 					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
 					"success": "a9bdc41d-e898-4a94-91a2-fc992be6b840"
@@ -252,8 +271,8 @@
 				"displayName": "Patch User"
 			},
 			"a9bdc41d-e898-4a94-91a2-fc992be6b840": {
-				"x": 1593,
-				"y": 319.015625,
+				"x": 1650,
+				"y": 534.015625,
 				"connections": {
 					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
 				},
@@ -265,10 +284,19 @@
 				"y": 102.015625,
 				"connections": {
 					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"true": "822b42b1-3bc8-4397-b3fe-5dc2feaa17a3"
+					"true": "14f9ca47-e9bc-4e0c-9a1c-796976d540a7"
 				},
 				"nodeType": "IdentifyExistingUserNode",
 				"displayName": "Identify Existing User"
+			},
+			"c8cd1bda-8c8b-439d-b625-aa5602b083fb": {
+				"x": 1232,
+				"y": 902.015625,
+				"connections": {
+					"true": "d2fb6dd8-a033-498a-a619-a4634b98bd54"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Raise Error"
 			},
 			"c9929215-1181-43b4-a2fa-a69b07e5e252": {
 				"x": 981,
@@ -278,6 +306,26 @@
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Pwd Error Message"
+			},
+			"d10a5fb1-9074-4e1b-a9d7-af5526392ca7": {
+				"x": 1303,
+				"y": 762.015625,
+				"connections": {
+					"Reject": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"Retry": "c8cd1bda-8c8b-439d-b625-aa5602b083fb"
+				},
+				"nodeType": "RetryLimitDecisionNode",
+				"displayName": "Retry Limit Decision"
+			},
+			"d2fb6dd8-a033-498a-a619-a4634b98bd54": {
+				"x": 1401,
+				"y": 507.015625,
+				"connections": {
+					"false": "d10a5fb1-9074-4e1b-a9d7-af5526392ca7",
+					"true": "a88db7fb-f4eb-48bd-a2e8-69727ff40068"
+				},
+				"nodeType": "PageNode",
+				"displayName": "Page Node"
 			},
 			"d4639469-32e5-4926-8cb7-7a050311acac": {
 				"x": 958,
@@ -295,63 +343,15 @@
 				"nodeType": "SessionDataNode",
 				"displayName": "Get Session Data"
 			},
-			"4b0697a4-d2f1-4d8e-8541-7768e18af29d": {
-				"x": 1185,
-				"y": 464.015625,
+			"14f9ca47-e9bc-4e0c-9a1c-796976d540a7": {
+				"x": 494,
+				"y": 232.015625,
 				"connections": {
-					"true": "846a0f18-64ae-40ca-b739-a268d8fb6010",
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a"
+					"success": "822b42b1-3bc8-4397-b3fe-5dc2feaa17a3",
+					"error": "822b42b1-3bc8-4397-b3fe-5dc2feaa17a3"
 				},
 				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Create Notify JWT"
-			},
-			"846a0f18-64ae-40ca-b739-a268d8fb6010": {
-				"x": 1067,
-				"y": 606.015625,
-				"connections": {
-					"outcome": "36eeba5f-414f-4798-b76a-50192cd85647"
-				},
-				"nodeType": "OneTimePasswordGeneratorNode",
-				"displayName": "HOTP Generator"
-			},
-			"36eeba5f-414f-4798-b76a-50192cd85647": {
-				"x": 1064,
-				"y": 706.015625,
-				"connections": {
-					"true": "d2fb6dd8-a033-498a-a619-a4634b98bd54",
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a"
-				},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Send OTP via Email"
-			},
-			"d2fb6dd8-a033-498a-a619-a4634b98bd54": {
-				"x": 1401,
-				"y": 507.015625,
-				"connections": {
-					"false": "d10a5fb1-9074-4e1b-a9d7-af5526392ca7",
-					"true": "402a58d5-a67a-4cdf-86d3-839edd3fc595"
-				},
-				"nodeType": "PageNode",
-				"displayName": "Page Node"
-			},
-			"d10a5fb1-9074-4e1b-a9d7-af5526392ca7": {
-				"x": 1303,
-				"y": 762.015625,
-				"connections": {
-					"Reject": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"Retry": "c8cd1bda-8c8b-439d-b625-aa5602b083fb"
-				},
-				"nodeType": "RetryLimitDecisionNode",
-				"displayName": "Retry Limit Decision"
-			},
-			"c8cd1bda-8c8b-439d-b625-aa5602b083fb": {
-				"x": 1232,
-				"y": 902.015625,
-				"connections": {
-					"true": "d2fb6dd8-a033-498a-a619-a4634b98bd54"
-				},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Raise Error"
+				"displayName": "get IDM token"
 			}
 		},
 		"staticNodes": {
@@ -360,8 +360,8 @@
 				"y": 103
 			},
 			"70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
-				"x": 1992,
-				"y": 361
+				"x": 1879,
+				"y": 484
 			},
 			"e301438c-0bd0-429c-ab0c-66126501069a": {
 				"x": 1875,
