@@ -1,16 +1,22 @@
 {
 	"target": "system/WebfilingUser/webfilingUser",
 	"source": "managed/alpha_user",
-	"name": "alphaUser_webfilingUserPassword",
+	"name": "alphaUser_webfilingUser",
 	"consentRequired": false,
 	"icon": null,
-	"displayName": "Steve test WebFiling user",
+	"displayName": "Sync FIDC user to WebFiling user",
 	"properties": [{
 		"target": "AUTHID",
 		"source": "frIndexedInteger2"
 	}, {
 		"target": "PASSWORD",
 		"source": "frIndexedString2"
+	}, {
+		"target": "CUSTID",
+		"source": "frIndexedInteger1"
+	}, {
+		"target": "EMAIL",
+		"source": "mail"
 	}],
 	"policies": [{
 		"action": "EXCEPTION",
@@ -55,9 +61,9 @@
 	"correlationQuery": [{
 		"linkQualifier": "default",
 		"expressionTree": {
-			"all": ["AUTHID"]
+			"any": ["AUTHID", "CUSTID"]
 		},
-		"mapping": "managedAlpha_user_systemWebfilingauthAuth",
+		"mapping": "alphaUser_webfilingUserPassword",
 		"type": "text/javascript",
 		"file": "ui/correlateTreeToQueryFilter.js"
 	}]
