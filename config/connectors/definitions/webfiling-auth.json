@@ -111,7 +111,7 @@
 		"suppressPassword": true,
 		"inclusiveSync": false
 	},
-	"enabled": true,
+	"enabled": false,
 	"objectTypes": {
 		"auth": {
 			"$schema": "http://json-schema.org/draft-03/schema",
