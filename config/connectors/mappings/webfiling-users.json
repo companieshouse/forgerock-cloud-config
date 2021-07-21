@@ -72,7 +72,7 @@
 	"correlationQuery": [{
 		"linkQualifier": "default",
 		"expressionTree": {
-			"any": ["frIndexedInteger2", "userName"]
+			"any": ["frIndexedInteger1", "userName"]
 		},
 		"mapping": "webfilingUser_alphaUser",
 		"type": "text/javascript",
