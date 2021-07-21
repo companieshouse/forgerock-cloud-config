@@ -45,6 +45,11 @@ var jurisdictions = {
     NI: "NI"
 };
 
+var CompanyStatus = {
+    ACTIVE: "active", 
+    DORMANT: "dormant"
+};
+
 function logResponse(response) {
     logger.error("[FETCH COMPANY] Scripted Node HTTP Response: " + response.getStatus() + ", Body: " + response.getEntity().getString());
 }
@@ -73,17 +78,26 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
 
     request.setMethod('GET');
 
-    if (isEWF && jurisdiction.equals(jurisdictions.SC) && companyNumber.indexOf("SC") !== 0) {
-        logger.error("[FETCH COMPANY] looking for SC company without 'SC' prefix - adding it");
-        companyNumber = "SC".concat(companyNumber);
-    }
-
     //if in EWF journey, we need to add the jurisdiction to the query criteria
-    var searchTerm = "?_queryFilter=number+eq+%22" + companyNumber + "%22";
-    if (isEWF) {        
+    var searchTerm;
+    if (isEWF) {     
+        // if the user selected Scotland and provided a company number without 'SC' at the beginning, search for a match with either '<company no>' or 'SC<company no>'
+        if (jurisdiction.equals(jurisdictions.SC) && companyNumber.indexOf("SC") !== 0) {
+            logger.error("[FETCH COMPANY] looking for SC company without 'SC' prefix - adding it");
+            searchTerm = "?_queryFilter=(number+eq+%22" + companyNumber + "%22".concat("+or+number+eq+%22SC" + companyNumber + "%22)");
+        } else {
+            //for other jurisdictions, do not make any logic on prefixes
+            searchTerm = "?_queryFilter=number+eq+%22" + companyNumber + "%22";
+        }    
+        //if in EWF journey, attach the jurisdiction condition to the search term
         searchTerm = searchTerm.concat("+and+jurisdiction+eq+%22" + jurisdiction + "%22");
+    } else {
+        // if using company association journey (no EWF), just lookup against the company number, without jurisdiction
+        searchTerm = "?_queryFilter=number+eq+%22" + companyNumber + "%22";
     }
     
+    logger.error("[FETCH COMPANY] Using search term: " + searchTerm);
+
     request.setUri(idmCompanyEndpoint + searchTerm);
     request.getHeaders().add("Authorization", "Bearer " + idmToken);
     request.getHeaders().add("Content-Type", "application/json");
@@ -121,13 +135,13 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
 
             logger.error("[FETCH COMPANY] Found status: " + companyStatus);
 
-            if (companyStatus !== "active") {
-                logger.error("[FETCH COMPANY] The company is not active")
-                sharedState.put("errorMessage", "The company " + companyName + " is not active.");
+            if (!companyStatus.equals(CompanyStatus.ACTIVE) && !companyStatus.equals(CompanyStatus.DORMANT)) {
+                logger.error("[FETCH COMPANY] The company is not active/dormant")
+                sharedState.put("errorMessage", "The company " + companyName + " is not active or dormant.");
                 sharedState.put("pagePropsJSON", JSON.stringify(
                     {
                         'errors': [{
-                            label: "The company " + companyName + " is not active.",
+                            label: "The company " + companyName + " is not active or dormant.",
                             token: "COMPANY_NOT_ACTIVE",
                             fieldName: isEWF ? "IDToken3" : "IDToken2",
                             anchor: isEWF ? "IDToken3" : "IDToken2"
