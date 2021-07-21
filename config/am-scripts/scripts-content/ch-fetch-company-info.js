@@ -77,7 +77,10 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
     var request = new org.forgerock.http.protocol.Request();
 
     request.setMethod('GET');
-
+    
+    //trim initial zeros from input company number
+    //var trimmedCompanyNumber = companyNumber.replace(/^0+|0+$/g, '');
+    
     //if in EWF journey, we need to add the jurisdiction to the query criteria
     var searchTerm;
     if (isEWF) {     
@@ -92,10 +95,10 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
         //if in EWF journey, attach the jurisdiction condition to the search term
         searchTerm = searchTerm.concat("+and+jurisdiction+eq+%22" + jurisdiction + "%22");
     } else {
-        // if using company association journey (no EWF), search for a match with either '<company no>' or 'SC<company no>', without filtering by jurisdiction
-        searchTerm = "?_queryFilter=(number+eq+%22" + companyNumber + "%22".concat("+or+number+eq+%22SC" + companyNumber + "%22)");
+        // if using company association journey (no EWF), search for a match with either '<company no>' or ('SC<company no>' and SC jurisdiction)
+        searchTerm = "?_queryFilter=(number+eq+%22" + companyNumber + "%22".concat("+or+(number+eq+%22SC" + companyNumber + "%22+and+jurisdiction+eq+%22SC%22))");
     }
-    
+
     logger.error("[FETCH COMPANY] Using search term: " + searchTerm);
 
     request.setUri(idmCompanyEndpoint + searchTerm);

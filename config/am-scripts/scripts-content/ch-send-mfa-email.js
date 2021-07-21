@@ -141,22 +141,29 @@ try {
                     ),
                     new fr.TextOutputCallback(
                         fr.TextOutputCallback.ERROR,
-                        "The email could not be sent: " + response.getEntity().getString()
+                        "The email could not be sent: " .concat(sendEmailResult.message)
                     ),
                     new fr.HiddenValueCallback(
                         "pagePropsJSON",
-                        JSON.stringify({ 'errors': [{ label: "An error occurred while sending the email. Please try again.", token: "SEND_MFA_EMAIL_ERROR" }] })
+                        JSON.stringify({ 'errors': [{ label: "The email could not be sent: " .concat(sendEmailResult.message), token: "SEND_MFA_EMAIL_ERROR" }] })
                     )
                 ).build()
-            
         }
     }
 } catch (e) {
     logger.error("[COMPANY INVITE - SEND EMAIL] Error : " + e);
     action = fr.Action.send(
+        new fr.HiddenValueCallback(
+            "stage",
+            "SEND_MFA_EMAIL_ERROR"
+        ),
         new fr.TextOutputCallback(
             fr.TextOutputCallback.ERROR,
             "The email could not be sent: " + e.toString()
+        ),
+        new fr.HiddenValueCallback(
+            "pagePropsJSON",
+            JSON.stringify({ 'errors': [{ label: "An error occurred while sending the email. Please try again.", token: "SEND_MFA_EMAIL_ERROR" }] })
         )
     ).build()
 }
