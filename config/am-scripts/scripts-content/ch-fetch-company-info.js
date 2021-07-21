@@ -92,8 +92,8 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
         //if in EWF journey, attach the jurisdiction condition to the search term
         searchTerm = searchTerm.concat("+and+jurisdiction+eq+%22" + jurisdiction + "%22");
     } else {
-        // if using company association journey (no EWF), just lookup against the company number, without jurisdiction
-        searchTerm = "?_queryFilter=number+eq+%22" + companyNumber + "%22";
+        // if using company association journey (no EWF), search for a match with either '<company no>' or 'SC<company no>', without filtering by jurisdiction
+        searchTerm = "?_queryFilter=(number+eq+%22" + companyNumber + "%22".concat("+or+number+eq+%22SC" + companyNumber + "%22)");
     }
     
     logger.error("[FETCH COMPANY] Using search term: " + searchTerm);
