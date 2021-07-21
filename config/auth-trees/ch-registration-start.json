@@ -197,173 +197,211 @@
             "outputs":["*"],
             "script":"c056951c-622e-11eb-ae93-0242ac130002"
          }
+      },
+      {
+         "_id": "0245c9e5-297b-4092-9e40-e3453f3581b6",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes":["true","false"],
+            "outputs":["*"],
+            "script": "1a6815f1-0272-490b-8d6b-69609c3ee9d6"
+         }
+      },
+      {
+         "_id": "d4cff847-705b-44ed-81c9-c9da0ece05b5",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes":["true","false"],
+            "outputs":["*"],
+            "script": "1a6815f1-0272-490b-8d6b-69609c3ee9d6"
+         }
       }
    ],
    "tree": {
-      "_id":"CHRegistration",
-      "description":"Platform Registration Tree for CH Users",
-      "identityResource":"managed/alpha_user",
-      "uiConfig":{},
-      "entryNodeId":"eb711261-5253-4e17-9357-43e175a5005d",
-      "nodes":{
-         "14a23247-eeb0-436c-99dd-1b046fc1204f":{
-            "x":1305,
-            "y":400.015625,
-            "connections":{
-               "Reject":"e301438c-0bd0-429c-ab0c-66126501069a",
-               "Retry":"2eaa7c69-f97d-4bbf-b8b0-2214832cbc6f"
+      "_id": "CHRegistration",
+      "description": "Platform Registration Tree for CH Users",
+      "identityResource": "managed/alpha_user",
+      "uiConfig": {},
+      "entryNodeId": "eb711261-5253-4e17-9357-43e175a5005d",
+      "nodes": {
+         "14a23247-eeb0-436c-99dd-1b046fc1204f": {
+            "x": 1305,
+            "y": 400.015625,
+            "connections": {
+               "Reject": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "Retry": "2eaa7c69-f97d-4bbf-b8b0-2214832cbc6f"
             },
-            "nodeType":"RetryLimitDecisionNode",
-            "displayName":"Retry Limit Decision"
+            "nodeType": "RetryLimitDecisionNode",
+            "displayName": "Retry Limit Decision"
          },
-         "24595c6d-40a2-4592-a8f2-7823bb5d84be":{
-            "x":674,
-            "y":799.015625,
-            "connections":{
-               "false":"e301438c-0bd0-429c-ab0c-66126501069a",
-               "true":"30518af8-5af3-45e1-bd23-d404e13d922b"
+         "24595c6d-40a2-4592-a8f2-7823bb5d84be": {
+            "x": 714,
+            "y": 829.015625,
+            "connections": {
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "true": "30518af8-5af3-45e1-bd23-d404e13d922b"
             },
-            "nodeType":"ScriptedDecisionNode",
-            "displayName":"Send Pwd Reset email"
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Send Pwd Reset email"
          },
-         "26f0bca6-8070-4d16-a5bc-8c3136e0057e":{
-            "x":436,
-            "y":601.015625,
-            "connections":{
-               "true":"24595c6d-40a2-4592-a8f2-7823bb5d84be",
-               "false":"e301438c-0bd0-429c-ab0c-66126501069a"
+         "26f0bca6-8070-4d16-a5bc-8c3136e0057e": {
+            "x": 436,
+            "y": 601.015625,
+            "connections": {
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "true": "0245c9e5-297b-4092-9e40-e3453f3581b6"
             },
-            "nodeType":"ScriptedDecisionNode",
-            "displayName":"Create Notify JWT"
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Create Notify JWT"
          },
-         "27ec8bc7-d2ed-4877-b8bd-ebd84d5b9994":{
-            "x":772,
-            "y":586.015625,
-            "connections":{
-               "outcome":"37a1f12f-1e7b-4ca2-a870-040bf63291a0"
+         "27ec8bc7-d2ed-4877-b8bd-ebd84d5b9994": {
+            "x": 772,
+            "y": 586.015625,
+            "connections": {
+               "outcome": "37a1f12f-1e7b-4ca2-a870-040bf63291a0"
             },
-            "nodeType":"OneTimePasswordGeneratorNode",
-            "displayName":"HOTP Generator"
+            "nodeType": "OneTimePasswordGeneratorNode",
+            "displayName": "HOTP Generator"
          },
-         "2eaa7c69-f97d-4bbf-b8b0-2214832cbc6f":{
-            "x":1195,
-            "y":606.015625,
-            "connections":{
-               "true":"42d22a17-4022-4d9a-8cc2-2ef7b2fd331c"
+         "2eaa7c69-f97d-4bbf-b8b0-2214832cbc6f": {
+            "x": 1195,
+            "y": 606.015625,
+            "connections": {
+               "true": "42d22a17-4022-4d9a-8cc2-2ef7b2fd331c"
             },
-            "nodeType":"ScriptedDecisionNode",
-            "displayName":"OTP not valid"
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "OTP not valid"
          },
-         "30518af8-5af3-45e1-bd23-d404e13d922b":{
-            "x":1556,
-            "y":157.015625,
-            "connections":{
-               
-            },
-            "nodeType":"ScriptedDecisionNode",
-            "displayName":"Email Sent Confirmation"
+         "30518af8-5af3-45e1-bd23-d404e13d922b": {
+            "x": 1705,
+            "y": 132.015625,
+            "connections": {},
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Email Sent Confirmation"
          },
-         "37a1f12f-1e7b-4ca2-a870-040bf63291a0":{
-            "x":981,
-            "y":715.015625,
-            "connections":{
-               "false":"e301438c-0bd0-429c-ab0c-66126501069a",
-               "true":"42d22a17-4022-4d9a-8cc2-2ef7b2fd331c"
+         "37a1f12f-1e7b-4ca2-a870-040bf63291a0": {
+            "x": 981,
+            "y": 715.015625,
+            "connections": {
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "true": "42d22a17-4022-4d9a-8cc2-2ef7b2fd331c"
             },
-            "nodeType":"ScriptedDecisionNode",
-            "displayName":"Send OTP"
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Send OTP"
          },
-         "42d22a17-4022-4d9a-8cc2-2ef7b2fd331c":{
-            "x":1013,
-            "y":369.015625,
-            "connections":{
-               "false":"14a23247-eeb0-436c-99dd-1b046fc1204f",
-               "true":"997cc39b-afde-4935-b9b5-a0d4e3034072"
+         "42d22a17-4022-4d9a-8cc2-2ef7b2fd331c": {
+            "x": 1013,
+            "y": 369.015625,
+            "connections": {
+               "false": "14a23247-eeb0-436c-99dd-1b046fc1204f",
+               "true": "997cc39b-afde-4935-b9b5-a0d4e3034072"
             },
-            "nodeType":"PageNode",
-            "displayName":"OTP page"
+            "nodeType": "PageNode",
+            "displayName": "OTP page"
          },
-         "453352a5-1e8a-4696-a439-0f09555ebc4f":{
-            "x":342,
-            "y":484.015625,
-            "connections":{
-               "true":"26f0bca6-8070-4d16-a5bc-8c3136e0057e"
+         "453352a5-1e8a-4696-a439-0f09555ebc4f": {
+            "x": 342,
+            "y": 484.015625,
+            "connections": {
+               "true": "26f0bca6-8070-4d16-a5bc-8c3136e0057e"
             },
-            "nodeType":"ScriptedDecisionNode",
-            "displayName":"Set User Existing"
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Set User Existing"
          },
-         "5c7f4247-3b01-4dae-b18b-1d90ee710891":{
-            "x":654,
-            "y":365.015625,
-            "connections":{
-               "false":"e301438c-0bd0-429c-ab0c-66126501069a",
-               "true":"27ec8bc7-d2ed-4877-b8bd-ebd84d5b9994"
+         "5c7f4247-3b01-4dae-b18b-1d90ee710891": {
+            "x": 654,
+            "y": 365.015625,
+            "connections": {
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "true": "27ec8bc7-d2ed-4877-b8bd-ebd84d5b9994"
             },
-            "nodeType":"ScriptedDecisionNode",
-            "displayName":"Create Notify JWT - SMS"
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Create Notify JWT - SMS"
          },
-         "817f8595-f2cc-45ce-b4f8-ad7aa6fdd1ea":{
-            "x":245,
-            "y":244.015625,
-            "connections":{
-               "false":"a87fa542-b6d3-49a1-bbdf-30370ae7042e",
-               "true":"453352a5-1e8a-4696-a439-0f09555ebc4f"
+         "817f8595-f2cc-45ce-b4f8-ad7aa6fdd1ea": {
+            "x": 245,
+            "y": 244.015625,
+            "connections": {
+               "false": "a87fa542-b6d3-49a1-bbdf-30370ae7042e",
+               "true": "453352a5-1e8a-4696-a439-0f09555ebc4f"
             },
-            "nodeType":"IdentifyExistingUserNode",
-            "displayName":"Identify Existing User"
+            "nodeType": "IdentifyExistingUserNode",
+            "displayName": "Identify Existing User"
          },
-         "997cc39b-afde-4935-b9b5-a0d4e3034072":{
-            "x":894,
-            "y":110,
-            "connections":{
-               "false":"e301438c-0bd0-429c-ab0c-66126501069a",
-               "true":"9e02588a-e4ac-4b08-b10f-ad8f298ae720"
+         "997cc39b-afde-4935-b9b5-a0d4e3034072": {
+            "x": 894,
+            "y": 110,
+            "connections": {
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "true": "d4cff847-705b-44ed-81c9-c9da0ece05b5"
             },
-            "nodeType":"ScriptedDecisionNode",
-            "displayName":"Create Notify JWT - Email"
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Create Notify JWT - Email"
          },
-         "9e02588a-e4ac-4b08-b10f-ad8f298ae720":{
-            "x":1203,
-            "y":89.015625,
-            "connections":{
-               "false":"e301438c-0bd0-429c-ab0c-66126501069a",
-               "true":"30518af8-5af3-45e1-bd23-d404e13d922b"
+         "9e02588a-e4ac-4b08-b10f-ad8f298ae720": {
+            "x": 1465,
+            "y": 57.015625,
+            "connections": {
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "true": "30518af8-5af3-45e1-bd23-d404e13d922b"
             },
-            "nodeType":"ScriptedDecisionNode",
-            "displayName":"Create & Email link"
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Create & Email link"
          },
-         "a87fa542-b6d3-49a1-bbdf-30370ae7042e":{
-            "x":588,
-            "y":107.015625,
-            "connections":{
-               "false":"997cc39b-afde-4935-b9b5-a0d4e3034072",
-               "true":"5c7f4247-3b01-4dae-b18b-1d90ee710891"
+         "a87fa542-b6d3-49a1-bbdf-30370ae7042e": {
+            "x": 588,
+            "y": 107.015625,
+            "connections": {
+               "false": "997cc39b-afde-4935-b9b5-a0d4e3034072",
+               "true": "5c7f4247-3b01-4dae-b18b-1d90ee710891"
             },
-            "nodeType":"ScriptedDecisionNode",
-            "displayName":"Check phone entered"
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Check phone entered"
          },
-         "eb711261-5253-4e17-9357-43e175a5005d":{
-            "x":231,
-            "y":57,
-            "connections":{
-               "outcome":"817f8595-f2cc-45ce-b4f8-ad7aa6fdd1ea"
+         "eb711261-5253-4e17-9357-43e175a5005d": {
+            "x": 231,
+            "y": 57,
+            "connections": {
+               "outcome": "817f8595-f2cc-45ce-b4f8-ad7aa6fdd1ea"
             },
-            "nodeType":"PageNode",
-            "displayName":"Email Collector"
+            "nodeType": "PageNode",
+            "displayName": "Email Collector"
+         },
+         "0245c9e5-297b-4092-9e40-e3453f3581b6": {
+            "x": 497,
+            "y": 747.015625,
+            "connections": {
+               "true": "24595c6d-40a2-4592-a8f2-7823bb5d84be",
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Load Keys"
+         },
+         "d4cff847-705b-44ed-81c9-c9da0ece05b5": {
+            "x": 1198,
+            "y": 36.015625,
+            "connections": {
+               "true": "9e02588a-e4ac-4b08-b10f-ad8f298ae720",
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Load Keys"
          }
       },
-      "staticNodes":{
-         "startNode":{
-            "x":70,
-            "y":80
+      "staticNodes": {
+         "startNode": {
+            "x": 70,
+            "y": 80
          },
-         "70e691a5-1e33-4ac3-a356-e7b6d60d92e0":{
-            "x":1615,
-            "y":726
+         "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
+            "x": 1615,
+            "y": 726
          },
-         "e301438c-0bd0-429c-ab0c-66126501069a":{
-            "x":1901,
-            "y":502
+         "e301438c-0bd0-429c-ab0c-66126501069a": {
+            "x": 1901,
+            "y": 502
          }
       }
    }

@@ -1,158 +1,229 @@
 var fr = JavaImporter(
-  org.forgerock.openam.auth.node.api.Action,
-  java.lang.Math,
-  java.lang.String,
-  org.forgerock.openam.auth.node.api,
-  javax.security.auth.callback.TextOutputCallback,
-  com.sun.identity.authentication.callbacks.HiddenValueCallback,
-  org.forgerock.json.jose.builders.JwtBuilderFactory,
-  org.forgerock.json.jose.jwt.JwtClaimsSet,
-  org.forgerock.json.jose.jws.JwsAlgorithm,
-  org.forgerock.json.jose.jws.SignedJwt,
-  org.forgerock.json.jose.jws.JwsHeader
+    org.forgerock.openam.auth.node.api.Action,
+    java.lang.Math,
+    java.lang.String,
+    org.forgerock.openam.auth.node.api,
+    javax.security.auth.callback.TextOutputCallback,
+    com.sun.identity.authentication.callbacks.HiddenValueCallback,
+    org.forgerock.json.jose.builders.JwtBuilderFactory,
+    org.forgerock.json.jose.jwt.JwtClaimsSet,
+    org.forgerock.json.jose.jws.JwsAlgorithm,
+    org.forgerock.json.jose.jwe.JweAlgorithm,
+    org.forgerock.json.jose.jwe.EncryptionMethod,
+    org.forgerock.json.jose.jws.SignedJwt,
+    org.forgerock.json.jose.jws.EncryptedThenSignedJwt,
+    org.forgerock.json.jose.jwe.SignedThenEncryptedJwt,
+    org.forgerock.secrets.SecretBuilder,
+    javax.crypto.spec.SecretKeySpec,
+    org.forgerock.secrets.keys.SigningKey,
+    org.forgerock.secrets.keys.VerificationKey,
+    org.forgerock.json.jose.jws.handlers.SecretHmacSigningHandler,
+    org.forgerock.util.encode.Base64,
+    java.time.temporal.ChronoUnit,
+    java.time.Clock
 )
 
 var NodeOutcome = {
-  SUCCESS: "true",
-  ERROR: "false"
+    SUCCESS: "true",
+    ERROR: "false"
 }
 
-function extractTokenParameter(){
-  var tokenURLParam = requestParameters.get("token");
-  if (!tokenURLParam) { 
-    if (callbacks.isEmpty()) {
-      action = fr.Action.send(
-          new fr.HiddenValueCallback (
-            "stage",
-            "REGISTRATION_ERROR" 
-          ),
-          new fr.HiddenValueCallback (
-            "pagePropsJSON",
-            JSON.stringify({ 'errors': [{ 
-              label: "No Registration Token found in request.", 
-              token: "REGISTRATION_NO_TOKEN_ERROR" 
-            }] })
-          ),
-          new fr.TextOutputCallback(
-            fr.TextOutputCallback.ERROR,
-            "Token parameter not found"
-          )
-      ).build();
-      return false;
+var KeyType = {
+    SIGNING: 0,
+    VERIFICATION: 1,
+    ENCRYPTION: 2
+}
+
+var JwtType = {
+    SIGNED: 0,
+    ENCRYPTED: 1,
+    SIGNED_THEN_ENCRYPTED: 2,
+    ENCRYPTED_THEN_SIGNED: 3
+}
+
+function extractTokenParameter() {
+    var tokenURLParam = requestParameters.get("token");
+    if (!tokenURLParam) {
+        if (callbacks.isEmpty()) {
+            action = fr.Action.send(
+                new fr.HiddenValueCallback(
+                    "stage",
+                    "REGISTRATION_ERROR"
+                ),
+                new fr.HiddenValueCallback(
+                    "pagePropsJSON",
+                    JSON.stringify({ "error": "No Registration Token found in request.", "token": "REGISTRATION_NO_TOKEN_ERROR" })
+                ),
+                new fr.TextOutputCallback(
+                    fr.TextOutputCallback.ERROR,
+                    "Token parameter not found"
+                )
+            ).build();
+            return false;
+        }
+    } else {
+        return tokenURLParam.get(0);
     }
-  }else{
-    return tokenURLParam.get(0);
-  }
 }
 
-function extractInfoFromToken(tokenURL){
-  //tokenURL = requestParameters.get("token").get(0);
-  logger.error("[REGISTRATION-RESUME] received token: " + tokenURL);
-  // TODO: TOKEN DECRYPTION
-  try{
-    // reconstruct the inbound token, extract the originating email and creation date
-    var signedJwt = new fr.JwtBuilderFactory().reconstruct(tokenURL, fr.SignedJwt);
-    var claimSet = signedJwt.getClaimsSet();
-    var email = claimSet.getSubject();
-    var iat = claimSet.getClaim("creationDate");
-    var fullName = claimSet.getClaim("fullName");
-    var phone = claimSet.getClaim("phone");
-    var now = new Date();
-    differenceInTime = now.getTime() - (new Date(iat)).getTime();
-    logger.error("[REGISTRATION-RESUME] initiating email: " + email + " on: "+ iat + " - difference (hours): "+Math.round(differenceInTime/(1000 * 60)/60));
-    logger.error("[REGISTRATION-RESUME] name: " + fullName);
-    logger.error("[REGISTRATION-RESUME] phone: " + phone);
+function saveUserDataToState(claimSet) {
+    try {
+        // put the read attributes in shared state for the Create Object node to consume
+        sharedState.put("objectAttributes",
+            {
+                "userName": claimSet.subject,
+                "givenName": claimSet.fullName.length > 0 ? claimSet.fullName : null,
+                "sn": claimSet.subject,
+                "mail": claimSet.subject,
+                "telephoneNumber": claimSet.phone.length > 0 ? claimSet.phone : null
+            });
+        sharedState.put("userName", claimSet.subject);
+        return NodeOutcome.SUCCESS;
+    } catch (e) {
+        logger.error("[REGISTRATION-RESUME] error while reconstructing JWT: " + e);
+        return NodeOutcome.ERROR;
+    }
+}
+
+function getKey(secret, keyType) {
+    if (keyType == KeyType.ENCRYPTION) {
+        return new fr.SecretKeySpec(fr.Base64.decode(config.encryptionKey), "AES")
+    }
+    else {
+        var secretBytes = fr.Base64.decode(secret);
+        var secretBuilder = new fr.SecretBuilder;
+        secretBuilder.secretKey(new javax.crypto.spec.SecretKeySpec(secretBytes, "Hmac"));
+        secretBuilder.stableId(config.issuer).expiresIn(5, fr.ChronoUnit.MINUTES, fr.Clock.systemUTC());
+        return (keyType == KeyType.SIGNING) ? new fr.SigningKey(secretBuilder) : new fr.VerificationKey(secretBuilder)
+    }
+}
+
+function validatedJwtClaims(jwtString, issuer, jwtType) {
+
+    var jwt = null
+    var verificationKey = getKey(config.signingKey, KeyType.VERIFICATION)
+    var decryptionKey = getKey(config.encryptionKey, KeyType.ENCRYPTION)
+
+    switch (jwtType) {
+        case JwtType.SIGNED:
+            jwt = new fr.JwtBuilderFactory().reconstruct(jwtString, fr.SignedJwt);
+            break;
+
+
+        case JwtType.ENCRYPTED_THEN_SIGNED:
+            jwt = new fr.JwtBuilderFactory().reconstruct(jwtString, fr.EncryptedThenSignedJwt);
+            jwt.decrypt(decryptionKey)
+            break;
+
+        case JwtType.SIGNED_THEN_ENCRYPTED:
+            jwt = new fr.JwtBuilderFactory().reconstruct(jwtString, fr.SignedThenEncryptedJwt);
+            jwt.decrypt(decryptionKey)
+            break;
+
+        default:
+            logger.error("Unknown jwt type " + jwtType)
+            return {
+                success: false,
+                code: "TOKEN_JWT_TYPE_UNKNOWN",
+                message: "Unknown jwt type " + jwtType
+            }
+    }
+
+    var verificationHandler = new fr.SecretHmacSigningHandler(verificationKey)
+
+    if (!jwt.verify(verificationHandler)) {
+        logger.message("JWT signature did not verify")
+        return {
+            success: false,
+            code: "TOKEN_VERIFICATION_ERROR",
+            message: "JWT signature did not verify"
+        }
+    }
+
+    var jwtClaims = jwt.getClaimsSet()
+    var jwtIssuer = jwtClaims.getIssuer()
+    var jwtIssuedAt = jwtClaims.getIssuedAtTime()
+    var jwtExpiry = jwtClaims.getExpirationTime()
+    var now = new Date()
+
+    if (jwtIssuer != issuer) {
+        logger.message("Issuer in JWT [" + jwtIssuer + "] doesn't match expected issuer [" + issuer + "]")
+        return {
+            success: false,
+            code: "TOKEN_ISSUER_MISMATCH",
+            message: "Issuer in JWT [" + jwtIssuer + "] doesn't match expected issuer [" + issuer + "]"
+        }
+    }
+
+    if (jwtIssuedAt.after(now)) {
+        logger.message("JWT issued in the future [" + jwtIssuedAt + "]")
+        return {
+            success: false,
+            code: "TOKEN_ISSUED_IN_FUTURE",
+            message: "JWT issued in the future [" + jwtIssuedAt + "]"
+        }
+    }
+
+    if (jwtExpiry.before(now)) {
+        logger.message("JWT expired at [" + jwtExpiry + "]")
+        return {
+            success: false,
+            code: "TOKEN_EXPIRED",
+            message: "JWT expired at [" + jwtExpiry + "]"
+        }
+    }
+
     return {
-      email: email,
-      fullName: fullName,
-      phone: phone,
-      differenceInTime: differenceInTime
-    }
-  }catch(e){
-    logger.error("[REGISTRATION-RESUME] error while reconstructing JWT: " + e);
-    return false;	
-  }
-}
-
-function raiseTokenExpiredError(){
-  if (callbacks.isEmpty()) {
-    action = fr.Action.send(
-      new fr.HiddenValueCallback (
-            "stage",
-            "REGISTRATION_ERROR" 
-      ),
-      new fr.HiddenValueCallback (
-        "pagePropsJSON",
-        JSON.stringify({ 'errors': [{ 
-          label: "The registration token has expired. Please restart the registration process.", 
-          token: "REGISTRATION_TOKEN_EXPIRED_ERROR" 
-        }] })
-      ),
-      new fr.TextOutputCallback(
-        fr.TextOutputCallback.ERROR,
-        "The registration token has expired"
-      )
-    ).build()
-  }
-}
-
-function saveUserDataToState(tokenData){
-  logger.error("[REGISTRATION-RESUME] The provided token is still valid");
-  try{
-    // put the read attributes in shared state for the Create Object node to consume
-    sharedState.put("objectAttributes", 
-      {
-        "userName": tokenData.email, 
-        "givenName": tokenData.fullName, 
-        "sn": tokenData.email, 
-        "mail": tokenData.email, 
-        "telephoneNumber": tokenData.phone
-      });
-    sharedState.put("userName", tokenData.email);
-    return NodeOutcome.SUCCESS;
-  }catch(e){
-    logger.error("[REGISTRATION-RESUME] error while storing state: " + e);
-    return NodeOutcome.ERROR;
-  }
+        success: true,
+        claims: jwtClaims.build()
+    };
 }
 
 //main execution flow
+try {
+    var config = {
+        signingKey: transientState.get("chJwtSigningKey"),
+        encryptionKey: transientState.get("chJwtEncryptionKey"),
+        issuer: requestHeaders.get("origin").get(0),
+        audience: "CH Account"
+    }
 
-var token = extractTokenParameter();
+    logger.error("[REGISTRATION - RESUME] Configuration ".concat(config.toString()));
 
-if(token) {
-  // TODO: TOKEN VERIFICATION
-  // see https://git.openam.org.ru/org.forgerock/org.forgerock.openam/blob/6d8bd7c079ed52aaefecb12e1b233ea697431a96/openam/openam-core-rest/src/main/java/org/forgerock/openam/core/rest/authn/AuthIdHelper.java
-  //  String keyAlias = getKeyAlias(realmDN);
-  //  PublicKey publicKey = amKeyProvider.getPublicKey(keyAlias);
-  //  SigningHandler signingHandler = signingManager.newHmacSigningHandler(publicKey.getEncoded());
-  //  var verified = signedJwt.verify(signingHandler)
-  var tokenData = extractInfoFromToken(token);
-
-  if(!tokenData){
-    if (callbacks.isEmpty()) {
-      action = fr.Action.send(
+    var token = extractTokenParameter();
+    if (token) {
+        var tokenClaimsResponse = validatedJwtClaims(token, config.issuer, JwtType.SIGNED_THEN_ENCRYPTED);
+        if (!tokenClaimsResponse.success) {
+            if (callbacks.isEmpty()) {
+                action = fr.Action.send(
+                    new fr.TextOutputCallback(
+                        fr.TextOutputCallback.ERROR,
+                        "Error while processing token:".concat(tokenClaimsResponse.message)
+                    ),
+                    new fr.HiddenValueCallback(
+                        "stage",
+                        "REGISTRATION_ERROR"
+                    ),
+                    new fr.HiddenValueCallback(
+                        "pagePropsJSON",
+                        JSON.stringify(
+                            {
+                                "error": "An error occurred while parsing the registration token. Please restart the registration process",
+                                "token": "REGISTRATION_ERROR".concat(tokenClaimsResponse.code)
+                            })
+                    )
+                ).build()
+            } 
+        } else {
+            outcome = saveUserDataToState(JSON.parse(tokenClaimsResponse.claims));
+        }
+    }
+} catch (e) {
+    logger.error("[REGISTRATION - RESUME] ERROR " + e);
+    action = fr.Action.send(
         new fr.TextOutputCallback(
             fr.TextOutputCallback.ERROR,
-            "Error While parsing token"
-        ),
-        new fr.HiddenValueCallback (
-          "stage",
-          "REGISTRATION_ERROR" 
-        ),
-        
-        new fr.HiddenValueCallback (
-          "pagePropsJSON",
-          JSON.stringify({ 'errors': [{ 
-            label: "An error occurred while parsing the registration token. Please restart the registration process", 
-            token: "REGISTRATION_TOKEN_PARSING_ERROR"
-          }] })
+            e.toString()
         )
-      ).build()
-    }
-  } else if (Math.round(tokenData.differenceInTime/(1000 * 60)) < 1440){
-    outcome = saveUserDataToState(tokenData); 
-  } else {
-    raiseTokenExpiredError();
-  }
+    ).build()
 }

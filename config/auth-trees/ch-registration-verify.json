@@ -100,6 +100,16 @@
                "required":false,
                "validateInputs":false
             }
+         },
+         {
+            "_id": "c23cf0f2-e3fa-4838-a45b-2f7f11cb4eb6",
+            "nodeType":"ScriptedDecisionNode",
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["true", "false"],
+                "outputs":["*"],
+                "script": "1a6815f1-0272-490b-8d6b-69609c3ee9d6"
+            }
          }
     ],
     "tree": {
@@ -107,7 +117,7 @@
       "identityResource": "managed/alpha_user",
       "description": "Verify Registration tree for CH Users",
       "uiConfig": {},
-      "entryNodeId": "7ebb5593-77f8-4125-a11a-5717499da135",
+      "entryNodeId": "c23cf0f2-e3fa-4838-a45b-2f7f11cb4eb6",
       "nodes": {
          "02d95fe8-1c39-4144-b411-13fcd4226c6a": {
             "x": 1379,
@@ -120,8 +130,8 @@
             "displayName": "Create User"
          },
          "7ebb5593-77f8-4125-a11a-5717499da135": {
-            "x": 203,
-            "y": 265,
+            "x": 408,
+            "y": 276,
             "connections": {
                "false": "e301438c-0bd0-429c-ab0c-66126501069a",
                "true": "63a23daf-33ad-4848-8e2a-c3f3d749e646"
@@ -130,8 +140,8 @@
             "displayName": "Verify Reg Token"
          },
          "63a23daf-33ad-4848-8e2a-c3f3d749e646": {
-            "x": 538,
-            "y": 189,
+            "x": 622,
+            "y": 137,
             "connections": {
                "false": "d3d9440a-6562-479a-be32-7d863a159155",
                "true": "9d7a87df-d656-4539-b1e4-7199950aa0e8"
@@ -175,6 +185,16 @@
             },
             "nodeType": "PageNode",
             "displayName": "Consent"
+         },
+         "c23cf0f2-e3fa-4838-a45b-2f7f11cb4eb6": {
+            "x": 186,
+            "y": 367.015625,
+            "connections": {
+               "true": "7ebb5593-77f8-4125-a11a-5717499da135",
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Load Keys"
          }
       },
       "staticNodes": {
