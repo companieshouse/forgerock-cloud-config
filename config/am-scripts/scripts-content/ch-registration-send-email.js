@@ -31,15 +31,15 @@ var fr = JavaImporter(
     org.forgerock.json.jose.jwt.JwtClaimsSet,
     org.forgerock.json.jose.jws.JwsAlgorithm,
     org.forgerock.json.jose.jwe.JweAlgorithm,
-    org.forgerock.json.jose.jwe.EncryptionMethod,
-    org.forgerock.secrets.SecretBuilder,
+    org.forgerock.json.jose.jwe.EncryptionMethod,    
     org.forgerock.json.jose.jws.SignedJwt,
     org.forgerock.json.jose.jws.EncryptedThenSignedJwt,
     org.forgerock.json.jose.jwe.SignedThenEncryptedJwt,
+    org.forgerock.json.jose.jws.handlers.SecretHmacSigningHandler,
     javax.crypto.spec.SecretKeySpec,
+    org.forgerock.secrets.SecretBuilder,
     org.forgerock.secrets.keys.SigningKey,
     org.forgerock.secrets.keys.VerificationKey,
-    org.forgerock.json.jose.jws.handlers.SecretHmacSigningHandler,
     org.forgerock.util.encode.Base64,
     java.time.temporal.ChronoUnit,
     java.time.Clock
@@ -160,56 +160,6 @@ function buildJwt(claims, issuer, audience, jwtType) {
     return jwt;
 }
 
-// builds the Password Reset JWT
-// function buildRegistrationToken(email, phone, fullName) {
-//     var jwt;
-//     var signingHandler;
-//     var secret = transientState.get("secretKey");
-//     try {
-//         var secretbytes = java.lang.String(secret).getBytes();
-//         var secretBuilder = new fr.SecretBuilder;
-//         secretBuilder.secretKey(new javax.crypto.spec.SecretKeySpec(secretbytes, "Hmac"));
-//         secretBuilder.stableId(host).expiresIn(5, fr.ChronoUnit.MINUTES, fr.Clock.systemUTC());
-//         var key = new fr.SigningKey(secretBuilder);
-//         signingHandler = new fr.SecretHmacSigningHandler(key);
-//     } catch (e) {
-//         logger.error("[REGISTRATION - SEND EMAIL] Error while creating signing handler: " + e);
-//         return false;
-//     }
-//     var jwtClaims = new fr.JwtClaimsSet;
-//     try {
-//         jwtClaims.setIssuer(host);
-//         var dateNow = new Date();
-//         jwtClaims.setIssuedAtTime(dateNow);
-//         jwtClaims.setSubject(email);
-//         if (fullName) {
-//             jwtClaims.setClaim("fullName", fullName);
-//         }
-//         if (phone) {
-//             jwtClaims.setClaim("phone", phone);
-//         }
-//         jwtClaims.setClaim("creationDate", new Date().toString());
-//     } catch (e) {
-//         logger.error("[REGISTRATION - SEND EMAIL] Error while adding claims to JWT: " + e);
-//         return false;
-//     }
-
-//     try {
-//         jwt = new fr.JwtBuilderFactory()
-//             .jws(signingHandler)
-//             .headers()
-//             .alg(fr.JwsAlgorithm.HS256)
-//             .done()
-//             .claims(jwtClaims)
-//             .build();
-//         logger.error("[REGISTRATION - SEND EMAIL] JWT from reg: " + jwt);
-//         return jwt;
-//     } catch (e) {
-//         logger.error("[REGISTRATION - SEND EMAIL] Error while creating JWT: " + e);
-//         return false;
-//     }
-// }
-
 //raises a generic registration error
 function sendErrorCallbacks(stage, token, message) {
     if (callbacks.isEmpty()) {
@@ -286,27 +236,6 @@ function getSelectedLanguage(requestHeaders) {
     return 'EN';
 }
 
-
-function getClaims() {
-    var jwtClaims = new fr.JwtClaimsSet;
-    try {
-        jwtClaims.setIssuer(host);
-        var dateNow = new Date();
-        jwtClaims.setIssuedAtTime(dateNow);
-        jwtClaims.setSubject(email);
-        if (fullName) {
-            jwtClaims.setClaim("fullName", fullName);
-        }
-        if (phone) {
-            jwtClaims.setClaim("phone", phone);
-        }
-        jwtClaims.setClaim("creationDate", new Date().toString());
-    } catch (e) {
-        logger.error("[REGISTRATION - SEND EMAIL] Error while adding claims to JWT: " + e);
-        return false;
-    }
-}
-
 // main execution flow
 var config = {
     signingKey: transientState.get("chJwtSigningKey"),
@@ -334,7 +263,6 @@ try {
     }
 
     if (regData) {
-        // registrationJwt = buildRegistrationToken(regData.email, regData.phone, regData.fullName);
         registrationJwt = buildJwt(registrationClaims, config.issuer, config.audience, JwtType.SIGNED_THEN_ENCRYPTED);
         action = fr.Action.send(
             new fr.TextOutputCallback(

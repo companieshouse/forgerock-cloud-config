@@ -124,7 +124,7 @@ function validatedJwtClaims(jwtString, issuer, jwtType) {
             logger.error("Unknown jwt type " + jwtType)
             return {
                 success: false,
-                code: "TOKEN_JWT_TYPE_UNKNOWN",
+                code: "ERROR_JWT_TYPE_UNKNOWN",
                 message: "Unknown jwt type " + jwtType
             }
     }
@@ -135,7 +135,7 @@ function validatedJwtClaims(jwtString, issuer, jwtType) {
         logger.message("JWT signature did not verify")
         return {
             success: false,
-            code: "TOKEN_VERIFICATION_ERROR",
+            code: "ERROR_TOKEN_VERIFICATION",
             message: "JWT signature did not verify"
         }
     }
@@ -150,7 +150,7 @@ function validatedJwtClaims(jwtString, issuer, jwtType) {
         logger.message("Issuer in JWT [" + jwtIssuer + "] doesn't match expected issuer [" + issuer + "]")
         return {
             success: false,
-            code: "TOKEN_ISSUER_MISMATCH",
+            code: "ERROR_TOKEN_ISSUER_MISMATCH",
             message: "Issuer in JWT [" + jwtIssuer + "] doesn't match expected issuer [" + issuer + "]"
         }
     }
@@ -159,7 +159,7 @@ function validatedJwtClaims(jwtString, issuer, jwtType) {
         logger.message("JWT issued in the future [" + jwtIssuedAt + "]")
         return {
             success: false,
-            code: "TOKEN_ISSUED_IN_FUTURE",
+            code: "ERROR_TOKEN_ISSUED_IN_FUTURE",
             message: "JWT issued in the future [" + jwtIssuedAt + "]"
         }
     }
@@ -168,7 +168,7 @@ function validatedJwtClaims(jwtString, issuer, jwtType) {
         logger.message("JWT expired at [" + jwtExpiry + "]")
         return {
             success: false,
-            code: "TOKEN_EXPIRED",
+            code: "ERROR_TOKEN_EXPIRED",
             message: "JWT expired at [" + jwtExpiry + "]"
         }
     }
@@ -187,8 +187,6 @@ try {
         issuer: requestHeaders.get("origin").get(0),
         audience: "CH Account"
     }
-
-    logger.error("[REGISTRATION - RESUME] Configuration ".concat(config.toString()));
 
     var token = extractTokenParameter();
     if (token) {
@@ -209,7 +207,7 @@ try {
                         JSON.stringify(
                             {
                                 "error": "An error occurred while parsing the registration token. Please restart the registration process",
-                                "token": "REGISTRATION_ERROR".concat(tokenClaimsResponse.code)
+                                "token": "REGISTRATION_".concat(tokenClaimsResponse.code)
                             })
                     )
                 ).build()

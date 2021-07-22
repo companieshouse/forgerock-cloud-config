@@ -75,7 +75,7 @@
             "_id":"ac4e4e6e-0b76-44d6-af80-a97fb83b70e4",
             "nodeType": "PageNode",
             "details": {
-                "stage":"REGISTRATION_5",
+                "stage": "EMAIL_CONSENT",
                 "nodes":[
                     {
                         "_id":"cc0eae7e-d27f-468f-9966-3f9efe7d7918",
