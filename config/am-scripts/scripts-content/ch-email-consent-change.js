@@ -102,7 +102,7 @@ function updatePreferences(userId, field, value) {
         logger.error("[UPDATE EMAIL CONSENT] Counter updated correctly");
         return true;
     } else {
-        logger.error("[UPDATE EMAIL CONSENT] Error while updating counter value: " + response.getStatus().getCode());
+        logger.error("[UPDATE EMAIL CONSENT] Error while updating counter value: " + response.getEntity().getString());
         return false;
     }
 }

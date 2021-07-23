@@ -274,7 +274,7 @@ function sendEmail(language, invitedEmail, companyName, inviterName, returnUrl) 
 
     return {
         success: (response.getStatus().getCode() == 201),
-        message: (response.getStatus().getCode() == 201) ? ("Message sent") : ("Cannot send message: " + response.getStatus().getCode())
+        message: (response.getStatus().getCode() == 201) ? ("Message sent") : response.getEntity().getString()
     };
 }
 
