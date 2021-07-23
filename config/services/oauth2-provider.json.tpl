@@ -97,7 +97,7 @@
             "A256CBC-HS512"
         ],
         "loaMapping": {
-            "webfiling": "CHWebFiling"
+            "webfiling": "CHWebFiling-Login"
         },
         "storeOpsTokens": true,
         "supportedUserInfoEncryptionEnc": [
