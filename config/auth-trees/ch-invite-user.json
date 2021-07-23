@@ -160,6 +160,16 @@
              "outputs":["*"],
              "script": "e502a152-bc0a-49b3-82cd-233bafdabcad"
          }
+      },
+      {
+         "_id": "6e1f2e53-af87-417a-ad0d-7b9440ea14bf",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["true", "false"],
+             "outputs":["*"],
+             "script": "1a6815f1-0272-490b-8d6b-69609c3ee9d6"
+         }
       }
    ],
    "tree": {
@@ -218,8 +228,8 @@
             "displayName": "Identify Existing User"
          },
          "64794662-6859-4db2-81c9-413b61184a01": {
-            "x": 1922,
-            "y": 39.015625,
+            "x": 2094,
+            "y": 53.015625,
             "connections": {
                "false": "948ed6a4-fe12-4cc2-9c39-aeafeec87822",
                "true": "d2c6f979-c746-408b-9199-7fde3da69dc5"
@@ -247,11 +257,11 @@
             "displayName": "get IDM token"
          },
          "9227e96a-960d-4502-8003-38b6857ca644": {
-            "x": 1713,
-            "y": 0,
+            "x": 1642,
+            "y": 6,
             "connections": {
                "false": "e301438c-0bd0-429c-ab0c-66126501069a",
-               "true": "64794662-6859-4db2-81c9-413b61184a01"
+               "true": "6e1f2e53-af87-417a-ad0d-7b9440ea14bf"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Create Notify JWT"
@@ -279,8 +289,8 @@
             "displayName": "Create Relationship"
          },
          "d2c6f979-c746-408b-9199-7fde3da69dc5": {
-            "x": 1971,
-            "y": 210.015625,
+            "x": 2116,
+            "y": 219.015625,
             "connections": {
                "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
             },
@@ -315,6 +325,16 @@
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "onboarding"
+         },
+         "6e1f2e53-af87-417a-ad0d-7b9440ea14bf": {
+            "x": 1872,
+            "y": 16.015625,
+            "connections": {
+               "true": "64794662-6859-4db2-81c9-413b61184a01",
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Load Keys"
          }
       },
       "staticNodes": {
@@ -323,8 +343,8 @@
             "y": 250
          },
          "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
-            "x": 2137,
-            "y": 130
+            "x": 2296,
+            "y": 126
          },
          "e301438c-0bd0-429c-ab0c-66126501069a": {
             "x": 1782,

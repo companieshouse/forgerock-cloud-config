@@ -100,7 +100,17 @@
 			"details": {
 				"tree": "CHManageEmailConsent"
 			}
-		}
+		},
+		{
+			"_id": "890c4806-4624-4570-9052-372d0fe1b923",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["true", "false"],
+                "outputs":["*"],
+				"script": "1a6815f1-0272-490b-8d6b-69609c3ee9d6"
+            }            
+        }
 	],
 	"tree": {
 		"_id": "CHOnboarding",
@@ -120,8 +130,8 @@
 				"displayName": "Create Password"
 			},
 			"5dcc3a70-9881-4661-ba8a-d674e932426e": {
-				"x": 1558,
-				"y": 203.015625,
+				"x": 1511,
+				"y": 156.015625,
 				"connections": {
 					"FAILURE": "e301438c-0bd0-429c-ab0c-66126501069a",
 					"PATCHED": "90fbab28-de9f-4d6b-9cc6-6519e26fef7f"
@@ -130,11 +140,11 @@
 				"displayName": "Patch Object"
 			},
 			"613e061a-3e49-4a9a-8efd-79fc1d7103ec": {
-				"x": 227,
-				"y": 248.015625,
+				"x": 189,
+				"y": 177.015625,
 				"connections": {
 					"error": "c93e7a45-b85f-415b-afaf-54f0543d0b7b",
-					"success": "c93e7a45-b85f-415b-afaf-54f0543d0b7b"
+					"success": "890c4806-4624-4570-9052-372d0fe1b923"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "get IDM token"
@@ -177,8 +187,8 @@
 				"displayName": "Load New Pwd for Patch"
 			},
 			"c93e7a45-b85f-415b-afaf-54f0543d0b7b": {
-				"x": 380,
-				"y": 131.015625,
+				"x": 418,
+				"y": 113.015625,
 				"connections": {
 					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
 					"true": "578b6f24-db1a-432a-bfb8-9d0f6a2e975c"
@@ -215,6 +225,16 @@
 				},
 				"nodeType": "InnerTreeEvaluatorNode",
 				"displayName": "Email consent"
+			},
+			"890c4806-4624-4570-9052-372d0fe1b923": {
+				"x": 317,
+				"y": 304.015625,
+				"connections": {
+					"true": "c93e7a45-b85f-415b-afaf-54f0543d0b7b",
+					"false": "c93e7a45-b85f-415b-afaf-54f0543d0b7b"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Load Keys"
 			}
 		},
 		"staticNodes": {

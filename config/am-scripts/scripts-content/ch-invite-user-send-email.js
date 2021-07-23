@@ -28,16 +28,22 @@ var fr = JavaImporter(
     org.forgerock.openam.auth.node.api,
     javax.security.auth.callback.TextOutputCallback,
     com.sun.identity.authentication.callbacks.HiddenValueCallback,
-    org.forgerock.util.encode.Base64,
-    java.time.temporal.ChronoUnit,
-    java.time.Clock,
-    org.forgerock.secrets.SecretBuilder,
-    javax.crypto.spec.SecretKeySpec,
-    org.forgerock.secrets.keys.SigningKey,
-    org.forgerock.json.jose.jws.handlers.SecretHmacSigningHandler,
     org.forgerock.json.jose.builders.JwtBuilderFactory,
     org.forgerock.json.jose.jwt.JwtClaimsSet,
-    org.forgerock.json.jose.jws.JwsAlgorithm
+    org.forgerock.json.jose.jws.JwsAlgorithm,
+    org.forgerock.json.jose.jwe.JweAlgorithm,
+    org.forgerock.json.jose.jwe.EncryptionMethod,    
+    org.forgerock.json.jose.jws.SignedJwt,
+    org.forgerock.json.jose.jws.EncryptedThenSignedJwt,
+    org.forgerock.json.jose.jwe.SignedThenEncryptedJwt,
+    org.forgerock.json.jose.jws.handlers.SecretHmacSigningHandler,
+    javax.crypto.spec.SecretKeySpec,
+    org.forgerock.secrets.SecretBuilder,
+    org.forgerock.secrets.keys.SigningKey,
+    org.forgerock.secrets.keys.VerificationKey,
+    org.forgerock.util.encode.Base64,
+    java.time.temporal.ChronoUnit,
+    java.time.Clock
 )
 
 var NodeOutcome = {
@@ -45,63 +51,100 @@ var NodeOutcome = {
     SUCCESS: "true"
 }
 
-// builds the Password Reset JWT
-function buildOnboardingToken(email, companyNo) {
-    var jwt;
-    var signingHandler;
-    var secret = transientState.get("secretKey");
-    try {
-        var secretbytes = java.lang.String(secret).getBytes();
-        var secretBuilder = new fr.SecretBuilder;
-        secretBuilder.secretKey(new javax.crypto.spec.SecretKeySpec(secretbytes, "Hmac"));
-        secretBuilder.stableId(host).expiresIn(5, fr.ChronoUnit.MINUTES, fr.Clock.systemUTC());
-        var key = new fr.SigningKey(secretBuilder);
-        signingHandler = new fr.SecretHmacSigningHandler(key);
-    } catch (e) {
-        logger.error("[ONBOARIDNG] Error while creating signing handler: " + e);
-        return {
-            success: false,
-            message: "[ONBOARIDNG] Error while creating signing handler: ".concat(e)
-        };
+var KeyType = {
+    SIGNING: 0,
+    VERIFICATION: 1,
+    ENCRYPTION: 2
+}
+
+var JwtType = {
+    SIGNED: 0,
+    ENCRYPTED: 1,
+    SIGNED_THEN_ENCRYPTED: 2,
+    ENCRYPTED_THEN_SIGNED: 3
+}
+
+function getKey(secret, keyType) {
+    if (keyType == KeyType.ENCRYPTION) {
+        return new fr.SecretKeySpec(fr.Base64.decode(config.encryptionKey), "AES")
     }
-    var jwtClaims = new fr.JwtClaimsSet;
-    try {
-        jwtClaims.setIssuer(host);
-        var dateNow = new Date();
-        jwtClaims.setIssuedAtTime(dateNow);
-        jwtClaims.setSubject(email);
-        if (companyNo) {
-            jwtClaims.setClaim("companyNo", companyNo);
-        }
-        jwtClaims.setClaim("creationDate", new Date().toString());
-    } catch (e) {
-        logger.error("[ONBOARIDNG] Error while adding claims to JWT: " + e);
-        return {
-            success: false,
-            message: "[ONBOARIDNG] Error while adding claims to JWT: ".concat(e)
-        };
+    else {
+        var secretBytes = fr.Base64.decode(secret);
+        var secretBuilder = new fr.SecretBuilder;
+        secretBuilder.secretKey(new javax.crypto.spec.SecretKeySpec(secretBytes, "Hmac"));
+        secretBuilder.stableId(config.issuer).expiresIn(5, fr.ChronoUnit.MINUTES, fr.Clock.systemUTC());
+        return (keyType == KeyType.SIGNING) ? new fr.SigningKey(secretBuilder) : new fr.VerificationKey(secretBuilder)
+    }
+}
+
+function buildJwt(claims, issuer, audience, jwtType) {
+
+    logger.message("Building response JWT")
+
+    var signingKey = getKey(config.signingKey, KeyType.SIGNING)
+    var signingHandler = new fr.SecretHmacSigningHandler(signingKey);
+    var encryptionKey = getKey(config.encryptionKey, KeyType.ENCRYPTION)
+
+    var iat = new Date()
+    var iatTime = iat.getTime();
+
+    var jwtClaims = new fr.JwtClaimsSet
+    jwtClaims.setIssuer(issuer)
+    jwtClaims.addAudience(audience);
+    jwtClaims.setIssuedAtTime(new Date());
+    jwtClaims.setExpirationTime(new Date(iatTime + (config.validityMinutes * 60 * 1000)))
+    jwtClaims.setClaims(claims)
+
+    var jwt = null;
+
+    switch (jwtType) {
+
+        case JwtType.SIGNED:
+
+            jwt = new fr.JwtBuilderFactory()
+                .jws(signingHandler)
+                .headers()
+                .alg(fr.JwsAlgorithm.HS256)
+                .done()
+                .claims(jwtClaims)
+                .build();
+            break;
+
+        case JwtType.SIGNED_THEN_ENCRYPTED:
+
+            jwt = new fr.JwtBuilderFactory()
+                .jws(signingHandler)
+                .headers()
+                .alg(fr.JwsAlgorithm.HS256)
+                .done()
+                .encrypt(encryptionKey)
+                .headers()
+                .alg(fr.JweAlgorithm.DIRECT)
+                .enc(fr.EncryptionMethod.A128CBC_HS256)
+                .done()
+                .claims(jwtClaims)
+                .build();
+            break;
+
+        case JwtType.ENCRYPTED_THEN_SIGNED:
+
+            jwt = new fr.JwtBuilderFactory()
+                .jwe(encryptionKey)
+                .headers()
+                .alg(fr.JweAlgorithm.DIRECT)
+                .enc(fr.EncryptionMethod.A128CBC_HS256)
+                .done()
+                .claims(jwtClaims)
+                .signedWith(signingHandler, fr.JwsAlgorithm.HS256)
+                .build();
+            break;
+
+        default:
+            logger.error("Unknown jwt type " + jwtType)
+
     }
 
-    try {
-        jwt = new fr.JwtBuilderFactory()
-            .jws(signingHandler)
-            .headers()
-            .alg(fr.JwsAlgorithm.HS256)
-            .done()
-            .claims(jwtClaims)
-            .build();
-        logger.error("[ONBOARIDNG] Onboarding JWT: " + jwt);
-        return {
-            success: true,
-            token: jwt
-        };
-    } catch (e) {
-        logger.error("[ONBOARIDNG] Error while creating JWT: " + e);
-        return {
-            success: false,
-            message: "[ONBOARIDNG] Error while creating JWT: ".concat(e)
-        };
-    }
+    return jwt;
 }
 
 // extracts the email from shared state
@@ -144,27 +187,42 @@ function sendErrorCallbacks(stage, token, message) {
     }
 }
 
-//sends the email (via Notify) to the recipient using the given JWT
-function sendEmail(language, invitedEmail, companyName, companyNumber, inviterName) {
-    var onboardingJwtResponse = "";
+//builds an onboarding JWT (if necessary) and assemble the return URL
+function buildReturnUrl(invitedEmail, companyNumber){
+   
     var returnUrl = "";
-    //if the user has been onboarded, the link they receive must be to the onboarding journey
+    var now = new Date();
     if (isOnboarding) {
-        onboardingJwtResponse = buildOnboardingToken(invitedEmail, companyNumber);
-        if (!onboardingJwtResponse.success) {
+        var obnboardingClaims = {
+            subject: invitedEmail,
+            companyNo: companyNumber,
+            creationDate: now.toString(),
+            expirationDate: new Date(now.getTime() + config.validityMinutes * 60 * 1000).toString()
+        }
+        var onboardingJwt = buildJwt(obnboardingClaims, config.issuer, config.audience, JwtType.SIGNED_THEN_ENCRYPTED);
+        //onboardingJwtResponse = buildOnboardingToken(invitedEmail, companyNumber);
+        if (!onboardingJwt) {
             logger.error("[COMPANY INVITE - SEND EMAIL] Error while creating Onboarding JWT");
             return {
                 success: false,
-                message: onboardingJwtResponse.message
+                message: "Error while creating Onboarding JWT"
             };
         } else {
-            returnUrl = host.concat("/account/onboarding/?token=", onboardingJwtResponse.token)
+            returnUrl = host.concat("/account/onboarding/?token=", onboardingJwt)
                             .concat("&goto=", encodeURIComponent("/account/notifications/#" + companyNumber));
         }
     } else {
         returnUrl = host.concat("/account/login/?goto=", encodeURIComponent("/account/notifications/#" + companyNumber));
     }
+    return {
+        success: true,
+        returnUrl: returnUrl
+    };
+}
 
+//sends the email (via Notify) to the recipient using the given JWT
+function sendEmail(language, invitedEmail, companyName, inviterName, returnUrl) {
+    
     logger.error("[COMPANY INVITE - SEND EMAIL] params: " + invitedEmail + " - " + companyName + " - " + inviterName);
 
     var notifyJWT = transientState.get("notifyJWT");
@@ -216,7 +274,7 @@ function sendEmail(language, invitedEmail, companyName, companyNumber, inviterNa
 
     return {
         success: (response.getStatus().getCode() == 201),
-        message: (response.getStatus().getCode() == 201) ? ("Message sent") : ("Cannot send message: " + response.getStatus().getCode())
+        message: (response.getStatus().getCode() == 201) ? ("Message sent") : response.getEntity().getString()
     };
 }
 
@@ -231,7 +289,17 @@ function getSelectedLanguage(requestHeaders) {
     return 'EN';
 }
 
+var FIDC_ENDPOINT = "https://openam-companieshouse-uk-dev.id.forgerock.io";
+
 // main execution flow
+var config = {
+    signingKey: transientState.get("chJwtSigningKey"),
+    encryptionKey: transientState.get("chJwtEncryptionKey"),
+    issuer: FIDC_ENDPOINT,
+    audience: "CH Account",
+    validityMinutes: 10080 //7 days
+}
+
 try {
     var host = requestHeaders.get("origin").get(0);
     var request = new org.forgerock.http.protocol.Request();
@@ -242,12 +310,17 @@ try {
     if (!inviteData) {
         sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ERROR", "An error has occurred! Please try again later.");
     } else {
-        var sendEmailResult = sendEmail(language, inviteData.invitedEmail, inviteData.companyName, inviteData.companyNumber, inviteData.inviterName);
-        if (sendEmailResult.success) {
-            action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
+        var returnUrlResponse = buildReturnUrl(inviteData.invitedEmail, inviteData.companyNumber);
+        if(!returnUrlResponse.success){
+            sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ERROR", returnUrlResponse.message);
         } else {
-            sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ERROR", JSON.stringify(sendEmailResult));
-        }
+            var sendEmailResult = sendEmail(language, inviteData.invitedEmail, inviteData.companyName, inviteData.inviterName, returnUrlResponse.returnUrl);
+            if (sendEmailResult.success) {
+                action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
+            } else {
+                sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ERROR", JSON.stringify(sendEmailResult));
+            }
+        }        
     }
 } catch (e) {
     logger.error("[COMPANY INVITE - SEND EMAIL] Error : " + e);

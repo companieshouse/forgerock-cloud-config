@@ -109,9 +109,8 @@ function sendEmail(language, code, emailAddress) {
 
     return {
         success: (response.getStatus().getCode() == 201),
-        message: (response.getStatus().getCode() == 201) ? ("Message sent") : ("Cannot send message: " + response.getStatus().getCode())
+        message: (response.getStatus().getCode() == 201) ? ("Message sent") : response.getEntity().getString()
     };
-
 }
 
 // execution flow
@@ -151,7 +150,7 @@ try {
         }
     }
 } catch (e) {
-    logger.error("[COMPANY INVITE - SEND EMAIL] Error : " + e);
+    logger.error("[SEND MFA EMAIL] Error : " + e);
     action = fr.Action.send(
         new fr.HiddenValueCallback(
             "stage",
