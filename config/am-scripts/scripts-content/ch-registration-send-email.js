@@ -265,12 +265,6 @@ try {
 
     if (regData) {
         registrationJwt = buildJwt(registrationClaims, config.issuer, config.audience, JwtType.SIGNED_THEN_ENCRYPTED);
-        action = fr.Action.send(
-            new fr.TextOutputCallback(
-                fr.TextOutputCallback.ERROR,
-                registrationJwt
-            )
-        ).build()
     }
 
     if (!regData || !registrationJwt) {
