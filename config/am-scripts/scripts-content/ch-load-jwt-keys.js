@@ -8,8 +8,8 @@ var NodeOutcome = {
 }
 
 // This variable value will be replaced with the relevant value in the target environment (stored in AM secret store) 
-var chJwtSigningKey = "cGFzc3dvcmQ=";
-var chJwtEncryptionKey = "Syz1K5XQCZtq7FkE+GNvgZPeFyvUXJdemIW7CQjM18U=";
+var chJwtSigningKey = "KLyM3tGMn0Efa0HmJfq3eJd4ZiHIDJ1/kNfUwDp9ofE=";
+var chJwtEncryptionKey = "5ATJO3doZPqg6pP4rUzn78HRnjQBwkGK01BGBTYio/U=";
 
 // saves the JWT to transient state for future use
 function saveState() {
