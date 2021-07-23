@@ -1349,6 +1349,22 @@
                 "lastModifiedDate":1617810491969
              },
             "filename": "ch-load-jwt-keys.js"
+        },
+        {
+            "payload": {
+                "_id":"1a782857-b6fc-438d-9244-ae7ddc1dec26",
+                "name":"CH - Load Language into session",
+                "description":"Load the selected language to session (defaults to EN)",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-webfiling-store-lang-in-session.js"
         }
     ]
 }

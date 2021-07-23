@@ -365,69 +365,86 @@ try {
     var config = {
         signingKey: transientState.get("chJwtSigningKey"),
         encryptionKey: transientState.get("chJwtEncryptionKey"),
-        issuer: requestHeaders.get("origin").get(0),
+        issuer: FIDC_ENDPOINT,
         audience: "CH Account"
     }
-    var token = extractTokenParameter();
-    sharedState.put("isOnboarding", true);
-
-    if (token) {
-        //var tokenData = extractInfoFromToken(token);
-        var tokenClaimsResponse = validatedJwtClaims(token, config.issuer, JwtType.SIGNED_THEN_ENCRYPTED);
-        if (!tokenClaimsResponse.success) {
-            if (callbacks.isEmpty()) {
-                action = fr.Action.send(
-                    new fr.TextOutputCallback(
-                        fr.TextOutputCallback.ERROR,
-                        "Error while processing token:".concat(tokenClaimsResponse.message)
-                    ),
-                    new fr.HiddenValueCallback(
-                        "stage",
-                        "ONBOARDING_ERROR"
-                    ),
-                    new fr.HiddenValueCallback(
-                        "pagePropsJSON",
-                        JSON.stringify(
-                            {
-                                "error": "An error occurred while parsing the onboarding token.",
-                                "token": "ONBOARDING_".concat(tokenClaimsResponse.code)
-                            })
-                    )
-                ).build()
-            } 
-        } else {
-            var tokenData = extractInfoFromToken(JSON.parse(tokenClaimsResponse.claims));
-
-            var userResponse = lookupUser(tokenData.email);
-
-            if (!userResponse.success) {
-                raiseError(userResponse.error, "ONBOARDING_USER_LOOKUP_ERROR");
-            } else if (!userResponse.user) {
-                raiseError("The invited user does not exist.", "ONBOARDING_USER_NOT_FOUND_ERROR");
+    if (typeof existingSession !== 'undefined') {
+        if (callbacks.isEmpty()) {
+            action = fr.Action.send(
+                new fr.HiddenValueCallback(
+                    "stage",
+                    "ONBOARDING_ERROR"
+                ),
+                new fr.TextOutputCallback(
+                    fr.TextOutputCallback.ERROR,
+                    "An active session was found - You must terminate all active sessions to proceed with this operation"
+                ),
+                new fr.HiddenValueCallback(
+                    "pagePropsJSON",
+                    JSON.stringify({ 'errors': [
+                        { 
+                            label: "An active session was found - You must terminate all active sessions to proceed with this operation", 
+                            token: "ACTIVE_SESSION_ERROR" 
+                        }] 
+                    })
+                )
+            ).build()
+        }
+    } else {
+        var token = extractTokenParameter();
+        sharedState.put("isOnboarding", true);
+        if (token) {
+            //var tokenData = extractInfoFromToken(token);
+            var tokenClaimsResponse = validatedJwtClaims(token, config.issuer, JwtType.SIGNED_THEN_ENCRYPTED);
+            if (!tokenClaimsResponse.success) {
+                if (callbacks.isEmpty()) {
+                    action = fr.Action.send(
+                        new fr.TextOutputCallback(
+                            fr.TextOutputCallback.ERROR,
+                            "Error while processing token:".concat(tokenClaimsResponse.message)
+                        ),
+                        new fr.HiddenValueCallback(
+                            "stage",
+                            "ONBOARDING_ERROR"
+                        ),
+                        new fr.HiddenValueCallback(
+                            "pagePropsJSON",
+                            JSON.stringify(
+                                {
+                                    "error": "An error occurred while parsing the onboarding token.",
+                                    "token": "ONBOARDING_".concat(tokenClaimsResponse.code)
+                                })
+                        )
+                    ).build()
+                }
             } else {
-                var isUserInvited = isUserInvitedForCompany(tokenData.email, tokenData.companyNo);
-                if (!isUserInvited.success) {
-                    raiseError(isUserInvited.error, "ONBOARDING_USER_LOOKUP_ERROR");
-                } else if (!isUserInvited.isPending) {
-                    raiseError("The user is not invited for the company", "ONBOARDING_NO_INVITE_FOUND_ERROR");
-                } else if (!validateOnboardingDate(userResponse.user)) {
-                    raiseError("The onboarding date is expired.", "ONBOARDING_DATE_EXPIRED_ERROR");
+                var tokenData = extractInfoFromToken(JSON.parse(tokenClaimsResponse.claims));
+
+                var userResponse = lookupUser(tokenData.email);
+
+                if (!userResponse.success) {
+                    raiseError(userResponse.error, "ONBOARDING_USER_LOOKUP_ERROR");
+                } else if (!userResponse.user) {
+                    raiseError("The invited user does not exist.", "ONBOARDING_USER_NOT_FOUND_ERROR");
                 } else {
-                    outcome = saveUserDataToState(tokenData);
-                } 
+                    var isUserInvited = isUserInvitedForCompany(tokenData.email, tokenData.companyNo);
+                    if (!isUserInvited.success) {
+                        raiseError(isUserInvited.error, "ONBOARDING_USER_LOOKUP_ERROR");
+                    } else if (!isUserInvited.isPending) {
+                        raiseError("The user is not invited for the company", "ONBOARDING_NO_INVITE_FOUND_ERROR");
+                    } else if (!validateOnboardingDate(userResponse.user)) {
+                        raiseError("The onboarding date is expired.", "ONBOARDING_DATE_EXPIRED_ERROR");
+                    } else {
+                        outcome = saveUserDataToState(tokenData);
+                    }
+                }
             }
         }
+        outcome = NodeOutcome.SUCCESS;
     }
-    outcome = NodeOutcome.SUCCESS;
 } catch (e) {
     logger.error("[ONBOARDING-RESUME] error " + e);
     sharedState.put("errorMessage", e.toString());
     //raiseError("general error: ".concat(e.toString()), "ONBOARDING_DATE_EXPIRED_ERROR");
     outcome = NodeOutcome.ERROR;
 }
-
-
-
-
-// https://idam.amido.aws.chdev.org/account/onboarding
-// https://idam.amido.aws.chdev.org/am/XUI/?realm=/alpha&authIndexType=service&authIndexValue=CHOnboarding&ForceAuth=true&token=eyJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwiYWxnIjoiZGlyIn0..RuIYZIY-7cNH-1AMWDivyA.Yd96OHLqW3C0Mg2IOXRDLyXUCRnRVWD8YaHo-NIflO-FSdmw-dd0w931U_ZDsIIKjL0bNmPI8EhSvPAWDQRotAr1Y-_UJyiHZS1beziV1eegiRl1d1BN6vnBRyqP4-QgheVoSxMqLzPfAAsMm8TdkdZioyOauEOOkFF2wHmNsrzHz9W6bo4rojrmHxi-m3PoosJOvnGiPurKt1DFwyWkF-f6m1C3WRguwAma5jUQRU2leQNVjlYMLEkXk1JPx33VLylb94znFASzhl1c0U_2rh_C8hW8mPMtnnZJHrLWdKUurMo0iRVHtEUiQHyQ1mCgIdGkhKx8J0VhgvnKMp1ZOx357nupSTDHGVwx75irlfwlTXoLHfsa_T_ni9xow-4fRZMHq6k0H6NP8JKUi1IoZg7FarL8dKtjddCqWekUiI1SPK25NKoNfrmkCQyPC0e8O1iBjqTbbSFUTdk45Yrz1Uv5x3fa4dqTMcd5DQchOwtL07Ej3siFrdWkSfgUf4FSi7GYlUIIgMxwfnPUCvE0FToOhWg22-YBxv75xSAkQCph7BInWo9JSjFfCAEnrIWwG9PO6hOuLNr4Lr8BxyieamCm4N8rCF3yfi8mf_tcB0yQ5fYzxKVdSXS8L2E3VwE7pDIJOW1mIKbmvEMPH_r-ow.43IlZzF6CYK4AU81wYj-lg

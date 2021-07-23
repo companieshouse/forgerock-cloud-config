@@ -271,10 +271,11 @@ function getSelectedLanguage(requestHeaders) {
 }
 
 // main execution flow
+var FIDC_ENDPOINT = "https://openam-companieshouse-uk-dev.id.forgerock.io";
 var config = {
     signingKey: transientState.get("chJwtSigningKey"),
     encryptionKey: transientState.get("chJwtEncryptionKey"),
-    issuer: requestHeaders.get("origin").get(0),
+    issuer: FIDC_ENDPOINT,
     audience: "CH Account",
     validityMinutes: 1440
 }
@@ -295,7 +296,6 @@ try {
     }
 
     if (email) {
-        //resetPasswordjJwt = buildPasswordResetToken(email);
         resetPasswordjJwt = buildJwt(pwdResetClaims, config.issuer, config.audience, JwtType.SIGNED_THEN_ENCRYPTED);
         if (resetPasswordjJwt) {
             returnUrl = buildReturnUrl(resetPasswordjJwt);

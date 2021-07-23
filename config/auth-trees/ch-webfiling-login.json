@@ -355,6 +355,16 @@
 			"details": {
 				"tree": "CHManageEmailConsent"
 			}
+		},
+		{
+			"_id": "f9659606-3900-4580-8513-0e197e62452a",
+			"nodeType": "ScriptedDecisionNode",
+			"details": {
+				"inputs": ["*"],
+				"outcomes": ["success"],
+				"outputs": ["*"],
+				"script": "1a782857-b6fc-438d-9244-ae7ddc1dec26"
+			}
 		}
 	],
     "tree": {
@@ -397,17 +407,27 @@
 				"displayName": "Check soft lock"
 			},
 			"24d11b28-95b9-478c-aede-990c2471109c": {
-				"x": 2810,
-				"y": 195.5,
+				"x": 2786,
+				"y": 56.5,
 				"connections": {
 					"outcome": "f79be846-2226-41d2-a8f1-7a53ef4b5a77"
 				},
 				"nodeType": "IncrementLoginCountNode",
 				"displayName": "Increment Login Count"
 			},
+			"318d16a5-37ca-4d58-a3ec-54a4699881e3": {
+				"x": 3148,
+				"y": 20.015625,
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "7f0f8fa9-357a-4139-b407-d9a0336faaa9"
+				},
+				"nodeType": "InnerTreeEvaluatorNode",
+				"displayName": "Complete Profile"
+			},
 			"31fa4b8d-9686-4bec-8db2-45d442533b22": {
-				"x": 3033,
-				"y": 34.5,
+				"x": 2985,
+				"y": 197.5,
 				"connections": {
 					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
 					"true": "318d16a5-37ca-4d58-a3ec-54a4699881e3"
@@ -473,6 +493,16 @@
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Send MFA text via Notify"
 			},
+			"7f0f8fa9-357a-4139-b407-d9a0336faaa9": {
+				"x": 3233,
+				"y": 191.015625,
+				"connections": {
+					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"true": "f9659606-3900-4580-8513-0e197e62452a"
+				},
+				"nodeType": "InnerTreeEvaluatorNode",
+				"displayName": "Email Consent"
+			},
 			"9760e4cc-d4f7-4bf0-8985-18a4c8a7c55d": {
 				"x": 2239,
 				"y": 260,
@@ -484,8 +514,8 @@
 				"displayName": "Send MFA email via Notify"
 			},
 			"979fd32f-2242-4d08-b31b-722c1ed419b4": {
-				"x": 3088,
-				"y": 443.015625,
+				"x": 2966,
+				"y": 423.015625,
 				"connections": {},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "max attempts"
@@ -599,8 +629,8 @@
 				"displayName": "Create Notify JWT - Email"
 			},
 			"f79be846-2226-41d2-a8f1-7a53ef4b5a77": {
-				"x": 3059,
-				"y": 194.5,
+				"x": 2796,
+				"y": 155.5,
 				"connections": {
 					"true": "31fa4b8d-9686-4bec-8db2-45d442533b22"
 				},
@@ -625,25 +655,14 @@
 				"nodeType": "PageNode",
 				"displayName": "Login Form (EWF)"
 			},
-			"318d16a5-37ca-4d58-a3ec-54a4699881e3": {
-				"x": 3305,
-				"y": 54.015625,
+			"f9659606-3900-4580-8513-0e197e62452a": {
+				"x": 3372,
+				"y": 106.015625,
 				"connections": {
-					"true": "7f0f8fa9-357a-4139-b407-d9a0336faaa9",
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a"
+					"success": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
 				},
-				"nodeType": "InnerTreeEvaluatorNode",
-				"displayName": "Complete Profile"
-			},
-			"7f0f8fa9-357a-4139-b407-d9a0336faaa9": {
-				"x": 3406,
-				"y": 203.015625,
-				"connections": {
-					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a"
-				},
-				"nodeType": "InnerTreeEvaluatorNode",
-				"displayName": "Email Consent"
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Add Language to session"
 			}
 		},
 		"staticNodes": {
@@ -652,12 +671,12 @@
 				"y": 190
 			},
 			"70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
-				"x": 3625,
-				"y": 196.66666666666666
+				"x": 3591,
+				"y": 34.66666666666666
 			},
 			"e301438c-0bd0-429c-ab0c-66126501069a": {
-				"x": 3639,
-				"y": 797.3333333333334
+				"x": 3302,
+				"y": 671.3333333333334
 			}
 		}
 	}

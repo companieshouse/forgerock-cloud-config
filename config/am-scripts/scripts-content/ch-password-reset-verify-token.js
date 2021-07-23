@@ -45,23 +45,7 @@ var NodeOutcome = {
 function extractTokenParameter() {
     var tokenURLParam = requestParameters.get("token");
     if (!tokenURLParam) {
-        if (callbacks.isEmpty()) {
-            action = fr.Action.send(
-                new fr.HiddenValueCallback(
-                    "stage",
-                    "RESET_PASSWORD_ERROR"
-                ),
-                new fr.HiddenValueCallback(
-                    "pagePropsJSON",
-                    JSON.stringify({ "error": "No Reset Password Token found in request.", "token": "RESET_PASSWORD_NO_TOKEN_ERROR" })
-                ),
-                new fr.TextOutputCallback(
-                    fr.TextOutputCallback.ERROR,
-                    "Token parameter not found"
-                )
-            ).build();
-            return false;
-        }
+        return false;
     } else {
         return tokenURLParam.get(0);
     }
@@ -178,11 +162,11 @@ try {
     var differenceInTime;
     var errorFound = false;
     var tokenURL;
-
+    var FIDC_ENDPOINT = "https://openam-companieshouse-uk-dev.id.forgerock.io";
     var config = {
         signingKey: transientState.get("chJwtSigningKey"),
         encryptionKey: transientState.get("chJwtEncryptionKey"),
-        issuer: requestHeaders.get("origin").get(0),
+        issuer: FIDC_ENDPOINT,
         audience: "CH Account"
     }
 
@@ -209,7 +193,7 @@ try {
                             })
                     )
                 ).build()
-            } 
+            }
         } else {
             saveUserDataToState(JSON.parse(tokenClaimsResponse.claims));
             outcome = NodeOutcome.RESUME;

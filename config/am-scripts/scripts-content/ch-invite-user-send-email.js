@@ -189,6 +189,7 @@ function sendErrorCallbacks(stage, token, message) {
 
 //builds an onboarding JWT (if necessary) and assemble the return URL
 function buildReturnUrl(invitedEmail, companyNumber){
+   
     var returnUrl = "";
     var now = new Date();
     if (isOnboarding) {
@@ -288,11 +289,13 @@ function getSelectedLanguage(requestHeaders) {
     return 'EN';
 }
 
+var FIDC_ENDPOINT = "https://openam-companieshouse-uk-dev.id.forgerock.io";
+
 // main execution flow
 var config = {
     signingKey: transientState.get("chJwtSigningKey"),
     encryptionKey: transientState.get("chJwtEncryptionKey"),
-    issuer: requestHeaders.get("origin").get(0),
+    issuer: FIDC_ENDPOINT,
     audience: "CH Account",
     validityMinutes: 10080 //7 days
 }
