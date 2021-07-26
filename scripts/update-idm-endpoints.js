@@ -59,9 +59,13 @@ const updateScripts = async (argv) => {
                 return console.log(err)
               }
               const body = {
-                enabled: false,
+                _id: 'removeExpireOnboardedUsers',
+                recoverable: false,
+                misfirePolicy: 'fireAndProceed',
+                repeatCount: -1,
+                enabled: true,
                 type: 'simple',
-                repeatInterval: 3600000,
+                repeatInterval: 10000,
                 persisted: true,
                 concurrentExecution: false,
                 invokeService: 'taskscanner',
@@ -69,8 +73,8 @@ const updateScripts = async (argv) => {
                   waitForCompletion: false,
                   numberOfThreads: 5,
                   scan: {
-                    _queryFilter: `((/frIndexedDate1 lt "\${Time.now - 7d}"))`, // eslint-disable-line
-                    object: 'managed/user',
+                    _queryFilter: `((/frIndexedDate2 lt "\${Time.now - 7d}Z"))`, // eslint-disable-line
+                    object: 'managed/alpha_user',
                     taskState: {
                       started: '/frUnindexedString1',
                       completed: '/frUnindexedString2'
@@ -80,24 +84,28 @@ const updateScripts = async (argv) => {
                     }
                   },
                   task: {
-                    type: 'text/javascript',
-                    source: data
-                      .split('\n')
-                      .map((line) => {
-                        if (line.trim().startsWith('//')) {
-                          return ''
-                        }
-                        return line.trim()
-                      })
-                      .join(' ')
-                  }
+                    script: {
+                      type: 'text/javascript',
+                      globals: {},
+                      source: data
+                        .split('\n')
+                        .map((line) => {
+                          if (line.trim().startsWith('//')) {
+                            return ''
+                          }
+                          return line.trim()
+                        })
+                        .join(' ')
+                    }
+                  },
+                  invokeLogLevel: 'info'
                 }
               }
               console.log(`IDM task code: ${JSON.stringify(body)}`)
 
-              const requestUrl = `${FIDC_URL}/openidm/scheduler/job/${task.scriptFileName}Task`
+              const requestUrl = `${FIDC_URL}/openidm/scheduler/job/${task.taskName}`
               await fidcRequest(requestUrl, body, accessToken)
-              console.log(`IDM Task updated: ${task.scriptFileName}`)
+              console.log(`IDM Task updated: ${task.taskName}`)
             })
           })
         )
