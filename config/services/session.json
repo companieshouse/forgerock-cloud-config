@@ -1,0 +1,14 @@
+{
+  "dynamic": {
+    "maxSessionTime": 40,
+    "maxIdleTime": 40,
+    "maxCachingTime": 3,
+    "quotaLimit": 5
+  },
+  "_id": "session",
+  "_type": {
+    "_id": "session",
+    "name": "Session",
+    "collection": false
+  }
+}

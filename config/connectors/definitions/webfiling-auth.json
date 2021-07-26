@@ -1,5 +1,5 @@
 {
-	"_id": "provisioner.openicf/WebfilingUser",
+	"_id": "provisioner.openicf/WebfilingAuth",
 	"connectorRef": {
 		"connectorHostRef": "ewf-group",
 		"displayName": "Database Table Connector",
@@ -9,11 +9,11 @@
 		"connectorName": "org.identityconnectors.databasetable.DatabaseTableConnector"
 	},
 	"poolConfigOption": {
-		"maxObjects": 2,
-		"maxIdle": 2,
+		"maxObjects": 10,
+		"maxIdle": 10,
 		"maxWait": 150000,
 		"minEvictableIdleTimeMillis": 120000,
-		"minIdle": 2
+		"minIdle": 1
 	},
 	"resultsHandlerConfig": {
 		"enableNormalizingResultsHandler": false,
@@ -46,16 +46,16 @@
 		"jmxEnabled": true,
 		"commitOnReturn": false,
 		"logAbandoned": false,
-		"maxIdle": "2",
+		"maxIdle": "100",
 		"testWhileIdle": false,
 		"removeAbandoned": false,
 		"abandonWhenPercentageFull": 0,
-		"minIdle": "2",
+		"minIdle": "10",
 		"defaultReadOnly": null,
 		"maxWait": "30000",
 		"logValidationErrors": false,
 		"driverClassName": "oracle.jdbc.OracleDriver",
-		"name": "Tomcat Connection Pool[1-1835529707]",
+		"name": "Tomcat Connection Pool[1-1677976140]",
 		"useStatementFacade": true,
 		"initSQL": null,
 		"validationQueryTimeout": "-1",
@@ -69,7 +69,7 @@
 		"defaultAutoCommit": null,
 		"testOnConnect": false,
 		"jdbcInterceptors": null,
-		"initialSize": "2",
+		"initialSize": "10",
 		"defaultTransactionIsolation": -1,
 		"numTestsPerEvictionRun": 0,
 		"url": "jdbc:oracle:thin:@//chd-webdb.internal.ch:1521/WEBDEV",
@@ -81,7 +81,7 @@
 		"timeBetweenEvictionRunsMillis": "5000",
 		"testOnReturn": false,
 		"useLock": false,
-		"maxActive": "2",
+		"maxActive": "100",
 		"username": "KERMITEWF",
 		"password": {
 			"$crypto": {
@@ -89,18 +89,18 @@
 				"value": {
 					"cipher": "AES/CBC/PKCS5Padding",
 					"stableId": "openidm-sym-default",
-					"salt": "YtmBlhCW8cq/TgvB3DKIPA==",
-					"data": "CcTtGPrE+m1M2ihvaOijmg==",
+					"salt": "RieXmGMZyArVLZUm4HOLqw==",
+					"data": "/PMioHIf+K6wEEIz1R580Q==",
 					"keySize": 16,
 					"purpose": "idm.config.encryption",
-					"iv": "smh+VcNKGpc7Ri5XPLd29Q==",
-					"mac": "79+upJDAsNEY/fAQ3SWaDg=="
+					"iv": "ibY3trgh8kZ0xEImxspWVw==",
+					"mac": "ESzX/GNwMCmdzCQhk7e+vQ=="
 				}
 			}
 		},
 		"quoting": "NONE",
-		"table": "CUSTOMER_VIEW",
-		"keyColumn": "CUSTOMERID",
+		"table": "AUTH",
+		"keyColumn": "AUTHID",
 		"passwordColumn": null,
 		"disablePaging": false,
 		"enableEmptyString": false,
@@ -111,37 +111,48 @@
 		"suppressPassword": true,
 		"inclusiveSync": false
 	},
-	"enabled": true,
+	"enabled": false,
 	"objectTypes": {
-		"webfilingUser": {
+		"auth": {
 			"$schema": "http://json-schema.org/draft-03/schema",
+			"id": "AUTHID",
 			"type": "object",
-			"id": "CUSTOMERID",
 			"nativeType": "__ACCOUNT__",
 			"properties": {
-				"EMAIL": {
-					"type": "string",
-					"nativeName": "EMAIL",
-					"nativeType": "string",
-					"required": true
-				},
 				"PASSWORD": {
 					"type": "string",
+					"required": true,
 					"nativeName": "PASSWORD",
-					"nativeType": "string",
-					"required": true
+					"nativeType": "string"
+				},
+				"PARENTID": {
+					"type": "number",
+					"nativeName": "PARENTID",
+					"nativeType": "JAVA_TYPE_BIGDECIMAL"
+				},
+				"CUSTVERSION": {
+					"type": "number",
+					"required": true,
+					"nativeName": "CUSTVERSION",
+					"nativeType": "JAVA_TYPE_BIGDECIMAL"
 				},
 				"CUSTID": {
 					"type": "number",
+					"required": true,
 					"nativeName": "CUSTID",
-					"nativeType": "string",
-					"required": false
+					"nativeType": "JAVA_TYPE_BIGDECIMAL"
 				},
-				"AUTHID": {
-					"type": "number",
-					"nativeName": "AUTHID",
-					"nativeType": "string",
-					"required": false
+				"USERNAME": {
+					"type": "string",
+					"required": true,
+					"nativeName": "USERNAME",
+					"nativeType": "string"
+				},
+				"__NAME__": {
+					"type": "string",
+					"required": true,
+					"nativeName": "__NAME__",
+					"nativeType": "string"
 				}
 			}
 		}

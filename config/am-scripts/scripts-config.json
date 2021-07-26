@@ -1269,6 +1269,102 @@
                 "lastModifiedDate":1617810491969
              },
             "filename": "ch-remove-user-send-email.js"
+        },
+        {
+            "payload": {
+                "_id":"bdfa0ec4-ad50-484f-9732-77c789a900cb",
+                "name":"CH - Email Consent Collector/Changer",
+                "description":"Collect email consent and allow the user to change it",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-email-consent-change.js"
+        },
+        {
+            "payload": {
+                "_id":"80333df7-d987-4333-8e65-dcd194e62a07",
+                "name":"CH - Change Email - Input Collector",
+                "description":"Collect password, email and confirmation email from user.",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-update-email-input-collector.js"
+        },
+        {
+            "payload": {
+                "_id":"47d1222b-1825-4522-98ff-1c462c42e4ff",
+                "name":"CH - Change Email - Patch User",
+                "description":"Patch user.",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-update-email-patch-new-email.js"
+        },
+        {
+            "payload": {
+                "_id":"7576d62c-b649-4a9e-b9ea-4efc6bc61fde",
+                "name":"CH - Change Email - Confirmation",
+                "description":"Change email confirmation",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-update-email-confirmation.js"
+        },
+        {
+            "payload": {
+                "_id":"1a6815f1-0272-490b-8d6b-69609c3ee9d6",
+                "name":"CH - Load JWT signing/encryption keys",
+                "description":"Load signing/encryption keys used to create/sign/encrypt the Registration/Pwd Reset/Onboarding JWTs",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-load-jwt-keys.js"
+        },
+        {
+            "payload": {
+                "_id":"1a782857-b6fc-438d-9244-ae7ddc1dec26",
+                "name":"CH - Load Language into session",
+                "description":"Load the selected language to session (defaults to EN)",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-webfiling-store-lang-in-session.js"
         }
     ]
 }

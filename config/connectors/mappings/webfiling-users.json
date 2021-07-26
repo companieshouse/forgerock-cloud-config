@@ -18,6 +18,9 @@
 	}, {
 		"target": "frIndexedInteger1",
 		"source": "CUSTID"
+	}, {
+		"target": "frIndexedInteger2",
+		"source": "AUTHID"
 	}],
 	"policies": [{
 		"action": "EXCEPTION",
@@ -69,7 +72,7 @@
 	"correlationQuery": [{
 		"linkQualifier": "default",
 		"expressionTree": {
-			"all": ["frIndexedInteger1"]
+			"any": ["frIndexedInteger1", "userName"]
 		},
 		"mapping": "webfilingUser_alphaUser",
 		"type": "text/javascript",
@@ -83,6 +86,6 @@
 	"onUpdate": {
 		"type": "text/javascript",
 		"globals": {},
-		"source": "if (source.PASSWORD != oldTarget.frIndexedString2) {\n  target.frIndexedString3 = \"pending\"\n}"
+		"source": "if (source.PASSWORD != oldTarget.frIndexedString2) {\n  target.frIndexedString3 = \"pending\";\n  target.frIndexedString5 = \"webfiling\";\n}"
 	}
 }
