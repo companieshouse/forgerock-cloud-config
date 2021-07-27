@@ -189,7 +189,7 @@
                     "_refProperties": {
                         "membershipStatus": newStatus,
                         "inviterId": callerId,
-                        "inviteTimestamp": new Date().toString()
+                        "inviteTimestamp": formatDate()
                     }
                 });
         }
@@ -213,7 +213,7 @@
             var inviteTimestampUpdate = {
                 operation: "replace",
                 field: "/_refProperties/inviteTimestamp",
-                value: new Date().toString()
+                value: formatDate()
             };
 
             // update the 'inviterId' and 'inviteTimestamp' relationship property only when an invitation is created, do not override them when invite is accepted
@@ -226,6 +226,28 @@
             success: true,
             oldStatus: currentStatusResponse.status
         };
+    }
+
+    function formatDate() {
+        var date = new Date();
+        var result = [];
+        var dateArr = [];
+        dateArr.push(date.getFullYear());
+        dateArr.push(padding(date.getMonth() + 1));
+        dateArr.push(padding(date.getDate()));
+        result.push(dateArr.join('-'));
+        result.push('T');
+        var timeArr = [];
+        timeArr.push(padding(date.getHours()));
+        timeArr.push(padding(date.getMinutes()));
+        timeArr.push(padding(date.getSeconds()));
+        result.push(timeArr.join(':'));
+        result.push("Z");
+        return result.join('');
+    }
+    
+    function padding(num) {
+        return num < 10 ? '0' + num : num;
     }
 
     // Look up a uid from a username
