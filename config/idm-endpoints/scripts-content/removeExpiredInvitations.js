@@ -1,4 +1,5 @@
 (function () {
+    // TODO replace with correct logic
     var patch = [
         {   "operation" : "replace", 
             "field" : "/description", 
@@ -6,8 +7,6 @@
         }
     ];
 
-    logger.info("TASK - Removing expired onboarded user on {} ({})", input.mail, objectID);
+    logger.info("TASK - Removing expired invitations on {} ({})", input.mail, objectID);
     openidm.patch(objectID, null, patch);
-//    logger.debug("TASK - Removing expired onboarded user on {} ({})", input.mail, objectID);
-//    openidm.delete(objectID, null);
 }());

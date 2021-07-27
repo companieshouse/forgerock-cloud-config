@@ -59,13 +59,13 @@ const updateScripts = async (argv) => {
                 return console.log(err)
               }
               const body = {
-                _id: 'removeExpireOnboardedUsers',
+                _id: task.taskName,
                 recoverable: false,
                 misfirePolicy: 'fireAndProceed',
                 repeatCount: -1,
                 enabled: true,
                 type: 'simple',
-                repeatInterval: 10000,
+                repeatInterval: task.repeatInterval,
                 persisted: true,
                 concurrentExecution: false,
                 invokeService: 'taskscanner',
@@ -73,7 +73,7 @@ const updateScripts = async (argv) => {
                   waitForCompletion: false,
                   numberOfThreads: 5,
                   scan: {
-                    _queryFilter: `((/frIndexedDate2 lt "\${Time.now - 7d}Z"))`, // eslint-disable-line
+                    _queryFilter: task.queryFilter,
                     object: 'managed/alpha_user',
                     taskState: {
                       started: '/frUnindexedString1',

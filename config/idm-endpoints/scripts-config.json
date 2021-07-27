@@ -8,6 +8,8 @@
     "tasks": [
         {
             "taskName": "removeExpiredOnboardedUsers",
+            "repeatInterval": 10000,
+            "queryFilter": "((/frIndexedDate2 lt \"${Time.now - 7d}Z\"))",
             "scriptFileName": "removeExpiredOnboardedUsers.js"
         }
     ]
