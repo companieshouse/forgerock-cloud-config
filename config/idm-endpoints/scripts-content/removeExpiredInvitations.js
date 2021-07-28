@@ -2,15 +2,14 @@
     var USER_RELATIONSHIP = "memberOfOrg";
     var MAX_INVITE_DURATION_DAYS = 7;
     try {
-        logger.info("TASK - input : {}", input);
-        logger.info("TASK - objectID : {}", objectID);
+        logger.info("TASK - REMOVE EXPIRED INVITES - user: {} ({}) : {}", input.mail, objectID);
 
         var response = openidm.query(
             objectID + "/" + USER_RELATIONSHIP,
             { "_queryFilter": "true" },
             ["_refProperties/membershipStatus"]);
 
-        logger.info("TASK - relationships : {}", response);
+        logger.debug("TASK - REMOVE EXPIRED INVITES - relationships : {}", response);
         let patchPayloads = [];
         if (response.result) {
             response.result.forEach(rel => {
@@ -20,7 +19,7 @@
                     let now = new Date();
 
                     if (expirydate < now) {
-                        logger.info("TASK - INVITE EXPIRED!");
+                        logger.info("TASK - REMOVE EXPIRED INVITES - INVITE EXPIRED: " + rel._ref);
                         patchPayloads.push(
                             {
                                 operation: "remove",
@@ -38,7 +37,7 @@
         }
 
         if (patchPayloads.length > 0) {
-            logger.info("TASK - Removing expired invitations on {} ({})", input.mail, objectID);
+            logger.info("TASK - REMOVE EXPIRED INVITES - Removing expired invitations on {} ({})", input.mail, objectID);
             let patchScannerStatus = {
                 operation: "remove",
                 field: "/frUnindexedString1"
@@ -46,10 +45,10 @@
             patchPayloads.push(patchScannerStatus);
             openidm.patch(objectID, null, patchPayloads);
         } else {
-            logger.info("TASK - No expired pending invites found - {} ({})", input.mail, objectID);
+            logger.info("TASK - REMOVE EXPIRED INVITES - No expired pending invites found - {} ({})", input.mail, objectID);
         }
 
     } catch (e) {
-        logger.error("TASK - Error while Removing expired invitations on {} ({}) - {}", input.mail, objectID, e);
+        logger.error("TASK - REMOVE EXPIRED INVITES - Error while Removing expired invitations on {} ({}) - {}", input.mail, objectID, e);
     }
 }());

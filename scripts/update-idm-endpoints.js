@@ -101,7 +101,7 @@ const updateScripts = async (argv) => {
                   invokeLogLevel: 'info'
                 }
               }
-              console.log(`IDM task code: ${JSON.stringify(body)}`)
+              // console.log(`IDM task code: ${JSON.stringify(body)}`)
 
               const requestUrl = `${FIDC_URL}/openidm/scheduler/job/${task.taskName}`
               await fidcRequest(requestUrl, body, accessToken)

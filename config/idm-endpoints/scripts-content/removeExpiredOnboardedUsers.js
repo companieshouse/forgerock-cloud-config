@@ -1,4 +1,4 @@
 (function () {
-    logger.info("TASK - Removing expired onboarded user on {} ({})", input.mail, objectID);
+    logger.info("TASK - REMOVED EXPIRED ONBOARDED USER - Removing expired onboarded user on {} ({})", input.mail, objectID);
     openidm.delete(objectID, null);
 }());
