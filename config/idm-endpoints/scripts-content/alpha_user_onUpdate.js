@@ -2,18 +2,22 @@ require('onUpdateUser').preserveLastSync(object, oldObject, request);
 newObject.mail = newObject.userName;
 newObject.sn = newObject.userName;
 
-let newTimestamps = [];
-
 try {
+    logger.info("TASK ONUPDATE newObject: " + newObject);
     let companies = newObject.memberOfOrg;
     if (companies) {
+        let newTimestamps = [];
+        logger.info("TASK ONUPDATE found companies for this user: " + companies.length);
         companies.forEach(company => {
-            if (company._refProperties.membershipStatus === 'confirmed') {
+            if (company._refProperties.membershipStatus === 'pending') {
                 newTimestamps.push(company._refProperties.inviteTimestamp);
             }
         })
+        logger.info("TASK ONUPDATE found pending invites for this user: " + newTimestamps.length);
+        newObject.frIndexedMultivalued1 = newTimestamps;
+    } else{
+        logger.info("TASK ONUPDATE memberOfOrg not found");
     }
-    newObject.frIndexedMultivalued1 = newTimestamps;
 } catch (e) {
     logger.error("TASK ONUPDATE error: " + e);
 }
