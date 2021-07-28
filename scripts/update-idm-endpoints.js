@@ -48,6 +48,70 @@ const updateScripts = async (argv) => {
         return Promise.resolve()
       })
     )
+
+    // Update each task
+    await Promise.all(
+      scriptFileContent.map(async (scriptFile) => {
+        await Promise.all(
+          scriptFile.tasks.map(async (task) => {
+            fs.readFile(`${dir}/scripts-content/${task.scriptFileName}`, 'utf8', async (err, data) => {
+              if (err) {
+                return console.log(err)
+              }
+              const body = {
+                _id: task.taskName,
+                recoverable: false,
+                misfirePolicy: 'fireAndProceed',
+                repeatCount: -1,
+                enabled: true,
+                type: 'simple',
+                repeatInterval: task.repeatInterval,
+                persisted: true,
+                concurrentExecution: false,
+                invokeService: 'taskscanner',
+                invokeContext: {
+                  waitForCompletion: false,
+                  numberOfThreads: 5,
+                  scan: {
+                    _queryFilter: task.queryFilter,
+                    object: 'managed/alpha_user',
+                    taskState: {
+                      started: '/frUnindexedString1',
+                      completed: '/frUnindexedString2'
+                    },
+                    recovery: {
+                      timeout: '10m'
+                    }
+                  },
+                  task: {
+                    script: {
+                      type: 'text/javascript',
+                      globals: {},
+                      source: data
+                        .split('\n')
+                        .map((line) => {
+                          if (line.trim().startsWith('//')) {
+                            return ''
+                          }
+                          return line.trim()
+                        })
+                        .join(' ')
+                    }
+                  },
+                  invokeLogLevel: 'info'
+                }
+              }
+              console.log(`IDM task code: ${JSON.stringify(body)}`)
+
+              const requestUrl = `${FIDC_URL}/openidm/scheduler/job/${task.taskName}`
+              await fidcRequest(requestUrl, body, accessToken)
+              console.log(`IDM Task updated: ${task.taskName}`)
+            })
+          })
+        )
+        return Promise.resolve()
+      })
+    )
   } catch (error) {
     console.error(error.message)
     process.exit(1)

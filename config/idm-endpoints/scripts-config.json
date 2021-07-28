@@ -3,10 +3,20 @@
         {
             "endpointName": "companyauth",
             "scriptFileName": "companyauth.js"
+        }
+    ],
+    "tasks": [
+        {
+            "taskName": "removeExpiredOnboardedUsers",
+            "repeatInterval": 30000,
+            "queryFilter": "((/frIndexedDate2 lt \"${Time.now - 7d}Z\"))",
+            "scriptFileName": "removeExpiredOnboardedUsers.js"
         },
         {
-            "endpointName": "echo",
-            "scriptFileName": "echo.js"
+            "taskName": "removeExpiredInvitations",
+            "repeatInterval": 30000,
+            "queryFilter": "((/frIndexedMultivalued1 lt \"${Time.now}Z\"))",
+            "scriptFileName": "removeExpiredInvitations.js"
         }
     ]
 }
