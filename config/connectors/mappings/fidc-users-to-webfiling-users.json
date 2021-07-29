@@ -6,7 +6,7 @@
 	"icon": null,
 	"displayName": "Sync FIDC user to WebFiling user",
 	"properties": [{
-		"target": "AUTHID",
+		"target": "CHILD_AUTHID",
 		"source": "frIndexedInteger2"
 	}, {
 		"target": "PASSWORD",
@@ -61,7 +61,7 @@
 	"correlationQuery": [{
 		"linkQualifier": "default",
 		"expressionTree": {
-			"any": ["AUTHID", "CUSTID"]
+			"any": ["CHILD_AUTHID", "CUSTID"]
 		},
 		"mapping": "alphaUser_webfilingUserPassword",
 		"type": "text/javascript",
