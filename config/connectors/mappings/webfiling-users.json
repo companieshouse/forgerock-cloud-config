@@ -20,7 +20,7 @@
 		"source": "CUSTID"
 	}, {
 		"target": "frIndexedInteger2",
-		"source": "AUTHID"
+		"source": "CHILD_AUTHID"
 	}],
 	"policies": [{
 		"action": "EXCEPTION",
