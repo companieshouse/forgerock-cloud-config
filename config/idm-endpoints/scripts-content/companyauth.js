@@ -21,7 +21,7 @@
         ACCEPT: "accept",
         DECLINE: "decline"
     };
-\
+
     var CompanyStatus = {
         ACTIVE: "active",
         DORMANT: "dormant"
@@ -999,7 +999,9 @@
             log("Invalid parameters - Expected: subjectId, companyNumber");
             throw {
                 code: 400,
-                message: "Invalid Parameters - Expected: subjectId, companyNumber"
+                detail: {
+                    reason: "Invalid Parameters - Expected: subjectId, companyNumber"
+                }
             };
         }
 

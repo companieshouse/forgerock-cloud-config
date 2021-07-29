@@ -15,7 +15,7 @@
         {
             "taskName": "removeExpiredInvitations",
             "repeatInterval": 30000,
-            "queryFilter": "((/frIndexedMultivalued1 lt \"${Time.now}Z\"))",
+            "queryFilter": "((/frIndexedMultivalued1 lt \"${Time.now - 7d}Z\"))",
             "scriptFileName": "removeExpiredInvitations.js"
         }
     ]
