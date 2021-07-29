@@ -21,6 +21,11 @@
         ACCEPT: "accept",
         DECLINE: "decline"
     };
+\
+    var CompanyStatus = {
+        ACTIVE: "active",
+        DORMANT: "dormant"
+    };
 
     // Endpoint actions
 
@@ -33,9 +38,6 @@
         RESPOND_INVITE: "respondToInvite",
         REMOVE_AUTHORISED_USER: "removeAuthorisedUser",
         ADD_AUTHORISED_USER: "addAuthorisedUser"
-        // GET_COMPANIES: "getCompanies",
-        // GET_USER: "getUser",
-        // GET_COMPANY: "getCompany"
     };
 
     // Debug loggers
@@ -797,10 +799,10 @@
             };
         }
 
-        if (company.status !== "active") {
+        if (company.status !== CompanyStatus.ACTIVE && company.status !== CompanyStatus.DORMANT) {
             return {
                 success: false,
-                message: "The company " + request.content.companyNumber + " is not active."
+                message: "The company " + request.content.companyNumber + " is not active or dormant."
             };
         }
 
