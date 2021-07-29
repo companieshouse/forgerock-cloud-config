@@ -1,6 +1,6 @@
 (function () {
 
-    // Configuration
+    // Configuration constants
 
     var OBJECT_USER = "alpha_user";
     var OBJECT_COMPANY = "alpha_organization";
