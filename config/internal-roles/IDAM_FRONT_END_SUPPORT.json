@@ -186,10 +186,10 @@
 					"readOnly": false
 				}, {
 					"attribute": "memberOfOrg",
-					"readOnly": true
+					"readOnly": false
 				}, {
 					"attribute": "memberOfOrgIDs",
-					"readOnly": false
+					"readOnly": true
 				}, {
 					"attribute": "frIndexedString2",
 					"readOnly": false
