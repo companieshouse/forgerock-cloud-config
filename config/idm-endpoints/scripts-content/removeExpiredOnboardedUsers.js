@@ -3,6 +3,6 @@
     try {
         openidm.delete(objectID, null);
     } catch (e) {
-        logger.error("TASK - REMOVED EXPIRED ONBOARDED USER - Error while expired onboarded user on {} ({}) - {}", input.mail, objectID, e);
+        logger.error("TASK - REMOVED EXPIRED ONBOARDED USER - Error while removing expired onboarded user on {} ({}) - {}", input.mail, objectID, e);
     }
 }());
