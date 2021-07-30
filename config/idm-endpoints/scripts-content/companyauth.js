@@ -22,6 +22,11 @@
         DECLINE: "decline"
     };
 
+    var CompanyStatus = {
+        ACTIVE: "active",
+        DORMANT: "dormant"
+    };
+
     // Endpoint actions
 
     var RequestAction = {
@@ -33,9 +38,6 @@
         RESPOND_INVITE: "respondToInvite",
         REMOVE_AUTHORISED_USER: "removeAuthorisedUser",
         ADD_AUTHORISED_USER: "addAuthorisedUser"
-        // GET_COMPANIES: "getCompanies",
-        // GET_USER: "getUser",
-        // GET_COMPANY: "getCompany"
     };
 
     // Debug loggers
@@ -797,10 +799,10 @@
             };
         }
 
-        if (company.status !== "active") {
+        if (company.status !== CompanyStatus.ACTIVE && company.status !== CompanyStatus.DORMANT) {
             return {
                 success: false,
-                message: "The company " + request.content.companyNumber + " is not active."
+                message: "The company " + request.content.companyNumber + " is not active or dormant."
             };
         }
 
@@ -997,7 +999,9 @@
             log("Invalid parameters - Expected: subjectId, companyNumber");
             throw {
                 code: 400,
-                message: "Invalid Parameters - Expected: subjectId, companyNumber"
+                detail: {
+                    reason: "Invalid Parameters - Expected: subjectId, companyNumber"
+                }
             };
         }
 

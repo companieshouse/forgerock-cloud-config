@@ -108,7 +108,7 @@ function addRelationshipToCompany(userId, company) {
             success: actionResponse.success
         }
     } else {
-        logger.error("[ADD AUTHZ USER] Error during action processing");
+        logger.error("[ADD AUTHZ USER] Error during action processing - "+ actionResponse.detail.reason);
         return {
             success: false,
             message: actionResponse.detail.reason
