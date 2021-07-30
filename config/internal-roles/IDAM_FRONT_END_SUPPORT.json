@@ -217,6 +217,12 @@
 				}, {
 					"attribute": "telephoneNumber",
 					"readOnly": false
+				}, {
+					"attribute": "frIndexedMultivalued2",
+					"readOnly": true
+				}, {
+					"attribute": "frIndexedMultivalued3",
+					"readOnly": true
 				}
 			]
 		}

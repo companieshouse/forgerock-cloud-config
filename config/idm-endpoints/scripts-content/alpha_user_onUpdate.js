@@ -3,7 +3,6 @@ newObject.mail = newObject.userName;
 newObject.sn = newObject.userName;
 
 try {
-    logger.info("TASK ONUPDATE newObject: " + newObject);
     let companies = newObject.memberOfOrg;
     if (companies) {
         let newTimestamps = [];
@@ -15,8 +14,33 @@ try {
         })
         logger.info("TASK ONUPDATE found pending invites for this user: " + newTimestamps.length);
         newObject.frIndexedMultivalued1 = newTimestamps;
-    } else{
-        logger.info("TASK ONUPDATE memberOfOrg not found");
+    } else {
+        logger.info("TASK ONUPDATE memberOfOrg not found - skipping invite timestamp array update.");
+    }
+} catch (e) {
+    logger.error("TASK ONUPDATE error: " + e);
+}
+
+try {
+    let companies = newObject.memberOfOrg;
+    if (companies) {
+        let confirmedCompanyLabels = [];
+        let pendingCompanyLabels = [];
+        //logger.info("TASK ONUPDATE found companies for this user: " + companies.length);
+        companies.forEach(company => {
+            if (company._refProperties.membershipStatus === 'confirmed') {
+                confirmedCompanyLabels.push(company._refProperties.companyLabel);
+            }
+            if (company._refProperties.membershipStatus === 'pending') {
+                pendingCompanyLabels.push(company._refProperties.companyLabel);
+            }
+        })
+        logger.info("TASK ONUPDATE found confirmed relationships for this user: " + confirmedCompanyLabels.length);
+        logger.info("TASK ONUPDATE found pending relationships for this user: " + pendingCompanyLabels.length);
+        newObject.frIndexedMultivalued2 = confirmedCompanyLabels;
+        newObject.frIndexedMultivalued3 = pendingCompanyLabels;
+    } else {
+        logger.info("TASK ONUPDATE memberOfOrg not found - skipping companies array updates.");
     }
 } catch (e) {
     logger.error("TASK ONUPDATE error: " + e);

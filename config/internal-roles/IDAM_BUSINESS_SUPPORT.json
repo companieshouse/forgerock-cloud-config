@@ -225,6 +225,14 @@
 				{
 					"attribute": "preferences",
 					"readOnly": true
+				},
+				{
+					"attribute": "frIndexedMultivalued2",
+					"readOnly": true
+				}, 
+				{
+					"attribute": "frIndexedMultivalued3",
+					"readOnly": true
 				}
 			]
 		}
