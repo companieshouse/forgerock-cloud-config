@@ -17,8 +17,11 @@ var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
   javax.security.auth.callback.NameCallback,
   javax.security.auth.callback.TextOutputCallback,
-  com.sun.identity.authentication.callbacks.HiddenValueCallback
+  com.sun.identity.authentication.callbacks.HiddenValueCallback,
+  javax.security.auth.callback.ChoiceCallback
 )
+
+var jurisdictions = ["EW", "SC", "NI"];
 
 if (callbacks.isEmpty()) {
   var infoMessage = "Please enter the company number.";
@@ -30,6 +33,12 @@ if (callbacks.isEmpty()) {
     infoMessage = errorMessage.concat(" Please try again.");
     action = fr.Action.send(
       new fr.TextOutputCallback(level, infoMessage),
+      new fr.ChoiceCallback(
+        "Where was the company registered?",
+        jurisdictions,
+        0,
+        false
+      ),
       new fr.NameCallback("Enter Company number"),
       new fr.HiddenValueCallback("stage", "COMPANY_ASSOCIATION_1"),
       new fr.HiddenValueCallback("pagePropsJSON", errorProps)
@@ -37,14 +46,23 @@ if (callbacks.isEmpty()) {
   } else {
     action = fr.Action.send(
       new fr.TextOutputCallback(level, infoMessage),
+      new fr.ChoiceCallback(
+        "Where was the company registered?",
+        jurisdictions,
+        0,
+        false
+      ),
       new fr.NameCallback("Enter Company number"),
       new fr.HiddenValueCallback("stage", "COMPANY_ASSOCIATION_1")
     ).build();
   }
 } else {
-  var companyNumber = callbacks.get(1).getName();
-  logger.error("[ENTER COMPANY NO CALLBACK] companyNumber: " + companyNumber);
+  var jurisdictionIndex = callbacks.get(1).getSelectedIndexes()[0];
+  logger.error("[PROMPT COMPANY NO] jurisdiction: " + jurisdictions[jurisdictionIndex]);
 
+  var companyNumber = callbacks.get(2).getName();
+  logger.error("[ENTER COMPANY NO CALLBACK] companyNumber: " + companyNumber);
+  sharedState.put("jurisdiction", jurisdictions[jurisdictionIndex]);
   sharedState.put("companyNumber", companyNumber);
   action = fr.Action.goTo("true").build();
 }
