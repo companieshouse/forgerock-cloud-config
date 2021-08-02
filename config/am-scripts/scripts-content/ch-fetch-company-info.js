@@ -70,7 +70,10 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
     if (companyNumber == null) {
         logger.error("[FETCH COMPANY] No company number in shared state");
         sharedState.put("errorMessage", "No company number in shared state.");
-        return false;
+        return {
+            success: false,
+            message: "No company number in shared state."
+        };
     }
 
     var jurisdiction = sharedState.get("jurisdiction");
@@ -83,22 +86,19 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
     
     //if in EWF journey, we need to add the jurisdiction to the query criteria
     var searchTerm;
-    if (isEWF) {     
-        // if the user selected Scotland and provided a company number without 'SC' at the beginning, search for a match with either '<company no>' or 'SC<company no>'
-        if (jurisdiction.equals(jurisdictions.SC) && companyNumber.indexOf("SC") !== 0) {
-            logger.error("[FETCH COMPANY] looking for SC company without 'SC' prefix - adding it");
-            searchTerm = "?_queryFilter=(number+eq+%22" + companyNumber + "%22".concat("+or+number+eq+%22SC" + companyNumber + "%22)");
-        } else {
-            //for other jurisdictions, do not make any logic on prefixes
-            searchTerm = "?_queryFilter=number+eq+%22" + companyNumber + "%22";
-        }    
-        //if in EWF journey, attach the jurisdiction condition to the search term
-        searchTerm = searchTerm.concat("+and+jurisdiction+eq+%22" + jurisdiction + "%22");
+        
+    // if the user selected Scotland and provided a company number without 'SC' at the beginning, search for a match with either '<company no>' or 'SC<company no>'
+    if (jurisdiction.equals(jurisdictions.SC) && companyNumber.indexOf("SC") !== 0) {
+        logger.error("[FETCH COMPANY] looking for SC company without 'SC' prefix - adding it");
+        searchTerm = "?_queryFilter=(number+eq+%22" + companyNumber + "%22+or+number+eq+%22SC" + companyNumber + "%22)+and+jurisdiction+eq+%22" + jurisdiction + "%22";
     } else {
-        // if using company association journey (no EWF), search for a match with either '<company no>' or ('SC<company no>' and SC jurisdiction)
-        searchTerm = "?_queryFilter=(number+eq+%22" + companyNumber + "%22".concat("+or+(number+eq+%22SC" + companyNumber + "%22+and+jurisdiction+eq+%22SC%22))");
-    }
-
+        //for other jurisdictions, do not make any logic on prefixes
+        searchTerm = "?_queryFilter=number+eq+%22" + companyNumber + "%22+and+jurisdiction+eq+%22" + jurisdiction + "%22";
+         //if in EWF journey, attach the jurisdiction condition to the search term
+        //searchTerm = searchTerm.concat("+and+jurisdiction+eq+%22" + jurisdiction + "%22");
+    }    
+   
+    
     logger.error("[FETCH COMPANY] Using search term: " + searchTerm);
 
     request.setUri(idmCompanyEndpoint + searchTerm);
@@ -133,7 +133,10 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
                         }],
                         'company': { name: companyName }
                     }));
-                return false;
+                    return {
+                        success: false,
+                        message: "No auth code associated with company " + companyName + "."
+                    };
             }
 
             logger.error("[FETCH COMPANY] Found status: " + companyStatus);
@@ -151,7 +154,10 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
                         }],
                         'company': { name: companyName }
                     }));
-                return false;
+                    return {
+                        success: false,
+                        message: "The company " + companyName + " is not active or dormant."
+                    };
             }
 
             sharedState.put("companyData", JSON.stringify(companyResponse.result[0]));
@@ -180,14 +186,18 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
                             YES_OPTION_INDEX
                         )
                     ).build();
-                    return true;
+                    return {
+                        success: true
+                    };
                 }
             } else {
-                return true;
+                return {
+                    success: true
+                };
             }
         } else {
             logger.error("[FETCH COMPANY] No company results for company number " + companyNumber);
-            sharedState.put("errorMessage", "The company " + companyNumber + " could not be found.");
+            sharedState.put("errorMessage", "The company " + companyNumber + " could not be found. " + searchTerm);
             sharedState.put("pagePropsJSON", JSON.stringify(
                 {
                     'errors': [{
@@ -198,7 +208,11 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
                     }],
                     'company': { number: companyNumber }
                 }));
-            return false;
+                return {
+                    success: false,
+                    message: "The company " + companyNumber + " could not be found.",
+                    searchTerm: searchTerm
+                };
         }
     } else {
         logger.error("[FETCH COMPANY] Error while retrieving company with ID " + companyNumber);
@@ -213,7 +227,10 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
                 }],
                 'company': { number: companyNumber }
             }));
-        return false;
+            return {
+                success: false,
+                message: "Error while retrieving company " + companyNumber + "."
+            };
     }
 }
 
@@ -252,7 +269,8 @@ try {
             } else {
                 var companyNumber = sharedState.get("companyNumber");
                 //fetchCompany can only result in callbacks, does not transition anywhere
-                if (!fetchCompany(accessToken, companyNumber, skipConfirmation)) {
+                var fetchResult = fetchCompany(accessToken, companyNumber, skipConfirmation);
+                if (!fetchResult.success) {
                     outcome = NodeOutcome.FALSE;
                 }
             }
@@ -266,7 +284,8 @@ try {
         } else {
             var companyNumber = sharedState.get("companyNumber");
             //fetchCompany can only result in callbacks, does not transition anywhere
-            if (!fetchCompany(accessToken, companyNumber, skipConfirmation)) {
+            var fetchResult = fetchCompany(accessToken, companyNumber, skipConfirmation);
+            if (!fetchResult.success) {
                 outcome = NodeOutcome.FALSE;
             } else {
                 logger.error("[FETCH COMPANY] company fetched successfully");
