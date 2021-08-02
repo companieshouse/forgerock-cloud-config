@@ -2,19 +2,13 @@ require('onUpdateUser').preserveLastSync(object, oldObject, request);
 newObject.mail = newObject.userName;
 newObject.sn = newObject.userName;
 
-logger.info("TASK ONUPDATE REQUEST: " + request);
-logger.info("TASK ONUPDATE NEW OBJECT: " + newObject);
-
 try {
     let companies = newObject.memberOfOrg;
     if (companies) {
         companies.forEach((company, index) => {
             if (!company._refProperties.membershipStatus) {
                 logger.error("TASK ONUPDATE - COMPANY REATIONSHIP DOES NOT HAVE STATUS! Upgrading to CONFIRMED");
-                
-                let res = openidm.read(newObject.memberOfOrg[index]._ref, null, ["*"]);
-                logger.error("TASK ONUPDATE - COMPANY DATA: " + res);
-                
+                let res = openidm.read(newObject.memberOfOrg[index]._ref, null, ["*"]);            
                 newObject.memberOfOrg[index]._refProperties.membershipStatus = 'confirmed';
                 newObject.memberOfOrg[index]._refProperties.companyLabel = res.name + " - " + res.number;
                 newObject.memberOfOrg[index]._refProperties.adminAdded = 'true';
@@ -27,7 +21,7 @@ try {
     companies = newObject.memberOfOrg;
     if (companies) {
         let newTimestamps = [];
-        logger.info("TASK ONUPDATE found companies for this user: " + companies.length);
+        logger.debug("TASK ONUPDATE found companies for this user: " + companies.length);
         companies.forEach(company => {
             if (company._refProperties.membershipStatus === 'pending') {
                 newTimestamps.push(company._refProperties.inviteTimestamp);
