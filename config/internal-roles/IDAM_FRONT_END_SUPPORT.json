@@ -186,10 +186,10 @@
 					"readOnly": false
 				}, {
 					"attribute": "memberOfOrg",
-					"readOnly": true
+					"readOnly": false
 				}, {
 					"attribute": "memberOfOrgIDs",
-					"readOnly": false
+					"readOnly": true
 				}, {
 					"attribute": "frIndexedString2",
 					"readOnly": false
@@ -217,6 +217,12 @@
 				}, {
 					"attribute": "telephoneNumber",
 					"readOnly": false
+				}, {
+					"attribute": "frIndexedMultivalued2",
+					"readOnly": true
+				}, {
+					"attribute": "frIndexedMultivalued3",
+					"readOnly": true
 				}
 			]
 		}

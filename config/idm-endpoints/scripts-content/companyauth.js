@@ -132,7 +132,7 @@
     }
 
     // adds a CONFIRMED relationship between the provided user and company, and replaces it if there's one in PENDING status already
-    function addConfirmedRelationshipToCompany(subjectId, companyId) {
+    function addConfirmedRelationshipToCompany(subjectId, companyId, companyLabel) {
 
         var currentStatusResponse = getStatus(subjectId, companyId);
 
@@ -155,6 +155,7 @@
                     _ref: "managed/alpha_organization/" + companyId,
                     _refProperties: {
                         membershipStatus: AuthorisationStatus.CONFIRMED,
+                        companyLabel: companyLabel,
                         inviterId: null,
                         inviteTimestamp: null
                     }
@@ -179,7 +180,7 @@
     }
 
     // Update status for user vs. company
-    function setStatus(callerId, subjectId, companyId, newStatus) {
+    function setStatus(callerId, subjectId, companyId, companyLabel, newStatus) {
 
         var currentStatusResponse = getStatus(subjectId, companyId);
         if (currentStatusResponse.status === AuthorisationStatus.NONE) {
@@ -191,7 +192,8 @@
                     "_refProperties": {
                         "membershipStatus": newStatus,
                         "inviterId": callerId,
-                        "inviteTimestamp": formatDate()
+                        "inviteTimestamp": formatDate(),
+                        "companyLabel": companyLabel
                     }
                 });
         }
@@ -550,6 +552,7 @@
         };
     }
 
+    var companyLabel = company.name + " - " + company.number;
     var companyId = company._id;
     log("Company found: " + companyId);
 
@@ -685,7 +688,7 @@
 
         var statusResponse;
         try {
-            statusResponse = setStatus(actor._id, subject._id, companyId, AuthorisationStatus.PENDING);
+            statusResponse = setStatus(actor._id, subject._id, companyId, companyLabel, AuthorisationStatus.PENDING);
         } catch (e) {
             throw {
                 code: 400,
@@ -748,7 +751,7 @@
 
         var statusResponse;
         try {
-            statusResponse = setStatus(actor._id, subject._id, companyId, AuthorisationStatus.PENDING);
+            statusResponse = setStatus(actor._id, subject._id, companyId, companyLabel, AuthorisationStatus.PENDING);
         } catch (e) {
             throw {
                 code: 400,
@@ -856,7 +859,7 @@
                 };
             }
 
-            var statusResponse = setStatus(actor._id, subject._id, companyId, AuthorisationStatus.CONFIRMED);
+            var statusResponse = setStatus(actor._id, subject._id, companyId, companyLabel, AuthorisationStatus.CONFIRMED);
             if (!statusResponse || !statusResponse.success) {
                 throw {
                     code: 400,
@@ -1017,7 +1020,8 @@
             };
         }
 
-        var addRelationshipResult = addConfirmedRelationshipToCompany(subject._id, companyId);
+        
+        var addRelationshipResult = addConfirmedRelationshipToCompany(subject._id, companyId, companyLabel);
         if (!addRelationshipResult || !addRelationshipResult.success) {
             throw {
                 code: 400,

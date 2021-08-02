@@ -17,3 +17,4 @@ environment specific variables.
 - [ ] managed-objects
 - [ ] password-policy
 - [ ] services
+- [ ] internal-roles
