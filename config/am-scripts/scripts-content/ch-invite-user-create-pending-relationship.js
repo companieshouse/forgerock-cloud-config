@@ -196,7 +196,6 @@ function performAuthzCheck(inviterUserId, invitedEmail, companyData) {
 try {
   var idmCompanyAuthEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/endpoint/companyauth/";
   var companyData = sharedState.get("companyData");
-  logger.error("[INVITE USER CHECK MEMBERSHIP] company data: " + companyData);
   var inviterUserId = sharedState.get("_id");
   var invitedEmail = sharedState.get("email");
 

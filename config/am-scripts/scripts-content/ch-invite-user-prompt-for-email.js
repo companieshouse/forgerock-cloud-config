@@ -40,7 +40,6 @@ function validateEmail(email) {
 // main execution flow
 try {
     var companyData = sharedState.get("companyData");
-    logger.error("[INVITE USER INPUT] company data: " + companyData);
     var companyName = JSON.parse(companyData).name;
 
     if (callbacks.isEmpty()) {
