@@ -22,12 +22,18 @@ try {
             // TODO Better handling of error
         }
     } else if (mfaRoute == "email") {
-        if (idRepository.getAttribute(userId, "mail").iterator().hasNext()) {
-            emailAddress = idRepository.getAttribute(userId, "mail").iterator().next();
-            logger.error("[LOGIN MFA CALLBACK] emailAddress : " + emailAddress);
+        var isChangeEmail = sharedState.get("isChangeEmail");
+        if (isChangeEmail) {
+            emailAddress = sharedState.get("newEmail");
+            logger.error("[LOGIN MFA CALLBACK] emailAddress from change email journey: " + emailAddress);
         } else {
-            logger.error("[LOGIN MFA CALLBACK] Couldn't find emailAddress");
-            // TODO Better handling of error
+            if (idRepository.getAttribute(userId, "mail").iterator().hasNext()) {
+                emailAddress = idRepository.getAttribute(userId, "mail").iterator().next();
+                logger.error("[LOGIN MFA CALLBACK] emailAddress : " + emailAddress);
+            } else {
+                logger.error("[LOGIN MFA CALLBACK] Couldn't find emailAddress");
+                // TODO Better handling of error
+            }
         }
     } else {
         logger.error("[LOGIN MFA CALLBACK] Couldn't determine route used for sending MFA code");
