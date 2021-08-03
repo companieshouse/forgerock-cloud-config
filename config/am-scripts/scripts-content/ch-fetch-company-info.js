@@ -81,10 +81,6 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
 
     request.setMethod('GET');
     
-    //trim initial zeros from input company number
-    //var trimmedCompanyNumber = companyNumber.replace(/^0+|0+$/g, '');
-    
-    //if in EWF journey, we need to add the jurisdiction to the query criteria
     var searchTerm;
         
     // if the user selected Scotland and provided a company number without 'SC' at the beginning, search for a match with either '<company no>' or 'SC<company no>'
@@ -94,11 +90,8 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
     } else {
         //for other jurisdictions, do not make any logic on prefixes
         searchTerm = "?_queryFilter=number+eq+%22" + companyNumber + "%22+and+jurisdiction+eq+%22" + jurisdiction + "%22";
-         //if in EWF journey, attach the jurisdiction condition to the search term
-        //searchTerm = searchTerm.concat("+and+jurisdiction+eq+%22" + jurisdiction + "%22");
     }    
-   
-    
+       
     logger.error("[FETCH COMPANY] Using search term: " + searchTerm);
 
     request.setUri(idmCompanyEndpoint + searchTerm);

@@ -75,34 +75,34 @@ try {
                 infoMessage = errorMessage.concat(" Please try again.");
                 action = fr.Action.send(
                     new fr.TextOutputCallback(level, infoMessage),
+                    new fr.NameCallback("Enter Company number"),
                     new fr.ChoiceCallback(
                         "Where was the company registered?",
                         jurisdictions,
                         0,
                         false
                     ),
-                    new fr.NameCallback("Enter Company number"),
                     new fr.HiddenValueCallback("stage", "EWF_LOGIN_2"),
                     new fr.HiddenValueCallback("pagePropsJSON", errorProps)
                 ).build();
             } else {
                 action = fr.Action.send(
                     new fr.TextOutputCallback(level, infoMessage),
+                    new fr.NameCallback("Enter Company number"),
                     new fr.ChoiceCallback(
                         "Where was the company registered?",
                         jurisdictions,
                         0,
                         false
                     ),
-                    new fr.NameCallback("Enter Company number"),
                     new fr.HiddenValueCallback("stage", "EWF_LOGIN_2")
                 ).build();
             }
         } else {
-            var jurisdictionIndex = callbacks.get(1).getSelectedIndexes()[0];
+            var jurisdictionIndex = callbacks.get(2).getSelectedIndexes()[0];
             logger.error("[EWF PROMPT COMPANY NO] jurisdiction: " + jurisdictions[jurisdictionIndex]);
 
-            var companyNumber = callbacks.get(2).getName();
+            var companyNumber = callbacks.get(1).getName();
             logger.error("[EWF PROMPT COMPANY NO] companyNumber: " + companyNumber);
 
             sharedState.put("companyNumber", companyNumber);
