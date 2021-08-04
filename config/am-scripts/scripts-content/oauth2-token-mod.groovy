@@ -1,3 +1,4 @@
+/* groovylint-disable LineLength, NoDef, VariableTypeRequired */
 /*
  * Copyright 2019 ForgeRock AS. All Rights Reserved
  *
@@ -12,6 +13,7 @@ import org.forgerock.http.protocol.Response
 import com.iplanet.sso.SSOException
 
 import groovy.json.JsonSlurper
+
 
 /**
  * TEST
@@ -29,6 +31,27 @@ import groovy.json.JsonSlurper
  * the JWTs if client based OAuth2 tokens are utilised.
  * When adding/updating fields make sure that the token size remains within client/user-agent limits.
  */
+
+def claims = accessToken.getClaims()
+if (claims == null) {
+  logger.message('No claims in token')
+} else {
+  logger.message('Got claims ' + claims)
+  def claimsObject = JSON.parse(claims)
+  if (claimsObject == null) {
+    logger.error('Could not decode claims to object')
+  } else if (claimsObject.userinfo == null) {
+    logger.error('No userinfo in claims')
+  } else if (claimsObject.userinfo.company == null) {
+    logger.error('No company in claims')
+  } else if (claimsObject.userinfo.company.value == null) {
+    logger.error('No company value in claims')
+  } else {
+    def company = claimsObject.userinfo.company.value
+    logger.message('Got company ' + company)
+    accessToken.setField('company', company)
+  }
+}
 
 /*
 //Field to always include in token
@@ -132,16 +155,16 @@ public class ScopeMapper {
 
         def permissions = []
 
-        String[] scopes = incomingScopes.split(" ");
+        String[] scopes = incomingScopes.split(' ');
         for (scope in scopes) {
             // Provide human readable text for a given singular scope string.
             // This text appears on the 3rd-party authorisation prompt
-            if (scope.equals('https://account.companieshouse.gov.uk/user/profile.read') ||
-                    scope.equals('https://identity.company-information.service.gov.uk/user/profile.read')) {
+            if (scope == ('https://account.companieshouse.gov.uk/user/profile.read') ||
+                    scope == ('https://identity.company-information.service.gov.uk/user/profile.read')) {
                 permissions.push('This will allow it to view your email address.');
             } else if (scope =~ 'https://api.companieshouse.gov.uk/company/(.*?)/registered-office-address.update' ||
                     scope =~ 'https://api.company-information.service.gov.uk/company/(.*?)/registered-office-address.update') {
-                permissions.push("This will allow it to update " + companyName + "'s registered office address.");
+                permissions.push('This will allow it to update ' + companyName + '\'s registered office address.');
             } else {
                 // No scope permission text found
                 println('No scope permission text found for scope: ' + scope + '. Please add a scope permission text.')

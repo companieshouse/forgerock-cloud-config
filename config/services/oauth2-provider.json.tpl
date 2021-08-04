@@ -97,7 +97,8 @@
             "A256CBC-HS512"
         ],
         "loaMapping": {
-            "webfiling": "CHWebFiling-Login"
+            "webfiling": "CHWebFiling-Login",
+            "chs": "CHLogin"
         },
         "storeOpsTokens": true,
         "supportedUserInfoEncryptionEnc": [
@@ -156,7 +157,7 @@
             "A256CBC-HS512"
         ],
         "amrMappings": {},
-        "claimsParameterSupported": false,
+        "claimsParameterSupported": true,
         "supportedUserInfoEncryptionAlgorithms": [
             "ECDH-ES+A256KW",
             "ECDH-ES+A192KW",
@@ -304,7 +305,7 @@
         "oidcClaimsScript": "36863ffb-40ec-48b9-94b1-9a99f71cc3b5",
         "oidcDiscoveryEndpointEnabled": true,
         "overrideableOIDCClaims": [],
-        "supportedClaims": [],
+        "supportedClaims": ["company|en|company"],
         "supportedIDTokenEncryptionAlgorithms": [
             "ECDH-ES+A256KW",
             "ECDH-ES+A192KW",
