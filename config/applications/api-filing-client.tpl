@@ -34,8 +34,7 @@
 		"redirectionUris": {
 			"inherited": false,
 			"value": [
-                "https://example.com",
-                "https://idam.amido.aws.chdev.org/enduser/?realm=alpha"
+                "http://localhost:8090/redirect"
             ]
 		},
 		"clientName": {
@@ -262,8 +261,7 @@
 		"postLogoutRedirectUri": {
 			"inherited": false,
 			"value": [
-                "https://example.com",
-                "https://idam.amido.aws.chdev.org/enduser/?realm=alpha"
+                "http://localhost:8090/redirect"
             ]
 		},
 		"backchannel_logout_session_required": {
