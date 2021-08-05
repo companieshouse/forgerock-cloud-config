@@ -100,7 +100,7 @@
 		},
 		"quoting": "NONE",
 		"table": "CUSTOMER_VIEW",
-		"keyColumn": "CUSTOMERID",
+		"keyColumn": "PARENT_USERNAME",
 		"passwordColumn": null,
 		"disablePaging": false,
 		"enableEmptyString": false,
@@ -116,7 +116,7 @@
 		"webfilingUser": {
 			"$schema": "http://json-schema.org/draft-03/schema",
 			"type": "object",
-			"id": "CUSTOMERID",
+			"id": "PARENT_USERNAME",
 			"nativeType": "__ACCOUNT__",
 			"properties": {
 				"EMAIL": {
@@ -140,6 +140,24 @@
 				"CHILD_AUTHID": {
 					"type": "number",
 					"nativeName": "CHILD_AUTHID",
+					"nativeType": "string",
+					"required": false
+				},
+				"PARENT_USERNAME": {
+					"type": "string",
+					"nativeName": "PARENT_USERNAME",
+					"nativeType": "string",
+					"required": false
+				},
+				"FORENAME": {
+					"type": "string",
+					"nativeName": "FORENAME",
+					"nativeType": "string",
+					"required": false
+				},
+				"SURNAME": {
+					"type": "string",
+					"nativeName": "SURNAME",
 					"nativeType": "string",
 					"required": false
 				}

@@ -16,6 +16,9 @@
 		"target": "frIndexedString2",
 		"source": "PASSWORD"
 	}, {
+		"target": "frIndexedString1",
+		"source": "PARENT_USERNAME"
+	}, {
 		"target": "frIndexedInteger1",
 		"source": "CUSTID"
 	}, {
@@ -72,7 +75,7 @@
 	"correlationQuery": [{
 		"linkQualifier": "default",
 		"expressionTree": {
-			"any": ["frIndexedInteger1", "userName"]
+			"any": ["frIndexedString1"]
 		},
 		"mapping": "webfilingUser_alphaUser",
 		"type": "text/javascript",

@@ -5,18 +5,25 @@
 	"consentRequired": false,
 	"icon": null,
 	"displayName": "Sync FIDC user to WebFiling user",
+	"onError" : {
+		"type" : "text/javascript",
+		"source" : "logger.error(\"Sync of alphaUser_webfilingUser with sourceId: \" + sourceId + \" failed with error: \" + error);"
+	},
 	"properties": [{
-		"target": "CHILD_AUTHID",
-		"source": "frIndexedInteger2"
+		"target": "PARENT_USERNAME",
+		"source": "frIndexedString1"
 	}, {
 		"target": "PASSWORD",
 		"source": "frIndexedString2"
 	}, {
-		"target": "CUSTID",
-		"source": "frIndexedInteger1"
-	}, {
 		"target": "EMAIL",
 		"source": "mail"
+	},{
+		"target": "FORENAME",
+		"source": "sn"
+	},{
+		"target": "SURNAME",
+		"source": "sn"
 	}],
 	"policies": [{
 		"action": "EXCEPTION",
@@ -61,7 +68,7 @@
 	"correlationQuery": [{
 		"linkQualifier": "default",
 		"expressionTree": {
-			"any": ["CHILD_AUTHID", "CUSTID"]
+			"any": ["PARENT_USERNAME"]
 		},
 		"mapping": "alphaUser_webfilingUserPassword",
 		"type": "text/javascript",
