@@ -32,6 +32,36 @@
         },
         {
             "payload": {
+                "_id": "a15a784a-489e-49ee-af79-a7153447c843",
+                "name": "CH - Registration - Enter new password",
+                "description": "Registration - Enter new password",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "ch-registration-pwd-input-collector.js"
+        },
+        {
+            "payload": {
+                "_id": "e69b137b-1bae-4804-af6b-6a93371733ca",
+                "name": "CH - Generic Error Message",
+                "description": "Generic Error Message",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "ch-callback-general-error.js"
+        },
+        {
+            "payload": {
                 "_id": "8b203967-fa57-4ce2-9dad-2f387ca52a61",
                 "name": "CH - Registration - Sent Email Confirmation",
                 "description": "Displays a confirmation message when registration email is sent",

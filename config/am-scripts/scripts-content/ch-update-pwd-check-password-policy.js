@@ -33,7 +33,8 @@ function policyCompliant(pwd) {
     logger.error("[CHANGE PWD - POLICY CHECK] Checking password [" + pwd + "] against policy");
     var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
     if (accessToken == null) {
-        logger.error("[CHANGE PWD - POLICY CHECK] Access token not in shared state");
+        logger.error("[CHANGE PWD - POLICY CHECK] Access token not in transient state");
+        sharedState.put("errorMessage", "Access token not in transient state");
         return NodeOutcome.ERROR;
     }
 
@@ -58,6 +59,7 @@ function policyCompliant(pwd) {
         var policyResponse = JSON.parse(response.getEntity().getString());
         if (policyResponse == null) {
             logger.error("[CHANGE PWD - POLICY CHECK] No policy result in response");
+            sharedState.put("errorMessage", "No policy result in response");
             return NodeOutcome.ERROR;
         }
         var compliant = policyResponse.result;
@@ -65,20 +67,24 @@ function policyCompliant(pwd) {
             logger.error("[CHANGE PWD - POLICY CHECK] Password compliant with policy");
             sharedState.put("errorMessage", null);
             sharedState.put("pagePropsJSON", null);
+            transientState.put("newPassword", newPassword);
             return NodeOutcome.PASS;
         }
         else {
             logger.error("[CHANGE PWD - POLICY CHECK] Password not compliant with policy");
+            sharedState.put("errorMessage", "Password not compliant with policy");
             setPolicyErrorMessage(policyResponse);
             return NodeOutcome.FAIL;
         }
     }
     else if (response.getStatus().getCode() === 401) {
-        logger.error("A[CHANGE PWD - POLICY CHECK] Authentication failed for policy lookup");
+        logger.error("[CHANGE PWD - POLICY CHECK] Authentication failed for policy lookup");
+        sharedState.put("errorMessage", "Authentication failed for policy lookup");
         return NodeOutcome.ERROR;
     }
 
     logger.error("[CHANGE PWD - POLICY CHECK] Error");
+    sharedState.put("errorMessage", "[CHANGE PWD - POLICY CHECK] Error");
     return NodeOutcome.ERROR;
 }
 
