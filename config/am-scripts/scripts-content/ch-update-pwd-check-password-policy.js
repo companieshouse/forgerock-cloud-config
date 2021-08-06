@@ -67,7 +67,7 @@ function policyCompliant(pwd) {
             logger.error("[CHANGE PWD - POLICY CHECK] Password compliant with policy");
             sharedState.put("errorMessage", null);
             sharedState.put("pagePropsJSON", null);
-            transientState.put("newPassword", newPassword);
+            //transientState.put("newPassword", newPassword);
             return NodeOutcome.PASS;
         }
         else {

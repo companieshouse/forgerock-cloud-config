@@ -33,8 +33,8 @@
         {
             "payload": {
                 "_id": "a15a784a-489e-49ee-af79-a7153447c843",
-                "name": "CH - Registration - Enter new password",
-                "description": "Registration - Enter new password",
+                "name": "CH - Enter and confirm new password",
+                "description": "Enter and new password (shared between Registration, Pwd Reset, Onboarding)",
                 "script": "<replace>",
                 "language": "JAVASCRIPT",
                 "context": "AUTHENTICATION_TREE_DECISION_NODE",
@@ -43,7 +43,7 @@
                 "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
                 "lastModifiedDate": 1436807766258
             },
-            "filename": "ch-registration-pwd-input-collector.js"
+            "filename": "ch-pwd-input-collector.js"
         },
         {
             "payload": {
@@ -787,23 +787,7 @@
                 "lastModifiedDate":1617810491969
              },
             "filename": "ch-onboarding-verify-token.js"
-        },  
-        {
-            "payload": {
-                "_id":"96b2e801-7ddb-45ee-8255-1e96568dd404",
-                "name":"CH - Onboard User - Password collector",
-                "description":"Prompts the user for a new password",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-onboarding-pwd-input-collector.js"
-        },  
+        },
         {
             "payload": {
                 "_id":"d22f9a0c-426a-4466-b95e-d0f125b0d5fa",

@@ -612,6 +612,7 @@
             company: {
                 id: companyId,
                 number: request.content.companyNumber,
+                name: company.name,
                 status: statusResponse.status,
                 inviterId: statusResponse.inviterId,
                 inviteTimestamp: statusResponse.inviteTimestamp
@@ -650,6 +651,7 @@
             company: {
                 id: companyId,
                 number: request.content.companyNumber,
+                name: company.name,
                 status: statusResponse.status,
                 inviterId: statusResponse.inviterId,
                 inviteTimestamp: statusResponse.inviteTimestamp
@@ -714,6 +716,7 @@
             company: {
                 id: companyId,
                 number: request.content.companyNumber,
+                name: company.name,
                 status: AuthorisationStatus.PENDING,
                 previousStatus: statusResponse.oldStatus
             }
@@ -777,6 +780,7 @@
             company: {
                 id: companyId,
                 number: request.content.companyNumber,
+                name: company.name,
                 status: AuthorisationStatus.PENDING,
                 previousStatus: statusResponse.oldStatus
             }
@@ -885,6 +889,7 @@
                 company: {
                     id: companyId,
                     number: request.content.companyNumber,
+                    name: company.name,
                     status: AuthorisationStatus.CONFIRMED,
                     previousStatus: statusResponse.oldStatus
                 }
@@ -930,6 +935,7 @@
                 company: {
                     id: companyId,
                     number: request.content.companyNumber,
+                    name: company.name,
                     status: AuthorisationStatus.NONE,
                     previousStatus: subjectStatus
                 }
@@ -991,6 +997,7 @@
             company: {
                 id: companyId,
                 number: request.content.companyNumber,
+                name: company.name,
                 status: AuthorisationStatus.NONE,
                 previousStatus: AuthorisationStatus.CONFIRMED
             }
@@ -1047,6 +1054,7 @@
             company: {
                 id: companyId,
                 number: request.content.companyNumber,
+                name: company.name,
                 status: AuthorisationStatus.CONFIRMED,
                 previousStatus: subjectStatus 
             }
