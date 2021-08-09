@@ -171,6 +171,16 @@
                 "outputs":["*"],
                 "script": "7576d62c-b649-4a9e-b9ea-4efc6bc61fde"
             }            
+        },
+		{
+            "_id": "a4ecc762-8785-4d34-aa1a-6852f1f9f789",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["true"],
+                "outputs":["*"],
+                "script": "e69b137b-1bae-4804-af6b-6a93371733ca"
+            }            
         }
   	],
 	"tree": {
@@ -191,11 +201,11 @@
 				"displayName": "Data Store Decision"
 			},
 			"2fd4b959-5aa4-4046-b363-c733e0c009e9": {
-				"x": 216,
-				"y": 159.015625,
+				"x": 148,
+				"y": 268.015625,
 				"connections": {
 					"hasSession": "f86dcabe-c64c-4162-931f-2130135b03d0",
-					"noSession": "e301438c-0bd0-429c-ab0c-66126501069a"
+					"noSession": "a4ecc762-8785-4d34-aa1a-6852f1f9f789"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Check for Session"
@@ -214,8 +224,8 @@
 				"x": 1064,
 				"y": 706.015625,
 				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"true": "d2fb6dd8-a033-498a-a619-a4634b98bd54"
+					"true": "d2fb6dd8-a033-498a-a619-a4634b98bd54",
+					"false": "a4ecc762-8785-4d34-aa1a-6852f1f9f789"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Send OTP via Email"
@@ -224,8 +234,8 @@
 				"x": 1185,
 				"y": 464.015625,
 				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"true": "846a0f18-64ae-40ca-b739-a268d8fb6010"
+					"true": "846a0f18-64ae-40ca-b739-a268d8fb6010",
+					"false": "a4ecc762-8785-4d34-aa1a-6852f1f9f789"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Create Notify JWT"
@@ -264,8 +274,8 @@
 				"x": 1657,
 				"y": 386.015625,
 				"connections": {
-					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"success": "a9bdc41d-e898-4a94-91a2-fc992be6b840"
+					"success": "a9bdc41d-e898-4a94-91a2-fc992be6b840",
+					"error": "a4ecc762-8785-4d34-aa1a-6852f1f9f789"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Patch User"
@@ -280,11 +290,11 @@
 				"displayName": "Confirmation"
 			},
 			"aad2c6c9-a4ca-43ef-8561-0046a6cfcb32": {
-				"x": 442,
+				"x": 444,
 				"y": 102.015625,
 				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"true": "14f9ca47-e9bc-4e0c-9a1c-796976d540a7"
+					"true": "14f9ca47-e9bc-4e0c-9a1c-796976d540a7",
+					"false": "a4ecc762-8785-4d34-aa1a-6852f1f9f789"
 				},
 				"nodeType": "IdentifyExistingUserNode",
 				"displayName": "Identify Existing User"
@@ -308,11 +318,11 @@
 				"displayName": "Pwd Error Message"
 			},
 			"d10a5fb1-9074-4e1b-a9d7-af5526392ca7": {
-				"x": 1303,
-				"y": 762.015625,
+				"x": 1411,
+				"y": 738.015625,
 				"connections": {
-					"Reject": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"Retry": "c8cd1bda-8c8b-439d-b625-aa5602b083fb"
+					"Retry": "c8cd1bda-8c8b-439d-b625-aa5602b083fb",
+					"Reject": "a4ecc762-8785-4d34-aa1a-6852f1f9f789"
 				},
 				"nodeType": "RetryLimitDecisionNode",
 				"displayName": "Retry Limit Decision"
@@ -352,6 +362,13 @@
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "get IDM token"
+			},
+			"a4ecc762-8785-4d34-aa1a-6852f1f9f789": {
+				"x": 1615,
+				"y": 923.015625,
+				"connections": {},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "General Error"
 			}
 		},
 		"staticNodes": {
@@ -364,8 +381,8 @@
 				"y": 484
 			},
 			"e301438c-0bd0-429c-ab0c-66126501069a": {
-				"x": 1875,
-				"y": 996
+				"x": 1895,
+				"y": 632
 			}
 		}
 	}

@@ -171,28 +171,24 @@
                 "outputs": ["*"],
                 "script": "6811d9da-4d44-488e-9e32-19a199dc0b3f"
             }
+        },
+        {
+            "_id": "a2dbeefa-1379-4062-8c70-217e6867f0a3",
+            "nodeType": "ScriptedDecisionNode", 
+            "details": {
+                "inputs":["*"],
+                "outcomes": ["true"],
+                "outputs":["*"],
+                "script": "e69b137b-1bae-4804-af6b-6a93371733ca"
+            }            
         }
 	],
 	"tree": {
         "_id": "CHChangePhoneNumber",
         "description": "Add a new phone number to existing account",
         "identityResource": "managed/alpha_user",
-        "entryNodeId": "6e941621-19ff-4354-bf46-8368756a4c37",
-        "staticNodes": {
-            "startNode": {
-                "x": 62,
-                "y": 103
-            },
-            "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
-                "x": 2196,
-                "y": 254
-            },
-            "e301438c-0bd0-429c-ab0c-66126501069a": {
-                "x": 1615,
-                "y": 836
-            }
-        },
         "uiConfig": {},
+        "entryNodeId": "6e941621-19ff-4354-bf46-8368756a4c37",
         "nodes": {
             "0539d36b-436a-4e70-80e6-f6bfdbca1e96": {
                 "x": 1873,
@@ -227,8 +223,8 @@
                 "x": 682,
                 "y": 382.015625,
                 "connections": {
-                    "Reject": "7e29ba19-c500-4a3c-b963-66d341b3b764",
-                    "Retry": "173f27f6-a619-4e73-9008-e55252030161"
+                    "Retry": "173f27f6-a619-4e73-9008-e55252030161",
+                    "Reject": "a2dbeefa-1379-4062-8c70-217e6867f0a3"
                 },
                 "nodeType": "RetryLimitDecisionNode",
                 "displayName": "Retry Limit Decision"
@@ -256,14 +252,14 @@
                 "y": 548.015625,
                 "connections": {
                     "hasSession": "87c675c7-4c21-4ed4-8795-cc85c1f3ca7e",
-                    "noSession": "e301438c-0bd0-429c-ab0c-66126501069a"
+                    "noSession": "a2dbeefa-1379-4062-8c70-217e6867f0a3"
                 },
                 "nodeType": "ScriptedDecisionNode",
                 "displayName": "Check for Session"
             },
             "7e29ba19-c500-4a3c-b963-66d341b3b764": {
-                "x": 1643,
-                "y": 1025.015625,
+                "x": 1860,
+                "y": 761.015625,
                 "connections": {},
                 "nodeType": "ScriptedDecisionNode",
                 "displayName": "Max Number Exceeded"
@@ -291,8 +287,8 @@
                 "x": 1912,
                 "y": 230.015625,
                 "connections": {
-                    "FAILURE": "e301438c-0bd0-429c-ab0c-66126501069a",
-                    "PATCHED": "4a256d89-2e4a-41d4-bb48-ef024969af95"
+                    "PATCHED": "4a256d89-2e4a-41d4-bb48-ef024969af95",
+                    "FAILURE": "a2dbeefa-1379-4062-8c70-217e6867f0a3"
                 },
                 "nodeType": "PatchObjectNode",
                 "displayName": "Patch Object"
@@ -311,8 +307,8 @@
                 "x": 988,
                 "y": 182.015625,
                 "connections": {
-                    "false": "e301438c-0bd0-429c-ab0c-66126501069a",
-                    "true": "06cb5370-bf77-4aff-8ff3-18aa7a468206"
+                    "true": "06cb5370-bf77-4aff-8ff3-18aa7a468206",
+                    "false": "a2dbeefa-1379-4062-8c70-217e6867f0a3"
                 },
                 "nodeType": "ScriptedDecisionNode",
                 "displayName": "Create Notify JWT - SMS"
@@ -321,18 +317,18 @@
                 "x": 1386,
                 "y": 193.015625,
                 "connections": {
-                    "false": "e301438c-0bd0-429c-ab0c-66126501069a",
-                    "true": "8d26d3b0-d201-4436-b651-4f41a063a16f"
+                    "true": "8d26d3b0-d201-4436-b651-4f41a063a16f",
+                    "false": "a2dbeefa-1379-4062-8c70-217e6867f0a3"
                 },
                 "nodeType": "ScriptedDecisionNode",
                 "displayName": "Send OTP"
             },
             "697a1140-9e54-4150-805f-6d5ea7cee7a0": {
-                "x": 401,
-                "y": 229.015625,
+                "x": 425,
+                "y": 242.015625,
                 "connections": {
                     "true": "173f27f6-a619-4e73-9008-e55252030161",
-                    "false": "e301438c-0bd0-429c-ab0c-66126501069a"
+                    "false": "a2dbeefa-1379-4062-8c70-217e6867f0a3"
                 },
                 "nodeType": "IdentifyExistingUserNode",
                 "displayName": "Identify Existing User"
@@ -345,7 +341,28 @@
                 },
                 "nodeType": "ScriptedDecisionNode",
                 "displayName": "Update Phone Confirmation"
+            },
+            "a2dbeefa-1379-4062-8c70-217e6867f0a3": {
+                "x": 1552,
+                "y": 648.015625,
+                "connections": {},
+                "nodeType": "ScriptedDecisionNode",
+                "displayName": "generic error"
+            }
+        },
+        "staticNodes": {
+            "startNode": {
+                "x": 62,
+                "y": 103
+            },
+            "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
+                "x": 2196,
+                "y": 254
+            },
+            "e301438c-0bd0-429c-ab0c-66126501069a": {
+                "x": 2195,
+                "y": 419
             }
         }
-	}
+    }
 }
