@@ -45,7 +45,8 @@
     "changeNumberAttribute": "changeNumber",
     "filterWithOrInsteadOfAnd": false,
     "objectClassesToSynchronize": [
-      "inetOrgPerson"
+      "inetOrgPerson",
+      "ch-user"
     ],
     "vlvSortAttribute": "uid",
     "passwordAttribute": "userPassword",
@@ -57,7 +58,8 @@
       "top",
       "person",
       "organizationalPerson",
-      "inetOrgPerson"
+      "inetOrgPerson",
+      "ch-user"
     ],
     "accountUserNameAttributes": [
       "uid"
@@ -182,6 +184,41 @@
         "description": {
           "type": "string",
           "nativeName": "description",
+          "nativeType": "string"
+        },
+        "status": {
+          "type": "string",
+          "nativeName": "status",
+          "nativeType": "string"
+        },
+        "migratedPasswordStatus": {
+          "type": "string",
+          "nativeName": "migratedPasswordStatus",
+          "nativeType": "string"
+        },
+        "legacyPassword": {
+          "type": "string",
+          "nativeName": "legacyPassword",
+          "nativeType": "string"
+        },
+        "origin": {
+          "type": "string",
+          "nativeName": "origin",
+          "nativeType": "string"
+        },
+        "ewfCustomerID": {
+          "type": "string",
+          "nativeName": "ewfCustomerID",
+          "nativeType": "string"
+        },
+        "ewfAuthID": {
+          "type": "string",
+          "nativeName": "ewfAuthID",
+          "nativeType": "string"
+        },
+        "authorisedCompanies": {
+          "type": "array",
+          "nativeName": "authorisedCompanies",
           "nativeType": "string"
         },
         "telephoneNumber": {
