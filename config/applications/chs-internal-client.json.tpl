@@ -109,8 +109,8 @@
 		"javascriptOrigins": {
 			"inherited": false,
 			"value": [
-                "https://idam.amido.aws.chdev.org", 
-                "https://idam.amido.aws.chdev.org:443"
+                "{UI_URL}", 
+                "{UI_URL}:443"
             ]
 		},
 		"policyUri": {
