@@ -69,4 +69,9 @@ function getAccessToken() {
     return NodeOutcome.SUCCESS;
 }
 
-outcome = getAccessToken()
+try{
+  outcome = getAccessToken();
+} catch(e){
+  sharedState.put("errorMessage", e.toString());
+  outcome = NodeOutcome.ERROR;
+}

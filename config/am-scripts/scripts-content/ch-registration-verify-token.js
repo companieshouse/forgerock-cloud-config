@@ -78,6 +78,7 @@ function saveUserDataToState(claimSet) {
                 "telephoneNumber": claimSet.phone.length > 0 ? claimSet.phone : null
             });
         sharedState.put("userName", claimSet.subject);
+        sharedState.put("isRegistration", true);
         return NodeOutcome.SUCCESS;
     } catch (e) {
         logger.error("[REGISTRATION-RESUME] error while reconstructing JWT: " + e);
@@ -219,10 +220,6 @@ try {
     }
 } catch (e) {
     logger.error("[REGISTRATION - RESUME] ERROR " + e);
-    action = fr.Action.send(
-        new fr.TextOutputCallback(
-            fr.TextOutputCallback.ERROR,
-            e.toString()
-        )
-    ).build()
+    sharedState.put("errorMessage", e.toString());
+    outcome = NodeOutcome.ERROR;
 }
