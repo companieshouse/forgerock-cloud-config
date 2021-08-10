@@ -34,7 +34,7 @@
             "payload": {
                 "_id": "a15a784a-489e-49ee-af79-a7153447c843",
                 "name": "CH - Enter and confirm new password",
-                "description": "Enter and new password (shared between Registration, Pwd Reset, Onboarding)",
+                "description": "Enter and confirm a new password (shared between Registration, Pwd Reset, Onboarding)",
                 "script": "<replace>",
                 "language": "JAVASCRIPT",
                 "context": "AUTHENTICATION_TREE_DECISION_NODE",
