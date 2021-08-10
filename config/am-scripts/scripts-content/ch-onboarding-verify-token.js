@@ -265,6 +265,7 @@ function isUserInvitedForCompany(userEmail, companyNo) {
         var membershipResponse = JSON.parse(response.getEntity().getString());
         return {
             success: true,
+            companyName: membershipResponse.company.name,
             isPending: (membershipResponse.company.status === MembershipStatus.PENDING)
         }
     } else {
@@ -310,7 +311,7 @@ function raiseError(message, token) {
     }
 }
 
-function saveUserDataToState(tokenData) {
+function saveUserDataToState(tokenData, companyName) {
     logger.error("[ONBOARDING-RESUME] The provided token is still valid");
     try {
         // put the read attributes in shared state for the Create Object node to consume
@@ -321,6 +322,8 @@ function saveUserDataToState(tokenData) {
                 "mail": tokenData.email
             });
         sharedState.put("userName", tokenData.email);
+        sharedState.put("invitedCompanyName", companyName);
+        sharedState.put("isOnboarding", true);
         return NodeOutcome.SUCCESS;
     } catch (e) {
         logger.error("[ONBOARDING-RESUME] error while storing state: " + e);
@@ -330,7 +333,13 @@ function saveUserDataToState(tokenData) {
 
 // reads the onboarding date
 function validateOnboardingDate(user) {
+
     var onboardDate = user.frIndexedDate2;
+    if(!onboardDate){
+        logger.error("[ONBOARDING-RESUME] Onboarding date not found for user "+user._id);
+        return false;
+    }
+
     logger.error("[ONBOARDING-RESUME] onboarding date: " + onboardDate);
 
     if (onboardDate.length > 0) {
@@ -433,9 +442,9 @@ try {
                     } else if (!isUserInvited.isPending) {
                         raiseError("The user is not invited for the company", "ONBOARDING_NO_INVITE_FOUND_ERROR");
                     } else if (!validateOnboardingDate(userResponse.user)) {
-                        raiseError("The onboarding date is expired.", "ONBOARDING_DATE_EXPIRED_ERROR");
+                        raiseError("The onboarding date is not found or is expired.", "ONBOARDING_DATE_EXPIRED_ERROR");
                     } else {
-                        outcome = saveUserDataToState(tokenData);
+                        outcome = saveUserDataToState(tokenData, isUserInvited.companyName);
                     }
                 }
             }
@@ -445,6 +454,5 @@ try {
 } catch (e) {
     logger.error("[ONBOARDING-RESUME] error " + e);
     sharedState.put("errorMessage", e.toString());
-    //raiseError("general error: ".concat(e.toString()), "ONBOARDING_DATE_EXPIRED_ERROR");
     outcome = NodeOutcome.ERROR;
 }

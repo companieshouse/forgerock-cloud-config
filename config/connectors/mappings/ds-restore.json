@@ -25,6 +25,48 @@
     {
       "target": "password",
       "source": "userPassword"
+    },
+    {
+      "target": "telephoneNumber",
+      "source": "telephoneNumber"
+    },
+    {
+      "target": "accountStatus",
+      "source": "status"
+    },
+    {
+      "target": "frIndexedString3",
+      "source": "migratedPasswordStatus"
+    },
+    {
+      "target": "frIndexedString2",
+      "source": "legacyPassword"
+    },
+    {
+      "target": "frIndexedString5",
+      "source": "origin"
+    },
+    {
+      "target": "frIndexedInteger1",
+      "source": "ewfCustomerID",
+      "transform": {
+        "type": "text/javascript",
+        "globals": {},
+        "source": "parseInt(source)"
+      }
+    },
+    {
+      "target": "frIndexedInteger2",
+      "source": "ewfAuthID",
+      "transform": {
+        "type": "text/javascript",
+        "globals": {},
+        "source": "parseInt(source)"
+      }
+    },
+    {
+      "target": "frIndexedMultivalued2",
+      "source": "authorisedCompanies"
     }
   ],
   "policies": [

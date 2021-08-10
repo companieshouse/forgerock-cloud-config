@@ -11,3 +11,8 @@ config/applications/idm-admin-client.json
 config/applications/ig-oidc-client.json
 config/consent/terms-and-conditions.json
 config/idm-endpoints/scripts-content/companyauth-frdemo.js
+config/applications/api-filing-client.json
+config/applications/api-filing-client
+config/applications/api-filing-m2m-client.json
+config/applications/api-filing-web-client.json
+config/applications/chs-internal-client.json

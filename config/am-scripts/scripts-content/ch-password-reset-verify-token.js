@@ -150,10 +150,11 @@ function saveUserDataToState(claimSet) {
         // put the read attributes in shared state for the Create Object node to consume
         sharedState.put("objectAttributes", { "userName": claimSet.subject, "mail": claimSet.subject });
         sharedState.put("userName", claimSet.subject);
-        return true;
+        sharedState.put("isResetPassword", true);
+        return NodeOutcome.RESUME;
     } catch (e) {
         logger.error("[REGISTRATION-RESUME] error while reconstructing JWT: " + e);
-        return false;
+        return NodeOutcome.ERROR;
     }
 }
 
@@ -195,8 +196,7 @@ try {
                 ).build()
             }
         } else {
-            saveUserDataToState(JSON.parse(tokenClaimsResponse.claims));
-            outcome = NodeOutcome.RESUME;
+            outcome = saveUserDataToState(JSON.parse(tokenClaimsResponse.claims));
         }
     } else {
         logger.error("[RESET PWD] token not found: starting pwd reset journey");
@@ -204,10 +204,6 @@ try {
     }
 } catch (e) {
     logger.error("[RESET PWD] ERROR " + e);
-    action = fr.Action.send(
-        new fr.TextOutputCallback(
-            fr.TextOutputCallback.ERROR,
-            e.toString()
-        )
-    ).build()
+    sharedState.put("errorMessage", e.toString());
+    outcome = NodeOutcome.ERROR;
 }

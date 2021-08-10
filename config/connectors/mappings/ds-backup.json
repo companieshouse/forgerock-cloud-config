@@ -16,11 +16,7 @@
     },
     {
       "target": "cn",
-      "transform": {
-        "type": "text/javascript",
-        "source": "source.givenName + ' ' + source.sn"
-      },
-      "source": ""
+      "source": "sn"
     },
     {
       "target": "sn",
@@ -41,6 +37,38 @@
     {
       "target": "userPassword",
       "source": "password"
+    },
+    {
+      "target": "telephoneNumber",
+      "source": "telephoneNumber"
+    },
+    {
+      "target": "status",
+      "source": "accountStatus"
+    },
+    {
+      "target": "migratedPasswordStatus",
+      "source": "frIndexedString3"
+    },
+    {
+      "target": "legacyPassword",
+      "source": "frIndexedString2"
+    },
+    {
+      "target": "origin",
+      "source": "frIndexedString5"
+    },
+    {
+      "target": "ewfCustomerID",
+      "source": "frIndexedInteger1"
+    },
+    {
+      "target": "ewfAuthID",
+      "source": "frIndexedInteger2"
+    },
+    {
+      "target": "authorisedCompanies",
+      "source": "frIndexedMultivalued2"
     }
   ],
   "policies": [

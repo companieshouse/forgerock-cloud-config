@@ -1,3 +1,4 @@
+/* groovylint-disable LineLength, NoDef, VariableTypeRequired */
 /*
  * Copyright 2019 ForgeRock AS. All Rights Reserved
  *
@@ -14,7 +15,6 @@ import com.iplanet.sso.SSOException
 import groovy.json.JsonSlurper
 
 /**
- * TEST
  * Defined variables:
  * accessToken - The access token to be updated. Mutable object, all changes to the access token will be reflected.
  * httpClient - always present, the HTTP client that can be used to make external HTTP requests
@@ -30,6 +30,27 @@ import groovy.json.JsonSlurper
  * When adding/updating fields make sure that the token size remains within client/user-agent limits.
  */
 
+def claims = accessToken.getClaims()
+if (claims == null) {
+    logger.message('No claims in token')
+} else {
+    logger.message('Got claims ' + claims)
+    def claimsObject = new JsonSlurper().parseText(claims)
+    if (claimsObject == null) {
+        logger.error('Could not decode claims to object')
+  } else if (claimsObject.userinfo == null) {
+        logger.error('No userinfo in claims')
+  } else if (claimsObject.userinfo.company == null) {
+        logger.error('No company in claims')
+  } else if (claimsObject.userinfo.company.value == null) {
+        logger.error('No company value in claims')
+  } else {
+        def company = claimsObject.userinfo.company.value
+        logger.message('Got company ' + company)
+        accessToken.setField('company', company)
+    }
+}
+
 /*
 //Field to always include in token
 accessToken.setField("hello", "world")
@@ -40,7 +61,7 @@ try {
             .setUri("https://third.party.app/hello.jsp")
             .setMethod("POST")
             .modifyHeaders({ headers -> headers.put("Content-Type", "application/json;charset=UTF-8") })
-//          .setEntity('foo=bar&hello=world'))
+            //          .setEntity('foo=bar&hello=world'))
             .setEntity([foo: 'bar']))
             .getOrThrow()
     if (response.status.successful) {
@@ -129,24 +150,23 @@ public class ScopeMapper {
     }
 
     def scopesToPermissionText(incomingScopes, companyName) {
-
         def permissions = []
 
-        String[] scopes = incomingScopes.split(" ");
+        String[] scopes = incomingScopes.split(' ')
         for (scope in scopes) {
             // Provide human readable text for a given singular scope string.
             // This text appears on the 3rd-party authorisation prompt
-            if (scope.equals('https://account.companieshouse.gov.uk/user/profile.read') ||
-                    scope.equals('https://identity.company-information.service.gov.uk/user/profile.read')) {
-                permissions.push('This will allow it to view your email address.');
+            if (scope == ('https://account.companieshouse.gov.uk/user/profile.read') ||
+                    scope == ('https://identity.company-information.service.gov.uk/user/profile.read')) {
+                permissions.push('This will allow it to view your email address.')
             } else if (scope =~ 'https://api.companieshouse.gov.uk/company/(.*?)/registered-office-address.update' ||
                     scope =~ 'https://api.company-information.service.gov.uk/company/(.*?)/registered-office-address.update') {
-                permissions.push("This will allow it to update " + companyName + "'s registered office address.");
+                permissions.push('This will allow it to update ' + companyName + '\'s registered office address.')
             } else {
                 // No scope permission text found
                 println('No scope permission text found for scope: ' + scope + '. Please add a scope permission text.')
                 permissions.push(scope)
-            }
+                    }
         }
 
         // return permissions;
@@ -158,43 +178,43 @@ public class ScopeMapper {
 
         boolean companyNumberSupplied = companyNumber?.trim()
 
-        String[] scopes = incomingScopes.split(" ");
+        String[] scopes = incomingScopes.split(' ')
         for (scope in scopes) {
             // Provide human readable text for a given singular scope string.
             // This text appears on the 3rd party authorisation prompt
             if (scope.equals('https://account.companieshouse.gov.uk/user/profile.read') ||
                     scope.equals('https://identity.company-information.service.gov.uk/user/profile.read')) {
-                scopesAsText.push('View email address');
+                scopesAsText.push('View email address')
             } else if (companyNumberSupplied &&
-                    (scope.equals("https://api.companieshouse.gov.uk/company/" + companyNumber + "/registered-office-address.update") ||
-                            scope.equals("https://api.company-information.service.gov.uk/company/" + companyNumber + "/registered-office-address.update") ) ) {
+                    (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/registered-office-address.update') ||
+                            scope.equals('https://api.company-information.service.gov.uk/company/' + companyNumber + '/registered-office-address.update') ) ) {
                 scopesAsText.push('Update registered office address')
                 // Finally, append company company_number - if supplied
                 if (companyNumberSupplied) {
                     // TODO Check this output
-                    scopesAsText.push("for {{" + companyNumber + "}} (" + companyNumber + ")")
+                    scopesAsText.push('for {{' + companyNumber + '}} (' + companyNumber + ')')
                 }
             } else {
                 // No scope permission text found
                 println('No scope permission text found for scope: ' + scope + '. Please add a scope permission text.')
-            }
+                            }
         }
 
-        return scopesAsText.reverse().join(" ")
+        return scopesAsText.reverse().join(' ')
     }
 
     /**
      * Convert scopes to their equivalent permissions.
      */
     def scopesToPermissions(incomingScopes, isForInternalApp=false) {
-        def chPermissions = new CHPermissions();
+        def chPermissions = new CHPermissions()
         chPermissions.isForInternalApp(isForInternalApp)
 
         if (incomingScopes.length() == 0) {
             return chPermissions
         }
 
-        String[] scopes = incomingScopes.split(" ");
+        String[] scopes = incomingScopes.split(' ')
         for (scope in scopes) {
             scopeToPermissions(scope, chPermissions)
         }
@@ -207,42 +227,41 @@ public class ScopeMapper {
      */
     def scopeToPermissions(scope, permissions) {
         // Handle literal scopes first
-        if (scope.equals("https://account.companieshouse.gov.uk/user/profile.read") ||
-                scope.equals("https://identity.company-information.service.gov.uk/user/profile.read")) {
+        if (scope.equals('https://account.companieshouse.gov.uk/user/profile.read') ||
+                scope.equals('https://identity.company-information.service.gov.uk/user/profile.read')) {
             def map = [:]
-            map["user_profile"] = "read"
+            map['user_profile'] = 'read'
 
             permissions.addPermissions(map)
             return permissions
-        } else if (scope.equals("https://account.companieshouse.gov.uk/user.write-full") ||
-                scope.equals("https://identity.company-information.service.gov.uk/user.write-full")) {
+        } else if (scope.equals('https://account.companieshouse.gov.uk/user.write-full') ||
+                scope.equals('https://identity.company-information.service.gov.uk/user.write-full')) {
             if (permissions.isForInternalApp()) {
                 def map = [:]
-                map["user_applications"] = "create,read,update,delete"
-                map["user_profile"] = "delete,read,update"
-                map["user_following"] = "read,update"
-                map["user_transactions"] = "read"
-                map["user_request_auth_code"] = "create"
-                map["user_orders"] = "create,read,update,delete"
-                map["user_secure_applications"] = "create,read,update,delete"
-                map["user_third_party_apps"] = "read,delete"
+                map['user_applications'] = 'create,read,update,delete'
+                map['user_profile'] = 'delete,read,update'
+                map['user_following'] = 'read,update'
+                map['user_transactions'] = 'read'
+                map['user_request_auth_code'] = 'create'
+                map['user_orders'] = 'create,read,update,delete'
+                map['user_secure_applications'] = 'create,read,update,delete'
+                map['user_third_party_apps'] = 'read,delete'
 
                 permissions.addPermissions(map)
                 return permissions
             } else {
-                println("External app requested forbidden scope: /user.write-full")
+                println('External app requested forbidden scope: /user.write-full')
                 permissions.invalidate('Permission denied.')
                 return permissions
             }
         } else if (scope =~ 'https://api.companieshouse.gov.uk/company/(.*?)/registered-office-address.update' ||
                 scope =~ 'https://api.company-information.service.gov.uk/company/(.*?)/registered-office-address.update') {
-
             def result = (scope =~ '/company/(.*?)/registered-office-address.update').findAll()
             def companyNumber = result[0][1]
 
             def map = [:]
-            map["company_number"] = companyNumber
-            map["company_roa"] = "update"
+            map['company_number'] = companyNumber
+            map['company_roa'] = 'update'
 
             permissions.addPermissions(map)
             return permissions
@@ -254,41 +273,40 @@ public class ScopeMapper {
 
                 if (permissions.isForInternalApp()) {
                     def map = [:]
-                    map["company_accounts"] = "update"
-                    map["company_auth_code"] = "update,delete"
-                    map["company_number"] = companyNumber
-                    map["company_roa"] = "update"
-                    map["company_status"] = "update"
-                    map["company_transactions"] = "read"
-                    map["company_promise_to_file"] = "update"
+                    map['company_accounts'] = 'update'
+                    map['company_auth_code'] = 'update,delete'
+                    map['company_number'] = companyNumber
+                    map['company_roa'] = 'update'
+                    map['company_status'] = 'update'
+                    map['company_transactions'] = 'read'
+                    map['company_promise_to_file'] = 'update'
 
                     permissions.addPermissions(map)
                     return permissions
                 } else {
-                    println("Permission denied. External app requested legacy scope: admin.write-full for company number: $companyNumber");
+                    println("Permission denied. External app requested legacy scope: admin.write-full for company number: $companyNumber")
                     permissions.invalidate('Permission denied.')
                     return permissions
                 }
             } else {
-                println('Permission denied. Legacy scopes not allowed.');
+                println('Permission denied. Legacy scopes not allowed.')
                 permissions.invalidate('Permission denied.')
                 return permissions
             }
         } else if (scope =~ 'https://api.companieshouse.gov.uk/company/(.*?)/admin.write-full' ||
                 scope =~ 'https://api.company-information.service.gov.uk/company/(.*?)/admin.write-full') {
-
             def result = (scope =~ '/company/(.*?)/admin.write-full').findAll()
             def companyNumber = result[0][1]
 
             if (permissions.isForInternalApp()) {
                 def map = [:]
-                map["company_accounts"] = "update"
-                map["company_auth_code"] = "update,delete"
-                map["company_number"] = companyNumber
-                map["company_roa"] = "update"
-                map["company_status"] = "update"
-                map["company_transactions"] = "read"
-                map["company_promise_to_file"] = "update"
+                map['company_accounts'] = 'update'
+                map['company_auth_code'] = 'update,delete'
+                map['company_number'] = companyNumber
+                map['company_roa'] = 'update'
+                map['company_status'] = 'update'
+                map['company_transactions'] = 'read'
+                map['company_promise_to_file'] = 'update'
 
                 permissions.addPermissions(map)
                 return permissions
@@ -301,8 +319,9 @@ public class ScopeMapper {
             println('No permissions found matching the scope: ' + scope + '. Please add a new scope to the module: AccountChGovUk::Helpers::ScopeMapper->scope_to_permissions().')
             permissions.invalidate('No permissions found matching the scope: ' + scope)
             return permissions
-        }
+                }
     }
+
 }
 
 public class CHPermissions {
@@ -314,7 +333,6 @@ public class CHPermissions {
     def permissionRecord = [:]
 
     void addPermissions(permissions) {
-
         permissions.each { key, value ->
             value = value.trim()
 
@@ -330,12 +348,12 @@ public class CHPermissions {
                 }
 
                 // Merge new permission values into one string delimited by ','
-                var allValues  = [value, existingValue].join(",")
-                def uniqueValues = allValues.split(",").collect()
+                var allValues  = [value, existingValue].join(',')
+                def uniqueValues = allValues.split(',').collect()
                 uniqueValues = uniqueValues.unique()
 
                 // Store the merged permissions list
-                permissionRecord.put(key, uniqueValues.join(","))
+                permissionRecord.put(key, uniqueValues.join(','))
             }
         }
     }
@@ -372,6 +390,7 @@ public class CHPermissions {
 
         return false
     }
+
 }
 
 // Test the ScopeMapper

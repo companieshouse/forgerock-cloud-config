@@ -32,6 +32,36 @@
         },
         {
             "payload": {
+                "_id": "a15a784a-489e-49ee-af79-a7153447c843",
+                "name": "CH - Enter and confirm new password",
+                "description": "Enter and confirm a new password (shared between Registration, Pwd Reset, Onboarding)",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "ch-pwd-input-collector.js"
+        },
+        {
+            "payload": {
+                "_id": "e69b137b-1bae-4804-af6b-6a93371733ca",
+                "name": "CH - Generic Error Message",
+                "description": "Generic Error Message",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "ch-callback-general-error.js"
+        },
+        {
+            "payload": {
                 "_id": "8b203967-fa57-4ce2-9dad-2f387ca52a61",
                 "name": "CH - Registration - Sent Email Confirmation",
                 "description": "Displays a confirmation message when registration email is sent",
@@ -757,23 +787,7 @@
                 "lastModifiedDate":1617810491969
              },
             "filename": "ch-onboarding-verify-token.js"
-        },  
-        {
-            "payload": {
-                "_id":"96b2e801-7ddb-45ee-8255-1e96568dd404",
-                "name":"CH - Onboard User - Password collector",
-                "description":"Prompts the user for a new password",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-onboarding-pwd-input-collector.js"
-        },  
+        },
         {
             "payload": {
                 "_id":"d22f9a0c-426a-4466-b95e-d0f125b0d5fa",
@@ -1317,22 +1331,6 @@
                 "lastModifiedDate":1617810491969
              },
             "filename": "ch-update-email-patch-new-email.js"
-        },
-        {
-            "payload": {
-                "_id":"7576d62c-b649-4a9e-b9ea-4efc6bc61fde",
-                "name":"CH - Change Email - Confirmation",
-                "description":"Change email confirmation",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-update-email-confirmation.js"
         },
         {
             "payload": {

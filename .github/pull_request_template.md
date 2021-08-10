@@ -8,6 +8,7 @@ that will require FR to update FIDC
 environment specific variables.
 -->
 **FIDC Update Required:**
+- [ ] applications
 - [ ] am-scripts
 - [ ] auth-trees
 - [ ] connectors
