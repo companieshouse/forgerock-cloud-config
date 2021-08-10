@@ -1334,22 +1334,6 @@
         },
         {
             "payload": {
-                "_id":"7576d62c-b649-4a9e-b9ea-4efc6bc61fde",
-                "name":"CH - Change Email - Confirmation",
-                "description":"Change email confirmation",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-update-email-confirmation.js"
-        },
-        {
-            "payload": {
                 "_id":"1a6815f1-0272-490b-8d6b-69609c3ee9d6",
                 "name":"CH - Load JWT signing/encryption keys",
                 "description":"Load signing/encryption keys used to create/sign/encrypt the Registration/Pwd Reset/Onboarding JWTs",

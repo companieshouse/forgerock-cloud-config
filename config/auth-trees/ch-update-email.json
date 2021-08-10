@@ -163,16 +163,6 @@
             }            
         },
 		{
-            "_id": "a9bdc41d-e898-4a94-91a2-fc992be6b840",
-            "nodeType": "ScriptedDecisionNode", 
-            "details": {
-                "inputs":["*"],
-                "outcomes": ["true"],
-                "outputs":["*"],
-                "script": "7576d62c-b649-4a9e-b9ea-4efc6bc61fde"
-            }            
-        },
-		{
             "_id": "a4ecc762-8785-4d34-aa1a-6852f1f9f789",
             "nodeType": "ScriptedDecisionNode", 
             "details": {
@@ -279,23 +269,14 @@
 				"displayName": "HOTP Generator"
 			},
 			"a88db7fb-f4eb-48bd-a2e8-69727ff40068": {
-				"x": 1548,
-				"y": 338.015625,
+				"x": 1492,
+				"y": 249.015625,
 				"connections": {
 					"error": "a4ecc762-8785-4d34-aa1a-6852f1f9f789",
 					"success": "bb7ebb47-c3a7-43fa-9a99-2a4033f0a016"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Patch User"
-			},
-			"a9bdc41d-e898-4a94-91a2-fc992be6b840": {
-				"x": 1819,
-				"y": 380.015625,
-				"connections": {
-					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
-				},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Confirmation"
 			},
 			"aad2c6c9-a4ca-43ef-8561-0046a6cfcb32": {
 				"x": 444,
@@ -379,11 +360,11 @@
 				"displayName": "General Error"
 			},
 			"bb7ebb47-c3a7-43fa-9a99-2a4033f0a016": {
-				"x": 1745,
-				"y": 221.015625,
+				"x": 1615,
+				"y": 413.015625,
 				"connections": {
 					"false": "a4ecc762-8785-4d34-aa1a-6852f1f9f789",
-					"true": "a9bdc41d-e898-4a94-91a2-fc992be6b840"
+					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
 				},
 				"nodeType": "IdentifyExistingUserNode",
 				"displayName": "Set Username in Shared State"
