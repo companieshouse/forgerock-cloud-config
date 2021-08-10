@@ -108,7 +108,10 @@ if (callbacks.isEmpty()) {
         "telephoneNumber": newPhoneNumber
       });
       transientState.put("updatePhoneNumber", true);
-      transientState.put("password", currentPassword);
+      sharedState.put("password", currentPassword);
       action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
+      // action = fr.Action.send(
+      //   fr.TextOutputCallback(fr.TextOutputCallback.ERROR , "shared state: " + sharedState + " ******** objectAttributes: " + JSON.stringify(sharedState.get("objectAttributes")) + " ********** session: " + existingSession.toString())
+      // ).build();
   }        
 }

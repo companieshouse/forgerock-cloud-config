@@ -181,7 +181,15 @@
                 "outputs":["*"],
                 "script": "e69b137b-1bae-4804-af6b-6a93371733ca"
             }            
-        }
+        },
+		{
+			"_id": "bb7ebb47-c3a7-43fa-9a99-2a4033f0a016",
+			"nodeType": "IdentifyExistingUserNode",
+			"details": {
+				"identifier": "userName",
+				"identityAttribute": "_id"
+			}
+		}
   	],
 	"tree": {
 		"_id": "CHChangeEmailAddress",
@@ -271,18 +279,18 @@
 				"displayName": "HOTP Generator"
 			},
 			"a88db7fb-f4eb-48bd-a2e8-69727ff40068": {
-				"x": 1657,
-				"y": 386.015625,
+				"x": 1548,
+				"y": 338.015625,
 				"connections": {
-					"success": "a9bdc41d-e898-4a94-91a2-fc992be6b840",
-					"error": "a4ecc762-8785-4d34-aa1a-6852f1f9f789"
+					"error": "a4ecc762-8785-4d34-aa1a-6852f1f9f789",
+					"success": "bb7ebb47-c3a7-43fa-9a99-2a4033f0a016"
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Patch User"
 			},
 			"a9bdc41d-e898-4a94-91a2-fc992be6b840": {
-				"x": 1650,
-				"y": 534.015625,
+				"x": 1819,
+				"y": 380.015625,
 				"connections": {
 					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
 				},
@@ -369,6 +377,16 @@
 				"connections": {},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "General Error"
+			},
+			"bb7ebb47-c3a7-43fa-9a99-2a4033f0a016": {
+				"x": 1745,
+				"y": 221.015625,
+				"connections": {
+					"false": "a4ecc762-8785-4d34-aa1a-6852f1f9f789",
+					"true": "a9bdc41d-e898-4a94-91a2-fc992be6b840"
+				},
+				"nodeType": "IdentifyExistingUserNode",
+				"displayName": "Set Username in Shared State"
 			}
 		},
 		"staticNodes": {
@@ -377,8 +395,8 @@
 				"y": 103
 			},
 			"70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
-				"x": 1879,
-				"y": 484
+				"x": 1925,
+				"y": 521
 			},
 			"e301438c-0bd0-429c-ab0c-66126501069a": {
 				"x": 1895,
