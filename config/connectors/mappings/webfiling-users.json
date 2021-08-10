@@ -18,12 +18,6 @@
 	}, {
 		"target": "frIndexedString1",
 		"source": "PARENT_USERNAME"
-	}, {
-		"target": "frIndexedInteger1",
-		"source": "CUSTID"
-	}, {
-		"target": "frIndexedInteger2",
-		"source": "CHILD_AUTHID"
 	}],
 	"policies": [{
 		"action": "EXCEPTION",

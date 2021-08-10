@@ -131,18 +131,6 @@
 					"nativeType": "string",
 					"required": true
 				},
-				"CUSTID": {
-					"type": "number",
-					"nativeName": "CUSTID",
-					"nativeType": "string",
-					"required": false
-				},
-				"CHILD_AUTHID": {
-					"type": "number",
-					"nativeName": "CHILD_AUTHID",
-					"nativeType": "string",
-					"required": false
-				},
 				"PARENT_USERNAME": {
 					"type": "string",
 					"nativeName": "PARENT_USERNAME",
