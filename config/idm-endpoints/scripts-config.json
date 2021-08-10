@@ -3,6 +3,10 @@
         {
             "endpointName": "companyauth",
             "scriptFileName": "companyauth.js"
+        },
+        {
+            "endpointName": "company",
+            "scriptFileName": "company.js"
         }
     ],
     "tasks": [
