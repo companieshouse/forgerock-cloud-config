@@ -1,5 +1,5 @@
 var companyData = sharedState.get("companyData");
-sharedState.put("errorMessage","The auth code you supplied is incorrect.")
+sharedState.put("errorMessage", "The auth code you supplied is incorrect.")
 sharedState.put("pagePropsJSON", JSON.stringify(
     {
         'errors': [{
@@ -8,7 +8,9 @@ sharedState.put("pagePropsJSON", JSON.stringify(
             fieldName: "IDToken2",
             anchor: "IDToken2"
         }],
-        "company": JSON.parse(companyData)
+        'company': {
+            name: JSON.parse(companyData).name
+        }
     }));
 logger.error("[VALIDATE CREDENTIAL] The auth code you supplied is incorrect.");
 outcome = "true";

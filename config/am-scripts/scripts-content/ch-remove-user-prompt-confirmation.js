@@ -265,7 +265,9 @@ try {
                     level = fr.TextOutputCallback.ERROR;
                     infoMessage = errorMessage.concat(" Please confirm you have read the information.");
                     var newJSONProps = JSON.parse(errorProps);     
-                    newJSONProps.company = companyLookupResponse.company;
+                    newJSONProps.company = {
+                        name: companyLookupResponse.company.name
+                    };
                     newJSONProps.userDisplayName = userDisplayName;
                     action = fr.Action.send(
                         new fr.TextOutputCallback(level, infoMessage),
@@ -277,8 +279,10 @@ try {
                     ).build();
                 } else {
                     var newJSONProps = {
-                        "company": companyLookupResponse.company,
-                        "userDisplayName": userDisplayName
+                        'company': {
+                            name: companyLookupResponse.company.name
+                        },
+                        'userDisplayName': userDisplayName
                     }
                     action = fr.Action.send(
                         new fr.TextOutputCallback(level, infoMessage),

@@ -42,7 +42,14 @@ if (callbacks.isEmpty()) {
       new fr.TextOutputCallback(level, infoMessage),
       new fr.NameCallback("Enter Auth Code"),
       new fr.HiddenValueCallback("stage", isEWF ? "EWF_LOGIN_4" : "COMPANY_ASSOCIATION_3"),
-      new fr.HiddenValueCallback("pagePropsJSON", JSON.stringify({"company": JSON.parse(companyData)}))
+      new fr.HiddenValueCallback(
+        "pagePropsJSON",
+        JSON.stringify(
+          {
+            'company': {
+              name: JSON.parse(companyData).name
+            }
+          }))
     ).build();
   }
 } else {

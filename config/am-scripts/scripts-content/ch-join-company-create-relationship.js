@@ -193,7 +193,9 @@ try {
                     fieldName: "IDToken2",
                     anchor: "IDToken2"
                 }],
-                'company': JSON.parse(companyData)
+                'company': {
+                    name: JSON.parse(companyData).name
+                }
             }));
         action = fr.Action.goTo(NodeOutcome.COMPANY_ALREADY_ASSOCIATED)
             .putSessionProperty("language", language.toLowerCase())
@@ -209,7 +211,9 @@ try {
                     fieldName: "IDToken1",
                     anchor: "IDToken1"
                 }],
-                'company': JSON.parse(companyData)
+                'company': {
+                    name: JSON.parse(companyData).name
+                }
             }));
         action = fr.Action.goTo(NodeOutcome.AUTH_CODE_INACTIVE).build();
     } else {

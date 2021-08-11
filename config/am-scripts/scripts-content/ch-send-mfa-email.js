@@ -121,7 +121,7 @@ try {
     var language = getSelectedLanguage(requestHeaders);
     var emailAddress = extractEmail();
 
-    logger.error("[SEND MFA EMAIL] User email address: " + emailAddress);        
+    logger.error("[SEND MFA EMAIL] User email address: " + emailAddress);
     logger.error("[SEND MFA EMAIL] Code: " + code);
 
     if (!emailAddress) {
@@ -132,21 +132,28 @@ try {
         if (sendEmailResult.success) {
             action = fr.Action.goTo(NodeOutcome.TRUE).build();
         } else {
-            
-                action = fr.Action.send(
-                    new fr.HiddenValueCallback(
-                        "stage",
-                        "SEND_MFA_EMAIL_ERROR"
-                    ),
-                    new fr.TextOutputCallback(
-                        fr.TextOutputCallback.ERROR,
-                        "The email could not be sent: " .concat(sendEmailResult.message)
-                    ),
-                    new fr.HiddenValueCallback(
-                        "pagePropsJSON",
-                        JSON.stringify({ 'errors': [{ label: "The email could not be sent: " .concat(sendEmailResult.message), token: "SEND_MFA_EMAIL_ERROR" }] })
-                    )
-                ).build()
+
+            action = fr.Action.send(
+                new fr.HiddenValueCallback(
+                    "stage",
+                    "SEND_MFA_EMAIL_ERROR"
+                ),
+                new fr.TextOutputCallback(
+                    fr.TextOutputCallback.ERROR,
+                    "The email could not be sent: ".concat(sendEmailResult.message)
+                ),
+                new fr.HiddenValueCallback(
+                    "pagePropsJSON",
+                    JSON.stringify({
+                        'errors': [
+                            {
+                                label: "The email could not be sent: ".concat(sendEmailResult.message),
+                                token: "SEND_MFA_EMAIL_ERROR"
+                            }
+                        ]
+                    })
+                )
+            ).build()
         }
     }
 } catch (e) {
@@ -162,7 +169,14 @@ try {
         ),
         new fr.HiddenValueCallback(
             "pagePropsJSON",
-            JSON.stringify({ 'errors': [{ label: "An error occurred while sending the email. Please try again.", token: "SEND_MFA_EMAIL_ERROR" }] })
+            JSON.stringify({
+                'errors': [
+                    {
+                        label: "An error occurred while sending the email. Please try again.",
+                        token: "SEND_MFA_EMAIL_ERROR"
+                    }
+                ]
+            })
         )
     ).build()
 }

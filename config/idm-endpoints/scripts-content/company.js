@@ -10,14 +10,15 @@
 
     // Look up a user
     function getUserById(id) {
-        var response = openidm.read("managed/alpha_user/" + id, null, ["_id", "userName", "telephoneNumber", "givenName", "memberOfOrg"]);
+        var response = openidm.read("managed/alpha_user/" + id, null, ["_id", "userName", "telephoneNumber",
+            "givenName", "memberOfOrg"]);
         return response;
     }
 
     // Look up a company
     function getCompany(ref) {
-        let response = openidm.read(ref, null, ["*", "number", "name", "addressLine1", "addressLine2", 
-        "postalCode", "locality", "jurisdiction", "type", "status", "members"]);
+        let response = openidm.read(ref, null, ["*", "number", "name", "addressLine1", "addressLine2",
+            "postalCode", "locality", "jurisdiction", "type", "status", "region", "members"]);
         return response;
     }
 
@@ -42,7 +43,7 @@
                 _id: fullUser._id,
                 name: fullUser.givenName,
                 email: maskEmail(fullUser.userName),
-                displayName: fullUser.givenName? fullUser.givenName : maskEmail(fullUser.userName),
+                displayName: fullUser.givenName ? fullUser.givenName : maskEmail(fullUser.userName),
                 phone: fullUser.telephoneNumber ? maskPhone(fullUser.telephoneNumber) : undefined,
                 membershipStatus: status._refProperties.membershipStatus
             });
@@ -71,7 +72,8 @@
                 postalCode: companyInfo.postalCode,
                 locality: companyInfo.locality,
                 jurisdiction: companyInfo.jurisdiction,
-                type: companyInfo.type
+                type: companyInfo.type,
+                region: companyInfo.region
             });
         });
     }
