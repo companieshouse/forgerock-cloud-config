@@ -209,10 +209,10 @@ function buildReturnUrl(invitedEmail, companyNumber){
             };
         } else {
             returnUrl = host.concat("/account/onboarding/?token=", onboardingJwt)
-                            .concat("&goto=", encodeURIComponent("/account/notifications/#" + companyNumber));
+                            .concat("&goto=", encodeURIComponent("/account/notifications/?companyNumber=" + companyNumber));
         }
     } else {
-        returnUrl = host.concat("/account/login/?goto=", encodeURIComponent("/account/notifications/#" + companyNumber));
+        returnUrl = host.concat("/account/login/?goto=", encodeURIComponent("/account/notifications/?companyNumber=" + companyNumber));
     }
     return {
         success: true,
