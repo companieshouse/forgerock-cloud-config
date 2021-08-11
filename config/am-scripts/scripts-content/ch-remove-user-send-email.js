@@ -160,7 +160,11 @@ try {
                 ),
                 new fr.HiddenValueCallback(
                     "pagePropsJSON",
-                    JSON.stringify({ "user": userDisplayName, "company": removalData.companyName })
+                    JSON.stringify(
+                        {
+                            "user": userDisplayName,
+                            "company": removalData.companyName
+                        })
                 ),
                 new fr.HiddenValueCallback(
                     "notificationId",

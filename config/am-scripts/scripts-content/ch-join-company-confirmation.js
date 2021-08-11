@@ -36,7 +36,11 @@ if (callbacks.isEmpty()) {
         ),
         new fr.HiddenValueCallback (
             "pagePropsJSON",
-            JSON.stringify({"company": JSON.parse(companyData)}) 
+            JSON.stringify({
+                'company': {
+                    name: JSON.parse(companyData).name
+                }
+            })
         )
     ).build()
 } else {

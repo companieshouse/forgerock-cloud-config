@@ -40,13 +40,13 @@ var NodeOutcome = {
 }
 
 var jurisdictions = {
-    EW: "EW", 
-    SC: "SC", 
+    EW: "EW",
+    SC: "SC",
     NI: "NI"
 };
 
 var CompanyStatus = {
-    ACTIVE: "active", 
+    ACTIVE: "active",
     DORMANT: "dormant"
 };
 
@@ -80,9 +80,9 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
     var request = new org.forgerock.http.protocol.Request();
 
     request.setMethod('GET');
-    
+
     var searchTerm;
-        
+
     // if the user selected Scotland and provided a company number without 'SC' at the beginning, search for a match with either '<company no>' or 'SC<company no>'
     if (jurisdiction.equals(jurisdictions.SC) && companyNumber.indexOf("SC") !== 0) {
         logger.error("[FETCH COMPANY] looking for SC company without 'SC' prefix - adding it");
@@ -90,8 +90,8 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
     } else {
         //for other jurisdictions, do not make any logic on prefixes
         searchTerm = "?_queryFilter=number+eq+%22" + companyNumber + "%22+and+jurisdiction+eq+%22" + jurisdiction + "%22";
-    }    
-       
+    }
+
     logger.error("[FETCH COMPANY] Using search term: " + searchTerm);
 
     request.setUri(idmCompanyEndpoint + searchTerm);
@@ -107,11 +107,11 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
         var companyResponse = JSON.parse(response.getEntity().getString());
 
         if (companyResponse.resultCount > 0) {
-            var companyStatus = companyResponse.result[0].status;
-            var authCode = companyResponse.result[0].authCode;
-            var companyName = companyResponse.result[0].name;
-            logger.error("[FETCH COMPANY] Got a result: " + JSON.stringify(companyResponse.result[0]));
-            logger.error("[FETCH COMPANY] Found authCode: " + authCode);
+            var companyData = companyResponse.result[0];
+            var companyStatus = companyData.status;
+            var authCode = companyData.authCode;
+            var companyName = companyData.name;
+            logger.error("[FETCH COMPANY] Got a result: " + JSON.stringify(companyData));
 
             if (authCode == null) {
                 logger.error("[FETCH COMPANY] No auth code associated with company")
@@ -126,10 +126,10 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
                         }],
                         'company': { name: companyName }
                     }));
-                    return {
-                        success: false,
-                        message: "No auth code associated with company " + companyName + "."
-                    };
+                return {
+                    success: false,
+                    message: "No auth code associated with company " + companyName + "."
+                };
             }
 
             logger.error("[FETCH COMPANY] Found status: " + companyStatus);
@@ -147,14 +147,13 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
                         }],
                         'company': { name: companyName }
                     }));
-                    return {
-                        success: false,
-                        message: "The company " + companyName + " is not active or dormant."
-                    };
+                return {
+                    success: false,
+                    message: "The company " + companyName + " is not active or dormant."
+                };
             }
 
-            sharedState.put("companyData", JSON.stringify(companyResponse.result[0]));
-            sharedState.put("hashedCredential", authCode);
+            sharedState.put("companyData", JSON.stringify(companyData));
             sharedState.put("validateMethod", "CHS");
 
             if (!skipConfirmation) {
@@ -170,7 +169,21 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
                         ),
                         new fr.HiddenValueCallback(
                             "pagePropsJSON",
-                            JSON.stringify({ "company": companyResponse.result[0] })
+                            JSON.stringify(
+                                {
+                                    "company": {
+                                        name: companyData.name,
+                                        number: companyData.number,
+                                        status: companyData.status,
+                                        creationDate: companyData.creationDate,
+                                        type: companyData.type,
+                                        addressLine1: companyData.addressLine1,
+                                        addressLine2: companyData.addressLine2,
+                                        region: companyData.region,
+                                        postalCode: companyData.postalCode
+                                    }
+                                }
+                            )
                         ),
                         new fr.ConfirmationCallback(
                             "Do you want to file for this company?",
@@ -201,11 +214,11 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
                     }],
                     'company': { number: companyNumber }
                 }));
-                return {
-                    success: false,
-                    message: "The company " + companyNumber + " could not be found.",
-                    searchTerm: searchTerm
-                };
+            return {
+                success: false,
+                message: "The company " + companyNumber + " could not be found.",
+                searchTerm: searchTerm
+            };
         }
     } else {
         logger.error("[FETCH COMPANY] Error while retrieving company with ID " + companyNumber);
@@ -220,10 +233,10 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
                 }],
                 'company': { number: companyNumber }
             }));
-            return {
-                success: false,
-                message: "Error while retrieving company " + companyNumber + "."
-            };
+        return {
+            success: false,
+            message: "Error while retrieving company " + companyNumber + "."
+        };
     }
 }
 
