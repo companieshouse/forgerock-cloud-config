@@ -51,6 +51,49 @@ if (claims == null) {
     }
 }
 
+def attributes = identity.getAttributes(["fr-attr-istr1","fr-attr-imulti2"].toSet())
+accessToken.setField("username-test", attributes["fr-attr-istr1"])
+accessToken.setField("company-test", attributes["fr-attr-imulti2"])
+
+def companies = attributes["fr-attr-imulti2"]
+accessToken.setField("companies", companies)
+
+def targetCompanyNumber = "00048839"
+def isAssoc = isUserAssociated(companies, targetCompanyNumber)
+if (isAssoc) {
+    accessToken.setField("we-may-proceed", isAssoc)
+}
+
+// def foundNumber = companies.find { assocCompany ->
+//    assocCompany.tokenize("-").get(1).trim() = targetCompanyNumber
+// }
+// logger.error("foundNumber: {}", foundNumber)
+// if (foundNumber != null) {
+//     accessToken.setField("foundNumber", "yep")
+// } else {
+//     accessToken.setField("foundNumber", "nope")
+// }
+
+def isUserAssociated(companies, targetCompanyNumber) {
+   isAssoc = false
+
+   companies.eachWithIndex { assocCompany, index ->
+        def companyDetails = assocCompany.tokenize("-");
+        def companyName = companyDetails.get(0).trim()
+        def companyNumber = companyDetails.get(1).trim()
+
+        accessToken.setField("company-name" + index, companyName)
+        accessToken.setField("company-number" + index, companyNumber)
+
+        if (companyNumber.equals(targetCompanyNumber)) {
+            accessToken.setField("company-gotcha", assocCompany)
+            isAssoc = true
+        }
+    }
+
+    return isAssoc
+}
+
 /*
 //Field to always include in token
 accessToken.setField("hello", "world")
