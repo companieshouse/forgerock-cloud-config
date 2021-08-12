@@ -139,14 +139,34 @@ function createPendingRelationship(callerId, userName, company) {
     }
 }
 
+function maskEmail(mail) {
+    var maskedemail;
+    try{
+        var mailUsername = mail.split("@")[0];
+        mailUsername = mailUsername.substring(0, 1).concat("******");
+        var mailDomain = mail.split("@")[1].split(".")[0];
+        var mailTld = mail.split("@")[1].split(".")[1];
+        maskedemail = mailUsername + "@" + mailDomain + "." + mailTld;
+    }catch(e){
+        logger.error("[INVITE USER CHECK MEMBERSHIP] Email masking failed");
+        return false;
+    }
+    return maskedemail;
+}
+
 function performAuthzCheck(inviterUserId, invitedEmail, companyData) {
     var inviterMembership = getUserMembershipForCompany(inviterUserId, companyData, IdentifierType.USERID);
     if (!inviterMembership) {
         logger.error("[INVITE USER CHECK MEMBERSHIP] Error while invoking endpoint");
         return false;
     }
+    var maskedEmail = maskEmail(inviterMembership.subject.userName);
+    if(!maskedEmail){
+        logger.error("[INVITE USER CHECK MEMBERSHIP] Error while masking user email");
+        return false;
+    }
     //store the subject username in shared state
-    sharedState.put("inviterName", inviterMembership.subject.fullName || inviterMembership.subject.userName);
+    sharedState.put("inviterName", inviterMembership.subject.fullName || maskedEmail);
     logger.error("[INVITE USER CHECK MEMBERSHIP] Inviter membership to company: " + JSON.stringify(inviterMembership));
     // check whether the caller (user owning the session in which the inviter journey has been started) is already authorised for the company
     if (inviterMembership.company.status !== MembershipStatus.CONFIRMED) {

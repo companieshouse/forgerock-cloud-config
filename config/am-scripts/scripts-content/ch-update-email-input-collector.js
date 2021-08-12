@@ -60,20 +60,20 @@ function checkUserExistence(email) {
     if (response.getStatus().getCode() === 200) {
         var searchResponse = JSON.parse(response.getEntity().getString());
         if (searchResponse && searchResponse.result && searchResponse.result.length > 0) {
-            logger.error("[CHECK USER EXIST] user found: " + JSON.stringify(searchResponse.result[0]));
+            logger.error("[CHANGE EMAIL - CHECK USER EXIST] user found: " + JSON.stringify(searchResponse.result[0]));
             return {
                 success: true,
                 userFound: true
             }
         } else {
-            logger.error("[CHECK USER EXIST] user NOT found: " + email);
+            logger.error("[CHANGE EMAIL - CHECK USER EXIST] user NOT found: " + email);
             return {
                 success: true,
                 userFound: false
             }
         }
     } else {
-        logger.error("[CHECK USER EXIST] Error while checking user existence: " + response.getStatus().getCode())
+        logger.error("[CHANGE EMAIL - CHECK USER EXIST] Error while checking user existence: " + response.getStatus().getCode())
         return {
             success: false,
             message: "Error while checking user existence: " + response.getStatus().getCode()

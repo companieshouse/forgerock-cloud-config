@@ -165,7 +165,15 @@ function fetchCompany(idmToken, companyNumber, skipConfirmation) {
                         ),
                         new fr.TextOutputCallback(
                             fr.TextOutputCallback.INFORMATION,
-                            JSON.stringify(companyResponse.result[0])
+                            JSON.stringify(
+                                {
+                                    "company": {
+                                        name: companyData.name,
+                                        number: companyData.number,
+                                        status: companyData.status
+                                    }
+                                }
+                            )
                         ),
                         new fr.HiddenValueCallback(
                             "pagePropsJSON",

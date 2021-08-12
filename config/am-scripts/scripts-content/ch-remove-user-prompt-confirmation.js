@@ -174,6 +174,21 @@ function lookupUser(userId) {
     }
 }
 
+function maskEmail(mail) {
+    var maskedemail;
+    try {
+        var mailUsername = mail.split("@")[0];
+        mailUsername = mailUsername.substring(0, 1).concat("******");
+        var mailDomain = mail.split("@")[1].split(".")[0];
+        var mailTld = mail.split("@")[1].split(".")[1];
+        maskedemail = mailUsername + "@" + mailDomain + "." + mailTld;
+    } catch (e) {
+        logger.error("[REMOVE USER CHECK MEMBERSHIP] Email masking failed");
+        return false;
+    }
+    return maskedemail;
+}
+
 //extracts the company number and user ID from the query parameters
 function fetchParameters() {
     var companyNo = requestParameters.get("companyNumber");
@@ -223,7 +238,7 @@ function removeUserFromCompany(callerId, companyNo, userIdToRemove) {
         logger.error("[REMOVE AUTHZ USER] 200 response from IDM");
         return {
             success: actionResponse.success,
-            removerName: (actionResponse.caller.fullName ? actionResponse.caller.fullName : actionResponse.caller.userName)
+            removerName: (actionResponse.caller.fullName ? actionResponse.caller.fullName : maskEmail(actionResponse.caller.userName))
         }
     } else {
         logger.error("[REMOVE AUTHZ USER] Error during action processing");
@@ -252,19 +267,25 @@ try {
             if (!userResponse.success) {
                 raiseError(userResponse.message, "USER_NOT_FOUND");
             } else if (!companyLookupResponse.success) {
-                raiseError(companyLookupResponse.message, " ");
+                raiseError(companyLookupResponse.message, "COMPANY_NOT_FOUND");
+            } else if (!maskEmail(userResponse.user.userName)) {
+                raiseError("masking error", "MASKING_ERROR");
             } else {
                 sharedState.put("companyData", JSON.stringify(companyLookupResponse.company));
                 sharedState.put("userToRemove", JSON.stringify(userResponse.user));
+
                 var userDisplayName = userResponse.user.givenName ? userResponse.user.givenName : userResponse.user.userName;
-                var infoMessage = "Remove ".concat(userDisplayName, "'s authorisation to file online for company ").concat(companyLookupResponse.company.name);
+                var infoMessage = "Remove "
+                    .concat("userDisplayName")
+                    .concat("'s authorisation to file online for company ")
+                    .concat(maskEmail(companyLookupResponse.company.name));
                 var errorMessage = sharedState.get("errorMessage");
                 var level = fr.TextOutputCallback.INFORMATION;
                 if (errorMessage !== null) {
                     var errorProps = sharedState.get("pagePropsJSON");
                     level = fr.TextOutputCallback.ERROR;
                     infoMessage = errorMessage.concat(" Please confirm you have read the information.");
-                    var newJSONProps = JSON.parse(errorProps);     
+                    var newJSONProps = JSON.parse(errorProps);
                     newJSONProps.company = {
                         name: companyLookupResponse.company.name
                     };
