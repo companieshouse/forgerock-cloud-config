@@ -32,11 +32,13 @@ var fr = JavaImporter(
 
 var NodeOutcome = {
     SUCCESS: "success",
+    RESEND_INVITE: "resend",
     ERROR: "error"
 }
 
-function fetchCompanyParameter() {
+function fetchQueryParameters() {
     var companyNo = requestParameters.get("companyNumber");
+    var userId = requestParameters.get("userId");
 
     if (!companyNo) {
         logger.error("[INVITE USER - GET COMPANY DETAILS] No Company Number found in request.");
@@ -57,7 +59,63 @@ function fetchCompanyParameter() {
             ).build();
         }
     } else {
-        return companyNo.get(0);
+        return {
+            companyNo: companyNo.get(0),
+            userId: userId ? userId.get(0) : null
+        }
+    }
+}
+
+//checks whether the user with the given email already exists in IDM
+function getUserInfo(userId) {
+    try {
+        var idmUserIdEndpoint = idmUserEndpoint.concat(userId);
+        var request = new org.forgerock.http.protocol.Request();
+        var accessToken = transientState.get("idmAccessToken");
+        if (!accessToken) {
+            logger.error("[INVITE USER - GET USER DETAILS] Access token not in shared state");
+            return {
+                success: false,
+                message: "Access token not in shared state"
+            };
+        }
+
+        request.setMethod('GET');
+        request.setUri(idmUserIdEndpoint);
+        request.getHeaders().add("Authorization", "Bearer " + accessToken);
+        request.getHeaders().add("Content-Type", "application/json");
+        request.getHeaders().add("Accept-API-Version", "resource=1.0");
+
+        var response = httpClient.send(request).get();
+
+        if (response.getStatus().getCode() === 200) {
+            var user = JSON.parse(response.getEntity().getString());
+            if (user) {
+                logger.error("[INVITE USER - GET USER DETAILS] user found: " + JSON.stringify(user));
+                return {
+                    success: true,
+                    user: user
+                }
+            } else {
+                logger.error("[INVITE USER - GET USER DETAILS] user NOT found: " + userId);
+                return {
+                    success: false,
+                    message: "User not found: " + userId
+                };
+            }
+        } else {
+            logger.error("[INVITE USER - GET USER DETAILS] Error while fetching user: " + response.getStatus().getCode())
+            return {
+                success: false,
+                message: "Error while fetching user: " + response.getStatus().getCode()
+            };
+        }
+    } catch (e) {
+        logger.error(e)
+        return {
+            success: false,
+            message: "Error during user lookup: " + e
+        };
     }
 }
 
@@ -65,8 +123,7 @@ function fetchCompanyParameter() {
 function getCompanyInfo(userId, companyNo) {
 
     var request = new org.forgerock.http.protocol.Request();
-    var ACCESS_TOKEN_STATE_FIELD = "idmAccessToken";
-    var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
+    var accessToken = transientState.get("idmAccessToken");
     if (accessToken == null) {
         logger.error("[INVITE USER - GET COMPANY DETAILS] Access token not in shared state");
         return NodeOutcome.ERROR;
@@ -112,6 +169,7 @@ function getCompanyInfo(userId, companyNo) {
             }
         }
     } else {
+        logger.error("[INVITE USER - GET COMPANY DETAILS] Could not get company " + companyNo + " - Error " + response.getEntity().getString());
         return false;
     }
 }
@@ -119,13 +177,30 @@ function getCompanyInfo(userId, companyNo) {
 // main execution flow
 try {
     var idmCompanyAuthEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/endpoint/companyauth/";
-    var companyNumber = fetchCompanyParameter();
+    var idmUserEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_user/";
+    var params = fetchQueryParameters();
+
     var sessionOwner = sharedState.get("_id");
-    var companyData = getCompanyInfo(sessionOwner, companyNumber);
+    var companyData = getCompanyInfo(sessionOwner, params.companyNo);
 
     if (companyData) {
         sharedState.put("companyData", JSON.stringify(companyData));
-        outcome = NodeOutcome.SUCCESS;
+        if (params.userId) {
+            var userInfo = getUserInfo(params.userId);
+            if (!userInfo.success) {
+                sharedState.put("errorMessage", "Error while fetching user by ID: " + params.userId);
+                logger.error("[INVITE USER - GET USER DETAILS] Error while fetching user by ID " + params.userId);
+                outcome = NodeOutcome.ERROR;
+            } else {
+                sharedState.put("email", userInfo.user.userName);
+                outcome = NodeOutcome.RESEND_INVITE;
+            }
+        } else {
+            outcome = NodeOutcome.SUCCESS;
+        }
+    } else {
+        sharedState.put("errorMessage", "Could not find a company with number " + params.companyNo);
+        outcome = NodeOutcome.ERROR;
     }
 } catch (e) {
     sharedState.put("errorMessage", e.toString());

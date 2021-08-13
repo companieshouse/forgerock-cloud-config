@@ -198,7 +198,17 @@
                 });
         }
         else if (currentStatusResponse.status === newStatus) {
-            log("Status already " + newStatus);
+            if (currentStatusResponse.status === AuthorisationStatus.PENDING) {
+                log("Status already PENDING: updating invite timestamp");
+                var inviteTimestampUpdate = {
+                    operation: "replace",
+                    field: "/_refProperties/inviteTimestamp",
+                    value: formatDate()
+                };
+                openidm.patch("managed/" + OBJECT_USER + "/" + subjectId + "/" + USER_RELATIONSHIP + "/" + currentStatusResponse.membership,
+                null,
+                [inviteTimestampUpdate]);
+            }
         } else {
             log("Updating status from " + currentStatusResponse.status + " to " + newStatus + " for company " + companyId);
 
