@@ -361,6 +361,12 @@
             "actions": "*"
         },
         {
+            "pattern": "endpoint/companypag",
+            "roles": "internal/role/openidm-authorized",
+            "methods": "read,query,action",
+            "actions": "*"
+        },
+        {
             "pattern": "managed/alpha_organization/*",
             "roles": "internal/role/openidm-authorized",
             "methods": "read,query",
