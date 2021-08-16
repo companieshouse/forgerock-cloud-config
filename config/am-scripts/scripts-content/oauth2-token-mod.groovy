@@ -31,7 +31,6 @@ import groovy.json.JsonSlurper
  */
 
  def clientId = clientProperties.clientId
-//accessToken.setField("client-stuff", clientProperties)
 accessToken.setField("client-id", clientId)
 
 def claims = accessToken.getClaims()
@@ -62,16 +61,22 @@ if (claims == null) {
             accessToken.setField("company-associated", isAssoc)
         }
 
-        def internalApp = false
+        def isInternalApp = false
         if (clientId == 'CHSInternalClient') {
-            internalApp = true
+            isInternalApp = true
         }
-        accessToken.setField("internal-app", internalApp)
+        accessToken.setField("internal-app", isInternalApp)
+
+        // Quick test
+        var scopes = "https://account.companieshouse.gov.uk/user/profile.read https://account.companieshouse.gov.uk/user.write-full"
+        // var test = scopesToPermissions(scopes, isInternalApp)
+        var test = scopesToPermissions(scopes, true)
+        accessToken.setField("test-permissions", test)
     }
 }
 
 /** 
- * Check if user is associated with the company number passed in
+ * Check if user is associated with the company number passed in.
  */
 def isUserAssociated(companies, targetCompanyNumber) {
    isAssoc = false
@@ -81,9 +86,6 @@ def isUserAssociated(companies, targetCompanyNumber) {
         def companyName = companyDetails.get(0).trim()
         def companyNumber = companyDetails.get(1).trim()
 
-        // accessToken.setField("company-name" + index, companyName)
-        // accessToken.setField("company-number" + index, companyNumber)
-
         if (companyNumber.equals(targetCompanyNumber)) {
             accessToken.setField("company-match", assocCompany)
             isAssoc = true
@@ -92,6 +94,86 @@ def isUserAssociated(companies, targetCompanyNumber) {
 
     return isAssoc
 }
+
+/**
+ * Convert scopes to their equivalent permissions.
+ */
+def scopesToPermissions(incomingScopes, isInternalApp=false) {
+    def permissionRecord = [:]
+
+    if (incomingScopes.length() == 0) {
+        return permissionRecord
+    }
+
+    String[] scopes = incomingScopes.split(' ')
+    for (scope in scopes) {
+        def map = scopeToPermissions(scope, permissionRecord, isInternalApp)
+        addPermissions(permissionRecord, map)
+    }
+
+    return permissionRecord
+}
+
+/**
+ * Simple mapping between literal and placeholder scopes and permissions.
+ */
+def scopeToPermissions(scope, permissionRecord, isInternalApp) {
+    // Handle literal scopes first
+    if (scope.equals('https://account.companieshouse.gov.uk/user/profile.read') ||
+        scope.equals('https://identity.company-information.service.gov.uk/user/profile.read')) {
+        def map = [:]
+        map['user_profile'] = 'read'
+        return map
+    } else if (scope.equals('https://account.companieshouse.gov.uk/user.write-full') ||
+        scope.equals('https://identity.company-information.service.gov.uk/user.write-full')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['user_applications'] = 'create,read,update,delete'
+            map['user_profile'] = 'delete,read,update'
+            map['user_following'] = 'read,update'
+            map['user_transactions'] = 'read'
+            map['user_request_auth_code'] = 'create'
+            map['user_orders'] = 'create,read,update,delete'
+            map['user_secure_applications'] = 'create,read,update,delete'
+            map['user_third_party_apps'] = 'read,delete'
+            return map
+        } else {
+            // println('External app requested forbidden scope: /user.write-full')
+            // permissions.invalidate('Permission denied.')
+            // return permissions
+            def map = [:]
+            map['error'] = 'External app requested forbidden scope: /user.write-full'
+            return map
+        }
+    } // TODO...
+}
+
+def addPermissions(permissionRecord, permissions) {
+    permissions.each { key, value ->
+        value = value.trim()
+
+        if (!permissionRecord.containsKey(key)) {
+            permissionRecord.put(key, value)
+        } else {
+            def existingValue = permissionRecord.get(key)
+
+            // Check that the company_number matches any previous company_number
+            if ( key.equals('company_number') && value != existingValue ) {
+                println('Permission denied. Mismatched company numbers in scope requests.')
+            }
+
+            // Merge new permission values into one string delimited by ','
+            var allValues  = [value, existingValue].join(',')
+            def uniqueValues = allValues.split(',').collect()
+            uniqueValues = uniqueValues.unique()
+
+            // Store the merged permissions list
+            permissionRecord.put(key, uniqueValues.join(','))
+        }
+    }
+}
+
+
 
 //def scopeMapper = new ScopeMapper()
 // def chPermissionsOut = scopeMapper.scopesToPermissions("https://account.companieshouse.gov.uk/user/profile.read", false)
@@ -189,7 +271,7 @@ accessToken.removeTokenName()
  * permissionText = scopeMapper.scopesToPermissionText('https://somesite.com/requested-scope', 'Girls Day Trust');
  *
  */
-public class ScopeMapper {
+class ScopeMapper {
 
     // Allow deprecated scopes (e.g., http://api.companieshouse.gov.uk/company/{company_number})
     // Once code is migrated remove this flag or default to 0
@@ -374,7 +456,7 @@ public class ScopeMapper {
 
 }
 
-public class CHPermissions {
+class CHPermissions {
 
     boolean isForInternalApp = false
 
