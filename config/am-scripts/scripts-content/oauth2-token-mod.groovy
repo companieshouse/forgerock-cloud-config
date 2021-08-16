@@ -58,22 +58,26 @@ accessToken.setField("company-test", attributes["fr-attr-imulti2"])
 def companies = attributes["fr-attr-imulti2"]
 accessToken.setField("companies", companies)
 
+def clientId = clientProperties.clientId
+accessToken.setField("client-stuff", clientProperties)
+accessToken.setField("client-id", clientId)
+
+def internalApp = false
+if (clientId == 'CHSInternalClient') {
+    internalApp = true
+} else if (clientId == 'ApiFilingWebClient') {
+    internalApp = false
+}
+accessToken.setField("internal-app", internalApp)
+
 def targetCompanyNumber = "00048839"
 def isAssoc = isUserAssociated(companies, targetCompanyNumber)
 if (isAssoc) {
     accessToken.setField("we-may-proceed", isAssoc)
 }
 
-// def foundNumber = companies.find { assocCompany ->
-//    assocCompany.tokenize("-").get(1).trim() = targetCompanyNumber
-// }
-// logger.error("foundNumber: {}", foundNumber)
-// if (foundNumber != null) {
-//     accessToken.setField("foundNumber", "yep")
-// } else {
-//     accessToken.setField("foundNumber", "nope")
-// }
 
+// Check if user is associated with the company number
 def isUserAssociated(companies, targetCompanyNumber) {
    isAssoc = false
 
@@ -93,6 +97,14 @@ def isUserAssociated(companies, targetCompanyNumber) {
 
     return isAssoc
 }
+
+//def scopeMapper = new ScopeMapper()
+// def chPermissionsOut = scopeMapper.scopesToPermissions("https://account.companieshouse.gov.uk/user/profile.read", false)
+// def permissions = chPermissionsOut.getPermissions()
+// assert permissions.size() == 1
+// assert permissions.user_profile == 'read'
+
+// accessToken.setField("token_permissions", permissions)
 
 /*
 //Field to always include in token
@@ -209,7 +221,7 @@ public class ScopeMapper {
                 // No scope permission text found
                 println('No scope permission text found for scope: ' + scope + '. Please add a scope permission text.')
                 permissions.push(scope)
-                    }
+            }
         }
 
         // return permissions;
