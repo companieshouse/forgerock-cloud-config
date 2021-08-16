@@ -1254,6 +1254,22 @@
         },
         {
             "payload": {
+                "_id":"16727fa5-71c7-4a81-8639-1dfffa8f034b",
+                "name":"CH - Remove User - Fetch User and Company data",
+                "description":"Fetch user and company data, and user status for given company",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-remove-user-fetch-company-and-user.js"
+        },
+        {
+            "payload": {
                 "_id":"5000bb7b-29da-4bf4-a2cf-6f028d32a4d9",
                 "name":"CH - Remove User - Prompt for confirmation",
                 "description":"Prompts the user to confirm user removal from a company",

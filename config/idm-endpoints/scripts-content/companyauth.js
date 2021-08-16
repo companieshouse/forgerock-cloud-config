@@ -378,6 +378,15 @@
             };
         }
 
+        // if the caller is a company authorised user and and the subject is also authorised, allow the removal
+        if (callerStatus === AuthorisationStatus.CONFIRMED && 
+            (subjectStatus === AuthorisationStatus.CONFIRMED || subjectStatus === AuthorisationStatus.PENDING)) {
+            log("Caller is authorised for the company - changing from '" + subjectStatus + "' to 'NONE' allowed");
+            return {
+                allowed: true
+            };
+        }
+
         // the user we are trying to remove from a company does not actually have a relationship with the company
         if (subjectStatus === AuthorisationStatus.NONE) {
             return {
@@ -386,27 +395,9 @@
             };
         }
 
-        // if the caller is a company authorised user and and the subject is also authorised, allow the removal
-        if (callerStatus === AuthorisationStatus.CONFIRMED && subjectStatus === AuthorisationStatus.CONFIRMED) {
-            log("Caller is authorised for the company, and subject too - changing from 'CONFIRMED' to 'NONE' allowed");
-            return {
-                allowed: true
-            };
-        }
-
-        // if caller is authroised for company AND the creator of the subject invite, and the current subject status is PENDING, allow the removal
-        if (subjectStatus === AuthorisationStatus.PENDING &&
-            callerStatus === AuthorisationStatus.CONFIRMED &&
-            callerId === subjectInviterId) {
-            log("Caller is creator of the subject invite - changing from 'PENDING' to 'NONE' allowed");
-            return {
-                allowed: true
-            };
-        }
-
         // for any other combination, deny the request
         return {
-            message: "Possible failure reasons: Caller is not authorised for the company, subject is invited and caller is not the inviter, caller is not an admin user.",
+            message: "Possible failure reasons: Caller is not authorised for the company, subject is invited, caller is not an admin user.",
             allowed: false
         };
     }
