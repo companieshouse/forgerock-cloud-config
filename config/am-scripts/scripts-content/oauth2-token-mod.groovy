@@ -38,22 +38,22 @@ if (claims == null) {
     def claimsObject = new JsonSlurper().parseText(claims)
     if (claimsObject == null) {
         logger.error('Could not decode claims to object')
-  } else if (claimsObject.userinfo == null) {
-        logger.error('No userinfo in claims')
-  } else if (claimsObject.userinfo.company == null) {
+  } else if (claimsObject.userInfo == null) {
+        logger.error('No userInfo in claims')
+  } else if (claimsObject.userInfo.company == null) {
         logger.error('No company in claims')
-  } else if (claimsObject.userinfo.company.value == null) {
+  } else if (claimsObject.userInfo.company.value == null) {
         logger.error('No company value in claims')
   } else {
-        def company = claimsObject.userinfo.company.value
-        logger.message('Got company ' + company)
+        def company = claimsObject.userInfo.company.value
+        logger.error('Got company ' + company)
         accessToken.setField('company', company)
     }
 }
 
 def attributes = identity.getAttributes(["fr-attr-istr1","fr-attr-imulti2"].toSet())
 accessToken.setField("username-test", attributes["fr-attr-istr1"])
-accessToken.setField("company-test", attributes["fr-attr-imulti2"])
+accessToken.setField("companies-test", attributes["fr-attr-imulti2"])
 
 def companies = attributes["fr-attr-imulti2"]
 accessToken.setField("companies", companies)
