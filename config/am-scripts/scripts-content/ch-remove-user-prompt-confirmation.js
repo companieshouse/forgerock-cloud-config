@@ -66,113 +66,12 @@ function raiseError(message, token) {
     ).build()
 }
 
-function debug(message) {
-    action = fr.Action.send(
-        new fr.TextOutputCallback(
-            fr.TextOutputCallback.ERROR,
-            message
-        )
-    ).build()
-}
-
 var confirmRemoveCallback = new fr.ConfirmationCallback(
     "Do you want to cancel?",
     fr.ConfirmationCallback.INFORMATION,
     ["SUBMIT", "CANCEL"],
     ConfirmRemoveIndex.SUBMIT
 );
-
-// gets company information
-function getCompanyInfo(companyNo) {
-
-    var request = new org.forgerock.http.protocol.Request();
-    var accessToken = transientState.get("idmAccessToken");
-    if (accessToken == null) {
-        logger.error("[REMOVE AUTHZ USER] Access token not in transient state");
-        return {
-            success: false,
-            message: "Access token not in transient state"
-        }
-    }
-
-    var requestBodyJson =
-    {
-        "companyNumber": companyNo
-    };
-
-    request.setMethod('POST');
-    logger.error("[REMOVE AUTHZ USER] Get company details for " + companyNo);
-    request.setUri(idmCompanyAuthEndpoint + "?_action=getCompanyByNumber");
-    request.getHeaders().add("Authorization", "Bearer " + accessToken);
-    request.getHeaders().add("Content-Type", "application/json");
-    request.getHeaders().add("Accept-API-Version", "resource=1.0");
-    request.setEntity(requestBodyJson);
-
-    var response = httpClient.send(request).get();
-    var companyResponse = JSON.parse(response.getEntity().getString());
-    if (response.getStatus().getCode() === 200) {
-        logger.error("[REMOVE AUTHZ USER] 200 response from IDM");
-
-        if (companyResponse.success) {
-            return {
-                success: true,
-                company: companyResponse.company
-            }
-        } else {
-            return {
-                success: false,
-                message: companyResponse.message
-            }
-        }
-    } else {
-        return {
-            success: false,
-            message: "Error during GET company: code " + response.getStatus().getCode()
-        }
-    }
-}
-
-// reads the current invalid login attempts counter from frUnindexedInteger1
-function lookupUser(userId) {
-    try {
-        var accessToken = transientState.get("idmAccessToken");
-        if (accessToken == null) {
-            logger.error("[REMOVE AUTHZ USER] Access token not in transient state")
-            return {
-                success: false,
-                message: "Access token not in transient state"
-            }
-        } else {
-            sharedState.put("idmAccessToken", accessToken);
-        }
-
-        var request = new org.forgerock.http.protocol.Request();
-
-        request.setMethod('GET');
-        request.setUri(alphaUserUrl + userId);
-        request.getHeaders().add("Authorization", "Bearer " + accessToken);
-        request.getHeaders().add("Content-Type", "application/json");
-        var response = httpClient.send(request).get();
-        if (response.getStatus().getCode() === 200) {
-            return {
-                success: true,
-                user: JSON.parse(response.getEntity().getString())
-            }
-        } else {
-            logger.error("[REMOVE AUTHZ USER] Error while looking up user: " + response.getStatus().getCode())
-            return {
-                success: false,
-                message: "Error while GET user: " + response.getStatus().getCode()
-            }
-        }
-    } catch (e) {
-        logger.error("[REMOVE AUTHZ USER] lookup User error: " + e);
-        return {
-            success: false,
-            message: "Error while looking up user: " + e
-        };
-    }
-}
 
 function maskEmail(mail) {
     var maskedemail;
@@ -187,21 +86,6 @@ function maskEmail(mail) {
         return false;
     }
     return maskedemail;
-}
-
-//extracts the company number and user ID from the query parameters
-function fetchParameters() {
-    var companyNo = requestParameters.get("companyNumber");
-    var userId = requestParameters.get("userId");
-    if (companyNo && userId) {
-        logger.error("[REMOVE AUTHZ USER] company number/userId found in request: " + companyNo.get(0) + " - " + userId.get(0));
-        return {
-            companyNo: companyNo.get(0),
-            userId: userId.get(0)
-        }
-    }
-    logger.error("[REMOVE AUTHZ USER] Company number or userId not found in request");
-    return false;
 }
 
 //removes the user from the company
@@ -251,69 +135,65 @@ function removeUserFromCompany(callerId, companyNo, userIdToRemove) {
 
 // execution flow
 var idmCompanyAuthEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/endpoint/companyauth/";
-var alphaUserUrl = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_user/";
 try {
-    var paramsResponse = fetchParameters();
-    if (!paramsResponse) {
-        raiseError("Missing company number and/or userId from request", "MISSING_PARAMS");
-    } else {
-        var companyNo = paramsResponse.companyNo;
-        var userIdToRemove = paramsResponse.userId;
-        var sessionOwnerId = sharedState.get("_id");
 
+    var companyLookupResponse = JSON.parse(sharedState.get("companyData"));
+    var userResponse = JSON.parse(sharedState.get("userToRemove"));
+    var userStatus = sharedState.get("subjectStatus");
+    var sessionOwnerId = sharedState.get("_id");
+
+     
+    if (userStatus === 'pending') {
+        // removal logic
+        var removeResponse = removeUserFromCompany(sessionOwnerId, companyLookupResponse.number, userResponse._id);
+        if (removeResponse.success) {
+            sharedState.put("idmAccessToken", null);
+            sharedState.put("removerName", removeResponse.removerName);
+            action = fr.Action.goTo(NodeOutcome.CONFIRMED).build();
+        } else {
+            raiseError(removeResponse.message, "USER_REMOVAL_FAILED");
+        }
+    } else if (userStatus === 'confirmed') {
         if (callbacks.isEmpty()) {
-            var companyLookupResponse = getCompanyInfo(companyNo);
-            var userResponse = lookupUser(userIdToRemove);
-            if (!userResponse.success) {
-                raiseError(userResponse.message, "USER_NOT_FOUND");
-            } else if (!companyLookupResponse.success) {
-                raiseError(companyLookupResponse.message, "COMPANY_NOT_FOUND");
-            } else if (!maskEmail(userResponse.user.userName)) {
-                raiseError("masking error", "MASKING_ERROR");
+            var userDisplayName = userResponse.givenName ? userResponse.givenName : userResponse.maskedUsername;
+            var infoMessage = "Remove "
+                .concat(userDisplayName)
+                .concat("'s authorisation to file online for company ")
+                .concat(companyLookupResponse.name);
+            var errorMessage = sharedState.get("errorMessage");
+            var level = fr.TextOutputCallback.INFORMATION;
+            if (errorMessage !== null) {
+                var errorProps = sharedState.get("pagePropsJSON");
+                level = fr.TextOutputCallback.ERROR;
+                infoMessage = errorMessage.concat(" Please confirm you have read the information.");
+                var newJSONProps = JSON.parse(errorProps);
+                newJSONProps.company = {
+                    name: companyLookupResponse.name
+                };
+                newJSONProps.userDisplayName = userDisplayName;
+                action = fr.Action.send(
+                    new fr.TextOutputCallback(level, infoMessage),
+                    new fr.BooleanAttributeInputCallback("agreement", "I confirm that I have read and understood this information.", false, true),
+                    new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "Do you want to cancel?"),
+                    confirmRemoveCallback,
+                    new fr.HiddenValueCallback("stage", "REMOVE_USER_CONFIRM"),
+                    new fr.HiddenValueCallback("pagePropsJSON", JSON.stringify(newJSONProps))
+                ).build();
             } else {
-                sharedState.put("companyData", JSON.stringify(companyLookupResponse.company));
-                sharedState.put("userToRemove", JSON.stringify(userResponse.user));
-
-                var userDisplayName = userResponse.user.givenName ? userResponse.user.givenName : userResponse.user.userName;
-                var infoMessage = "Remove "
-                    .concat("userDisplayName")
-                    .concat("'s authorisation to file online for company ")
-                    .concat(maskEmail(companyLookupResponse.company.name));
-                var errorMessage = sharedState.get("errorMessage");
-                var level = fr.TextOutputCallback.INFORMATION;
-                if (errorMessage !== null) {
-                    var errorProps = sharedState.get("pagePropsJSON");
-                    level = fr.TextOutputCallback.ERROR;
-                    infoMessage = errorMessage.concat(" Please confirm you have read the information.");
-                    var newJSONProps = JSON.parse(errorProps);
-                    newJSONProps.company = {
-                        name: companyLookupResponse.company.name
-                    };
-                    newJSONProps.userDisplayName = userDisplayName;
-                    action = fr.Action.send(
-                        new fr.TextOutputCallback(level, infoMessage),
-                        new fr.BooleanAttributeInputCallback("agreement", "I confirm that I have read and understood this information.", false, true),
-                        new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "Do you want to cancel?"),
-                        confirmRemoveCallback,
-                        new fr.HiddenValueCallback("stage", "REMOVE_USER_CONFIRM"),
-                        new fr.HiddenValueCallback("pagePropsJSON", JSON.stringify(newJSONProps))
-                    ).build();
-                } else {
-                    var newJSONProps = {
-                        'company': {
-                            name: companyLookupResponse.company.name
-                        },
-                        'userDisplayName': userDisplayName
-                    }
-                    action = fr.Action.send(
-                        new fr.TextOutputCallback(level, infoMessage),
-                        new fr.BooleanAttributeInputCallback("agreement", "I confirm that I have read and understood this information.", false, true),
-                        new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "Do you want to cancel?"),
-                        confirmRemoveCallback,
-                        new fr.HiddenValueCallback("stage", "REMOVE_USER_CONFIRM"),
-                        new fr.HiddenValueCallback("pagePropsJSON", JSON.stringify(newJSONProps))
-                    ).build();
+                var newJSONProps = {
+                    'company': {
+                        name: companyLookupResponse.name
+                    },
+                    'userDisplayName': userDisplayName
                 }
+                action = fr.Action.send(
+                    new fr.TextOutputCallback(level, infoMessage),
+                    new fr.BooleanAttributeInputCallback("agreement", "I confirm that I have read and understood this information.", false, true),
+                    new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "Do you want to cancel?"),
+                    confirmRemoveCallback,
+                    new fr.HiddenValueCallback("stage", "REMOVE_USER_CONFIRM"),
+                    new fr.HiddenValueCallback("pagePropsJSON", JSON.stringify(newJSONProps))
+                ).build();
             }
         } else {
             var userToRemove = sharedState.get("userToRemove");
@@ -339,7 +219,7 @@ try {
                     action = fr.Action.goTo(NodeOutcome.MISSING_CONFIRM).build();
                 } else {
                     // removal logic
-                    var removeResponse = removeUserFromCompany(sessionOwnerId, companyNo, userIdToRemove);
+                    var removeResponse = removeUserFromCompany(sessionOwnerId, companyLookupResponse.number, userResponse._id);
                     if (removeResponse.success) {
                         sharedState.put("idmAccessToken", null);
                         sharedState.put("removerName", removeResponse.removerName);
@@ -352,10 +232,13 @@ try {
                 action = fr.Action.goTo(NodeOutcome.CANCEL).build();
             }
         }
+    } else {
+        logger.error("[REMOVE AUTHZ USER - REMOVE] User " + userResponse._id + "is not confirmed or invited for company " + companyLookupResponse);
+        sharedState.put("errorMessage", "[REMOVE AUTHZ USER - REMOVE] User " + userResponse._id + "is not confirmed or invited for company " + companyLookupResponse.name);
+        action = fr.Action.goTo(NodeOutcome.ERROR).build();
     }
 } catch (e) {
-    logger.error("[REMOVE AUTHZ USER] ERROR: " + e);
-    sharedState.put("errorMessage", e.toString());
+    logger.error("[REMOVE AUTHZ USER - REMOVE] ERROR: " + e);
+    sharedState.put("errorMessage", "[REMOVE AUTHZ USER - REMOVE] " + e.toString());
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
 }
-
