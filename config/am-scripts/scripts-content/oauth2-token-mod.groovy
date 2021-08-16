@@ -30,6 +30,10 @@ import groovy.json.JsonSlurper
  * When adding/updating fields make sure that the token size remains within client/user-agent limits.
  */
 
+ def clientId = clientProperties.clientId
+//accessToken.setField("client-stuff", clientProperties)
+accessToken.setField("client-id", clientId)
+
 def claims = accessToken.getClaims()
 if (claims == null) {
     logger.message('No claims in token')
@@ -48,36 +52,27 @@ if (claims == null) {
         def company = claimsObject.userInfo.company.value
         logger.error('Got company ' + company)
         accessToken.setField('company', company)
+
+        def attributes = identity.getAttributes(["fr-attr-istr1", "fr-attr-imulti2"].toSet())
+        def companies = attributes["fr-attr-imulti2"]
+        accessToken.setField("user-companies", companies)
+
+        def isAssociated = isUserAssociated(companies, company)
+        if (isAssociated) {
+            accessToken.setField("company-associated", isAssoc)
+        }
+
+        def internalApp = false
+        if (clientId == 'CHSInternalClient') {
+            internalApp = true
+        }
+        accessToken.setField("internal-app", internalApp)
     }
 }
 
-def attributes = identity.getAttributes(["fr-attr-istr1","fr-attr-imulti2"].toSet())
-accessToken.setField("username-test", attributes["fr-attr-istr1"])
-accessToken.setField("companies-test", attributes["fr-attr-imulti2"])
-
-def companies = attributes["fr-attr-imulti2"]
-accessToken.setField("companies", companies)
-
-def clientId = clientProperties.clientId
-accessToken.setField("client-stuff", clientProperties)
-accessToken.setField("client-id", clientId)
-
-def internalApp = false
-if (clientId == 'CHSInternalClient') {
-    internalApp = true
-} else if (clientId == 'ApiFilingWebClient') {
-    internalApp = false
-}
-accessToken.setField("internal-app", internalApp)
-
-def targetCompanyNumber = "00048839"
-def isAssoc = isUserAssociated(companies, targetCompanyNumber)
-if (isAssoc) {
-    accessToken.setField("we-may-proceed", isAssoc)
-}
-
-
-// Check if user is associated with the company number
+/** 
+ * Check if user is associated with the company number passed in
+ */
 def isUserAssociated(companies, targetCompanyNumber) {
    isAssoc = false
 
@@ -86,11 +81,11 @@ def isUserAssociated(companies, targetCompanyNumber) {
         def companyName = companyDetails.get(0).trim()
         def companyNumber = companyDetails.get(1).trim()
 
-        accessToken.setField("company-name" + index, companyName)
-        accessToken.setField("company-number" + index, companyNumber)
+        // accessToken.setField("company-name" + index, companyName)
+        // accessToken.setField("company-number" + index, companyNumber)
 
         if (companyNumber.equals(targetCompanyNumber)) {
-            accessToken.setField("company-gotcha", assocCompany)
+            accessToken.setField("company-match", assocCompany)
             isAssoc = true
         }
     }
