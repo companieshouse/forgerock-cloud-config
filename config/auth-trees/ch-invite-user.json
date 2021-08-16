@@ -101,7 +101,7 @@
          "nodeType": "ScriptedDecisionNode", 
          "details": {
              "inputs":["*"],
-             "outcomes": ["success", "error"],
+             "outcomes": ["success", "error", "resend"],
              "outputs":["*"],
              "script": "0b0cf5cd-c570-475c-851e-e3e8035113d2"
          }
@@ -213,10 +213,11 @@
             "y": 61.015625,
             "connections": {
                "success": "e72032ec-18b5-4d90-bf65-6d589de17e89",
-               "error": "d0646013-0068-43d3-b25c-5df992288947"
+               "error": "d0646013-0068-43d3-b25c-5df992288947",
+               "resend": "a7a24982-63e4-409d-9867-d1f42a121bc1"
             },
             "nodeType": "ScriptedDecisionNode",
-            "displayName": "Lookup company"
+            "displayName": "Check parameters"
          },
          "40b3ada0-ed4a-4237-b61f-1641047856eb": {
             "x": 725,

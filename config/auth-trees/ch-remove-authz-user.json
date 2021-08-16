@@ -65,6 +65,26 @@
              "outputs":["*"],
              "script": "a221047b-706f-48f9-8d39-3fcd518543aa"
          }
+      },
+      {
+         "_id": "adf29af7-a4f2-4e85-b706-d532952b46f2",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["success", "error"],
+             "outputs":["*"],
+             "script": "16727fa5-71c7-4a81-8639-1dfffa8f034b"
+         }
+      },
+      {
+         "_id": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["true"],
+             "outputs":["*"],
+             "script": "e69b137b-1bae-4804-af6b-6a93371733ca"
+         }
       }
    ],
    "tree": {
@@ -79,9 +99,9 @@
             "y": 20.015625,
             "connections": {
                "cancel": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
-               "error": "e301438c-0bd0-429c-ab0c-66126501069a",
                "missing_confirm": "299077d4-9c8f-4dea-bfa6-c4c1dfc0e82c",
-               "confirmed": "35140cc8-f08a-406d-beb1-364ed9cd2d32"
+               "confirmed": "35140cc8-f08a-406d-beb1-364ed9cd2d32",
+               "error": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "prompt for removal confirmation"
@@ -99,8 +119,8 @@
             "x": 401,
             "y": 229.015625,
             "connections": {
-               "false": "e301438c-0bd0-429c-ab0c-66126501069a",
-               "true": "c09e416c-f0ac-4583-88ef-987559b069f5"
+               "true": "c09e416c-f0ac-4583-88ef-987559b069f5",
+               "false": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8"
             },
             "nodeType": "IdentifyExistingUserNode",
             "displayName": "Identify Existing User"
@@ -109,8 +129,8 @@
             "x": 673,
             "y": 38.015625,
             "connections": {
-               "error": "e301438c-0bd0-429c-ab0c-66126501069a",
-               "success": "065dc9a0-bab4-4c67-990e-df6b6c189246"
+               "success": "adf29af7-a4f2-4e85-b706-d532952b46f2",
+               "error": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Get IDM token"
@@ -120,7 +140,7 @@
             "y": 548.015625,
             "connections": {
                "hasSession": "23759bb2-1d78-401c-ae3e-0a13259c8fc7",
-               "noSession": "e301438c-0bd0-429c-ab0c-66126501069a"
+               "noSession": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Check for Session"
@@ -130,7 +150,7 @@
             "y": 36.015625,
             "connections": {
                "true": "7bc1ac94-dab8-4504-b02e-4d645cb71f45",
-               "false": "e301438c-0bd0-429c-ab0c-66126501069a"
+               "false": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Get Notify JWT"
@@ -140,10 +160,27 @@
             "y": 51.015625,
             "connections": {
                "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
-               "false": "e301438c-0bd0-429c-ab0c-66126501069a"
+               "false": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Send Notification email"
+         },
+         "adf29af7-a4f2-4e85-b706-d532952b46f2": {
+            "x": 808,
+            "y": 183.015625,
+            "connections": {
+               "success": "065dc9a0-bab4-4c67-990e-df6b6c189246",
+               "error": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Fetch Company and User"
+         },
+         "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8": {
+            "x": 1376,
+            "y": 611.015625,
+            "connections": {},
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "General error"
          }
       },
       "staticNodes": {
@@ -156,8 +193,8 @@
             "y": 352
          },
          "e301438c-0bd0-429c-ab0c-66126501069a": {
-            "x": 1093,
-            "y": 610
+            "x": 1817,
+            "y": 520
          }
       }
    }

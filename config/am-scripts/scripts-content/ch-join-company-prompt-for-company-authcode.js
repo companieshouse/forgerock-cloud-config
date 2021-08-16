@@ -53,6 +53,9 @@ if (callbacks.isEmpty()) {
     ).build();
   }
 } else {
+  sharedState.put("errorMessage", null);
+  sharedState.put("pagePropsJSON", null);
+  
   var credential = callbacks.get(1).getName();
 
   logger.error("[ENTER AUTH CODE CALLBACK] cleartext auth code: " + credential);
