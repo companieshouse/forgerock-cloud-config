@@ -68,10 +68,12 @@ if (claims == null) {
         accessToken.setField("internal-app", isInternalApp)
 
         // Quick test
-        var scopes = "https://account.companieshouse.gov.uk/user/profile.read https://account.companieshouse.gov.uk/user.write-full"
-        // var test = scopesToPermissions(scopes, isInternalApp)
-        var test = scopesToPermissions(scopes, true)
-        accessToken.setField("test-permissions", test)
+        // var scopes = "https://account.companieshouse.gov.uk/user/profile.read https://account.companieshouse.gov.uk/user.write-full"
+        // var scopes = "https://api.companieshouse.gov.uk/company/registered-office-address.update"
+        var scopes = "https://api.companieshouse.gov.uk/company"
+        // var test = scopesToPermissions(scopes, company, isInternalApp)
+        var test = scopesToPermissions(scopes, company, true)
+        accessToken.setField("token-permissions", test)
     }
 }
 
@@ -98,7 +100,9 @@ def isUserAssociated(companies, targetCompanyNumber) {
 /**
  * Convert scopes to their equivalent permissions.
  */
-def scopesToPermissions(incomingScopes, isInternalApp=false) {
+def scopesToPermissions(incomingScopes, companyNumber, isInternalApp=false) {
+    def legacyScopesAllowed = true
+
     def permissionRecord = [:]
 
     if (incomingScopes.length() == 0) {
@@ -107,7 +111,7 @@ def scopesToPermissions(incomingScopes, isInternalApp=false) {
 
     String[] scopes = incomingScopes.split(' ')
     for (scope in scopes) {
-        def map = scopeToPermissions(scope, permissionRecord, isInternalApp)
+        def map = scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, legacyScopesAllowed)
         addPermissions(permissionRecord, map)
     }
 
@@ -115,9 +119,9 @@ def scopesToPermissions(incomingScopes, isInternalApp=false) {
 }
 
 /**
- * Simple mapping between literal and placeholder scopes and permissions.
+ * Simple mapping between scopes and permissions.
  */
-def scopeToPermissions(scope, permissionRecord, isInternalApp) {
+def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, legacyScopesAllowed) {
     // Handle literal scopes first
     if (scope.equals('https://account.companieshouse.gov.uk/user/profile.read') ||
         scope.equals('https://identity.company-information.service.gov.uk/user/profile.read')) {
@@ -142,10 +146,48 @@ def scopeToPermissions(scope, permissionRecord, isInternalApp) {
             // permissions.invalidate('Permission denied.')
             // return permissions
             def map = [:]
-            map['error'] = 'External app requested forbidden scope: /user.write-full'
+            map['error'] = 'Permission denied. External app requested forbidden scope: /user.write-full'
             return map
         }
-    } // TODO...
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/registered-office-address.update') ||
+        scope.equals('https://api.company-information.service.gov.uk/company/registered-office-address.update')) {
+        def map = [:]
+        map['company_number'] = companyNumber
+        map['company_roa'] = 'update'
+        return map
+    }  else if (scope.equals('https://api.companieshouse.gov.uk/company')) {
+        if (legacyScopesAllowed) {
+            // Grant permission here for legacy scopes - no new domain option for this one!
+            if (isInternalApp) {
+                def map = [:]
+                map['company_accounts'] = 'update'
+                map['company_auth_code'] = 'update,delete'
+                map['company_number'] = companyNumber
+                map['company_roa'] = 'update'
+                map['company_status'] = 'update'
+                map['company_transactions'] = 'read'
+                map['company_promise_to_file'] = 'update'
+                return map
+            } else {
+                // println("Permission denied. External app requested legacy scope: admin.write-full for company number: $companyNumber")
+                // permissions.invalidate('Permission denied.')
+                // return permissions
+                def map = [:]
+                map['error'] = 'Permission denied. External app requested legacy scope: admin.write-full for company number: ' + companyNumber
+                return map
+            }
+        } else {
+            // println('Permission denied. Legacy scopes not allowed.')
+            // permissions.invalidate('Permission denied.')
+            // return permissions
+            def map = [:]
+            map['error'] = 'Permission denied. Legacy scopes not allowed.'
+            return map
+        }
+    } else {
+        def map = [:]
+        return map
+    }
 }
 
 def addPermissions(permissionRecord, permissions) {
@@ -329,7 +371,7 @@ class ScopeMapper {
             } else {
                 // No scope permission text found
                 println('No scope permission text found for scope: ' + scope + '. Please add a scope permission text.')
-                            }
+            }
         }
 
         return scopesAsText.reverse().join(' ')
@@ -451,7 +493,7 @@ class ScopeMapper {
             println('No permissions found matching the scope: ' + scope + '. Please add a new scope to the module: AccountChGovUk::Helpers::ScopeMapper->scope_to_permissions().')
             permissions.invalidate('No permissions found matching the scope: ' + scope)
             return permissions
-                }
+        }
     }
 
 }
