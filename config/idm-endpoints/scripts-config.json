@@ -7,10 +7,6 @@
         {
             "endpointName": "company",
             "scriptFileName": "company.js"
-        },
-        {
-            "endpointName": "companypag",
-            "scriptFileName": "companypag.js"
         }
     ],
     "tasks": [
