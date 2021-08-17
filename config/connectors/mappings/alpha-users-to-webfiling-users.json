@@ -18,12 +18,24 @@
 	}, {
 		"target": "EMAIL",
 		"source": "mail"
-	},{
+	}, {
 		"target": "FORENAME",
-		"source": "sn"
+		"source": "sn",
+		"default": "First",
+		"transform": {
+			"type": "text/javascript",
+			"globals": {},
+			"source": "if (source.length > 30) {\n  source.substring(0,30);\n}"
+		}
 	},{
 		"target": "SURNAME",
-		"source": "sn"
+		"source": "sn",
+		"default": "Last",
+		"transform": {
+			"type": "text/javascript",
+			"globals": {},
+			"source": "if (source.length > 30) {\n  source.substring(0,30);\n}"
+		}
 	}],
 	"policies": [{
 		"action": "EXCEPTION",
@@ -65,13 +77,5 @@
 		"action": "CREATE",
 		"situation": "ABSENT"
 	}],
-	"correlationQuery": [{
-		"linkQualifier": "default",
-		"expressionTree": {
-			"any": ["PARENT_USERNAME"]
-		},
-		"mapping": "alphaUser_webfilingUserPassword",
-		"type": "text/javascript",
-		"file": "ui/correlateTreeToQueryFilter.js"
-	}]
+	"correlationQuery": []
 }
