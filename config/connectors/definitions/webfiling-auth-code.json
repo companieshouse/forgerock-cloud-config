@@ -63,7 +63,7 @@
 	},
 	"connectorRef": {
 		"bundleName": "org.forgerock.openicf.connectors.databasetable-connector",
-		"bundleVersion": "1.5.20.1",
+		"bundleVersion": "1.5.20.3-SNAPSHOT",
 		"connectorHostRef": "ewf-group",
 		"connectorName": "org.identityconnectors.databasetable.DatabaseTableConnector",
 		"displayName": "Database Table Connector",
