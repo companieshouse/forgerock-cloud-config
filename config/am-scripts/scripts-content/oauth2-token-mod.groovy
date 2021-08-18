@@ -184,8 +184,32 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
             map['error'] = 'Permission denied. Legacy scopes not allowed.'
             return map
         }
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/admin.write-full') ||
+        scope.equals('https://api.company-information.service.gov.uk/company/admin.write-full')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['company_accounts'] = 'update'
+            map['company_auth_code'] = 'update,delete'
+            map['company_number'] = companyNumber
+            map['company_roa'] = 'update'
+            map['company_status'] = 'update'
+            map['company_transactions'] = 'read'
+            map['company_promise_to_file'] = 'update'
+            return map
+        } else {
+            // println('Permission denied. External app requested scope: admin.write-full for company number: ' + companyNumber)
+            // permissions.invalidate('Permission denied.')
+            // return permissions
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested scope: admin.write-full for company number: ' + companyNumber
+            return map
+        }
     } else {
+        // println('No permissions found matching the scope: ' + scope + '. Please add a new scope to the module: AccountChGovUk::Helpers::ScopeMapper->scope_to_permissions().')
+        // permissions.invalidate('No permissions found matching the scope: ' + scope)
+        // return permissions
         def map = [:]
+        map['error'] = 'No permissions found matching the scope: ' + scope + '. Please add a new scope to the token modification script'
         return map
     }
 }
@@ -214,16 +238,6 @@ def addPermissions(permissionRecord, permissions) {
         }
     }
 }
-
-
-
-//def scopeMapper = new ScopeMapper()
-// def chPermissionsOut = scopeMapper.scopesToPermissions("https://account.companieshouse.gov.uk/user/profile.read", false)
-// def permissions = chPermissionsOut.getPermissions()
-// assert permissions.size() == 1
-// assert permissions.user_profile == 'read'
-
-// accessToken.setField("token_permissions", permissions)
 
 /*
 //Field to always include in token
