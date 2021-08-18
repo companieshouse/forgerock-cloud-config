@@ -16,11 +16,8 @@
 		"target": "frIndexedString2",
 		"source": "PASSWORD"
 	}, {
-		"target": "frIndexedInteger1",
-		"source": "CUSTID"
-	}, {
-		"target": "frIndexedInteger2",
-		"source": "CHILD_AUTHID"
+		"target": "frIndexedString1",
+		"source": "_id"
 	}],
 	"policies": [{
 		"action": "EXCEPTION",
@@ -72,7 +69,7 @@
 	"correlationQuery": [{
 		"linkQualifier": "default",
 		"expressionTree": {
-			"any": ["frIndexedInteger1", "userName"]
+			"any": ["frIndexedString1"]
 		},
 		"mapping": "webfilingUser_alphaUser",
 		"type": "text/javascript",
