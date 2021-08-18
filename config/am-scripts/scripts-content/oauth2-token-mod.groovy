@@ -223,11 +223,6 @@ def addPermissions(permissionRecord, permissions) {
         } else {
             def existingValue = permissionRecord.get(key)
 
-            // Check that the company_number matches any previous company_number
-            if ( key.equals('company_number') && value != existingValue ) {
-                println('Permission denied. Mismatched company numbers in scope requests.')
-            }
-
             // Merge new permission values into one string delimited by ','
             var allValues  = [value, existingValue].join(',')
             def uniqueValues = allValues.split(',').collect()
