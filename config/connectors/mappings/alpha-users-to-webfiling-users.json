@@ -5,9 +5,9 @@
 	"consentRequired": false,
 	"icon": null,
 	"displayName": "Sync FIDC user to WebFiling user",
-	"onError" : {
-		"type" : "text/javascript",
-		"source" : "logger.error(\"Sync of alphaUser_webfilingUser with sourceId: \" + sourceId + \" failed with error: \" + error);"
+	"onError": {
+		"type": "text/javascript",
+		"source": "logger.error(\"Sync of alphaUser_webfilingUser with sourceId: \" + sourceId + \" failed with error: \" + error);"
 	},
 	"properties": [{
 		"target": "PARENT_USERNAME",
@@ -27,7 +27,7 @@
 			"globals": {},
 			"source": "if (source.length > 30) {\n  source.substring(0,30);\n}"
 		}
-	},{
+	}, {
 		"target": "SURNAME",
 		"source": "sn",
 		"default": "Last",
@@ -77,5 +77,13 @@
 		"action": "CREATE",
 		"situation": "ABSENT"
 	}],
-	"correlationQuery": []
+	"correlationQuery": [{
+		"linkQualifier": "default",
+		"expressionTree": {
+			"any": ["PARENT_USERNAME"]
+		},
+		"mapping": "alphaUser_webfilingUser",
+		"type": "text/javascript",
+		"file": "ui/correlateTreeToQueryFilter.js"
+	}]
 }
