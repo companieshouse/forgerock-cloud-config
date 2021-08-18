@@ -17,7 +17,7 @@
 		"source": "PASSWORD"
 	}, {
 		"target": "frIndexedString1",
-		"source": "PARENT_USERNAME"
+		"source": "_id"
 	}],
 	"policies": [{
 		"action": "EXCEPTION",
