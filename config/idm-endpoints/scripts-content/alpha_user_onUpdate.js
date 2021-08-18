@@ -7,7 +7,7 @@ try {
     if (companies) {
         companies.forEach((company, index) => {
             if (!company._refProperties.membershipStatus) {
-                logger.error("TASK ONUPDATE - COMPANY REATIONSHIP DOES NOT HAVE STATUS! Upgrading to CONFIRMED");
+                logger.error("TASK ONUPDATE - COMPANY RELATIONSHIP DOES NOT HAVE STATUS! Upgrading to CONFIRMED");
                 let res = openidm.read(newObject.memberOfOrg[index]._ref, null, ["*"]);            
                 newObject.memberOfOrg[index]._refProperties.membershipStatus = 'confirmed';
                 newObject.memberOfOrg[index]._refProperties.companyLabel = res.name + " - " + res.number;
