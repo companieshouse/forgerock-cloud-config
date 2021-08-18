@@ -12,22 +12,29 @@ var NodeOutcome = {
 }
 
 function raiseErrorCallback(level, stage, userName, companyName, infoMessage, errorProps){
+    var newJSONProps = JSON.parse(errorProps);    
+    newJSONProps.company = {
+        name: companyName
+    }
+    newJSONProps.user = {
+        userName: userName
+    }
     action = fr.Action.send(
         fr.TextOutputCallback(level, infoMessage),
-        fr.HiddenValueCallback("userName", userName),
-        fr.HiddenValueCallback("companyName", companyName),
         fr.PasswordCallback("New password", false),
         fr.PasswordCallback("Confirm new password", false),
         fr.HiddenValueCallback("stage", stage),
-        fr.HiddenValueCallback("pagePropsJSON", errorProps)
+        fr.HiddenValueCallback("pagePropsJSON", JSON.stringify(newJSONProps))
     ).build();
 }
 
 try {
     var userName = sharedState.get("userName");
+    // journey selector variables
     var isOnboarding = sharedState.get("isOnboarding");
     var isResetPassword = sharedState.get("isResetPassword");
     var isRegistration = sharedState.get("isRegistration");
+    
     var invitedCompanyName = sharedState.get("invitedCompanyName");
     var stageName = isOnboarding ? "ONBOARDING_PWD" : (isResetPassword ? "RESET_PASSWORD_4" : (isRegistration ? "REGISTRATION_4" : "N/A"));
 
@@ -43,16 +50,26 @@ try {
         } else {
             action = fr.Action.send(
                 fr.TextOutputCallback(level, infoMessage),
-                fr.HiddenValueCallback("userName", userName),
-                fr.HiddenValueCallback("companyName", invitedCompanyName),
                 fr.PasswordCallback("New password", false),
                 fr.PasswordCallback("Confirm new password", false),
-                fr.HiddenValueCallback("stage", stageName)
+                fr.HiddenValueCallback("stage", stageName),
+                fr.HiddenValueCallback("pagePropsJSON",
+                    JSON.stringify(
+                        {
+                            "company": {
+                                name: invitedCompanyName
+                            },
+                            "user": {
+                                userName: userName
+                            }
+                        }
+                    )
+                )
             ).build();
         }
     } else {
-        var newPassword = fr.String(callbacks.get(3).getPassword());
-        var confirmNewPassword = fr.String(callbacks.get(4).getPassword());
+        var newPassword = fr.String(callbacks.get(1).getPassword());
+        var confirmNewPassword = fr.String(callbacks.get(2).getPassword());
         if (!confirmNewPassword.equals(newPassword)) {
             var infoMessage = "The new password and confirmation do not match.";
             var errorProps = JSON.stringify(
