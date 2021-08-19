@@ -64,6 +64,13 @@ var JwtType = {
     ENCRYPTED_THEN_SIGNED: 3
 }
 
+var Actions = {
+    USER_AUTHZ_AUTH_CODE: "user_added_auth_code",
+    AUTHZ_USER_REMOVED: "user_removed",
+    USER_ACCEPT_INVITE: "user_accepted",
+    USER_INVITED: "user_invited"
+}
+
 function getKey(secret, keyType) {
     if (keyType == KeyType.ENCRYPTION) {
         return new fr.SecretKeySpec(fr.Base64.decode(config.encryptionKey), "AES")
@@ -316,6 +323,15 @@ try {
         } else {
             var sendEmailResult = sendEmail(language, inviteData.invitedEmail, inviteData.companyName, inviteData.inviterName, returnUrlResponse.returnUrl);
             if (sendEmailResult.success) {
+                
+                var companyNotificationData = {
+                    "companyNumber": String(inviteData.companyNumber),
+                    "subjectUserName": String(inviteData.invitedEmail),
+                    "actorId": String(inviteData.inviterUserId),
+                    "action": String(Actions.USER_INVITED)
+                }
+                sharedState.put("companyNotification", JSON.stringify(companyNotificationData));
+                
                 action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
             } else {
                 sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ERROR", JSON.stringify(sendEmailResult));

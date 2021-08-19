@@ -48,7 +48,7 @@ var IdentifierType = {
 }
 
 function logResponse(response) {
-    logger.error("[INVITE - ADD RELATIONSHIP] Scripted Node HTTP Response: " + response.getStatus() + ", Body: " + response.getEntity().getString());
+    logger.error("[INVITE - ADD RELATIONSHIP] Scripted Node HTTP Response Body: " + response.getEntity().getString());
 }
 
 // extracts the user membership status to the given company. User could be provided as a user ID or a username (email) 
@@ -59,7 +59,7 @@ function getUserMembershipForCompany(userIdentifier, company, idType) {
     var companyNo = JSON.parse(company).number;
     if (accessToken == null) {
         logger.error("[INVITE USER CHECK MEMBERSHIP] Access token not in transient state");
-        return NodeOutcome.ERROR;
+        return false;
     }
 
     var requestBodyJson = (idType === IdentifierType.USERID) ?
@@ -102,7 +102,10 @@ function createPendingRelationship(callerId, userName, company) {
     var companyNo = JSON.parse(company).number;
     if (accessToken == null) {
         logger.error("[INVITE USER CHECK MEMBERSHIP] Access token not in shared state");
-        return NodeOutcome.ERROR;
+        return {
+            success: false,
+            message: "[INVITE USER CHECK MEMBERSHIP] Access token not in shared state"
+        };
     }
 
     var requestBodyJson =

@@ -85,6 +85,26 @@
              "outputs":["*"],
              "script": "e69b137b-1bae-4804-af6b-6a93371733ca"
          }
+      },
+      {
+         "_id": "f1e97c58-0b2a-4f7e-b915-9e8bbb1cce4b",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["success", "error"],
+             "outputs":["*"],
+             "script": "1b3c84cf-411a-4e5b-998f-768191e735f1"
+         }
+      },
+      {
+         "_id": "7e84fbf4-aa84-4daf-83bc-3e184f7e31aa",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["success", "error"],
+             "outputs":["*"],
+             "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149"
+         }
       }
    ],
    "tree": {
@@ -99,9 +119,9 @@
             "y": 20.015625,
             "connections": {
                "cancel": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
-               "missing_confirm": "299077d4-9c8f-4dea-bfa6-c4c1dfc0e82c",
                "confirmed": "35140cc8-f08a-406d-beb1-364ed9cd2d32",
-               "error": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8"
+               "error": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8",
+               "missing_confirm": "299077d4-9c8f-4dea-bfa6-c4c1dfc0e82c"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "prompt for removal confirmation"
@@ -119,18 +139,55 @@
             "x": 401,
             "y": 229.015625,
             "connections": {
-               "true": "c09e416c-f0ac-4583-88ef-987559b069f5",
-               "false": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8"
+               "false": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8",
+               "true": "c09e416c-f0ac-4583-88ef-987559b069f5"
             },
             "nodeType": "IdentifyExistingUserNode",
             "displayName": "Identify Existing User"
+         },
+         "35140cc8-f08a-406d-beb1-364ed9cd2d32": {
+            "x": 1308,
+            "y": 36.015625,
+            "connections": {
+               "false": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8",
+               "true": "7e84fbf4-aa84-4daf-83bc-3e184f7e31aa"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Get Notify JWT"
+         },
+         "7bc1ac94-dab8-4504-b02e-4d645cb71f45": {
+            "x": 1609,
+            "y": 51.015625,
+            "connections": {
+               "false": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8",
+               "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Send Notification email"
+         },
+         "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8": {
+            "x": 1376,
+            "y": 611.015625,
+            "connections": {},
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "General error"
+         },
+         "adf29af7-a4f2-4e85-b706-d532952b46f2": {
+            "x": 808,
+            "y": 183.015625,
+            "connections": {
+               "error": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8",
+               "success": "065dc9a0-bab4-4c67-990e-df6b6c189246"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Fetch Company and User"
          },
          "c09e416c-f0ac-4583-88ef-987559b069f5": {
             "x": 673,
             "y": 38.015625,
             "connections": {
-               "success": "adf29af7-a4f2-4e85-b706-d532952b46f2",
-               "error": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8"
+               "error": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8",
+               "success": "adf29af7-a4f2-4e85-b706-d532952b46f2"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Get IDM token"
@@ -145,42 +202,25 @@
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Check for Session"
          },
-         "35140cc8-f08a-406d-beb1-364ed9cd2d32": {
-            "x": 1308,
-            "y": 36.015625,
+         "f1e97c58-0b2a-4f7e-b915-9e8bbb1cce4b": {
+            "x": 1444,
+            "y": 281.015625,
             "connections": {
-               "true": "7bc1ac94-dab8-4504-b02e-4d645cb71f45",
-               "false": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8"
-            },
-            "nodeType": "ScriptedDecisionNode",
-            "displayName": "Get Notify JWT"
-         },
-         "7bc1ac94-dab8-4504-b02e-4d645cb71f45": {
-            "x": 1609,
-            "y": 51.015625,
-            "connections": {
-               "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
-               "false": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8"
-            },
-            "nodeType": "ScriptedDecisionNode",
-            "displayName": "Send Notification email"
-         },
-         "adf29af7-a4f2-4e85-b706-d532952b46f2": {
-            "x": 808,
-            "y": 183.015625,
-            "connections": {
-               "success": "065dc9a0-bab4-4c67-990e-df6b6c189246",
+               "success": "7bc1ac94-dab8-4504-b02e-4d645cb71f45",
                "error": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8"
             },
             "nodeType": "ScriptedDecisionNode",
-            "displayName": "Fetch Company and User"
+            "displayName": "Notify Company Users"
          },
-         "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8": {
-            "x": 1376,
-            "y": 611.015625,
-            "connections": {},
+         "7e84fbf4-aa84-4daf-83bc-3e184f7e31aa": {
+            "x": 1430,
+            "y": 164.015625,
+            "connections": {
+               "success": "f1e97c58-0b2a-4f7e-b915-9e8bbb1cce4b",
+               "error": "91ae7e8b-fb77-4b87-b3df-b3a5723bb1a8"
+            },
             "nodeType": "ScriptedDecisionNode",
-            "displayName": "General error"
+            "displayName": "Get IDM token"
          }
       },
       "staticNodes": {

@@ -31,6 +31,13 @@ var NodeOutcome = {
     AUTH_CODE_INACTIVE: "auth_code_inactive"
 }
 
+var Actions = {
+    USER_AUTHZ_AUTH_CODE: "user_added_auth_code",
+    AUTHZ_USER_REMOVED: "user_removed",
+    USER_ACCEPT_INVITE: "user_accepted",
+    USER_INVITED: "user_invited"
+}
+
 function logResponse(response) {
     logger.error("[ADD RELATIONSHIP] Scripted Node HTTP Response: " + response.getStatus() + ", Body: " + response.getEntity().getString());
 }
@@ -218,6 +225,16 @@ try {
         action = fr.Action.goTo(NodeOutcome.AUTH_CODE_INACTIVE).build();
     } else {
         var addUserResult = addRelationshipToCompany(userId, JSON.parse(companyData));
+        
+        var companyNotificationData = {
+            companyNumber: String(JSON.parse(companyData).number),
+            subjectId: String(userId),
+            actorId: String(userId),
+            action: String(Actions.USER_AUTHZ_AUTH_CODE)
+        }
+
+        sharedState.put("companyNotification", JSON.stringify(companyNotificationData));
+        
         action = fr.Action.goTo(addUserResult.success ? NodeOutcome.TRUE : NodeOutcome.ERROR)
             .putSessionProperty("language", language.toLowerCase())
             .build();
