@@ -299,7 +299,8 @@
         // log("Looking up  company " + number);
         var response = openidm.query("managed/" + OBJECT_COMPANY,
             { "_queryFilter": "/number eq \"" + number + "\"" },
-            ["_id", "number", "name", "authCode", "status", "members"]);
+            ["_id", "number", "name", "authCode", "status", "members", "addressLine1", "addressLine2" ,
+             "authCodeIsActive", "jurisdiction", "locality", "postalCode", "region", "type"]);
 
         if (response.resultCount === 0) {
             log("getCompany: Bad result count: " + response.resultCount);
@@ -515,6 +516,21 @@
             allowed: false
         };
 
+    }
+
+    function mapCompanyMembers(companyId, members) {
+        let mapped = [];
+        members.forEach(member => {
+            let fullUser = getUserById(member._refResourceId);
+            let status = fullUser.memberOfOrg.find(element => (element._refResourceId === companyId));
+            mapped.push({
+                _id: fullUser._id,
+                name: fullUser.givenName,
+                email: fullUser.userName,
+                membershipStatus: status._refProperties.membershipStatus
+            });
+        });
+        return mapped;
     }
 
     // ************************************
@@ -821,7 +837,22 @@
                 userName: actor.userName,
                 fullName: actor.givenName
             },
-            company: company
+            company: {
+                _id: company._id,
+                name: company.name,
+                number: company.number,
+                authCode: company.authCode,
+                authCodeIsActive: company.authCodeIsActive,
+                jurisdiction: company.jurisdiction,
+                status: company.status,
+                type: company.type,
+                addressLine1: company.addressLine1,
+                addressLine2: company.addressLine2,
+                region: company.region,
+                locality: company.locality,
+                postalCode: company.postalCode,
+                members: mapCompanyMembers(company._id, company.members)
+            }
         };
     }
     else if (request.action === RequestAction.RESPOND_INVITE) {

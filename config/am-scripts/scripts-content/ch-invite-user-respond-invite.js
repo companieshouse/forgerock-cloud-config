@@ -34,6 +34,7 @@ var fr = JavaImporter(
 
 var NodeOutcome = {
     SKIP_RESPOND: "skip_respond_invite",
+    SUCCESS_RESPOND: "success_respond_invite",
     ERROR: "error"
 }
 
@@ -41,6 +42,13 @@ var InviteActions = {
     ACCEPT: "accept",
     DECLINE: "decline",
     SEND: "send"
+}
+
+var Actions = {
+    USER_AUTHZ_AUTH_CODE: "user_added_auth_code",
+    AUTHZ_USER_REMOVED: "user_removed",
+    USER_ACCEPT_INVITE: "user_accepted",
+    USER_INVITED: "user_invited"
 }
 
 function fetchActionParameter() {
@@ -64,7 +72,7 @@ function logResponse(response) {
 
 // responds to the invite
 function respondToInvite(callerId, company, action) {
-    logger.error("[INVITE USER - RESPOND INVITE] Processing action " + action + " for user " + callerId + " and company " + companyNo);
+    logger.error("[INVITE USER - RESPOND INVITE] Processing action '" + action + "' for user " + callerId + " and company " + JSON.parse(company).number);
     var request = new org.forgerock.http.protocol.Request();
     var ACCESS_TOKEN_STATE_FIELD = "idmAccessToken";
     var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
@@ -152,29 +160,16 @@ try {
                 logger.error("[INVITE USER - ACCEPT INVITE] Error while setting relationship status to confirmed");
                 sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ACCEPT_INVITE_ERROR", acceptResponse.message);
             } else {
-                var infoMessage = "You are now authorised to file for "
-                    .concat(JSON.parse(companyData).name)
-                    .concat(". This company has been added to your account.");
-                if (callbacks.isEmpty()) {
-                    action = fr.Action.send(
-                        new fr.TextOutputCallback(
-                            fr.TextOutputCallback.INFORMATION,
-                            infoMessage
-                        ),
-                        new fr.HiddenValueCallback(
-                            "stage",
-                            "INVITE_USER_3"
-                        ),
-                        new fr.HiddenValueCallback(
-                            "pagePropsJSON",
-                            JSON.stringify({
-                                'company': {
-                                    name: JSON.parse(companyData).name
-                                }
-                            })
-                        )
-                    ).build()
+                
+                var companyNotificationData = {
+                    "companyNumber": String(JSON.parse(companyData).number),
+                    "subjectId": String(userId),
+                    "actorId": String(userId),
+                    "action": String(Actions.USER_ACCEPT_INVITE)
                 }
+                sharedState.put("companyNotification", JSON.stringify(companyNotificationData));
+                
+                outcome = NodeOutcome.SUCCESS_RESPOND;
             }
         } else if (actionParam === InviteActions.DECLINE) {
             var declineResponse = respondToInvite(userId, companyData, InviteActions.DECLINE);
@@ -182,32 +177,9 @@ try {
                 logger.error("[INVITE USER - DECLINE INVITE] Error while removing relationship");
                 sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_DECLINE_INVITE_ERROR", declineResponse.message);
             } else {
-                var infoMessage = "You have declined the request to have authorisation to file online for "
-                    .concat(JSON.parse(companyData).name)
-                    .concat(".");
-                if (callbacks.isEmpty()) {
-                    action = fr.Action.send(
-                        new fr.TextOutputCallback(
-                            fr.TextOutputCallback.INFORMATION,
-                            infoMessage
-                        ),
-                        new fr.HiddenValueCallback(
-                            "stage",
-                            "INVITE_USER_3"
-                        ),
-                        new fr.HiddenValueCallback(
-                            "pagePropsJSON",
-                            JSON.stringify({
-                                'company': {
-                                    name: JSON.parse(companyData).name
-                                }
-                            })
-                        )
-                    ).build()
-                }
+                outcome = NodeOutcome.SUCCESS_RESPOND;
             }
         }
-
     }
 } catch (e) {
     logger.error("[INVITE USER - RESPOND INVITE] Error " + e);

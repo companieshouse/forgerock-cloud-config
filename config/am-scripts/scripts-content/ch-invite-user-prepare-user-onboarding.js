@@ -33,8 +33,6 @@ var NodeOutcome = {
     ERROR: "error"
 }
 
-var companyData = sharedState.get("companyData");
-var inviterUserId = sharedState.get("_id");
 var invitedEmail = sharedState.get("email");
 var inviterName = sharedState.get("inviterName");
 

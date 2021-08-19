@@ -49,6 +49,13 @@ var ConfirmRemoveIndex = {
     CANCEL: 1
 }
 
+var Actions = {
+    USER_AUTHZ_AUTH_CODE: "user_added_auth_code",
+    AUTHZ_USER_REMOVED: "user_removed",
+    USER_ACCEPT_INVITE: "user_accepted",
+    USER_INVITED: "user_invited"
+}
+
 function raiseError(message, token) {
     action = fr.Action.send(
         new fr.HiddenValueCallback(
@@ -221,6 +228,15 @@ try {
                     // removal logic
                     var removeResponse = removeUserFromCompany(sessionOwnerId, companyLookupResponse.number, userResponse._id);
                     if (removeResponse.success) {
+                        
+                        var companyNotificationData = {
+                            "companyNumber": String(companyLookupResponse.number),
+                            "subjectId": String(userResponse._id),
+                            "actorId": String(sessionOwnerId),
+                            "action": String(Actions.AUTHZ_USER_REMOVED)
+                        };
+                        sharedState.put("companyNotification", JSON.stringify(companyNotificationData));
+                        
                         sharedState.put("idmAccessToken", null);
                         sharedState.put("removerName", removeResponse.removerName);
                         action = fr.Action.goTo(NodeOutcome.CONFIRMED).build();

@@ -132,6 +132,36 @@
             "outputs": ["*"],
             "script": "df75d4ae-8f25-48f4-af14-bb87206e029d"
          }
+      },
+      {
+         "_id": "a35dc8d4-66a5-4e6e-b3e0-9a7612d52bbb",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "outcomes": ["success", "error"],
+            "inputs": ["*"],
+            "outputs": ["*"],
+            "script": "1b3c84cf-411a-4e5b-998f-768191e735f1"
+         }
+      },
+      {
+         "_id": "95966d43-e698-432d-b3d8-2f8fb0e98276",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "outcomes": ["true"],
+            "inputs": ["*"],
+            "outputs": ["*"],
+            "script": "e69b137b-1bae-4804-af6b-6a93371733ca"
+         }
+      },
+      {
+         "_id": "537ff588-0447-4938-b1be-bce4fe9869ce",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "outcomes": ["true", "false"],
+            "inputs": ["*"],
+            "outputs": ["*"],
+            "script": "df67765e-df3a-4503-9ba5-35c992b39259"
+         }
       }
    ],
    "tree": {
@@ -146,7 +176,7 @@
             "y": 402.015625,
             "connections": {
                "hasSession": "54a93ee3-d273-49b6-8d23-0fd1dcb6320b",
-               "noSession": "e301438c-0bd0-429c-ab0c-66126501069a"
+               "noSession": "95966d43-e698-432d-b3d8-2f8fb0e98276"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "check session"
@@ -155,7 +185,7 @@
             "x": 559,
             "y": 26.015625,
             "connections": {
-               "false": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "false": "95966d43-e698-432d-b3d8-2f8fb0e98276",
                "true": "ef37be85-8d9f-4140-aa6a-b8c8cc19a695"
             },
             "nodeType": "ScriptedDecisionNode",
@@ -174,15 +204,15 @@
             "x": 1097,
             "y": 30,
             "connections": {
-               "false": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "false": "95966d43-e698-432d-b3d8-2f8fb0e98276",
                "true": "93328e47-3918-42c3-a27d-b5cf6c1abb67"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Enter Auth Code"
          },
          "78204b08-ebbd-4b61-8b1b-080a1061987a": {
-            "x": 1665,
-            "y": 460.015625,
+            "x": 1707,
+            "y": 532.015625,
             "connections": {
                "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
             },
@@ -203,7 +233,7 @@
             "x": 916,
             "y": 182.015625,
             "connections": {
-               "error": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "error": "95966d43-e698-432d-b3d8-2f8fb0e98276",
                "false": "3f37ce1b-c569-4229-a331-9bedf3ceb9af",
                "true": "55ab38cb-458d-4c6c-ba34-3586bf34b06c",
                "other": "3f37ce1b-c569-4229-a331-9bedf3ceb9af"
@@ -212,13 +242,13 @@
             "displayName": "get company data"
          },
          "b2401c4a-636f-43e4-b129-be18fccf30f3": {
-            "x": 1636,
-            "y": 198.015625,
+            "x": 1683,
+            "y": 142.015625,
             "connections": {
                "already_associated": "3f37ce1b-c569-4229-a331-9bedf3ceb9af",
                "auth_code_inactive": "3f37ce1b-c569-4229-a331-9bedf3ceb9af",
-               "error": "e301438c-0bd0-429c-ab0c-66126501069a",
-               "true": "78204b08-ebbd-4b61-8b1b-080a1061987a"
+               "error": "95966d43-e698-432d-b3d8-2f8fb0e98276",
+               "true": "537ff588-0447-4938-b1be-bce4fe9869ce"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Create Association"
@@ -253,7 +283,7 @@
             "x": 299.40625,
             "y": 37.015625,
             "connections": {
-               "false": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "false": "95966d43-e698-432d-b3d8-2f8fb0e98276",
                "true": "3f37ce1b-c569-4229-a331-9bedf3ceb9af"
             },
             "nodeType": "IdentifyExistingUserNode",
@@ -263,7 +293,7 @@
             "x": 1534,
             "y": 37.015625,
             "connections": {
-               "error": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "error": "95966d43-e698-432d-b3d8-2f8fb0e98276",
                "success": "b2401c4a-636f-43e4-b129-be18fccf30f3"
             },
             "nodeType": "ScriptedDecisionNode",
@@ -273,11 +303,38 @@
             "x": 790,
             "y": 22.015625,
             "connections": {
-               "error": "e301438c-0bd0-429c-ab0c-66126501069a",
+               "error": "95966d43-e698-432d-b3d8-2f8fb0e98276",
                "success": "a011052d-bbf2-4dd9-93fc-bf96e3d9b7f6"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "get IDM token"
+         },
+         "a35dc8d4-66a5-4e6e-b3e0-9a7612d52bbb": {
+            "x": 1629,
+            "y": 410.015625,
+            "connections": {
+               "success": "78204b08-ebbd-4b61-8b1b-080a1061987a",
+               "error": "95966d43-e698-432d-b3d8-2f8fb0e98276"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Notify Company Members"
+         },
+         "95966d43-e698-432d-b3d8-2f8fb0e98276": {
+            "x": 917,
+            "y": 755.015625,
+            "connections": {},
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Generic error"
+         },
+         "537ff588-0447-4938-b1be-bce4fe9869ce": {
+            "x": 1641,
+            "y": 303.015625,
+            "connections": {
+               "false": "95966d43-e698-432d-b3d8-2f8fb0e98276",
+               "true": "a35dc8d4-66a5-4e6e-b3e0-9a7612d52bbb"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Create Notify JWT"
          }
       },
       "staticNodes": {
@@ -290,8 +347,8 @@
             "y": 128
          },
          "e301438c-0bd0-429c-ab0c-66126501069a": {
-            "x": 1135,
-            "y": 759
+            "x": 1572,
+            "y": 777
          }
       }
    }

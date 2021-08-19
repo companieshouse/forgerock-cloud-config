@@ -131,7 +131,7 @@
          "nodeType": "ScriptedDecisionNode", 
          "details": {
              "inputs":["*"],
-             "outcomes": ["skip_respond_invite", "error"],
+             "outcomes": ["skip_respond_invite", "success_respond_invite", "error"],
              "outputs":["*"],
              "script": "f2e4ee99-bcbb-4f3b-9ea8-36c1d547d620"
          }
@@ -179,6 +179,46 @@
              "outcomes": ["true"],
              "outputs":["*"],
              "script": "e69b137b-1bae-4804-af6b-6a93371733ca"
+         }
+      },
+      {
+         "_id": "00fa0c95-e934-499e-bd30-a1837161933d",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["success", "error"],
+             "outputs":["*"],
+             "script": "1b3c84cf-411a-4e5b-998f-768191e735f1"
+         }
+      },
+      {
+         "_id": "4124d242-502d-488d-9ec7-03380bac2431",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["true"],
+             "outputs":["*"],
+             "script": "14296e66-f0a8-4922-b04c-a94b25630f1b"
+         }
+      },
+      {
+         "_id": "d71255bc-ee20-47bb-b80c-ab22a55ec073",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["true", "false"],
+             "outputs":["*"],
+             "script": "df67765e-df3a-4503-9ba5-35c992b39259"
+         }
+      },
+      {
+         "_id": "f01d45a1-60a8-4125-8272-f973a2840628",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+             "inputs":["*"],
+             "outcomes": ["success", "error"],
+             "outputs":["*"],
+             "script": "1b3c84cf-411a-4e5b-998f-768191e735f1"
          }
       }
    ],
@@ -254,7 +294,7 @@
             "y": 53.015625,
             "connections": {
                "false": "948ed6a4-fe12-4cc2-9c39-aeafeec87822",
-               "true": "d2c6f979-c746-408b-9199-7fde3da69dc5"
+               "true": "00fa0c95-e934-499e-bd30-a1837161933d"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Send Email"
@@ -321,8 +361,8 @@
             "displayName": "Create Relationship"
          },
          "d2c6f979-c746-408b-9199-7fde3da69dc5": {
-            "x": 2116,
-            "y": 219.015625,
+            "x": 2083,
+            "y": 320.015625,
             "connections": {
                "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
             },
@@ -343,7 +383,8 @@
             "y": 179.015625,
             "connections": {
                "skip_respond_invite": "948ed6a4-fe12-4cc2-9c39-aeafeec87822",
-               "error": "d0646013-0068-43d3-b25c-5df992288947"
+               "error": "d0646013-0068-43d3-b25c-5df992288947",
+               "success_respond_invite": "d71255bc-ee20-47bb-b80c-ab22a55ec073"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Respond/Skip"
@@ -354,6 +395,43 @@
             "connections": {},
             "nodeType": "ScriptedDecisionNode",
             "displayName": "General error"
+         },
+         "00fa0c95-e934-499e-bd30-a1837161933d": {
+            "x": 2061,
+            "y": 166.015625,
+            "connections": {
+               "success": "d2c6f979-c746-408b-9199-7fde3da69dc5",
+               "error": "d0646013-0068-43d3-b25c-5df992288947"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Notify Company Users"
+         },
+         "4124d242-502d-488d-9ec7-03380bac2431": {
+            "x": 1075,
+            "y": 603.015625,
+            "connections": {},
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Response Confirmation"
+         },
+         "d71255bc-ee20-47bb-b80c-ab22a55ec073": {
+            "x": 996,
+            "y": 322.015625,
+            "connections": {
+               "true": "f01d45a1-60a8-4125-8272-f973a2840628",
+               "false": "d0646013-0068-43d3-b25c-5df992288947"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Notify JWT"
+         },
+         "f01d45a1-60a8-4125-8272-f973a2840628": {
+            "x": 998,
+            "y": 453.015625,
+            "connections": {
+               "success": "4124d242-502d-488d-9ec7-03380bac2431",
+               "error": "d0646013-0068-43d3-b25c-5df992288947"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Notify Company Users"
          }
       },
       "staticNodes": {

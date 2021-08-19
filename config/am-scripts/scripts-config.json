@@ -758,6 +758,22 @@
         },
         {
             "payload": {
+                "_id":"14296e66-f0a8-4922-b04c-a94b25630f1b",
+                "name":"CH - Invite User - Confirmation of invite accept/decline",
+                "description": "Shows the confirmation message for invite accept/decline.",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-invite-user-respond-confirmation.js"
+        },
+        {
+            "payload": {
                 "_id":"e502a152-bc0a-49b3-82cd-233bafdabcad",
                 "name":"CH - Invite User - Onboard unregistered user",
                 "description":"Onboards an unregistered user as part of the invitation process.",
@@ -1379,6 +1395,22 @@
                 "lastModifiedDate":1617810491969
              },
             "filename": "ch-webfiling-store-lang-in-session.js"
+        },
+        {
+            "payload": {
+                "_id":"1b3c84cf-411a-4e5b-998f-768191e735f1",
+                "name":"CH - Notify Authorised Company Users",
+                "description":"Sends an email notification to all authorised members of a company",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-notify-authorized-users.js"
         }
     ]
 }
