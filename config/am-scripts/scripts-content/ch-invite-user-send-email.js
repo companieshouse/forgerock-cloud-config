@@ -327,7 +327,7 @@ try {
                 var companyNotificationData = {
                     "companyNumber": String(inviteData.companyNumber),
                     "subjectUserName": String(inviteData.invitedEmail),
-                    "actorName": String(inviteData.inviterName),
+                    "actorId": String(inviteData.inviterUserId),
                     "action": String(Actions.USER_INVITED)
                 }
                 sharedState.put("companyNotification", JSON.stringify(companyNotificationData));

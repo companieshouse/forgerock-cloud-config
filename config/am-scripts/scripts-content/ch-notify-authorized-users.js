@@ -101,7 +101,7 @@ function getUserData(email, id) {
                 logger.error("[CHECK USER EXIST] user found: " + searchResponse.result[0].toString());
                 return {
                     success: true,
-                    displayName: searchResponse.result[0].givenName || searchResponse.result[0].userName
+                    user: searchResponse.result[0]
                 };
             } else {
                 logger.error("[CHECK USER EXIST] user NOT found: " + email);
@@ -271,25 +271,49 @@ function getSelectedLanguage(requestHeaders) {
     return 'EN';
 }
 
+function maskEmail(mail) {
+    var maskedemail;
+    try {
+        var mailUsername = mail.split("@")[0];
+        mailUsername = mailUsername.substring(0, 1).concat("******");
+        var mailDomain = mail.split("@")[1].split(".")[0];
+        var mailTld = mail.split("@")[1].split(".")[1];
+        maskedemail = mailUsername + "@" + mailDomain + "." + mailTld;
+    } catch (e) {
+        logger.error("[INVITE USER CHECK MEMBERSHIP] Email masking failed");
+        return false;
+    }
+    return maskedemail;
+}
+
+function processDisplayNames(notifyEventData) {
+    var actorDisplayName; //= notifyEventData.actorName || (notifyEventData.actorUserName ? getUserData(notifyEventData.actorUserName, null).displayName : getUserData(null, notifyEventData.actorId).displayName);
+    if (notifyEventData.actorName) {
+        actorDisplayName = notifyEventData.actorName;
+    } else if (notifyEventData.actorUserName) {
+        actorDisplayName = maskEmail(notifyEventData.actorUserName);
+    } else if (notifyEventData.actorId) {
+        var user = getUserData(null, notifyEventData.actorId).user;
+        actorDisplayName = user.givenName || maskEmail(user.userName);
+    }
+
+    var subjectDisplayName; //= notifyEventData.subjectName || (notifyEventData.subjectUserName ? getUserData(notifyEventData.subjectUserName, null).displayName : getUserData(null, notifyEventData.subjectId).displayName);
+    if (notifyEventData.subjectName) {
+        subjectDisplayName = notifyEventData.subjectName;
+    } else if (notifyEventData.subjectUserName) {
+        subjectDisplayName = maskEmail(notifyEventData.subjectUserName);
+    } else if (notifyEventData.subjectId) {
+        var user = getUserData(null, notifyEventData.subjectId).user;
+        subjectDisplayName = user.givenName || maskEmail(user.userName);
+    }
+
+    return {
+        actorDisplayName: String(actorDisplayName),
+        subjectDisplayName: String(subjectDisplayName)
+    }
+}
+
 // main execution flow
-// USER_AUTHZ_AUTH_CODE: "user_added_auth_code",
-// AUTHZ_USER_REMOVED: "user_removed",
-// USER_ACCEPT_INVITE: "user_accepted",
-// USER_INVITED: "user_invited"
-
-// var testData = {
-//     companyNumber: "00116457",
-//     subjectId: null,
-//     subjectName: null,
-//     subjectUserName: "matteo.formica@amido.com",
-//     actorId: "e178fe50-91e6-4caf-bcc6-dcc38e5083cd",
-//     actorName: null,
-//     actorUserName: null,
-//     action: "user_removed"
-// }
-
-// sharedState.put("companyNotification", JSON.stringify(testData));
-
 var FIDC_ENDPOINT = "https://openam-companieshouse-uk-dev.id.forgerock.io";
 var idmCompanyAuthEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/endpoint/companyauth/";
 
@@ -302,8 +326,9 @@ try {
     } else {
         var company = getCompanyData(notifyEventData.companyNumber).company;
         if (company) {
-            var actorName = notifyEventData.actorName || (notifyEventData.actorUserName ? getUserData(notifyEventData.actorUserName, null).displayName : getUserData(null, notifyEventData.actorId).displayName);
-            var subjectName = notifyEventData.subjectName || (notifyEventData.subjectUserName ? getUserData(notifyEventData.subjectUserName, null).displayName : getUserData(null, notifyEventData.subjectId).displayName);
+            var displayNames = processDisplayNames(notifyEventData);
+            var actorName = displayNames.actorDisplayName;
+            var subjectName = displayNames.subjectDisplayName;
 
             var failedEmails = 0;
             var sentEmails = 0;
@@ -324,7 +349,7 @@ try {
                 }
             }
 
-            logger.error("[NOTIFY AUTHZ USER - SEND EMAIL] All " + sentEmails + " authorised company members have been notified via email(s) successfully! Notification failed for " + failedEmails + " authorised company members");           
+            logger.error("[NOTIFY AUTHZ USER - SEND EMAIL] All " + sentEmails + " authorised company members have been notified via email(s) successfully! Notification failed for " + failedEmails + " authorised company members");
         } else {
             logger.error("[NOTIFY AUTHZ USER - SEND EMAIL] Error while company lookup");
         }
