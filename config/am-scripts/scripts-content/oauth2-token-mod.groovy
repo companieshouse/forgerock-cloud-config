@@ -150,6 +150,9 @@ def scopesToPermissions(incomingScopes, companyNumber, isInternalApp=false) {
         addPermissions(permissionRecord, map)
     }
 
+    // TODO Check for 'error' values in the resulting permissionRecord map.
+    // If there's an error, return empty permissions?
+
     return permissionRecord
 }
 
@@ -177,9 +180,6 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
             map['user_third_party_apps'] = 'read,delete'
             return map
         } else {
-            // println('External app requested forbidden scope: /user.write-full')
-            // permissions.invalidate('Permission denied.')
-            // return permissions
             def map = [:]
             map['error'] = 'Permission denied. External app requested forbidden scope: /user.write-full'
             return map
@@ -205,17 +205,11 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
                 map['company_promise_to_file'] = 'update'
                 return map
             } else {
-                // println("Permission denied. External app requested legacy scope: admin.write-full for company number: $companyNumber")
-                // permissions.invalidate('Permission denied.')
-                // return permissions
                 def map = [:]
                 map['error'] = 'Permission denied. External app requested legacy scope: admin.write-full for company number: ' + companyNumber
                 return map
             }
         } else {
-            // println('Permission denied. Legacy scopes not allowed.')
-            // permissions.invalidate('Permission denied.')
-            // return permissions
             def map = [:]
             map['error'] = 'Permission denied. Legacy scopes not allowed.'
             return map
@@ -233,17 +227,11 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
             map['company_promise_to_file'] = 'update'
             return map
         } else {
-            // println('Permission denied. External app requested scope: admin.write-full for company number: ' + companyNumber)
-            // permissions.invalidate('Permission denied.')
-            // return permissions
             def map = [:]
             map['error'] = 'Permission denied. External app requested scope: admin.write-full for company number: ' + companyNumber
             return map
         }
     } else {
-        // println('No permissions found matching the scope: ' + scope + '. Please add a new scope to the module: AccountChGovUk::Helpers::ScopeMapper->scope_to_permissions().')
-        // permissions.invalidate('No permissions found matching the scope: ' + scope)
-        // return permissions
         def map = [:]
         map['error'] = 'No permissions found matching the scope: ' + scope + '. Please add a new scope to the token modification script'
         return map
