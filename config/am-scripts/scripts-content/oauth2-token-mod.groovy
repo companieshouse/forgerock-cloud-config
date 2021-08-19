@@ -67,13 +67,26 @@ if (claims == null) {
         }
         accessToken.setField("internal-app", isInternalApp)
 
-        // Quick test
-        // var scopes = "https://account.companieshouse.gov.uk/user/profile.read https://account.companieshouse.gov.uk/user.write-full"
+        // Test possible scopes
+        // TODO Pass values in request
+
+        // var scopes = ""
+        var scopes = "https://account.companieshouse.gov.uk/user/profile.read"
+        // var scopes = "https://identity.company-information.service.gov.uk/user/profile.read"
+        // var scopes = "https://account.companieshouse.gov.uk/user.write-full"
+        // var scopes = "https://identity.company-information.service.gov.uk/user.write-full"
         // var scopes = "https://api.companieshouse.gov.uk/company/registered-office-address.update"
-        var scopes = "https://api.companieshouse.gov.uk/company"
-        // var test = scopesToPermissions(scopes, company, isInternalApp)
-        var test = scopesToPermissions(scopes, company, true)
-        accessToken.setField("token-permissions", test)
+        // var scopes = "https://api.company-information.service.gov.uk/company/registered-office-address.update"
+        // var scopes = "https://api.companieshouse.gov.uk/company/admin.write-full"
+        // var scopes = "https://api.company-information.service.gov.uk/company/admin.write-full"
+        // var scopes = "http://api.companieshouse.gov.uk/company"
+        // var scopes = "https://api.companieshouse.gov.uk/company"
+        // var scopes = "https://account.companieshouse.gov.uk/user/profile.read https://account.companieshouse.gov.uk/user.write-full"
+        // var scopes = "https://identity.company-information.service.gov.uk/user/profile.read https://identity.company-information.service.gov.uk/user.write-full"
+
+        var permissions = scopesToPermissions(scopes, company, isInternalApp)
+
+        accessToken.setField("token-permissions", permissions)
     }
 }
 
@@ -155,7 +168,8 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
         map['company_number'] = companyNumber
         map['company_roa'] = 'update'
         return map
-    }  else if (scope.equals('https://api.companieshouse.gov.uk/company')) {
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company') ||
+        scope.equals('http://api.companieshouse.gov.uk/company')) {
         if (legacyScopesAllowed) {
             // Grant permission here for legacy scopes - no new domain option for this one!
             if (isInternalApp) {
