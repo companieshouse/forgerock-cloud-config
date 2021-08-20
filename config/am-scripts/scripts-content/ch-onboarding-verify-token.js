@@ -154,11 +154,16 @@ function extractTokenParameter() {
                 ),
                 new fr.HiddenValueCallback(
                     "pagePropsJSON",
-                    JSON.stringify({ "error": "No Onboarding Token found in request.", "token": "ONBOARDING_NO_TOKEN_ERROR" })
+                    JSON.stringify({
+                        'errors': [{
+                            label: "No Onboarding Token found in request.",
+                            token: "ONBOARDING_NO_TOKEN_ERROR"
+                        }]
+                    }
                 ),
                 new fr.TextOutputCallback(
                     fr.TextOutputCallback.ERROR,
-                    "Token parameter not found"
+                    "Token parameter not found")
                 )
             ).build();
             return false;
@@ -301,7 +306,14 @@ function raiseError(message, token) {
             ),
             new fr.HiddenValueCallback(
                 "pagePropsJSON",
-                JSON.stringify({ "error": message, "token": token })
+                JSON.stringify(
+                    {
+                      'errors': [{
+                        label: message,
+                        token: token,
+                      }]
+                    }
+                )
             ),
             new fr.TextOutputCallback(
                 fr.TextOutputCallback.ERROR,
@@ -418,11 +430,12 @@ try {
                         ),
                         new fr.HiddenValueCallback(
                             "pagePropsJSON",
-                            JSON.stringify(
-                                {
-                                    "error": "An error occurred while parsing the onboarding token.",
-                                    "token": "ONBOARDING_".concat(tokenClaimsResponse.code)
-                                })
+                            JSON.stringify({ 'errors': [
+                                { 
+                                    label: "An error occurred while parsing the onboarding token.", 
+                                    token: "ONBOARDING_".concat(tokenClaimsResponse.code)
+                                }] 
+                            })
                         )
                     ).build()
                 }
