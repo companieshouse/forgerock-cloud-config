@@ -22,8 +22,8 @@ function setPolicyErrorMessage(policyResponse) {
             'errors': [{
                 label: "The new password does not meet the password policy requirements.",
                 token: "PWD_POLICY_ERROR",
-                fieldName: "IDToken3",
-                anchor: "IDToken3"
+                fieldName: "IDToken2",
+                anchor: "IDToken2"
             }],
             'failedPolicies': failedPolicyRequirements
         }));

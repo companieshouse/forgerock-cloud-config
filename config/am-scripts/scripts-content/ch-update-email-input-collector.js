@@ -157,8 +157,8 @@ try {
                     'errors': [{
                         label: "A user with this email already exist",
                         token: "EMAIL_EXISTS_ERROR",
-                        fieldName: "IDToken2",
-                        anchor: "IDToken2"
+                        fieldName: "IDToken3",
+                        anchor: "IDToken3"
                     }]
                 }));
             action = fr.Action.goTo(NodeOutcome.EMAIL_INVALID_ERROR).build();
