@@ -186,6 +186,16 @@
 			"details": {
 				"tree": "CHManageEmailConsent"
 			}
+		},
+		{
+			"_id": "074551cb-6074-4ded-b08e-03c638bfd1a1",
+			"nodeType": "ScriptedDecisionNode",
+            "details": {
+                "outcomes": ["true"],
+                "inputs": ["*"],
+                "outputs": ["*"],
+                "script": "e69b137b-1bae-4804-af6b-6a93371733ca"
+			}
 		}
     ],
     "tree": {
@@ -196,12 +206,12 @@
 		"entryNodeId": "35f0b7c1-ac55-406d-aebe-12e33ab6125a",
 		"nodes": {
 			"09352d71-046f-4fbf-b831-aefb8954705a": {
-				"x": 1545,
+				"x": 1546,
 				"y": 425.015625,
 				"connections": {
 					"already_associated": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
 					"auth_code_inactive": "61877889-8233-4048-b76c-39f882081e40",
-					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"error": "074551cb-6074-4ded-b08e-03c638bfd1a1",
 					"true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
 				},
 				"nodeType": "ScriptedDecisionNode",
@@ -211,7 +221,7 @@
 				"x": 417,
 				"y": 164.015625,
 				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"false": "074551cb-6074-4ded-b08e-03c638bfd1a1",
 					"true": "ffad651d-d017-43dc-bc3e-ec4768de5cc5"
 				},
 				"nodeType": "InnerTreeEvaluatorNode",
@@ -221,7 +231,7 @@
 				"x": 840,
 				"y": 391.015625,
 				"connections": {
-					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"error": "074551cb-6074-4ded-b08e-03c638bfd1a1",
 					"false": "61877889-8233-4048-b76c-39f882081e40",
 					"other": "61877889-8233-4048-b76c-39f882081e40",
 					"true": "b13495ba-6ac2-4877-8535-4f63dffb813f"
@@ -233,7 +243,7 @@
 				"x": 1552,
 				"y": 304.015625,
 				"connections": {
-					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"error": "074551cb-6074-4ded-b08e-03c638bfd1a1",
 					"success": "09352d71-046f-4fbf-b831-aefb8954705a"
 				},
 				"nodeType": "ScriptedDecisionNode",
@@ -272,7 +282,7 @@
 				"x": 810,
 				"y": 147.015625,
 				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"false": "074551cb-6074-4ded-b08e-03c638bfd1a1",
 					"true": "9e1930dd-6045-417c-9286-d2083f454f01"
 				},
 				"nodeType": "ScriptedDecisionNode",
@@ -282,7 +292,7 @@
 				"x": 831,
 				"y": 264.015625,
 				"connections": {
-					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"error": "074551cb-6074-4ded-b08e-03c638bfd1a1",
 					"success": "0dc8c791-4b84-4f63-af32-5f10a58c54c1"
 				},
 				"nodeType": "ScriptedDecisionNode",
@@ -301,7 +311,7 @@
 				"x": 1053,
 				"y": 86.015625,
 				"connections": {
-					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"error": "074551cb-6074-4ded-b08e-03c638bfd1a1",
 					"success": "dfb2d5fd-8a2f-4b59-9f7b-347046b69e5c"
 				},
 				"nodeType": "ScriptedDecisionNode",
@@ -327,7 +337,7 @@
 				"x": 616.640625,
 				"y": 60.015625,
 				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"false": "074551cb-6074-4ded-b08e-03c638bfd1a1",
 					"true": "61877889-8233-4048-b76c-39f882081e40"
 				},
 				"nodeType": "IdentifyExistingUserNode",
@@ -337,7 +347,7 @@
 				"x": 1071,
 				"y": 211.015625,
 				"connections": {
-					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"error": "074551cb-6074-4ded-b08e-03c638bfd1a1",
 					"user_associated": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
 					"user_not_associated": "fc86f06d-b17e-4cda-b10c-fb9fae255d59"
 				},
@@ -368,7 +378,7 @@
 				"x": 1335,
 				"y": 178.015625,
 				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"false": "074551cb-6074-4ded-b08e-03c638bfd1a1",
 					"true": "fbf0037d-0557-4111-bd01-edeb685c836f"
 				},
 				"nodeType": "ScriptedDecisionNode",
@@ -382,6 +392,13 @@
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Add to Session"
+			},
+			"074551cb-6074-4ded-b08e-03c638bfd1a1": {
+				"x": 1106,
+				"y": 780.015625,
+				"connections": {},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "General Error"
 			}
 		},
 		"staticNodes": {
@@ -394,8 +411,8 @@
 				"y": 487
 			},
 			"e301438c-0bd0-429c-ab0c-66126501069a": {
-				"x": 1240,
-				"y": 753
+				"x": 1323,
+				"y": 769
 			}
 		}
 	}

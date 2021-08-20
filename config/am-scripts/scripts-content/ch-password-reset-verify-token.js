@@ -187,11 +187,12 @@ try {
                     ),
                     new fr.HiddenValueCallback(
                         "pagePropsJSON",
-                        JSON.stringify(
-                            {
-                                "error": "An error occurred while parsing the password reset token.",
-                                "token": "RESET_PASSWORD_".concat(tokenClaimsResponse.code)
-                            })
+                        JSON.stringify({ 
+                            "errors": [{
+                              label: "An error occurred while parsing the password reset token.", 
+                              token: "RESET_PASSWORD_".concat(tokenClaimsResponse.code)
+                            }]}
+                        )
                     )
                 ).build()
             }

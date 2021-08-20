@@ -343,12 +343,6 @@
             "customAuthz": "request.additionalParameters.target === (context.security.authorization.component + '/' + context.security.authorization.id)"
         },
         {
-            "pattern": "endpoint/echo",
-            "roles": "internal/role/openidm-authorized",
-            "methods": "read,query,create,delete,action",
-            "actions": "*"
-        },
-        {
             "pattern": "endpoint/companyauth",
             "roles": "internal/role/openidm-authorized",
             "methods": "read,query,create,delete,action",
@@ -361,14 +355,8 @@
             "actions": "*"
         },
         {
-            "pattern": "endpoint/companypag",
-            "roles": "internal/role/openidm-authorized",
-            "methods": "read,query,action",
-            "actions": "*"
-        },
-        {
             "pattern": "managed/alpha_organization/*",
-            "roles": "internal/role/openidm-authorized",
+            "roles": "internal/role/openidm-admin, internal/role/eee7a778-ca4c-4679-9ab9-82bd91164b53, internal/role/15007107-ef48-4113-a71f-cc1905354a30",
             "methods": "read,query",
             "actions": "*"
         }

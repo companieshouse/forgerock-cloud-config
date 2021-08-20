@@ -331,6 +331,16 @@
 				"outputs": ["*"],
 				"script": "e0aec02a-ad8b-427d-a72e-cdfd8cb6c0e0"
 			}
+		},
+		{
+			"_id": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
+			"nodeType": "ScriptedDecisionNode",
+			"details": {
+				"outcomes": ["true"],
+				"inputs": ["*"],
+				"outputs": ["*"],
+				"script": "e69b137b-1bae-4804-af6b-6a93371733ca"
+			}
 		}
 	],
     "tree": {
@@ -363,7 +373,7 @@
 				"x": 1732,
 				"y": 248,
 				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
 					"true": "c20b82fd-458d-4a46-8d0f-41d589f3976b"
 				},
 				"nodeType": "ScriptedDecisionNode",
@@ -373,7 +383,7 @@
 				"x": 1732,
 				"y": 75,
 				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
 					"true": "0e167098-4f1b-4a6d-a383-9a415b143dda"
 				},
 				"nodeType": "ScriptedDecisionNode",
@@ -403,7 +413,7 @@
 				"x": 2239,
 				"y": 260,
 				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
 					"true": "35194bf4-8dcc-41a2-8545-4a965b8f6ec0"
 				},
 				"nodeType": "ScriptedDecisionNode",
@@ -442,7 +452,7 @@
 				"x": 2246,
 				"y": 83,
 				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
 					"true": "35194bf4-8dcc-41a2-8545-4a965b8f6ec0"
 				},
 				"nodeType": "ScriptedDecisionNode",
@@ -471,7 +481,7 @@
 				"x": 1171,
 				"y": 422.015625,
 				"connections": {
-					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"error": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
 					"success": "6486165d-fb00-4248-93c8-4f36ad2b2cb1"
 				},
 				"nodeType": "ScriptedDecisionNode",
@@ -481,7 +491,7 @@
 				"x": 2732,
 				"y": 318.015625,
 				"connections": {
-					"Reject": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"Reject": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
 					"Retry": "739919ca-5a2b-4788-a447-36fe83a011f9"
 				},
 				"nodeType": "RetryLimitDecisionNode",
@@ -500,7 +510,7 @@
 				"x": 614,
 				"y": 13.015625,
 				"connections": {
-					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"error": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
 					"success": "fa88fc01-a7a2-429f-b7cc-546fe67a70b4"
 				},
 				"nodeType": "ScriptedDecisionNode",
@@ -594,6 +604,13 @@
 				},
 				"nodeType": "ScriptedDecisionNode",
 				"displayName": "Login Error message"
+			},
+			"7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a": {
+				"x": 2261,
+				"y": 700.015625,
+				"connections": {},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "General Error"
 			}
 		},
 		"staticNodes": {

@@ -211,11 +211,12 @@ try {
                     ),
                     new fr.HiddenValueCallback(
                         "pagePropsJSON",
-                        JSON.stringify(
-                            {
-                                "error": "An error occurred while parsing the registration token. Please restart the registration process",
-                                "token": "REGISTRATION_".concat(tokenClaimsResponse.code)
-                            })
+                        JSON.stringify({ 
+                            "errors": [{
+                              label: "An error occurred while parsing the registration token. Please restart the registration process", 
+                              token: "REGISTRATION_".concat(tokenClaimsResponse.code)
+                            }]}
+                        )
                     )
                 ).build()
             } 
