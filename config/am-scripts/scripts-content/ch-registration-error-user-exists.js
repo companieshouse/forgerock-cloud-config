@@ -16,7 +16,12 @@ if (callbacks.isEmpty()) {
     ),
     new fr.HiddenValueCallback (
         "pagePropsJSON",
-        JSON.stringify({"errors": [{"label": "Registration Failed: a user with this email already exists", token: "REGISTRATION_ERROR_USER_ALREADY_EXIST" }]})
+        JSON.stringify({ 
+          "errors": [{
+            label: "Registration Failed: a user with this email already exists", 
+            token: "REGISTRATION_ERROR_USER_ALREADY_EXIST" 
+          }]}
+        )
     )
   ).build()
 } else { 

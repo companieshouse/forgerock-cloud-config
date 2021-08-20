@@ -52,7 +52,12 @@ function extractTokenParameter() {
                 ),
                 new fr.HiddenValueCallback(
                     "pagePropsJSON",
-                    JSON.stringify({ "error": "No Registration Token found in request.", "token": "REGISTRATION_NO_TOKEN_ERROR" })
+                    JSON.stringify({ 
+                        "errors": [{
+                          label: "No Registration Token found in request.", 
+                          token: "REGISTRATION_NO_TOKEN_ERROR"
+                        }]}
+                    )
                 ),
                 new fr.TextOutputCallback(
                     fr.TextOutputCallback.ERROR,

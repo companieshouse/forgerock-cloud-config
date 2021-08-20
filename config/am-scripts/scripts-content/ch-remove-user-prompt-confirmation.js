@@ -64,7 +64,12 @@ function raiseError(message, token) {
         ),
         new fr.HiddenValueCallback(
             "pagePropsJSON",
-            JSON.stringify({ "error": message, "token": token })
+            JSON.stringify({ 
+                "errors": [{
+                  label: message, 
+                  token: token
+                }]}
+            )
         ),
         new fr.TextOutputCallback(
             fr.TextOutputCallback.ERROR,
