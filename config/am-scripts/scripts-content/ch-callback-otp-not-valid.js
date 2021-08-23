@@ -3,15 +3,15 @@ var fr = JavaImporter(
 )
 
 try {
-    sharedState.put("pagePropsJSON", JSON.stringify(
-        {
-            'errors': [{
-                label: "The OTP provided is not valid. Please try again.",
-                token: "OTP_NOT_VALID",
-                fieldName: "IDToken3",
-                anchor: "IDToken3"
-            }]
-        }));
+    // sharedState.put("pagePropsJSON", JSON.stringify(
+    //     {
+    //         'errors': [{
+    //             label: "The OTP provided is not valid. Please try again.",
+    //             token: "OTP_NOT_VALID",
+    //             fieldName: "IDToken3",
+    //             anchor: "IDToken3"
+    //         }]
+    //     }));
 
     transientState.put("error", "The OTP provided is not valid. Please try again");
 } catch (e) {

@@ -13,7 +13,7 @@ logger.error("[LOGIN MFA CALLBACK] Found OTP Error : " + otpError);
 try {
     var userId = sharedState.get("_id");
 
-    if (mfaRoute == "sms") {
+    if (mfaRoute === "sms") {
         if (idRepository.getAttribute(userId, "telephoneNumber").iterator().hasNext()) {
             phoneNumber = idRepository.getAttribute(userId, "telephoneNumber").iterator().next();
             logger.error("[LOGIN MFA CALLBACK] phoneNumber : " + phoneNumber);
@@ -21,7 +21,7 @@ try {
             logger.error("[LOGIN MFA CALLBACK] Couldn't find telephoneNumber");
             // TODO Better handling of error
         }
-    } else if (mfaRoute == "email") {
+    } else if (mfaRoute === "email") {
         var isChangeEmail = sharedState.get("isChangeEmail");
         if (isChangeEmail) {
             emailAddress = sharedState.get("newEmail");
@@ -52,7 +52,7 @@ if (otpError) {
                         'errors': [
                             {
                                 label: otpError,
-                                token: "OTP_NOT_VALID",
+                                token: (mfaRoute === "sms" ? "OTP_NOT_VALID_SMS" : (mfaRoute === "email" ? "OTP_NOT_VALID_EMAIL" : "OTP_NOT_VALID")),
                                 fieldName: "IDToken3",
                                 anchor: "IDToken3"
                             }

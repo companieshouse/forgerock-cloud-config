@@ -150,7 +150,6 @@ function saveUserDataToState(claimSet) {
         // put the read attributes in shared state for the Create Object node to consume
         sharedState.put("objectAttributes", { "userName": claimSet.subject, "mail": claimSet.subject });
         sharedState.put("userName", claimSet.subject);
-        sharedState.put("isResetPassword", true);
         return NodeOutcome.RESUME;
     } catch (e) {
         logger.error("[REGISTRATION-RESUME] error while reconstructing JWT: " + e);
@@ -170,7 +169,8 @@ try {
         issuer: FIDC_ENDPOINT,
         audience: "CH Account"
     }
-
+    sharedState.put("isResetPassword", true);
+    
     var token = extractTokenParameter();
     if (token) {
         var tokenClaimsResponse = validatedJwtClaims(token, config.issuer, JwtType.SIGNED_THEN_ENCRYPTED);

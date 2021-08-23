@@ -163,7 +163,7 @@ try {
 
                 //got the OTP route if the phone has been changed and phone is valid
                 if (newPhoneNumber) {
-                    transientState.put("registrationMFA", true);
+                    sharedState.put("registrationMFA", true);
                     action = fr.Action.goTo(NodeOutcome.OTP).build();
                 } else {
                     action = fr.Action.goTo(NodeOutcome.NAME_ONLY).build();

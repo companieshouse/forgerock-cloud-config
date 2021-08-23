@@ -20,7 +20,7 @@ try {
                     JSON.stringify(
                         { 'errors': [{
                             label: otpError,
-                            token: "OTP_NOT_VALID",
+                            token: "OTP_NOT_VALID_SMS",
                             fieldName: "IDToken3",
                             anchor: "IDToken3" 
                         }],
