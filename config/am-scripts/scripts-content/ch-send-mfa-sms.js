@@ -122,11 +122,8 @@ function sendTextMessage(language, phoneNumber, code) {
 // extracts the number from the user profile (for password reset) or from shared state (for registration)
 function extractPhoneNumber() {
     var userId = sharedState.get("_id");
-    var isRegistrationMFA = transientState.get("registrationMFA");
     var isUpdatePhoneNumber = transientState.get("updatePhoneNumber");
-    if (isRegistrationMFA) {
-        return sharedState.get("objectAttributes").get("telephoneNumber");
-    } else if (isUpdatePhoneNumber) {
+    if (isRegistrationMFA || isUpdatePhoneNumber) {
         return sharedState.get("objectAttributes").get("telephoneNumber");
     } else {
         if (idRepository.getAttribute(userId, "telephoneNumber").iterator().hasNext()) {
@@ -139,20 +136,27 @@ function extractPhoneNumber() {
 }
 
 // main execution flow
-var code = sharedState.get("oneTimePassword");
-logger.error("[SEND MFA SMS] Code: " + code);
+try {
+    var code = sharedState.get("oneTimePassword");
+    var isRegistrationMFA = sharedState.get("registrationMFA");
+    logger.error("[SEND MFA SMS] Code: " + code);
 
-var language = getSelectedLanguage(requestHeaders);
+    var language = getSelectedLanguage(requestHeaders);
 
-var phoneNumber = extractPhoneNumber();
-if (!phoneNumber || !code) {
-    sendErrorCallbacks();
-}
+    var phoneNumber = extractPhoneNumber();
+    if (!phoneNumber || !code) {
+        sendErrorCallbacks();
+    }
 
-logger.error("[SEND MFA SMS] User phoneNumber: " + phoneNumber);
+    logger.error("[SEND MFA SMS] User phoneNumber: " + phoneNumber);
 
-if (sendTextMessage(language, phoneNumber, code)) {
-    action = fr.Action.goTo("true").build();
-} else {
-    sendErrorCallbacks();
+    if (sendTextMessage(language, phoneNumber, code)) {
+        action = fr.Action.goTo("true").build();
+    } else {
+        sendErrorCallbacks();
+    }
+} catch (e) {
+    logger.error("[SEND MFA SMS] An error occurred: " + e);
+    sharedState.put("errorMessage", e.toString())
+    outcome = "false";
 }

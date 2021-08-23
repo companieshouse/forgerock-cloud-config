@@ -24,12 +24,13 @@ var fr = JavaImporter(
 )
 
 function extractPhoneNumber(){
-    var isRegistrationMFA = transientState.get("registrationMFA");
-    var userId = sharedState.get("_id");
+    var isRegistrationMFA = sharedState.get("registrationMFA");
+
     if(isRegistrationMFA){
         return sharedState.get("objectAttributes").get("telephoneNumber");
     } else {
         try{
+            var userId = sharedState.get("_id");
             if (idRepository.getAttribute(userId, "telephoneNumber").iterator().hasNext()) {
                 return idRepository.getAttribute(userId, "telephoneNumber").iterator().next();
             } else {
@@ -76,7 +77,7 @@ if(otpError){
                         'errors': [
                             {
                                 label: otpError,
-                                token: "OTP_NOT_VALID",
+                                token: "OTP_NOT_VALID_SMS",
                                 fieldName: "IDToken3",
                                 anchor: "IDToken3"
                             }
