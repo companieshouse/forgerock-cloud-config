@@ -47,8 +47,8 @@ if (callbacks.isEmpty()) {
               'errors': [{
                   label: "The new password and confirmation do not match.",
                   token: "PWD_MISMATCH",
-                  fieldName: "IDToken2",
-                  anchor: "IDToken2"
+                  fieldName: "IDToken3",
+                  anchor: "IDToken3"
               }]
           }));
         action = fr.Action.goTo(NodeOutcome.MISMATCH).build();

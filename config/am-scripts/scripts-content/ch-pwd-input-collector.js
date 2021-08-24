@@ -77,8 +77,8 @@ try {
                     'errors': [{
                         label: infoMessage,
                         token: "PWD_MISMATCH",
-                        fieldName: "IDToken3",
-                        anchor: "IDToken3"
+                        fieldName: "IDToken2",
+                        anchor: "IDToken2"
                     }]
                 });
                 raiseErrorCallback(fr.TextOutputCallback.ERROR, stageName, userName, invitedCompanyName, infoMessage, errorProps);
