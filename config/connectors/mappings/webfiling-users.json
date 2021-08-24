@@ -3,78 +3,103 @@
 	"source": "system/WebfilingUser/webfilingUser",
 	"name": "webfilingUser_alphaUser",
 	"displayName": "webfilingUser_alphaUser",
-	"properties": [{
-		"target": "mail",
-		"source": "EMAIL"
-	}, {
-		"target": "sn",
-		"source": "EMAIL"
-	}, {
-		"target": "userName",
-		"source": "EMAIL"
-	}, {
-		"target": "frIndexedString2",
-		"source": "PASSWORD"
-	}, {
-		"target": "frIndexedString1",
-		"source": "_id"
-	}],
-	"policies": [{
-		"action": "EXCEPTION",
-		"situation": "AMBIGUOUS"
-	}, {
-		"action": "EXCEPTION",
-		"situation": "SOURCE_MISSING"
-	}, {
-		"action": "EXCEPTION",
-		"situation": "MISSING"
-	}, {
-		"action": "EXCEPTION",
-		"situation": "FOUND_ALREADY_LINKED"
-	}, {
-		"action": "DELETE",
-		"situation": "UNQUALIFIED"
-	}, {
-		"action": "EXCEPTION",
-		"situation": "UNASSIGNED"
-	}, {
-		"action": "EXCEPTION",
-		"situation": "LINK_ONLY"
-	}, {
-		"action": "IGNORE",
-		"situation": "TARGET_IGNORED"
-	}, {
-		"action": "IGNORE",
-		"situation": "SOURCE_IGNORED"
-	}, {
-		"action": "IGNORE",
-		"situation": "ALL_GONE"
-	}, {
-		"action": "UPDATE",
-		"situation": "CONFIRMED"
-	}, {
-		"action": "UPDATE",
-		"situation": "FOUND"
-	}, {
-		"action": "CREATE",
-		"situation": "ABSENT"
-	}],
+	"properties": [
+		{
+			"target": "mail",
+			"source": "EMAIL"
+		},
+		{
+			"target": "sn",
+			"source": "EMAIL"
+		},
+		{
+			"target": "userName",
+			"source": "EMAIL"
+		},
+		{
+			"target": "frIndexedString2",
+			"source": "PASSWORD"
+		},
+		{
+			"target": "frIndexedString1",
+			"source": "_id"
+		}
+	],
+	"policies": [
+		{
+			"action": "EXCEPTION",
+			"situation": "AMBIGUOUS"
+		},
+		{
+			"action": "EXCEPTION",
+			"situation": "SOURCE_MISSING"
+		},
+		{
+			"action": "EXCEPTION",
+			"situation": "MISSING"
+		},
+		{
+			"action": "EXCEPTION",
+			"situation": "FOUND_ALREADY_LINKED"
+		},
+		{
+			"action": "DELETE",
+			"situation": "UNQUALIFIED"
+		},
+		{
+			"action": "EXCEPTION",
+			"situation": "UNASSIGNED"
+		},
+		{
+			"action": "EXCEPTION",
+			"situation": "LINK_ONLY"
+		},
+		{
+			"action": "IGNORE",
+			"situation": "TARGET_IGNORED"
+		},
+		{
+			"action": "IGNORE",
+			"situation": "SOURCE_IGNORED"
+		},
+		{
+			"action": "IGNORE",
+			"situation": "ALL_GONE"
+		},
+		{
+			"action": "UPDATE",
+			"situation": "CONFIRMED"
+		},
+		{
+			"action": "UPDATE",
+			"situation": "FOUND"
+		},
+		{
+			"action": "CREATE",
+			"situation": "ABSENT"
+		}
+	],
 	"clusteredSourceReconEnabled": true,
 	"reconSourceQueryPageSize": 10000,
 	"sourceQueryFullEntry": true,
 	"sourceQuery": {
-		"_queryFilter": "true"
+		"_queryFilter": "true",
+		"_sortKeys": "PARENT_USERNAME"
 	},
 	"taskThreads": 20,
-	"correlationQuery": [{
-		"linkQualifier": "default",
-		"expressionTree": {
-			"any": ["frIndexedString1"]
-		},
-		"mapping": "webfilingUser_alphaUser",
-		"type": "text/javascript",
-		"file": "ui/correlateTreeToQueryFilter.js"
-	}],
+	"correlationQuery": [
+		{
+			"linkQualifier": "default",
+			"expressionTree": {
+				"any": [
+					"frIndexedString1"
+				]
+			},
+			"mapping": "webfilingUser_alphaUser",
+			"type": "text/javascript",
+			"file": "ui/correlateTreeToQueryFilter.js"
+		}
+	],
 	"onCreate": {
 		"type": "text/javascript",
 		"globals": {},

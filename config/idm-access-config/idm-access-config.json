@@ -356,7 +356,7 @@
         },
         {
             "pattern": "managed/alpha_organization/*",
-            "roles": "internal/role/openidm-admin, internal/role/IDAM_FRONT_END_SUPPORT, internal/role/IDAM_BUSINESS_SUPPORT",
+            "roles": "internal/role/openidm-admin,internal/role/IDAM_FRONT_END_SUPPORT,internal/role/IDAM_BUSINESS_SUPPORT",
             "methods": "read,query,update,patch,action",
             "actions": "*"
         }
