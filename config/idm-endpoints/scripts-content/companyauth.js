@@ -877,6 +877,7 @@
 
         // Authorisation check
         var subjectStatus = getStatus(subject._id, companyId).status;
+        var subjectInviterId = getStatus(subject._id, companyId).inviterId;
         var callerStatus = getStatus(actor._id, companyId).status;
 
         if (request.content.action === InviteActions.ACCEPT) {
@@ -923,7 +924,8 @@
                     number: request.content.companyNumber,
                     name: company.name,
                     status: AuthorisationStatus.CONFIRMED,
-                    previousStatus: statusResponse.oldStatus
+                    previousStatus: statusResponse.oldStatus,
+                    inviterId: subjectInviterId
                 }
             };
 
@@ -969,7 +971,8 @@
                     number: request.content.companyNumber,
                     name: company.name,
                     status: AuthorisationStatus.NONE,
-                    previousStatus: subjectStatus
+                    previousStatus: subjectStatus,
+                    inviterId: subjectInviterId
                 }
             }
         }

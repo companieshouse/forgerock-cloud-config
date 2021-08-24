@@ -104,7 +104,8 @@ function respondToInvite(callerId, company, action) {
     if (response.getStatus().getCode() === 200) {
         logger.error("[INVITE USER - ACCEPT INVITE] 200 response from IDM");
         return {
-            success: actionResponse.success
+            success: actionResponse.success,
+            inviterId: actionResponse.company.inviterId
         }
     } else {
         logger.error("[INVITE USER - ACCEPT INVITE] Error during action processing");
@@ -164,7 +165,7 @@ try {
                 var companyNotificationData = {
                     "companyNumber": String(JSON.parse(companyData).number),
                     "subjectId": String(userId),
-                    "actorId": String(userId),
+                    "actorId": String(acceptResponse.inviterId),
                     "action": String(Actions.USER_ACCEPT_INVITE)
                 }
                 sharedState.put("companyNotification", JSON.stringify(companyNotificationData));
