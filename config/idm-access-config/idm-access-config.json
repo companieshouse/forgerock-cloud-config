@@ -355,6 +355,12 @@
             "actions": "*"
         },
         {
+            "pattern": "endpoint/scrs",
+            "roles": "internal/role/openidm-authorized",
+            "methods": "read,query,action",
+            "actions": "*"
+        },
+        {
             "pattern": "managed/alpha_organization/*",
             "roles": "internal/role/openidm-admin,internal/role/IDAM_FRONT_END_SUPPORT,internal/role/IDAM_BUSINESS_SUPPORT",
             "methods": "read,query,update,patch,action",
