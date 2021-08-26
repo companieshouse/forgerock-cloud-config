@@ -17,16 +17,16 @@
 		"scopes": {
 			"inherited": false,
 			"value": [
-                "openid",
+				"openid",
 				"profile",
 				"email",
-                "https://account.companieshouse.gov.uk/user/profile.read",
+				"https://account.companieshouse.gov.uk/user/profile.read",
 				"https://identity.company-information.service.gov.uk/user/profile.read",
 				"https://api.companieshouse.gov.uk/company/registered-office-address.update",
 				"https://api.company-information.service.gov.uk/company/registered-office-address.update",
 				"https://api.companieshouse.gov.uk/company/admin.write-full",
 				"https://api.company-information.service.gov.uk/company/admin.write-full"
-            ]
+			]
 		},
 		"status": {
 			"inherited": false,
@@ -38,7 +38,10 @@
 		},
 		"redirectionUris": {
 			"inherited": false,
-			"value": []
+			"value": [
+				"http://localhost:8090/redirect",
+				"https://test-harness-api-filing.amido.aws.chdev.org/redirect"
+			]
 		},
 		"clientName": {
 			"inherited": false,
@@ -88,7 +91,9 @@
 		},
 		"responseTypes": {
 			"inherited": false,
-			"value": ["token"]
+			"value": [
+				"token"
+			]
 		},
 		"updateAccessToken": {
 			"inherited": false
@@ -132,7 +137,9 @@
 		},
 		"grantTypes": {
 			"inherited": false,
-			"value": ["client_credentials"]
+			"value": [
+				"client_credentials"
+			]
 		}
 	},
 	"signEncOAuth2ClientConfig": {
@@ -260,7 +267,10 @@
 		},
 		"postLogoutRedirectUri": {
 			"inherited": false,
-			"value": []
+			"value": [
+				"http://localhost:8090/redirect",
+				"https://test-harness-api-filing.amido.aws.chdev.org/redirect"
+			]
 		},
 		"backchannel_logout_session_required": {
 			"inherited": false,
