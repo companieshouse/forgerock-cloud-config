@@ -86,7 +86,7 @@ if (claims == null) {
 
         var permissions = scopesToPermissions(scopes, company, isInternalApp)
 
-        accessToken.setField("token-permissions", permissions)
+        accessToken.setField("token_permissions", permissions)
     }
 }
 
