@@ -4,6 +4,10 @@
     var OBJECT_COMPANY = "alpha_organization";
     let companyIncorporationsEndpoint = "https://v79uxae8q8.execute-api.eu-west-1.amazonaws.com/mock/submissions";
     let emailsEndpoint = "https://v79uxae8q8.execute-api.eu-west-1.amazonaws.com/mock/authorisedForgerockEmails";
+    let amEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io";
+    let customUiUrl = "https://idam-ui.amido.aws.chdev.org";
+    let idmUsername = "tree-service-user@companieshouse.com";
+    let idmPassword = "Passw0rd123!";
 
     var AuthorisationStatus = {
         CONFIRMED: "confirmed",
@@ -13,6 +17,28 @@
     
     function log(message) {
         logger.error("SCRS - " + message);
+    }
+
+    function formatDate() {
+        var date = new Date();
+        var result = [];
+        var dateArr = [];
+        dateArr.push(date.getFullYear());
+        dateArr.push(padding(date.getMonth() + 1));
+        dateArr.push(padding(date.getDate()));
+        result.push(dateArr.join('-'));
+        result.push('T');
+        var timeArr = [];
+        timeArr.push(padding(date.getHours()));
+        timeArr.push(padding(date.getMinutes()));
+        timeArr.push(padding(date.getSeconds()));
+        result.push(timeArr.join(':'));
+        result.push("Z");
+        return result.join('');
+    }
+    
+    function padding(num) {
+        return num < 10 ? '0' + num : num;
     }
 
     // Look up a user
@@ -51,6 +77,31 @@
         }
 
         return response.result[0];
+    }
+
+    function callNotificationJourney(email, link, companyName, companyNumber, isNewUser){
+        let request = {
+            "url": amEndpoint + "/am/json/alpha/authenticate?authIndexType=service&authIndexValue=SCRS_Emails&noSession=true",
+            "method": "POST",
+            "headers": {
+                "Content-Type": "application/json",
+                "CH-Username": idmUsername,
+                "CH-Password": idmPassword,
+                "NofificationLink": link,
+                "NofificationEmail": email,
+                "NotificationCompanyNumber": companyNumber,
+                "NotificationCompanyName": companyName,
+                "NewUser" : isNewUser
+            }
+        };
+        // log("request URL emails: " + emailsEndpoint + "?companyNo=" + companyIncorp.company_number);
+
+        return openidm.action("external/rest", "call", request);
+    }
+
+    function fetchAuthorizationToken(){
+        //TODO implement authN logic to fetch Bearer token 
+        return "Bearer 1234abcde"
     }
 
     // Creates a relationship between the user and company
@@ -112,11 +163,16 @@
 
     let defaultTimepoint = [
         date.getFullYear(),
-        (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : '0' + (date.getMonth() + 1),
-        date.getDate() > 9 ? date.getDate() : '0' + date.getDate(),
-        date.getHours() > 9 ? date.getHours() : '0' + date.getHours(),
-        date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes(),
-        date.getSeconds() > 9 ? date.getSeconds() : '0' + date.getSeconds(),
+        padding(date.getMonth() + 1),
+        // (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : '0' + (date.getMonth() + 1),
+        padding(date.getDate()),
+        // date.getDate() > 9 ? date.getDate() : '0' + date.getDate(),
+        padding(date.getHours()),
+        // date.getHours() > 9 ? date.getHours() : '0' + date.getHours(),
+        padding(date.getMinutes()),
+        // date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes(),
+        padding(date.getSeconds()),
+        // date.getSeconds() > 9 ? date.getSeconds() : '0' + date.getSeconds(),
         date.getMilliseconds()
     ].join("");
 
@@ -129,7 +185,8 @@
             "url": companyIncorporationsEndpoint + "?timepoint=" + timePoint,
             "method": "GET",
             "headers": {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": fetchAuthorizationToken()
             }
         };
         // log("request URL: " + companyIncorporationsEndpoint + "?timepoint=" + timePoint);
@@ -162,10 +219,10 @@
                         "url": emailsEndpoint + "?companyNo=" + companyIncorp.company_number,
                         "method": "GET",
                         "headers": {
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
+                            "Authorization": fetchAuthorizationToken()
                         }
                     };
-                    // log("request URL emails: " + emailsEndpoint + "?companyNo=" + companyIncorp.company_number);
 
                     let emailsResponse = openidm.action("external/rest", "call", request);
 
@@ -182,18 +239,24 @@
                                 if (!userLookup) {
                                     // CREATE THE USER + CREATE RELATIONSHIP + SEND EMAIL TO THE USER
                                     log("Creating new user with username " + email);
+                                    var onboardingDate = formatDate();
                                     let createRes = openidm.create("managed/" + OBJECT_USER,
                                         null,
                                         {
                                             "userName": email,
                                             "sn": email,
-                                            "mail": email
+                                            "mail": email,
+                                            "frIndexedDate2": onboardingDate
                                         });
                                     log("Create User ID: " + createRes._id);
                                     addConfirmedRelationshipToCompany(createRes._id, companyInfo._id, companyInfo.name + " - " + companyInfo.number);
+                                    let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, true);
+                                    log("notification response : " + JSON.stringify(notificationResponse));
                                 } else {
                                     // IF YES, CREATE THE RELATIONSHIP AND SEND EMAIL
                                     addConfirmedRelationshipToCompany(userLookup._id, companyInfo._id, companyInfo.name + " - " + companyInfo.number);
+                                    let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, false);
+                                    log("notification response : " + JSON.stringify(notificationResponse));
                                 }
                             }
                         })

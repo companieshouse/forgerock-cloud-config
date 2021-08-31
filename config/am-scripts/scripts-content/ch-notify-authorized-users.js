@@ -271,40 +271,25 @@ function getSelectedLanguage(requestHeaders) {
     return 'EN';
 }
 
-function maskEmail(mail) {
-    var maskedemail;
-    try {
-        var mailUsername = mail.split("@")[0];
-        mailUsername = mailUsername.substring(0, 1).concat("******");
-        var mailDomain = mail.split("@")[1].split(".")[0];
-        var mailTld = mail.split("@")[1].split(".")[1];
-        maskedemail = mailUsername + "@" + mailDomain + "." + mailTld;
-    } catch (e) {
-        logger.error("[INVITE USER CHECK MEMBERSHIP] Email masking failed");
-        return false;
-    }
-    return maskedemail;
-}
-
 function processDisplayNames(notifyEventData) {
     var actorDisplayName; //= notifyEventData.actorName || (notifyEventData.actorUserName ? getUserData(notifyEventData.actorUserName, null).displayName : getUserData(null, notifyEventData.actorId).displayName);
     if (notifyEventData.actorName) {
         actorDisplayName = notifyEventData.actorName;
     } else if (notifyEventData.actorUserName) {
-        actorDisplayName = maskEmail(notifyEventData.actorUserName);
+        actorDisplayName = notifyEventData.actorUserName;
     } else if (notifyEventData.actorId) {
         var user = getUserData(null, notifyEventData.actorId).user;
-        actorDisplayName = user.givenName || maskEmail(user.userName);
+        actorDisplayName = user.givenName || user.userName;
     }
 
     var subjectDisplayName; //= notifyEventData.subjectName || (notifyEventData.subjectUserName ? getUserData(notifyEventData.subjectUserName, null).displayName : getUserData(null, notifyEventData.subjectId).displayName);
     if (notifyEventData.subjectName) {
         subjectDisplayName = notifyEventData.subjectName;
     } else if (notifyEventData.subjectUserName) {
-        subjectDisplayName = maskEmail(notifyEventData.subjectUserName);
+        subjectDisplayName = notifyEventData.subjectUserName;
     } else if (notifyEventData.subjectId) {
         var user = getUserData(null, notifyEventData.subjectId).user;
-        subjectDisplayName = user.givenName || maskEmail(user.userName);
+        subjectDisplayName = user.givenName || user.userName;
     }
 
     return {

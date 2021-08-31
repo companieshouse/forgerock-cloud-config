@@ -85,21 +85,6 @@ var confirmRemoveCallback = new fr.ConfirmationCallback(
     ConfirmRemoveIndex.SUBMIT
 );
 
-function maskEmail(mail) {
-    var maskedemail;
-    try {
-        var mailUsername = mail.split("@")[0];
-        mailUsername = mailUsername.substring(0, 1).concat("******");
-        var mailDomain = mail.split("@")[1].split(".")[0];
-        var mailTld = mail.split("@")[1].split(".")[1];
-        maskedemail = mailUsername + "@" + mailDomain + "." + mailTld;
-    } catch (e) {
-        logger.error("[REMOVE USER CHECK MEMBERSHIP] Email masking failed");
-        return false;
-    }
-    return maskedemail;
-}
-
 //removes the user from the company
 function removeUserFromCompany(callerId, companyNo, userIdToRemove) {
     logger.error("[REMOVE AUTHZ USER] Removing user " + userIdToRemove + " from company " + companyNo);
@@ -134,7 +119,7 @@ function removeUserFromCompany(callerId, companyNo, userIdToRemove) {
         logger.error("[REMOVE AUTHZ USER] 200 response from IDM");
         return {
             success: actionResponse.success,
-            removerName: (actionResponse.caller.fullName ? actionResponse.caller.fullName : maskEmail(actionResponse.caller.userName))
+            removerName: (actionResponse.caller.fullName ? actionResponse.caller.fullName : actionResponse.caller.userName)
         }
     } else {
         logger.error("[REMOVE AUTHZ USER] Error during action processing");
@@ -167,7 +152,7 @@ try {
         }
     } else if (userStatus === 'confirmed') {
         if (callbacks.isEmpty()) {
-            var userDisplayName = userResponse.givenName ? userResponse.givenName : userResponse.maskedUsername;
+            var userDisplayName = userResponse.givenName ? userResponse.givenName : userResponse.userName;
             var infoMessage = "Remove "
                 .concat(userDisplayName)
                 .concat("'s authorisation to file online for company ")
