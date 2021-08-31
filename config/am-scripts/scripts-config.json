@@ -1411,6 +1411,54 @@
                 "lastModifiedDate":1617810491969
              },
             "filename": "ch-notify-authorized-users.js"
+        },
+        {
+            "payload": {
+                "_id": "26c31a86-df26-4dd3-8675-55e29388d568",
+                "name": "CH - Process Request",
+                "description": "Process request for consent journey",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1630445552147
+            },
+            "filename": "ch-process-request-consent.js"
+        },
+        {
+            "payload": {
+                "_id": "f981c992-2b82-4f38-919a-93ea83e7b8fb",
+                "name": "CH - Get Consent",
+                "description": "Get user consent",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1630446169326
+            },
+            "filename": "ch-get-consent.js"
+        },
+        {
+            "payload": {
+                "_id": "3de821a3-7c07-4ae4-858f-8e46192ed667",
+                "name": "CH - Send Consent Response",
+                "description": "Send consent response",
+                "script": "<replace>",
+                "default": false,
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "null",
+                "creationDate": 0,
+                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+                "lastModifiedDate": 1630446313640
+            },
+            "filename": "ch-send-consent-response.js"
         }
     ]
 }
