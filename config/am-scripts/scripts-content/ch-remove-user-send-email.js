@@ -42,7 +42,6 @@ function extractRemovalDataFromState() {
             companyName: JSON.parse(companyData).name,
             removerName: removerName,
             userToRemove: userToRemove.userName,
-            //userToRemoveMasked: userToRemove.maskedUsername,
             displayName: displayName
         }
     } catch (e) {

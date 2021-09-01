@@ -155,7 +155,7 @@
          "nodeType": "ScriptedDecisionNode", 
          "details": {
             "inputs":["*"],
-            "outcomes":["true"],
+            "outcomes": ["true", "resend"],
             "outputs":["*"],
             "script":"8b203967-fa57-4ce2-9dad-2f387ca52a61"
          }    
@@ -297,7 +297,9 @@
          "30518af8-5af3-45e1-bd23-d404e13d922b": {
             "x": 1705,
             "y": 132.015625,
-            "connections": {},
+            "connections": {
+               "resend": "997cc39b-afde-4935-b9b5-a0d4e3034072"
+            },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Email Sent Confirmation"
          },

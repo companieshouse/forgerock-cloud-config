@@ -259,6 +259,7 @@
                                     log("notification response : " + JSON.stringify(notificationResponse));
                                     outputUsers.push({
                                         _id: createRes._id,
+                                        email: email,
                                         companyNumber: companyInfo.number,
                                         companyName: companyInfo.name,  
                                         newUser: true,
@@ -271,6 +272,7 @@
                                     log("notification response : " + JSON.stringify(notificationResponse));
                                     outputUsers.push({
                                         _id: userLookup._id,
+                                        email: email,
                                         companyNumber: companyInfo.number,
                                         companyName: companyInfo.name,  
                                         newUser: false,

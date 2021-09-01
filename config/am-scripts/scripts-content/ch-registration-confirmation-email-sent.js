@@ -1,8 +1,14 @@
 var fr = JavaImporter(
     org.forgerock.openam.auth.node.api.Action,
     javax.security.auth.callback.TextOutputCallback,
-    com.sun.identity.authentication.callbacks.HiddenValueCallback
+    com.sun.identity.authentication.callbacks.HiddenValueCallback,
+    javax.security.auth.callback.ConfirmationCallback
 )
+
+var ConfirmIndex = {
+    RESEND: 0,
+    OK: 1
+}
 
 var email = sharedState.get("objectAttributes").get("mail");
 var notificationId = transientState.get("notificationId");
@@ -24,8 +30,18 @@ if (callbacks.isEmpty()) {
         new fr.HiddenValueCallback(
             "notificationId",
             notificationId
-        )
+        ),
+        new fr.ConfirmationCallback(
+            "Do you want to confirm the changes?",
+            fr.ConfirmationCallback.INFORMATION,
+            ["RESEND", "OK"],
+            0)
     ).build();
 } else {
-    outcome = "true";
+    var confirmIndex = callbacks.get(4).getSelectedIndex();
+    if (confirmIndex === ConfirmIndex.RESEND) { 
+        outcome = "resend";
+    } else {
+        outcome = "true";
+    }
 }
