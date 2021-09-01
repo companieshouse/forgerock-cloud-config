@@ -41,7 +41,7 @@
 		"action": "EXCEPTION",
 		"situation": "AMBIGUOUS"
 	}, {
-		"action": "EXCEPTION",
+		"action": "DELETE",
 		"situation": "SOURCE_MISSING"
 	}, {
 		"action": "EXCEPTION",
