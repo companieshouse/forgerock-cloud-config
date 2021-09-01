@@ -1,0 +1,121 @@
+{
+    "nodes": [
+      {
+         "_id": "390141ab-309a-4e12-8398-81e882482885",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+               "inputs":["*"],
+               "outcomes": ["true", "false"],
+               "outputs":["*"],
+               "script": "1a6815f1-0272-490b-8d6b-69609c3ee9d6"
+         }            
+      },
+      {
+         "_id": "bc5a8502-1ecf-4e35-93b6-c1994ce1973a",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+               "inputs":["*"],
+               "outcomes": ["true", "false"],
+               "outputs":["*"],
+               "script": "df67765e-df3a-4503-9ba5-35c992b39259"
+         }            
+      },     
+      {
+         "_id": "36d7b17c-3095-4ae0-b86a-6da85cddf1b2",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+               "inputs":["*"],
+               "outcomes": ["true", "false"],
+               "outputs":["*"],
+               "script": "bce73aab-8659-4ee0-ac00-7419f88b78ed"
+         }            
+      },
+      {
+         "_id": "9fe1ca3a-3e31-4d5b-86ea-fa516795e1dc",
+			"nodeType": "DataStoreDecisionNode", 
+			"details":{}
+		},
+      {
+         "_id": "4cc5b021-e439-405f-bc6f-d732597edcda",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+               "inputs":["*"],
+               "outcomes": ["success", "error"],
+               "outputs":["*"],
+               "script": "1968af0f-92d4-45ec-b8bd-f08b5aac4b7b"
+         }            
+      }
+   ],
+   "tree": {
+      "_id": "CHSendSCRSNotifications",
+      "identityResource": "managed/alpha_user",
+      "uiConfig": {},
+      "entryNodeId": "390141ab-309a-4e12-8398-81e882482885",
+      "nodes": {
+         "bc5a8502-1ecf-4e35-93b6-c1994ce1973a": {
+            "x": 620,
+            "y": 130.015625,
+            "connections": {
+               "true": "36d7b17c-3095-4ae0-b86a-6da85cddf1b2",
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Create Notify JWT"
+         },
+         "4cc5b021-e439-405f-bc6f-d732597edcda": {
+            "x": 1305,
+            "y": 22.015625,
+            "connections": {
+               "success": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
+               "error": "e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Send Emails"
+         },
+         "36d7b17c-3095-4ae0-b86a-6da85cddf1b2": {
+            "x": 856,
+            "y": 115.015625,
+            "connections": {
+               "true": "9fe1ca3a-3e31-4d5b-86ea-fa516795e1dc",
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Check params"
+         },
+         "9fe1ca3a-3e31-4d5b-86ea-fa516795e1dc": {
+            "x": 1081,
+            "y": 36.015625,
+            "connections": {
+               "true": "4cc5b021-e439-405f-bc6f-d732597edcda",
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType": "DataStoreDecisionNode",
+            "displayName": "Data Store Decision"
+         },
+         "390141ab-309a-4e12-8398-81e882482885": {
+            "x": 380,
+            "y": 189.015625,
+            "connections": {
+               "true": "bc5a8502-1ecf-4e35-93b6-c1994ce1973a",
+               "false": "e301438c-0bd0-429c-ab0c-66126501069a"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Load Keys"
+         }
+      },
+      "staticNodes": {
+         "startNode": {
+            "x": 188,
+            "y": 269
+         },
+         "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
+            "x": 1587,
+            "y": 98
+         },
+         "e301438c-0bd0-429c-ab0c-66126501069a": {
+            "x": 1413,
+            "y": 373
+         }
+      }
+   }
+}

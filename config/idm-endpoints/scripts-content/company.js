@@ -94,18 +94,6 @@
         return response;
     }
 
-    function maskEmail(mail) {
-        let mailUsername = mail.split("@")[0];
-        mailUsername = mailUsername.substring(0, 1).concat("******");
-        let mailDomain = mail.split("@")[1].split(".")[0];
-        let mailTld = mail.split("@")[1].split(".")[1];
-        return mailUsername + "@" + mailDomain + "." + mailTld;
-    }
-
-    function maskPhone(phone) {
-        return "******".concat(phone.substring(phone.length - 4, phone.length));
-    }
-
     function mapCompanyMembers(companyId, members) {
         let mapped = [];
         members.forEach(member => {
@@ -114,9 +102,9 @@
             mapped.push({
                 _id: fullUser._id,
                 name: fullUser.givenName,
-                email: maskEmail(fullUser.userName),
-                displayName: fullUser.givenName ? fullUser.givenName : maskEmail(fullUser.userName),
-                phone: fullUser.telephoneNumber ? maskPhone(fullUser.telephoneNumber) : undefined,
+                email: fullUser.userName,
+                displayName: fullUser.givenName ? fullUser.givenName : fullUser.userName,
+                phone: fullUser.telephoneNumber ? fullUser.telephoneNumber : undefined,
                 membershipStatus: status._refProperties.membershipStatus
             });
         });
@@ -131,9 +119,9 @@
                 mappedUser = {
                     _id: user._id,
                     name: user.givenName,
-                    email: maskEmail(user.userName),
-                    displayName: user.givenName ? user.givenName : maskEmail(user.userName),
-                    phone: user.telephoneNumber ? maskPhone(user.telephoneNumber) : undefined,
+                    email: user.userName,
+                    displayName: user.givenName ? user.givenName : user.userName,
+                    phone: user.telephoneNumber ? user.telephoneNumber : undefined,
                 };
             }
         }
