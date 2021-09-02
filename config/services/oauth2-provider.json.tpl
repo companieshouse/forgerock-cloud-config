@@ -219,7 +219,8 @@
     },
     "consent": {
         "clientsCanSkipConsent": true,
-        "enableRemoteConsent": false,
+        "enableRemoteConsent": true,
+        "remoteConsentServiceId": "journey-rcs",
         "supportedRcsRequestEncryptionAlgorithms": [
             "ECDH-ES+A256KW",
             "ECDH-ES+A192KW",

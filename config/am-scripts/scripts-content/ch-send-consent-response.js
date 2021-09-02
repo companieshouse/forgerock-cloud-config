@@ -125,7 +125,7 @@ var ssoToken = getCookie(config.ssoCookieName)
 var consentRequest = fr.JwtClaimsSet(sharedState.get("consentRequest"))
     
 logger.error("[SEND CONSENT RESPONSE] consent request " + consentRequest)
-    
+
 if (!ssoToken) {
     logger.error("[SEND CONSENT RESPONSE] No ssoToken cookie")
     //raiseError("[SEND CONSENT RESPONSE] No ssoToken cookie")
@@ -136,16 +136,16 @@ if (!ssoToken) {
     outcome = NodeOutcome.ERROR
 } else {
     logger.error("[SEND CONSENT RESPONSE] posting on user's behalf")
-        
+
     var redirectUri = consentRequest.get("consentApprovalRedirectUri").asString()  
     logger.error("[SEND CONSENT RESPONSE] posting to " + redirectUri)
-        
+
     var jwt = buildJwt(consentRequest,config.rcsSecret,config.rcsIssuer)
     logger.error("[SEND CONSENT RESPONSE] built jwt " + jwt);
-        
+
     var location = postResponse(redirectUri,jwt,config.ssoCookieName,ssoToken)
     logger.error("[SEND CONSENT RESPONSE] got location " + location)
-        
+
     if (location == null) {
         logger.error("[SEND CONSENT RESPONSE] No redirect back from redirect URI")
         raiseError("[SEND CONSENT RESPONSE] No redirect back from redirect URI")

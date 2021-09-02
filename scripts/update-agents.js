@@ -28,7 +28,8 @@ const updateAgents = async (argv) => {
     // Update each application
     await Promise.all(
       agentFileContent.map(async (agentFile) => {
-        const requestUrl = `${FIDC_URL}/am/json/realms/root/realms/${realm}/realm-config/agents/IdentityGatewayAgent/${agentFile._id}`
+        const requestUrl = `${FIDC_URL}/am/json/realms/root/realms/${realm}/realm-config/agents/${agentFile._type._id}/${agentFile._id}`
+        delete agentFile._type
         await fidcRequest(requestUrl, agentFile, sessionToken, true)
         console.log(`${agentFile._id} updated`)
         return Promise.resolve()
