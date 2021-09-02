@@ -16,3 +16,4 @@ config/applications/api-filing-client
 config/applications/api-filing-m2m-client.json
 config/applications/api-filing-web-client.json
 config/applications/chs-internal-client.json
+config/agents/ig-agent.json

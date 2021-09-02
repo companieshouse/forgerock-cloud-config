@@ -2,6 +2,7 @@
 const yargs = require('yargs')
 const cliOptions = require('./helpers/cli-options')
 const {
+  updateAgents,
   updateApplications,
   updateAuthTrees,
   updateConnectorDefinitions,
@@ -34,6 +35,12 @@ yargs
   .version(false)
   .help('h')
   .alias('h', 'help')
+  .command({
+    command: 'agents',
+    desc: 'Update ForgeRock Agents (./config/agents)',
+    builder: cliOptions(['username', 'password', 'realm', 'igAgentPassword']),
+    handler: (argv) => updateAgents(argv)
+  })
   .command({
     command: 'applications',
     desc: 'Update ForgeRock Applications (./config/applications)',
