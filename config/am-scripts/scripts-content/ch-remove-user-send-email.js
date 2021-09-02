@@ -42,7 +42,6 @@ function extractRemovalDataFromState() {
             companyName: JSON.parse(companyData).name,
             removerName: removerName,
             userToRemove: userToRemove.userName,
-            userToRemoveMasked: userToRemove.maskedUsername,
             displayName: displayName
         }
     } catch (e) {
@@ -146,7 +145,7 @@ try {
         sendErrorCallbacks("REMOVE_AUTHZ_USER_ERROR", "Error while extracting data from shared state");
     } else {
         var sendEmailResult = sendEmail(language, removalData.removerName, removalData.userToRemove, removalData.companyName);
-        var userDisplayName = removalData.userToRemoveMasked;
+        var userDisplayName = removalData.displayName;
         var notificationId = transientState.get("notificationId");
 
         if (callbacks.isEmpty()) {

@@ -22,8 +22,8 @@ function setPolicyErrorMessage(policyResponse) {
             'errors': [{
                 label: "The new password does not meet the password policy requirements.",
                 token: "PWD_POLICY_ERROR",
-                fieldName: "IDToken3",
-                anchor: "IDToken3"
+                fieldName: (isOnboarding || isResetPassword || isRegistration  ? "IDToken2" : "IDToken3"),
+                anchor: (isOnboarding || isResetPassword || isRegistration  ? "IDToken2" : "IDToken3")
             }],
             'failedPolicies': failedPolicyRequirements
         }));
@@ -90,13 +90,16 @@ function policyCompliant(pwd) {
 
 // Main execution path
 
+var isOnboarding = sharedState.get("isOnboarding");
+var isResetPassword = sharedState.get("isResetPassword");
+var isRegistration = sharedState.get("isRegistration");
+
 var newPassword = transientState.get(VAR_PASSWORD);
 
 if (newPassword == null) {
     logger.error("[CHANGE PWD - POLICY CHECK] No password in shared state for policy evaluation");
     outcome = NodeOutcome.ERROR;
-}
-else {
+} else {
     try {
         outcome = policyCompliant(newPassword);
     } catch (e) {

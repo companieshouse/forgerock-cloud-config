@@ -50,6 +50,11 @@ const cliOptions = (requestedOptions) => {
       alias: 'i',
       demandOption: true,
       describe: 'Password for the IG OIDC Client'
+    },
+    igAgentPassword: {
+      alias: 'ia',
+      demandOption: true,
+      describe: 'Password for the IG Agent'
     }
   }
 

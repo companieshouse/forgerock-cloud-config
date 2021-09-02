@@ -1459,6 +1459,38 @@
                 "lastModifiedDate": 1630446313640
             },
             "filename": "ch-send-consent-response.js"
+        },
+        {
+             "payload": {           
+                "_id":"1968af0f-92d4-45ec-b8bd-f08b5aac4b7b",
+                "name":"CH - Notify Users post-SCRS",
+                "description":"Sends an email notification to all users authorised via SCRS",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-scrs-send-email.js"
+        },
+        {
+            "payload": {
+                "_id":"bce73aab-8659-4ee0-ac00-7419f88b78ed",
+                "name":"CH - Check incoming parameters from SCRS endpoint",
+                "description":"Check incoming parameters from SCRS endpoint",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+             },
+            "filename": "ch-scrs-validate-params.js"
         }
     ]
 }

@@ -178,21 +178,6 @@ function getSubjectStatusForCompany(userId, companyNo) {
     }
 }
 
-function maskEmail(mail) {
-    var maskedemail;
-    try {
-        var mailUsername = mail.split("@")[0];
-        mailUsername = mailUsername.substring(0, 1).concat("******");
-        var mailDomain = mail.split("@")[1].split(".")[0];
-        var mailTld = mail.split("@")[1].split(".")[1];
-        maskedemail = mailUsername + "@" + mailDomain + "." + mailTld;
-    } catch (e) {
-        logger.error("[REMOVE USER CHECK MEMBERSHIP] Email masking failed");
-        return false;
-    }
-    return maskedemail;
-}
-
 // execution flow
 var idmCompanyAuthEndpoint = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/endpoint/companyauth/";
 var alphaUserUrl = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_user/";
@@ -217,7 +202,6 @@ try {
             raiseError("Cannot check userstatus", "USER_STATUS_ERROR");
         } else {
             sharedState.put("companyData", JSON.stringify(companyLookupResponse.company));
-            userResponse.user.maskedUsername = maskEmail(userResponse.user.userName);
             sharedState.put("userToRemove", JSON.stringify(userResponse.user));
             sharedState.put("subjectStatus", statuResponse.company.status);
             action = fr.Action.goTo(NodeOutcome.SUCCESS).build();

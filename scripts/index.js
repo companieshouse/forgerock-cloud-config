@@ -1,3 +1,4 @@
+const updateAgents = require('./update-agents')
 const updateApplications = require('./update-applications')
 const updateAuthTrees = require('./update-auth-trees')
 const updateConnectorDefinitions = require('./update-connector-definitions')
@@ -17,6 +18,7 @@ const updateIdmEndpoints = require('./update-idm-endpoints')
 const updateIdmAccessConfig = require('./update-idm-access-config')
 
 module.exports = {
+  updateAgents,
   updateApplications,
   updateAuthTrees,
   updateConnectorDefinitions,
