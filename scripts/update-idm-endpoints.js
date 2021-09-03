@@ -112,6 +112,60 @@ const updateScripts = async (argv) => {
         return Promise.resolve()
       })
     )
+
+    await Promise.all(
+      scriptFileContent.map(async (scriptFile) => {
+        await Promise.all(
+          scriptFile.scheduledScripts.map(async (schedule) => {
+            fs.readFile(`${dir}/scripts-content/${schedule.scriptFileName}`, 'utf8', async (err, data) => {
+              if (err) {
+                return console.log(err)
+              }
+              const body = {
+                _id: schedule.scheduleName,
+                enabled: true,
+                persisted: true,
+                recoverable: false,
+                misfirePolicy: 'fireAndProceed',
+                schedule: schedule.cronExp,
+                repeatInterval: 0,
+                repeatCount: 0,
+                type: 'cron',
+                invokeService: 'script',
+                invokeContext: {
+                  script: {
+                    type: 'text/javascript',
+                    globals: {},
+                    source: data
+                      .split('\n')
+                      .map((line) => {
+                        if (line.trim().startsWith('//')) {
+                          return ''
+                        }
+                        return line.trim()
+                      })
+                      .join(' ')
+                  }
+                },
+                invokeLogLevel: 'info',
+                startTime: null,
+                endTime: null,
+                concurrentExecution: false,
+                previousRunDate: null,
+                saveToConfig: false
+              }
+
+              // console.log(`IDM task code: ${JSON.stringify(body)}`)
+
+              const requestUrl = `${FIDC_URL}/openidm/scheduler/job/${schedule.scheduleName}`
+              await fidcRequest(requestUrl, body, accessToken)
+              console.log(`IDM Scheduled script updated: ${schedule.scheduleName}`)
+            })
+          })
+        )
+        return Promise.resolve()
+      })
+    )
   } catch (error) {
     console.error(error.message)
     process.exit(1)

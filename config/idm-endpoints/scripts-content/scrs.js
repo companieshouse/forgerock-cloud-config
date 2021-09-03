@@ -243,14 +243,14 @@
                                 log("The user with email : " + email + " is NOT a member of company " + companyInfo.name);
                                 if (!userLookup) {
                                     log("User does not exist: Creating new user with username " + email);
-                                    var onboardingDate = formatDate();
+                                    //var onboardingDate = formatDate();
                                     let createRes = openidm.create("managed/" + OBJECT_USER,
                                         null,
                                         {
                                             "userName": email,
                                             "sn": email,
-                                            "mail": email,
-                                            "frIndexedDate2": onboardingDate
+                                            "mail": email
+                                            // "frIndexedDate2": onboardingDate
                                         });
                                     log("New User ID: " + createRes._id);
                                     log("Creating CONFIRMED relationship between user " + createRes._id + " and company "+ companyInfo.number);
