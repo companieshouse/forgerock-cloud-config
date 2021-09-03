@@ -127,10 +127,10 @@ const updateScripts = async (argv) => {
                 persisted: true,
                 recoverable: false,
                 misfirePolicy: 'fireAndProceed',
-                schedule: schedule.cronExp,
-                repeatInterval: 0,
-                repeatCount: 0,
-                type: 'cron',
+                schedule: null,
+                type: 'simple',
+                repeatInterval: schedule.repeatInterval,
+                repeatCount: -1,
                 invokeService: 'script',
                 invokeContext: {
                   script: {
@@ -152,7 +152,8 @@ const updateScripts = async (argv) => {
                 endTime: null,
                 concurrentExecution: false,
                 previousRunDate: null,
-                saveToConfig: false
+                saveToConfig: false,
+                isCron: false
               }
 
               // console.log(`IDM task code: ${JSON.stringify(body)}`)

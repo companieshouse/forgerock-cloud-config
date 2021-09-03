@@ -30,8 +30,8 @@
     "scheduledScripts" : [
         {
             "scheduleName": "scrs",
-            "scriptFileName": "scrs.js",
-            "cronExp": "0 0 * * * ?"
+            "scriptFileName": "scrs-wrapper.js",
+            "repeatInterval": 3600000
         }
     ]
 }

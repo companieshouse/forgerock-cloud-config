@@ -1,5 +1,7 @@
 (function () {
 
+    log("HERE!!!!! " + JSON.stringify(request));
+
     var OBJECT_USER = "alpha_user";
     var OBJECT_COMPANY = "alpha_organization";
     let companyIncorporationsEndpoint = "https://v79uxae8q8.execute-api.eu-west-1.amazonaws.com/mock/submissions";
@@ -178,7 +180,7 @@
     let companyNumber = request.additionalParameters.companyNumber;
     let outputUsers = [];
 
-    if (request.method === "read") {
+    if (request.method === "read" || (request.method === "action" && request.action === 'read')) {
 
         let request = {
             "url": companyIncorporationsEndpoint + "?timepoint=" + timePoint,
