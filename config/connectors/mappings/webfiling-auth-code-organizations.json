@@ -10,7 +10,13 @@
 		"source": "AUTHCODE"
 	}, {
 		"target": "authCodeIsActive",
-		"default": true
+		"transform": {
+			"type": "text/javascript",
+			"globals": {},
+			"source": "function isActive(startDate, expiryDate) {\n    const unixNow = Date.parse(new Date());\n    logger.error('[AUTHCODE_DATE_CHECK] unix now ==> ' + unixNow);\n\n    try {\n        if (startDate && expiryDate) {\n            logger.error('[AUTHCODE_DATE_CHECK] both dates present');\n            logger.error('[AUTHCODE_DATE_CHECK] start date ==> ' + startDate);\n            logger.error('[AUTHCODE_DATE_CHECK] expiry date ==> ' + expiryDate);\n\n            var parsedStart = new Date(startDate.substring(0, 10));\n            var unixStart = Date.parse(parsedStart);\n            logger.error('[AUTHCODE_DATE_CHECK] unix start date ==> ' + unixStart);\n\n            var parsedExpiry = new Date(expiryDate.substring(0, 10));\n            var unixExpiry = Date.parse(parsedExpiry);\n            logger.error('[AUTHCODE_DATE_CHECK] unix expiry date ==> ' + unixExpiry);\n\n            if ((unixNow >= unixStart) && (unixNow < unixExpiry)) {\n                logger.error('[AUTHCODE_DATE_CHECK] currently within dates - ACTIVE');\n                return true;\n            } else {\n                logger.error('[AUTHCODE_DATE_CHECK] currently outside dates - INACTIVE');\n                return false;\n            }\n        } else if (startDate && !expiryDate) {\n            logger.error('[AUTHCODE_DATE_CHECK] start date present');\n\n            var parsedStart = new Date(startDate.substring(0, 10));\n            var unixStart = Date.parse(parsedStart);\n            logger.error('[AUTHCODE_DATE_CHECK] unix start date ==> ' + unixStart);\n\n            if (unixNow >= unixStart) {\n                logger.error('[AUTHCODE_DATE_CHECK] currently after start date - ACTIVE');\n                return true;\n            } else {\n                logger.error('[AUTHCODE_DATE_CHECK] currently before start date - INACTIVE');\n                return false;\n            }\n        } else {\n            logger.error('[AUTHCODE_DATE_CHECK] no auth code dates present - default to ACTIVE');\n            return true;\n        }\n    } catch (e) {\n        logger.error('[AUTHCODE_DATE_CHECK] An error occurred ' + e);\n        return true;\n    }\n}\n\nisActive(source.STARTDTE, source.EXPIRYDTE);\n"
+		},
+		"default": false,
+		"source": ""
 	}, {
 		"target": "authCodeValidFrom",
 		"source": "STARTDTE"
