@@ -34,9 +34,8 @@ function getCookie(name) {
     logger.error("[SEND CONSENT RESPONSE] Cookies: " + cookies);
 
     for each (cookie in cookies) {
-        logger.error("[SEND CONSENT RESPONSE] specific cookie: " + cookie);
+        logger.error("[SEND CONSENT RESPONSE] cookie: " + cookie);
         var cookieSpec = cookie.split("=");
-        logger.error("[SEND CONSENT RESPONSE] cookieSpec: " + cookieSpec);
         if (cookieSpec[0].trim() == name) {
             logger.error("[SEND CONSENT RESPONSE] Gotcha " + cookieSpec);
             return cookieSpec[1].trim();
@@ -60,19 +59,19 @@ function raiseError(message) {
 }
   
 function postResponse(url,consentResponse,ssoCookieName,ssoToken) {
-      var request = new org.forgerock.http.protocol.Request();
-      request.setUri(url);
-      request.setMethod("POST");
-      request.getHeaders().add("Content-Type", "application/x-www-form-urlencoded");
-      request.getHeaders().add("Cookie", ssoCookieName.concat("=").concat(ssoToken));
-  
-      request.setEntity("consent_response=".concat(consentResponse));
-      var response = httpClient.send(request).get();
-      logResponse(response);
-      
-      var location = response.getHeaders().getFirst("location")
-      logger.error("[SEND CONSENT RESPONSE] Got location " + location)
-      return location
+    var request = new org.forgerock.http.protocol.Request();
+    request.setUri(url);
+    request.setMethod("POST");
+    request.getHeaders().add("Content-Type", "application/x-www-form-urlencoded");
+    request.getHeaders().add("Cookie", ssoCookieName.concat("=").concat(ssoToken));
+
+    request.setEntity("consent_response=".concat(consentResponse));
+    var response = httpClient.send(request).get();
+    logResponse(response);
+
+    var location = response.getHeaders().getFirst("location")
+    logger.error("[SEND CONSENT RESPONSE] Got location " + location)
+    return location
 }
   
 function buildJwt(consentRequest,secret,issuer) {
