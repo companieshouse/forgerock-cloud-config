@@ -18,10 +18,9 @@ try {
         sharedState.put("errorMessage", "The new password could not be found in transient state.");
         outcome = "error";
     } else {
-        transientState.put("objectAttributes", { "password": password });
+        transientState.put("objectAttributes", { "password": password,  "frIndexedDate2": null });
         outcome = "true";
     }
-
     
 } catch (e) {
     sharedState.put("errorMessage", "Error preparing pwd: " + e);
