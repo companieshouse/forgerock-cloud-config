@@ -1,5 +1,7 @@
 (function () {
 
+    log("HERE!!!!! " + JSON.stringify(request));
+
     var OBJECT_USER = "alpha_user";
     var OBJECT_COMPANY = "alpha_organization";
     let companyIncorporationsEndpoint = "https://v79uxae8q8.execute-api.eu-west-1.amazonaws.com/mock/submissions";
@@ -178,7 +180,7 @@
     let companyNumber = request.additionalParameters.companyNumber;
     let outputUsers = [];
 
-    if (request.method === "read") {
+    if (request.method === "read" || (request.method === "action" && request.action === 'read')) {
 
         let request = {
             "url": companyIncorporationsEndpoint + "?timepoint=" + timePoint,
@@ -243,14 +245,14 @@
                                 log("The user with email : " + email + " is NOT a member of company " + companyInfo.name);
                                 if (!userLookup) {
                                     log("User does not exist: Creating new user with username " + email);
-                                    var onboardingDate = formatDate();
+                                    //var onboardingDate = formatDate();
                                     let createRes = openidm.create("managed/" + OBJECT_USER,
                                         null,
                                         {
                                             "userName": email,
                                             "sn": email,
-                                            "mail": email,
-                                            "frIndexedDate2": onboardingDate
+                                            "mail": email
+                                            // "frIndexedDate2": onboardingDate
                                         });
                                     log("New User ID: " + createRes._id);
                                     log("Creating CONFIRMED relationship between user " + createRes._id + " and company "+ companyInfo.number);

@@ -26,5 +26,12 @@
             "queryFilter": "((/frIndexedMultivalued1 lt \"${Time.now - 7d}Z\"))",
             "scriptFileName": "removeExpiredInvitations.js"
         }
+    ],
+    "scheduledScripts" : [
+        {
+            "scheduleName": "scrs",
+            "scriptFileName": "scrs-wrapper.js",
+            "repeatInterval": 3600000
+        }
     ]
 }
