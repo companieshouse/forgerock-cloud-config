@@ -80,26 +80,14 @@
 		}
 	],
 	"clusteredSourceReconEnabled": true,
-	"reconSourceQueryPageSize": 10000,
+	"reconSourceQueryPageSize": 100000,
 	"sourceQueryFullEntry": true,
 	"sourceQuery": {
 		"_queryFilter": "true",
 		"_sortKeys": "PARENT_USERNAME"
 	},
 	"taskThreads": 20,
-	"correlationQuery": [
-		{
-			"linkQualifier": "default",
-			"expressionTree": {
-				"any": [
-					"frIndexedString1"
-				]
-			},
-			"mapping": "webfilingUser_alphaUser",
-			"type": "text/javascript",
-			"file": "ui/correlateTreeToQueryFilter.js"
-		}
-	],
+	"correlationQuery": [],
 	"onCreate": {
 		"type": "text/javascript",
 		"globals": {},
