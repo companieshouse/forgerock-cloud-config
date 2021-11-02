@@ -1,6 +1,7 @@
 const updateAgents = require('./update-agents')
 const updateApplications = require('./update-applications')
 const updateAuthTrees = require('./update-auth-trees')
+const getAuthTree = require('./get-auth-tree')
 const updateConnectorDefinitions = require('./update-connector-definitions')
 const updateConnectorMappings = require('./update-connector-mappings')
 const updateConnectorSchedules = require('./update-connector-schedules')
@@ -21,6 +22,7 @@ module.exports = {
   updateAgents,
   updateApplications,
   updateAuthTrees,
+  getAuthTree,
   updateConnectorDefinitions,
   updateConnectorMappings,
   updateConnectorSchedules,
