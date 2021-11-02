@@ -13,13 +13,10 @@ const getAuthTree = async (argv) => {
     const requestUrl = `${baseUrl}/trees/${authTreeName}?forUI=true`
     const response = await fidcGet(requestUrl, sessionToken, true)
 
-    // console.log('GET AUTH TREE', response)
-
-    // Tidy up the tree response so that it can be persisted
+    // Tidy up the tree response so that it can be persisted correctly
     delete response._rev
 
     Object.keys(response.nodes).forEach(node => {
-      // console.log('AAA', response.nodes[node])
       delete response.nodes[node]._outcomes
     })
 
@@ -28,8 +25,6 @@ const getAuthTree = async (argv) => {
     if (response && response.nodes) {
       for (const [key, value] of Object.entries(response.nodes)) {
         const nodeResponse = await processNode(FIDC_URL, realm, sessionToken, key, value)
-        // console.log(nodeResponse)
-
         ret.nodes.push(nodeResponse)
       }
     }
@@ -46,7 +41,6 @@ async function processNode (FIDC_URL, realm, sessionToken, nodeId, node) {
   const requestUrlNode = `${FIDC_URL}/am/json/realms/root/realms/${realm}/realm-config/authentication/authenticationtrees/nodes/${nodeType}/${nodeId}`
 
   const nodeDetails = await fidcGet(requestUrlNode, sessionToken, true)
-  // console.log('XXX -> ', nodeDetails)
 
   const nodeRet = { _id: nodeId, nodeType: nodeType, details: {} }
 
