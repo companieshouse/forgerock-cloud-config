@@ -171,7 +171,7 @@
             // apply search term filter
             if (searchTerm) {
                 companies = companies.filter(comp => {
-                    return (comp.name.indexOf(searchTerm) > -1 || comp.number.indexOf(searchTerm) > -1);
+                    return (comp.name.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1 || comp.number.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1);
                 });
             }
 
