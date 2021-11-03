@@ -5,6 +5,7 @@ const {
   updateAgents,
   updateApplications,
   updateAuthTrees,
+  getAuthTree,
   updateConnectorDefinitions,
   updateConnectorMappings,
   updateConnectorSchedules,
@@ -58,6 +59,12 @@ yargs
     desc: 'Update AM Auth Trees (./config/auth-trees)',
     builder: cliOptions(['username', 'password', 'realm']),
     handler: (argv) => updateAuthTrees(argv)
+  })
+  .command({
+    command: 'get-auth-tree',
+    desc: 'Get AM Auth Tree (Journey)',
+    builder: cliOptions(['username', 'password', 'realm', 'authTreeName']),
+    handler: (argv) => getAuthTree(argv)
   })
   .command({
     command: 'connector-definitions',

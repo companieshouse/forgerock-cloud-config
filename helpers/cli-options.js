@@ -55,6 +55,11 @@ const cliOptions = (requestedOptions) => {
       alias: 'ia',
       demandOption: true,
       describe: 'Password for the IG Agent'
+    },
+    authTreeName: {
+      alias: 'atn',
+      demandOption: false,
+      describe: 'Auth Tree Name'
     }
   }
 
