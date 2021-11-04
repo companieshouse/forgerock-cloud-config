@@ -60,6 +60,11 @@ const cliOptions = (requestedOptions) => {
       alias: 'atn',
       demandOption: false,
       describe: 'Auth Tree Name'
+    },
+    managedUsername: {
+      alias: 'mu',
+      demandOption: false,
+      describe: 'Managed Username'
     }
   }
 
