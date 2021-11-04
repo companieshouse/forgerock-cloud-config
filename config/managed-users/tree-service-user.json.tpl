@@ -2,7 +2,7 @@
   "_id": "9dbbf03c-6c71-45a9-9afb-cbde39b53ead",
 
   "userName": "tree-service-user@companieshouse.com",
-  "password": "Passw0rd123!",
+  "password": "{TREE_SERVICE_USER_PASSWORD}",
   "authzRoles": [
     {
       "_ref": "internal/role/openidm-admin"

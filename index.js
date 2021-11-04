@@ -248,7 +248,7 @@ yargs
   .command({
     command: 'update-managed-users',
     desc: 'Update Managed Users (./config/managed-users)',
-    builder: cliOptions(['username', 'password', 'realm']),
+    builder: cliOptions(['username', 'password', 'realm', 'treeServiceUserPassword']),
     handler: (argv) => updateManagedUsers(argv)
   })
   .demandCommand()

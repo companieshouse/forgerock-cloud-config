@@ -65,6 +65,12 @@ const cliOptions = (requestedOptions) => {
       alias: 'mu',
       demandOption: false,
       describe: 'Managed Username'
+    },
+    treeServiceUserPassword: {
+      alias: 'tsup',
+      demandOption: false,
+      describe: 'Password for the Tree Service User',
+      default: 'Passw0rd123!'
     }
   }
 

@@ -2,15 +2,24 @@ const fs = require('fs')
 const path = require('path')
 const getAccessToken = require('../helpers/get-access-token')
 const fidcRequest = require('../helpers/fidc-request')
+const replaceSensitiveValues = require('../helpers/replace-sensitive-values')
 
-const updateUserRoles = async (argv) => {
-  const { FIDC_URL } = process.env
+const updateManagedUsers = async (argv) => {
+  const { FIDC_URL, treeServiceUserPassword } = process.env
 
   try {
     const accessToken = await getAccessToken(argv)
 
     // Combine managed object JSON files
     const dir = path.resolve(__dirname, '../config/managed-users')
+
+    const tsup = treeServiceUserPassword || argv.treeServiceUserPassword
+
+    await replaceSensitiveValues(
+      dir,
+      [/{TREE_SERVICE_USER_PASSWORD}/g],
+      [tsup]
+    )
 
     const managedUsersFileContent = fs
       .readdirSync(dir)
@@ -36,4 +45,4 @@ const updateUserRoles = async (argv) => {
   }
 }
 
-module.exports = updateUserRoles
+module.exports = updateManagedUsers
