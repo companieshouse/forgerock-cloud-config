@@ -53,7 +53,7 @@ ACCESS_TOKEN=$(sh get_idm_access_token.sh -u ${username} -p ${password} -a ${adm
 TEMPLATE_FILE_COMMAND="cat ${templateFile} | sed 's/{CONCOURSE_USER_PASSWORD\}/${concourseUserPassword}/g'"
 TEMPLATE_MERGED=$(eval ${TEMPLATE_FILE_COMMAND})
 
-CURL_COMMAND="curl -s --write-out '%{http_code}' --output /dev/null --location --request PUT '${fidcServer}/openidm/managed/alpha_user/2f077b77-2f0c-40bc-8abd-f7e43df287fe' \
+CURL_COMMAND="curl -s --write-out '%{http_code}' --output /dev/null --location --request PUT '${fidcServer}/openidm/managed/${fidcRealm}_user/2f077b77-2f0c-40bc-8abd-f7e43df287fe' \
 --header 'Authorization: Bearer ${ACCESS_TOKEN}' \
 --header 'Content-Type: application/json' \
 --data-raw '${TEMPLATE_MERGED}'"
