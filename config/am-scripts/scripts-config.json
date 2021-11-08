@@ -1443,6 +1443,38 @@
                 "lastModifiedDate":1617810491969
              },
             "filename": "ch-scrs-validate-params.js"
+        },
+        {
+            "payload": {
+                "_id":"1aa520a7-d32a-424a-8d13-36e7f523bb2e",
+                "name":"SJD - Resend OTP via MFA Route",
+                "description":"",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+            },
+            "filename": "sjd-resend-otp-via-mfa-route.js"
+        },
+        {
+            "payload": {
+                "_id":"bea97db8-7350-471d-b06b-acc865f83f04",
+                "name":"",
+                "description":"",
+                "script":"<replace>",
+                "default":false,
+                "language":"JAVASCRIPT",
+                "context":"AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy":"null",
+                "creationDate":0,
+                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+                "lastModifiedDate":1617810491969
+            },
+            "filename": "sjd-callback-to-capture-otp-response.js"
         }
     ]
 }
