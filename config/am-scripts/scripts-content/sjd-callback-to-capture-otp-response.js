@@ -5,6 +5,11 @@ var NodeOutcome = {
   ERROR: "error"
 };
 
+var ConfirmIndex = {
+  RESEND: 0,
+  NEXT: 1
+}
+
 var config = {
   otpSharedStateVariable: "oneTimePassword",
   linkFragment: "resendOTP",
@@ -18,20 +23,9 @@ var fr = JavaImporter(
   javax.security.auth.callback.PasswordCallback,
   com.sun.identity.authentication.callbacks.HiddenValueCallback,
   com.sun.identity.authentication.callbacks.ScriptTextOutputCallback,
+  javax.security.auth.callback.ConfirmationCallback,
   java.lang.String
 )
-
-var RESEND_INPUT = "RESEND_INPUT";
-var RESEND_SCRIPT = "window.resendOTP = function() {"
-  .concat("  document.getElementById('").concat(RESEND_INPUT).concat("').value = 'true';")
-  .concat("  document.getElementById('").concat(config.submitButton).concat("').click();")
-  .concat("  return false;")
-  .concat("};")
-  .concat("document.getElementsByTagName('a').forEach(function (link) {")
-  .concat("  if (link.href.endsWith('#").concat(config.linkFragment).concat("')) {")
-  .concat("    link.addEventListener('click', resendOTP);")
-  .concat("  }")
-  .concat("});");
 
 function tag(message) {
   return "SJD ***".concat(config.nodeName).concat(" ").concat(message);
@@ -98,14 +92,22 @@ if (callbacks.isEmpty()) {
       "notificationId",
       notificationId
     ),
-    new fr.HiddenValueCallback(RESEND_INPUT, "false"),
     new fr.PasswordCallback("Security Code", false),
-    new fr.ScriptTextOutputCallback(RESEND_SCRIPT),
-    new fr.ScriptTextOutputCallback("<b>Hello World</b>")
+    new fr.ConfirmationCallback(
+      "Do you want to resend?",
+      fr.ConfirmationCallback.INFORMATION,
+      ["RESEND", "NEXT"],
+      1)
   ).build()
 } else {
-  var resend = callbacks.get(3).getValue();
-  var otp = fr.String(callbacks.get(4).getPassword());
+
+  resend = "false";
+  var confirmIndex = callbacks.get(4).getSelectedIndex();
+  if (confirmIndex === ConfirmIndex.RESEND) {
+    resend = "true";
+  }
+
+  var otp = fr.String(callbacks.get(3).getPassword());
   var correctOtp = sharedState.get(config.otpSharedStateVariable);
 
   logger.message(tag("Resend = " + resend + ', correctOtp = ' + correctOtp));

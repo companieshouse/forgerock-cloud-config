@@ -1448,7 +1448,7 @@
             "payload": {
                 "_id":"1aa520a7-d32a-424a-8d13-36e7f523bb2e",
                 "name":"SJD - Resend OTP via MFA Route",
-                "description":"",
+                "description":"Resend OTP via MFA Route",
                 "script":"<replace>",
                 "default":false,
                 "language":"JAVASCRIPT",
@@ -1464,7 +1464,7 @@
             "payload": {
                 "_id":"bea97db8-7350-471d-b06b-acc865f83f04",
                 "name":"SJD - Callback to capture OTP response",
-                "description":"",
+                "description":"Callback to capture OTP response",
                 "script":"<replace>",
                 "default":false,
                 "language":"JAVASCRIPT",
