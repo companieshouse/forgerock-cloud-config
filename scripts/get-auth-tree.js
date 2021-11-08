@@ -26,6 +26,13 @@ const getAuthTree = async (argv) => {
       for (const [key, value] of Object.entries(response.nodes)) {
         const nodeResponse = await processNode(FIDC_URL, realm, sessionToken, key, value)
         ret.nodes.push(nodeResponse)
+
+        if (nodeResponse.details && nodeResponse.details.nodes) {
+          for (const subNode of nodeResponse.details.nodes) {
+            const subNodeResponse = await processNode(FIDC_URL, realm, sessionToken, subNode._id, subNode)
+            ret.nodes.push(subNodeResponse)
+          }
+        }
       }
     }
 
