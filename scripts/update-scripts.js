@@ -30,11 +30,16 @@ const updateScripts = async (argv) => {
               return
             }
 
+            if (!script.payload.name || script.payload.name.trim() === '') {
+              throw new Error(`ERROR script Id :  ${script.payload._id} must have a valid (non-blank) name!`)
+            }
+
             // updates the script content with encoded file
             script.payload.script = fs.readFileSync(
               `${dir}/scripts-content/${script.filename}`,
               { encoding: 'base64' }
             )
+
             console.log(`updating script : ${script.payload.name} (${script.filename})`)
             const requestUrl = `${baseUrl}/scripts/${script.payload._id}`
             return await fidcRequest(
