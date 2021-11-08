@@ -2,20 +2,23 @@ const fs = require('fs')
 const path = require('path')
 const getSessionToken = require('../helpers/get-session-token')
 const fidcRequest = require('../helpers/fidc-request')
+const fileFilter = require('../helpers/file-filter')
 
 const updateAuthTrees = async (argv) => {
   const { realm } = argv
-  const { FIDC_URL } = process.env
+  const { FIDC_URL, filenameFilter } = process.env
 
   try {
     const sessionToken = await getSessionToken(argv)
 
     // Read auth tree JSON files
     const dir = path.resolve(__dirname, '../config/auth-trees')
+    const useFF = filenameFilter || argv.filenameFilter
 
     const authTreesFileContent = fs
       .readdirSync(dir)
       .filter((name) => path.extname(name) === '.json') // Filter out any non JSON files
+      .filter((name) => fileFilter(name, useFF)) // Filter based on name, if required
       .map((filename) => require(path.join(dir, filename))) // Map JSON file content to an array
 
     // Update each auth tree

@@ -71,6 +71,11 @@ const cliOptions = (requestedOptions) => {
       demandOption: false,
       describe: 'Password for the Tree Service User',
       default: 'Passw0rd123!'
+    },
+    filenameFilter: {
+      alias: 'ff',
+      demandOption: false,
+      describe: 'Filename Filter (combine multiples using comma, use ~ prefix on entry for wildcard match)'
     }
   }
 

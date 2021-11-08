@@ -59,7 +59,7 @@ yargs
   .command({
     command: 'auth-trees',
     desc: 'Update AM Auth Trees (./config/auth-trees)',
-    builder: cliOptions(['username', 'password', 'realm']),
+    builder: cliOptions(['username', 'password', 'realm', 'filenameFilter']),
     handler: (argv) => updateAuthTrees(argv)
   })
   .command({
@@ -157,7 +157,7 @@ yargs
   .command({
     command: 'scripts',
     desc: 'Update AM Scripts (./config/am-scripts)',
-    builder: cliOptions(['username', 'password', 'realm']),
+    builder: cliOptions(['username', 'password', 'realm', 'filenameFilter']),
     handler: (argv) => updateScripts(argv)
   })
   .command({
