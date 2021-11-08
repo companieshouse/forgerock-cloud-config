@@ -1463,7 +1463,7 @@
         {
             "payload": {
                 "_id":"bea97db8-7350-471d-b06b-acc865f83f04",
-                "name":"",
+                "name":"SJD - Callback to capture OTP response",
                 "description":"",
                 "script":"<replace>",
                 "default":false,
