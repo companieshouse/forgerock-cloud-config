@@ -5,12 +5,12 @@ object.sn = object.userName;
 
 var request = {
   "url": "https://ypdak57qu6.execute-api.eu-west-1.amazonaws.com/default/dummyBCryptValue",
-    "method": "POST",
-    "headers": {
-      "Content-Type": "application/json"
-    },
-    "body": "{\"convert\": \"" + object.password + "\"}"
-  };
+  "method": "POST",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"convert\": \"" + object.password + "\"}"
+};
 
 logger.error("OnCreate PARENT_USERNAME: {}", object.frIndexedString1);
 logger.error("OnCreate LEGACY_PASSWORD: {}", object.frIndexedString2);
@@ -53,9 +53,9 @@ if (object.frIndexedString2 != null) {
   }
   catch (e) {
     logger.info("OnCreate LEGACY_PASSWORD ERROR");
-    if (e.javaException.getCode() == "201"){
+    if (e.javaException.getCode() === "201"){
       logger.info("OnCreate LEGACY_PASSWORD CODE HTTP: 201")
-    } else if (e.javaException.getCode() == "400") {
+    } else if (e.javaException.getCode() === "400") {
       logger.info("OnCreate CODE HTTP: 400") ;
     }
     logger.info("OnCreate LEGACY_PASSWORD error detail: {}", e);

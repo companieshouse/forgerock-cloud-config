@@ -8,7 +8,7 @@ try {
         companies.forEach((company, index) => {
             if (!company._refProperties.membershipStatus) {
                 logger.error("TASK ONUPDATE - COMPANY RELATIONSHIP DOES NOT HAVE STATUS! Upgrading to CONFIRMED");
-                let res = openidm.read(newObject.memberOfOrg[index]._ref, null, ["*"]);            
+                let res = openidm.read(newObject.memberOfOrg[index]._ref, null, ["*"]);
                 newObject.memberOfOrg[index]._refProperties.membershipStatus = 'confirmed';
                 newObject.memberOfOrg[index]._refProperties.companyLabel = res.name + " - " + res.number;
                 newObject.memberOfOrg[index]._refProperties.adminAdded = 'true';
@@ -37,7 +37,7 @@ try {
     if (companies) {
         let confirmedCompanyLabels = [];
         let pendingCompanyLabels = [];
-        companies.forEach(company => {      
+        companies.forEach(company => {
             if (company._refProperties.membershipStatus === 'confirmed') {
                 confirmedCompanyLabels.push(company._refProperties.companyLabel);
             }
@@ -56,7 +56,7 @@ try {
     logger.error("TASK ONUPDATE error: " + e);
 }
 
-if (newObject.password != oldObject.password) {
+if (newObject.password !== oldObject.password) {
     var request = {
         "url": "https://ypdak57qu6.execute-api.eu-west-1.amazonaws.com/default/dummyBCryptValue",
         "method": "POST",
@@ -82,9 +82,9 @@ if (newObject.password != oldObject.password) {
     }
     catch (e) {
         logger.info("OnUpdate ERROR");
-        if (e.javaException.getCode() == "201") {
+        if (e.javaException.getCode() === "201") {
             logger.info("OnUpdate CODE HTTP: 201")
-        } else if (e.javaException.getCode() == "400") {
+        } else if (e.javaException.getCode() === "400") {
             logger.info("OnUpdate CODE HTTP: 400");
         }
         logger.info("OnUpdate Error Detail: {}", e);
