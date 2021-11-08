@@ -60,6 +60,22 @@ const cliOptions = (requestedOptions) => {
       alias: 'atn',
       demandOption: false,
       describe: 'Auth Tree Name'
+    },
+    managedUsername: {
+      alias: 'mu',
+      demandOption: false,
+      describe: 'Managed Username'
+    },
+    treeServiceUserPassword: {
+      alias: 'tsup',
+      demandOption: false,
+      describe: 'Password for the Tree Service User',
+      default: 'Passw0rd123!'
+    },
+    filenameFilter: {
+      alias: 'ff',
+      demandOption: false,
+      describe: 'Filename Filter (combine multiples using comma, use ~ prefix on entry for wildcard match)'
     }
   }
 

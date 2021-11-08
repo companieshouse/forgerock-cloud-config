@@ -20,7 +20,9 @@ const {
   updateUiConfig,
   updateUserRoles,
   updateIdmEndpoints,
-  updateIdmAccessConfig
+  updateIdmAccessConfig,
+  getManagedUser,
+  updateManagedUsers
 } = require('./scripts')
 
 require('dotenv').config()
@@ -57,7 +59,7 @@ yargs
   .command({
     command: 'auth-trees',
     desc: 'Update AM Auth Trees (./config/auth-trees)',
-    builder: cliOptions(['username', 'password', 'realm']),
+    builder: cliOptions(['username', 'password', 'realm', 'filenameFilter']),
     handler: (argv) => updateAuthTrees(argv)
   })
   .command({
@@ -155,7 +157,7 @@ yargs
   .command({
     command: 'scripts',
     desc: 'Update AM Scripts (./config/am-scripts)',
-    builder: cliOptions(['username', 'password', 'realm']),
+    builder: cliOptions(['username', 'password', 'realm', 'filenameFilter']),
     handler: (argv) => updateScripts(argv)
   })
   .command({
@@ -236,6 +238,18 @@ yargs
       'realm'
     ]),
     handler: (argv) => updateIdmAccessConfig(argv)
+  })
+  .command({
+    command: 'get-managed-user',
+    desc: 'Get Managed User',
+    builder: cliOptions(['username', 'password', 'realm', 'managedUsername']),
+    handler: (argv) => getManagedUser(argv)
+  })
+  .command({
+    command: 'update-managed-users',
+    desc: 'Update Managed Users (./config/managed-users)',
+    builder: cliOptions(['username', 'password', 'realm', 'treeServiceUserPassword']),
+    handler: (argv) => updateManagedUsers(argv)
   })
   .demandCommand()
   .parse()

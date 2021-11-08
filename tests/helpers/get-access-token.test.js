@@ -51,6 +51,29 @@ describe('get-access-token', () => {
     expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions)
   })
 
+  it('should call API with the correct aliased options', async () => {
+    const mockValuesAliased = {
+      fidcUrl: 'https://fidc-test.forgerock.com',
+      iu: 'test-user',
+      ip: 'SecurePassword123',
+      a: 'ForgeRockAdminClient',
+      s: 'SecureClientSecret123',
+      realm: 'alpha',
+      accessToken: 'abcd-1234'
+    }
+
+    const expectedUrl = `${mockValuesAliased.fidcUrl}/am/oauth2/realms/root/realms/${mockValuesAliased.realm}/access_token?auth_chain=PasswordGrant`
+    const expectedApiOptions = {
+      method: 'post',
+      body: expectedBody
+    }
+    expect.assertions(2)
+    await expect(getAccessToken(mockValuesAliased)).resolves.toEqual(
+      mockValuesAliased.accessToken
+    )
+    expect(fetch).toHaveBeenCalledWith(expectedUrl, expectedApiOptions)
+  })
+
   it('should change the realm if the realm argument is set', async () => {
     const updatedRealm = '/realms/root/realms/beta'
 

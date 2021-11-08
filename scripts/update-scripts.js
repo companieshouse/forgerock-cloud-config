@@ -2,16 +2,18 @@ const fs = require('fs')
 const path = require('path')
 const getSessionToken = require('../helpers/get-session-token')
 const fidcRequest = require('../helpers/fidc-request')
+const fileFilter = require('../helpers/file-filter')
 
 const updateScripts = async (argv) => {
   const { realm } = argv
-  const { FIDC_URL } = process.env
+  const { FIDC_URL, filenameFilter } = process.env
 
   try {
     const sessionToken = await getSessionToken(argv)
 
     // Read auth tree JSON files
     const dir = path.resolve(__dirname, '../config/am-scripts')
+    const useFF = filenameFilter || argv.filenameFilter
 
     const scriptFileContent = fs
       .readdirSync(dir)
@@ -24,12 +26,16 @@ const updateScripts = async (argv) => {
         const baseUrl = `${FIDC_URL}/am/json/realms/root/realms/${realm}`
         await Promise.all(
           scriptFile.scripts.map(async (script) => {
+            if (!fileFilter(script.filename, useFF)) {
+              return
+            }
+
             // updates the script content with encoded file
             script.payload.script = fs.readFileSync(
               `${dir}/scripts-content/${script.filename}`,
               { encoding: 'base64' }
             )
-            console.log(`updating script : ${script.payload.name}`)
+            console.log(`updating script : ${script.payload.name} (${script.filename})`)
             const requestUrl = `${baseUrl}/scripts/${script.payload._id}`
             return await fidcRequest(
               requestUrl,

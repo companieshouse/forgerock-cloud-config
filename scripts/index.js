@@ -17,6 +17,8 @@ const updateUiConfig = require('./update-ui-config')
 const updateUserRoles = require('./update-user-roles')
 const updateIdmEndpoints = require('./update-idm-endpoints')
 const updateIdmAccessConfig = require('./update-idm-access-config')
+const updateManagedUsers = require('./update-managed-users')
+const getManagedUser = require('./get_managed_user')
 
 module.exports = {
   updateAgents,
@@ -37,5 +39,7 @@ module.exports = {
   updateUiConfig,
   updateUserRoles,
   updateIdmEndpoints,
-  updateIdmAccessConfig
+  updateIdmAccessConfig,
+  getManagedUser,
+  updateManagedUsers
 }
