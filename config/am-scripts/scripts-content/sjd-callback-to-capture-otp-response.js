@@ -31,6 +31,14 @@ function tag(message) {
   return "SJD ***".concat(config.nodeName).concat(" ").concat(message);
 }
 
+function getMfaRouteOptions(mfaRoute) {
+  if (mfaRoute === "sms") {
+    return ["RESEND", "NEXT"];
+  } else if (mfaRoute === "email") {
+    return ["RESEND", "CHANGE EMAIL", "NEXT"];
+  } else return [];
+}
+
 var phoneNumber = "";
 var emailAddress = "";
 var notificationId = transientState.get("notificationId");
@@ -96,7 +104,7 @@ if (callbacks.isEmpty()) {
     new fr.ConfirmationCallback(
       "Do you want to resend?",
       fr.ConfirmationCallback.INFORMATION,
-      ["RESEND", "NEXT"],
+      getMfaRouteOptions(mfaRoute),
       1)
   ).build()
 } else {
