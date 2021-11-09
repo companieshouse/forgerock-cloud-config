@@ -10,38 +10,53 @@ var ConfirmIndex = {
     OK: 1
 }
 
-var email = sharedState.get("objectAttributes").get("mail");
-var notificationId = transientState.get("notificationId");
+try {
+    var email = sharedState.get("objectAttributes").get("mail");
+    var notificationId = transientState.get("notificationId");
+    var isEmailResend = sharedState.get("resendEmail");
 
-if (callbacks.isEmpty()) {
+    if (callbacks.isEmpty()) {
+        action = fr.Action.send(
+            new fr.TextOutputCallback(
+                fr.TextOutputCallback.INFORMATION,
+                "Please check your email to complete registration - " + email
+            ),
+            new fr.HiddenValueCallback(
+                "stage",
+                "REGISTRATION_3"
+            ),
+            new fr.HiddenValueCallback(
+                "pagePropsJSON",
+                JSON.stringify(
+                    {
+                        "email": email,
+                        "resend": isEmailResend
+                    })
+            ),
+            new fr.HiddenValueCallback(
+                "notificationId",
+                notificationId
+            ),
+            new fr.ConfirmationCallback(
+                "Do you want to confirm the changes?",
+                fr.ConfirmationCallback.INFORMATION,
+                ["RESEND", "OK"],
+                0)
+        ).build();
+    } else {
+        var confirmIndex = callbacks.get(4).getSelectedIndex();
+        if (confirmIndex === ConfirmIndex.RESEND) {
+            outcome = "resend";
+        } else {
+            outcome = "true";
+        }
+    }
+} catch (e) {
+    logger.error("[REGISTRATION - SENDING CONFIRMATION] ERROR " + e);
     action = fr.Action.send(
         new fr.TextOutputCallback(
-            fr.TextOutputCallback.INFORMATION,
-            "Please check your email to complete registration - " + email
-        ),
-        new fr.HiddenValueCallback(
-            "stage",
-            "REGISTRATION_3"
-        ),
-        new fr.HiddenValueCallback(
-            "pagePropsJSON",
-            JSON.stringify({ "email": email })
-        ),
-        new fr.HiddenValueCallback(
-            "notificationId",
-            notificationId
-        ),
-        new fr.ConfirmationCallback(
-            "Do you want to confirm the changes?",
-            fr.ConfirmationCallback.INFORMATION,
-            ["RESEND", "OK"],
-            0)
-    ).build();
-} else {
-    var confirmIndex = callbacks.get(4).getSelectedIndex();
-    if (confirmIndex === ConfirmIndex.RESEND) { 
-        outcome = "resend";
-    } else {
-        outcome = "true";
-    }
+            fr.TextOutputCallback.ERROR,
+            e.toString()
+        )
+    ).build()
 }

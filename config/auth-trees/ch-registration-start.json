@@ -227,7 +227,17 @@
             "outputs":["*"],
             "script": "e69b137b-1bae-4804-af6b-6a93371733ca"
          }
-      }
+      },
+      {
+         "_id": "781e185e-f4da-442b-9fcd-827a4f235066",
+         "nodeType": "ScriptedDecisionNode", 
+         "details": {
+            "inputs":["*"],
+            "outcomes": ["resend", "change_email", "error"],
+            "outputs":["*"],
+            "script": "3e1aa9b2-7ca9-4292-8378-a08b27f09fd5"
+         }
+      }      
    ],
    "tree": {
       "_id": "CHRegistration",
@@ -295,10 +305,10 @@
             "displayName": "OTP not valid"
          },
          "30518af8-5af3-45e1-bd23-d404e13d922b": {
-            "x": 1705,
-            "y": 132.015625,
+            "x": 1724,
+            "y": 143.015625,
             "connections": {
-               "resend": "997cc39b-afde-4935-b9b5-a0d4e3034072"
+               "resend": "781e185e-f4da-442b-9fcd-827a4f235066"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Email Sent Confirmation"
@@ -341,6 +351,23 @@
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Create Notify JWT - SMS"
+         },
+         "6ca3881c-7762-4280-a8be-692395b136d4": {
+            "x": 1847,
+            "y": 302.015625,
+            "connections": {},
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "General Error"
+         },
+         "781e185e-f4da-442b-9fcd-827a4f235066": {
+            "x": 1171,
+            "y": 213.015625,
+            "connections": {
+               "change_email": "eb711261-5253-4e17-9357-43e175a5005d",
+               "resend": "997cc39b-afde-4935-b9b5-a0d4e3034072"
+            },
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Resend Or Change address"
          },
          "817f8595-f2cc-45ce-b4f8-ad7aa6fdd1ea": {
             "x": 245,
@@ -400,13 +427,6 @@
             },
             "nodeType": "PageNode",
             "displayName": "Email Collector"
-         },
-         "6ca3881c-7762-4280-a8be-692395b136d4": {
-            "x": 1847,
-            "y": 302.015625,
-            "connections": {},
-            "nodeType": "ScriptedDecisionNode",
-            "displayName": "General Error"
          }
       },
       "staticNodes": {
