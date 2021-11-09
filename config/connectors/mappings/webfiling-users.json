@@ -87,19 +87,7 @@
 		"_sortKeys": "PARENT_USERNAME"
 	},
 	"taskThreads": 20,
-	"correlationQuery": [
-		{
-			"linkQualifier": "default",
-			"expressionTree": {
-				"any": [
-					"frIndexedString1"
-				]
-			},
-			"mapping": "webfilingUser_alphaUser",
-			"type": "text/javascript",
-			"file": "ui/correlateTreeToQueryFilter.js"
-		}
-	],
+	"correlationQuery": [],
 	"onCreate": {
 		"type": "text/javascript",
 		"globals": {},
@@ -111,7 +99,7 @@
 		"source": "if (source.PASSWORD != oldTarget.frIndexedString2) {\n  target.frIndexedString3 = \"pending\";\n  target.frIndexedString5 = \"webfiling\";\n}"
 	},
 	"onError": {
-		"type": "text/javascript", 
+		"type": "text/javascript",
 		"source": "logger.error(\"Sync of alphaUser_webfilingUser with sourceId: \" + sourceId + \" failed with error: \" + error);\r\nlogger.error(\"Source object: \" + JSON.stringify(source));\r\nlogger.error(\"Target object: \" + JSON.stringify(target));"
 	}
 }
