@@ -33,5 +33,12 @@
             "scriptFileName": "scrs-wrapper.js",
             "repeatInterval": 3600000
         }
+    ],
+    "scheduledRecons" : [
+        {
+            "scheduleName": "ds-backup",
+            "cronExp": "0 0 * * * ?",
+            "mappingName": "managedAlpha_user_systemDsbackupAccount"
+        }
     ]
 }

@@ -41,7 +41,9 @@ describe('update-managed-objects', () => {
       title: 'User',
       type: 'object'
     },
-    type: 'Managed Object'
+    type: 'Managed Object',
+    onUpdate: {
+    }
   }
 
   const expectedUrl = `${mockValues.fidcUrl}/openidm/config/managed`
@@ -85,6 +87,24 @@ describe('update-managed-objects', () => {
     const expectedBody = {
       objects: [mockConfig]
     }
+    await updateManagedObject(mockValues)
+    expect(fidcRequest.mock.calls.length).toEqual(1)
+    expect(fidcRequest).toHaveBeenCalledWith(
+      expectedUrl,
+      expectedBody,
+      mockValues.accessToken
+    )
+  })
+
+  it('should call API using config file merging scripts', async () => {
+    expect.assertions(2)
+    const expectedBody = {
+      objects: [mockConfig]
+    }
+
+    fs.existsSync.mockReturnValue(true)
+    fs.readFileSync.mockReturnValue('my script')
+
     await updateManagedObject(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(1)
     expect(fidcRequest).toHaveBeenCalledWith(
