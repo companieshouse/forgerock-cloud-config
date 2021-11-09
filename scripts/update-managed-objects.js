@@ -19,7 +19,7 @@ const updateManagedObjects = async (argv) => {
 
     // Update the Event scripts if we have been supplied them in the config
     for (const managedObject of managedObjects) {
-      for (const eventName of ['onCreate', 'onUpdate']) {
+      for (const eventName of ['onCreate', 'onUpdate', 'onDelete', 'postCreate', 'postDelete', 'postUpdate']) {
         const eventScriptName = managedObject.name + '_' + eventName + '.js'
 
         const fileEventScript = path.resolve(__dirname, '../config/managed-objects/event-scripts/' + eventScriptName)
