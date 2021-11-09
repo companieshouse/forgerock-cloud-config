@@ -24,6 +24,9 @@ const updateManagedObjects = async (argv) => {
 
         const fileEventScript = path.resolve(__dirname, '../config/managed-objects/event-scripts/' + eventScriptName)
         if (fs.existsSync(fileEventScript)) {
+          if (!managedObject[eventName]) {
+            managedObject[eventName] = {}
+          }
           managedObject[eventName].source = fs.readFileSync(fileEventScript, { encoding: 'utf8' })
         }
       }

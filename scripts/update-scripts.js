@@ -31,7 +31,7 @@ const updateScripts = async (argv) => {
             }
 
             if (!script.payload.name || script.payload.name.trim() === '') {
-              throw new Error(`ERROR script Id :  ${script.payload._id} must have a valid (non-blank) name!`)
+              throw new Error(`ERROR script Id : ${script.payload._id} must have a valid (non-blank) name!`)
             }
 
             // updates the script content with encoded file
