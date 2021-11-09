@@ -190,8 +190,6 @@ const updateScripts = async (argv) => {
               saveToConfig: false
             }
 
-            // console.log(`IDM task code: ${JSON.stringify(body)}`)
-
             const requestUrl = `${FIDC_URL}/openidm/scheduler/job/${schedule.scheduleName}`
             await fidcRequest(requestUrl, body, accessToken)
             console.log(`IDM Scheduled reconciliations updated: ${schedule.scheduleName}`)
