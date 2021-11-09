@@ -8,14 +8,14 @@ that will require FR to update FIDC
 environment specific variables.
 -->
 **FIDC Update Required:**
-- [ ] applications
-- [ ] am-scripts
-- [ ] auth-trees
-- [ ] connectors
-- [ ] cors
-- [ ] idm-access-config
-- [ ] idm-endpoints
-- [ ] managed-objects
-- [ ] password-policy
-- [ ] services
-- [ ] internal-roles
+- [ ] applications (AM)
+- [ ] scripts (AM)
+- [ ] auth-trees (AM)
+- [ ] connectors/mappings (IDM)
+- [ ] cors (AM/IDM)
+- [ ] idm-access-config (IDM)
+- [ ] idm-endpoints (IDM)
+- [ ] managed-objects (IDM)
+- [ ] password-policy (IDM)
+- [ ] services (AM)
+- [ ] internal-roles (IDM)

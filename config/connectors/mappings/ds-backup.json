@@ -137,5 +137,6 @@
       "type": "text/javascript",
       "file": "ui/correlateTreeToQueryFilter.js"
     }
-  ]
+  ],
+  "enableSync": false
 }

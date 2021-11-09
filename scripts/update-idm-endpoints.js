@@ -164,6 +164,37 @@ const updateScripts = async (argv) => {
             })
           })
         )
+
+        await Promise.all(
+          scriptFile.scheduledRecons.map(async (schedule) => {
+            const body = {
+              _id: schedule.scheduleName,
+              enabled: true,
+              persisted: true,
+              recoverable: false,
+              misfirePolicy: 'fireAndProceed',
+              schedule: schedule.cronExp,
+              type: 'cron',
+              repeatInterval: 0,
+              invokeService: 'org.forgerock.openidm.sync',
+              repeatCount: 0,
+              invokeContext: {
+                action: 'reconcile',
+                mapping: schedule.mappingName
+              },
+              invokeLogLevel: 'info',
+              startTime: null,
+              endTime: null,
+              concurrentExecution: false,
+              previousRunDate: null,
+              saveToConfig: false
+            }
+
+            const requestUrl = `${FIDC_URL}/openidm/scheduler/job/${schedule.scheduleName}`
+            await fidcRequest(requestUrl, body, accessToken)
+            console.log(`IDM Scheduled reconciliations updated: ${schedule.scheduleName}`)
+          })
+        )
         return Promise.resolve()
       })
     )
