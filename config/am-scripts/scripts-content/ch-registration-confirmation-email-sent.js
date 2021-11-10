@@ -5,6 +5,11 @@ var fr = JavaImporter(
     javax.security.auth.callback.ConfirmationCallback
 )
 
+var NodeOutcome = {
+    RESEND: "resend",
+    CHANGE_EMAIL: "change_email"
+}
+
 var ConfirmIndex = {
     RESEND: 0,
     OK: 1
@@ -38,17 +43,17 @@ try {
                 notificationId
             ),
             new fr.ConfirmationCallback(
-                "Do you want to confirm the changes?",
+                "Do you want to resend the email, or use a different address?",
                 fr.ConfirmationCallback.INFORMATION,
-                ["RESEND", "OK"],
+                ["RESEND", "CHANGE_EMAIL"],
                 0)
         ).build();
     } else {
         var confirmIndex = callbacks.get(4).getSelectedIndex();
         if (confirmIndex === ConfirmIndex.RESEND) {
-            outcome = "resend";
+            outcome = NodeOutcome.RESEND;
         } else {
-            outcome = "true";
+            outcome = NodeOutcome.CHANGE_EMAIL;
         }
     }
 } catch (e) {

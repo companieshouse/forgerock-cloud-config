@@ -18,35 +18,15 @@ var ConfirmIndex = {
     CHANGE_EMAIL: 1
 }
 
-//raises a generic registration error
-function sendErrorCallbacks(stage, token, message) {
-    if (callbacks.isEmpty()) {
-        action = fr.Action.send(
-            new fr.HiddenValueCallback(
-                "stage",
-                stage
-            ),
-            new fr.TextOutputCallback(
-                fr.TextOutputCallback.ERROR,
-                message
-            ),
-            new fr.HiddenValueCallback(
-                "pagePropsJSON",
-                JSON.stringify({ 'errors': [{ label: message, token: token }] })
-            )
-        ).build()
-    }
-}
-
 // main execution flow
 var email = sharedState.get("objectAttributes").get("mail");
 try {
     if (callbacks.isEmpty()) {
 
         action = fr.Action.send(
-            new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "Do you want to resend to ".concat(email).concat("?")),
+            new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "Do you want to resend the email to ".concat(email).concat("?")),
             new fr.ConfirmationCallback(
-                "Do you want to resend?",
+                "Do you want to resend email or change address?",
                 fr.ConfirmationCallback.INFORMATION,
                 ["RESEND", "CHANGE_EMAIL"],
                 0),
@@ -62,7 +42,7 @@ try {
         ).build();
     } else {
         var confirmIndex = callbacks.get(1).getSelectedIndex();
-        logger.error("[UPDATE EMAIL CONSENT] confirm remove: " + confirmIndex);
+        logger.error("[REGISTRATION - RESEND EMAIL] confirm resend choice: " + confirmIndex);
 
         if (confirmIndex === ConfirmIndex.RESEND) {
             sharedState.put("resendEmail", true);

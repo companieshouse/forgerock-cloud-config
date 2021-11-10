@@ -155,7 +155,7 @@
          "nodeType": "ScriptedDecisionNode", 
          "details": {
             "inputs":["*"],
-            "outcomes": ["true", "resend"],
+            "outcomes": ["resend", "change_email"],
             "outputs":["*"],
             "script":"8b203967-fa57-4ce2-9dad-2f387ca52a61"
          }    
@@ -241,7 +241,7 @@
    ],
    "tree": {
       "_id": "CHRegistration",
-      "description": "Platform Registration Tree for CH Users",
+      "description": "Registration Tree for CH Users - First part (email sending)",
       "identityResource": "managed/alpha_user",
       "uiConfig": {},
       "entryNodeId": "eb711261-5253-4e17-9357-43e175a5005d",
@@ -308,7 +308,8 @@
             "x": 1724,
             "y": 143.015625,
             "connections": {
-               "resend": "781e185e-f4da-442b-9fcd-827a4f235066"
+               "resend": "781e185e-f4da-442b-9fcd-827a4f235066",
+               "change_email": "eb711261-5253-4e17-9357-43e175a5005d"
             },
             "nodeType": "ScriptedDecisionNode",
             "displayName": "Email Sent Confirmation"
