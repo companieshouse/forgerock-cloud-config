@@ -6,15 +6,15 @@
     "type": "text/javascript"
   },
   "postCreate": {
-    "source": "require('roles/postOperation-roles').manageTemporalConstraints(resourceName);",
+    "source": "// change via external file",
     "type": "text/javascript"
   },
   "postDelete": {
-    "source": "require('roles/postOperation-roles').manageTemporalConstraints(resourceName);",
+    "source": "// change via external file",
     "type": "text/javascript"
   },
   "postUpdate": {
-    "source": "require('roles/postOperation-roles').manageTemporalConstraints(resourceName);",
+    "source": "// change via external file",
     "type": "text/javascript"
   },
   "schema": {

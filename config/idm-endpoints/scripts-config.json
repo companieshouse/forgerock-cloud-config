@@ -36,7 +36,7 @@
     ],
     "scheduledRecons" : [
         {
-            "scheduleName": "ds-backup",
+            "scheduleName": "alphaUserToDSbackupRecon",
             "cronExp": "0 0 * * * ?",
             "mappingName": "managedAlpha_user_systemDsbackupAccount"
         }

@@ -152,7 +152,6 @@ const updateScripts = async (argv) => {
                 endTime: null,
                 concurrentExecution: false,
                 previousRunDate: null,
-                saveToConfig: false,
                 isCron: false
               }
 
@@ -186,8 +185,7 @@ const updateScripts = async (argv) => {
               startTime: null,
               endTime: null,
               concurrentExecution: false,
-              previousRunDate: null,
-              saveToConfig: false
+              previousRunDate: null
             }
 
             const requestUrl = `${FIDC_URL}/openidm/scheduler/job/${schedule.scheduleName}`

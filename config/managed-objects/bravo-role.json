@@ -6,15 +6,15 @@
     "type": "text/javascript"
   },
   "postCreate": {
-    "source": "require('roles/postOperation-roles').manageTemporalConstraints(resourceName);",
+    "source": "// change via external file",
     "type": "text/javascript"
   },
   "postDelete": {
-    "source": "require('roles/postOperation-roles').manageTemporalConstraints(resourceName);",
+    "source": "// change via external file",
     "type": "text/javascript"
   },
   "postUpdate": {
-    "source": "require('roles/postOperation-roles').manageTemporalConstraints(resourceName);",
+    "source": "// change via external file",
     "type": "text/javascript"
   },
   "schema": {
@@ -66,7 +66,12 @@
             {
               "label": "Assignment",
               "path": "managed/bravo_assignment",
-              "query": { "fields": ["name"], "queryFilter": "true" }
+              "query": {
+                "fields": [
+                  "name"
+                ],
+                "queryFilter": "true"
+              }
             }
           ],
           "reversePropertyName": "roles",
@@ -75,7 +80,9 @@
           "type": "relationship",
           "validate": true
         },
-        "notifyRelationships": ["members"],
+        "notifyRelationships": [
+          "members"
+        ],
         "returnByDefault": false,
         "title": "Managed Assignments",
         "type": "array",
@@ -129,7 +136,11 @@
               "notify": true,
               "path": "managed/bravo_user",
               "query": {
-                "fields": ["userName", "givenName", "sn"],
+                "fields": [
+                  "userName",
+                  "givenName",
+                  "sn"
+                ],
                 "queryFilter": "true"
               }
             }
@@ -157,22 +168,33 @@
         "description": "An array of temporal constraints for a role",
         "isTemporalConstraint": true,
         "items": {
-          "order": ["duration"],
+          "order": [
+            "duration"
+          ],
           "properties": {
-            "duration": { "description": "Duration", "type": "string" }
+            "duration": {
+              "description": "Duration",
+              "type": "string"
+            }
           },
-          "required": ["duration"],
+          "required": [
+            "duration"
+          ],
           "title": "Temporal Constraints Items",
           "type": "object"
         },
-        "notifyRelationships": ["members"],
+        "notifyRelationships": [
+          "members"
+        ],
         "returnByDefault": true,
         "title": "Temporal Constraints",
         "type": "array",
         "viewable": false
       }
     },
-    "required": ["name"],
+    "required": [
+      "name"
+    ],
     "title": "Bravo realm - Role",
     "type": "object"
   },
