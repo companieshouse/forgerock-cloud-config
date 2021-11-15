@@ -1,16 +1,18 @@
 /* Add any useful library functions here ...
 
 If the following commented tags are found in a script, the contents of this file
-will be merge between the tags. The reason that the contents are merged rather than
-replaced is because if the server-side script happens to be pasted back into this
-project file it will safely be replaced with the latest version of the library code when
+will be merged between the tags, replacing anything already there.
+
+The reason that the contents are merged rather than replaced is because if the server-side script happens
+to be pasted back into this project file it will safely be replaced with the latest version of the library code when
 it is next deployed.
 
 // LIBRARY START
 // LIBRARY END
 
-It is also recommended that a global var called _scriptName is declared.
+It is also recommended that a global var called "_scriptName" is declared so that logging can be refined per-script.
 
+Note that comments in this file will be removed as part of the JS minification at point of merge.
 */
 
 function _getScriptNameForDisplay () {
