@@ -34,3 +34,44 @@ function _getSelectedLanguage (requestHeaders) {
     _log("No selected language found - defaulting to EN");
     return "EN";
 }
+
+function _obfuscateEmail (email) {
+    if (!email || email.replace(/\s/g, "").length === 0 || email.replace(/\s/g, "").indexOf("@") <= 0) {
+        return email;
+    }
+
+    email = email.replace(/\s/g, "");
+
+    var at = email.indexOf("@");
+    var username = email.substring(0, at).trim();
+    var domain = email.substring(at + 1).trim();
+
+    return username.substring(0, 1).concat("*****@").concat(domain);
+}
+
+function _obfuscatePhone (phone) {
+    var NUM_CHARS_TO_SHOW = 4;
+
+    if (!phone || phone.replace(/\s/g, "").length < NUM_CHARS_TO_SHOW) {
+        return phone;
+    }
+
+    phone = phone.replace(/\s/g, "");
+
+    var buffer = "";
+    for (var i = 0; i < phone.length - NUM_CHARS_TO_SHOW; i++) {
+        buffer = buffer + "*";
+    }
+
+    buffer = buffer + phone.substring(phone.length - NUM_CHARS_TO_SHOW);
+
+    if (buffer.length > 6) {
+        buffer = buffer.substring(0, 5).concat(" ") + buffer.substring(5);
+    }
+
+    if (buffer.length > 9) {
+        buffer = buffer.substring(0, 9).concat(" ") + buffer.substring(9);
+    }
+
+    return buffer;
+}
