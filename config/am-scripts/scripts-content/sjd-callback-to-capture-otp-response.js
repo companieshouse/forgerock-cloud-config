@@ -1,3 +1,5 @@
+var _scriptName = "SJD CAPTURE OTP RESPONSE";
+
 var NodeOutcome = {
     CORRECT: "correct",
     INCORRECT: "incorrect",
@@ -27,10 +29,6 @@ var fr = JavaImporter(
     java.lang.String
 );
 
-function tag (message) {
-    return "SJD ***".concat(config.nodeName).concat(" ").concat(message);
-}
-
 function getMfaRouteOptions (mfaRoute) {
     if (mfaRoute === "sms") {
         return ["RESEND", "NEXT"];
@@ -45,7 +43,7 @@ var notificationId = transientState.get("notificationId");
 var mfaRoute = sharedState.get("mfa-route");
 var otpError = transientState.get("error");
 
-logger.error("[LOGIN MFA CALLBACK] Found OTP Error : " + otpError);
+_log("Found OTP Error : " + otpError);
 
 try {
     var userId = sharedState.get("_id");
@@ -53,30 +51,30 @@ try {
     if (mfaRoute === "sms") {
         if (idRepository.getAttribute(userId, "telephoneNumber").iterator().hasNext()) {
             phoneNumber = idRepository.getAttribute(userId, "telephoneNumber").iterator().next();
-            logger.error("[LOGIN MFA CALLBACK] phoneNumber : " + phoneNumber);
+            _log("phoneNumber : " + phoneNumber);
         } else {
-            logger.error("[LOGIN MFA CALLBACK] Couldn't find telephoneNumber");
+            _log("Couldn't find telephoneNumber");
             // TODO Better handling of error
         }
     } else if (mfaRoute === "email") {
         var isChangeEmail = sharedState.get("isChangeEmail");
         if (isChangeEmail) {
             emailAddress = sharedState.get("newEmail");
-            logger.error("[LOGIN MFA CALLBACK] emailAddress from change email journey: " + emailAddress);
+            _log("emailAddress from change email journey: " + emailAddress);
         } else {
             if (idRepository.getAttribute(userId, "mail").iterator().hasNext()) {
                 emailAddress = idRepository.getAttribute(userId, "mail").iterator().next();
-                logger.error("[LOGIN MFA CALLBACK] emailAddress : " + emailAddress);
+                _log("emailAddress : " + emailAddress);
             } else {
-                logger.error("[LOGIN MFA CALLBACK] Couldn't find emailAddress");
+                _log("Couldn't find emailAddress");
                 // TODO Better handling of error
             }
         }
     } else {
-        logger.error("[LOGIN MFA CALLBACK] Couldn't determine route used for sending MFA code");
+        _log("Couldn't determine route used for sending MFA code");
     }
 } catch (e) {
-    logger.error("[LOGIN MFA CALLBACK] Error retrieving user details: " + e);
+    _log("Error retrieving user details: " + e);
 }
 
 if (callbacks.isEmpty()) {
@@ -118,20 +116,23 @@ if (callbacks.isEmpty()) {
     var otp = fr.String(callbacks.get(3).getPassword());
     var correctOtp = sharedState.get(config.otpSharedStateVariable);
 
-    logger.message(tag("Resend = " + resend + ", correctOtp = " + correctOtp));
+    _log("Resend = " + resend + ", correctOtp = " + correctOtp);
 
     if (resend === "true") {
-        logger.message(tag("Resend requested"));
+        _log("Resend requested");
         outcome = NodeOutcome.RESEND;
     } else if (!correctOtp) {
-        logger.error(tag("No OTP in shared state"));
+        _log("No OTP in shared state");
         outcome = NodeOutcome.ERROR;
     } else if (!otp.equals(correctOtp)) {
-        logger.message(tag("Incorrect OTP"));
+        _log("Incorrect OTP");
         outcome = NodeOutcome.INCORRECT;
     } else {
-        logger.message(tag("Correct OTP"));
+        _log("Correct OTP");
         outcome = NodeOutcome.CORRECT;
     }
 
 }
+
+// LIBRARY START
+// LIBRARY END
