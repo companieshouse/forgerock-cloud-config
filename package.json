@@ -19,6 +19,7 @@
     "fs-extra": "^9.1.0",
     "node-fetch": "^2.6.1",
     "replace-in-file": "^6.2.0",
+    "uglify-js": "^3.14.3",
     "yargs": "^16.2.0"
   },
   "devDependencies": {
