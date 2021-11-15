@@ -101,7 +101,11 @@ const updateScripts = async (argv) => {
             );
 
             if (libraryFunctionsScript) {
-                const uglified = uglifyJS.minify(libraryFunctionsScript);
+                const uglified = uglifyJS.minify(libraryFunctionsScript, {
+                    output: {
+                        max_line_len: 140
+                    }
+                });
 
                 if (uglified.error) {
                     throw new Error("Failed to minify Library Functions Script!");
