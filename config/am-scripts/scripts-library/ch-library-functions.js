@@ -65,7 +65,7 @@ function _obfuscatePhone (phone) {
 
     buffer = buffer + phone.substring(phone.length - NUM_CHARS_TO_SHOW);
 
-    if (buffer.length > 6) {
+    if (buffer.length > 5) {
         buffer = buffer.substring(0, 5).concat(" ") + buffer.substring(5);
     }
 
