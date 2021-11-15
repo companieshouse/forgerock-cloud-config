@@ -137,7 +137,7 @@
     ],
     "tree": {
       "_id": "CHVerifyReg",
-      "description": "Verify Registration tree for CH Users",
+      "description": "Registration tree for CH Users - Second Part (email verification and account creation)",
       "identityResource": "managed/alpha_user",
       "uiConfig": {},
       "entryNodeId": "c23cf0f2-e3fa-4838-a45b-2f7f11cb4eb6",

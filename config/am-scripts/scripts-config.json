@@ -32,6 +32,21 @@
         },
         {
             "payload": {
+                "_id": "3e1aa9b2-7ca9-4292-8378-a08b27f09fd5",
+                "name": "CH - Registration - Resend email or Change Address",
+                "description": "Resend registration email or Change Address",
+                "script": "<replace>",
+                "language": "JAVASCRIPT",
+                "context": "AUTHENTICATION_TREE_DECISION_NODE",
+                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "creationDate": 1436807766258,
+                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+                "lastModifiedDate": 1436807766258
+            },
+            "filename": "ch-registration-resend-email-confirm.js"
+        },
+        {
+            "payload": {
                 "_id": "a15a784a-489e-49ee-af79-a7153447c843",
                 "name": "CH - Enter and confirm new password",
                 "description": "Enter and confirm a new password (shared between Registration, Pwd Reset, Onboarding)",
