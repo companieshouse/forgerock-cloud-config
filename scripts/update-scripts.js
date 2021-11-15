@@ -20,7 +20,7 @@ const updateScripts = async (argv) => {
             .filter((name) => path.extname(name) === ".json") // Filter out any non JSON files
             .map((filename) => require(path.join(dir, filename))); // Map JSON file content to an array
 
-        let libraryFunctionsScriptCompressed = getLibraryFunctionsScriptCompressed(dir);
+        let libraryFunctionsScriptMinified = getLibraryFunctionsScriptMinified(dir);
 
         // Update each script
         await Promise.all(
@@ -42,8 +42,8 @@ const updateScripts = async (argv) => {
                             { encoding: "utf-8" }
                         );
 
-                        const mergedScript = libraryFunctionsScriptCompressed ?
-                            mergeOriginalWithLibraryFunctionsScriptCompressed(originalScript, libraryFunctionsScriptCompressed)
+                        const mergedScript = libraryFunctionsScriptMinified ?
+                            mergeOriginalWithLibraryFunctionsScriptMinified(originalScript, libraryFunctionsScriptMinified)
                             : originalScript;
 
                         script.payload.script = Buffer.from(mergedScript).toString("base64");
@@ -69,8 +69,8 @@ const updateScripts = async (argv) => {
         process.exit(1);
     }
 
-    function mergeOriginalWithLibraryFunctionsScriptCompressed (originalScript, libraryScriptCompressed) {
-        if (!originalScript || !libraryScriptCompressed) {
+    function mergeOriginalWithLibraryFunctionsScriptMinified (originalScript, libraryScriptMinified) {
+        if (!originalScript || !libraryScriptMinified) {
             return originalScript;
         }
 
@@ -85,13 +85,13 @@ const updateScripts = async (argv) => {
         }
 
         originalScript = originalScript.substring(0, startMarker + LIBRARY_START.length)
-            .concat("\n").concat(libraryScriptCompressed).concat("\n")
+            .concat("\n").concat(libraryScriptMinified).concat("\n")
             .concat(originalScript.substring(endMarker));
 
         return originalScript;
     }
 
-    function getLibraryFunctionsScriptCompressed (dir) {
+    function getLibraryFunctionsScriptMinified (dir) {
         const libraryFunctionsFile = `${dir}/scripts-library/ch-library-functions.js`;
 
         if (fs.existsSync(libraryFunctionsFile)) {
