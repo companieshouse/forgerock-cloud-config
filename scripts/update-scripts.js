@@ -20,7 +20,7 @@ const updateScripts = async (argv) => {
       .filter((name) => path.extname(name) === '.json') // Filter out any non JSON files
       .map((filename) => require(path.join(dir, filename))) // Map JSON file content to an array
 
-    let libraryFunctionsScriptMinified = getLibraryFunctionsScriptMinified(dir)
+    const libraryFunctionsScriptMinified = getLibraryFunctionsScriptMinified(dir)
 
     // Update each script
     await Promise.all(
@@ -42,8 +42,8 @@ const updateScripts = async (argv) => {
               { encoding: 'utf-8' }
             )
 
-            const mergedScript = libraryFunctionsScriptMinified ?
-              mergeOriginalWithLibraryFunctionsScriptMinified(originalScript, libraryFunctionsScriptMinified)
+            const mergedScript = libraryFunctionsScriptMinified
+              ? mergeOriginalWithLibraryFunctionsScriptMinified(originalScript, libraryFunctionsScriptMinified)
               : originalScript
 
             script.payload.script = Buffer.from(mergedScript).toString('base64')
