@@ -16,11 +16,23 @@ Note that comments in this file will be removed as part of the JS minification a
 */
 
 function _getScriptNameForDisplay () {
-    return _scriptName ? "[" + _scriptName + "]" : "";
+    return (typeof _scriptName !== "undefined" && _scriptName) ? "[" + _scriptName + "]" : "";
 }
 
-function _log (message) {
-    logger.error("[CHLOG]".concat(_getScriptNameForDisplay()).concat(" ").concat(message));
+function _log (message, logLevel) {
+    if (!logLevel) {
+        logLevel = "ERROR";
+    }
+
+    var chLogMarker = "[CHLOG]";
+
+    if (logLevel === "MESSAGE" && logger.messageEnabled()) {
+        logger.message(chLogMarker.concat(_getScriptNameForDisplay()).concat(" ").concat(message));
+    } else if (logLevel === "WARNING" && logger.warningEnabled()) {
+        logger.warning(chLogMarker.concat(_getScriptNameForDisplay()).concat(" ").concat(message));
+    } else if (logLevel === "ERROR" && logger.errorEnabled()) {
+        logger.error(chLogMarker.concat(_getScriptNameForDisplay()).concat(" ").concat(message));
+    }
 }
 
 function _getSelectedLanguage (requestHeaders) {
@@ -74,4 +86,25 @@ function _obfuscatePhone (phone) {
     }
 
     return buffer;
+}
+
+function _getJourneyName () {
+    var journeyName = undefined;
+    var authIndexType = requestParameters.get("authIndexType");
+
+    if (authIndexType) {
+        var ait = authIndexType.get(0);
+        if (ait) {
+            var authIndexValue = requestParameters.get("authIndexValue");
+            if (authIndexValue) {
+                var aiv = authIndexValue.get(0);
+                if (aiv) {
+                    journeyName = aiv;
+                }
+            }
+        }
+    }
+
+    _log("Resolved Journey Name as : " + journeyName);
+    return journeyName;
 }
