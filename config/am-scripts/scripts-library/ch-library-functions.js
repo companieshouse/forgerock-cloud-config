@@ -19,8 +19,20 @@ function _getScriptNameForDisplay () {
     return _scriptName ? "[" + _scriptName + "]" : "";
 }
 
-function _log (message) {
-    logger.error("[CHLOG]".concat(_getScriptNameForDisplay()).concat(" ").concat(message));
+function _log (message, logLevel) {
+    if (!logLevel) {
+        logLevel = "ERROR";
+    }
+
+    var chLogMarker = "[CHLOG]";
+
+    if (logLevel === "MESSAGE" && logger.messageEnabled()) {
+        logger.message(chLogMarker.concat(_getScriptNameForDisplay()).concat(" ").concat(message));
+    } else if (logLevel === "WARNING" && logger.warningEnabled()) {
+        logger.warning(chLogMarker.concat(_getScriptNameForDisplay()).concat(" ").concat(message));
+    } else if (logLevel === "ERROR" && logger.errorEnabled()) {
+        logger.error(chLogMarker.concat(_getScriptNameForDisplay()).concat(" ").concat(message));
+    }
 }
 
 function _getSelectedLanguage (requestHeaders) {
