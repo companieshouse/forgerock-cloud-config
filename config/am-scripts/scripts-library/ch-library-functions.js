@@ -24,12 +24,14 @@ function _log (message, logLevel) {
         logLevel = "ERROR";
     }
 
+    var chLogMarker = "[CHLOG]";
+
     if (logLevel === "MESSAGE" && logger.messageEnabled()) {
-        logger.message("[CHLOG]".concat(_getScriptNameForDisplay()).concat(" ").concat(message));
+        logger.message(chLogMarker.concat(_getScriptNameForDisplay()).concat(" ").concat(message));
     } else if (logLevel === "WARNING" && logger.warningEnabled()) {
-        logger.warning("[CHLOG]".concat(_getScriptNameForDisplay()).concat(" ").concat(message));
+        logger.warning(chLogMarker.concat(_getScriptNameForDisplay()).concat(" ").concat(message));
     } else if (logLevel === "ERROR" && logger.errorEnabled()) {
-        logger.error("[CHLOG]".concat(_getScriptNameForDisplay()).concat(" ").concat(message));
+        logger.error(chLogMarker.concat(_getScriptNameForDisplay()).concat(" ").concat(message));
     }
 }
 
