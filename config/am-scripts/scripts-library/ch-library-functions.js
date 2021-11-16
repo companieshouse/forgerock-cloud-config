@@ -16,7 +16,7 @@ Note that comments in this file will be removed as part of the JS minification a
 */
 
 function _getScriptNameForDisplay () {
-    return (typeof _scriptName !== "undefined" && _scriptName) ? "[" + _scriptName + "]" : "cc";
+    return (typeof _scriptName !== "undefined" && _scriptName) ? "[" + _scriptName + "]" : "";
 }
 
 function _log (message, logLevel) {
