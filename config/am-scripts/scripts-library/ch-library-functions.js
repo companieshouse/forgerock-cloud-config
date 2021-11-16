@@ -87,3 +87,24 @@ function _obfuscatePhone (phone) {
 
     return buffer;
 }
+
+function _getJourneyName () {
+    var journeyName = undefined;
+    var authIndexType = requestParameters.get("authIndexType");
+
+    if (authIndexType) {
+        var ait = authIndexType.get(0);
+        if (ait) {
+            var authIndexValue = requestParameters.get("authIndexValue");
+            if (authIndexValue) {
+                var aiv = authIndexValue.get(0);
+                if (aiv) {
+                    journeyName = aiv;
+                }
+            }
+        }
+    }
+
+    _log("Resolved Journey Name as : " + journeyName);
+    return journeyName;
+}
