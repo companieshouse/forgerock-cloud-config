@@ -1,4 +1,4 @@
-var _scriptName = "REGISTRATION - RESEND EMAIL";
+var _scriptName = "INVITE USER CONFIRM EMAIL SEND";
 _log("Started");
 
 var fr = JavaImporter(
@@ -13,27 +13,27 @@ var fr = JavaImporter(
 var NodeOutcome = {
     ERROR: "error",
     CHANGE_EMAIL: "change_email",
-    RESEND: "resend"
+    SEND: "send"
 }
 
 var ConfirmIndex = {
-    RESEND: 0,
+    SEND: 0,
     CHANGE_EMAIL: 1
 }
 
 // main execution flow
-var email = sharedState.get("objectAttributes").get("mail");
+var email = sharedState.get("email");
 try {
     if (callbacks.isEmpty()) {
 
         action = fr.Action.send(
-            new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "Do you want to resend the email to ".concat(email).concat("?")),
+            new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, "Check the authorised person's email address before we send the email to ".concat(email)),
             new fr.ConfirmationCallback(
-                "Do you want to resend email or change address?",
+                "Check the authorised person's email address before we send the email",
                 fr.ConfirmationCallback.INFORMATION,
-                ["RESEND", "CHANGE_EMAIL"],
+                ["SEND", "CHANGE_EMAIL"],
                 0),
-            new fr.HiddenValueCallback("stage", "REGISTRATION_RESEND"),
+            new fr.HiddenValueCallback("stage", "INVITE_USER_CONFIRM"),
             new fr.HiddenValueCallback(
                 "pagePropsJSON",
                 JSON.stringify(
@@ -47,12 +47,9 @@ try {
         var confirmIndex = callbacks.get(1).getSelectedIndex();
         _log("confirm resend choice: " + confirmIndex);
 
-        if (confirmIndex === ConfirmIndex.RESEND) {
-            sharedState.put("resendEmail", true);
-            action = fr.Action.goTo(NodeOutcome.RESEND).build();
-
+        if (confirmIndex === ConfirmIndex.SEND) {
+            action = fr.Action.goTo(NodeOutcome.SEND).build();
         } else {
-            sharedState.put("resendEmail", false);
             action = fr.Action.goTo(NodeOutcome.CHANGE_EMAIL).build();
         }
     }
@@ -66,7 +63,7 @@ try {
     ).build()
 }
 
-_log("Outcome = " + _getOutcomeForDisplay());
+//_log("Outcome = " + outcome);
 
 // LIBRARY START
 // LIBRARY END

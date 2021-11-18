@@ -19,6 +19,9 @@
   
 */
 
+var _scriptName = "INVITE USER INPUT COLLECTOR";
+_log("Started");
+
 var fr = JavaImporter(
     org.forgerock.openam.auth.node.api.Action,
     javax.security.auth.callback.NameCallback,
@@ -67,19 +70,24 @@ try {
         var email = callbacks.get(1).getName();
         var userId = sharedState.get("_id");
         if (!validateEmail(email)) {
-            logger.error("[INVITE USER INPUT] Invalid email: " + email);
+            _log("Invalid email: " + email);
             action = fr.Action.goTo(NodeOutcome.EMAIL_INVALID_ERROR).build();
         } else {
-            logger.error("[INVITE USER INPUT] company number: " + JSON.parse(companyData).number);
-            logger.error("[INVITE USER INPUT] invited email: " + email);
-            logger.error("[INVITE USER INPUT] inviter ID: " + userId);
+            _log("company number: " + JSON.parse(companyData).number);
+            _log("invited email: " + email);
+            _log("inviter ID: " + userId);
 
             sharedState.put("email", email);
             action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
         }
     }
 } catch (e) {
-    logger.error("[INVITE USER INPUT] error: " + e);
+    _log("error: " + e);
     sharedState.put("errorMessage", e.toString());
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
 }
+
+_log("Outcome = " + _getOutcomeForDisplay());
+
+// LIBRARY START
+// LIBRARY END

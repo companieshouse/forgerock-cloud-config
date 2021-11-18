@@ -805,6 +805,22 @@
     },
     {
       "payload": {
+        "_id": "6afae8cf-4428-4b98-a281-37d823123e1f",
+        "name": "CH - Invite User - Ask for Email Sending confirmation",
+        "description": "Ask for Email Sending confirmation.",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-invite-user-send-email-confirm.js"
+    },
+    {
+      "payload": {
         "_id": "9130bbdf-bb9d-4ef9-8226-c95c6192c1d7",
         "name": "CH - Onboard User - Verify token",
         "description": "Verify token, user existence, invite and onboarding date",

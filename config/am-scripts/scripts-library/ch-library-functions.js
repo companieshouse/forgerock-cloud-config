@@ -19,6 +19,10 @@ function _getScriptNameForDisplay () {
   return (typeof _scriptName !== 'undefined' && _scriptName) ? '[' + _scriptName + ']' : ''
 }
 
+function _getOutcomeForDisplay () {
+  return (typeof outcome !== 'undefined' && outcome) ? '[' + outcome + ']' : ''
+}
+
 function _log (message, logLevel) {
   if (!logLevel) {
     logLevel = 'ERROR'

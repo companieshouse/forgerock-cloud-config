@@ -277,7 +277,7 @@ try {
         }
     }
 } catch (e) {
-    logger.error("[COMPANY INVITE - SEND EMAIL] Error : " + e);
+    logger.error("[SCRS - SEND EMAIL] Error : " + e);
     sharedState.put("errorMessage", e.toString());
     // outcome = NodeOutcome.ERROR;
     sendErrorCallbacks("error", e.toString());

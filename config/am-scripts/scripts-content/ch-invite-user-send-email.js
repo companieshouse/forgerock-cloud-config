@@ -22,6 +22,9 @@
     - generic error
 */
 
+var _scriptName = "COMPANY INVITE SEND EMAIL";
+_log("Started");
+
 var fr = JavaImporter(
     org.forgerock.openam.auth.node.api.Action,
     java.lang.Math,
@@ -86,7 +89,7 @@ function getKey(secret, keyType) {
 
 function buildJwt(claims, issuer, audience, jwtType) {
 
-    logger.message("Building response JWT")
+    _log("Building response JWT")
 
     var signingKey = getKey(config.signingKey, KeyType.SIGNING)
     var signingHandler = new fr.SecretHmacSigningHandler(signingKey);
@@ -147,7 +150,7 @@ function buildJwt(claims, issuer, audience, jwtType) {
             break;
 
         default:
-            logger.error("Unknown jwt type " + jwtType)
+            _log("Unknown jwt type " + jwtType)
 
     }
 
@@ -169,7 +172,7 @@ function extractInviteDataFromState() {
             companyName: JSON.parse(companyData).name
         }
     } catch (e) {
-        logger.error("[COMPANY INVITE - SEND EMAIL] error in fetching objectAttributes : " + e);
+        _log("[COMPANY INVITE - SEND EMAIL] error in fetching objectAttributes : " + e);
         return false;
     }
 }
@@ -209,7 +212,7 @@ function buildReturnUrl(invitedEmail, companyNumber){
         var onboardingJwt = buildJwt(obnboardingClaims, config.issuer, config.audience, JwtType.SIGNED_THEN_ENCRYPTED);
         //onboardingJwtResponse = buildOnboardingToken(invitedEmail, companyNumber);
         if (!onboardingJwt) {
-            logger.error("[COMPANY INVITE - SEND EMAIL] Error while creating Onboarding JWT");
+            _log("[COMPANY INVITE - SEND EMAIL] Error while creating Onboarding JWT");
             return {
                 success: false,
                 message: "Error while creating Onboarding JWT"
@@ -230,14 +233,14 @@ function buildReturnUrl(invitedEmail, companyNumber){
 //sends the email (via Notify) to the recipient using the given JWT
 function sendEmail(language, invitedEmail, companyName, inviterName, returnUrl) {
     
-    logger.error("[COMPANY INVITE - SEND EMAIL] params: " + invitedEmail + " - " + companyName + " - " + inviterName);
+    _log("[COMPANY INVITE - SEND EMAIL] params: " + invitedEmail + " - " + companyName + " - " + inviterName);
 
     var notifyJWT = transientState.get("notifyJWT");
     var templates = transientState.get("notifyTemplates");
     
-    logger.error("[COMPANY INVITE - SEND EMAIL] JWT from transient state: " + notifyJWT);
-    logger.error("[COMPANY INVITE - SEND EMAIL] Templates from transient state: " + templates);
-    logger.error("[COMPANY INVITE - SEND EMAIL] RETURN URL: " + returnUrl);
+    _log("[COMPANY INVITE - SEND EMAIL] JWT from transient state: " + notifyJWT);
+    _log("[COMPANY INVITE - SEND EMAIL] Templates from transient state: " + templates);
+    _log("[COMPANY INVITE - SEND EMAIL] RETURN URL: " + returnUrl);
 
     request.setUri("https://api.notifications.service.gov.uk/v2/notifications/email");
     try {
@@ -251,7 +254,7 @@ function sendEmail(language, invitedEmail, companyName, inviterName, returnUrl) 
             }
         }
     } catch (e) {
-        logger.error("[COMPANY INVITE - SEND EMAIL] Error while preparing request for Notify: " + e);
+        _log("[COMPANY INVITE - SEND EMAIL] Error while preparing request for Notify: " + e);
         return {
             success: false,
             message: "[COMPANY INVITE - SEND EMAIL] Error while preparing request for Notify: ".concat(e)
@@ -265,23 +268,33 @@ function sendEmail(language, invitedEmail, companyName, inviterName, returnUrl) 
 
     var response = httpClient.send(request).get();
     var notificationId;
-    logger.error("[COMPANY INVITE - SEND EMAIL] Notify Response: " + response.getStatus().getCode() + " - " + response.getEntity().getString());
+    var notifyErrorMessage;
+    _log("[COMPANY INVITE - SEND EMAIL] Notify Response: " + response.getStatus().getCode() + " - " + response.getEntity().getString());
+
 
     try {
         notificationId = JSON.parse(response.getEntity().getString()).id;
-        transientState.put("notificationId", notificationId);
-        logger.error("[COMPANY INVITE - SEND EMAIL] Notify ID: " + notificationId);
     } catch (e) {
-        logger.error("[COMPANY INVITE - SEND EMAIL] Error while parsing Notify response: " + e);
+        _log("[COMPANY INVITE - SEND EMAIL] Error while parsing Notify response: " + e);
         return {
             success: false,
             message: "[COMPANY INVITE - SEND EMAIL] Error while parsing Notify response: ".concat(e)
         };
     }
+    
+    if(response.getStatus().getCode() == 201){
+        transientState.put("notificationId", notificationId);
+        _log("[COMPANY INVITE - SEND EMAIL] Notify ID: " + notificationId);
+    } else {
+        if (JSON.parse(response.getEntity().getString()).errors.length > 0){
+            notifyErrorMessage = JSON.parse(response.getEntity().getString()).errors[0].message
+        }
+        _log("[COMPANY INVITE - SEND EMAIL] Email not sent");
+    }
 
     return {
         success: (response.getStatus().getCode() == 201),
-        message: (response.getStatus().getCode() == 201) ? ("Message sent") : response.getEntity().getString()
+        message: (response.getStatus().getCode() == 201) ? ("Message sent") : notifyErrorMessage
     };
 }
 
@@ -289,10 +302,10 @@ function sendEmail(language, invitedEmail, companyName, inviterName, returnUrl) 
 function getSelectedLanguage(requestHeaders) {
     if (requestHeaders && requestHeaders.get("Chosen-Language")) {
         var lang = requestHeaders.get("Chosen-Language").get(0);
-        logger.error("[COMPANY INVITE - SEND EMAIL] selected language: " + lang);
+        _log("[COMPANY INVITE - SEND EMAIL] selected language: " + lang);
         return lang;
     }
-    logger.error("[COMPANY INVITE - SEND EMAIL] no selected language found - defaulting to EN");
+    _log("[COMPANY INVITE - SEND EMAIL] no selected language found - defaulting to EN");
     return 'EN';
 }
 
@@ -334,11 +347,16 @@ try {
                 
                 action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
             } else {
-                sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ERROR", JSON.stringify(sendEmailResult));
+                sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ERROR", sendEmailResult.message);
             }
         }        
     }
 } catch (e) {
-    logger.error("[COMPANY INVITE - SEND EMAIL] Error : " + e);
+    _log("[COMPANY INVITE - SEND EMAIL] Error : " + e);
     sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ERROR", e);
 }
+
+_log("Outcome = " + _getOutcomeForDisplay());
+
+// LIBRARY START
+// LIBRARY END

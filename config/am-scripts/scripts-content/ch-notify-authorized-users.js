@@ -26,6 +26,8 @@ function extractEventFromState () {
     try {
         var notificationDetails = JSON.parse(sharedState.get("companyNotification"));
 
+        _log("Notification data: " + sharedState.get("companyNotification"));
+
         if (!notificationDetails.action || !notificationDetails.companyNumber) {
             _log("Missing params to send email to authz users");
             return false;
@@ -80,6 +82,7 @@ function sendErrorCallbacks (token, message) {
 function getUserData (email, id) {
     try {
         var searchTerm = email ? ("/openidm/managed/alpha_user?_queryFilter=userName+eq+%22" + email + "%22") : "/openidm/managed/alpha_user?_queryFilter=_id+eq+%22" + id + "%22";
+        _log("User Search term: " + searchTerm);
         var idmUserEndpoint = FIDC_ENDPOINT.concat(searchTerm);
         var request = new org.forgerock.http.protocol.Request();
         var accessToken = transientState.get("idmAccessToken");
@@ -104,7 +107,7 @@ function getUserData (email, id) {
         if (response.getStatus().getCode() === 200) {
             var searchResponse = JSON.parse(response.getEntity().getString());
             if (searchResponse && searchResponse.result && searchResponse.result.length > 0) {
-                _log("User found: " + searchResponse.result[0].toString());
+                _log("[CHECK USER EXIST] User found: " + searchResponse.result[0].toString());
                 return {
                     success: true,
                     user: searchResponse.result[0]
@@ -117,14 +120,14 @@ function getUserData (email, id) {
                 };
             }
         } else {
-            _log("Error while checking user existence: " + response.getStatus().getCode());
+            _log("[CHECK USER EXIST] Error while checking user existence: " + response.getStatus().getCode());
             return {
                 success: false,
                 message: "[CHECK USER EXIST] Error while checking user existence: " + response.getStatus().getCode()
             };
         }
     } catch (e) {
-        _log("Error : " + e);
+        _log("[CHECK USER EXIST] Error : " + e);
         return {
             success: false,
             message: "[CHECK USER EXIST] Error: " + e
@@ -361,7 +364,7 @@ try {
     outcome = NodeOutcome.ERROR;
 }
 
-_log("Outcome = " + outcome);
+_log("Outcome = " + _getOutcomeForDisplay());
 
 // LIBRARY START
 // LIBRARY END
