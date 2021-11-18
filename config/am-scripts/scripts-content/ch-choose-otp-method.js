@@ -15,7 +15,7 @@ var fr = JavaImporter(
 var phoneNumber = ''
 var emailAddress = ''
 
-_log('Starting request of OTP Method')
+_log('Starting request of Choose OTP Method')
 
 try {
   var userId = sharedState.get('_id')

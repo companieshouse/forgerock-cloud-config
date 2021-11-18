@@ -1461,6 +1461,38 @@
     },
     {
       "payload": {
+        "_id": "39d33cdf-0fb9-46c7-8180-51b141cf321f",
+        "name": "CH - Resend OTP via MFA Route",
+        "description": "Resend OTP via MFA Route",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-resend-otp-via-mfa-route.js"
+    },
+    {
+      "payload": {
+        "_id": "da9c499e-d364-42df-a645-fa509c625622",
+        "name": "CH - Callback to capture OTP response",
+        "description": "Callback to capture OTP response",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-callback-to-capture-otp-response.js"
+    },
+    {
+      "payload": {
         "_id": "610ba200-db35-4c44-80c9-a40d36cc6fc0",
         "name": "CH - Choose OTP Method",
         "description": "Choose OTP Method",
@@ -1474,6 +1506,22 @@
         "lastModifiedDate": 1617810491969
       },
       "filename": "ch-choose-otp-method.js"
+    },
+    {
+      "payload": {
+        "_id": "b6d1b635-6216-4719-bb93-eff19a561084",
+        "name": "CH - MFA Sub-Flow Setup",
+        "description": "MFA Sub-Flow Setup",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-mfa-sub-flow-setup.js"
     }
   ]
 }
