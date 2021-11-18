@@ -169,7 +169,7 @@ try {
 
         if (actionParam === InviteActions.ACCEPT) {
             var acceptResponse = respondToInvite(userId, companyData, InviteActions.ACCEPT);
-
+            _log("ACCEPT INVITE RESPONSE: " + JSON.stringify(acceptResponse));
             if (!acceptResponse.success) {
                 _log("Error while setting relationship status to confirmed");
                 sendErrorCallbacks("INVITE_USER_ERROR", "INVITE_USER_ACCEPT_INVITE_ERROR", acceptResponse.message);
@@ -204,6 +204,9 @@ try {
                 outcome = NodeOutcome.SUCCESS_RESPOND;
             }
         }
+
+        _log("Completed, Outcome = " + outcome);
+
     }
 } catch (e) {
     _log("Error : " + e);
@@ -211,7 +214,7 @@ try {
     outcome = NodeOutcome.ERROR;
 }
 
-_log("Completed, Outcome = " + outcome);
+_log("Outcome = " + _getOutcomeForDisplay());
 
 // LIBRARY START
 // LIBRARY END

@@ -9,12 +9,13 @@ environment specific variables.
 -->
 **FIDC Update Required:**
 - [ ] applications (AM)
+- [ ] agents (AM)
 - [ ] scripts (AM)
-- [ ] auth-trees (AM)
+- [ ] auth trees (AM)
 - [ ] connectors/mappings (IDM)
 - [ ] cors (AM/IDM)
-- [ ] idm-access-config (IDM)
-- [ ] idm-endpoints (IDM)
+- [ ] idm access config (IDM)
+- [ ] idm custom endpoints / schedules (IDM)
 - [ ] managed-objects (IDM)
 - [ ] password-policy (IDM)
 - [ ] services (AM)

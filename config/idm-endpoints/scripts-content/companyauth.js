@@ -354,9 +354,10 @@
         if (callerStatus === AuthorisationStatus.CONFIRMED &&
             subjectStatus === AuthorisationStatus.CONFIRMED &&
             newStatus === AuthorisationStatus.CONFIRMED) {
-            log("Caller is already authorised - subject status for company is already CONFIRMED - Status change allowed");
+            log("Caller is already authorised - subject status for company is already CONFIRMED - Status change NOT allowed");
             return {
-                allowed: true
+                message: "The subject is already authorised for the company.",
+                allowed: false
             };
         }
 
