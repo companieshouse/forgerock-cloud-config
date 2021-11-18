@@ -28,7 +28,6 @@ var fr = JavaImporter(
 )
 
 function getMfaRouteOptions (mfaRoute) {
-
   /*
   if (mfaRoute === 'sms') {
     return ['RESEND', 'NEXT']
