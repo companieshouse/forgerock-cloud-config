@@ -28,11 +28,8 @@ var fr = JavaImporter(
 )
 
 function getMfaRouteOptions (mfaRoute) {
-  if (mfaRoute === 'sms') {
-    return ['RESEND', 'NEXT']
-  } else if (mfaRoute === 'email') {
-    return ['RESEND', 'CHANGE EMAIL', 'NEXT']
-  } else return []
+  // mfaRoute = sms or email
+  return ['RESEND', 'NEXT']
 }
 
 var phoneNumber = ''
