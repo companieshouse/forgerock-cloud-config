@@ -32,4 +32,18 @@ describe('file-filter', () => {
     const useIt = fileFilter('this-is-my-file', '~my-other-file')
     expect(useIt).toEqual(false)
   })
+
+  it('matches filter is undefined', async () => {
+    expect.assertions(1)
+
+    const useIt = fileFilter('my-file', undefined)
+    expect(useIt).toEqual(true)
+  })
+
+  it('matches filter is blank', async () => {
+    expect.assertions(1)
+
+    const useIt = fileFilter('my-file', '')
+    expect(useIt).toEqual(false)
+  })
 })
