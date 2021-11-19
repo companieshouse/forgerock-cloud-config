@@ -1,27 +1,31 @@
+var _scriptName = 'CH LOAD JWT KEYS';
+
 var fr = JavaImporter(
-    org.forgerock.openam.auth.node.api.Action
-)
+  org.forgerock.openam.auth.node.api.Action
+);
 
 var NodeOutcome = {
-    SUCCESS: "true",
-    ERROR: "false"
-}
+  SUCCESS: 'true',
+  ERROR: 'false'
+};
 
 // This variable value will be replaced with the relevant value in the target environment (stored in AM secret store) 
-var chJwtSigningKey = "KLyM3tGMn0Efa0HmJfq3eJd4ZiHIDJ1/kNfUwDp9ofE=";
-var chJwtEncryptionKey = "5ATJO3doZPqg6pP4rUzn78HRnjQBwkGK01BGBTYio/U=";
+var chJwtSigningKey = 'KLyM3tGMn0Efa0HmJfq3eJd4ZiHIDJ1/kNfUwDp9ofE=';
+var chJwtEncryptionKey = '5ATJO3doZPqg6pP4rUzn78HRnjQBwkGK01BGBTYio/U=';
 
-// saves the JWT to transient state for future use
-function saveState() {
-    try {
-        transientState.put("chJwtSigningKey", chJwtSigningKey);
-        transientState.put("chJwtEncryptionKey", chJwtEncryptionKey);
-    } catch (e) {
-        logger.error("Error while setting state - " + e);
-        return NodeOutcome.ERROR;
-    }
-    return NodeOutcome.SUCCESS;
+function saveState () {
+  try {
+    transientState.put('chJwtSigningKey', chJwtSigningKey);
+    transientState.put('chJwtEncryptionKey', chJwtEncryptionKey);
+  } catch (e) {
+    _log('Error : Failed to set state - ' + e);
+    return NodeOutcome.ERROR;
+  }
+
+  return NodeOutcome.SUCCESS;
 }
 
-//main execution flow
-action = fr.Action.goTo(saveState()).build()
+action = fr.Action.goTo(saveState()).build();
+
+// LIBRARY START
+// LIBRARY END
