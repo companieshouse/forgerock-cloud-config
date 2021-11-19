@@ -25,138 +25,148 @@
     - error (stage SEND_MFA_SMS_ERROR, error while sending SMS) 
 */
 
+var _scriptName = 'CH SEND MFA SMS';
+
 var fr = JavaImporter(
-    org.forgerock.openam.auth.node.api.Action,
-    javax.security.auth.callback.TextOutputCallback,
-    com.sun.identity.authentication.callbacks.HiddenValueCallback
-)
+  org.forgerock.openam.auth.node.api.Action,
+  javax.security.auth.callback.TextOutputCallback,
+  com.sun.identity.authentication.callbacks.HiddenValueCallback
+);
 
 // sends the error callbacks
-function sendErrorCallbacks() {
-    if (callbacks.isEmpty()) {
-        action = fr.Action.send(
-            new fr.HiddenValueCallback(
-                "stage",
-                "SEND_MFA_SMS_ERROR"
-            ),
-            new fr.TextOutputCallback(
-                fr.TextOutputCallback.ERROR,
-                "The SMS could not be sent. Please try again."
-            ),
-            new fr.HiddenValueCallback(
-                "pagePropsJSON",
-                JSON.stringify({
-                    'errors': [
-                        {
-                            label: "An error occurred while sending the SMS. Please try again.",
-                            token: "SEND_MFA_SMS_ERROR"
-                        }
-                    ]
-                })
-            )
-        ).build()
-    }
+function sendErrorCallbacks () {
+  if (callbacks.isEmpty()) {
+    action = fr.Action.send(
+      new fr.HiddenValueCallback(
+        'stage',
+        'SEND_MFA_SMS_ERROR'
+      ),
+      new fr.TextOutputCallback(
+        fr.TextOutputCallback.ERROR,
+        'The SMS could not be sent. Please try again.'
+      ),
+      new fr.HiddenValueCallback(
+        'pagePropsJSON',
+        JSON.stringify({
+          'errors': [
+            {
+              label: 'An error occurred while sending the SMS. Please try again.',
+              token: 'SEND_MFA_SMS_ERROR'
+            }
+          ]
+        })
+      )
+    ).build();
+  }
 }
 
 //extracts the language form headers (default to EN)
-function getSelectedLanguage(requestHeaders) {
-    if (requestHeaders && requestHeaders.get("Chosen-Language")) {
-        var lang = requestHeaders.get("Chosen-Language").get(0);
-        logger.error("[SEND MFA SMS] selected language: " + lang);
-        return lang;
-    }
-    logger.error("[SEND MFA SMS] no selected language found - defaulting to EN");
-    return 'EN';
+function getSelectedLanguage (requestHeaders) {
+  if (requestHeaders && requestHeaders.get('Chosen-Language')) {
+    var lang = requestHeaders.get('Chosen-Language').get(0);
+    _log('selected language: ' + lang);
+    return lang;
+  }
+
+  _log('no selected language found - defaulting to EN');
+  return 'EN';
 }
 
 // sends the OTP code via text to the number specified
-function sendTextMessage(language, phoneNumber, code) {
-    var notifyJWT = transientState.get("notifyJWT");
-    var templates = transientState.get("notifyTemplates");
+function sendTextMessage (language, phoneNumber, code) {
+  var notifyJWT = transientState.get('notifyJWT');
+  var templates = transientState.get('notifyTemplates');
 
-    logger.error("[SEND MFA SMS] JWT from transient state: " + notifyJWT);
-    logger.error("[SEND MFA SMS] Templates from transient state: " + templates);
-    var request = new org.forgerock.http.protocol.Request();
-    request.setUri("https://api.notifications.service.gov.uk/v2/notifications/sms");
-    try {
-        var requestBodyJson = {
-            "phone_number": phoneNumber,
-            "template_id": language === 'EN' ? JSON.parse(templates).en_otpSms : JSON.parse(templates).cy_otpSms,
-            "personalisation": {
-                "code": code
-            }
-        }
-    } catch (e) {
-        logger.error("[SEND MFA SMS] Error while preparing request for Notify: " + e);
-        return false;
-    }
+  _log('JWT from transient state: ' + notifyJWT);
+  _log('Templates from transient state: ' + templates);
 
-    request.setMethod("POST");
-    request.getHeaders().add("Content-Type", "application/json");
-    request.getHeaders().add("Authorization", "Bearer " + notifyJWT);
-    request.getEntity().setString(JSON.stringify(requestBodyJson))
+  var request = new org.forgerock.http.protocol.Request();
+  request.setUri('https://api.notifications.service.gov.uk/v2/notifications/sms');
 
-    var notificationId;
-    var response = httpClient.send(request).get();
-    logger.error("[SEND MFA SMS] Notify Response: " + response.getStatus().getCode() + response.getCause() + response.getEntity().getString());
-
-    try {
-        notificationId = JSON.parse(response.getEntity().getString()).id;
-        logger.error("[SEND MFA SMS] Notify ID: " + notificationId);
-        transientState.put("notificationId", notificationId);
-        sharedState.put("mfa-route", "sms");
-    } catch (e) {
-        logger.error("[SEND MFA SMS] Error while parsing Notify response: " + e);
-        return false;
-    }
-
-    logger.error("[SEND MFA SMS] Notify Response: " + response.getStatus().getCode() + response.getCause() + response.getEntity().getString());
-
-    if (response.getStatus().getCode() == 201) {
-        return true;
-    }
-
+  try {
+    var requestBodyJson = {
+      'phone_number': phoneNumber,
+      'template_id': language === 'EN' ? JSON.parse(templates).en_otpSms : JSON.parse(templates).cy_otpSms,
+      'personalisation': {
+        'code': code
+      }
+    };
+  } catch (e) {
+    _log('Error while preparing request for Notify: ' + e);
     return false;
+  }
+
+  request.setMethod('POST');
+  request.getHeaders().add('Content-Type', 'application/json');
+  request.getHeaders().add('Authorization', 'Bearer ' + notifyJWT);
+  request.getEntity().setString(JSON.stringify(requestBodyJson));
+
+  var notificationId;
+  var response = httpClient.send(request).get();
+  _log('Notify Response: ' + response.getStatus().getCode() + response.getCause() + response.getEntity().getString());
+
+  try {
+    notificationId = JSON.parse(response.getEntity().getString()).id;
+
+    _log('Notify ID: ' + notificationId);
+
+    transientState.put('notificationId', notificationId);
+    sharedState.put('mfa-route', 'sms');
+  } catch (e) {
+    _log('Error while parsing Notify response: ' + e);
+    return false;
+  }
+
+  _log('Notify Response: ' + response.getStatus().getCode() + response.getCause() + response.getEntity().getString());
+
+  return response.getStatus().getCode() === 201;
 }
 
 // extracts the number from the user profile (for password reset) or from shared state (for registration)
-function extractPhoneNumber() {
-    var userId = sharedState.get("_id");
-    var isUpdatePhoneNumber = transientState.get("updatePhoneNumber");
-    if (isRegistrationMFA || isUpdatePhoneNumber) {
-        return sharedState.get("objectAttributes").get("telephoneNumber");
+function extractPhoneNumber () {
+  var userId = sharedState.get('_id');
+  var isUpdatePhoneNumber = sharedState.get('updatePhoneNumber');
+
+  if (isRegistrationMFA || isUpdatePhoneNumber) {
+    return sharedState.get('objectAttributes').get('telephoneNumber');
+  } else {
+    if (idRepository.getAttribute(userId, 'telephoneNumber').iterator().hasNext()) {
+      return idRepository.getAttribute(userId, 'telephoneNumber').iterator().next();
     } else {
-        if (idRepository.getAttribute(userId, "telephoneNumber").iterator().hasNext()) {
-            return idRepository.getAttribute(userId, "telephoneNumber").iterator().next();
-        } else {
-            logger.error("[SEND MFA SMS] Couldn't find telephoneNumber");
-            return false;
-        }
+      _log('Couldn\'t find telephoneNumber');
+      return false;
     }
+  }
 }
 
 // main execution flow
 try {
-    var code = sharedState.get("oneTimePassword");
-    var isRegistrationMFA = sharedState.get("registrationMFA");
-    logger.error("[SEND MFA SMS] Code: " + code);
+  var code = sharedState.get('oneTimePassword');
+  var isRegistrationMFA = sharedState.get('registrationMFA');
 
-    var language = getSelectedLanguage(requestHeaders);
+  _log('Code: ' + code);
 
-    var phoneNumber = extractPhoneNumber();
-    if (!phoneNumber || !code) {
-        sendErrorCallbacks();
-    }
+  var language = getSelectedLanguage(requestHeaders);
 
-    logger.error("[SEND MFA SMS] User phoneNumber: " + phoneNumber);
+  var phoneNumber = extractPhoneNumber();
+  if (!phoneNumber || phoneNumber === 'false' || !code) {
+    sendErrorCallbacks();
+  }
 
-    if (sendTextMessage(language, phoneNumber, code)) {
-        action = fr.Action.goTo("true").build();
-    } else {
-        sendErrorCallbacks();
-    }
+  _log('User phoneNumber: ' + phoneNumber);
+
+  if (sendTextMessage(language, phoneNumber, code)) {
+    action = fr.Action.goTo('true').build();
+  } else {
+    sendErrorCallbacks();
+  }
 } catch (e) {
-    logger.error("[SEND MFA SMS] An error occurred: " + e);
-    sharedState.put("errorMessage", e.toString())
-    outcome = "false";
+  _log('Error : ' + e);
+  sharedState.put('errorMessage', e.toString());
+  outcome = 'false';
 }
+
+_log('Outcome = ' + _getOutcomeForDisplay());
+
+// LIBRARY START
+// LIBRARY END

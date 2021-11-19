@@ -1,4 +1,4 @@
-var _scriptName = 'CH CHOOSE OTP'
+var _scriptName = 'CH CHOOSE OTP';
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -10,45 +10,45 @@ var fr = JavaImporter(
   javax.security.auth.callback.ChoiceCallback,
   javax.security.auth.callback.NameCallback,
   java.lang.String
-)
+);
 
-var phoneNumber = ''
-var emailAddress = ''
+var phoneNumber = '';
+var emailAddress = '';
 
-_log('Starting request of Choose OTP Method')
+_log('Starting request of Choose OTP Method');
 
 try {
-  var userId = sharedState.get('_id')
+  var userId = sharedState.get('_id');
 
-  _log('UserId : ' + userId)
+  _log('UserId : ' + userId);
 
   if (idRepository.getAttribute(userId, 'telephoneNumber').iterator().hasNext()) {
-    phoneNumber = idRepository.getAttribute(userId, 'telephoneNumber').iterator().next()
-    _log('phoneNumber : ' + phoneNumber)
+    phoneNumber = idRepository.getAttribute(userId, 'telephoneNumber').iterator().next();
+    _log('phoneNumber : ' + phoneNumber);
   } else {
-    _log('Couldn\'t find telephoneNumber')
+    _log('Couldn\'t find telephoneNumber');
   }
 
   if (idRepository.getAttribute(userId, 'mail').iterator().hasNext()) {
-    emailAddress = idRepository.getAttribute(userId, 'mail').iterator().next()
-    _log('emailAddress : ' + emailAddress)
+    emailAddress = idRepository.getAttribute(userId, 'mail').iterator().next();
+    _log('emailAddress : ' + emailAddress);
   } else {
-    _log('Couldn\'t find emailAddress')
+    _log('Couldn\'t find emailAddress');
   }
 } catch (e) {
-  _log('Error retrieving user details: ' + e)
+  _log('Error retrieving user details: ' + e);
 }
 
 var userDetailsJSON = JSON.stringify({
   'phoneNumber': _obfuscatePhone(phoneNumber),
   'emailAddress': _obfuscateEmail(emailAddress)
-})
+});
 
-_log('User Details JSON : ' + userDetailsJSON)
+_log('User Details JSON : ' + userDetailsJSON);
 
 if (callbacks.isEmpty()) {
-  var confirmMessage = 'How do you want to confirm it\'s you?'
-  var optOptions = ['email', 'text']
+  var confirmMessage = 'How do you want to confirm it\'s you?';
+  var optOptions = ['email', 'text'];
 
   action = fr.Action.send(
     new fr.ChoiceCallback(
@@ -64,19 +64,19 @@ if (callbacks.isEmpty()) {
     ),
     new fr.HiddenValueCallback('description', confirmMessage),
     new fr.HiddenValueCallback('header', confirmMessage)
-  ).build()
+  ).build();
 } else {
-  var otpMethod = callbacks.get(0).getSelectedIndexes()[0]
+  var otpMethod = callbacks.get(0).getSelectedIndexes()[0];
 
-  _log('OTP Method Requested : ' + otpMethod)
+  _log('OTP Method Requested : ' + otpMethod);
 
   if (otpMethod === 0) {
-    outcome = 'email'
+    outcome = 'email';
   } else {
-    outcome = 'text'
+    outcome = 'text';
   }
 
-  _log('Outcome = ' + outcome)
+  _log('Outcome = ' + _getOutcomeForDisplay());
 }
 
 // LIBRARY START
