@@ -2,15 +2,17 @@ const fs = require('fs')
 const path = require('path')
 const getAccessToken = require('../helpers/get-access-token')
 const fidcRequest = require('../helpers/fidc-request')
+const fileFilter = require('../helpers/file-filter')
 
 const updateScripts = async (argv) => {
-  const { FIDC_URL } = process.env
+  const { FIDC_URL, filenameFilter } = process.env
 
   try {
     const accessToken = await getAccessToken(argv)
 
     // Read auth tree JSON files
     const dir = path.resolve(__dirname, '../config/idm-endpoints')
+    const useFF = filenameFilter || argv.filenameFilter
 
     const scriptFileContent = fs
       .readdirSync(dir)
@@ -22,6 +24,10 @@ const updateScripts = async (argv) => {
       scriptFileContent.map(async (scriptFile) => {
         await Promise.all(
           scriptFile.endpoints.map(async (endpoint) => {
+            if (!fileFilter(endpoint.scriptFileName, useFF)) {
+              return
+            }
+
             fs.readFile(`${dir}/scripts-content/${endpoint.scriptFileName}`, 'utf8', async (err, data) => {
               if (err) {
                 return console.log(err)
@@ -54,6 +60,10 @@ const updateScripts = async (argv) => {
       scriptFileContent.map(async (scriptFile) => {
         await Promise.all(
           scriptFile.tasks.map(async (task) => {
+            if (!fileFilter(task.scriptFileName, useFF)) {
+              return
+            }
+
             fs.readFile(`${dir}/scripts-content/${task.scriptFileName}`, 'utf8', async (err, data) => {
               if (err) {
                 return console.log(err)
@@ -117,6 +127,10 @@ const updateScripts = async (argv) => {
       scriptFileContent.map(async (scriptFile) => {
         await Promise.all(
           scriptFile.scheduledScripts.map(async (schedule) => {
+            if (!fileFilter(schedule.scriptFileName, useFF)) {
+              return
+            }
+
             fs.readFile(`${dir}/scripts-content/${schedule.scriptFileName}`, 'utf8', async (err, data) => {
               if (err) {
                 return console.log(err)
@@ -166,6 +180,10 @@ const updateScripts = async (argv) => {
 
         await Promise.all(
           scriptFile.scheduledRecons.map(async (schedule) => {
+            if (!fileFilter(schedule.scheduleName, useFF)) {
+              return
+            }
+
             const body = {
               _id: schedule.scheduleName,
               enabled: true,

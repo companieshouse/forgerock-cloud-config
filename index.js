@@ -223,7 +223,8 @@ yargs
       'idmPassword',
       'adminClientId',
       'adminClientSecret',
-      'realm'
+      'realm',
+      'filenameFilter'
     ]),
     handler: (argv) => updateIdmEndpoints(argv)
   })
