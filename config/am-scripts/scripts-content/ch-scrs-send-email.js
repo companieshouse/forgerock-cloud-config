@@ -204,7 +204,8 @@ function sendEmail (language, email, companyName, returnUrl, newUser) {
       'template_id': getEmailTemplateId(templates, language, newUser),
       'personalisation': {
         'link': returnUrl,
-        'company': companyName
+        'company': companyName,
+        'subject': email
       }
     };
   } catch (e) {
