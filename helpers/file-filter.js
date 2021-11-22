@@ -1,8 +1,12 @@
 const fileFilter = (filename, filter) => {
-  // console.log('FILTER DEBUG - Filename = ' + filename + ', filter = ' + filter)
+  // console.log('FILTER DEBUG - Filename = ' + filename + ', filter = ' + filter);
 
-  if (!filename || filename === '' || !filter || filter.trim() === '') {
+  if (!filename || filename === '' || typeof (filter) === 'undefined') {
     return true
+  }
+
+  if (filter.trim() === '') {
+    return false
   }
 
   const filterParts = filter.split(',')
