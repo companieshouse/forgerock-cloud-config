@@ -97,17 +97,6 @@
       "situation": "ABSENT"
     }
   ],
-  "correlationQuery": [
-    {
-      "linkQualifier": "default",
-      "expressionTree": {
-        "any": [
-          "PARENT_USERNAME"
-        ]
-      },
-      "mapping": "alphaUser_webfilingUser",
-      "type": "text/javascript",
-      "file": "ui/correlateTreeToQueryFilter.js"
-    }
-  ]
+  "links": "webfilingUser_alphaUser",
+  "correlationQuery": []
 }
