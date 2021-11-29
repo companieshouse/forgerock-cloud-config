@@ -1,0 +1,34 @@
+{
+    "javascript.preferences.quoteStyle": "single",
+    "editor.autoClosingQuotes": "always",
+    "eslint.validate": [
+        "javascript"
+    ],
+    "eslint.options": {
+        "env": {
+            "browser": true,
+            "jest/globals": true,
+            "es6": false
+        },
+        "parserOptions": {
+            "ecmaVersion": 2017,
+            "sourceType": "module",
+            "ecmaFeatures": {
+                "jsx": true
+            }
+        },
+        "rules": {
+            "no-debugger": "off",
+            "quotes": [
+                "error",
+                "single"
+            ],
+            "indent": ["error", 4],
+            "semi": ["error", "always"],
+            "no-var": 0,
+            "space-before-function-paren": ["error", "never"],
+            "quote-props": ["error", "consistent"]
+        },
+        
+    }
+}

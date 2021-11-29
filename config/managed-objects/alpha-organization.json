@@ -1,5 +1,9 @@
 {
 	"name": "alpha_organization",
+	"onUpdate": {
+		"source": "// change via external file",
+		"type": "text/javascript"
+	},
 	"schema": {
 		"$schema": "http://forgerock.org/json-schema#",
 		"type": "object",
