@@ -284,7 +284,7 @@
   function getParameterFromUrlByName (url, name) {
     name = name.replace(/[\[\]]/g, '\\$&');
 
-    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+    let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
       results = regex.exec(url);
 
     if (!results) return null;
@@ -315,11 +315,18 @@
   // ================================================================================================================
 
   if (request.method === 'read' || (request.method === 'action' && request.action === 'read')) {
+    let paramCompanyNumber = request.additionalParameters.companyNumber;
+
     let timePoint = determineTimePoint();
     let nextTimePoint = '';
-    let paramCompanyNumber = request.additionalParameters.companyNumber;
+    let responseNextTimePoint = nextTimePoint;
+
     let outputUsers = [];
     let addedCompanies = [];
+
+    let companyAttemptCount = 0;
+    let companySuccessCount = 0;
+    let companyFailureCount = 0;
 
     let incorporationsResponse = getCompanyIncorporations(timePoint);
     _log('Incorporations response : ' + incorporationsResponse);
@@ -340,106 +347,127 @@
         }
 
         if (incorporations.items) {
-          incorporations.items.forEach(companyIncorp => {
+          for (let companyIncorpItem of incorporations.items) {
+            _log('Received Company : ' + companyIncorpItem.company_number);
 
-            if (companyIncorp.transaction_type === 'incorporation' && companyIncorp.transaction_status === 'accepted') {
+            if (companyIncorpItem.transaction_type === 'incorporation' && companyIncorpItem.transaction_status === 'accepted') {
+              companyAttemptCount++;
+              _log('Processing Accepted Company : ' + companyIncorpItem.company_number + ' (item ' + companyAttemptCount + ')');
 
-              let companyInfo = getCompany(companyIncorp.company_number);
+              try {
+                let companyInfo = getCompany(companyIncorpItem.company_number);
 
-              if (!companyInfo) {
-                _log('Company not found: ' + companyIncorp.company_number + ', creating.');
+                if (!companyInfo) {
+                  _log('Company not found: ' + companyIncorpItem.company_number + ', creating.');
 
-                createCompany(companyIncorp);
-                companyInfo = getCompany(companyIncorp.company_number);
+                  createCompany(companyIncorpItem);
+                  companyInfo = getCompany(companyIncorpItem.company_number);
+
+                  if (companyInfo) {
+                    addedCompanies.push(companyInfo);
+                  }
+                }
 
                 if (companyInfo) {
-                  addedCompanies.push(companyInfo);
-                }
-              }
+                  let allMembers = companyInfo.members ? companyInfo.members.map(member => {
+                    let fullUser = getUserById(member._refResourceId);
+                    let companyRelationship = fullUser.memberOfOrg.find(element => (element._refResourceId === companyInfo._id));
 
-              if (companyInfo) {
-                let allMembers = companyInfo.members ? companyInfo.members.map(member => {
-                  let fullUser = getUserById(member._refResourceId);
-                  let companyRelationship = fullUser.memberOfOrg.find(element => (element._refResourceId === companyInfo._id));
+                    return {
+                      email: fullUser.userName,
+                      status: companyRelationship ? companyRelationship._refProperties.membershipStatus : 'n/a'
+                    };
+                  }) : [];
 
-                  return {
-                    email: fullUser.userName,
-                    status: companyRelationship ? companyRelationship._refProperties.membershipStatus : 'n/a'
-                  };
-                }) : [];
+                  let allMembersEmailsString = allMembers.map(member => {
+                    return member.email;
+                  }).join(',');
 
-                let allMembersEmailsString = allMembers.map(member => {
-                  return member.email;
-                }).join(',');
+                  let emailsResponse = getCompanyEmails(companyIncorpItem.company_number);
 
-                let emailsResponse = getCompanyEmails(companyIncorp.company_number);
+                  if (emailsResponse.items) {
+                    emailsResponse.items.forEach(email => {
+                      let userLookup = getUserByUsername(email);
 
-                if (emailsResponse.items) {
-                  emailsResponse.items.forEach(email => {
-                    let userLookup = getUserByUsername(email);
-
-                    if (allMembersEmailsString.indexOf(email) > -1) {
-                      let userObj = allMembers.find(element => (element.email === email));
-                      _log('The user with email : ' + email + ' is already a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: ' + userObj.status);
-
-                      outputUsers.push({
-                        message: 'The user with email : ' + email + ' is already a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: ' + userObj.status
-                      });
-                    } else {
-                      _log('The user with email : ' + email + ' is NOT a member of company ' + companyInfo.name + ' (' + companyInfo.number + ')');
-
-                      if (!userLookup) {
-                        let createRes = createUser(email);
-
-                        _log('New User ID: ' + createRes._id);
-                        _log('Creating CONFIRMED relationship between user ' + createRes._id + ' and company ' + companyInfo.number);
-
-                        addConfirmedRelationshipToCompany(createRes._id, companyInfo._id, companyInfo.name + ' - ' + companyInfo.number);
-
-                        let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'true');
-                        _log('notification response : ' + JSON.stringify(notificationResponse));
+                      if (allMembersEmailsString.indexOf(email) > -1) {
+                        let userObj = allMembers.find(element => (element.email === email));
+                        _log('The user with email : ' + email + ' is already a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: ' + userObj.status);
 
                         outputUsers.push({
-                          _id: createRes._id,
-                          email: email,
-                          companyNumber: companyInfo.number,
-                          companyName: companyInfo.name,
-                          newUser: true,
-                          accountStatus: 'inactive',
-                          emailNotification: notificationResponse.code === 200 ? 'success' : 'fail'
+                          message: 'The user with email : ' + email + ' is already a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: ' + userObj.status
                         });
                       } else {
-                        _log('UserLookup : ' + JSON.stringify(userLookup, null, 2));
-                        _log('User found with email :' + email + ' - Creating CONFIRMED relationship with company ' + companyInfo.number);
+                        _log('The user with email : ' + email + ' is NOT a member of company ' + companyInfo.name + ' (' + companyInfo.number + ')');
 
-                        addConfirmedRelationshipToCompany(userLookup._id, companyInfo._id, companyInfo.name + ' - ' + companyInfo.number);
+                        if (!userLookup) {
+                          let createRes = createUser(email);
 
-                        let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'false');
-                        _log('notification response : ' + JSON.stringify(notificationResponse));
+                          _log('New User ID: ' + createRes._id);
+                          _log('Creating CONFIRMED relationship between user ' + createRes._id + ' and company ' + companyInfo.number);
 
-                        outputUsers.push({
-                          _id: userLookup._id,
-                          email: email,
-                          companyNumber: companyInfo.number,
-                          companyName: companyInfo.name,
-                          newUser: false,
-                          accountStatus: userLookup.accountStatus,
-                          emailNotification: notificationResponse.code === 200 ? 'success' : 'fail'
-                        });
+                          addConfirmedRelationshipToCompany(createRes._id, companyInfo._id, companyInfo.name + ' - ' + companyInfo.number);
+
+                          let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'true');
+                          _log('notification response : ' + JSON.stringify(notificationResponse));
+
+                          outputUsers.push({
+                            _id: createRes._id,
+                            email: email,
+                            companyNumber: companyInfo.number,
+                            companyName: companyInfo.name,
+                            newUser: true,
+                            accountStatus: 'inactive',
+                            emailNotification: notificationResponse.code === 200 ? 'success' : 'fail'
+                          });
+                        } else {
+                          _log('UserLookup : ' + JSON.stringify(userLookup, null, 2));
+                          _log('User found with email :' + email + ' - Creating CONFIRMED relationship with company ' + companyInfo.number);
+
+                          addConfirmedRelationshipToCompany(userLookup._id, companyInfo._id, companyInfo.name + ' - ' + companyInfo.number);
+
+                          let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'false');
+                          _log('notification response : ' + JSON.stringify(notificationResponse));
+
+                          outputUsers.push({
+                            _id: userLookup._id,
+                            email: email,
+                            companyNumber: companyInfo.number,
+                            companyName: companyInfo.name,
+                            newUser: false,
+                            accountStatus: userLookup.accountStatus,
+                            emailNotification: notificationResponse.code === 200 ? 'success' : 'fail'
+                          });
+                        }
                       }
-                    }
-                  });
+                    });
+                  }
+
+                  companySuccessCount++;
                 }
+              } catch (e) {
+                _log('Error processing company : ' + e);
+                companyFailureCount++;
               }
+
             }
-          });
+          }
         }
       }
 
-      let response = getScrsServiceUser();
-      if (response.resultCount === 1) {
-        _log('FOUND IT : ' + response.result[0]);
-        updateScrsServiceUserTimepoint(response.result[0]._id, nextTimePoint);
+      responseNextTimePoint = nextTimePoint;
+
+      if (companyAttemptCount > 0 && companySuccessCount === 0) {
+        // We tried some, but none succeeded so something must be wrong, so
+        // we don't update the next time point
+        _log('None of the company attempts succeeded, skipping the update of the timePoint');
+        responseNextTimePoint = timePoint;
+      }
+
+      if (companySuccessCount > 0) {
+        let response = getScrsServiceUser();
+        if (response.resultCount === 1) {
+          updateScrsServiceUserTimepoint(response.result[0]._id, responseNextTimePoint);
+        }
       }
     }
 
@@ -449,7 +477,10 @@
       _id: context.security.authenticationId,
       results: {
         usedTimePoint: timePoint,
-        nextTimePoint: nextTimePoint,
+        nextTimePoint: responseNextTimePoint,
+        companyAttemptCount: companyAttemptCount,
+        companyFailureCount: companyFailureCount,
+        companySuccessCount: companySuccessCount,
         addedCompanies: addedCompanies,
         users: outputUsers
       }
