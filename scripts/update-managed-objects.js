@@ -28,6 +28,9 @@ const updateManagedObjects = async (argv) => {
             managedObject[eventName] = {}
           }
           managedObject[eventName].source = fs.readFileSync(fileEventScript, { encoding: 'utf8' })
+          if (!managedObject[eventName].type) {
+            managedObject[eventName].type = 'text/javascript'
+          }
         }
       }
     }
