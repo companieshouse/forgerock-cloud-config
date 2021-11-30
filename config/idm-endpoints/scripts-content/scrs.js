@@ -23,6 +23,19 @@
     logger.error('[CHLOG][SCRS] ' + message);
   }
 
+  function uuidv4 () {
+    var s = [];
+    var hexDigits = '0123456789abcdef';
+    for (var i = 0; i < 36; i++) {
+      s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+    }
+    s[14] = '4';
+    s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
+    s[8] = s[13] = s[18] = s[23] = '-';
+
+    return s.join('');
+  }
+
   function padding (num) {
     return num < 10 ? '0' + num : num;
   }
@@ -48,7 +61,7 @@
     return openidm.action('external/rest', 'call', request);
   }
 
-  function callNotificationJourney (email, link, companyName, companyNumber, isNewUser) {
+  function callNotificationJourney (email, link, companyName, companyNumber, isNewUser, userId, linkTokenUuid) {
     let request = {
       'url': amEndpoint + '/am/json/alpha/authenticate?authIndexType=service&authIndexValue=CHSendSCRSNotifications&noSession=true',
       'method': 'POST',
@@ -61,7 +74,9 @@
         'Notification-Email': email,
         'Notification-Company-Number': companyNumber,
         'Notification-Company-Name': companyName,
-        'New-User': isNewUser
+        'New-User': isNewUser,
+        'Notification-User-Id': userId,
+        'Notification-Token-Uuid': linkTokenUuid
       }
     };
 
@@ -147,7 +162,7 @@
     }
   }
 
-  function createUser (email, description) {
+  function createUser (email, description, linkTokenHint) {
     _log('User does not exist: Creating new user with username ' + email);
 
     let userDetails = {
@@ -161,7 +176,29 @@
       userDetails.description = description;
     }
 
+    if (linkTokenHint) {
+      userDetails.frUnindexedString3 = linkTokenHint;
+    }
+
     return openidm.create('managed/' + OBJECT_USER, null, userDetails);
+  }
+
+  function updateUserLinkTokenId (userId, linkTokenUuid) {
+    _log('Updating User Id : ' + userId + ' with linkTokenUuid of : ' + linkTokenUuid);
+
+    if (userId && linkTokenUuid) {
+      let linkTokenUuidUpdate = {
+        operation: 'replace',
+        field: '/frUnindexedString3',
+        value: linkTokenUuid
+      };
+
+      openidm.patch('managed/' + OBJECT_USER + '/' + userId,
+        null,
+        [linkTokenUuidUpdate]);
+
+      _log('Updated with linkTokenUuid : ' + linkTokenUuid);
+    }
   }
 
   function fixCreationDate (incorporationDate) {
@@ -408,15 +445,18 @@
                           } else {
                             _log('The user with email : ' + email + ' is NOT a member of company ' + companyInfo.name + ' (' + companyInfo.number + ')');
 
+                            let linkTokenUuid = uuidv4();
+                            _log('Using UUID : ' + linkTokenUuid + ' for user with email : ', email);
+
                             if (!userLookup) {
-                              let createRes = createUser(email);
+                              let createRes = createUser(email, null, linkTokenUuid);
 
                               _log('New User ID: ' + createRes._id);
                               _log('Creating CONFIRMED relationship between user ' + createRes._id + ' and company ' + companyInfo.number);
 
                               addConfirmedRelationshipToCompany(createRes._id, companyInfo._id, companyInfo.name + ' - ' + companyInfo.number);
 
-                              let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'true');
+                              let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'true', createRes._id, linkTokenUuid);
                               _log('notification response : ' + JSON.stringify(notificationResponse));
 
                               outputUsers.push({
@@ -434,7 +474,11 @@
 
                               addConfirmedRelationshipToCompany(userLookup._id, companyInfo._id, companyInfo.name + ' - ' + companyInfo.number);
 
-                              let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'false');
+                              if (!userLookup.frUnindexedString3) {
+                                updateUserLinkTokenId(userLookup._id, linkTokenUuid);
+                              }
+
+                              let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'false', userLookup._id, linkTokenUuid);
                               _log('notification response : ' + JSON.stringify(notificationResponse));
 
                               outputUsers.push({
@@ -472,7 +516,7 @@
         if (companyAttemptCount > 0 && companySuccessCount === 0) {
           // We tried some, but none succeeded so something must be wrong, so
           // we don't update the next time point
-          _log('None of the company attempts succeeded, skipping the update of the timePoint');
+          _log('None of the company attempts succeeded, resetting the timePoint back to the current instance');
           responseNextTimePoint = timePoint;
         }
 
