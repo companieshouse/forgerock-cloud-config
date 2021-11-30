@@ -882,11 +882,11 @@
       },
       "frUnindexedString3": {
         "deleteQueryConfig": false,
-        "description": "Generic Unindexed String 3",
+        "description": "Activation UUID",
         "isPersonal": false,
         "isVirtual": false,
         "searchable": false,
-        "title": "Generic Unindexed String 3",
+        "title": "The activation UUID set by SCRS journey",
         "type": "string",
         "usageDescription": null,
         "userEditable": true,
