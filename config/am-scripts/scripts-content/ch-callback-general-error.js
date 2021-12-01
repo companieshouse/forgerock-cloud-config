@@ -10,30 +10,37 @@
     - output: stage name and page props for UI
 */
 
-var fr = JavaImporter(
-    org.forgerock.openam.auth.node.api.Action,
-    javax.security.auth.callback.TextOutputCallback,
-    com.sun.identity.authentication.callbacks.HiddenValueCallback
-)
+var _scriptName = 'CH CALLBACK GENERAL ERROR';
+_log('Started');
 
-var errorMessage = sharedState.get("errorMessage");
-var errorProps = sharedState.get("pagePropsJSON");
+var fr = JavaImporter(
+  org.forgerock.openam.auth.node.api.Action,
+  javax.security.auth.callback.TextOutputCallback,
+  com.sun.identity.authentication.callbacks.HiddenValueCallback
+);
+
+var errorMessage = sharedState.get('errorMessage') || 'An error occurred';
+var errorProps = sharedState.get('pagePropsJSON');
 var level = fr.TextOutputCallback.ERROR;
 
 action = fr.Action.send(
   new fr.TextOutputCallback(
-      fr.TextOutputCallback.ERROR,
-      "Error: " + errorMessage
+    fr.TextOutputCallback.ERROR,
+    'Error: ' + errorMessage
   ),
   new fr.HiddenValueCallback(
-      "stage",
-      "GENERIC_ERROR"
+    'stage',
+    'GENERIC_ERROR'
   ),
   new fr.HiddenValueCallback(
-      "pagePropsJSON",
-      JSON.stringify({ "errors": [{ "label": errorMessage, token: "GENERIC_ERROR" }] })
+    'pagePropsJSON',
+    JSON.stringify({ 'errors': [{ 'label': errorMessage, token: 'GENERIC_ERROR' }] })
   )
-).build()
-    
+).build();
 
-outcome = "true";
+outcome = 'true';
+
+_log('Outcome = ' + _getOutcomeForDisplay());
+
+// LIBRARY START
+// LIBRARY END
