@@ -37,16 +37,18 @@
     return s.join('');
   }
 
-  function removeDuplicates (data) {
-    let unique = [];
+  function removeDuplicateEmails (data) {
+    let emails = [];
+    let uniqueSet = [];
 
     data.forEach(element => {
-      if (!unique.includes(element)) {
-        unique.push(element);
+      if (!emails.includes(element.email)) {
+        emails.push(element.email);
+        uniqueSet.push(element);
       }
     });
 
-    return unique;
+    return uniqueSet;
   }
 
   function padding (num) {
@@ -74,18 +76,19 @@
     return openidm.action('external/rest', 'call', request);
   }
 
-  function callNotificationJourney (email, link, companyName, companyNumber, isNewUser, userId, linkTokenUuid) {
+  function callNotificationJourney (email, link, companyName, companyNumber, isNewUser, userId, linkTokenUuid, language) {
     let headers = {
       'Content-Type': 'application/json',
       'CH-Username': idmUsername,
       'CH-Password': idmPassword,
       'Notification-Link': link,
       'Notification-Email': email,
+      'Notification-Language': language || 'en',
       'Notification-Company-Number': companyNumber,
       'Notification-Company-Name': companyName,
-      'New-User': isNewUser,
       'Notification-User-Id': userId,
-      'Notification-Token-Uuid': linkTokenUuid
+      'Notification-Token-Uuid': linkTokenUuid,
+      'New-User': isNewUser
     };
 
     let request = {
@@ -451,14 +454,21 @@
                       _log('Emails response : ' + emailsResponse);
 
                       if (emailsResponse && emailsResponse.items) {
-                        let emailsUnique = removeDuplicates(emailsResponse.items);
+                        let emailsUnique = removeDuplicateEmails(emailsResponse.items);
 
                         _log('Emails (unique) : ' + emailsUnique);
 
-                        emailsUnique.forEach(email => {
+                        emailsUnique.forEach(emailEntry => {
+
+                          if (!emailEntry.email) {
+                            return;
+                          }
+
+                          let email = emailEntry.email;
+                          let emailLang = emailEntry.language || 'en';
 
                           try {
-                            _log('Processing user with email : ' + email);
+                            _log('Processing user with email : ' + email + ', language = ' + emailLang);
                             let userLookup = getUserByUsername(email);
 
                             if (allMembersEmailsString.indexOf(email) > -1) {
@@ -482,7 +492,9 @@
 
                                 addConfirmedRelationshipToCompany(createRes._id, companyInfo._id, companyInfo.name + ' - ' + companyInfo.number);
 
-                                let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'true', createRes._id, linkTokenUuid);
+                                let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'true',
+                                  createRes._id, linkTokenUuid, emailLang);
+
                                 _log('notification response : ' + JSON.stringify(notificationResponse));
 
                                 outputUsers.push({
@@ -505,7 +517,9 @@
                                   updateUserLinkTokenId(userLookup._id, linkTokenUuid);
                                 }
 
-                                let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'false', userLookup._id, linkTokenUuid);
+                                let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'false',
+                                  userLookup._id, linkTokenUuid, emailLang);
+
                                 _log('notification response : ' + JSON.stringify(notificationResponse));
 
                                 outputUsers.push({
