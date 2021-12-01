@@ -189,7 +189,7 @@
       "_id": "b9428678-9e82-4a32-ba6f-8d7f2fb96299",
       "nodeType": "RetryLimitDecisionNode",
       "details": {
-        "incrementUserAttributeOnFailure": true,
+        "incrementUserAttributeOnFailure": false,
         "retryLimit": 3
       }
     },
@@ -226,6 +226,14 @@
         "inputs": [
           "*"
         ]
+      }
+    },
+    {
+      "_id": "3cc81498-c9f9-4834-aba0-e75138512186",
+      "nodeType": "RetryLimitDecisionNode",
+      "details": {
+        "incrementUserAttributeOnFailure": false,
+        "retryLimit": 5
       }
     }
   ],
@@ -308,7 +316,7 @@
           "correct": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
           "error": "e301438c-0bd0-429c-ab0c-66126501069a",
           "incorrect": "b9428678-9e82-4a32-ba6f-8d7f2fb96299",
-          "resend": "af71d819-bf61-4791-ae70-fc9184f90906"
+          "resend": "3cc81498-c9f9-4834-aba0-e75138512186"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "OTP Check & Resend"
@@ -362,7 +370,7 @@
           "Retry": "47af5379-9faf-4712-b7cc-752d2c97d305"
         },
         "nodeType": "RetryLimitDecisionNode",
-        "displayName": "Retry Limit Decision"
+        "displayName": "Retry Limit Decision (OTP)"
       },
       "5877bfca-a540-4c93-a9cf-6081b66f9fe8": {
         "x": 1232,
@@ -384,6 +392,16 @@
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Resend via selected MFA Route"
+      },
+      "3cc81498-c9f9-4834-aba0-e75138512186": {
+        "x": 1680,
+        "y": 97.015625,
+        "connections": {
+          "Retry": "af71d819-bf61-4791-ae70-fc9184f90906",
+          "Reject": "c61c207e-8c12-4119-a87f-08aa91fbbe85"
+        },
+        "nodeType": "RetryLimitDecisionNode",
+        "displayName": "Retry Limit Decision (RESEND)"
       }
     },
     "staticNodes": {
