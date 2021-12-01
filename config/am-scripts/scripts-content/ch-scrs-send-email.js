@@ -31,7 +31,7 @@ var NodeOutcome = {
 };
 
 function buildOnboardingParams (userId, linkTokenId) {
-  return 'uid=' + encodeURIComponent(userId) + '&tokenId=' + encodeURIComponent(linkTokenId);
+  return '_id=' + encodeURIComponent(userId) + '&tokenId=' + encodeURIComponent(linkTokenId);
 }
 
 function buildReturnUrl (email, companyNumber, isNewUser, host, userId, linkTokenId) {
