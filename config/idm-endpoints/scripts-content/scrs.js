@@ -1,4 +1,5 @@
 (function () {
+  let logNowMsecs = new Date().getTime();
   _log('SCRS Starting! request = ' + JSON.stringify(request));
 
   var OBJECT_USER = 'alpha_user';
@@ -20,7 +21,7 @@
   };
 
   function _log (message) {
-    logger.error('[CHLOG][SCRS] ' + message);
+    logger.error('[CHLOG][SCRS][' + logNowMsecs + '] ' + message);
   }
 
   function uuidv4 () {
@@ -34,6 +35,18 @@
     s[8] = s[13] = s[18] = s[23] = '-';
 
     return s.join('');
+  }
+
+  function removeDuplicates (data) {
+    let unique = [];
+
+    data.forEach(element => {
+      if (!unique.includes(element)) {
+        unique.push(element);
+      }
+    });
+
+    return unique;
   }
 
   function padding (num) {
@@ -431,8 +444,14 @@
                     try {
                       let emailsResponse = getCompanyEmails(companyIncorpItem.company_number);
 
+                      _log('Emails response : ' + emailsResponse);
+
                       if (emailsResponse && emailsResponse.items) {
-                        emailsResponse.items.forEach(email => {
+                        let emailsUnique = removeDuplicates(emailsResponse.items);
+
+                        _log('Emails (unique) : ' + emailsUnique);
+
+                        emailsUnique.forEach(email => {
                           let userLookup = getUserByUsername(email);
 
                           if (allMembersEmailsString.indexOf(email) > -1) {
