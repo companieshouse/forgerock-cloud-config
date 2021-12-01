@@ -75,27 +75,29 @@
   }
 
   function callNotificationJourney (email, link, companyName, companyNumber, isNewUser, userId, linkTokenUuid) {
+    let headers = {
+      'Content-Type': 'application/json',
+      'CH-Username': idmUsername,
+      'CH-Password': idmPassword,
+      'Notification-Link': link,
+      'Notification-Email': email,
+      'Notification-Company-Number': companyNumber,
+      'Notification-Company-Name': companyName,
+      'New-User': isNewUser,
+      'Notification-User-Id': userId,
+      'Notification-Token-Uuid': linkTokenUuid
+    };
+
     let request = {
       'url': amEndpoint + '/am/json/alpha/authenticate?authIndexType=service&authIndexValue=CHSendSCRSNotifications&noSession=true',
       'method': 'POST',
       'forceWrap': true,
-      'headers': {
-        'Content-Type': 'application/json',
-        'CH-Username': idmUsername,
-        'CH-Password': idmPassword,
-        'Notification-Link': link,
-        'Notification-Email': email,
-        'Notification-Company-Number': companyNumber,
-        'Notification-Company-Name': companyName,
-        'New-User': isNewUser,
-        'Notification-User-Id': userId,
-        'Notification-Token-Uuid': linkTokenUuid
-      }
+      'headers': headers
     };
 
-    _log('journey Request:  ' + JSON.stringify(request));
+    _log('Journey Request:  ' + JSON.stringify(request));
     let journeyResponse = openidm.action('external/rest', 'call', request);
-    _log('journey Response:  ' + JSON.stringify(journeyResponse));
+    _log('Journey Response:  ' + JSON.stringify(journeyResponse));
 
     return journeyResponse;
   }
@@ -372,6 +374,8 @@
   let companySuccessCount = 0;
   let companyFailureCount = 0;
 
+  let userFailureCount = 0;
+
   let timePoint = '';
   let nextTimePoint = '';
   let responseNextTimePoint = '';
@@ -452,64 +456,73 @@
                         _log('Emails (unique) : ' + emailsUnique);
 
                         emailsUnique.forEach(email => {
-                          let userLookup = getUserByUsername(email);
 
-                          if (allMembersEmailsString.indexOf(email) > -1) {
-                            let userObj = allMembers.find(element => (element.email === email));
-                            _log('The user with email : ' + email + ' is already a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: ' + userObj.status);
+                          try {
+                            _log('Processing user with email : ' + email);
+                            let userLookup = getUserByUsername(email);
 
-                            outputUsers.push({
-                              message: 'The user with email : ' + email + ' is already a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: ' + userObj.status
-                            });
-                          } else {
-                            _log('The user with email : ' + email + ' is NOT a member of company ' + companyInfo.name + ' (' + companyInfo.number + ')');
-
-                            let linkTokenUuid = uuidv4();
-                            _log('Using UUID : ' + linkTokenUuid + ' for user with email : ', email);
-
-                            if (!userLookup) {
-                              let createRes = createUser(email, null, linkTokenUuid);
-
-                              _log('New User ID: ' + createRes._id);
-                              _log('Creating CONFIRMED relationship between user ' + createRes._id + ' and company ' + companyInfo.number);
-
-                              addConfirmedRelationshipToCompany(createRes._id, companyInfo._id, companyInfo.name + ' - ' + companyInfo.number);
-
-                              let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'true', createRes._id, linkTokenUuid);
-                              _log('notification response : ' + JSON.stringify(notificationResponse));
+                            if (allMembersEmailsString.indexOf(email) > -1) {
+                              let userObj = allMembers.find(element => (element.email === email));
+                              _log('The user with email : ' + email + ' is already a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: ' + userObj.status);
 
                               outputUsers.push({
-                                _id: createRes._id,
-                                email: email,
-                                companyNumber: companyInfo.number,
-                                companyName: companyInfo.name,
-                                newUser: true,
-                                accountStatus: 'inactive',
-                                emailNotification: notificationResponse.code === 200 ? 'success' : 'fail'
+                                message: 'The user with email : ' + email + ' is already a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: ' + userObj.status
                               });
                             } else {
-                              _log('UserLookup : ' + JSON.stringify(userLookup, null, 2));
-                              _log('User found with email :' + email + ' - Creating CONFIRMED relationship with company ' + companyInfo.number);
+                              _log('The user with email : ' + email + ' is NOT a member of company ' + companyInfo.name + ' (' + companyInfo.number + ')');
 
-                              addConfirmedRelationshipToCompany(userLookup._id, companyInfo._id, companyInfo.name + ' - ' + companyInfo.number);
+                              let linkTokenUuid = uuidv4();
+                              _log('Using UUID : ' + linkTokenUuid + ' for user with email : ', email);
 
-                              if (!userLookup.frUnindexedString3) {
-                                updateUserLinkTokenId(userLookup._id, linkTokenUuid);
+                              if (!userLookup) {
+                                let createRes = createUser(email, null, linkTokenUuid);
+
+                                _log('New User ID: ' + createRes._id);
+                                _log('Creating CONFIRMED relationship between user ' + createRes._id + ' and company ' + companyInfo.number);
+
+                                addConfirmedRelationshipToCompany(createRes._id, companyInfo._id, companyInfo.name + ' - ' + companyInfo.number);
+
+                                let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'true', createRes._id, linkTokenUuid);
+                                _log('notification response : ' + JSON.stringify(notificationResponse));
+
+                                outputUsers.push({
+                                  _id: createRes._id,
+                                  email: email,
+                                  companyNumber: companyInfo.number,
+                                  companyName: companyInfo.name,
+                                  newUser: true,
+                                  accountStatus: 'inactive',
+                                  emailNotification: notificationResponse.code === 200 ? 'success' : 'fail',
+                                  message: 'The user with email : ' + email + ' has been added as a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: confirmed'
+                                });
+                              } else {
+                                _log('UserLookup : ' + JSON.stringify(userLookup, null, 2));
+                                _log('User found with email :' + email + ' - Creating CONFIRMED relationship with company ' + companyInfo.number);
+
+                                addConfirmedRelationshipToCompany(userLookup._id, companyInfo._id, companyInfo.name + ' - ' + companyInfo.number);
+
+                                if (!userLookup.frUnindexedString3) {
+                                  updateUserLinkTokenId(userLookup._id, linkTokenUuid);
+                                }
+
+                                let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'false', userLookup._id, linkTokenUuid);
+                                _log('notification response : ' + JSON.stringify(notificationResponse));
+
+                                outputUsers.push({
+                                  _id: userLookup._id,
+                                  email: email,
+                                  companyNumber: companyInfo.number,
+                                  companyName: companyInfo.name,
+                                  newUser: false,
+                                  accountStatus: userLookup.accountStatus,
+                                  emailNotification: notificationResponse.code === 200 ? 'success' : 'fail',
+                                  message: 'The user with email : ' + email + ' has been added as a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: confirmed'
+                                });
                               }
-
-                              let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'false', userLookup._id, linkTokenUuid);
-                              _log('notification response : ' + JSON.stringify(notificationResponse));
-
-                              outputUsers.push({
-                                _id: userLookup._id,
-                                email: email,
-                                companyNumber: companyInfo.number,
-                                companyName: companyInfo.name,
-                                newUser: false,
-                                accountStatus: userLookup.accountStatus,
-                                emailNotification: notificationResponse.code === 200 ? 'success' : 'fail'
-                              });
                             }
+                          } catch (e) {
+                            userFailureCount++;
+                            _log('Error processing user : ' + email);
                           }
                         });
                       }
@@ -553,9 +566,7 @@
     responseMessage = e.toString();
   }
 
-  _log('SCRS Ending!');
-
-  return {
+  let response = {
     _id: context.security.authenticationId,
     results: {
       message: responseMessage,
@@ -564,9 +575,13 @@
       companyAttemptCount: companyAttemptCount,
       companyFailureCount: companyFailureCount,
       companySuccessCount: companySuccessCount,
+      userFailureCount: userFailureCount,
       addedCompanies: addedCompanies,
       users: outputUsers
     }
   };
+
+  _log('SCRS returning - ' + JSON.stringify(response));
+  return response;
 
 })();
