@@ -77,32 +77,41 @@
   }
 
   function callNotificationJourney (email, link, companyName, companyNumber, isNewUser, userId, linkTokenUuid, language) {
-    let headers = {
-      'Content-Type': 'application/json',
-      'CH-Username': idmUsername,
-      'CH-Password': idmPassword,
-      'Notification-Link': link,
-      'Notification-Email': email,
-      'Notification-Language': language || 'en',
-      'Notification-Company-Number': companyNumber,
-      'Notification-Company-Name': companyName,
-      'Notification-User-Id': userId,
-      'Notification-Token-Uuid': linkTokenUuid,
-      'New-User': isNewUser
-    };
+    try {
+      let headers = {
+        'Content-Type': 'application/json',
+        'CH-Username': idmUsername,
+        'CH-Password': idmPassword,
+        'Notification-Link': link,
+        'Notification-Email': email,
+        'Notification-Language': language || 'en',
+        'Notification-Company-Number': companyNumber,
+        'Notification-Company-Name': companyName,
+        'Notification-User-Id': userId,
+        'Notification-Token-Uuid': linkTokenUuid,
+        'New-User': isNewUser
+      };
 
-    let request = {
-      'url': amEndpoint + '/am/json/alpha/authenticate?authIndexType=service&authIndexValue=CHSendSCRSNotifications&noSession=true',
-      'method': 'POST',
-      'forceWrap': true,
-      'headers': headers
-    };
+      let request = {
+        'url': amEndpoint + '/am/json/alpha/authenticate?authIndexType=service&authIndexValue=CHSendSCRSNotifications&noSession=true',
+        'method': 'POST',
+        'forceWrap': true,
+        'headers': headers
+      };
 
-    _log('Journey Request:  ' + JSON.stringify(request));
-    let journeyResponse = openidm.action('external/rest', 'call', request);
-    _log('Journey Response:  ' + JSON.stringify(journeyResponse));
+      _log('Journey Request:  ' + JSON.stringify(request));
+      let journeyResponse = openidm.action('external/rest', 'call', request);
+      _log('Journey Response:  ' + JSON.stringify(journeyResponse));
 
-    return journeyResponse;
+      return journeyResponse;
+    } catch (e) {
+      _log('Error calling notification journey : ' + e);
+
+      return {
+        code: 500,
+        message: e.toString()
+      };
+    }
   }
 
   function fetchAuthorizationToken () {
@@ -122,7 +131,7 @@
     let response = openidm.query(
       'managed/' + OBJECT_USER,
       { '_queryFilter': '/userName eq "' + username + '"' },
-      ['_id', 'userName', 'givenName', 'roles', 'authzRoles', 'memberOfOrg', 'accountStatus']
+      ['_id', 'userName', 'givenName', 'roles', 'authzRoles', 'memberOfOrg', 'accountStatus', 'frUnindexedString3']
     );
 
     if (response.resultCount !== 1) {
@@ -482,7 +491,7 @@
                               _log('The user with email : ' + email + ' is NOT a member of company ' + companyInfo.name + ' (' + companyInfo.number + ')');
 
                               let linkTokenUuid = uuidv4();
-                              _log('Using UUID : ' + linkTokenUuid + ' for user with email : ', email);
+                              _log('Using UUID : ' + linkTokenUuid + ' for user with email : ' + email);
 
                               if (!userLookup) {
                                 let createRes = createUser(email, null, linkTokenUuid);
@@ -514,7 +523,10 @@
                                 addConfirmedRelationshipToCompany(userLookup._id, companyInfo._id, companyInfo.name + ' - ' + companyInfo.number);
 
                                 if (!userLookup.frUnindexedString3) {
+                                  _log('User : ' + email + ' (id = ' + userLookup._id + ') has no linkTokenUuid currently');
                                   updateUserLinkTokenId(userLookup._id, linkTokenUuid);
+                                } else {
+                                  linkTokenUuid = userLookup.frUnindexedString3;
                                 }
 
                                 let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'false',
