@@ -1,3 +1,6 @@
+var _scriptName = 'CH CHECK FOR SESSION';
+_log('Starting');
+
 /* 
   ** OUTCOMES
     - hasSession: the user has an active session
@@ -11,38 +14,47 @@ var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
   javax.security.auth.callback.TextOutputCallback,
   com.sun.identity.authentication.callbacks.HiddenValueCallback
-)
+);
 
 var NodeOutcome = {
-  HAS_SESSION: "hasSession",
-  NO_SESSION: "noSession"
-}
+  HAS_SESSION: 'hasSession',
+  NO_SESSION: 'noSession'
+};
 
-try{
+try {
   if (typeof existingSession !== 'undefined') {
     outcome = NodeOutcome.HAS_SESSION;
-    logger.error("[CHECK SESSION] existing session: "+existingSession.toString());
-  }
-  else {
+    _log('Existing session: ' + existingSession.toString());
+  } else {
     if (callbacks.isEmpty()) {
       action = fr.Action.send(
         new fr.HiddenValueCallback(
-          "stage",
-          "NO_SESSION_ERROR"
+          'stage',
+          'NO_SESSION_ERROR'
         ),
         new fr.TextOutputCallback(
           fr.TextOutputCallback.ERROR,
-          "You must have an active session to proceed with this operation"
+          'You must have an active session to proceed with this operation'
         ),
         new fr.HiddenValueCallback(
-          "pagePropsJSON",
-          JSON.stringify({ 'errors': [{ label: "You must have an active session to proceed with this operation", token: "NO_ACTIVE_SESSION" }] })
+          'pagePropsJSON',
+          JSON.stringify({
+            'errors': [{
+              label: 'You must have an active session to proceed with this operation',
+              token: 'NO_ACTIVE_SESSION'
+            }]
+          })
         )
-      ).build()
+      ).build();
     }
     outcome = NodeOutcome.NO_SESSION;
   }
-}catch(e){
-  logger.error("[CHECK SESSION] error: "+e);
-  sharedState.put("errorMessage", e.toString())
+} catch (e) {
+  _log('error: ' + e);
+  sharedState.put('errorMessage', e.toString());
 }
+
+_log('Outcome = ' + _getOutcomeForDisplay());
+
+// LIBRARY START
+// LIBRARY END

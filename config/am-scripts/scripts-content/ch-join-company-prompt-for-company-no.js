@@ -1,3 +1,6 @@
+var _scriptName = 'CH JOIN COMPANY PROMPT FOR COMPANY NO';
+_log('Starting');
+
 /* 
   ** OUTPUT DATA
     * SHARED STATE:
@@ -19,50 +22,53 @@ var fr = JavaImporter(
   javax.security.auth.callback.TextOutputCallback,
   com.sun.identity.authentication.callbacks.HiddenValueCallback,
   javax.security.auth.callback.ChoiceCallback
-)
+);
 
-var jurisdictions = ["EW", "SC", "NI"];
+var jurisdictions = ['EW', 'SC', 'NI'];
 
 if (callbacks.isEmpty()) {
-  var infoMessage = "Please enter the company number.";
-  var errorMessage = sharedState.get("errorMessage");
+  var infoMessage = 'Please enter the company number.';
+  var errorMessage = sharedState.get('errorMessage');
   var level = fr.TextOutputCallback.INFORMATION;
   if (errorMessage !== null) {
-    var errorProps = sharedState.get("pagePropsJSON");
+    var errorProps = sharedState.get('pagePropsJSON');
     level = fr.TextOutputCallback.ERROR;
-    infoMessage = errorMessage.concat(" Please try again.");
+    infoMessage = errorMessage.concat(' Please try again.');
     action = fr.Action.send(
       new fr.TextOutputCallback(level, infoMessage),
-      new fr.NameCallback("Enter Company number"),
+      new fr.NameCallback('Enter Company number'),
       new fr.ChoiceCallback(
-        "Where was the company registered?",
+        'Where was the company registered?',
         jurisdictions,
         0,
         false
       ),
-      new fr.HiddenValueCallback("stage", "COMPANY_ASSOCIATION_1"),
-      new fr.HiddenValueCallback("pagePropsJSON", errorProps)
+      new fr.HiddenValueCallback('stage', 'COMPANY_ASSOCIATION_1'),
+      new fr.HiddenValueCallback('pagePropsJSON', errorProps)
     ).build();
   } else {
     action = fr.Action.send(
       new fr.TextOutputCallback(level, infoMessage),
-      new fr.NameCallback("Enter Company number"),
+      new fr.NameCallback('Enter Company number'),
       new fr.ChoiceCallback(
-        "Where was the company registered?",
+        'Where was the company registered?',
         jurisdictions,
         0,
         false
       ),
-      new fr.HiddenValueCallback("stage", "COMPANY_ASSOCIATION_1")
+      new fr.HiddenValueCallback('stage', 'COMPANY_ASSOCIATION_1')
     ).build();
   }
 } else {
   var jurisdictionIndex = callbacks.get(2).getSelectedIndexes()[0];
-  logger.error("[PROMPT COMPANY NO] jurisdiction: " + jurisdictions[jurisdictionIndex]);
+  _log('jurisdiction: ' + jurisdictions[jurisdictionIndex]);
 
   var companyNumber = callbacks.get(1).getName();
-  logger.error("[ENTER COMPANY NO CALLBACK] companyNumber: " + companyNumber);
-  sharedState.put("jurisdiction", jurisdictions[jurisdictionIndex]);
-  sharedState.put("companyNumber", companyNumber);
-  action = fr.Action.goTo("true").build();
+  _log('companyNumber: ' + companyNumber);
+  sharedState.put('jurisdiction', jurisdictions[jurisdictionIndex]);
+  sharedState.put('companyNumber', companyNumber);
+  action = fr.Action.goTo('true').build();
 }
+
+// LIBRARY START
+// LIBRARY END
