@@ -1,4 +1,5 @@
 var _scriptName = 'CH RESEND OTP VIA MFA';
+_log('Starting');
 
 var NodeOutcome = {
   SMS: 'sms',

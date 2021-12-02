@@ -23,7 +23,7 @@
 */
 
 var _scriptName = 'COMPANY INVITE SEND EMAIL';
-_log('Started');
+_log('Starting');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,

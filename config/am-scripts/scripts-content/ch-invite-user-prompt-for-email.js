@@ -19,75 +19,75 @@
   
 */
 
-var _scriptName = "INVITE USER INPUT COLLECTOR";
-_log("Started");
+var _scriptName = 'INVITE USER INPUT COLLECTOR';
+_log('Starting');
 
 var fr = JavaImporter(
-    org.forgerock.openam.auth.node.api.Action,
-    javax.security.auth.callback.NameCallback,
-    javax.security.auth.callback.TextOutputCallback,
-    com.sun.identity.authentication.callbacks.HiddenValueCallback
-)
+  org.forgerock.openam.auth.node.api.Action,
+  javax.security.auth.callback.NameCallback,
+  javax.security.auth.callback.TextOutputCallback,
+  com.sun.identity.authentication.callbacks.HiddenValueCallback
+);
 
 var NodeOutcome = {
-    SUCCESS: "success",
-    EMAIL_INVALID_ERROR: "email_invalid",
-    ERROR: "error"
-}
+  SUCCESS: 'success',
+  EMAIL_INVALID_ERROR: 'email_invalid',
+  ERROR: 'error'
+};
 
-function validateEmail(email) {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
+function validateEmail (email) {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
 }
 
 // main execution flow
 try {
-    var companyData = sharedState.get("companyData");
-    var companyName = JSON.parse(companyData).name;
+  var companyData = sharedState.get('companyData');
+  var companyName = JSON.parse(companyData).name;
 
-    if (callbacks.isEmpty()) {
-        var infoMessage = "What are the details of the person you want to authorise to file for this company?";
-        var errorMessage = sharedState.get("errorMessage");
-        var level = fr.TextOutputCallback.INFORMATION;
-        if (errorMessage !== null) {
-            var errorProps = sharedState.get("pagePropsJSON");
-            level = fr.TextOutputCallback.ERROR;
-            infoMessage = errorMessage.concat(" Please try again.");
-            action = fr.Action.send(
-                new fr.TextOutputCallback(level, infoMessage),
-                new fr.NameCallback("Email Address"),
-                new fr.HiddenValueCallback("stage", "INVITE_USER_1"),
-                new fr.HiddenValueCallback("pagePropsJSON", errorProps)
-            ).build();
-        } else {
-            action = fr.Action.send(
-                new fr.TextOutputCallback(level, infoMessage),
-                new fr.NameCallback("Email Address"),
-                new fr.HiddenValueCallback("stage", "INVITE_USER_1")
-            ).build();
-        }
+  if (callbacks.isEmpty()) {
+    var infoMessage = 'What are the details of the person you want to authorise to file for this company?';
+    var errorMessage = sharedState.get('errorMessage');
+    var level = fr.TextOutputCallback.INFORMATION;
+    if (errorMessage !== null) {
+      var errorProps = sharedState.get('pagePropsJSON');
+      level = fr.TextOutputCallback.ERROR;
+      infoMessage = errorMessage.concat(' Please try again.');
+      action = fr.Action.send(
+        new fr.TextOutputCallback(level, infoMessage),
+        new fr.NameCallback('Email Address'),
+        new fr.HiddenValueCallback('stage', 'INVITE_USER_1'),
+        new fr.HiddenValueCallback('pagePropsJSON', errorProps)
+      ).build();
     } else {
-        var email = callbacks.get(1).getName();
-        var userId = sharedState.get("_id");
-        if (!validateEmail(email)) {
-            _log("Invalid email: " + email);
-            action = fr.Action.goTo(NodeOutcome.EMAIL_INVALID_ERROR).build();
-        } else {
-            _log("company number: " + JSON.parse(companyData).number);
-            _log("invited email: " + email);
-            _log("inviter ID: " + userId);
-
-            sharedState.put("email", email);
-            action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
-        }
+      action = fr.Action.send(
+        new fr.TextOutputCallback(level, infoMessage),
+        new fr.NameCallback('Email Address'),
+        new fr.HiddenValueCallback('stage', 'INVITE_USER_1')
+      ).build();
     }
+  } else {
+    var email = callbacks.get(1).getName();
+    var userId = sharedState.get('_id');
+    if (!validateEmail(email)) {
+      _log('Invalid email: ' + email);
+      action = fr.Action.goTo(NodeOutcome.EMAIL_INVALID_ERROR).build();
+    } else {
+      _log('company number: ' + JSON.parse(companyData).number);
+      _log('invited email: ' + email);
+      _log('inviter ID: ' + userId);
+
+      sharedState.put('email', email);
+      action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
+    }
+  }
 } catch (e) {
-    _log("error: " + e);
-    sharedState.put("errorMessage", e.toString());
-    action = fr.Action.goTo(NodeOutcome.ERROR).build();
+  _log('error: ' + e);
+  sharedState.put('errorMessage', e.toString());
+  action = fr.Action.goTo(NodeOutcome.ERROR).build();
 }
 
-_log("Outcome = " + _getOutcomeForDisplay());
+_log('Outcome = ' + _getOutcomeForDisplay());
 
 // LIBRARY START
 // LIBRARY END

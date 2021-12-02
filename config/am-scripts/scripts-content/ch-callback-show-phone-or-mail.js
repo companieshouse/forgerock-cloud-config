@@ -1,47 +1,48 @@
-var _scriptName = 'CH CALLBACK SHOW PHONE OR MAIL'
+var _scriptName = 'CH CALLBACK SHOW PHONE OR MAIL';
+_log('Starting');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
   javax.security.auth.callback.TextOutputCallback,
   com.sun.identity.authentication.callbacks.HiddenValueCallback
-)
+);
 
-var phoneNumber = ''
-var emailAddress = ''
-var notificationId = transientState.get('notificationId')
-var mfaRoute = sharedState.get('mfa-route')
-var otpError = transientState.get('error')
+var phoneNumber = '';
+var emailAddress = '';
+var notificationId = transientState.get('notificationId');
+var mfaRoute = sharedState.get('mfa-route');
+var otpError = transientState.get('error');
 
-_log('Found OTP Error : ' + otpError)
+_log('Found OTP Error : ' + otpError);
 
 try {
-  var userId = sharedState.get('_id')
+  var userId = sharedState.get('_id');
 
   if (mfaRoute === 'sms') {
     if (idRepository.getAttribute(userId, 'telephoneNumber').iterator().hasNext()) {
-      phoneNumber = idRepository.getAttribute(userId, 'telephoneNumber').iterator().next()
-      _log('phoneNumber : ' + phoneNumber)
+      phoneNumber = idRepository.getAttribute(userId, 'telephoneNumber').iterator().next();
+      _log('phoneNumber : ' + phoneNumber);
     } else {
-      _log('Couldn\'t find telephoneNumber')
+      _log('Couldn\'t find telephoneNumber');
     }
   } else if (mfaRoute === 'email') {
-    var isChangeEmail = sharedState.get('isChangeEmail')
+    var isChangeEmail = sharedState.get('isChangeEmail');
     if (isChangeEmail) {
-      emailAddress = sharedState.get('newEmail')
-      _log('emailAddress from change email journey: ' + emailAddress)
+      emailAddress = sharedState.get('newEmail');
+      _log('emailAddress from change email journey: ' + emailAddress);
     } else {
       if (idRepository.getAttribute(userId, 'mail').iterator().hasNext()) {
-        emailAddress = idRepository.getAttribute(userId, 'mail').iterator().next()
-        _log('emailAddress : ' + emailAddress)
+        emailAddress = idRepository.getAttribute(userId, 'mail').iterator().next();
+        _log('emailAddress : ' + emailAddress);
       } else {
-        _log('Couldn\'t find emailAddress')
+        _log('Couldn\'t find emailAddress');
       }
     }
   } else {
-    _log('Couldn\'t determine route used for sending MFA code')
+    _log('Couldn\'t determine route used for sending MFA code');
   }
 } catch (e) {
-  _log('Error retrieving user details: ' + e)
+  _log('Error retrieving user details: ' + e);
 }
 
 if (otpError) {
@@ -69,14 +70,14 @@ if (otpError) {
         fr.TextOutputCallback.ERROR,
         otpError
       )
-    ).build()
+    ).build();
   }
 } else if (callbacks.isEmpty()) {
-  var message = ''
+  var message = '';
   if (mfaRoute === 'sms') {
-    message = 'Please check your phone'
+    message = 'Please check your phone';
   } else if (mfaRoute === 'email') {
-    message = 'Please check your email'
+    message = 'Please check your email';
   }
 
   action = fr.Action.send(
@@ -96,9 +97,9 @@ if (otpError) {
       'notificationId',
       notificationId
     )
-  ).build()
+  ).build();
 } else {
-  outcome = 'True'
+  outcome = 'True';
 }
 
 // LIBRARY START

@@ -1,4 +1,5 @@
 var _scriptName = 'CH MFA SUB-FLOW SETUP';
+_log('Starting');
 
 var journeyName = _getJourneyName();
 _log('Setup for Journey Name : ' + journeyName);

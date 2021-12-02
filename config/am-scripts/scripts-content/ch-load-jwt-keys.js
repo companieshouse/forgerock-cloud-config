@@ -1,4 +1,5 @@
 var _scriptName = 'CH LOAD JWT KEYS';
+_log('Starting');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action

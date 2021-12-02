@@ -14,6 +14,7 @@
 */
 
 var _scriptName = 'CH CREATE NOTIFY JWT';
+_log('Starting');
 
 var fr = JavaImporter(
   org.forgerock.json.jose.builders.JwtBuilderFactory,
