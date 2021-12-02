@@ -31,10 +31,6 @@
 		{
 			"source": "__NAME__",
 			"target": "number"
-		},
-		{
-			"source": "__NAME__",
-			"target": "name"			
 		}
 	],
 	"policies": [

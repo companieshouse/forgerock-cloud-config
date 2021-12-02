@@ -422,7 +422,7 @@
 				"userEditable": true
 			}
 		},
-		"order": ["name", "number", "description", "owners", "admins", "members", "parent", "children", "adminIDs", "ownerIDs", "parentAdminIDs", "parentOwnerIDs", "parentIDs", "type", "status", "authCode", "authCodeIsActive", "authCodeValidFrom", "locality", "postalCode", "addressLine1", "addressLine2", "region", "creationDate", "jurisdiction"],
-		"required": ["name", "number"]
+		"order": ["name", "number", "description", "owners", "admins", "members", "parent", "children", "adminIDs", "ownerIDs", "parentAdminIDs", "parentOwnerIDs", "parentIDs", "type", "status", "authCode", "authCodeIsActive", "authCodeValidFrom","authCodeValidUntil", "locality", "postalCode", "addressLine1", "addressLine2", "region", "creationDate", "jurisdiction"],
+		"required": ["number"]
 	}
 }
