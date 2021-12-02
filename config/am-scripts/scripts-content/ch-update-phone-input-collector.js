@@ -1,4 +1,5 @@
 var _scriptName = 'CH UPDATE PHONE INPUT COLLECTOR';
+_log('Starting');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,

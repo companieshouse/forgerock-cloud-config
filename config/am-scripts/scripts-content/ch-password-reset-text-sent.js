@@ -17,37 +17,38 @@
     - success: if there are no errors, including the notificationID and the phoneNumber used
 */
 
-var _scriptName = 'CH PASSWORD RESET TEXT SENT'
+var _scriptName = 'CH PASSWORD RESET TEXT SENT';
+_log('Starting');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
   javax.security.auth.callback.TextOutputCallback,
   com.sun.identity.authentication.callbacks.HiddenValueCallback
-)
+);
 
 function extractPhoneNumber () {
-  var isRegistrationMFA = sharedState.get('registrationMFA')
+  var isRegistrationMFA = sharedState.get('registrationMFA');
 
   if (isRegistrationMFA) {
-    return sharedState.get('objectAttributes').get('telephoneNumber')
+    return sharedState.get('objectAttributes').get('telephoneNumber');
   } else {
     try {
-      var userId = sharedState.get('_id')
+      var userId = sharedState.get('_id');
       if (idRepository.getAttribute(userId, 'telephoneNumber').iterator().hasNext()) {
-        return idRepository.getAttribute(userId, 'telephoneNumber').iterator().next()
+        return idRepository.getAttribute(userId, 'telephoneNumber').iterator().next();
       } else {
-        _log('Couldn\'t find telephoneNumber')
-        return false
+        _log('Couldn\'t find telephoneNumber');
+        return false;
       }
     } catch (e) {
-      _log('Error retrieving telephoneNumber: ' + e)
-      return false
+      _log('Error retrieving telephoneNumber: ' + e);
+      return false;
     }
   }
 }
 
 //main execution logic
-var phoneNumber = extractPhoneNumber()
+var phoneNumber = extractPhoneNumber();
 
 if (!phoneNumber) {
   if (callbacks.isEmpty()) {
@@ -65,15 +66,15 @@ if (!phoneNumber) {
         fr.TextOutputCallback.ERROR,
         'No phone number could be found in context.'
       )
-    ).build()
+    ).build();
   }
 }
-_log('phoneNumber : ' + phoneNumber)
+_log('phoneNumber : ' + phoneNumber);
 
-var notificationId = transientState.get('notificationId')
-var otpError = transientState.get('error')
-_log('Notification ID: ' + notificationId)
-_log('Found OTP Error : ' + otpError)
+var notificationId = transientState.get('notificationId');
+var otpError = transientState.get('error');
+_log('Notification ID: ' + notificationId);
+_log('Found OTP Error : ' + otpError);
 
 if (otpError) {
   if (callbacks.isEmpty()) {
@@ -98,7 +99,7 @@ if (otpError) {
         fr.TextOutputCallback.ERROR,
         otpError
       )
-    ).build()
+    ).build();
   }
 } else if (callbacks.isEmpty()) {
   action = fr.Action.send(
@@ -110,9 +111,9 @@ if (otpError) {
       'notificationId',
       notificationId
     )
-  ).build()
+  ).build();
 } else {
-  outcome = 'True'
+  outcome = 'True';
 }
 
 // LIBRARY START

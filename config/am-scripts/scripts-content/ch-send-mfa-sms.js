@@ -26,6 +26,7 @@
 */
 
 var _scriptName = 'CH SEND MFA SMS';
+_log('Starting');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,

@@ -1,6 +1,5 @@
 var _scriptName = 'CH INVITE USER SEND EMAIL CONFIRM';
-
-_log('Started');
+_log('Starting');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
