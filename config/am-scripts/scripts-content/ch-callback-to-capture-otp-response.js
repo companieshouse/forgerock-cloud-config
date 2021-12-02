@@ -1,21 +1,21 @@
-var _scriptName = 'CH CAPTURE OTP RESPONSE'
+var _scriptName = 'CH CAPTURE OTP RESPONSE';
 
 var NodeOutcome = {
   CORRECT: 'correct',
   INCORRECT: 'incorrect',
   RESEND: 'resend',
   ERROR: 'error'
-}
+};
 
 var ConfirmIndex = {
   RESEND: 0,
   NEXT: 1
-}
+};
 
 var config = {
   otpSharedStateVariable: 'oneTimePassword',
   otpCheckStageNameVariable: 'otpCheckStageName'
-}
+};
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -25,74 +25,85 @@ var fr = JavaImporter(
   com.sun.identity.authentication.callbacks.ScriptTextOutputCallback,
   javax.security.auth.callback.ConfirmationCallback,
   java.lang.String
-)
+);
 
 function getMfaRouteOptions (mfaRoute) {
   // mfaRoute = sms or email
-  return ['RESEND', 'NEXT']
+  return ['RESEND', 'NEXT'];
 }
 
-var phoneNumber = ''
-var emailAddress = ''
-var notificationId = transientState.get('notificationId')
-var mfaRoute = sharedState.get('mfa-route')
-var otpError = transientState.get('error')
-
-_log('Found OTP Error : ' + otpError)
+var phoneNumber = '';
+var emailAddress = '';
+var notificationId = transientState.get('notificationId');
+var mfaRoute = sharedState.get('mfa-route');
 
 try {
-  var userId = sharedState.get('_id')
+  var userId = sharedState.get('_id');
 
   if (mfaRoute === 'sms') {
     if (idRepository.getAttribute(userId, 'telephoneNumber').iterator().hasNext()) {
-      phoneNumber = idRepository.getAttribute(userId, 'telephoneNumber').iterator().next()
-      _log('phoneNumber : ' + phoneNumber)
+      phoneNumber = idRepository.getAttribute(userId, 'telephoneNumber').iterator().next();
+      _log('phoneNumber : ' + phoneNumber);
     } else {
-      _log('Couldn\'t find telephoneNumber')
+      _log('Couldn\'t find telephoneNumber');
     }
   } else if (mfaRoute === 'email') {
-    var isChangeEmail = sharedState.get('isChangeEmail')
+    var isChangeEmail = sharedState.get('isChangeEmail');
     if (isChangeEmail) {
-      emailAddress = sharedState.get('newEmail')
-      _log('emailAddress from change email journey: ' + emailAddress)
+      emailAddress = sharedState.get('newEmail');
+      _log('emailAddress from change email journey: ' + emailAddress);
     } else {
       if (idRepository.getAttribute(userId, 'mail').iterator().hasNext()) {
-        emailAddress = idRepository.getAttribute(userId, 'mail').iterator().next()
-        _log('emailAddress : ' + emailAddress)
+        emailAddress = idRepository.getAttribute(userId, 'mail').iterator().next();
+        _log('emailAddress : ' + emailAddress);
       } else {
-        _log('Couldn\'t find emailAddress')
+        _log('Couldn\'t find emailAddress');
       }
     }
   } else {
-    _log('Couldn\'t determine route used for sending MFA code')
+    _log('Couldn\'t determine route used for sending MFA code');
   }
 } catch (e) {
-  _log('Error retrieving user details: ' + e)
+  _log('Error retrieving user details: ' + e);
 }
 
 if (callbacks.isEmpty()) {
-  var message = ''
+  var otpError = sharedState.get('otpError');
+  var otpResend = sharedState.get('otpResend');
+  _log('Found OTP Flags : otpError = ' + otpError + ', otpResend = ' + otpResend);
+
+  var message = '';
   if (mfaRoute === 'sms') {
-    message = 'Please check your phone'
+    message = 'Please check your phone';
   } else if (mfaRoute === 'email') {
-    message = 'Please check your email'
+    message = 'Please check your email';
   }
 
-  var checkOtpStageName = sharedState.get(config.otpCheckStageNameVariable)
+  var checkOtpStageName = sharedState.get(config.otpCheckStageNameVariable);
   if (!checkOtpStageName) {
-    checkOtpStageName = 'NO_OTP_CHECK_STAGE_NAME'
+    checkOtpStageName = 'NO_OTP_CHECK_STAGE_NAME';
   }
 
-  _log('OTP stage name : ' + checkOtpStageName)
+  _log('OTP stage name : ' + checkOtpStageName);
+
+  var pageProps = {
+    'phoneNumber': _obfuscatePhone(phoneNumber),
+    'emailAddress': _obfuscateEmail(emailAddress),
+    'type': mfaRoute
+  };
+
+  if (otpError) {
+    pageProps.incorrect = otpError;
+  }
+
+  if (otpResend) {
+    pageProps.resend = otpResend;
+  }
 
   action = fr.Action.send(
     new fr.HiddenValueCallback(
       'pagePropsJSON',
-      JSON.stringify({
-        'phoneNumber': _obfuscatePhone(phoneNumber),
-        'emailAddress': _obfuscateEmail(emailAddress),
-        'type': mfaRoute
-      })
+      JSON.stringify(pageProps)
     ),
     new fr.TextOutputCallback(
       fr.TextOutputCallback.INFORMATION,
@@ -111,35 +122,42 @@ if (callbacks.isEmpty()) {
     new fr.HiddenValueCallback('stage', checkOtpStageName),
     new fr.HiddenValueCallback('description', 'Please enter the code you received'),
     new fr.HiddenValueCallback('header', 'Please enter your code')
-  ).build()
+  ).build();
 } else {
 
-  resend = 'false'
-  var confirmIndex = callbacks.get(4).getSelectedIndex()
+  sharedState.put('otpError', null);
+  sharedState.put('otpResend', null);
+
+  resend = 'false';
+  var confirmIndex = callbacks.get(4).getSelectedIndex();
   if (confirmIndex === ConfirmIndex.RESEND) {
-    resend = 'true'
+    resend = 'true';
   }
 
-  var otp = fr.String(callbacks.get(3).getPassword())
-  var correctOtp = sharedState.get(config.otpSharedStateVariable)
+  var otp = fr.String(callbacks.get(3).getPassword());
+  var correctOtp = sharedState.get(config.otpSharedStateVariable);
 
-  _log('Resend = ' + resend + ', correctOtp = ' + correctOtp)
+  _log('Resend = ' + resend + ', correctOtp = ' + correctOtp);
 
   if (resend === 'true') {
-    _log('Resend requested')
-    outcome = NodeOutcome.RESEND
+    _log('Resend requested');
+    sharedState.put('otpResend', true);
+    outcome = NodeOutcome.RESEND;
   } else if (!correctOtp) {
-    _log('No OTP in shared state')
-    outcome = NodeOutcome.ERROR
+    _log('No OTP in shared state');
+    outcome = NodeOutcome.ERROR;
   } else if (!otp.equals(correctOtp)) {
-    _log('Incorrect OTP')
-    outcome = NodeOutcome.INCORRECT
+    _log('Incorrect OTP');
+    sharedState.put('otpError', true);
+    outcome = NodeOutcome.INCORRECT;
   } else {
-    _log('Correct OTP')
-    outcome = NodeOutcome.CORRECT
+    _log('Correct OTP');
+    outcome = NodeOutcome.CORRECT;
   }
 
 }
+
+_log('Outcome : ' + _getOutcomeForDisplay());
 
 // LIBRARY START
 // LIBRARY END
