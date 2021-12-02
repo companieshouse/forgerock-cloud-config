@@ -365,6 +365,13 @@
 				"searchable": true,
 				"userEditable": true
 			},
+			"authCodeValidUntil": {
+				"title": "Authentication Code Valid Until",
+				"type": "string",
+				"viewable": true,
+				"searchable": true,
+				"userEditable": true
+			},
 			"locality": {
 				"title": "Locality",
 				"type": "string",

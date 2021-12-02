@@ -5,74 +5,105 @@
 	"consentRequired": false,
 	"icon": null,
 	"displayName": "webfilingAuthCode_alphaOrg",
-	"properties": [{
-		"target": "authCode",
-		"source": "AUTHCODE"
-	}, {
-		"target": "authCodeIsActive",
-		"transform": {
+	"properties": [
+		{
+			"target": "authCode",
+			"source": "AUTHCODE"
+		},
+		{
+			"target": "authCodeIsActive",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "function isActive(startDate, expiryDate) {\n    const unixNow = Date.parse(new Date());\n    logger.error('[AUTHCODE_DATE_CHECK] unix now ==> ' + unixNow);\n\n    try {\n        if (startDate && expiryDate) {\n            logger.error('[AUTHCODE_DATE_CHECK] both dates present');\n            logger.error('[AUTHCODE_DATE_CHECK] start date ==> ' + startDate);\n            logger.error('[AUTHCODE_DATE_CHECK] expiry date ==> ' + expiryDate);\n\n            var parsedStart = new Date(startDate.substring(0, 10));\n            var unixStart = Date.parse(parsedStart);\n            logger.error('[AUTHCODE_DATE_CHECK] unix start date ==> ' + unixStart);\n\n            var parsedExpiry = new Date(expiryDate.substring(0, 10));\n            var unixExpiry = Date.parse(parsedExpiry);\n            logger.error('[AUTHCODE_DATE_CHECK] unix expiry date ==> ' + unixExpiry);\n\n            if ((unixNow >= unixStart) && (unixNow < unixExpiry)) {\n                logger.error('[AUTHCODE_DATE_CHECK] currently within dates - ACTIVE');\n                return true;\n            } else {\n                logger.error('[AUTHCODE_DATE_CHECK] currently outside dates - INACTIVE');\n                return false;\n            }\n        } else if (startDate && !expiryDate) {\n            logger.error('[AUTHCODE_DATE_CHECK] start date present');\n\n            var parsedStart = new Date(startDate.substring(0, 10));\n            var unixStart = Date.parse(parsedStart);\n            logger.error('[AUTHCODE_DATE_CHECK] unix start date ==> ' + unixStart);\n\n            if (unixNow >= unixStart) {\n                logger.error('[AUTHCODE_DATE_CHECK] currently after start date - ACTIVE');\n                return true;\n            } else {\n                logger.error('[AUTHCODE_DATE_CHECK] currently before start date - INACTIVE');\n                return false;\n            }\n        } else {\n            logger.error('[AUTHCODE_DATE_CHECK] no auth code dates present - default to ACTIVE');\n            return true;\n        }\n    } catch (e) {\n        logger.error('[AUTHCODE_DATE_CHECK] An error occurred ' + e);\n        return true;\n    }\n}\n\nisActive(source.STARTDTE, source.EXPIRYDTE);\n"
+			},
+			"default": false,
+			"source": ""
+		},
+		{
+			"source": "STARTDTE",
+			"target": "authCodeValidFrom"
+		},
+		{
+			"source": "EXPIRYDTE",
+			"target": "authCodeValidUntil"
+		},
+		{
+			"source": "__NAME__",
+			"target": "number"
+		},
+		{
+			"source": "__NAME__",
+			"target": "name"			
+		}
+	],
+	"policies": [
+		{
+			"action": "EXCEPTION",
+			"situation": "AMBIGUOUS"
+		},
+		{
+			"action": "EXCEPTION",
+			"situation": "SOURCE_MISSING"
+		},
+		{
+			"action": "EXCEPTION",
+			"situation": "MISSING"
+		},
+		{
+			"action": "EXCEPTION",
+			"situation": "FOUND_ALREADY_LINKED"
+		},
+		{
+			"action": "DELETE",
+			"situation": "UNQUALIFIED"
+		},
+		{
+			"action": "EXCEPTION",
+			"situation": "UNASSIGNED"
+		},
+		{
+			"action": "EXCEPTION",
+			"situation": "LINK_ONLY"
+		},
+		{
+			"action": "IGNORE",
+			"situation": "TARGET_IGNORED"
+		},
+		{
+			"action": "IGNORE",
+			"situation": "SOURCE_IGNORED"
+		},
+		{
+			"action": "IGNORE",
+			"situation": "ALL_GONE"
+		},
+		{
+			"action": "UPDATE",
+			"situation": "CONFIRMED"
+		},
+		{
+			"action": "UPDATE",
+			"situation": "FOUND"
+		},
+		{
+			"action": "CREATE",
+			"situation": "ABSENT"
+		}
+	],
+	"correlationQuery": [
+		{
+			"linkQualifier": "default",
+			"expressionTree": {
+				"any": [
+					"number"
+				]
+			},
+			"mapping": "webfilingAuthCode_alphaOrg",
 			"type": "text/javascript",
-			"globals": {},
-			"source": "function isActive(startDate, expiryDate) {\n    const unixNow = Date.parse(new Date());\n    logger.error('[AUTHCODE_DATE_CHECK] unix now ==> ' + unixNow);\n\n    try {\n        if (startDate && expiryDate) {\n            logger.error('[AUTHCODE_DATE_CHECK] both dates present');\n            logger.error('[AUTHCODE_DATE_CHECK] start date ==> ' + startDate);\n            logger.error('[AUTHCODE_DATE_CHECK] expiry date ==> ' + expiryDate);\n\n            var parsedStart = new Date(startDate.substring(0, 10));\n            var unixStart = Date.parse(parsedStart);\n            logger.error('[AUTHCODE_DATE_CHECK] unix start date ==> ' + unixStart);\n\n            var parsedExpiry = new Date(expiryDate.substring(0, 10));\n            var unixExpiry = Date.parse(parsedExpiry);\n            logger.error('[AUTHCODE_DATE_CHECK] unix expiry date ==> ' + unixExpiry);\n\n            if ((unixNow >= unixStart) && (unixNow < unixExpiry)) {\n                logger.error('[AUTHCODE_DATE_CHECK] currently within dates - ACTIVE');\n                return true;\n            } else {\n                logger.error('[AUTHCODE_DATE_CHECK] currently outside dates - INACTIVE');\n                return false;\n            }\n        } else if (startDate && !expiryDate) {\n            logger.error('[AUTHCODE_DATE_CHECK] start date present');\n\n            var parsedStart = new Date(startDate.substring(0, 10));\n            var unixStart = Date.parse(parsedStart);\n            logger.error('[AUTHCODE_DATE_CHECK] unix start date ==> ' + unixStart);\n\n            if (unixNow >= unixStart) {\n                logger.error('[AUTHCODE_DATE_CHECK] currently after start date - ACTIVE');\n                return true;\n            } else {\n                logger.error('[AUTHCODE_DATE_CHECK] currently before start date - INACTIVE');\n                return false;\n            }\n        } else {\n            logger.error('[AUTHCODE_DATE_CHECK] no auth code dates present - default to ACTIVE');\n            return true;\n        }\n    } catch (e) {\n        logger.error('[AUTHCODE_DATE_CHECK] An error occurred ' + e);\n        return true;\n    }\n}\n\nisActive(source.STARTDTE, source.EXPIRYDTE);\n"
-		},
-		"default": false,
-		"source": ""
-	}, {
-		"target": "authCodeValidFrom",
-		"source": "STARTDTE"
-	}, {
-		"target": "number",
-		"source": "__NAME__"
-	}],
-	"policies": [{
-		"action": "EXCEPTION",
-		"situation": "AMBIGUOUS"
-	}, {
-		"action": "EXCEPTION",
-		"situation": "SOURCE_MISSING"
-	}, {
-		"action": "EXCEPTION",
-		"situation": "MISSING"
-	}, {
-		"action": "EXCEPTION",
-		"situation": "FOUND_ALREADY_LINKED"
-	}, {
-		"action": "DELETE",
-		"situation": "UNQUALIFIED"
-	}, {
-		"action": "EXCEPTION",
-		"situation": "UNASSIGNED"
-	}, {
-		"action": "EXCEPTION",
-		"situation": "LINK_ONLY"
-	}, {
-		"action": "IGNORE",
-		"situation": "TARGET_IGNORED"
-	}, {
-		"action": "IGNORE",
-		"situation": "SOURCE_IGNORED"
-	}, {
-		"action": "IGNORE",
-		"situation": "ALL_GONE"
-	}, {
-		"action": "UPDATE",
-		"situation": "CONFIRMED"
-	}, {
-		"action": "UPDATE",
-		"situation": "FOUND"
-	}, {
-		"action": "CREATE",
-		"situation": "ABSENT"
-	}],
-	"correlationQuery": [{
-		"linkQualifier": "default",
-		"expressionTree": {
-			"any": ["number"]
-		},
-		"mapping": "webfilingAuthCode_alphaOrg",
-		"type": "text/javascript",
-		"file": "ui/correlateTreeToQueryFilter.js"
-	}],
+			"file": "ui/correlateTreeToQueryFilter.js"
+		}
+	],
 	"clusteredSourceReconEnabled": true,
 	"reconSourceQueryPageSize": 10000,
 	"sourceQueryFullEntry": true,

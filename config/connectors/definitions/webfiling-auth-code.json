@@ -91,6 +91,12 @@
 					"nativeType": "string",
 					"required": false
 				},
+				"EXPIRYDTE": {
+					"type": "string",
+					"nativeName": "EXPIRYDTE",
+					"nativeType": "string",
+					"required": false
+				},
 				"__NAME__": {
 					"type": "string",
 					"nativeName": "__NAME__",
