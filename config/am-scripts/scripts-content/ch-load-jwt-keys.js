@@ -28,5 +28,7 @@ function saveState () {
 
 action = fr.Action.goTo(saveState()).build();
 
+_log('Exited');
+
 // LIBRARY START
 // LIBRARY END
