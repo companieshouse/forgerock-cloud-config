@@ -4,6 +4,7 @@
 
   var OBJECT_USER = 'alpha_user';
   var OBJECT_COMPANY = 'alpha_organization';
+  var SYSTEM_WEBFILING_USER = 'system/WebfilingUser/webfilingUser';
 
   let companyIncorporationsEndpoint = 'https://v79uxae8q8.execute-api.eu-west-1.amazonaws.com/mock/submissions';
   let numIncorporationsPerPage = '50';
@@ -19,6 +20,8 @@
     PENDING: 'pending',
     NONE: 'none'
   };
+
+  var _ewfUserParentNameMap = new Map();
 
   function _log (message) {
     logger.error('[CHLOG][SCRS][' + logNowMsecs + '] ' + message);
@@ -189,6 +192,38 @@
     }
   }
 
+  function getParentNameFromEwf (email) {
+    try {
+      if (!email || email.trim() === '') {
+        return null;
+      }
+
+      email = email.trim();
+
+      let cacheKey = email.toUpperCase();
+
+      if (_ewfUserParentNameMap.has(cacheKey)) {
+        return _ewfUserParentNameMap.get(cacheKey);
+      }
+
+      let response = openidm.query(
+        SYSTEM_WEBFILING_USER,
+        { '_queryFilter': 'EMAIL eq "' + email + '"' }
+      );
+
+      if (response.resultCount === 1) {
+        if (response.result[0]._id) {
+          _ewfUserParentNameMap.set(cacheKey, response.result[0]._id);
+          return response.result[0]._id;
+        }
+      }
+    } catch (e) {
+      _log('Error : ' + e);
+    }
+
+    return null;
+  }
+
   function createUser (email, description, linkTokenHint) {
     _log('User does not exist: Creating new user with username ' + email);
 
@@ -206,6 +241,15 @@
     if (linkTokenHint) {
       userDetails.frUnindexedString3 = linkTokenHint;
     }
+
+    let ewfParentNameForEmail = getParentNameFromEwf(email);
+    _log('EWF ParentName for ' + email + ' = ' + ewfParentNameForEmail);
+
+    if (ewfParentNameForEmail) {
+      userDetails.frIndexedString1 = ewfParentNameForEmail;
+    }
+
+    _log('User details for createUser : ' + JSON.stringify(userDetails));
 
     return openidm.create('managed/' + OBJECT_USER, null, userDetails);
   }
