@@ -75,7 +75,7 @@ var Actions = {
 };
 
 function getKey (secret, keyType) {
-  if (keyType === KeyType.ENCRYPTION) {
+  if (keyType == KeyType.ENCRYPTION) {
     return new fr.SecretKeySpec(fr.Base64.decode(config.encryptionKey), 'AES');
   } else {
     var secretBytes = fr.Base64.decode(secret);

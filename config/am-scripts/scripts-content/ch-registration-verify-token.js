@@ -96,7 +96,7 @@ function saveUserDataToState (claimSet) {
 }
 
 function getKey (secret, keyType) {
-  if (keyType === KeyType.ENCRYPTION) {
+  if (keyType == KeyType.ENCRYPTION) {
     return new fr.SecretKeySpec(fr.Base64.decode(config.encryptionKey), 'AES');
   } else {
     var secretBytes = fr.Base64.decode(secret);
@@ -154,7 +154,7 @@ function validatedJwtClaims (jwtString, issuer, jwtType) {
   var jwtExpiry = jwtClaims.getExpirationTime();
   var now = new Date();
 
-  if (jwtIssuer !== issuer) {
+  if (jwtIssuer != issuer) {
     _log('Issuer in JWT [' + jwtIssuer + '] doesn\'t match expected issuer [' + issuer + ']');
     return {
       success: false,
