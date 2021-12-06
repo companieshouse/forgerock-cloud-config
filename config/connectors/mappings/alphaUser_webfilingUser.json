@@ -9,9 +9,13 @@
     "type": "text/javascript",
     "source": "// change via external file"
   },
+  "onUpdate": {
+    "type": "text/javascript",
+    "source": "// change via external file"
+  },
   "properties": [
     {
-      "target": "PARENT_USERNAME",
+      "target": "_id",
       "source": "frIndexedString1"
     },
     {
@@ -83,7 +87,7 @@
       "linkQualifier": "default",
       "expressionTree": {
         "all": [
-          "PARENT_USERNAME"
+          "_id"
         ]
       },
       "mapping": "alphaUser_webfilingUser",

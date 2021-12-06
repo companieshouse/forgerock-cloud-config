@@ -71,13 +71,16 @@ describe('update-connector-mappings', () => {
       }
     ],
     onCreate: {
-      source: 'my script'
+      source: 'my script',
+      type: 'text/javascript'
     },
     onError: {
-      source: 'my script'
+      source: 'my script',
+      type: 'text/javascript'
     },
     onUpdate: {
-      source: 'my script'
+      source: 'my script',
+      type: 'text/javascript'
     }
   }
 
