@@ -35,6 +35,23 @@ function selectTypeCallback (nameFound, phoneFound) {
   }
 }
 
+function getSmsSendErrorProps () {
+  var pageProps = {};
+
+  var invalidPhone = sharedState.get('invalidPhone');
+  var smsSendError = sharedState.get('smsSendError');
+
+  if (invalidPhone) {
+    pageProps.invalidPhone = true;
+  }
+
+  if (smsSendError) {
+    pageProps.smsSendError = true;
+  }
+
+  return JSON.stringify(pageProps);
+}
+
 // main execution flow
 try {
   var PHONE_NUMBER_FIELD = 'telephoneNumber';
@@ -89,6 +106,8 @@ try {
       var stageName = isOnboarding ? 'ONBOARDING_PROFILE' : 'EWF_PROFILE';
       _log(logPrefix + ' userId: ' + userId);
 
+      sharedState.put('sendSmsSimpleOutcome', true);
+
       if (errorMessage !== null) {
         var errorProps = sharedState.get('pagePropsJSON');
         level = fr.TextOutputCallback.ERROR;
@@ -109,7 +128,8 @@ try {
           nameFound ? placeHolderCallback : new fr.NameCallback('What is your full name? (optional)'),
           phoneFound ? placeHolderCallback : new fr.NameCallback('What is your mobile number? (optional)'),
           new fr.HiddenValueCallback('stage', stageName),
-          skipCallback
+          skipCallback,
+          new fr.HiddenValueCallback('pagePropsJSON', getSmsSendErrorProps())
         ).build();
       }
     }
