@@ -1,0 +1,29 @@
+{
+    "env": {
+        "browser": true,
+        "es6": false
+    },
+    "parserOptions": {
+        "ecmaVersion": 2017,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "rules": {
+        "no-debugger": "off",
+        "quotes": [
+            "error",
+            "double"
+        ],
+        "indent": ["error", 4],
+        "semi": ["error", "always"],
+        "no-var": 0,
+        "space-before-function-paren": ["error", {
+            "anonymous": "always",
+            "named": "never",
+            "asyncArrow": "always"
+        }],
+        "quote-props": ["error", "consistent"]
+    }
+}
