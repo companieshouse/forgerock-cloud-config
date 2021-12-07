@@ -19,6 +19,7 @@ const updateConnectorMappings = async (argv) => {
     const requestUrl = `${FIDC_URL}/openidm/config/sync`
     const requestBody = {
       mappings: mappingFilesContent
+        .filter((mapping) => mapping.enabled)
     }
 
     // Update the Event scripts if we have been supplied them in the config

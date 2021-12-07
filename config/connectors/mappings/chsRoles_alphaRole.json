@@ -1,5 +1,6 @@
 {
 	"target": "managed/alpha_role",
+	"enabled": false,
 	"source": "system/CHSRoles/roles",
 	"name": "chsRoles_alphaRole",
 	"consentRequired": false,

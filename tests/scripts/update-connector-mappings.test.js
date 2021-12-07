@@ -24,6 +24,7 @@ describe('update-connector-mappings', () => {
 
   const mockConfig = {
     consentRequired: false,
+    enabled: true,
     displayName: 'MongodbUsers',
     icon: null,
     name: 'MongodbUsers',
@@ -49,6 +50,7 @@ describe('update-connector-mappings', () => {
 
   const mockConfigWithScript = {
     consentRequired: false,
+    enabled: true,
     displayName: 'MongodbUsers',
     icon: null,
     name: 'MongodbUsers',

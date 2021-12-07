@@ -1,5 +1,6 @@
 {
   "target": "system/WebfilingUser/webfilingUser",
+  "enabled": true,
   "source": "managed/alpha_user",
   "name": "alphaUser_webfilingUser",
   "consentRequired": false,
@@ -15,7 +16,7 @@
   },
   "properties": [
     {
-      "target": "_id",
+      "target": "PARENT_USERNAME",
       "source": "frIndexedString1"
     },
     {
@@ -87,7 +88,7 @@
       "linkQualifier": "default",
       "expressionTree": {
         "all": [
-          "_id"
+          "PARENT_USERNAME"
         ]
       },
       "mapping": "alphaUser_webfilingUser",
