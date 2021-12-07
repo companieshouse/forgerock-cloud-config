@@ -7,7 +7,7 @@
   var SYSTEM_WEBFILING_USER = 'system/WebfilingUser/webfilingUser';
 
   let companyIncorporationsEndpoint = 'https://v79uxae8q8.execute-api.eu-west-1.amazonaws.com/mock/submissions';
-  let numIncorporationsPerPage = '50';
+  let defaultIncorporationsPerPage = 50;
   let emailsEndpoint = 'https://v79uxae8q8.execute-api.eu-west-1.amazonaws.com/mock/authorisedForgerockEmails';
   let amEndpoint = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
   let customUiUrl = 'https://idam-ui.amido.aws.chdev.org';
@@ -64,11 +64,14 @@
     return date;
   }
 
-  function getCompanyIncorporations (incorporationTimepoint) {
-    _log('Getting Company Incorporations from timepoint : ' + incorporationTimepoint);
+  function getCompanyIncorporations (incorporationTimepoint, useIncorporationsPerPage) {
+    _log('Getting Company Incorporations from timepoint : ' + incorporationTimepoint + ' (items_per_page = ' + useIncorporationsPerPage + ')');
+
+    const url = companyIncorporationsEndpoint + '?timepoint=' + incorporationTimepoint + '&items_per_page=' + useIncorporationsPerPage;
+    _log('Company Incorporations url : ' + url);
 
     let request = {
-      'url': companyIncorporationsEndpoint + '?timepoint=' + incorporationTimepoint + '&items_per_page=' + numIncorporationsPerPage,
+      'url': url,
       'method': 'GET',
       'headers': {
         'Content-Type': 'application/json',
@@ -433,35 +436,28 @@
   let userFailureCount = 0;
 
   let timePoint = '';
-  let nextTimePoint = '';
+  let linksNextTimePoint = '';
   let responseNextTimePoint = '';
   let responseMessage = 'OK';
 
-  try {
+  let itemsPerPage = request.additionalParameters.numIncorporationsPerPage || defaultIncorporationsPerPage;
 
+  try {
     if (request.method === 'read' || (request.method === 'action' && request.action === 'read')) {
-      let paramCompanyNumber = request.additionalParameters.companyNumber;
 
       timePoint = determineTimePoint();
-      nextTimePoint = '';
-      responseNextTimePoint = nextTimePoint;
+      responseNextTimePoint = timePoint;
 
-      let incorporationsResponse = getCompanyIncorporations(timePoint);
+      let incorporationsResponse = getCompanyIncorporations(timePoint, itemsPerPage);
       _log('Incorporations response : ' + incorporationsResponse);
 
       if (incorporationsResponse) {
         let incorporations = JSON.parse(incorporationsResponse);
 
         if (incorporations) {
-          if (paramCompanyNumber) {
-            incorporations = incorporations.filter(inc => {
-              return (inc.company_number === paramCompanyNumber);
-            });
-          }
-
           if (incorporations.links && incorporations.links.next) {
             _log('Incorporations : Links > Next = ' + incorporations.links.next);
-            nextTimePoint = extractLinksNextTimePoint(incorporations.links.next, '');
+            linksNextTimePoint = extractLinksNextTimePoint(incorporations.links.next, '');
           }
 
           if (incorporations.items) {
@@ -613,16 +609,20 @@
           }
         }
 
-        responseNextTimePoint = nextTimePoint;
+        if (linksNextTimePoint) {
+          // By default we'll use the links>next timepoint
+          responseNextTimePoint = linksNextTimePoint;
+        }
 
         if (companyAttemptCount > 0 && companySuccessCount === 0) {
-          // We tried some, but none succeeded so something must be wrong, so
-          // we don't update the next time point
+          // Unless we tried some but none succeeded so something must be wrong, so
+          // we don't update the next time point otherwise we'll miss all of these
           _log('None of the company attempts succeeded, resetting the timePoint back to the current instance');
           responseNextTimePoint = timePoint;
         }
 
         if (companySuccessCount > 0) {
+          // If we did manage to update any, then we move onto the next set
           let response = getScrsServiceUser();
           if (response.resultCount === 1) {
             updateScrsServiceUserTimepoint(response.result[0]._id, responseNextTimePoint);
@@ -641,6 +641,7 @@
     results: {
       message: responseMessage,
       usedTimePoint: timePoint,
+      itemsPerPage: itemsPerPage,
       nextTimePoint: responseNextTimePoint,
       companyAttemptCount: companyAttemptCount,
       companyFailureCount: companyFailureCount,
