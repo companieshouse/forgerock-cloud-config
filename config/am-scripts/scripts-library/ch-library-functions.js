@@ -16,109 +16,119 @@ Note that comments in this file will be removed as part of the JS minification a
 */
 
 function _getScriptNameForDisplay () {
-  return (typeof _scriptName !== 'undefined' && _scriptName) ? '[' + _scriptName + ']' : ''
+  return (typeof _scriptName !== 'undefined' && _scriptName) ? '[' + _scriptName + ']' : '';
 }
 
 function _getOutcomeForDisplay () {
-  return (typeof outcome !== 'undefined' && outcome) ? '[' + outcome + ']' : ''
+  return (typeof outcome !== 'undefined' && outcome) ? '[' + outcome + ']' : '';
 }
 
 function _log (message, logLevel) {
   if (!logLevel) {
-    logLevel = 'ERROR'
+    logLevel = 'MESSAGE';
   }
 
-  var chLogMarker = '[CHLOG]'
+  var chLogMarker = '[CHLOG]';
+  var scriptNameForDisplay = _getScriptNameForDisplay() + '[SPAN:' + _getSpanId() + ']';
 
   if (logLevel === 'MESSAGE' && logger.messageEnabled()) {
-    logger.message(chLogMarker.concat(_getScriptNameForDisplay()).concat(' ').concat(message))
+    logger.message(chLogMarker.concat(scriptNameForDisplay).concat(' ').concat(message));
   } else if (logLevel === 'WARNING' && logger.warningEnabled()) {
-    logger.warning(chLogMarker.concat(_getScriptNameForDisplay()).concat(' ').concat(message))
+    logger.warning(chLogMarker.concat(scriptNameForDisplay).concat(' ').concat(message));
   } else if (logLevel === 'ERROR' && logger.errorEnabled()) {
-    logger.error(chLogMarker.concat(_getScriptNameForDisplay()).concat(' ').concat(message))
+    logger.error(chLogMarker.concat(scriptNameForDisplay).concat(' ').concat(message));
   }
 }
 
 function _getSelectedLanguage (requestHeaders) {
-  var langHeader = 'Chosen-Language'
+  var langHeader = 'Chosen-Language';
 
   if (requestHeaders && requestHeaders.get(langHeader)) {
-    var lang = requestHeaders.get(langHeader).get(0)
-    _log('Selected language: ' + lang)
-    return lang
+    var lang = requestHeaders.get(langHeader).get(0);
+    _log('Selected language: ' + lang);
+    return lang;
   }
-  _log('No selected language found - defaulting to EN')
-  return 'EN'
+  _log('No selected language found - defaulting to EN');
+  return 'EN';
 }
 
 function _obfuscateEmail (email) {
   if (!email || email.replace(/\s/g, '').length === 0 || email.replace(/\s/g, '').indexOf('@') <= 0) {
-    return email
+    return email;
   }
 
-  email = email.replace(/\s/g, '')
+  email = email.replace(/\s/g, '');
 
-  var at = email.indexOf('@')
-  var username = email.substring(0, at).trim()
-  var domain = email.substring(at + 1).trim()
+  var at = email.indexOf('@');
+  var username = email.substring(0, at).trim();
+  var domain = email.substring(at + 1).trim();
 
-  return username.substring(0, 1).concat('*****@').concat(domain)
+  return username.substring(0, 1).concat('*****@').concat(domain);
 }
 
 function _obfuscatePhone (phone) {
-  var NUM_CHARS_TO_SHOW = 4
+  var NUM_CHARS_TO_SHOW = 4;
 
   if (!phone || phone.replace(/\s/g, '').length < NUM_CHARS_TO_SHOW) {
-    return phone
+    return phone;
   }
 
-  phone = phone.replace(/\s/g, '')
+  phone = phone.replace(/\s/g, '');
 
-  var buffer = ''
+  var buffer = '';
   for (var i = 0; i < phone.length - NUM_CHARS_TO_SHOW; i++) {
-    buffer = buffer + '*'
+    buffer = buffer + '*';
   }
 
-  buffer = buffer + phone.substring(phone.length - NUM_CHARS_TO_SHOW)
+  buffer = buffer + phone.substring(phone.length - NUM_CHARS_TO_SHOW);
 
-  return _padPhone(buffer)
+  return _padPhone(buffer);
 }
 
 function _padPhone (phone) {
   if (!phone) {
-    return phone
+    return phone;
   }
 
-  phone = phone.replace(/\s/g, '')
+  phone = phone.replace(/\s/g, '');
 
   if (phone.length > 5) {
-    phone = phone.substring(0, 5).concat(' ') + phone.substring(5)
+    phone = phone.substring(0, 5).concat(' ') + phone.substring(5);
   }
 
   if (phone.length > 9) {
-    phone = phone.substring(0, 9).concat(' ') + phone.substring(9)
+    phone = phone.substring(0, 9).concat(' ') + phone.substring(9);
   }
 
-  return phone
+  return phone;
 }
 
 function _getJourneyName () {
-  var journeyName = undefined
-  var authIndexType = requestParameters.get('authIndexType')
+  var journeyName = undefined;
+  var authIndexType = requestParameters.get('authIndexType');
 
   if (authIndexType) {
-    var ait = authIndexType.get(0)
+    var ait = authIndexType.get(0);
     if (ait) {
-      var authIndexValue = requestParameters.get('authIndexValue')
+      var authIndexValue = requestParameters.get('authIndexValue');
       if (authIndexValue) {
-        var aiv = authIndexValue.get(0)
+        var aiv = authIndexValue.get(0);
         if (aiv) {
-          journeyName = aiv
+          journeyName = aiv;
         }
       }
     }
   }
 
-  _log('Resolved Journey Name as : ' + journeyName)
-  return journeyName
+  _log('Resolved Journey Name as : ' + journeyName);
+  return journeyName;
+}
+
+function _getSpanId () {
+  var spanId = sharedState.get('_spanId');
+  if (!spanId) {
+    spanId = new Date().getTime().toString() + '-' + Math.floor(Math.random() * 100).toString();
+    sharedState.put('_spanId', spanId);
+  }
+  return spanId;
 }
