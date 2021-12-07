@@ -30,14 +30,14 @@ var NodeOutcome = {
   SUCCESS: 'success'
 };
 
-function buildOnboardingParams (userId, linkTokenId) {
-  return '_id=' + encodeURIComponent(userId) + '&tokenId=' + encodeURIComponent(linkTokenId);
+function buildOnboardingParams (userId, linkTokenId, companyNumber) {
+  return '_id=' + encodeURIComponent(userId) + '&tokenId=' + encodeURIComponent(linkTokenId) + '&companyNo=' + encodeURIComponent(companyNumber);
 }
 
 function buildReturnUrl (email, companyNumber, isNewUser, host, userId, linkTokenId) {
   _log('Starting buildReturnUrl');
 
-  var onboardingParams = buildOnboardingParams(userId, linkTokenId);
+  var onboardingParams = buildOnboardingParams(userId, linkTokenId, companyNumber);
 
   _log('Onboarding params : ' + onboardingParams);
 

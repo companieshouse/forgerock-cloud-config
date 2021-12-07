@@ -1,5 +1,6 @@
 {
   "target": "managed/alpha_user",
+  "enabled": true,
   "source": "system/WebfilingUser/webfilingUser",
   "name": "webfilingUser_alphaUser",
   "displayName": "webfilingUser_alphaUser",
@@ -22,7 +23,7 @@
     },
     {
       "target": "frIndexedString1",
-      "source": "_id"
+      "source": "PARENT_USERNAME"
     }
   ],
   "policies": [

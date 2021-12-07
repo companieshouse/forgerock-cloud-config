@@ -1,5 +1,6 @@
 {
   "target": "system/DSBackup/account",
+  "enabled": true,
   "source": "managed/alpha_user",
   "name": "managedAlpha_user_systemDsbackupAccount",
   "consentRequired": false,
