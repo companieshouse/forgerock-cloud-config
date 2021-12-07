@@ -29,7 +29,11 @@ for (let iteration = 1; iteration <= maxIterations; iteration++) {
 
     _log('SCRS Iteration no. ' + iteration + ' => response analysis : triedSomeCompanies = ' + triedSomeCompanies + ', allCompaniesFailed = ' + allCompaniesFailed);
 
-    if (triedSomeCompanies && allCompaniesFailed) {
+    if (!triedSomeCompanies) {
+      // No companies attempted, probably nothing to do
+      _log('No companies attempted, stopping iterations (at no. ' + iteration + ' of ' + maxIterations + ') as submissions queue completed for now.');
+      break;
+    } else if (triedSomeCompanies && allCompaniesFailed) {
       // If we tried some (e.g. some were returned by the /submissions request) but all failed we probably have an issue
       _log('All companies failed, stopping iterations (at no. ' + iteration + ' of ' + maxIterations + ') as there may be a potential issue to resolve.');
       break;
