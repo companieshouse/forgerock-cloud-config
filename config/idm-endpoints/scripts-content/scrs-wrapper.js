@@ -7,7 +7,7 @@ function _log (message) {
 _log('SCRS Scheduled Starting!');
 
 const maxIterations = 3;
-const incorporationsPerPage = '25';
+const incorporationsPerPage = 50;
 
 for (let iteration = 1; iteration <= maxIterations; iteration++) {
   _log('SCRS Iteration no. ' + iteration + ' starts (max iterations = ' + maxIterations + ')');
@@ -35,7 +35,7 @@ for (let iteration = 1; iteration <= maxIterations; iteration++) {
       break;
     }
   } else {
-    // We got no response, so let's not try again for now
+    // We got no response, so let's not try again for now, instead wait for the next schedule to run
     _log('SCRS Iteration no. ' + iteration + ' returned no response, quitting.');
     break;
   }

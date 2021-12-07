@@ -7,7 +7,7 @@
   var SYSTEM_WEBFILING_USER = 'system/WebfilingUser/webfilingUser';
 
   let companyIncorporationsEndpoint = 'https://v79uxae8q8.execute-api.eu-west-1.amazonaws.com/mock/submissions';
-  let defaultIncorporationsPerPage = '50';
+  let defaultIncorporationsPerPage = 50;
   let emailsEndpoint = 'https://v79uxae8q8.execute-api.eu-west-1.amazonaws.com/mock/authorisedForgerockEmails';
   let amEndpoint = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
   let customUiUrl = 'https://idam-ui.amido.aws.chdev.org';
@@ -67,8 +67,11 @@
   function getCompanyIncorporations (incorporationTimepoint, useIncorporationsPerPage) {
     _log('Getting Company Incorporations from timepoint : ' + incorporationTimepoint + ' (items_per_page = ' + useIncorporationsPerPage + ')');
 
+    const url = companyIncorporationsEndpoint + '?timepoint=' + incorporationTimepoint + '&items_per_page=' + useIncorporationsPerPage;
+    _log('Company Incorporations url : ' + url);
+
     let request = {
-      'url': companyIncorporationsEndpoint + '?timepoint=' + incorporationTimepoint + '&items_per_page=' + useIncorporationsPerPage,
+      'url': url,
       'method': 'GET',
       'headers': {
         'Content-Type': 'application/json',
@@ -437,15 +440,15 @@
   let responseNextTimePoint = '';
   let responseMessage = 'OK';
 
-  try {
+  let itemsPerPage = request.additionalParameters.numIncorporationsPerPage || defaultIncorporationsPerPage;
 
+  try {
     if (request.method === 'read' || (request.method === 'action' && request.action === 'read')) {
-      let useIncorporationsPerPage = request.additionalParameters.numIncorporationsPerPage || defaultIncorporationsPerPage;
 
       timePoint = determineTimePoint();
       responseNextTimePoint = timePoint;
 
-      let incorporationsResponse = getCompanyIncorporations(timePoint, useIncorporationsPerPage);
+      let incorporationsResponse = getCompanyIncorporations(timePoint, itemsPerPage);
       _log('Incorporations response : ' + incorporationsResponse);
 
       if (incorporationsResponse) {
@@ -638,6 +641,7 @@
     results: {
       message: responseMessage,
       usedTimePoint: timePoint,
+      itemsPerPage: itemsPerPage,
       nextTimePoint: responseNextTimePoint,
       companyAttemptCount: companyAttemptCount,
       companyFailureCount: companyFailureCount,
