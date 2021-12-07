@@ -25,7 +25,7 @@ function _getOutcomeForDisplay () {
 
 function _log (message, logLevel) {
   if (!logLevel) {
-    logLevel = 'ERROR';
+    logLevel = 'MESSAGE';
   }
 
   var chLogMarker = '[CHLOG]';
