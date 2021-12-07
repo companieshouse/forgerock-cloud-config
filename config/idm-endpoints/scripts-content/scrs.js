@@ -6,7 +6,7 @@
   var OBJECT_COMPANY = 'alpha_organization';
 
   let companyIncorporationsEndpoint = 'https://v79uxae8q8.execute-api.eu-west-1.amazonaws.com/mock/submissions';
-  let numIncorporationsPerPage = '50';
+  let defaultIncorporationsPerPage = '50';
   let emailsEndpoint = 'https://v79uxae8q8.execute-api.eu-west-1.amazonaws.com/mock/authorisedForgerockEmails';
   let amEndpoint = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
   let customUiUrl = 'https://idam-ui.amido.aws.chdev.org';
@@ -61,11 +61,11 @@
     return date;
   }
 
-  function getCompanyIncorporations (incorporationTimepoint) {
-    _log('Getting Company Incorporations from timepoint : ' + incorporationTimepoint);
+  function getCompanyIncorporations (incorporationTimepoint, useIncorporationsPerPage) {
+    _log('Getting Company Incorporations from timepoint : ' + incorporationTimepoint + ' (items_per_page = ' + useIncorporationsPerPage + ')');
 
     let request = {
-      'url': companyIncorporationsEndpoint + '?timepoint=' + incorporationTimepoint + '&items_per_page=' + numIncorporationsPerPage,
+      'url': companyIncorporationsEndpoint + '?timepoint=' + incorporationTimepoint + '&items_per_page=' + useIncorporationsPerPage,
       'method': 'GET',
       'headers': {
         'Content-Type': 'application/json',
@@ -396,24 +396,18 @@
   try {
 
     if (request.method === 'read' || (request.method === 'action' && request.action === 'read')) {
-      let paramCompanyNumber = request.additionalParameters.companyNumber;
+      let useIncorporationsPerPage = request.additionalParameters.numIncorporationsPerPage || defaultIncorporationsPerPage;
 
       timePoint = determineTimePoint();
       responseNextTimePoint = timePoint;
 
-      let incorporationsResponse = getCompanyIncorporations(timePoint);
+      let incorporationsResponse = getCompanyIncorporations(timePoint, useIncorporationsPerPage);
       _log('Incorporations response : ' + incorporationsResponse);
 
       if (incorporationsResponse) {
         let incorporations = JSON.parse(incorporationsResponse);
 
         if (incorporations) {
-          if (paramCompanyNumber) {
-            incorporations = incorporations.filter(inc => {
-              return (inc.company_number === paramCompanyNumber);
-            });
-          }
-
           if (incorporations.links && incorporations.links.next) {
             _log('Incorporations : Links > Next = ' + incorporations.links.next);
             linksNextTimePoint = extractLinksNextTimePoint(incorporations.links.next, '');

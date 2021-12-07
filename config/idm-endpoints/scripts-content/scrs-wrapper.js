@@ -1,40 +1,44 @@
-//this script contains the logic to invoke the endpoint 'scrs' to process incorporations available from the submission endpoint within the last 2 hours
+let logNowMsecs = new Date().getTime();
 
-function log(message) {
-    logger.error("SCRS_WRAPPER - " + message);
+function _log (message) {
+  logger.error('[CHLOG][SCRS-WRAPPER][' + logNowMsecs + '] ' + message);
 }
 
-function minusHours(h) {
-    var date = new Date();
-    date.setHours(date.getHours() - h);
-    return date;
+_log('SCRS Scheduled Starting!');
+
+const maxIterations = 3;
+const incorporationsPerPage = '25';
+
+for (let iteration = 1; iteration <= maxIterations; iteration++) {
+  _log('SCRS Iteration no. ' + iteration + ' starts (max iterations = ' + maxIterations + ')');
+
+  let endpointResponse = openidm.action(
+    'endpoint/scrs',
+    'read',
+    null,
+    {
+      'numIncorporationsPerPage': incorporationsPerPage
+    },
+    null);
+
+  if (endpointResponse && endpointResponse.results) {
+    _log('SCRS Iteration no. ' + iteration + ' => response :  ' + JSON.stringify(endpointResponse));
+
+    const triedSomeCompanies = endpointResponse.results.companyAttemptCount > 0;
+    const allCompaniesFailed = endpointResponse.results.companyFailureCount === endpointResponse.results.companyAttemptCount;
+
+    _log('SCRS Iteration no. ' + iteration + ' => response analysis : triedSomeCompanies = ' + triedSomeCompanies + ', allCompaniesFailed = ' + allCompaniesFailed);
+
+    if (triedSomeCompanies && allCompaniesFailed) {
+      // If we tried some (e.g. some were returned by the /submissions request) but all failed we probably have an issue
+      _log('All companies failed, stopping iterations (at no. ' + iteration + ' of ' + maxIterations + ') as there may be a potential issue to resolve.');
+      break;
+    }
+  } else {
+    // We got no response, so let's not try again for now
+    _log('SCRS Iteration no. ' + iteration + ' returned no response, quitting.');
+    break;
+  }
 }
 
-function padding(num) {
-    return num < 10 ? '0' + num : num;
-}
-
-let date = minusHours(2);
-
-let defaultTimepoint = [
-    date.getFullYear(),
-    padding(date.getMonth() + 1),
-    padding(date.getDate()),
-    padding(date.getHours()),
-    padding(date.getMinutes()),
-    padding(date.getSeconds()),
-    date.getMilliseconds()
-].join("");
-
-log("SCRS Scheduled Run");
-
-let endpointResponse = openidm.action(
-                            "endpoint/scrs", 
-                            "read", 
-                            null, 
-                            {
-                                "timepoint" : defaultTimepoint
-                            }, 
-                            null);
-
-log("SCRS Scheduled Run - response:  " + JSON.stringify(endpointResponse));
+_log('SCRS Scheduled Ending!');
