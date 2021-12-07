@@ -1,17 +1,18 @@
-var _scriptName = 'CH CALLBACK UPDATE PHONE SHOW NUMBER'
+var _scriptName = 'CH CALLBACK UPDATE PHONE SHOW NUMBER';
+_log('Starting');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
   javax.security.auth.callback.TextOutputCallback,
   com.sun.identity.authentication.callbacks.HiddenValueCallback
-)
+);
 
-var phoneNumber = sharedState.get('objectAttributes').get('telephoneNumber')
-_log('Phone number: ' + phoneNumber)
+var phoneNumber = sharedState.get('objectAttributes').get('telephoneNumber');
+_log('Phone number: ' + phoneNumber);
 
-var notificationId = transientState.get('notificationId')
-var otpError = transientState.get('error')
-_log('Found OTP Error: ' + otpError)
+var notificationId = transientState.get('notificationId');
+var otpError = transientState.get('error');
+_log('Found OTP Error: ' + otpError);
 
 try {
   if (otpError) {
@@ -34,10 +35,10 @@ try {
           fr.TextOutputCallback.ERROR,
           otpError
         )
-      ).build()
+      ).build();
     }
   } else if (callbacks.isEmpty()) {
-    var message = 'Please check your phone'
+    var message = 'Please check your phone';
 
     action = fr.Action.send(
       new fr.HiddenValueCallback(
@@ -52,14 +53,14 @@ try {
         'notificationId',
         notificationId
       )
-    ).build()
+    ).build();
   } else {
-    outcome = 'True'
+    outcome = 'True';
   }
 } catch (e) {
-  _log('An error occurred: ' + e)
-  sharedState.put('errorMessage', e.toString())
-  outcome = 'False'
+  _log('An error occurred: ' + e);
+  sharedState.put('errorMessage', e.toString());
+  outcome = 'False';
 }
 
 // LIBRARY START

@@ -1,4 +1,5 @@
 var _scriptName = 'CH LOAD JWT KEYS';
+_log('Starting');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action
@@ -26,6 +27,8 @@ function saveState () {
 }
 
 action = fr.Action.goTo(saveState()).build();
+
+_log('Exited');
 
 // LIBRARY START
 // LIBRARY END

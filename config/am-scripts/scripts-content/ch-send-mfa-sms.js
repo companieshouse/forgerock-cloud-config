@@ -1,31 +1,5 @@
-/* 
-  ** INPUT DATA
-    * SHARED STATE:
-      - 'oneTimePassword' : the OTP code to be sent via text
-      - '_id': the user ID to be send the text to (only populated if registrationMFA = false)
-      - 'objectAttributes.telephoneNumber': the user telephone number (entered in a previous screen)
-
-    * TRANSIENT STATE
-      - 'registrationMFA' : flag indicating if this script is invoked as part of the registration journey (i.e. the user does not exist in IDM yet)
-      - 'notifyJWT': the Notify JWT to be used for requests to Notify
-      - 'templates': the list of all Notify templates 
-
-  ** OUTPUT DATA
-    * TRANSIENT STATE:
-      - 'notificationId': the notification ID returned by Notify if the call was successful
-      
-    * SHARED STATE:
-      - 'mfa-route': the boolean indicating whether this is a SMS or a Email MFA route (SMS in this case)
-
-    ** OUTCOMES
-    - true: message sent successfully
-    - false: error in sending message
-  
-  ** CALLBACKS:
-    - error (stage SEND_MFA_SMS_ERROR, error while sending SMS) 
-*/
-
 var _scriptName = 'CH SEND MFA SMS';
+_log('Starting');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -33,9 +7,42 @@ var fr = JavaImporter(
   com.sun.identity.authentication.callbacks.HiddenValueCallback
 );
 
-// sends the error callbacks
 function sendErrorCallbacks () {
   if (callbacks.isEmpty()) {
+    _log('Called sendErrorCallbacks');
+
+    outcome = 'false';
+
+    var sendSmsSimpleOutcome = sharedState.get('sendSmsSimpleOutcome');
+
+    if (sendSmsSimpleOutcome) {
+      _log('Not returning using Action as set to use sendSmsSimpleOutcome');
+      return;
+    }
+
+    var invalidPhone = sharedState.get('invalidPhone');
+    var smsSendError = sharedState.get('smsSendError');
+
+    var pageProps = {
+      'errors': [
+        {
+          label: 'An error occurred while sending the SMS. Please try again.',
+          token: 'SEND_MFA_SMS_ERROR'
+        }
+      ]
+    };
+
+    if (invalidPhone) {
+      pageProps.invalidPhone = true;
+    }
+
+    if (smsSendError) {
+      pageProps.smsSendError = true;
+    }
+
+    var pagePropsJSON = JSON.stringify(pageProps);
+    _log('pagePropsJSON = ' + pagePropsJSON);
+
     action = fr.Action.send(
       new fr.HiddenValueCallback(
         'stage',
@@ -47,20 +54,12 @@ function sendErrorCallbacks () {
       ),
       new fr.HiddenValueCallback(
         'pagePropsJSON',
-        JSON.stringify({
-          'errors': [
-            {
-              label: 'An error occurred while sending the SMS. Please try again.',
-              token: 'SEND_MFA_SMS_ERROR'
-            }
-          ]
-        })
+        pagePropsJSON
       )
     ).build();
   }
 }
 
-//extracts the language form headers (default to EN)
 function getSelectedLanguage (requestHeaders) {
   if (requestHeaders && requestHeaders.get('Chosen-Language')) {
     var lang = requestHeaders.get('Chosen-Language').get(0);
@@ -72,8 +71,10 @@ function getSelectedLanguage (requestHeaders) {
   return 'EN';
 }
 
-// sends the OTP code via text to the number specified
 function sendTextMessage (language, phoneNumber, code) {
+  sharedState.put('invalidPhone', null);
+  sharedState.put('smsSendError', null);
+
   var notifyJWT = transientState.get('notifyJWT');
   var templates = transientState.get('notifyTemplates');
 
@@ -96,33 +97,45 @@ function sendTextMessage (language, phoneNumber, code) {
     return false;
   }
 
-  request.setMethod('POST');
-  request.getHeaders().add('Content-Type', 'application/json');
-  request.getHeaders().add('Authorization', 'Bearer ' + notifyJWT);
-  request.getEntity().setString(JSON.stringify(requestBodyJson));
-
-  var notificationId;
-  var response = httpClient.send(request).get();
-  _log('Notify Response: ' + response.getStatus().getCode() + response.getCause() + response.getEntity().getString());
-
   try {
-    notificationId = JSON.parse(response.getEntity().getString()).id;
+    request.setMethod('POST');
+    request.getHeaders().add('Content-Type', 'application/json');
+    request.getHeaders().add('Authorization', 'Bearer ' + notifyJWT);
+    request.getEntity().setString(JSON.stringify(requestBodyJson));
 
-    _log('Notify ID: ' + notificationId);
+    var notificationId;
+    var response = httpClient.send(request).get();
+    _log('Notify Response: ' + response.getStatus().getCode() + ' cause= ' + response.getCause() + ' body=' + response.getEntity().getString());
 
-    transientState.put('notificationId', notificationId);
-    sharedState.put('mfa-route', 'sms');
+    try {
+      notificationId = JSON.parse(response.getEntity().getString()).id;
+
+      _log('Notify ID: ' + notificationId);
+
+      transientState.put('notificationId', notificationId);
+      sharedState.put('mfa-route', 'sms');
+    } catch (e) {
+      _log('Error while parsing Notify response: ' + e);
+      return false;
+    }
+
+    _log('Notify Response: ' + response.getStatus().getCode() + response.getCause() + response.getEntity().getString());
+
+    var notifyCode = response.getStatus().getCode();
+
+    if (notifyCode === 400) {
+      sharedState.put('invalidPhone', true);
+    } else if (notifyCode > 400) {
+      sharedState.put('smsSendError', true);
+    }
+
+    return notifyCode === 201;
   } catch (e) {
-    _log('Error while parsing Notify response: ' + e);
+    _log('Error sending via Notify : ' + e);
     return false;
   }
-
-  _log('Notify Response: ' + response.getStatus().getCode() + response.getCause() + response.getEntity().getString());
-
-  return response.getStatus().getCode() === 201;
 }
 
-// extracts the number from the user profile (for password reset) or from shared state (for registration)
 function extractPhoneNumber () {
   var userId = sharedState.get('_id');
   var isUpdatePhoneNumber = sharedState.get('updatePhoneNumber');
@@ -141,24 +154,27 @@ function extractPhoneNumber () {
 
 // main execution flow
 try {
+  outcome = 'false';
+
   var code = sharedState.get('oneTimePassword');
   var isRegistrationMFA = sharedState.get('registrationMFA');
 
   _log('Code: ' + code);
 
   var language = getSelectedLanguage(requestHeaders);
-
   var phoneNumber = extractPhoneNumber();
-  if (!phoneNumber || phoneNumber === 'false' || !code) {
-    sendErrorCallbacks();
-  }
 
   _log('User phoneNumber: ' + phoneNumber);
 
-  if (sendTextMessage(language, phoneNumber, code)) {
-    action = fr.Action.goTo('true').build();
-  } else {
+  if (!phoneNumber || phoneNumber === 'false' || !code) {
     sendErrorCallbacks();
+  } else {
+    if (sendTextMessage(language, phoneNumber, code)) {
+      // action = fr.Action.goTo('true').build();
+      outcome = 'true';
+    } else {
+      sendErrorCallbacks();
+    }
   }
 } catch (e) {
   _log('Error : ' + e);

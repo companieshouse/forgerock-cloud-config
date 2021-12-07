@@ -32,6 +32,27 @@ const updateConnectorMappings = async (argv) => {
             mappingObject[eventName] = {}
           }
           mappingObject[eventName].source = fs.readFileSync(fileEventScript, { encoding: 'utf8' })
+          if (!mappingObject[eventName].type) {
+            mappingObject[eventName].type = 'text/javascript'
+          }
+        }
+      }
+    }
+
+    // Update the Properties Transform scripts if we have been supplied them in the config
+    for (const mappingObject of mappingFilesContent) {
+      if (mappingObject.name && mappingObject.properties) {
+        for (const property of mappingObject.properties) {
+          if (property.target && property.transform) {
+            const propertyTransformScript = path.resolve(__dirname, '../config/connectors/mappings/properties-transform-scripts/' +
+              mappingObject.name + '/' + property.target + '.js')
+            if (fs.existsSync(propertyTransformScript)) {
+              property.transform.source = fs.readFileSync(propertyTransformScript, { encoding: 'utf8' })
+              if (!property.transform.type) {
+                property.transform.type = 'text/javascript'
+              }
+            }
+          }
         }
       }
     }

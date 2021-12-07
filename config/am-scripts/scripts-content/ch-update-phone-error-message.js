@@ -1,14 +1,22 @@
-logger.error("[UPDATE PHONE NUMBER ERROR MESSAGE] Enter correct password.");
+var _scriptName = 'CH UPDATE PHONE ERROR MESSAGE';
+_log('Starting');
 
-sharedState.put("errorMessage", "Enter the correct password.")
-sharedState.put("pagePropsJSON", JSON.stringify(
-    {
-        'errors': [{
-            label: "Enter the correct password.",
-            token: "USER_PASSWORD_INCORRECT",
-            fieldName: "IDToken3",
-            anchor: "IDToken3"
-        }]
-    }));
+_log('Enter correct password.');
 
-outcome = "true";
+sharedState.put('errorMessage', 'Enter the correct password.');
+sharedState.put('pagePropsJSON', JSON.stringify(
+  {
+    'errors': [{
+      label: 'Enter the correct password.',
+      token: 'USER_PASSWORD_INCORRECT',
+      fieldName: 'IDToken3',
+      anchor: 'IDToken3'
+    }]
+  }));
+
+outcome = 'true';
+
+_log('Outcome = ' + _getOutcomeForDisplay());
+
+// LIBRARY START
+// LIBRARY END

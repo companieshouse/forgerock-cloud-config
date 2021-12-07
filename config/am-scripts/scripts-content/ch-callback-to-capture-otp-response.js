@@ -1,4 +1,5 @@
 var _scriptName = 'CH CAPTURE OTP RESPONSE';
+_log('Starting');
 
 var NodeOutcome = {
   CORRECT: 'correct',

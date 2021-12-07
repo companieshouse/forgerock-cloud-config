@@ -1,3 +1,6 @@
+var _scriptName = 'CH UPDATE LEGACY PASSWORD CHECK ORIGINAL';
+_log('Starting');
+
 /*
   ** INPUT DATA
     * SHARED STATE:
@@ -15,26 +18,31 @@
 */
 
 var fr = JavaImporter(
-    org.forgerock.openam.auth.node.api.Action
-)
+  org.forgerock.openam.auth.node.api.Action
+);
 
 var NodeOutcome = {
-    MATCH: "match",
-    MISMATCH: "mismatch",
+  MATCH: 'match',
+  MISMATCH: 'mismatch',
+};
+
+function checkUserPassword (userEnteredPassword, passwordFromCollector) {
+
+  _log('Comparing ' + userEnteredPassword + ' with ' + passwordFromCollector);
+  if (!userEnteredPassword.equals(passwordFromCollector)) {
+    sharedState.put('errorMessage', 'The current password you supplied is incorrect.');
+    _log('The current password you supplied is correct');
+    return NodeOutcome.MISMATCH;
+  }
+  return NodeOutcome.MATCH;
 }
 
-function checkUserPassword(userEnteredPassword, passwordFromCollector) {
-
-    logger.error("[UPDATE LEGACY PASSWORD CHECK ORIGINAL] Comparing " + userEnteredPassword + " with " + passwordFromCollector);
-    if (!userEnteredPassword.equals(passwordFromCollector)) {
-        sharedState.put("errorMessage","The current password you supplied is incorrect.")
-        logger.error("[UPDATE LEGACY PASSWORD CHECK ORIGINAL] The current password you supplied is correct")
-        return NodeOutcome.MISMATCH;
-    }
-    return NodeOutcome.MATCH;
-}
-
-var userEnteredPassword = sharedState.get("credential");
-var passwordFromCollector = transientState.get("password");
+var userEnteredPassword = sharedState.get('credential');
+var passwordFromCollector = transientState.get('password');
 
 outcome = checkUserPassword(userEnteredPassword, passwordFromCollector);
+
+_log('Outcome = ' + _getOutcomeForDisplay());
+
+// LIBRARY START
+// LIBRARY END
