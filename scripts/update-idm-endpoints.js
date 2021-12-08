@@ -4,6 +4,26 @@ const getAccessToken = require('../helpers/get-access-token')
 const fidcRequest = require('../helpers/fidc-request')
 const fileFilter = require('../helpers/file-filter')
 
+function checkEndOfLineComment (scriptFileName, line) {
+  if (!line || !scriptFileName || !scriptFileName.endsWith('.js')) {
+    return
+  }
+
+  const start = line.indexOf('// ')
+  if (start <= 0) {
+    return
+  }
+
+  if (line.substring(0, start).trim().length > 0) {
+    let comment = line.substring(start).trim()
+    if (comment.length > 40) {
+      comment = comment.substring(0, 40) + '...'
+    }
+
+    console.warn('\n** WARNING: Linting issue with \'line ends with comment\' in script : ' + scriptFileName + ' (' + comment + ')\n')
+  }
+}
+
 const updateScripts = async (argv) => {
   const { FIDC_URL, filenameFilter } = process.env
 
@@ -40,6 +60,9 @@ const updateScripts = async (argv) => {
                     if (line.trim().startsWith('//')) {
                       return ''
                     }
+
+                    checkEndOfLineComment(endpoint.scriptFileName, line)
+
                     return line.trim()
                   })
                   .join(' ')
@@ -103,6 +126,9 @@ const updateScripts = async (argv) => {
                           if (line.trim().startsWith('//')) {
                             return ''
                           }
+
+                          checkEndOfLineComment(task.scriptFileName, line)
+
                           return line.trim()
                         })
                         .join(' ')
@@ -156,6 +182,9 @@ const updateScripts = async (argv) => {
                         if (line.trim().startsWith('//')) {
                           return ''
                         }
+
+                        checkEndOfLineComment(schedule.scriptFileName, line)
+
                         return line.trim()
                       })
                       .join(' ')
