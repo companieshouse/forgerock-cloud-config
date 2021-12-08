@@ -42,7 +42,8 @@ function buildReturnUrl (email, companyNumber, isNewUser, host, userId, linkToke
   _log('Onboarding params : ' + onboardingParams);
 
   if (onboardingParams) {
-    var returnUrl = host.concat('/account/onboarding/?', onboardingParams)
+    var returnUrl = host
+      .concat('/am/XUI/?realm=/alpha&service=CHSCRSActivation&', onboardingParams)
       .concat('&goto=', encodeURIComponent('/account/your-companies/'));
 
     _log('Onboarding Url : ' + returnUrl);
