@@ -42,8 +42,8 @@ function buildReturnUrl (email, companyNumber, isNewUser, host, userId, linkToke
   _log('Onboarding params : ' + onboardingParams);
 
   if (onboardingParams) {
-    var returnUrl = host.concat('/account/onboarding/?', onboardingParams)
-      .concat('&goto=', encodeURIComponent('/account/your-companies/'));
+    var returnUrl = host.concat('/account/scrs/?', onboardingParams)
+      .concat('&goto=', encodeURIComponent('/account/home/?companyNo=' + companyNumber));
 
     _log('Onboarding Url : ' + returnUrl);
 

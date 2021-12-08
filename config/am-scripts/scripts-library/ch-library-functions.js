@@ -132,3 +132,58 @@ function _getSpanId () {
   }
   return spanId;
 }
+
+//fetches the IDM access token from transient state
+function _fetchIDMToken() {
+  var accessToken = transientState.get('idmAccessToken');
+  if (accessToken === null) {
+    _log('Access token not in transient state');
+    return false;
+  }
+  return accessToken;
+}
+
+function _getUserInfoById (userId, accessToken) {
+  var idmUserEndpoint = 'https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_user/';
+  try {
+    var idmUserIdEndpoint = idmUserEndpoint.concat(userId);
+    var request = new org.forgerock.http.protocol.Request();
+
+    request.setMethod('GET');
+    request.setUri(idmUserIdEndpoint);
+    request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
+    request.getHeaders().add('Content-Type', 'application/json');
+    request.getHeaders().add('Accept-API-Version', 'resource=1.0');
+
+    var response = httpClient.send(request).get();
+
+    if (response.getStatus().getCode() === 200) {
+      var user = JSON.parse(response.getEntity().getString());
+      if (user) {
+        _log('user found: ' + JSON.stringify(user));
+        return {
+          success: true,
+          user: user
+        };
+      } else {
+        _log('user NOT found: ' + userId);
+        return {
+          success: false,
+          message: 'User not found: ' + userId
+        };
+      }
+    } else {
+      _log('Error while fetching user: ' + response.getStatus().getCode());
+      return {
+        success: false,
+        message: 'Error while fetching user: ' + response.getStatus().getCode()
+      };
+    }
+  } catch (e) {
+    _log(e);
+    return {
+      success: false,
+      message: 'Error during user lookup: ' + e
+    };
+  }
+}

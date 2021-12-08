@@ -71,27 +71,27 @@ function validatedJwtClaims (jwtString, issuer, jwtType) {
   var decryptionKey = getKey(config.encryptionKey, KeyType.ENCRYPTION);
 
   switch (jwtType) {
-    case JwtType.SIGNED:
-      jwt = new fr.JwtBuilderFactory().reconstruct(jwtString, fr.SignedJwt);
-      break;
+  case JwtType.SIGNED:
+    jwt = new fr.JwtBuilderFactory().reconstruct(jwtString, fr.SignedJwt);
+    break;
 
-    case JwtType.ENCRYPTED_THEN_SIGNED:
-      jwt = new fr.JwtBuilderFactory().reconstruct(jwtString, fr.EncryptedThenSignedJwt);
-      jwt.decrypt(decryptionKey);
-      break;
+  case JwtType.ENCRYPTED_THEN_SIGNED:
+    jwt = new fr.JwtBuilderFactory().reconstruct(jwtString, fr.EncryptedThenSignedJwt);
+    jwt.decrypt(decryptionKey);
+    break;
 
-    case JwtType.SIGNED_THEN_ENCRYPTED:
-      jwt = new fr.JwtBuilderFactory().reconstruct(jwtString, fr.SignedThenEncryptedJwt);
-      jwt.decrypt(decryptionKey);
-      break;
+  case JwtType.SIGNED_THEN_ENCRYPTED:
+    jwt = new fr.JwtBuilderFactory().reconstruct(jwtString, fr.SignedThenEncryptedJwt);
+    jwt.decrypt(decryptionKey);
+    break;
 
-    default:
-      _log('Unknown jwt type ' + jwtType);
-      return {
-        success: false,
-        code: 'ERROR_JWT_TYPE_UNKNOWN',
-        message: 'Unknown jwt type ' + jwtType
-      };
+  default:
+    _log('Unknown jwt type ' + jwtType);
+    return {
+      success: false,
+      code: 'ERROR_JWT_TYPE_UNKNOWN',
+      message: 'Unknown jwt type ' + jwtType
+    };
   }
 
   var verificationHandler = new fr.SecretHmacSigningHandler(verificationKey);
@@ -156,11 +156,11 @@ function extractTokenParameter () {
         new fr.HiddenValueCallback(
           'pagePropsJSON',
           JSON.stringify({
-              'errors': [{
-                label: 'No Onboarding Token found in request.',
-                token: 'ONBOARDING_NO_TOKEN_ERROR'
-              }]
-            }
+            'errors': [{
+              label: 'No Onboarding Token found in request.',
+              token: 'ONBOARDING_NO_TOKEN_ERROR'
+            }]
+          }
           ),
           new fr.TextOutputCallback(
             fr.TextOutputCallback.ERROR,
