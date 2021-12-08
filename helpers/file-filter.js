@@ -5,7 +5,7 @@ const fileFilter = (filename, filter) => {
     return true
   }
 
-  if (filter.trim() === '') {
+  if (typeof (filter) === 'boolean' || filter.trim() === '') {
     return false
   }
 

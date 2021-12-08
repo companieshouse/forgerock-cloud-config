@@ -5,6 +5,27 @@ const fidcRequest = require('../helpers/fidc-request')
 const fileFilter = require('../helpers/file-filter')
 const uglifyJS = require('uglify-js')
 
+function regexIndexOf (text, re, i) {
+  const indexInSuffix = text.slice(i).search(re)
+  return indexInSuffix < 0 ? indexInSuffix : indexInSuffix + i
+}
+
+function lintWithWarnings (scriptName, mergedScript, lintingWarnedScripts) {
+  if (!mergedScript || !scriptName.endsWith('.js')) {
+    return mergedScript
+  }
+
+  const arr = mergedScript.toString().replace(/\r\n/g, '\n').split('\n')
+
+  for (let i = 0; i < arr.length; i++) {
+    const line = arr[i]
+    if (regexIndexOf(line, '(^|[\\s+])let[\\s+]', 0) > -1) {
+      console.warn('\n** WARNING: Linting issue with \'usage of let\' in script : ' + scriptName + ' (line ' + (i + 1) + ')\n')
+      lintingWarnedScripts.push(scriptName)
+    }
+  }
+}
+
 const updateScripts = async (argv) => {
   const { realm } = argv
   const { FIDC_URL, filenameFilter } = process.env
@@ -21,6 +42,8 @@ const updateScripts = async (argv) => {
       .map((filename) => require(path.join(dir, filename))) // Map JSON file content to an array
 
     const libraryFunctionsScriptMinified = getLibraryFunctionsScriptMinified(dir)
+
+    const lintingWarnedScripts = []
 
     // Update each script
     await Promise.all(
@@ -46,6 +69,8 @@ const updateScripts = async (argv) => {
               ? mergeOriginalWithLibraryFunctionsScriptMinified(originalScript, libraryFunctionsScriptMinified)
               : originalScript
 
+            lintWithWarnings(script.filename, mergedScript, lintingWarnedScripts)
+
             script.payload.script = Buffer.from(mergedScript).toString('base64')
 
             console.log(`updating script : ${script.payload.name} (${script.filename})`)
@@ -61,6 +86,11 @@ const updateScripts = async (argv) => {
         )
 
         console.log('scripts updated')
+
+        if (lintingWarnedScripts.length > 0) {
+          console.warn('\n** Linting warnings for scripts : ' + lintingWarnedScripts + '\n')
+        }
+
         return Promise.resolve()
       })
     )
