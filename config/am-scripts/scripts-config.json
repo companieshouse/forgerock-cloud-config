@@ -1538,6 +1538,38 @@
         "lastModifiedDate": 1617810491969
       },
       "filename": "ch-mfa-sub-flow-setup.js"
+    },
+    {
+      "payload": {
+        "_id": "e20fd099-54b2-4546-8f76-8ad3de3a4a08",
+        "name": "CH - SCRS Activation parameters check",
+        "description": "SCRS Activation parameters check",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-scrs-activation-check-params.js"
+    },
+    {
+      "payload": {
+        "_id": "b559209e-541e-47f5-9a35-d455c564a2ea",
+        "name": "CH - SCRS User Activation",
+        "description": "SCRS User Activation",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-scrs-unlock-user.js"
     }
   ]
 }
