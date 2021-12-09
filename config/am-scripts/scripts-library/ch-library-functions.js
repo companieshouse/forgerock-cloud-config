@@ -15,25 +15,6 @@ It is also recommended that a global var called "_scriptName" is declared so tha
 Note that comments in this file will be removed as part of the JS minification at point of merge.
 */
 
-function _fromConfig (configElement, defaultValue) {
-  const __config = {
-    FIDC_ENDPOINT: 'https://openam-companieshouse-uk-dev.id.forgerock.io',
-    NOTIFY_EMAIL_ENDPOINT: 'https://api.notifications.service.gov.uk/v2/notifications/email',
-    NOTIFY_SMS_ENDPOINT: 'https://api.notifications.service.gov.uk/v2/notifications/sms',
-    VALIDATE_SERVICE_SECRET_ENDPOINT: 'https://btazausqwf.execute-api.eu-west-2.amazonaws.com/cidev/'
-  };
-
-  if (configElement) {
-    return __config[configElement];
-  } else {
-    if (defaultValue) {
-      return defaultValue;
-    } else {
-      return '';
-    }
-  }
-}
-
 function _getScriptNameForDisplay () {
   return (typeof _scriptName !== 'undefined' && _scriptName) ? '[' + _scriptName + ']' : '';
 }
