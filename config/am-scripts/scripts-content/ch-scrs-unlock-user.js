@@ -15,7 +15,7 @@ var NodeOutcome = {
   ERROR: 'error'
 };
 
-var FIDC_ENDPOINT = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
+var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
 
 function raiseError (message, token) {
   if (callbacks.isEmpty()) {
@@ -45,7 +45,7 @@ function raiseError (message, token) {
 
 // soft locks the user, by setting the soft lock date (in UNIX date format) into frIndexedString4
 function performUserUnlock (userId, accessToken) {
-  var alphaUserUrl = 'https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_user/';  
+  var alphaUserUrl = _fromConfig('FIDC_ENDPOINT') + '/openidm/managed/alpha_user/';
   var request = new org.forgerock.http.protocol.Request();
   request.setMethod('PATCH');
   request.setUri(alphaUserUrl + userId);
@@ -80,8 +80,8 @@ function performUserUnlock (userId, accessToken) {
 try {
   var accessToken = _fetchIDMToken();
   var userId = sharedState.get('userId');
-  var unlockStatus = performUserUnlock (userId, accessToken);
-  if(unlockStatus) {
+  var unlockStatus = performUserUnlock(userId, accessToken);
+  if (unlockStatus) {
     _log('User unlocked!');
     outcome = NodeOutcome.USER_UNLOCKED;
   } else {

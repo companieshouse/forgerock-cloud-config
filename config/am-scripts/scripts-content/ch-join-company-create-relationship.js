@@ -179,8 +179,8 @@ function getSelectedLanguage (requestHeaders) {
 
 // main execution flow
 try {
-  var idmCompanyAuthEndpoint = 'https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/endpoint/companyauth/';
-  var idmUserEndpoint = 'https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_user/';
+  var idmCompanyAuthEndpoint = _fromConfig('FIDC_ENDPOINT') + '/openidm/endpoint/companyauth/';
+  var idmUserEndpoint = _fromConfig('FIDC_ENDPOINT') + '/openidm/managed/alpha_user/';
   var companyData = sharedState.get('companyData');
   var userId = sharedState.get('_id');
   _log('Incoming company data :' + companyData);

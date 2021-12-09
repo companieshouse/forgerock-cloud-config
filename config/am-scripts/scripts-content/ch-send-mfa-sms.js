@@ -82,7 +82,7 @@ function sendTextMessage (language, phoneNumber, code) {
   _log('Templates from transient state: ' + templates);
 
   var request = new org.forgerock.http.protocol.Request();
-  request.setUri('https://api.notifications.service.gov.uk/v2/notifications/sms');
+  request.setUri(_fromConfig('NOTIFY_SMS_ENDPOINT'));
 
   try {
     var requestBodyJson = {

@@ -2,7 +2,7 @@ var _scriptName = 'CH UPDATE PWD CHECK PASSWORD POLICY';
 _log('Starting');
 
 var ACCESS_TOKEN_STATE_FIELD = 'idmAccessToken';
-var idmEndpoint = 'https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/policy/managed/alpha_user/*?_action=validateProperty';
+var idmEndpoint = _fromConfig('FIDC_ENDPOINT') + '/openidm/policy/managed/alpha_user/*?_action=validateProperty';
 
 var NodeOutcome = {
   PASS: 'pass',

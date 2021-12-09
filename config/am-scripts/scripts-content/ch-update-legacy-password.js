@@ -22,7 +22,7 @@ var fr = JavaImporter(
 
 var ACCESS_TOKEN_STATE_FIELD = 'idmAccessToken';
 
-var updateUserSecretString = '{"endpoint": "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_user/"}';
+var updateUserSecretString = '{"endpoint": "' + _fromConfig('FIDC_ENDPOINT') + '/openidm/managed/alpha_user/"}';
 
 function fetchSecret () {
   try {

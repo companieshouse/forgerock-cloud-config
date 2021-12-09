@@ -1,6 +1,11 @@
 var _scriptName = 'CH REQUIRE MFA CHECK';
 _log('Starting');
 
+_log('SJD2 Config Value FIDC = ' + _fromConfig('FIDC_ENDPOINT'));
+_log('SJD2 Config Value NOT E = ' + _fromConfig('NOTIFY_EMAIL_ENDPOINT'));
+_log('SJD2 Config Value NOT S = ' + _fromConfig('NOTIFY_SMS_ENDPOINT'));
+_log('SJD2 Config Value MISS = ' + _fromConfig('MISSING', 'Blah Blah'));
+
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action
 );
@@ -10,7 +15,7 @@ var userId = sharedState.get('_id');
 // Use AM representation of attribute
 var LAST_LOGIN_FIELD = 'fr-attr-idate1';
 
-var checkMFA = false;
+var checkMFA = true; // false;
 
 try {
   if (idRepository.getAttribute(userId, LAST_LOGIN_FIELD).iterator().hasNext()) {

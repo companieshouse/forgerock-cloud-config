@@ -52,8 +52,8 @@ function updateUsername (userId, value) {
 
 // main execution flow
 try {
-  var FIDC_ENDPOINT = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
-  //var alphaUserUrl  = "https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_user/";
+  var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
+  //var alphaUserUrl  = _fromConfig('FIDC_ENDPOINT') + "/openidm/managed/alpha_user/";
   var newEmail = sharedState.get('newEmail');
   var sessionOwnerId = sharedState.get('_id');
   var result = updateUsername(sessionOwnerId, newEmail);

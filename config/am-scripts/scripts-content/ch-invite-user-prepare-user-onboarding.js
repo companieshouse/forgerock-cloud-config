@@ -155,7 +155,7 @@ function createUser (invitedEmail) {
 
 //main execution flow
 try {
-  var FIDC_ENDPOINT = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
+  var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
   var onboardingDate = formatDate();
   _log('Setting onboarding date to ' + onboardingDate);
 

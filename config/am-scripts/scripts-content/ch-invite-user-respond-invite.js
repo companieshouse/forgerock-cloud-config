@@ -149,7 +149,7 @@ function sendErrorCallbacks (stage, token, message) {
 
 // main execution flow
 try {
-  var idmCompanyAuthEndpoint = 'https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/endpoint/companyauth/';
+  var idmCompanyAuthEndpoint = _fromConfig('FIDC_ENDPOINT') + '/openidm/endpoint/companyauth/';
   var actionParam = fetchActionParameter();
   var companyData = sharedState.get('companyData');
   // var invitedEmail = sharedState.get('email');

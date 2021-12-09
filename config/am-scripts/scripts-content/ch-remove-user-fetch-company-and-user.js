@@ -183,8 +183,8 @@ function getSubjectStatusForCompany (userId, companyNo) {
 }
 
 // execution flow
-var idmCompanyAuthEndpoint = 'https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/endpoint/companyauth/';
-var alphaUserUrl = 'https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_user/';
+var idmCompanyAuthEndpoint = _fromConfig('FIDC_ENDPOINT') + '/openidm/endpoint/companyauth/';
+var alphaUserUrl = _fromConfig('FIDC_ENDPOINT') + '/openidm/managed/alpha_user/';
 try {
   var paramsResponse = fetchParameters();
   if (!paramsResponse) {

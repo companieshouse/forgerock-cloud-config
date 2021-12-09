@@ -90,7 +90,7 @@ function checkUserExistence (email) {
 }
 
 // main execution flow
-var FIDC_ENDPOINT = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
+var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
 try {
   if (callbacks.isEmpty()) {
     var sessionOwnerId = sharedState.get('_id');

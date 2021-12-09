@@ -163,7 +163,7 @@ try {
   var differenceInTime;
   var errorFound = false;
   var tokenURL;
-  var FIDC_ENDPOINT = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
+  var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
   var config = {
     signingKey: transientState.get('chJwtSigningKey'),
     encryptionKey: transientState.get('chJwtEncryptionKey'),

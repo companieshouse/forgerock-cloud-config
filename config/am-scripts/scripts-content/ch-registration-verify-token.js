@@ -188,7 +188,7 @@ function validatedJwtClaims (jwtString, issuer, jwtType) {
 }
 
 //main execution flow
-var FIDC_ENDPOINT = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
+var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
 try {
   var config = {
     signingKey: transientState.get('chJwtSigningKey'),

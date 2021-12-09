@@ -11,7 +11,7 @@ _log('Starting');
     - error: error during token generation
 */
 
-var tokenEndpoint = 'https://openam-companieshouse-uk-dev.id.forgerock.io/am/oauth2/realms/root/realms/alpha/access_token';
+var tokenEndpoint = _fromConfig('FIDC_ENDPOINT') + '/am/oauth2/realms/root/realms/alpha/access_token';
 var clientInfoSecretString = '{"id": "AMTreeAdminClient","secret": "Passw0rd123!","scope": "fr:idm:*","serviceUsername": "tree-service-user@companieshouse.com","servicePassword": "Passw0rd123!"}';
 
 var NodeOutcome = {

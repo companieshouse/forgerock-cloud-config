@@ -137,7 +137,7 @@ function getHeaderParams (requestHeaders) {
   };
 }
 
-var FIDC_ENDPOINT = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
+var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
 
 try {
   _log('Validating SCRS Params');

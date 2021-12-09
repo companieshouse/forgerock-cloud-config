@@ -70,7 +70,7 @@ function sendEmail (language, code, emailAddress) {
   var templates = transientState.get('notifyTemplates');
   var request = new org.forgerock.http.protocol.Request();
   var requestBodyJson;
-  request.setUri('https://api.notifications.service.gov.uk/v2/notifications/email');
+  request.setUri(_fromConfig('NOTIFY_EMAIL_ENDPOINT'));
   try {
     requestBodyJson = {
       'email_address': emailAddress,

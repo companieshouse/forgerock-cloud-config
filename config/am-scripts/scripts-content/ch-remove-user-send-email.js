@@ -82,7 +82,7 @@ function sendEmail (language, removerName, userToRemove, companyName) {
   _log('JWT from transient state: ' + notifyJWT);
   _log('Templates from transient state: ' + templates);
 
-  request.setUri('https://api.notifications.service.gov.uk/v2/notifications/email');
+  request.setUri(_fromConfig('NOTIFY_EMAIL_ENDPOINT'));
   try {
     var requestBodyJson = {
       'email_address': userToRemove,

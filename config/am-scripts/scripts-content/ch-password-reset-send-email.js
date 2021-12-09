@@ -227,7 +227,7 @@ function sendEmail (language) {
   _log('Notify JWT from transient state: ' + notifyJWT);
   _log('Templates from transient state: ' + templates);
   var isUserExisting = transientState.get('isUserExisting');
-  request.setUri('https://api.notifications.service.gov.uk/v2/notifications/email');
+  request.setUri(_fromConfig('NOTIFY_EMAIL_ENDPOINT'));
   try {
     var requestBodyJson = isUserExisting ? {
         'email_address': email,
@@ -283,7 +283,7 @@ function getSelectedLanguage (requestHeaders) {
 }
 
 // main execution flow
-var FIDC_ENDPOINT = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
+var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
 var config = {
   signingKey: transientState.get('chJwtSigningKey'),
   encryptionKey: transientState.get('chJwtEncryptionKey'),
