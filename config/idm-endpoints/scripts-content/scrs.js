@@ -42,16 +42,14 @@
 
   function removeDuplicateEmails (data) {
     let emails = [];
-    let uniqueSet = [];
 
-    data.forEach(element => {
-      if (!emails.includes(element.email)) {
-        emails.push(element.email);
-        uniqueSet.push(element);
+    data.forEach(email => {
+      if (email && !emails.includes(email)) {
+        emails.push(email);
       }
     });
 
-    return uniqueSet;
+    return emails;
   }
 
   function padding (num) {
@@ -507,14 +505,9 @@
 
                         _log('Emails (unique) : ' + emailsUnique);
 
-                        emailsUnique.forEach(emailEntry => {
-
-                          if (!emailEntry.email) {
-                            return;
-                          }
-
-                          let email = emailEntry.email;
-                          let emailLang = emailEntry.language || 'en';
+                        emailsUnique.forEach(email => {
+                          // Force to EN based on a CH Decision that all SCRS user emails are in English
+                          let emailLang = 'en';
 
                           try {
                             _log('Processing user with email : ' + email + ', language = ' + emailLang);
