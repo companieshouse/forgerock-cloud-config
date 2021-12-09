@@ -2,18 +2,22 @@
   let logNowMsecs = new Date().getTime();
   _log('SCRS Starting! request = ' + JSON.stringify(request));
 
-  var OBJECT_USER = 'alpha_user';
-  var OBJECT_COMPANY = 'alpha_organization';
-  var SYSTEM_WEBFILING_USER = 'system/WebfilingUser/webfilingUser';
+  const BEARER_TOKEN_COMPANY_SUBMISSIONS = 'fL2uLcnfRHb_OxSkLlVbF-YvbusSK0V-3CSORk3Q';
+  const BEARER_TOKEN_AUTHORISED_FILERS_EMAILS = 'a57468b1-dfed-4a09-973d-11db8285d1c3';
 
-  let companyIncorporationsEndpoint = 'https://v79uxae8q8.execute-api.eu-west-1.amazonaws.com/mock/submissions';
-  let defaultIncorporationsPerPage = 50;
-  let emailsEndpoint = 'https://v79uxae8q8.execute-api.eu-west-1.amazonaws.com/mock/authorisedForgerockEmails';
-  let amEndpoint = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
-  let customUiUrl = 'https://idam-ui.amido.aws.chdev.org';
-  let idmUsername = 'tree-service-user@companieshouse.com';
-  let idmPassword = 'Passw0rd123!';
-  let idmScrsServiceUsername = 'scrs-service-user@companieshouse.com';
+  const ENDPOINT_COMPANY_SUBMISSIONS = 'https://v79uxae8q8.execute-api.eu-west-1.amazonaws.com/mock/submissions';
+  const ENDPOINT_AUTHORISED_FILERS_EMAILS = 'https://v79uxae8q8.execute-api.eu-west-1.amazonaws.com/mock/authorisedForgerockEmails';
+  const ENDPOINT_FIDC = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
+  const ENDPOINT_IDAM_UI = 'https://idam-ui.amido.aws.chdev.org';
+
+  const OBJECT_USER = 'alpha_user';
+  const OBJECT_COMPANY = 'alpha_organization';
+  const SYSTEM_WEBFILING_USER = 'system/WebfilingUser/webfilingUser';
+
+  const DEFAULT_SUBMISSIONS_PER_PAGE = 50;
+  const IDAM_USERNAME = 'tree-service-user@companieshouse.com';
+  const IDAM_PASSWORD = 'Passw0rd123!';
+  const IDAM_SCRS_SERVICE_USERNAME = 'scrs-service-user@companieshouse.com';
 
   var AuthorisationStatus = {
     CONFIRMED: 'confirmed',
@@ -65,7 +69,7 @@
   function getCompanyIncorporations (incorporationTimepoint, useIncorporationsPerPage) {
     _log('Getting Company Incorporations from timepoint : ' + incorporationTimepoint + ' (items_per_page = ' + useIncorporationsPerPage + ')');
 
-    const url = companyIncorporationsEndpoint + '?timepoint=' + incorporationTimepoint + '&items_per_page=' + useIncorporationsPerPage;
+    const url = ENDPOINT_COMPANY_SUBMISSIONS + '?timepoint=' + incorporationTimepoint + '&items_per_page=' + useIncorporationsPerPage;
     _log('Company Incorporations url : ' + url);
 
     let request = {
@@ -73,7 +77,7 @@
       'method': 'GET',
       'headers': {
         'Content-Type': 'application/json',
-        'Authorization': fetchAuthorizationToken()
+        'Authorization': 'Bearer ' + BEARER_TOKEN_COMPANY_SUBMISSIONS
       }
     };
 
@@ -84,8 +88,8 @@
     try {
       let headers = {
         'Content-Type': 'application/json',
-        'CH-Username': idmUsername,
-        'CH-Password': idmPassword,
+        'CH-Username': IDAM_USERNAME,
+        'CH-Password': IDAM_PASSWORD,
         'Notification-Link': link,
         'Notification-Email': email,
         'Notification-Language': language || 'en',
@@ -97,7 +101,7 @@
       };
 
       let request = {
-        'url': amEndpoint + '/am/json/alpha/authenticate?authIndexType=service&authIndexValue=CHSendSCRSNotifications&noSession=true',
+        'url': ENDPOINT_FIDC + '/am/json/alpha/authenticate?authIndexType=service&authIndexValue=CHSendSCRSNotifications&noSession=true',
         'method': 'POST',
         'forceWrap': true,
         'headers': headers
@@ -116,11 +120,6 @@
         message: e.toString()
       };
     }
-  }
-
-  function fetchAuthorizationToken () {
-    //TODO implement authN logic to fetch Bearer token
-    return 'Bearer 1234abcde';
   }
 
   function getUserById (id) {
@@ -149,7 +148,7 @@
   function getScrsServiceUser () {
     return openidm.query(
       'managed/' + OBJECT_USER,
-      { '_queryFilter': '/userName eq "' + idmScrsServiceUsername + '"' },
+      { '_queryFilter': '/userName eq "' + IDAM_SCRS_SERVICE_USERNAME + '"' },
       ['_id', 'userName', 'description']
     );
   }
@@ -161,11 +160,11 @@
     if (response.resultCount === 0) {
       _log('SCRS Service User not found, creating it');
 
-      createUser(idmScrsServiceUsername, initialTimepoint);
+      createUser(IDAM_SCRS_SERVICE_USERNAME, initialTimepoint);
 
       return openidm.query(
         'managed/' + OBJECT_USER,
-        { '_queryFilter': '/userName eq "' + idmScrsServiceUsername + '"' },
+        { '_queryFilter': '/userName eq "' + IDAM_SCRS_SERVICE_USERNAME + '"' },
         ['_id', 'userName', 'description']
       );
     }
@@ -345,11 +344,11 @@
 
   function getCompanyEmails (companyNumber) {
     let request = {
-      'url': emailsEndpoint + '?companyNo=' + companyNumber,
+      'url': ENDPOINT_AUTHORISED_FILERS_EMAILS + '?companyNo=' + companyNumber,
       'method': 'GET',
       'headers': {
         'Content-Type': 'application/json',
-        'Authorization': fetchAuthorizationToken()
+        'Authorization': 'Bearer ' + BEARER_TOKEN_AUTHORISED_FILERS_EMAILS
       }
     };
 
@@ -438,7 +437,7 @@
   let responseNextTimePoint = '';
   let responseMessage = 'OK';
 
-  let itemsPerPage = request.additionalParameters.numIncorporationsPerPage || defaultIncorporationsPerPage;
+  let itemsPerPage = request.additionalParameters.numIncorporationsPerPage || DEFAULT_SUBMISSIONS_PER_PAGE;
 
   try {
     if (request.method === 'read' || (request.method === 'action' && request.action === 'read')) {
@@ -534,7 +533,7 @@
 
                                 addConfirmedRelationshipToCompany(createRes._id, companyInfo._id, companyInfo.name + ' - ' + companyInfo.number);
 
-                                let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'true',
+                                let notificationResponse = callNotificationJourney(email, ENDPOINT_IDAM_UI, companyInfo.name, companyInfo.number, 'true',
                                   createRes._id, linkTokenUuid, emailLang);
 
                                 _log('notification response : ' + JSON.stringify(notificationResponse));
@@ -562,7 +561,7 @@
                                   linkTokenUuid = userLookup.frUnindexedString3;
                                 }
 
-                                let notificationResponse = callNotificationJourney(email, customUiUrl, companyInfo.name, companyInfo.number, 'false',
+                                let notificationResponse = callNotificationJourney(email, ENDPOINT_IDAM_UI, companyInfo.name, companyInfo.number, 'false',
                                   userLookup._id, linkTokenUuid, emailLang);
 
                                 _log('notification response : ' + JSON.stringify(notificationResponse));
