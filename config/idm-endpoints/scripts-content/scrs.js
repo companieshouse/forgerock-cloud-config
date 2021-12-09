@@ -1,5 +1,5 @@
 (function () {
-  let logNowMsecs = new Date().getTime();
+  const logNowMsecs = new Date().getTime();
   _log('SCRS Starting! request = ' + JSON.stringify(request));
 
   const BEARER_TOKEN_COMPANY_SUBMISSIONS = 'fL2uLcnfRHb_OxSkLlVbF-YvbusSK0V-3CSORk3Q';
