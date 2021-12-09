@@ -1,4 +1,4 @@
-function _fromConfig (configElement) {
+function _fromConfig (configItem) {
   var _CONFIG_FIDC_ENDPOINT = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
   var _CONFIG_NOTIFY_EMAIL_ENDPOINT = 'https://api.notifications.service.gov.uk/v2/notifications/email';
   var _CONFIG_NOTIFY_SMS_ENDPOINT = 'https://api.notifications.service.gov.uk/v2/notifications/sms';
@@ -11,5 +11,5 @@ function _fromConfig (configElement) {
     _ITEM_VALIDATE_SERVICE_SECRET_ENDPOINT: _CONFIG_VALIDATE_SERVICE_SECRET_ENDPOINT
   };
 
-  return allConfigItems['_ITEM_' + configElement] || ('Unknown config item : ' + configElement);
+  return allConfigItems['_ITEM_' + configItem] || ('Unknown config item : ' + configItem);
 }
