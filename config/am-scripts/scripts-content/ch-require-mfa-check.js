@@ -10,7 +10,7 @@ var userId = sharedState.get('_id');
 // Use AM representation of attribute
 var LAST_LOGIN_FIELD = 'fr-attr-idate1';
 
-var checkMFA = true; // false;
+var checkMFA = false;
 
 try {
   if (idRepository.getAttribute(userId, LAST_LOGIN_FIELD).iterator().hasNext()) {
