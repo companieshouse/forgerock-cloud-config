@@ -238,7 +238,7 @@ function sendEmail (language, action, recipient, companyName, actorName, subject
   _log('JWT from transient state: ' + notifyJWT);
   _log('Templates from transient state: ' + templates);
 
-  request.setUri('https://api.notifications.service.gov.uk/v2/notifications/email');
+  request.setUri(_fromConfig('NOTIFY_EMAIL_ENDPOINT'));
 
   try {
     requestBodyJson = bodyBuilder(action, recipient, companyName, language, actorName, subjectName);
@@ -304,8 +304,8 @@ function isSendToMemberAllowed (companyMemberData, notifyEventData) {
 }
 
 // main execution flow
-var FIDC_ENDPOINT = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
-var idmCompanyAuthEndpoint = 'https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/endpoint/companyauth/';
+var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
+var idmCompanyAuthEndpoint = FIDC_ENDPOINT + '/openidm/endpoint/companyauth/';
 
 try {
   var notifyEventData = extractEventFromState();

@@ -22,9 +22,9 @@ var MembershipStatus = {
   NONE: 'none'
 };
 
-var FIDC_ENDPOINT = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
+var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
 
-function extractActivationParameters() {
+function extractActivationParameters () {
   var userIdParam = requestParameters.get('_id');
   var companyNoParam = requestParameters.get('companyNo');
   var activationIdParam = requestParameters.get('tokenId');
@@ -60,7 +60,7 @@ function extractActivationParameters() {
 }
 
 // extracts the user membership status to the given company. User could be provided as a user ID or a username (email) 
-function isUserAuthorisedForCompany(userId, companyNo, accessToken) {
+function isUserAuthorisedForCompany (userId, companyNo, accessToken) {
   var request = new org.forgerock.http.protocol.Request();
   var accessToken = transientState.get('idmAccessToken');
   var idmCompanyAuthEndpoint = FIDC_ENDPOINT + '/openidm/endpoint/companyauth?_action=getCompanyStatusByUserId';
@@ -88,7 +88,7 @@ function isUserAuthorisedForCompany(userId, companyNo, accessToken) {
   var response = httpClient.send(request).get();
   _log(response.getStatus().getCode() + ' response from IDM');
   var membershipResponse = JSON.parse(response.getEntity().getString());
-  if (response.getStatus().getCode() === 200) {    
+  if (response.getStatus().getCode() === 200) {
     if (membershipResponse.company.status === MembershipStatus.CONFIRMED) {
       return {
         success: true,
@@ -117,7 +117,7 @@ function isUserAuthorisedForCompany(userId, companyNo, accessToken) {
   }
 }
 
-function raiseError(message, token) {
+function raiseError (message, token) {
   if (callbacks.isEmpty()) {
     action = fr.Action.send(
       new fr.HiddenValueCallback(
@@ -152,7 +152,7 @@ function saveUserDataToState (email, userId) {
         'mail': email
       });
     sharedState.put('userName', email);
-    sharedState.put('userId',   userId);
+    sharedState.put('userId', userId);
     return true;
   } catch (e) {
     _log('error while storing state: ' + e);
@@ -194,12 +194,12 @@ try {
       if (!isUserAuthorisedResponse.success) {
         raiseError(isUserAuthorisedResponse.error, isUserAuthorisedResponse.code);
       } else {
-        var userResponse = _getUserInfoById(params.userId, accessToken);        
+        var userResponse = _getUserInfoById(params.userId, accessToken);
         if (userResponse.user.accountStatus === 'active') {
           outcome = NodeOutcome.USER_ALREADY_ACTIVE;
         } else {
           if (String(params.activationId) === String(userResponse.user.frUnindexedString3)) {
-            saveUserDataToState (userResponse.user.userName, params.userId); 
+            saveUserDataToState(userResponse.user.userName, params.userId);
             outcome = NodeOutcome.USER_NOT_ACTIVE;
           } else {
             raiseError('The activation ID in the email does not match the one in the user profile', 'SCRS_ERROR_ACTIVATION_ID_MISMATCH');

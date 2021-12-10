@@ -241,7 +241,7 @@ function sendEmail (language, invitedEmail, companyName, inviterName, returnUrl)
   _log('Templates from transient state: ' + templates);
   _log('RETURN URL: ' + returnUrl);
 
-  request.setUri('https://api.notifications.service.gov.uk/v2/notifications/email');
+  request.setUri(_fromConfig('NOTIFY_EMAIL_ENDPOINT'));
   try {
     var requestBodyJson = {
       'email_address': invitedEmail,
@@ -307,7 +307,7 @@ function getSelectedLanguage (requestHeaders) {
   return 'EN';
 }
 
-var FIDC_ENDPOINT = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
+var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
 
 // main execution flow
 var config = {

@@ -72,7 +72,7 @@ function getSelectedLanguage (requestHeaders) {
 }
 
 try {
-  var idmCompanyAuthEndpoint = 'https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/endpoint/companyauth/';
+  var idmCompanyAuthEndpoint = _fromConfig('FIDC_ENDPOINT') + '/openidm/endpoint/companyauth/';
   var companyNo = JSON.parse(sharedState.get('companyData')).number;
   var sessionOwner = sharedState.get('_id');
   _log('[EWF - CHECK COMPANY MEMBERSHIP] session owner: ' + sessionOwner);

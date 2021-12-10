@@ -134,7 +134,7 @@ function _getSpanId () {
 }
 
 //fetches the IDM access token from transient state
-function _fetchIDMToken() {
+function _fetchIDMToken () {
   var accessToken = transientState.get('idmAccessToken');
   if (accessToken === null) {
     _log('Access token not in transient state');
@@ -144,7 +144,7 @@ function _fetchIDMToken() {
 }
 
 function _getUserInfoById (userId, accessToken) {
-  var idmUserEndpoint = 'https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_user/';
+  var idmUserEndpoint = _fromConfig('FIDC_ENDPOINT') + '/openidm/managed/alpha_user/';
   try {
     var idmUserIdEndpoint = idmUserEndpoint.concat(userId);
     var request = new org.forgerock.http.protocol.Request();

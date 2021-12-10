@@ -254,7 +254,7 @@ function fetchCompany (idmToken, companyNumber, skipConfirmation) {
 // main execution flow
 var YES_OPTION_INDEX = 0;
 var NO_OPTION_INDEX = 1;
-var idmCompanyEndpoint = 'https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_organization/';
+var idmCompanyEndpoint = _fromConfig('FIDC_ENDPOINT') + '/openidm/managed/alpha_organization/';
 
 var skipConfirmation = sharedState.get('skipConfirmation');
 var isEWF = sharedState.get('EWF-JOURNEY');

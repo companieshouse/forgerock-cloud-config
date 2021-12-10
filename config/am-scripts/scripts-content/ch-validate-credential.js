@@ -24,7 +24,7 @@ var NodeOutcome = {
   ERROR: 'error'
 };
 
-var validateServiceSecretString = '{"endpoint": "https://btazausqwf.execute-api.eu-west-2.amazonaws.com/cidev/","apiKey": "kIEW1gAYcT5DGoCVZ8wDT1Rq1aw6IX242qPDiSHA"}';
+var validateServiceSecretString = '{"endpoint": "' + _fromConfig('VALIDATE_SERVICE_SECRET_ENDPOINT') + '","apiKey": "kIEW1gAYcT5DGoCVZ8wDT1Rq1aw6IX242qPDiSHA"}';
 
 //fetches the secret as a JSON object
 function fetchSecret () {

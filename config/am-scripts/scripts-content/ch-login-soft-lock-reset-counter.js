@@ -27,7 +27,7 @@ var fr = JavaImporter(
 );
 
 var ACCESS_TOKEN_STATE_FIELD = 'idmAccessToken';
-var alphaUserUrl = 'https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_user/';
+var alphaUserUrl = _fromConfig('FIDC_ENDPOINT') + '/openidm/managed/alpha_user/';
 
 var NodeOutcome = {
   SUCCESS: 'success',

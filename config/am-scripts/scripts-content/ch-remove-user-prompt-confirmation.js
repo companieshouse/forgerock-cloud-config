@@ -135,7 +135,7 @@ function removeUserFromCompany (callerId, companyNo, userIdToRemove) {
 }
 
 // execution flow
-var idmCompanyAuthEndpoint = 'https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/endpoint/companyauth/';
+var idmCompanyAuthEndpoint = _fromConfig('FIDC_ENDPOINT') + '/openidm/endpoint/companyauth/';
 try {
 
   var companyLookupResponse = JSON.parse(sharedState.get('companyData'));

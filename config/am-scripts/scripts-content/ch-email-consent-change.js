@@ -163,7 +163,7 @@ function fetchActionParameter () {
 }
 
 // execution flow
-var alphaUserUrl = 'https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/managed/alpha_user/';
+var alphaUserUrl = _fromConfig('FIDC_ENDPOINT') + '/openidm/managed/alpha_user/';
 try {
   var answers = ['YES', 'NO'];
   var paramsResponse = fetchActionParameter();

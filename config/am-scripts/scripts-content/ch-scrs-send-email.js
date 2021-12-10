@@ -96,7 +96,7 @@ function sendEmail (language, email, companyName, returnUrl, newUser) {
   _log('Templates from transient state: ' + templates);
   _log(email + ' => RETURN URL: ' + returnUrl);
 
-  request.setUri('https://api.notifications.service.gov.uk/v2/notifications/email');
+  request.setUri(_fromConfig('NOTIFY_EMAIL_ENDPOINT'));
   var requestBodyJson = '';
 
   try {
@@ -172,7 +172,7 @@ function sendErrorCallbacks (token, message) {
   ).build();
 }
 
-var FIDC_ENDPOINT = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
+var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
 
 var config = {
   signingKey: transientState.get('chJwtSigningKey'),

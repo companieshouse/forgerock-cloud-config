@@ -199,7 +199,7 @@ function performAuthzCheck (inviterUserId, invitedEmail, companyData) {
 // main execution flow
 
 try {
-  var idmCompanyAuthEndpoint = 'https://openam-companieshouse-uk-dev.id.forgerock.io/openidm/endpoint/companyauth/';
+  var idmCompanyAuthEndpoint = _fromConfig('FIDC_ENDPOINT') + '/openidm/endpoint/companyauth/';
   var companyData = sharedState.get('companyData');
   var inviterUserId = sharedState.get('_id');
   var invitedEmail = sharedState.get('email');
