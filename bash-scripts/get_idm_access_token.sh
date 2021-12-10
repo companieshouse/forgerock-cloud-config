@@ -81,7 +81,7 @@ CURL_RESPONSE=$(eval ${CURL_COMMAND} 2>&1 | grep "< location:")
 CODE=$(echo ${CURL_RESPONSE} | cut -d'=' -f2 | cut -d'&' -f1)
 
 #################################
-# 1. GET IDM ADMIN TOKEN
+# 4. GET IDM ADMIN TOKEN
 #################################
 
 CURL_COMMAND="curl --silent --location --request POST '${fidcServer}/am/oauth2/access_token' \
