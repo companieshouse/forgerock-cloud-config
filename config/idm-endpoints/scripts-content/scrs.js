@@ -97,7 +97,7 @@
         'Notification-Company-Name': companyName,
         'Notification-User-Id': userId,
         'Notification-Token-Uuid': linkTokenUuid,
-        'New-User': isNewUser
+        'New-User': isNewUser.toString()
       };
 
       let request = {
@@ -131,6 +131,8 @@
   }
 
   function getUserByUsername (username) {
+    _log('Looking up username : ' + username);
+
     let response = openidm.query(
       'managed/' + OBJECT_USER,
       { '_queryFilter': '/userName eq "' + username + '"' },
@@ -138,7 +140,7 @@
     );
 
     if (response.resultCount !== 1) {
-      _log('getUserByUsername: Bad result count: ' + response.resultCount);
+      _log('getUserByUsername: No user found for : ' + username);
       return null;
     }
 
@@ -203,6 +205,7 @@
       let cacheKey = email.toUpperCase();
 
       if (_ewfUserParentNameMap.has(cacheKey)) {
+        _log('EWF Parent Name query for : ' + email + ', Cached Value = ' + _ewfUserParentNameMap.get(cacheKey));
         return _ewfUserParentNameMap.get(cacheKey);
       }
 
@@ -211,9 +214,12 @@
         { '_queryFilter': 'EMAIL eq "' + email + '"' }
       );
 
+      _log('EWF Parent Name query for : ' + email + ', Count = ' + response.resultCount);
+
       if (response.resultCount === 1) {
         if (response.result[0]._id) {
           _ewfUserParentNameMap.set(cacheKey, response.result[0]._id);
+          _log('EWF Parent Name query for : ' + email + ', Value put in Cache = ' + response.result[0]._id);
           return response.result[0]._id;
         }
       }
@@ -242,12 +248,12 @@
       userDetails.frUnindexedString3 = linkTokenHint;
     }
 
-    let ewfParentNameForEmail = getParentNameFromEwf(email);
-    _log('EWF ParentName for ' + email + ' = ' + ewfParentNameForEmail);
+    //let ewfParentNameForEmail = getParentNameFromEwf(email);
+    //_log('EWF ParentName for ' + email + ' = ' + ewfParentNameForEmail);
 
-    if (ewfParentNameForEmail) {
-      userDetails.frIndexedString1 = ewfParentNameForEmail;
-    }
+    //if (ewfParentNameForEmail) {
+    //  userDetails.frIndexedString1 = ewfParentNameForEmail;
+    //}
 
     _log('User details for createUser : ' + JSON.stringify(userDetails));
 
@@ -439,6 +445,112 @@
 
   let itemsPerPage = request.additionalParameters.numIncorporationsPerPage || DEFAULT_SUBMISSIONS_PER_PAGE;
 
+  function addConfirmedRelationshipAndEmail (email, emailLang, foundUser, companyInfo, newUser, linkTokenUuid) {
+
+    addConfirmedRelationshipToCompany(foundUser._id, companyInfo._id, companyInfo.name + ' - ' + companyInfo.number);
+
+    let notificationResponse = callNotificationJourney(email, ENDPOINT_IDAM_UI, companyInfo.name, companyInfo.number, newUser,
+      foundUser._id, linkTokenUuid, emailLang);
+
+    _log('notification response : ' + JSON.stringify(notificationResponse));
+
+    outputUsers.push({
+      _id: foundUser._id,
+      email: email,
+      companyNumber: companyInfo.number,
+      companyName: companyInfo.name,
+      newUser: newUser,
+      accountStatus: newUser ? 'inactive' : foundUser.accountStatus,
+      emailNotification: notificationResponse.code === 200 ? 'success' : 'fail',
+      message: 'The user with email : ' + email + ' has been added as a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: confirmed'
+    });
+
+  }
+
+  function associateUserWithCompany (email, companyInfo) {
+    try {
+      // Force to EN based on a CH Decision that all SCRS user emails are in English
+      let emailLang = 'en';
+
+      let ewfParentNameForEmail = getParentNameFromEwf(email);
+      _log('EWF ParentName for ' + email + ' = ' + ewfParentNameForEmail);
+
+      _log('Processing user with email : ' + email + ', language = ' + emailLang);
+      let foundUser = getUserByUsername(email);
+
+      let linkTokenUuid = uuidv4();
+      _log('Using UUID : ' + linkTokenUuid + ' for user with email : ' + email);
+
+      if (!ewfParentNameForEmail) {
+
+        _log('No EWF PARENT_NAME found');
+
+        if (!foundUser) {
+
+          _log('No FIDC User found');
+
+          foundUser = createUser(email, null, linkTokenUuid);
+          _log('New User ID: ' + foundUser._id);
+
+          let newUser = true;
+          addConfirmedRelationshipAndEmail(email, emailLang, foundUser, companyInfo, newUser, linkTokenUuid);
+
+        } else {
+
+          _log('FIDC User found');
+
+          let newUser = false;
+          addConfirmedRelationshipAndEmail(email, emailLang, foundUser, companyInfo, newUser, linkTokenUuid);
+
+        }
+
+      } else {
+
+        _log('EWF PARENT_NAME found : ' + ewfParentNameForEmail);
+
+        if (!foundUser) {
+
+          _log('No FIDC User found');
+
+          let retryCounter = 10;
+
+          // TRIGGER RECONBYID
+          _log('RECON BY ID');
+
+          while (!foundUser && retryCounter-- > 0) {
+
+            _log('Retrying to get FIDC user, retryCounter = ' + retryCounter);
+            foundUser = getUserByUsername(email);
+
+            if (foundUser) {
+
+              let newUser = true;
+              addConfirmedRelationshipAndEmail(email, emailLang, foundUser, companyInfo, newUser, linkTokenUuid);
+
+            }
+
+          }
+
+          if (!foundUser) {
+            _log('No FIDC User created by ReconById, giving up.');
+          }
+
+        } else {
+
+          _log('FIDC User found');
+
+          let newUser = false;
+          addConfirmedRelationshipAndEmail(email, emailLang, foundUser, companyInfo, newUser, linkTokenUuid);
+
+        }
+
+      }
+    } catch (e) {
+      userFailureCount++;
+      _log('Error processing user : ' + email);
+    }
+  }
+
   try {
     if (request.method === 'read' || (request.method === 'action' && request.action === 'read')) {
 
@@ -495,92 +607,26 @@
                     }).join(',');
 
                     try {
+                      _log('Getting Company Emails for No : ' + companyIncorpItem.company_number);
                       let emailsResponse = getCompanyEmails(companyIncorpItem.company_number);
-
                       _log('Emails response : ' + emailsResponse);
 
                       if (emailsResponse && emailsResponse.items) {
                         let emailsUnique = removeDuplicateEmails(emailsResponse.items);
 
                         _log('Emails (unique) : ' + emailsUnique);
+                        _log('Company Members Already : ' + allMembersEmailsString);
 
                         emailsUnique.forEach(email => {
-                          // Force to EN based on a CH Decision that all SCRS user emails are in English
-                          let emailLang = 'en';
+                          if (allMembersEmailsString.indexOf(email) > -1) {
+                            let userObj = allMembers.find(element => (element.email === email));
+                            _log('The user with email : ' + email + ' is already a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: ' + userObj.status);
 
-                          try {
-                            _log('Processing user with email : ' + email + ', language = ' + emailLang);
-                            let userLookup = getUserByUsername(email);
-
-                            if (allMembersEmailsString.indexOf(email) > -1) {
-                              let userObj = allMembers.find(element => (element.email === email));
-                              _log('The user with email : ' + email + ' is already a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: ' + userObj.status);
-
-                              outputUsers.push({
-                                message: 'The user with email : ' + email + ' is already a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: ' + userObj.status
-                              });
-                            } else {
-                              _log('The user with email : ' + email + ' is NOT a member of company ' + companyInfo.name + ' (' + companyInfo.number + ')');
-
-                              let linkTokenUuid = uuidv4();
-                              _log('Using UUID : ' + linkTokenUuid + ' for user with email : ' + email);
-
-                              if (!userLookup) {
-                                let createRes = createUser(email, null, linkTokenUuid);
-
-                                _log('New User ID: ' + createRes._id);
-                                _log('Creating CONFIRMED relationship between user ' + createRes._id + ' and company ' + companyInfo.number);
-
-                                addConfirmedRelationshipToCompany(createRes._id, companyInfo._id, companyInfo.name + ' - ' + companyInfo.number);
-
-                                let notificationResponse = callNotificationJourney(email, ENDPOINT_IDAM_UI, companyInfo.name, companyInfo.number, 'true',
-                                  createRes._id, linkTokenUuid, emailLang);
-
-                                _log('notification response : ' + JSON.stringify(notificationResponse));
-
-                                outputUsers.push({
-                                  _id: createRes._id,
-                                  email: email,
-                                  companyNumber: companyInfo.number,
-                                  companyName: companyInfo.name,
-                                  newUser: true,
-                                  accountStatus: 'inactive',
-                                  emailNotification: notificationResponse.code === 200 ? 'success' : 'fail',
-                                  message: 'The user with email : ' + email + ' has been added as a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: confirmed'
-                                });
-                              } else {
-                                _log('UserLookup : ' + JSON.stringify(userLookup, null, 2));
-                                _log('User found with email :' + email + ' - Creating CONFIRMED relationship with company ' + companyInfo.number);
-
-                                addConfirmedRelationshipToCompany(userLookup._id, companyInfo._id, companyInfo.name + ' - ' + companyInfo.number);
-
-                                if (!userLookup.frUnindexedString3) {
-                                  _log('User : ' + email + ' (id = ' + userLookup._id + ') has no linkTokenUuid currently');
-                                  updateUserLinkTokenId(userLookup._id, linkTokenUuid);
-                                } else {
-                                  linkTokenUuid = userLookup.frUnindexedString3;
-                                }
-
-                                let notificationResponse = callNotificationJourney(email, ENDPOINT_IDAM_UI, companyInfo.name, companyInfo.number, 'false',
-                                  userLookup._id, linkTokenUuid, emailLang);
-
-                                _log('notification response : ' + JSON.stringify(notificationResponse));
-
-                                outputUsers.push({
-                                  _id: userLookup._id,
-                                  email: email,
-                                  companyNumber: companyInfo.number,
-                                  companyName: companyInfo.name,
-                                  newUser: false,
-                                  accountStatus: userLookup.accountStatus,
-                                  emailNotification: notificationResponse.code === 200 ? 'success' : 'fail',
-                                  message: 'The user with email : ' + email + ' has been added as a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: confirmed'
-                                });
-                              }
-                            }
-                          } catch (e) {
-                            userFailureCount++;
-                            _log('Error processing user : ' + email);
+                            outputUsers.push({
+                              message: 'The user with email : ' + email + ' is already a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: ' + userObj.status
+                            });
+                          } else {
+                            associateUserWithCompany(email, companyInfo);
                           }
                         });
                       }
@@ -602,7 +648,7 @@
         }
 
         if (linksNextTimePoint) {
-          // By default we'll use the links>next timepoint
+          // By default, we'll use the links>next timepoint
           responseNextTimePoint = linksNextTimePoint;
         }
 
