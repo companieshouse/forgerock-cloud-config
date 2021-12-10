@@ -133,7 +133,7 @@
 				},
 				"PARENT_USERNAME": {
 					"type": "string",
-					"nativeName": "PARENT_USERNAME",
+					"nativeName": "__NAME__",
 					"nativeType": "string",
 					"required": false
 				},
