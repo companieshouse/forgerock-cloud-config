@@ -5,7 +5,7 @@
 #####################################################
 
 usage() {
-  echo "Usage: $0  [ -t templateFile ] [ -c concourseUserPassword ] [ -u username ] [ -p password] [ -a adminClientId ] [ -s adminClientSecret ] [ -f fidcServerUrl ] [ -r fidcRealm (optional) ]"
+  echo "Usage: $0  [ -t templateFile ] [ -c concourseUserPassword ] [ -u username ] [ -p password] [ -f fidcServerUrl ] [ -r fidcRealm (optional) ]"
   exit 1
 }
 
@@ -13,12 +13,10 @@ unset templateFile
 unset concourseUserPassword
 unset username
 unset password
-unset adminClientId
-unset adminClientSecret
 unset fidcServer
 unset fidcRealm
 
-while getopts ht:c:u:p:a:s:f:r: flag
+while getopts ht:c:u:p:f:r: flag
 do
     case "${flag}" in
         h) usage;;
@@ -26,8 +24,6 @@ do
         c) concourseUserPassword=${OPTARG};;
         u) username=${OPTARG};;
         p) password=${OPTARG};;
-        a) adminClientId=${OPTARG};;
-        s) adminClientSecret=${OPTARG};;
         f) fidcServer=${OPTARG};;
         r) fidcRealm=${OPTARG};;
         *) usage;;
@@ -39,7 +35,7 @@ done
 #echo "FIDC Server: $fidcServer";
 #echo "FIDC Realm: $fidcRealm";
 
-if [[  ( -z "${templateFile}" ) || ( -z "${concourseUserPassword}" ) || ( -z "${username}" ) || ( -z "${password}" ) || ( -z "${adminClientId}" ) || ( -z "${adminClientSecret}" ) || ( -z "${fidcServer}" ) ]]; then
+if [[  ( -z "${templateFile}" ) || ( -z "${concourseUserPassword}" ) || ( -z "${username}" ) || ( -z "${password}" ) || ( -z "${fidcServer}" ) ]]; then
     echo "Invalid or missing arguments, quitting."
     usage
 fi
@@ -48,7 +44,7 @@ if [[ ( -z "${fidcRealm}" ) ]]; then
     fidcRealm="alpha"
 fi
 
-ACCESS_TOKEN=$(sh get_idm_access_token.sh -u ${username} -p ${password} -a ${adminClientId} -s ${adminClientSecret} -f ${fidcServer})
+ACCESS_TOKEN=$(sh get_idm_access_token.sh -u ${username} -p ${password} -f ${fidcServer})
 
 TEMPLATE_FILE_COMMAND="cat ${templateFile} | sed 's/{CONCOURSE_USER_PASSWORD\}/${concourseUserPassword}/g'"
 TEMPLATE_MERGED=$(eval ${TEMPLATE_FILE_COMMAND})
