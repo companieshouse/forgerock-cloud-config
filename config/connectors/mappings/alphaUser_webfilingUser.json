@@ -38,7 +38,7 @@
       "situation": "SOURCE_MISSING"
     },
     {
-      "action": "EXCEPTION",
+      "action": "CREATE",
       "situation": "MISSING"
     },
     {
