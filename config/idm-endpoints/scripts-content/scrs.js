@@ -500,7 +500,9 @@
       let foundUser = getUserByUsername(email);
 
       let linkTokenUuid = uuidv4();
-      _log('Using UUID : ' + linkTokenUuid + ' for user with email : ' + email);
+      if (foundUser && foundUser.frUnindexedString3) {
+        linkTokenUuid = foundUser.frUnindexedString3;
+      }
 
       if (!ewfParentUsernameForEmail) {
 
@@ -522,6 +524,7 @@
 
           let newUser = false;
           addConfirmedRelationshipAndEmail(email, emailLang, foundUser, companyInfo, newUser, linkTokenUuid);
+          updateUserLinkTokenId(foundUser._id, linkTokenUuid);
 
         }
 
@@ -560,6 +563,7 @@
           if (foundUser) {
             let newUser = true;
             addConfirmedRelationshipAndEmail(email, emailLang, foundUser, companyInfo, newUser, linkTokenUuid);
+            updateUserLinkTokenId(foundUser._id, linkTokenUuid);
           } else {
             _log('No FIDC User created, marking as failed');
             userFailureCount++;
@@ -571,6 +575,7 @@
 
           let newUser = false;
           addConfirmedRelationshipAndEmail(email, emailLang, foundUser, companyInfo, newUser, linkTokenUuid);
+          updateUserLinkTokenId(foundUser._id, linkTokenUuid);
         }
 
       }
