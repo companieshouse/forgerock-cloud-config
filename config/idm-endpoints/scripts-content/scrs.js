@@ -19,13 +19,15 @@
   const IDAM_PASSWORD = 'Passw0rd123!';
   const IDAM_SCRS_SERVICE_USERNAME = 'scrs-service-user@companieshouse.com';
 
+  const CREATE_USER_USING_RECON_BY_ID = false;
+
   var AuthorisationStatus = {
     CONFIRMED: 'confirmed',
     PENDING: 'pending',
     NONE: 'none'
   };
 
-  var _ewfUserParentNameMap = new Map();
+  var _ewfUserParentUsernameMap = new Map();
 
   function _log (message) {
     logger.error('[CHLOG][SCRS][' + logNowMsecs + '] ' + message);
@@ -42,6 +44,13 @@
     s[8] = s[13] = s[18] = s[23] = '-';
 
     return s.join('');
+  }
+
+  function sleepMSecs (msecs) {
+    _log('Sleeping for : ' + msecs + ' msecs');
+
+    var waitTill = new Date(new Date().getTime() + msecs);
+    while (waitTill > new Date()) {}
   }
 
   function removeDuplicateEmails (data) {
@@ -194,7 +203,7 @@
     }
   }
 
-  function getParentNameFromEwf (email) {
+  function getParentUsernameFromEwf (email) {
     try {
       if (!email || email.trim() === '') {
         return null;
@@ -204,9 +213,9 @@
 
       let cacheKey = email.toUpperCase();
 
-      if (_ewfUserParentNameMap.has(cacheKey)) {
-        _log('EWF Parent Name query for : ' + email + ', Cached Value = ' + _ewfUserParentNameMap.get(cacheKey));
-        return _ewfUserParentNameMap.get(cacheKey);
+      if (_ewfUserParentUsernameMap.has(cacheKey)) {
+        _log('EWF Parent Name query for : ' + email + ', Cached Value = ' + _ewfUserParentUsernameMap.get(cacheKey));
+        return _ewfUserParentUsernameMap.get(cacheKey);
       }
 
       let response = openidm.query(
@@ -217,8 +226,10 @@
       _log('EWF Parent Name query for : ' + email + ', Count = ' + response.resultCount);
 
       if (response.resultCount === 1) {
+        _log('Response from EWF : ' + JSON.stringify(response.result[0]));
+
         if (response.result[0]._id) {
-          _ewfUserParentNameMap.set(cacheKey, response.result[0]._id);
+          _ewfUserParentUsernameMap.set(cacheKey, response.result[0]._id);
           _log('EWF Parent Name query for : ' + email + ', Value put in Cache = ' + response.result[0]._id);
           return response.result[0]._id;
         }
@@ -230,7 +241,7 @@
     return null;
   }
 
-  function createUser (email, description, linkTokenHint) {
+  function createUser (email, description, linkTokenHint, ewfParentUsernameForEmail) {
     _log('User does not exist: Creating new user with username ' + email);
 
     let userDetails = {
@@ -248,12 +259,10 @@
       userDetails.frUnindexedString3 = linkTokenHint;
     }
 
-    //let ewfParentNameForEmail = getParentNameFromEwf(email);
-    //_log('EWF ParentName for ' + email + ' = ' + ewfParentNameForEmail);
-
-    //if (ewfParentNameForEmail) {
-    //  userDetails.frIndexedString1 = ewfParentNameForEmail;
-    //}
+    if (ewfParentUsernameForEmail) {
+      _log('EWF ParentUsername for ' + email + ' = ' + ewfParentUsernameForEmail);
+      userDetails.frIndexedString1 = ewfParentUsernameForEmail;
+    }
 
     _log('User details for createUser : ' + JSON.stringify(userDetails));
 
@@ -467,13 +476,25 @@
 
   }
 
+  function triggerReconById (email, ewfParentUsernameForEmail) {
+    _log('Triggering reconById for email : ' + email + ', ewfParentUserName : ' + ewfParentUsernameForEmail);
+
+    const response = openidm.action('recon', 'reconById', {}, {
+      'mapping': 'webfilingUser_alphaUser',
+      'id': ewfParentUsernameForEmail,
+      'waitForCompletion': false
+    });
+
+    _log('ReconById response: ' + response);
+  }
+
   function associateUserWithCompany (email, companyInfo) {
     try {
       // Force to EN based on a CH Decision that all SCRS user emails are in English
       let emailLang = 'en';
 
-      let ewfParentNameForEmail = getParentNameFromEwf(email);
-      _log('EWF ParentName for ' + email + ' = ' + ewfParentNameForEmail);
+      let ewfParentUsernameForEmail = getParentUsernameFromEwf(email);
+      _log('EWF ParentUsername for ' + email + ' = ' + ewfParentUsernameForEmail);
 
       _log('Processing user with email : ' + email + ', language = ' + emailLang);
       let foundUser = getUserByUsername(email);
@@ -481,7 +502,7 @@
       let linkTokenUuid = uuidv4();
       _log('Using UUID : ' + linkTokenUuid + ' for user with email : ' + email);
 
-      if (!ewfParentNameForEmail) {
+      if (!ewfParentUsernameForEmail) {
 
         _log('No EWF PARENT_NAME found');
 
@@ -506,33 +527,42 @@
 
       } else {
 
-        _log('EWF PARENT_NAME found : ' + ewfParentNameForEmail);
+        _log('EWF PARENT_NAME found : ' + ewfParentUsernameForEmail);
 
         if (!foundUser) {
 
           _log('No FIDC User found');
 
-          let retryCounter = 10;
+          if (CREATE_USER_USING_RECON_BY_ID) {
 
-          // TRIGGER RECONBYID
-          _log('RECON BY ID');
+            _log('Creating user : ' + email + 'using reconById() strategy');
 
-          while (!foundUser && retryCounter-- > 0) {
+            let retryCounter = 10;
+            triggerReconById(email, ewfParentUsernameForEmail);
 
-            _log('Retrying to get FIDC user, retryCounter = ' + retryCounter);
-            foundUser = getUserByUsername(email);
+            while (!foundUser && retryCounter-- > 0) {
+              sleepMSecs(200);
 
-            if (foundUser) {
+              _log('Retrying to get FIDC user, retryCounter = ' + retryCounter);
 
-              let newUser = true;
-              addConfirmedRelationshipAndEmail(email, emailLang, foundUser, companyInfo, newUser, linkTokenUuid);
-
+              foundUser = getUserByUsername(email);
             }
+
+          } else {
+
+            _log('Creating user : ' + email + 'using createUser() strategy');
+
+            foundUser = createUser(email, null, linkTokenUuid, ewfParentUsernameForEmail);
+            _log('New User ID: ' + foundUser._id);
 
           }
 
-          if (!foundUser) {
-            _log('No FIDC User created by ReconById, giving up.');
+          if (foundUser) {
+            let newUser = true;
+            addConfirmedRelationshipAndEmail(email, emailLang, foundUser, companyInfo, newUser, linkTokenUuid);
+          } else {
+            _log('No FIDC User created, marking as failed');
+            userFailureCount++;
           }
 
         } else {
@@ -541,7 +571,6 @@
 
           let newUser = false;
           addConfirmedRelationshipAndEmail(email, emailLang, foundUser, companyInfo, newUser, linkTokenUuid);
-
         }
 
       }
