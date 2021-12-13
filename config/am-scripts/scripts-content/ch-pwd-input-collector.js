@@ -37,9 +37,10 @@ try {
   var isOnboarding = sharedState.get('isOnboarding');
   var isResetPassword = sharedState.get('isResetPassword');
   var isRegistration = sharedState.get('isRegistration');
+  var isSCRSActivation = sharedState.get('isSCRSActivation');
 
   var invitedCompanyName = sharedState.get('invitedCompanyName');
-  var stageName = isOnboarding ? 'ONBOARDING_PWD' : (isResetPassword ? 'RESET_PASSWORD_4' : (isRegistration ? 'REGISTRATION_4' : 'N/A'));
+  var stageName = (isOnboarding || isSCRSActivation) ? 'ONBOARDING_PWD' : (isResetPassword ? 'RESET_PASSWORD_4' : (isRegistration ? 'REGISTRATION_4' : 'N/A'));
 
   if (callbacks.isEmpty()) {
     var infoMessage = 'Please create new password for user '.concat(sharedState.get('userName'));
