@@ -11,6 +11,17 @@ const updateAuthTrees = async (argv) => {
   try {
     const sessionToken = await getSessionToken(argv)
 
+    // Setup the Auth Tree config for token timeout
+    const treeAuth = path.resolve(__dirname, '../config/auth-trees/settings/tree-auth.json')
+    if (fs.existsSync(treeAuth)) {
+      const treeAuthJson = fs.readFileSync(treeAuth, { encoding: 'utf8' })
+      if (treeAuthJson) {
+        const requestUrl = `${FIDC_URL}/am/json/realms/root/realms/${realm}/realm-config/authentication`
+        await fidcRequest(requestUrl, JSON.parse(treeAuthJson), sessionToken, true)
+        console.log('Tree Auth settings updated')
+      }
+    }
+
     // Read auth tree JSON files
     const dir = path.resolve(__dirname, '../config/auth-trees')
     const useFF = filenameFilter || argv.filenameFilter
