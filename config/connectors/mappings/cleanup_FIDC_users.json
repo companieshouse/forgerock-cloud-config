@@ -1,0 +1,111 @@
+{
+  "target": "managed/alpha_user",
+  "enabled": true,
+  "source": "system/WebfilingUser/webfilingUser",
+  "name": "user-cleanup-mapping",
+  "displayName": "user-cleanup-mapping",
+  "properties": [
+    {
+      "target": "mail",
+      "source": "EMAIL"
+    },
+    {
+      "target": "sn",
+      "source": "EMAIL"
+    },
+    {
+      "target": "userName",
+      "source": "EMAIL"
+    },
+    {
+      "target": "frIndexedString2",
+      "source": "PASSWORD"
+    },
+    {
+      "target": "frIndexedString1",
+      "source": "PARENT_USERNAME"
+    }
+  ],
+  "policies": [
+    {
+      "action": "EXCEPTION",
+      "situation": "AMBIGUOUS"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "SOURCE_MISSING"
+    },
+    {
+      "action": "CREATE",
+      "situation": "MISSING"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "FOUND_ALREADY_LINKED"
+    },
+    {
+      "action": "DELETE",
+      "situation": "UNQUALIFIED"
+    },
+    {
+      "action": "DELETE",
+      "situation": "UNASSIGNED"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "LINK_ONLY"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "TARGET_IGNORED"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "SOURCE_IGNORED"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "ALL_GONE"
+    },
+    {
+      "action": "DELETE",
+      "situation": "CONFIRMED"
+    },
+    {
+      "action": "UPDATE",
+      "situation": "FOUND"
+    },
+    {
+      "action": "CREATE",
+      "situation": "ABSENT"
+    }
+  ],
+  "validTarget" : {
+    "type" : "text/javascript",
+    "globals" : { },
+    "source" : "target.userName !== 'tree-service-user@companieshouse.com' && 'tree-service-user@companieshouse.co.uk' && target.userName !== 'ConcourseUser@companieshouse.gov.uk' && target.userName !== 'AdminClientTest@example.com' && target.userName !== 'pxtdbugadc1@gmail.com' && target.userName !== 'pxtdbugadc2@gmail.com' && target.userName !== 'pxtdbugadc3@gmail.com' && target.userName !== 'pxtdbugadc4@gmail.com' && target.userName !== 'testautomationfr36@test.companieshouse.gov.uk' && target.userName !== 'testautomationfr37@test.companieshouse.gov.uk' && target.userName !== 'fcalvino@companieshouse.gov.uk' && target.userName !== 'francesco.calvino@amido.com'"
+  },
+  "clusteredSourceReconEnabled": true,
+  "reconSourceQueryPageSize": 10000,
+  "sourceQueryFullEntry": true,
+  "sourceQuery": {
+    "_queryFilter": "true",
+    "_sortKeys": "PARENT_USERNAME"
+  },
+  "taskThreads": 20,
+  "correlationQuery": [],
+  "onCreate": {
+    "type": "text/javascript",
+    "globals": {},
+    "source": "// change via external file"
+  },
+  "onUpdate": {
+    "type": "text/javascript",
+    "globals": {},
+    "source": "// change via external file"
+  },
+  "onError": {
+    "type": "text/javascript",
+    "source": "// change via external file"
+  }
+}
