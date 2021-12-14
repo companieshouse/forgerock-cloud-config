@@ -43,7 +43,7 @@ function buildReturnUrl (email, companyNumber, isNewUser, host, userId, linkToke
 
   if (onboardingParams) {
     var returnUrl = host.concat('/account/scrs/?', onboardingParams)
-      .concat('&goto=', encodeURIComponent('/account/home/?companyNo=' + companyNumber + '&scrsUserType='+(isNewUser ? 'new' : 'existing')));
+      .concat('&goto=', encodeURIComponent('/account/home/?companyNo=' + companyNumber + '&scrsUserType=' + (isNewUser ? 'new' : 'existing')));
 
     _log('Onboarding Url : ' + returnUrl);
 
@@ -69,13 +69,13 @@ function getEmailTemplateId (templates, language, newUser) {
   _log(JSON.stringify(templatesParsed, null, 2));
 
   if (language === 'EN' || language === 'en') {
-    if (newUser === 'true') {
+    if (String(newUser) === 'true') {
       templateId = templatesParsed.en_scrs_notification_new;
     } else {
       templateId = templatesParsed.en_scrs_notification;
     }
   } else {
-    if (newUser === 'true') {
+    if (String(newUser) === 'true') {
       templateId = templatesParsed.cy_scrs_notification_new;
     } else {
       templateId = templatesParsed.cy_scrs_notification;
