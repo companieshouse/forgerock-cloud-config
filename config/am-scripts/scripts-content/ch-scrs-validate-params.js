@@ -72,9 +72,9 @@ function getHeaderParams (requestHeaders) {
   if (requestHeaders.get(headerNotificationEmail)) {
     email = requestHeaders.get(headerNotificationEmail).get(0);
   }
-
+  
   if (requestHeaders.get(headerNewUser)) {
-    newUser = requestHeaders.get(headerNewUser).get(0);
+    newUser = (String(requestHeaders.get(headerNewUser).get(0)) === 'true');
   }
 
   if (requestHeaders.get(headerNotificationCompanyName)) {
