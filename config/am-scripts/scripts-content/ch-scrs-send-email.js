@@ -43,7 +43,7 @@ function buildReturnUrl (email, companyNumber, isNewUser, host, userId, linkToke
 
   if (onboardingParams) {
     var returnUrl = host.concat('/account/scrs/?', onboardingParams)
-      .concat('&goto=', encodeURIComponent('/account/home/?companyNo=' + companyNumber + '&scrsUserType=' + (isNewUser ? 'new' : 'existing')));
+      .concat('&goto=', encodeURIComponent('/account/home/?companyNo=' + companyNumber), '&scrsUserType=', encodeURIComponent(isNewUser ? 'new' : 'existing'));
 
     _log('Onboarding Url : ' + returnUrl);
 
