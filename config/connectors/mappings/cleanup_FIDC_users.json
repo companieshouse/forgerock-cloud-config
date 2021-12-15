@@ -32,11 +32,11 @@
       "situation": "AMBIGUOUS"
     },
     {
-      "action": "EXCEPTION",
+      "action": "DELETE",
       "situation": "SOURCE_MISSING"
     },
     {
-      "action": "CREATE",
+      "action": "IGNORE",
       "situation": "MISSING"
     },
     {
@@ -72,11 +72,11 @@
       "situation": "CONFIRMED"
     },
     {
-      "action": "UPDATE",
+      "action": "DELETE",
       "situation": "FOUND"
     },
     {
-      "action": "CREATE",
+      "action": "IGNORE",
       "situation": "ABSENT"
     }
   ],

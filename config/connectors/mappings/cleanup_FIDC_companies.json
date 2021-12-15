@@ -117,7 +117,7 @@
 			"situation": "SOURCE_MISSING"
 		},
 		{
-			"action": "EXCEPTION",
+			"action": "IGNORE",
 			"situation": "MISSING"
 		},
 		{
@@ -153,11 +153,11 @@
 			"situation": "CONFIRMED"
 		},
 		{
-			"action": "UPDATE",
+			"action": "DELETE",
 			"situation": "FOUND"
 		},
 		{
-			"action": "CREATE",
+			"action": "IGNORE",
 			"situation": "ABSENT"
 		}
 	],
