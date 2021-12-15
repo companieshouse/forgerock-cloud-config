@@ -4,7 +4,8 @@ _log('Starting');
 var resetParams = {
   'frIndexedString3': null,
   'frIndexedString4': null,
-  'frUnindexedInteger1': null
+  'frUnindexedInteger1': null,
+  'accountStatus': 'active'
 };
 
 sharedState.put('objectAttributes', resetParams);
