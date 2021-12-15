@@ -76,7 +76,7 @@
       "situation": "FOUND"
     },
     {
-      "action": "CREATE",
+      "action": "IGNORE",
       "situation": "ABSENT"
     }
   ],
