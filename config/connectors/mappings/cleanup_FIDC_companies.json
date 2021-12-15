@@ -2,10 +2,10 @@
 	"target": "managed/alpha_organization",
 	"enabled": true,
 	"source": "system/CHSCompany/company_profile",
-	"name": "companies-cleanup-mapping",
+	"name": "companies_cleanup_mapping",
 	"consentRequired": false,
 	"icon": null,
-	"displayName": "companies-cleanup-mapping",
+	"displayName": "companies_cleanup_mapping",
 	"properties": [
 		{
 			"target": "name",

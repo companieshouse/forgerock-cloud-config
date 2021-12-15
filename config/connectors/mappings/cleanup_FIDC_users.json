@@ -2,8 +2,8 @@
   "target": "managed/alpha_user",
   "enabled": true,
   "source": "system/WebfilingUser/webfilingUser",
-  "name": "user-cleanup-mapping",
-  "displayName": "user-cleanup-mapping",
+  "name": "user_cleanup_mapping",
+  "displayName": "user_cleanup_mapping",
   "properties": [
     {
       "target": "mail",
