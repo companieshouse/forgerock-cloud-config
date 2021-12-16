@@ -60,23 +60,12 @@ function getUserMembershipForCompany (userIdentifier, companyNo) {
   }
 }
 
-//extracts the language form headers (default to EN)
-function getSelectedLanguage (requestHeaders) {
-  if (requestHeaders && requestHeaders.get('Chosen-Language')) {
-    var lang = requestHeaders.get('Chosen-Language').get(0);
-    _log('selected language: ' + lang);
-    return lang;
-  }
-  _log('no selected language found - defaulting to EN');
-  return 'EN';
-}
-
 try {
   var idmCompanyAuthEndpoint = _fromConfig('FIDC_ENDPOINT') + '/openidm/endpoint/companyauth/';
   var companyNo = JSON.parse(sharedState.get('companyData')).number;
   var sessionOwner = sharedState.get('_id');
   _log('[EWF - CHECK COMPANY MEMBERSHIP] session owner: ' + sessionOwner);
-  var language = getSelectedLanguage(requestHeaders);
+  var language = _getSelectedLanguage(requestHeaders);
 
   var companyMembership = getUserMembershipForCompany(sessionOwner, companyNo);
   if (!companyMembership) {

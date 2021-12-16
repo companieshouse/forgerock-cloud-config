@@ -227,17 +227,6 @@ function sendEmail (language, jwt) {
   return (response.getStatus().getCode() === 201);
 }
 
-//extracts the language form headers (default to EN)
-function getSelectedLanguage (requestHeaders) {
-  if (requestHeaders && requestHeaders.get('Chosen-Language')) {
-    var lang = requestHeaders.get('Chosen-Language').get(0);
-    _log('selected language: ' + lang);
-    return lang;
-  }
-  _log('no selected language found - defaulting to EN');
-  return 'EN';
-}
-
 // main execution flow
 var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
 var config = {
@@ -253,7 +242,7 @@ try {
   var registrationJwt;
   var host = requestHeaders.get('origin').get(0);
   var request = new org.forgerock.http.protocol.Request();
-  var language = getSelectedLanguage(requestHeaders);
+  var language = _getSelectedLanguage(requestHeaders);
   var now = new Date();
 
   var regData = extractRegDataFromState();

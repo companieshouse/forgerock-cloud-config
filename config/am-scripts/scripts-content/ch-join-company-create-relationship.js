@@ -166,17 +166,6 @@ function fetchIDMToken () {
   return accessToken;
 }
 
-//extracts the language form headers (default to EN)
-function getSelectedLanguage (requestHeaders) {
-  if (requestHeaders && requestHeaders.get('Chosen-Language')) {
-    var lang = requestHeaders.get('Chosen-Language').get(0);
-    _log('selected language: ' + lang);
-    return lang;
-  }
-  _log('no selected language found - defaulting to EN');
-  return 'EN';
-}
-
 // main execution flow
 try {
   var idmCompanyAuthEndpoint = _fromConfig('FIDC_ENDPOINT') + '/openidm/endpoint/companyauth/';
@@ -185,7 +174,7 @@ try {
   var userId = sharedState.get('_id');
   _log('Incoming company data :' + companyData);
   _log('Incoming company id :' + JSON.parse(companyData)._id);
-  var language = getSelectedLanguage(requestHeaders);
+  var language = _getSelectedLanguage(requestHeaders);
 
   var accessToken = fetchIDMToken();
   if (!accessToken) {

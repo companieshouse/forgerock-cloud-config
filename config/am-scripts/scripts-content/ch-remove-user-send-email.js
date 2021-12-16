@@ -127,22 +127,11 @@ function sendEmail (language, removerName, userToRemove, companyName) {
   };
 }
 
-//extracts the language form headers (default to EN)
-function getSelectedLanguage (requestHeaders) {
-  if (requestHeaders && requestHeaders.get('Chosen-Language')) {
-    var lang = requestHeaders.get('Chosen-Language').get(0);
-    _log('selected language: ' + lang);
-    return lang;
-  }
-  _log('no selected language found - defaulting to EN');
-  return 'EN';
-}
-
 // main execution flow
 try {
   var request = new org.forgerock.http.protocol.Request();
   var removalData = extractRemovalDataFromState();
-  var language = getSelectedLanguage(requestHeaders);
+  var language = _getSelectedLanguage(requestHeaders);
 
   if (!removalData) {
     sendErrorCallbacks('REMOVE_AUTHZ_USER_ERROR', 'Error while extracting data from shared state');

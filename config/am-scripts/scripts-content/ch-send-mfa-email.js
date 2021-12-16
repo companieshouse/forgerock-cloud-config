@@ -39,17 +39,6 @@ var NodeOutcome = {
   FALSE: 'false'
 };
 
-//extracts the language form headers (default to EN)
-function getSelectedLanguage (requestHeaders) {
-  if (requestHeaders && requestHeaders.get('Chosen-Language')) {
-    var lang = requestHeaders.get('Chosen-Language').get(0);
-    _log('selected language: ' + lang);
-    return lang;
-  }
-  _log('no selected language found - defaulting to EN');
-  return 'EN';
-}
-
 // extracts the email form shared state (for change email journey) or from IDM profile (other journeys)
 function extractEmail () {
   var isChangeEmail = sharedState.get('isChangeEmail');
@@ -119,8 +108,7 @@ function sendEmail (language, code, emailAddress) {
 try {
   var code = sharedState.get('oneTimePassword');
   var userId = sharedState.get('_id');
-  var emailAddress = '';
-  var language = getSelectedLanguage(requestHeaders);
+  var language = _getSelectedLanguage(requestHeaders);
   var emailAddress = extractEmail();
 
   _log('User email address: ' + emailAddress);
