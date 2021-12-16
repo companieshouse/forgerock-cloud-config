@@ -60,17 +60,6 @@ function sendErrorCallbacks () {
   }
 }
 
-function getSelectedLanguage (requestHeaders) {
-  if (requestHeaders && requestHeaders.get('Chosen-Language')) {
-    var lang = requestHeaders.get('Chosen-Language').get(0);
-    _log('selected language: ' + lang);
-    return lang;
-  }
-
-  _log('no selected language found - defaulting to EN');
-  return 'EN';
-}
-
 function sendTextMessage (language, phoneNumber, code) {
   sharedState.put('invalidPhone', null);
   sharedState.put('smsSendError', null);
@@ -161,7 +150,7 @@ try {
 
   _log('Code: ' + code);
 
-  var language = getSelectedLanguage(requestHeaders);
+  var language = _getSelectedLanguage(requestHeaders);
   var phoneNumber = extractPhoneNumber();
 
   _log('User phoneNumber: ' + phoneNumber);

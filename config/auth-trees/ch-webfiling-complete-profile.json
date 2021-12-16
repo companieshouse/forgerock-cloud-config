@@ -189,7 +189,7 @@
       "_id": "c91bca42-14ab-44de-a17b-ca6201fddfcc",
       "nodeType": "RetryLimitDecisionNode",
       "details": {
-        "incrementUserAttributeOnFailure": true,
+        "incrementUserAttributeOnFailure": false,
         "retryLimit": 3
       }
     },

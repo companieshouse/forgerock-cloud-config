@@ -21,7 +21,7 @@
       "_id": "2fa15e3f-2b3d-48c6-93ee-9661538e2255",
       "nodeType": "RetryLimitDecisionNode",
       "details": {
-        "incrementUserAttributeOnFailure": true,
+        "incrementUserAttributeOnFailure": false,
         "retryLimit": 3
       }
     },

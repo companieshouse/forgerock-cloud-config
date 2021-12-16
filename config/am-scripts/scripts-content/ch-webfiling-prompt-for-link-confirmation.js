@@ -32,22 +32,11 @@ var NodeOutcome = {
   ERROR: 'error'
 };
 
-//extracts the language form headers (default to EN)
-function getSelectedLanguage (requestHeaders) {
-  if (requestHeaders && requestHeaders.get('Chosen-Language')) {
-    var lang = requestHeaders.get('Chosen-Language').get(0);
-    _log('selected language: ' + lang);
-    return lang;
-  }
-  _log('no selected language found - defaulting to EN');
-  return 'EN';
-}
-
 var YES_OPTION_INDEX = 0;
 
 try {
   var companyData = sharedState.get('companyData');
-  var language = getSelectedLanguage(requestHeaders);
+  var language = _getSelectedLanguage(requestHeaders);
   if (callbacks.isEmpty()) {
     var infoMessage = 'Do you want to add this company to your Companies House account?';
     var errorMessage = sharedState.get('errorMessage');
