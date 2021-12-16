@@ -17,16 +17,23 @@ function lintWithWarnings (scriptName, mergedScript, lintingWarnedScripts) {
 
   const arr = mergedScript.toString().replace(/\r\n/g, '\n').split('\n')
 
+  let warning = false
+
   for (let i = 0; i < arr.length; i++) {
     const line = arr[i]
     if (regexIndexOf(line, '(^|[\\s+])let[\\s+]', 0) > -1) {
       console.warn('\n** WARNING: Linting issue with \'usage of let\' in script : ' + scriptName + ' (line ' + (i + 1) + ')\n')
-      lintingWarnedScripts.push(scriptName)
+      warning = true
     }
   }
 
   if (mergedScript.indexOf('// LIBRARY START') === -1 || mergedScript.indexOf('// LIBRARY END') === -1) {
     console.warn('\n** WARNING: No valid Library Include comments found in script : ' + scriptName + '\n')
+    warning = true
+  }
+
+  if (warning) {
+    lintingWarnedScripts.push(scriptName)
   }
 }
 
