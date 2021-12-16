@@ -43,7 +43,7 @@
       "_id": "2fd8d3ba-efe0-4255-855b-48c3c7b0b154",
       "nodeType": "RetryLimitDecisionNode",
       "details": {
-        "incrementUserAttributeOnFailure": true,
+        "incrementUserAttributeOnFailure": false,
         "retryLimit": 3
       }
     },
@@ -51,7 +51,7 @@
       "_id": "739b7e82-e0b3-4d94-980a-b052c8771303",
       "nodeType": "RetryLimitDecisionNode",
       "details": {
-        "incrementUserAttributeOnFailure": true,
+        "incrementUserAttributeOnFailure": false,
         "retryLimit": 3
       }
     },
