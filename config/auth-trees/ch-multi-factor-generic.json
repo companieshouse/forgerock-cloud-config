@@ -235,6 +235,23 @@
         "incrementUserAttributeOnFailure": false,
         "retryLimit": 5
       }
+    },
+    {
+      "_id": "ff370767-613b-4b1c-bca5-66719de83f67",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "e5b8f7b7-0dc2-46ba-bb3e-16e2d5543156",
+        "outcomes": [
+          "resend",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
     }
   ],
   "tree": {
@@ -397,11 +414,21 @@
         "x": 1680,
         "y": 97.015625,
         "connections": {
-          "Retry": "af71d819-bf61-4791-ae70-fc9184f90906",
+          "Retry": "ff370767-613b-4b1c-bca5-66719de83f67",
           "Reject": "c61c207e-8c12-4119-a87f-08aa91fbbe85"
         },
         "nodeType": "RetryLimitDecisionNode",
         "displayName": "Retry Limit Decision (RESEND)"
+      },
+      "ff370767-613b-4b1c-bca5-66719de83f67": {
+        "x": 1101,
+        "y": 46.015625,
+        "connections": {
+          "error": "c61c207e-8c12-4119-a87f-08aa91fbbe85",
+          "resend": "af71d819-bf61-4791-ae70-fc9184f90906"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Check OTP Resend Address"
       }
     },
     "staticNodes": {

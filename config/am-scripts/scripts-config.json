@@ -1570,6 +1570,22 @@
         "lastModifiedDate": 1617810491969
       },
       "filename": "ch-scrs-unlock-user.js"
+    },
+    {
+      "payload": {
+        "_id": "e5b8f7b7-0dc2-46ba-bb3e-16e2d5543156",
+        "name": "CH - Check OTP Resend Address",
+        "description": "Check OTP Resend Address",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-check-otp-resend-address.js"
     }
   ]
 }
