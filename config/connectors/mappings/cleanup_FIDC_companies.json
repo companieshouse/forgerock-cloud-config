@@ -3,8 +3,6 @@
 	"enabled": true,
 	"source": "system/CHSCompany/company_profile",
 	"name": "companies_cleanup_mapping",
-	"consentRequired": false,
-	"icon": null,
 	"displayName": "companies_cleanup_mapping",
 	"properties": [
 		{
@@ -169,7 +167,7 @@
 					"number"
 				]
 			},
-			"mapping": "companies-cleanup-mapping",
+			"mapping": "companies_cleanup_mapping",
 			"type": "text/javascript",
 			"file": "ui/correlateTreeToQueryFilter.js"
 		}
