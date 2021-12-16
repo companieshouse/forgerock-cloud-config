@@ -23,6 +23,9 @@ if (journeyName === 'CHChangePhoneNumber') {
 } else if (journeyName === 'CHChangeEmailAddress') {
   useStageName = 'CHANGE_EMAIL_INPUT';
   useOutcome = NodeOutcome.FORCE_EMAIL;
+} else if (journeyName === 'CHResetPassword') {
+  useStageName = 'RESET_PASSWORD_3';
+  useOutcome = NodeOutcome.FORCE_TEXT;
 }
 
 sharedState.put(config.otpCheckStageNameVariable, useStageName);
