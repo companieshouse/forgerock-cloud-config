@@ -29,6 +29,9 @@ if (journeyName === 'CHChangePhoneNumber') {
 } else if (journeyName === 'CHWebFiling-Login') {
   useStageName = 'PHONE_OTP';
   useOutcome = NodeOutcome.FORCE_TEXT;
+} else if (journeyName === 'CHRegistration') {
+  useStageName = 'REGISTRATION_MFA';
+  useOutcome = NodeOutcome.FORCE_TEXT;
 }
 
 sharedState.put(config.otpCheckStageNameVariable, useStageName);
