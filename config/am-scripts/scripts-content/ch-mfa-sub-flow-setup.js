@@ -17,6 +17,9 @@ var NodeOutcome = {
 var useStageName = 'DEFAULT_OTP_STAGE_NAME';
 var useOutcome = NodeOutcome.DEFAULT;
 
+var isRegistrationMFA = sharedState.get('registrationMFA');
+_log('Is Registration MFA : ' + isRegistrationMFA);
+
 if (journeyName === 'CHChangePhoneNumber') {
   useStageName = 'UPDATE_PHONE_2';
   useOutcome = NodeOutcome.FORCE_TEXT;
@@ -26,9 +29,13 @@ if (journeyName === 'CHChangePhoneNumber') {
 } else if (journeyName === 'CHResetPassword') {
   useStageName = 'RESET_PASSWORD_3';
   useOutcome = NodeOutcome.FORCE_TEXT;
-} else if (journeyName === 'CHWebFiling-Login') {
+} else if (journeyName === 'CHWebFiling-Login' && isRegistrationMFA) {
+  // Complete Profile
   useStageName = 'PHONE_OTP';
   useOutcome = NodeOutcome.FORCE_TEXT;
+} else if (journeyName === 'CHWebFiling-Login') {
+  useStageName = 'EWF_LOGIN_OTP';
+  useOutcome = NodeOutcome.DEFAULT;
 } else if (journeyName === 'CHRegistration') {
   useStageName = 'REGISTRATION_MFA';
   useOutcome = NodeOutcome.FORCE_TEXT;
