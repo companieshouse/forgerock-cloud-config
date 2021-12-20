@@ -103,7 +103,7 @@
 			"transform": {
 				"type": "text/javascript",
 				"globals": {},
-				"source": "if (source.jurisdiction == \"england-wales\") {\n  \"EW\"\n} else if (source.jurisdiction == \"scotland\") {\n  \"SC\"\n} else if (source.jurisdiction == \"northern-ireland\") {\n  \"NI\"\n} else {\n  source.jurisdiction\n}"
+				"source": "if (source.jurisdiction == \"england-wales\" || source.jurisdiction == \"wales\" || source.jurisdiction == \"england\") {\n  \"EW\"\n} else if (source.jurisdiction == \"scotland\") {\n  \"SC\"\n} else if (source.jurisdiction == \"northern-ireland\") {\n  \"NI\"\n} else {\n  source.jurisdiction\n}"
 			}
 		}
 	],
