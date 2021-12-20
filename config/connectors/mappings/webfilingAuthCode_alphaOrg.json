@@ -6,6 +6,10 @@
   "consentRequired": false,
   "icon": null,
   "displayName": "webfilingAuthCode_alphaOrg",
+  "onError": {
+    "type": "text/javascript",
+    "source": "// change via external file"
+  },
   "properties": [
     {
       "target": "authCode",
