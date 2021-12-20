@@ -6,6 +6,10 @@
 	"consentRequired": false,
 	"icon": null,
 	"displayName": "chsMongoCompanyProfile_alphaOrg",
+	"onError": {
+		"type": "text/javascript",
+		"source": "// change via external file"
+	},
 	"properties": [
 		{
 			"target": "name",
@@ -161,15 +165,19 @@
 			"situation": "ABSENT"
 		}
 	],
-	"correlationQuery": [{
-		"linkQualifier": "default",
-		"expressionTree": {
-			"any": ["number"]
-		},
-		"mapping": "chsMongoCompanyProfile_alphaOrg",
-		"type": "text/javascript",
-		"file": "ui/correlateTreeToQueryFilter.js"
-	}],
+	"correlationQuery": [
+		{
+			"linkQualifier": "default",
+			"expressionTree": {
+				"any": [
+					"number"
+				]
+			},
+			"mapping": "chsMongoCompanyProfile_alphaOrg",
+			"type": "text/javascript",
+			"file": "ui/correlateTreeToQueryFilter.js"
+		}
+	],
 	"clusteredSourceReconEnabled": true,
 	"reconSourceQueryPageSize": 10000,
 	"sourceQueryFullEntry": true,
