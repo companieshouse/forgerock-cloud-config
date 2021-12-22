@@ -151,23 +151,6 @@
       }
     },
     {
-      "_id": "98541a2b-eb47-4344-9136-020eba006a6c",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "script": "20a3599f-b742-4554-a8b7-27862f248dd5",
-        "outcomes": [
-          "true",
-          "false"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
-      }
-    },
-    {
       "_id": "9a94e91d-e442-4c2c-8018-23f0f8672f7b",
       "nodeType": "ScriptedDecisionNode",
       "details": {
@@ -358,23 +341,13 @@
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Has Phone Number"
       },
-      "98541a2b-eb47-4344-9136-020eba006a6c": {
-        "x": 551,
-        "y": 429.5,
-        "connections": {
-          "false": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
-          "true": "cfdd2637-5058-475e-80a5-984e2f1f7141"
-        },
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "Require MFA"
-      },
       "9a94e91d-e442-4c2c-8018-23f0f8672f7b": {
         "x": 237.33333333333337,
         "y": 423.69270833333337,
         "connections": {
-          "default": "98541a2b-eb47-4344-9136-020eba006a6c",
           "forceEmail": "5877bfca-a540-4c93-a9cf-6081b66f9fe8",
-          "forceText": "d8bd9341-0bb4-49ff-a119-964e51146f74"
+          "forceText": "d8bd9341-0bb4-49ff-a119-964e51146f74",
+          "default": "cfdd2637-5058-475e-80a5-984e2f1f7141"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Setup based on Calling Journey"
