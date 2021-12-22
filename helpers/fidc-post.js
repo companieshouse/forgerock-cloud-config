@@ -1,12 +1,11 @@
 const fetch = require('node-fetch')
 
-const fidcGet = async (requestUrl, token, sessionToken) => {
+const fidcPost = async (requestUrl, body, token, sessionToken) => {
   const headers = sessionToken
     ? {
         'content-type': 'application/json',
         'x-requested-with': 'ForgeRock CREST.js',
-        cookie: token,
-        'Accept-API-Version': 'resource=1.0'
+        cookie: token
       }
     : {
         Authorization: `Bearer ${token}`,
@@ -22,24 +21,20 @@ const fidcGet = async (requestUrl, token, sessionToken) => {
   }
 
   const requestOptions = {
-    method: 'get',
-    body: null,
+    method: 'post',
+    body: JSON.stringify(body),
     headers
   }
 
-  const response = await fetch(requestUrl, requestOptions)
-
-  if (response.status !== 200) {
-    if (!esvMode || (esvMode && response.status !== 404)) {
-      console.log(`Error ${response.status}: ${response.statusText} - ${requestUrl}`)
+  const { status, statusText, text } = await fetch(requestUrl, requestOptions)
+  if (status > 299) {
+    console.log(`Error ${status}: ${statusText} - ${requestUrl}`)
+    if (text) {
+      console.log(text())
     }
-    if (response.text) {
-      console.log(response.text())
-    }
-    throw new Error(`${response.status}: ${response.statusText}`)
+    throw new Error(`${status}: ${statusText}`)
   }
-
-  return await response.json()
+  return Promise.resolve()
 }
 
-module.exports = fidcGet
+module.exports = fidcPost

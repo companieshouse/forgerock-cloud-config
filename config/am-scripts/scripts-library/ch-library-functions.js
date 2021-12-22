@@ -187,3 +187,18 @@ function _getUserInfoById (userId, accessToken) {
     };
   }
 }
+
+function _getVariable (varName) {
+  try {
+    if (varName) {
+      return systemEnv.getProperty(varName.replace('-', '.'));
+    }
+  } catch (e) {
+    _log(e);
+  }
+  return null;
+}
+
+function _getSecret (secretName) {
+  return _getVariable(secretName);
+}

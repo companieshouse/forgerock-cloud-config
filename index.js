@@ -22,7 +22,10 @@ const {
   updateIdmEndpoints,
   updateIdmAccessConfig,
   getManagedUser,
-  updateManagedUsers
+  updateManagedUsers,
+  updateVariables,
+  updateSecrets,
+  restartFidc
 } = require('./scripts')
 
 require('dotenv').config()
@@ -251,6 +254,24 @@ yargs
     desc: 'Update Managed Users (./config/managed-users)',
     builder: cliOptions(['username', 'password', 'realm', 'treeServiceUserPassword']),
     handler: (argv) => updateManagedUsers(argv)
+  })
+  .command({
+    command: 'variables',
+    desc: 'Update Variables (.env)',
+    builder: cliOptions(['username', 'password', 'realm']),
+    handler: (argv) => updateVariables(argv)
+  })
+  .command({
+    command: 'secrets',
+    desc: 'Update Secrets (.env)',
+    builder: cliOptions(['username', 'password', 'realm']),
+    handler: (argv) => updateSecrets(argv)
+  })
+  .command({
+    command: 'restart-fidc',
+    desc: 'Restart FIDC services',
+    builder: cliOptions(['username', 'password', 'realm']),
+    handler: (argv) => restartFidc(argv)
   })
   .demandCommand()
   .parse()
