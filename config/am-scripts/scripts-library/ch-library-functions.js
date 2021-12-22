@@ -191,7 +191,7 @@ function _getUserInfoById (userId, accessToken) {
 function _getVariable (varName) {
   try {
     if (varName) {
-      return systemEnv.getProperty(varName.replace('-', '.'));
+      return systemEnv.getProperty(varName.replace('-', '.').replace('_', '.').toLowerCase());
     }
   } catch (e) {
     _log(e);
