@@ -33,9 +33,6 @@ const fidcGet = async (requestUrl, token, sessionToken) => {
     if (!esvMode || (esvMode && response.status !== 404)) {
       console.log(`Error ${response.status}: ${response.statusText} - ${requestUrl}`)
     }
-    if (response.text) {
-      console.log(response.text())
-    }
     throw new Error(`${response.status}: ${response.statusText}`)
   }
 

@@ -26,13 +26,10 @@ const fidcRequest = async (requestUrl, body, token, sessionToken) => {
     headers
   }
 
-  const { status, statusText, text } = await fetch(requestUrl, requestOptions)
+  const { status, statusText } = await fetch(requestUrl, requestOptions)
 
   if (status > 299) {
     console.log(`Error ${status}: ${statusText} - ${requestUrl}`)
-    if (text) {
-      console.log(text())
-    }
     throw new Error(`${status}: ${statusText}`)
   }
   return Promise.resolve()
