@@ -1,7 +1,7 @@
 var _scriptName = 'CH GET IDM ACCESS TOKEN';
 _log('Starting');
 
-var treeServiceUsername = _getSecret('esv.c5d3143c84.manualidmusername');
+var treeServiceUsername = _getVariable('esv.c5d3143c84.manualidmusername');
 var treeServiceUserPassword = _getSecret('esv.bdb15f6140.treeserviceuserpassword');
 
 var tokenEndpoint = _fromConfig('FIDC_ENDPOINT') + '/am/oauth2/realms/root/realms/alpha/access_token';
