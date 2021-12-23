@@ -19,6 +19,9 @@ const updateIdmEndpoints = require('./update-idm-endpoints')
 const updateIdmAccessConfig = require('./update-idm-access-config')
 const updateManagedUsers = require('./update-managed-users')
 const getManagedUser = require('./get_managed_user')
+const updateVariables = require('./update-variables')
+const updateSecrets = require('./update-secrets')
+const restartFidc = require('./restart-fidc')
 
 module.exports = {
   updateAgents,
@@ -41,5 +44,8 @@ module.exports = {
   updateIdmEndpoints,
   updateIdmAccessConfig,
   getManagedUser,
-  updateManagedUsers
+  updateManagedUsers,
+  updateVariables,
+  updateSecrets,
+  restartFidc
 }

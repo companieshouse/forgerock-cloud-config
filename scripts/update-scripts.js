@@ -53,60 +53,45 @@ const updateScripts = async (argv) => {
       .map((filename) => require(path.join(dir, filename))) // Map JSON file content to an array
 
     const configFunctionsScript = getConfigFunctions(dir)
-
     const libraryFunctionsScriptMinified = getLibraryFunctionsScriptMinified(dir)
 
     const lintingWarnedScripts = []
+    const baseUrl = `${FIDC_URL}/am/json/realms/root/realms/${realm}`
 
-    // Update each script
-    await Promise.all(
-      scriptFileContent.map(async (scriptFile) => {
-        const baseUrl = `${FIDC_URL}/am/json/realms/root/realms/${realm}`
-        await Promise.all(
-          scriptFile.scripts.map(async (script) => {
-            if (!fileFilter(script.filename, useFF)) {
-              return
-            }
+    for (const script of scriptFileContent[0].scripts) {
+      if (!fileFilter(script.filename, useFF)) {
+        continue
+      }
 
-            if (!script.payload.name || script.payload.name.trim() === '') {
-              throw new Error(`ERROR script Id : ${script.payload._id} must have a valid (non-blank) name!`)
-            }
+      if (!script.payload.name || script.payload.name.trim() === '') {
+        throw new Error(`ERROR script Id : ${script.payload._id} must have a valid (non-blank) name!`)
+      }
 
-            // updates the script content with encoded file
-            const originalScript = fs.readFileSync(
-              `${dir}/scripts-content/${script.filename}`,
-              { encoding: 'utf-8' }
-            )
+      // updates the script content with encoded file
+      const originalScript = fs.readFileSync(
+        `${dir}/scripts-content/${script.filename}`,
+        { encoding: 'utf-8' }
+      )
 
-            const mergedScript = libraryFunctionsScriptMinified
-              ? mergeOriginalWithLibraryFunctionsScriptMinified(originalScript, configFunctionsScript, libraryFunctionsScriptMinified)
-              : originalScript
+      const mergedScript = libraryFunctionsScriptMinified
+        ? mergeOriginalWithLibraryFunctionsScriptMinified(originalScript, configFunctionsScript, libraryFunctionsScriptMinified)
+        : originalScript
 
-            lintWithWarnings(script.filename, mergedScript, lintingWarnedScripts)
+      lintWithWarnings(script.filename, mergedScript, lintingWarnedScripts)
 
-            script.payload.script = Buffer.from(mergedScript).toString('base64')
+      script.payload.script = Buffer.from(mergedScript).toString('base64')
 
-            console.log(`updating script : ${script.payload.name} (${script.filename})`)
-            const requestUrl = `${baseUrl}/scripts/${script.payload._id}`
+      console.log(`updating script : ${script.payload.name} (${script.filename})`)
+      const requestUrl = `${baseUrl}/scripts/${script.payload._id}`
 
-            return await fidcRequest(
-              requestUrl,
-              script.payload,
-              sessionToken,
-              true
-            )
-          })
-        )
+      await fidcRequest(requestUrl, script.payload, sessionToken, true)
+    }
 
-        console.log('scripts updated')
+    console.log('scripts updated')
 
-        if (lintingWarnedScripts.length > 0) {
-          console.warn('\n** Linting warnings for scripts : ' + lintingWarnedScripts + '\n')
-        }
-
-        return Promise.resolve()
-      })
-    )
+    if (lintingWarnedScripts.length > 0) {
+      console.warn('\n** Linting warnings for scripts : ' + lintingWarnedScripts + '\n')
+    }
   } catch (error) {
     console.error(error.message)
     process.exit(1)

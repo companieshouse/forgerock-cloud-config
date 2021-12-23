@@ -1,0 +1,172 @@
+[
+  {
+    "_id": "esv-c5d3143c84-manualidmusername",
+    "description": "Script variable MANUAL_idmUsername in file idm/conf/endpoint-scrs.json",
+    "valueBase64": "%ESV_C5D3143C84_MANUALIDMUSERNAME%"
+  },
+  {
+    "_id": "esv-1a23622894-configurationpropertiesconnectionuri",
+    "description": "Configuration parameter /configurationProperties/connectionURI in file idm/conf/provisioner.openicf-CHSUser.json",
+    "valueBase64": "%ESV_1A23622894_CONFIGURATIONPROPERTIESCONNECTIONURI%"
+  },
+  {
+    "_id": "esv-778b694e17-configurationpropertiesurl",
+    "description": "Configuration parameter /configurationProperties/url in file idm/conf/provisioner.openicf-WebfilingAuthCode.json",
+    "valueBase64": "%ESV_778B694E17_CONFIGURATIONPROPERTIESURL%"
+  },
+  {
+    "_id": "esv-97d59851ff-configurationpropertieshost",
+    "description": "Configuration parameter /configurationProperties/host in file idm/conf/provisioner.openicf-CHSAuthCode.json",
+    "valueBase64": "%ESV_97D59851FF_CONFIGURATIONPROPERTIESHOST%"
+  },
+  {
+    "_id": "esv-02f979b6fa-configurationpropertieshost",
+    "description": "Configuration parameter /configurationProperties/host in file idm/conf/provisioner.openicf-DSBackup.json",
+    "valueBase64": "%ESV_02F979B6FA_CONFIGURATIONPROPERTIESHOST%"
+  },
+  {
+    "_id": "esv-ba5058c071-initparamsallowedorigins",
+    "description": "Configuration parameter /initParams/allowedOrigins in file idm/conf/servletfilter-cors.json",
+    "valueBase64": "%ESV_BA5058C071_INITPARAMSALLOWEDORIGINS%"
+  },
+  {
+    "_id": "esv-2099bcaeaf-configurationpropertiesmaxactive",
+    "description": "Configuration parameter /configurationProperties/maxActive in file idm/conf/provisioner.openicf-WebfilingUser.json",
+    "valueBase64": "%ESV_2099BCAEAF_CONFIGURATIONPROPERTIESMAXACTIVE%"
+  },
+  {
+    "_id": "esv-2099bcaeaf-configurationpropertiesinitialsize",
+    "description": "Configuration parameter /configurationProperties/initialSize in file idm/conf/provisioner.openicf-WebfilingUser.json",
+    "valueBase64": "%ESV_2099BCAEAF_CONFIGURATIONPROPERTIESINITIALSIZE%"
+  },
+  {
+    "_id": "esv-cb50efd02a-configurationpropertiesconnectionuri",
+    "description": "Configuration parameter /configurationProperties/connectionURI in file idm/conf/CHSCompany.json",
+    "valueBase64": "%ESV_CB50EFD02A_CONFIGURATIONPROPERTIESCONNECTIONURI%"
+  },
+  {
+    "_id": "esv-0e0fbba507-notifydetails",
+    "description": "Script variable notifyDetails in file am/services/realm/root-alpha/scriptingservice/1.0/organizationconfig/default/scriptconfigurations/df67765e-df3a-4503-9ba5-35c992b39259.json",
+    "valueBase64": "%ESV_0E0FBBA507_NOTIFYDETAILS%"
+  },
+  {
+    "_id": "esv-1ad9ee29ae-configurationpropertiesconnectionuri",
+    "description": "Configuration parameter /configurationProperties/connectionURI in file idm/conf/provisioner.openicf-CHSRoles.json",
+    "valueBase64": "%ESV_1AD9EE29AE_CONFIGURATIONPROPERTIESCONNECTIONURI%"
+  },
+  {
+    "_id": "esv-3097979987-dataaliases",
+    "description": "Configuration parameter /data/aliases in file am/services/global/realms/root-alpha.json",
+    "valueBase64": "%ESV_3097979987_DATAALIASES%"
+  },
+  {
+    "_id": "esv-c5d3143c84-manualemailsendpoint",
+    "description": "Script variable MANUAL_emailsEndpoint in file idm/conf/endpoint-scrs.json",
+    "valueBase64": "%ESV_C5D3143C84_MANUALEMAILSENDPOINT%"
+  },
+  {
+    "_id": "esv-84f48b22a4-configurationpropertiesconnectionuri",
+    "description": "Configuration parameter /configurationProperties/connectionURI in file idm/conf/provisioner.openicf-CHSCompany.json",
+    "valueBase64": "%ESV_84F48B22A4_CONFIGURATIONPROPERTIESCONNECTIONURI%"
+  },
+  {
+    "_id": "esv-93fcfd459d-dataacceptedorigins",
+    "description": "Configuration parameter /data/acceptedOrigins in file am/services/realm/root/corsservice/1.0/globalconfig/default/configuration/org-ui.json",
+    "valueBase64": "%ESV_93FCFD459D_DATAACCEPTEDORIGINS%"
+  },
+  {
+    "_id": "esv-2099bcaeaf-configurationpropertiesurl",
+    "description": "Configuration parameter /configurationProperties/url in file idm/conf/provisioner.openicf-WebfilingUser.json",
+    "valueBase64": "%ESV_2099BCAEAF_CONFIGURATIONPROPERTIESURL%"
+  },
+  {
+    "_id": "esv-c5d3143c84-manualcompanyincorporationsendpoint",
+    "description": "Script variable MANUAL_companyIncorporationsEndpoint in file idm/conf/endpoint-scrs.json",
+    "valueBase64": "%ESV_C5D3143C84_MANUALCOMPANYINCORPORATIONSENDPOINT%"
+  },
+  {
+    "_id": "esv-84f48b22a4-configurationpropertieshost",
+    "description": "Configuration parameter /configurationProperties/host in file idm/conf/provisioner.openicf-CHSCompany.json",
+    "valueBase64": "%ESV_84F48B22A4_CONFIGURATIONPROPERTIESHOST%"
+  },
+  {
+    "_id": "esv-cb50efd02a-configurationpropertieshost",
+    "description": "Configuration parameter /configurationProperties/host in file idm/conf/CHSCompany.json",
+    "valueBase64": "%ESV_CB50EFD02A_CONFIGURATIONPROPERTIESHOST%"
+  },
+  {
+    "_id": "esv-c5d3143c84-manualamendpoint",
+    "description": "Script variable MANUAL_amEndpoint in file idm/conf/endpoint-scrs.json",
+    "valueBase64": "%ESV_C5D3143C84_MANUALAMENDPOINT%"
+  },
+  {
+    "_id": "esv-77c831284e-datavalidgotodestinations",
+    "description": "Configuration parameter /data/validGotoDestinations in file am/services/realm/root-alpha/validationservice/1.0/organizationconfig/default.json",
+    "valueBase64": "%ESV_77C831284E_DATAVALIDGOTODESTINATIONS%"
+  },
+  {
+    "_id": "esv-1a23622894-configurationpropertieshost",
+    "description": "Configuration parameter /configurationProperties/host in file idm/conf/provisioner.openicf-CHSUser.json",
+    "valueBase64": "%ESV_1A23622894_CONFIGURATIONPROPERTIESHOST%"
+  },
+  {
+    "_id": "esv-97d59851ff-configurationpropertiesconnectionuri",
+    "description": "Configuration parameter /configurationProperties/connectionURI in file idm/conf/provisioner.openicf-CHSAuthCode.json",
+    "valueBase64": "%ESV_97D59851FF_CONFIGURATIONPROPERTIESCONNECTIONURI%"
+  },
+  {
+    "_id": "esv-2099bcaeaf-configurationpropertiesusername",
+    "description": "Configuration parameter /configurationProperties/username in file idm/conf/provisioner.openicf-WebfilingUser.json",
+    "valueBase64": "%ESV_2099BCAEAF_CONFIGURATIONPROPERTIESUSERNAME%"
+  },
+  {
+    "_id": "esv-b4ec3ce32c-dataadvancedoauth2configcustomloginurltemplate",
+    "description": "Configuration parameter /data/advancedOAuth2Config/customLoginUrlTemplate in file am/services/realm/root-alpha/oauth2provider/1.0/organizationconfig/default.json",
+    "valueBase64": "%ESV_B4EC3CE32C_DATAADVANCEDOAUTH2CONFIGCUSTOMLOGINURLTEMPLATE%"
+  },
+  {
+    "_id": "esv-1ad9ee29ae-configurationpropertieshost",
+    "description": "Configuration parameter /configurationProperties/host in file idm/conf/provisioner.openicf-CHSRoles.json",
+    "valueBase64": "%ESV_1AD9EE29AE_CONFIGURATIONPROPERTIESHOST%"
+  },
+  {
+    "_id": "esv-d180501ac1-datafixedvalue",
+    "description": "Configuration parameter /data/fixedValue in file am/services/realm/root-alpha/amrealmbaseurl/1.0/organizationconfig/default.json",
+    "valueBase64": "%ESV_D180501AC1_DATAFIXEDVALUE%"
+  },
+  {
+    "_id": "esv-a147709bca-manualreconsourcequerypagesize",
+    "description": "Script variable MANUAL_RECON_SOURCE_QUERY_PAGESIZE in file idm/conf/sync.json",
+    "valueBase64": "%ESV_A147709BCA_MANUALRECONSOURCEQUERYPAGESIZE%"
+  },
+  {
+    "_id": "esv-c5d3143c84-manualcustomuiurl",
+    "description": "Script variable MANUAL_customUiUrl in file idm/conf/endpoint-scrs.json",
+    "valueBase64": "%ESV_C5D3143C84_MANUALCUSTOMUIURL%"
+  },
+  {
+    "_id": "esv-778b694e17-configurationpropertiesusername",
+    "description": "Configuration parameter /configurationProperties/username in file idm/conf/provisioner.openicf-WebfilingAuthCode.json",
+    "valueBase64": "%ESV_778B694E17_CONFIGURATIONPROPERTIESUSERNAME%"
+  },
+  {
+    "_id": "esv-d0f01990f4-manualscrsusername",
+    "description": "SCRS Username in file scrs.js",
+    "valueBase64": "%ESV_D0F01990F4_MANUALSCRSUSERNAME%"
+  },
+  {
+    "_id": "esv-926416aa96-notifyemailendpoint",
+    "description": "Notify Email Endpoint in file ch-config-functions.js",
+    "valueBase64": "%ESV_926416AA96_NOTIFYEMAILENDPOINT%"
+  },
+  {
+    "_id": "esv-06d383cb89-notifysmsendpoint",
+    "description": "Notify SMS Endpoint in file ch-config-functions.js",
+    "valueBase64": "%ESV_06D383CB89_NOTIFYSMSENDPOINT%"
+  },
+  {
+    "_id": "esv-983ec39961-validateservicesecretendpoint",
+    "description": "Validate Service Secret Endpoint in ch-config-functions.js",
+    "valueBase64": "%ESV_983EC39961_VALIDATESERVICESECRETENDPOINT%"
+  }
+]
