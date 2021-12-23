@@ -16,7 +16,7 @@
 
   const DEFAULT_SUBMISSIONS_PER_PAGE = 50;
   const IDAM_USERNAME = _getVariableOrSecret('esv.c5d3143c84.manualidmusername');
-  const IDAM_PASSWORD = 'Passw0rd123!';
+  const IDAM_PASSWORD = _getVariableOrSecret('esv.c5d3143c84.manualidmpassword');
   const IDAM_SCRS_SERVICE_USERNAME = _getVariableOrSecret('esv.d0f01990f4.manualscrsusername');
 
   const CREATE_USER_USING_RECON_BY_ID = false;
