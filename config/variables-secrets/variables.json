@@ -153,5 +153,20 @@
     "_id": "esv-d0f01990f4-manualscrsusername",
     "description": "SCRS Username in file scrs.js",
     "valueBase64": "%ESV_D0F01990F4_MANUALSCRSUSERNAME%"
+  },
+  {
+    "_id": "esv-926416aa96-notifyemailendpoint",
+    "description": "Notify Email Endpoint in file ch-config-functions.js",
+    "valueBase64": "%ESV_926416AA96_NOTIFYEMAILENDPOINT%"
+  },
+  {
+    "_id": "esv-06d383cb89-notifysmsendpoint",
+    "description": "Notify SMS Endpoint in file ch-config-functions.js",
+    "valueBase64": "%ESV_06D383CB89_NOTIFYSMSENDPOINT%"
+  },
+  {
+    "_id": "esv-983ec39961-validateservicesecretendpoint",
+    "description": "Validate Service Secret Endpoint in ch-config-functions.js",
+    "valueBase64": "%ESV_983EC39961_VALIDATESERVICESECRETENDPOINT%"
   }
 ]

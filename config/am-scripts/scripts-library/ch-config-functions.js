@@ -1,8 +1,8 @@
 function _fromConfig (configItem) {
-  var _CONFIG_FIDC_ENDPOINT = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
-  var _CONFIG_NOTIFY_EMAIL_ENDPOINT = 'https://api.notifications.service.gov.uk/v2/notifications/email';
-  var _CONFIG_NOTIFY_SMS_ENDPOINT = 'https://api.notifications.service.gov.uk/v2/notifications/sms';
-  var _CONFIG_VALIDATE_SERVICE_SECRET_ENDPOINT = 'https://btazausqwf.execute-api.eu-west-2.amazonaws.com/cidev/';
+  var _CONFIG_FIDC_ENDPOINT = _getVariable('esv.c5d3143c84.manualamendpoint');
+  var _CONFIG_NOTIFY_EMAIL_ENDPOINT = _getVariable('esv.926416aa96.notifyemailendpoint');
+  var _CONFIG_NOTIFY_SMS_ENDPOINT = _getVariable('esv.06d383cb89.notifysmsendpoint');
+  var _CONFIG_VALIDATE_SERVICE_SECRET_ENDPOINT = _getVariable('esv.983ec39961.validateservicesecretendpoint');
 
   const allConfigItems = {
     _ITEM_FIDC_ENDPOINT: _CONFIG_FIDC_ENDPOINT,
