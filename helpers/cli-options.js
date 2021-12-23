@@ -69,8 +69,7 @@ const cliOptions = (requestedOptions) => {
     treeServiceUserPassword: {
       alias: 'tsup',
       demandOption: false,
-      describe: 'Password for the Tree Service User',
-      default: 'Passw0rd123!'
+      describe: 'Password for the Tree Service User'
     },
     filenameFilter: {
       alias: 'ff',

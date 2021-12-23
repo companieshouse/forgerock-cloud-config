@@ -1,18 +1,11 @@
 var _scriptName = 'CH GET IDM ACCESS TOKEN';
 _log('Starting');
 
-/* 
-  ** OUTPUT DATA
-    * TRANSIENT STATE
-      - 'idmAccessToken' : the IDM Access Token
-      
-  ** OUTCOMES
-    - success: token generated successfully
-    - error: error during token generation
-*/
+var treeServiceUsername = _getSecret('esv.c5d3143c84.manualidmusername');
+var treeServiceUserPassword = _getSecret('esv.bdb15f6140.treeserviceuserpassword');
 
 var tokenEndpoint = _fromConfig('FIDC_ENDPOINT') + '/am/oauth2/realms/root/realms/alpha/access_token';
-var clientInfoSecretString = '{"id": "AMTreeAdminClient","secret": "Passw0rd123!","scope": "fr:idm:*","serviceUsername": "tree-service-user@companieshouse.com","servicePassword": "Passw0rd123!"}';
+var clientInfoSecretString = '{"id": "AMTreeAdminClient","secret": "' + treeServiceUserPassword + '","scope": "fr:idm:*","serviceUsername": "' + treeServiceUsername + '","servicePassword": "' + treeServiceUserPassword + '"}';
 
 var NodeOutcome = {
   SUCCESS: 'success',
