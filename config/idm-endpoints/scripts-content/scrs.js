@@ -2,22 +2,22 @@
   const logNowMsecs = new Date().getTime();
   _log('SCRS Starting! request = ' + JSON.stringify(request));
 
-  const BEARER_TOKEN_COMPANY_SUBMISSIONS = 'fL2uLcnfRHb_OxSkLlVbF-YvbusSK0V-3CSORk3Q';
-  const BEARER_TOKEN_AUTHORISED_FILERS_EMAILS = 'a57468b1-dfed-4a09-973d-11db8285d1c3';
+  const BEARER_TOKEN_COMPANY_SUBMISSIONS = _getVariableOrSecret('esv.032feca6b7.scrscompanysubmissionstoken');
+  const BEARER_TOKEN_AUTHORISED_FILERS_EMAILS = _getVariableOrSecret('esv.bada060229.scrsauthorisedfilersemailstoken');
 
-  const ENDPOINT_COMPANY_SUBMISSIONS = 'https://v79uxae8q8.execute-api.eu-west-1.amazonaws.com/mock/submissions';
-  const ENDPOINT_AUTHORISED_FILERS_EMAILS = 'https://v79uxae8q8.execute-api.eu-west-1.amazonaws.com/mock/authorisedForgerockEmails';
-  const ENDPOINT_FIDC = 'https://openam-companieshouse-uk-dev.id.forgerock.io';
-  const ENDPOINT_IDAM_UI = 'https://idam-ui.amido.aws.chdev.org';
+  const ENDPOINT_COMPANY_SUBMISSIONS = _getVariableOrSecret('esv.c5d3143c84.manualcompanyincorporationsendpoint');
+  const ENDPOINT_AUTHORISED_FILERS_EMAILS = _getVariableOrSecret('esv.c5d3143c84.manualemailsendpoint');
+  const ENDPOINT_FIDC = _getVariableOrSecret('esv.c5d3143c84.manualamendpoint');
+  const ENDPOINT_IDAM_UI = _getVariableOrSecret('esv.c5d3143c84.manualcustomuiurl');
 
   const OBJECT_USER = 'alpha_user';
   const OBJECT_COMPANY = 'alpha_organization';
   const SYSTEM_WEBFILING_USER = 'system/WebfilingUser/webfilingUser';
 
   const DEFAULT_SUBMISSIONS_PER_PAGE = 50;
-  const IDAM_USERNAME = 'tree-service-user@companieshouse.com';
+  const IDAM_USERNAME = _getVariableOrSecret('esv.c5d3143c84.manualidmusername');
   const IDAM_PASSWORD = 'Passw0rd123!';
-  const IDAM_SCRS_SERVICE_USERNAME = 'scrs-service-user@companieshouse.com';
+  const IDAM_SCRS_SERVICE_USERNAME = _getVariableOrSecret('esv.d0f01990f4.manualscrsusername');
 
   const CREATE_USER_USING_RECON_BY_ID = false;
 
@@ -31,6 +31,13 @@
 
   function _log (message) {
     logger.error('[CHLOG][SCRS][' + logNowMsecs + '] ' + message);
+  }
+
+  function _getVariableOrSecret (name) {
+    const fixedName = name.replace(/-/g, '.');
+    const value = identityServer.getProperty(fixedName);
+    _log('Returning variable or secret : ' + fixedName + ' as : ' + value);
+    return value;
   }
 
   function uuidv4 () {
