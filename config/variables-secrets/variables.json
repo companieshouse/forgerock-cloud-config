@@ -148,5 +148,10 @@
     "_id": "esv-778b694e17-configurationpropertiesusername",
     "description": "Configuration parameter /configurationProperties/username in file idm/conf/provisioner.openicf-WebfilingAuthCode.json",
     "valueBase64": "%ESV_778B694E17_CONFIGURATIONPROPERTIESUSERNAME%"
+  },
+  {
+    "_id": "esv-d0f01990f4-manualscrsusername",
+    "description": "SCRS Username in file scrs.js",
+    "valueBase64": "%ESV_D0F01990F4_MANUALSCRSUSERNAME%"
   }
 ]

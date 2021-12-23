@@ -36,14 +36,16 @@ const updateSecrets = async (argv) => {
               const envValue = process.env[envName]
 
               if (!envValue) {
-                console.error(`No environment value with key : '${envName}' for ESV named : '${secretEntry._id}', quitting.`)
-                process.exit(1)
+                console.error(`No environment value with key : '${envName}' for ESV named : '${secretEntry._id}', skipping!`)
+                return
               }
 
               secretEntry.valueBase64 = envValue
             }
 
-            secrets.push(secretEntry)
+            if (secretEntry.valueBase64) {
+              secrets.push(secretEntry)
+            }
           }
         })
       }
