@@ -14,7 +14,8 @@ const fidcRequest = async (requestUrl, body, token, sessionToken) => {
 
   const esvMode = (requestUrl.indexOf('/environment/variables/') > -1 ||
     requestUrl.indexOf('/environment/secrets/') > -1 ||
-    requestUrl.indexOf('/environment/startup') > -1)
+    requestUrl.indexOf('/environment/startup') > -1 ||
+    requestUrl.indexOf('/openidm/script?_action=eval') > -1)
 
   if (esvMode) {
     headers['Accept-API-Version'] = 'protocol=1.0,resource=1.0'
@@ -29,7 +30,7 @@ const fidcRequest = async (requestUrl, body, token, sessionToken) => {
   const { status, statusText } = await fetch(requestUrl, requestOptions)
 
   if (status > 299) {
-    console.log(`Error ${status}: ${statusText} - ${requestUrl}`)
+    console.log(`PUT Error ${status}: ${statusText} - ${requestUrl}`)
     throw new Error(`${status}: ${statusText}`)
   }
   return Promise.resolve()

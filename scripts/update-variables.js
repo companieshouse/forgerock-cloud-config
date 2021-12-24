@@ -2,6 +2,36 @@ const fs = require('fs')
 const path = require('path')
 const getAccessToken = require('../helpers/get-access-token')
 const fidcRequest = require('../helpers/fidc-request')
+const fidcGet = require('../helpers/fidc-get')
+const fidcPost = require('../helpers/fidc-post')
+
+async function alreadyExists (variableName, valueBase64, requestUrl, scriptUrl, accessToken) {
+  const ret = {
+    exists: false,
+    loaded: false,
+    same: false
+  }
+
+  try {
+    const response = await fidcGet(requestUrl, accessToken)
+
+    ret.exists = true
+    ret.loaded = response.loaded
+
+    const currentValue = await fidcPost(scriptUrl, {
+      type: 'text/javascript',
+      source: 'identityServer.getProperty("' + variableName.replaceAll('-', '.') + '")'
+    }, accessToken)
+
+    if (currentValue) {
+      const currentValueB64 = Buffer.from(currentValue).toString('base64')
+      ret.same = (valueBase64 === currentValueB64)
+    }
+  } catch (e) {
+  }
+
+  return ret
+}
 
 const updateVariables = async (argv) => {
   const { FIDC_URL } = process.env
@@ -40,17 +70,39 @@ const updateVariables = async (argv) => {
 
     console.log('Processing variables ...')
 
+    let restartRequired = false
+
     for (const objVariable of variables) {
       const variableName = objVariable._id
       delete objVariable._id
 
       const requestUrl = `${FIDC_URL}/environment/variables/${variableName}`
-      await fidcRequest(requestUrl, objVariable, accessToken, false)
+      const scriptUrl = `${FIDC_URL}/openidm/script?_action=eval`
 
-      console.log(`Variable '${variableName}' applied`)
+      const variableResponse = await alreadyExists(variableName, objVariable.valueBase64, requestUrl, scriptUrl, accessToken)
+
+      if (!restartRequired) {
+        restartRequired = !variableResponse.loaded || !variableResponse.same
+      }
+
+      const variableExists = variableResponse.exists
+      const variableSame = variableResponse.same
+
+      let updateMode = 'skipped (same value loaded)'
+
+      if (!variableExists || !variableSame) {
+        updateMode = 'created/updated'
+        await fidcRequest(requestUrl, objVariable, accessToken, false)
+      }
+
+      console.log(`Variable '${variableName}' ${updateMode}`)
     }
 
     console.log('Variables processed.')
+
+    if (restartRequired) {
+      console.log('\n** FIDC RESTART REQUIRED **\n')
+    }
   } catch (error) {
     console.error(error.message)
     process.exit(1)

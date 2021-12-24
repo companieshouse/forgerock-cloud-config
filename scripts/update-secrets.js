@@ -5,12 +5,28 @@ const fidcPost = require('../helpers/fidc-post')
 const path = require('path')
 const fs = require('fs')
 
-async function alreadyExists (requestUrl, accessToken) {
-  let ret = false
+async function alreadyExists (secretName, valueBase64, requestUrl, scriptUrl, accessToken) {
+  const ret = {
+    exists: false,
+    loaded: false,
+    same: false
+  }
 
   try {
-    await fidcGet(requestUrl, accessToken)
-    ret = true
+    const response = await fidcGet(requestUrl, accessToken)
+
+    ret.exists = true
+    ret.loaded = response.loaded
+
+    const currentValue = await fidcPost(scriptUrl, {
+      type: 'text/javascript',
+      source: 'identityServer.getProperty("' + secretName.replaceAll('-', '.') + '")'
+    }, accessToken)
+
+    if (currentValue) {
+      const currentValueB64 = Buffer.from(currentValue).toString('base64')
+      ret.same = (valueBase64 === currentValueB64)
+    }
   } catch (e) {
   }
 
@@ -53,26 +69,45 @@ const updateSecrets = async (argv) => {
 
     console.log('Processing secrets ...')
 
+    let restartRequired = false
+
     for (const objSecret of secrets) {
       const secretName = objSecret._id
       delete objSecret._id
 
       const requestUrl = `${FIDC_URL}/environment/secrets/${secretName}`
-      const secretExists = await alreadyExists(requestUrl, accessToken)
-      let updateMode = 'created'
+      const scriptUrl = `${FIDC_URL}/openidm/script?_action=eval`
 
-      if (!secretExists) {
-        await fidcRequest(requestUrl, objSecret, accessToken, false)
-      } else {
-        updateMode = 'updated'
-        const requestUrlVersions = requestUrl + '/versions?_action=create'
-        await fidcPost(requestUrlVersions, objSecret, accessToken, false)
+      const secretResponse = await alreadyExists(secretName, objSecret.valueBase64, requestUrl, scriptUrl, accessToken)
+
+      if (!restartRequired) {
+        restartRequired = !secretResponse.loaded || !secretResponse.same
+      }
+
+      const secretExists = secretResponse.exists
+      const secretSame = secretResponse.same
+
+      let updateMode = 'skipped (same value loaded)'
+
+      if (!secretExists || !secretSame) {
+        if (!secretExists) {
+          updateMode = 'created'
+          await fidcRequest(requestUrl, objSecret, accessToken, false)
+        } else {
+          updateMode = 'updated'
+          const requestUrlVersions = requestUrl + '/versions?_action=create'
+          await fidcPost(requestUrlVersions, objSecret, accessToken, false)
+        }
       }
 
       console.log(`Secret '${secretName}' ${updateMode}`)
     }
 
     console.log('Secrets processed.')
+
+    if (restartRequired) {
+      console.log('\n** FIDC RESTART REQUIRED **\n')
+    }
   } catch (error) {
     console.error(error.message)
     process.exit(1)
