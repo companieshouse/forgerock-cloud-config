@@ -22,6 +22,7 @@ const getManagedUser = require('./get_managed_user')
 const updateVariables = require('./update-variables')
 const updateSecrets = require('./update-secrets')
 const restartFidc = require('./restart-fidc')
+const getEsvConcourse = require('./get-esv-concourse')
 
 module.exports = {
   updateAgents,
@@ -47,5 +48,6 @@ module.exports = {
   updateManagedUsers,
   updateVariables,
   updateSecrets,
-  restartFidc
+  restartFidc,
+  getEsvConcourse
 }
