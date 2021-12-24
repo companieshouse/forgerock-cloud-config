@@ -75,6 +75,17 @@ const cliOptions = (requestedOptions) => {
       alias: 'ff',
       demandOption: false,
       describe: 'Filename Filter (combine multiples using comma, use ~ prefix on entry for wildcard match)'
+    },
+    regionName: {
+      alias: 'rn',
+      demandOption: false,
+      describe: 'Region Name (dev, staging, live)'
+    },
+    decodeValue: {
+      alias: 'dv',
+      demandOption: false,
+      describe: 'Decode Value (show ESV data decoded)',
+      default: 'false'
     }
   }
 
