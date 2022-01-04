@@ -58,7 +58,7 @@ function fetchCompanyParameters () {
 
 try {
 
-  if (typeof existingSession !== 'undefined') {
+  if (_isAuthenticated()) {
     _log('existing session: ' + existingSession.toString());
   } else {
     _log('no session!');

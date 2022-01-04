@@ -24,7 +24,7 @@ var NodeOutcome = {
 
 sharedState.put('EWF-JOURNEY', true);
 
-if (typeof existingSession !== 'undefined') {
+if (_isAuthenticated()) {
   outcome = NodeOutcome.HAS_SESSION;
   _log('existing session: ' + existingSession.toString());
 } else {

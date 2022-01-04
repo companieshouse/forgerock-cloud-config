@@ -162,7 +162,7 @@ function saveUserDataToState (email, userId) {
 
 //main execution flow
 try {
-  if (typeof existingSession !== 'undefined') {
+  if (_isAuthenticated()) {
     if (callbacks.isEmpty()) {
       action = fr.Action.send(
         new fr.HiddenValueCallback(

@@ -133,7 +133,6 @@ function _getSpanId () {
   return spanId;
 }
 
-//fetches the IDM access token from transient state
 function _fetchIDMToken () {
   var accessToken = transientState.get('idmAccessToken');
   if (accessToken === null) {
@@ -201,4 +200,14 @@ function _getVariable (varName) {
 
 function _getSecret (secretName) {
   return _getVariable(secretName);
+}
+
+function _isAuthenticated () {
+  if (typeof existingSession !== 'undefined') {
+    _log('User is authenticated');
+    return true;
+  } else {
+    _log('User is NOT authenticated');
+    return false;
+  }
 }
