@@ -6,7 +6,7 @@ function _log (message) {
 
 _log('SCRS Scheduled Starting!');
 
-const maxIterations = 3;
+const maxIterations = 5;
 const incorporationsPerPage = 50;
 
 for (let iteration = 1; iteration <= maxIterations; iteration++) {
