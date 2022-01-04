@@ -53,7 +53,8 @@ function getCompanyInfo (companyNo) {
 
   var requestBodyJson =
     {
-      'companyNumber': companyNo
+      'companyNumber': companyNo,
+      'ignoreCompanyAttributes': 'true'
     };
 
   request.setMethod('POST');
