@@ -19,12 +19,10 @@ var ConfirmIndex = {
   RESEND: 0
 };
 
-var stageName = 'REGISTRATION_RESEND';
+var stageName = 'OTP_RESEND';
 
 // For now we will just force a resend until the UI is updated - SJD 16/12/21
 outcome = NodeOutcome.RESEND;
-
-/*
 
 try {
   var mfaRoute = sharedState.get('mfa-route');
@@ -33,6 +31,8 @@ try {
   _log('MFA Route : ' + mfaRoute + ', userId : ' + userId);
 
   var phoneNumber = '';
+  var email = '';
+
   var mfaRouteText = 'MFA Route not supported : ' + mfaRoute + ' for userId : ' + userId;
 
   if (mfaRoute === 'sms') {
@@ -40,6 +40,12 @@ try {
       phoneNumber = idRepository.getAttribute(userId, 'telephoneNumber').iterator().next();
     } else {
       _log('Failed to get phoneNumber for userId : ' + userId);
+
+      _log('shared: ' + sharedState.get('objectAttributes'));
+      if (sharedState.get('objectAttributes')) {
+        phoneNumber = sharedState.get('objectAttributes').get('telephoneNumber');
+        _log('phoneNumber (sharedState): ' + phoneNumber);
+      }
     }
 
     mfaRouteText = 'Do you want to resend the SMS to '.concat(phoneNumber).concat('?');
@@ -48,6 +54,12 @@ try {
       email = idRepository.getAttribute(userId, 'mail').iterator().next();
     } else {
       _log('Failed to get email for userId : ' + userId);
+
+      _log('shared: ' + sharedState.get('objectAttributes'));
+      if (sharedState.get('objectAttributes')) {
+        email = sharedState.get('objectAttributes').get('mail');
+        _log('email (sharedState): ' + email);
+      }
     }
 
     mfaRouteText = 'Do you want to resend the email to '.concat(email).concat('?');
@@ -88,8 +100,6 @@ try {
   _log('ERROR ' + e);
   outcome = NodeOutcome.ERROR;
 }
-
-*/
 
 _log('Outcome = ' + _getOutcomeForDisplay());
 
