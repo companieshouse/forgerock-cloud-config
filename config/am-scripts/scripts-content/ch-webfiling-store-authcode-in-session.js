@@ -14,7 +14,7 @@ var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action
 );
 
-if (typeof existingSession !== 'undefined') {
+if (_isAuthenticated()) {
   _log('Existing session: ' + existingSession.toString());
 } else {
   _log('no session!');

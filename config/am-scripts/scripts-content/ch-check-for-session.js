@@ -22,7 +22,7 @@ var NodeOutcome = {
 };
 
 try {
-  if (typeof existingSession !== 'undefined') {
+  if (_isAuthenticated()) {
     outcome = NodeOutcome.HAS_SESSION;
     _log('Existing session: ' + existingSession.toString());
   } else {
