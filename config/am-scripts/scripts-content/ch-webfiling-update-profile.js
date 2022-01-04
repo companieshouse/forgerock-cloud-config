@@ -17,11 +17,13 @@ var NodeOutcome = {
   FAIL: 'fail'
 };
 
-function isMobile (number) {
+function isValidMobile (logPrefix, number) {
   var mobileValid = /^((0044|0|\+44)7\d{3}\s?\d{6})$/.test(number);
   if (mobileValid) {
+    _log(logPrefix + ' Mobile number : \'' + number + '\' is valid');
     return true;
   }
+  _log(logPrefix + ' Mobile number : \'' + number + '\' is NOT valid');
   return false;
 }
 
@@ -137,6 +139,7 @@ try {
     // returning callbacks
     var selection = callbacks.get(SKIP_CALLBACK_INDEX).getSelectedIndex();
     _log(logPrefix + ' selection ' + selection);
+
     if (selection === SKIP_OPTION_INDEX) {
       _log(logPrefix + ' selected SKIP');
       outcome = NodeOutcome.SKIP;
@@ -144,28 +147,41 @@ try {
       _log(logPrefix + ' selected SUBMIT');
       var type = callbacks.get(1).getValue();
       _log(logPrefix + ' type: ' + type);
-      var payload;
-      if ((type === 'PHONE' || type === 'BOTH') && newPhoneNumber && !isMobile(newPhoneNumber)) {
-        sharedState.put('errorMessage', 'Invalid mobile number entered.');
-        sharedState.put('pagePropsJSON', JSON.stringify(
-          {
-            'errors': [{
-              label: 'Invalid mobile number entered',
-              token: 'UPDATE_PHONE_INVALID_MOBILE_NUMBER',
-              fieldName: 'IDToken'.concat(PHONE_CALLBACK_INDEX),
-              anchor: 'IDToken'.concat(PHONE_CALLBACK_INDEX)
-            }]
-          }));
-        action = fr.Action.goTo(NodeOutcome.FAIL).build();
-      } else {
-        var newName, newPhoneNumber;
+
+      var newPhoneNumber;
+      var invalidPhoneNumber = false;
+
+      if (type === 'PHONE' || type === 'BOTH') {
+        newPhoneNumber = callbacks.get(PHONE_CALLBACK_INDEX).getName();
+        _log(logPrefix + ' new phone: ' + newPhoneNumber);
+
+        if (newPhoneNumber && !isValidMobile(logPrefix, newPhoneNumber)) {
+          sharedState.put('errorMessage', 'Invalid mobile number entered.');
+          sharedState.put('pagePropsJSON', JSON.stringify(
+            {
+              'errors': [{
+                label: 'Invalid mobile number entered',
+                token: 'UPDATE_PHONE_INVALID_MOBILE_NUMBER',
+                fieldName: 'IDToken'.concat(PHONE_CALLBACK_INDEX),
+                anchor: 'IDToken'.concat(PHONE_CALLBACK_INDEX)
+              }]
+            }));
+          action = fr.Action.goTo(NodeOutcome.FAIL).build();
+
+          invalidPhoneNumber = true;
+          _log(logPrefix + ' setting action as : fail (invalidPhoneNumber = ' + invalidPhoneNumber + ')');
+        }
+      }
+
+      _log(logPrefix + ' after having checked newPhoneNumber (invalidPhoneNumber = ' + invalidPhoneNumber + ')');
+
+      if (!invalidPhoneNumber) {
+        var payload;
+        var newName;
+
         if (type === 'NAME' || type === 'BOTH') {
           newName = callbacks.get(NAME_CALLBACK_INDEX).getName();
           _log(logPrefix + ' new name: ' + newName);
-        }
-        if (type === 'PHONE' || type === 'BOTH') {
-          newPhoneNumber = callbacks.get(PHONE_CALLBACK_INDEX).getName();
-          _log(logPrefix + ' new phone: ' + newPhoneNumber);
         }
 
         if (type === 'BOTH') {
@@ -182,6 +198,7 @@ try {
             'givenName': newName
           };
         }
+
         sharedState.put('objectAttributes', payload);
 
         //got the OTP route if the phone has been changed and phone is valid

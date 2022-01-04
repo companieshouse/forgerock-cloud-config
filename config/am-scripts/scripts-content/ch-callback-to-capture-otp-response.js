@@ -46,7 +46,15 @@ try {
       phoneNumber = idRepository.getAttribute(userId, 'telephoneNumber').iterator().next();
       _log('phoneNumber : ' + phoneNumber);
     } else {
-      _log('Couldn\'t find telephoneNumber');
+      _log('Couldn\'t find telephoneNumber from user record');
+
+      // Do we have it in shared state instead? For example, as part of onboarding so it's not
+      // actually persisted to the user yet?
+      _log('shared: ' + sharedState.get('objectAttributes'));
+      if (sharedState.get('objectAttributes')) {
+        phoneNumber = sharedState.get('objectAttributes').get('telephoneNumber');
+        _log('phoneNumber (sharedState): ' + phoneNumber);
+      }
     }
   } else if (mfaRoute === 'email') {
     var isChangeEmail = sharedState.get('isChangeEmail');
@@ -58,7 +66,7 @@ try {
         emailAddress = idRepository.getAttribute(userId, 'mail').iterator().next();
         _log('emailAddress : ' + emailAddress);
       } else {
-        _log('Couldn\'t find emailAddress');
+        _log('Couldn\'t find emailAddress from user record');
       }
     }
   } else {
