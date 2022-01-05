@@ -11,8 +11,8 @@ var NodeOutcome = {
 };
 
 // This variable value will be replaced with the relevant value in the target environment (stored in AM secret store) 
-var chJwtSigningKey = 'KLyM3tGMn0Efa0HmJfq3eJd4ZiHIDJ1/kNfUwDp9ofE=';
-var chJwtEncryptionKey = '5ATJO3doZPqg6pP4rUzn78HRnjQBwkGK01BGBTYio/U=';
+var chJwtSigningKey = _getSecret('esv.44899ede0e.chjwtsigningkey');
+var chJwtEncryptionKey = _getSecret('esv.44899ede0e.chjwtencryptionkey');
 
 function saveState () {
   try {
