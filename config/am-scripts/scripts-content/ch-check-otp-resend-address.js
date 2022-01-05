@@ -82,7 +82,8 @@ try {
         JSON.stringify(
           {
             'emailAddress': email,
-            'phoneNumber': phoneNumber
+            'phoneNumber': phoneNumber,
+            'type': mfaRoute
           }
         )
       )

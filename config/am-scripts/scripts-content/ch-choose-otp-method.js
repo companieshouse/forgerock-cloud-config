@@ -72,8 +72,10 @@ if (callbacks.isEmpty()) {
   _log('OTP Method Requested : ' + otpMethod);
 
   if (otpMethod === 0) {
+    sharedState.put('mfa-route', 'email');
     outcome = 'email';
   } else {
+    sharedState.put('mfa-route', 'sms');
     outcome = 'text';
   }
 
