@@ -17,16 +17,6 @@ var NodeOutcome = {
   FAIL: 'fail'
 };
 
-function isValidMobile (logPrefix, number) {
-  var mobileValid = /^((0044|0|\+44)7\d{3}\s?\d{6})$/.test(number);
-  if (mobileValid) {
-    _log(logPrefix + ' Mobile number : \'' + number + '\' is valid');
-    return true;
-  }
-  _log(logPrefix + ' Mobile number : \'' + number + '\' is NOT valid');
-  return false;
-}
-
 function selectTypeCallback (nameFound, phoneFound) {
   if (!phoneFound && nameFound) {
     return new fr.HiddenValueCallback('PHONE', 'PHONE');
@@ -155,7 +145,7 @@ try {
         newPhoneNumber = callbacks.get(PHONE_CALLBACK_INDEX).getName();
         _log(logPrefix + ' new phone: ' + newPhoneNumber);
 
-        if (newPhoneNumber && !isValidMobile(logPrefix, newPhoneNumber)) {
+        if (newPhoneNumber && !_isValidPhone(newPhoneNumber)) {
           sharedState.put('errorMessage', 'Invalid mobile number entered.');
           sharedState.put('pagePropsJSON', JSON.stringify(
             {

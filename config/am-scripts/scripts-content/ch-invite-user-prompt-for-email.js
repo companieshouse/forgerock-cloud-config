@@ -35,11 +35,6 @@ var NodeOutcome = {
   ERROR: 'error'
 };
 
-function validateEmail (email) {
-  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
-}
-
 // main execution flow
 try {
   var companyData = sharedState.get('companyData');
@@ -69,7 +64,7 @@ try {
   } else {
     var email = callbacks.get(1).getName();
     var userId = sharedState.get('_id');
-    if (!validateEmail(email)) {
+    if (!_isValidEmail(email)) {
       _log('Invalid email: ' + email);
       action = fr.Action.goTo(NodeOutcome.EMAIL_INVALID_ERROR).build();
     } else {

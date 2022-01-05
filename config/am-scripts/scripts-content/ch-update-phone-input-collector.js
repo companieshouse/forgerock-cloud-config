@@ -15,10 +15,6 @@ var NodeOutcome = {
   FAIL: 'fail'
 };
 
-function isMobile (number) {
-  return /^((0044|0|\+44)7\d{3}\s?\d{6})$/.test(number);
-}
-
 var PHONE_NUMBER_FIELD = 'telephoneNumber';
 
 var debug = String('Shared state: ' + sharedState.toString() + '\\n');
@@ -74,7 +70,7 @@ if (callbacks.isEmpty()) {
   var currentPassword = fr.String(callbacks.get(2).getPassword());
 
   _log('New phone number ' + newPhoneNumber);
-  if (!newPhoneNumber || !isMobile(newPhoneNumber)) {
+  if (!newPhoneNumber || !_isValidPhone(newPhoneNumber)) {
     sharedState.put('errorMessage', 'Invalid mobile number entered.');
     sharedState.put('pagePropsJSON', JSON.stringify(
       {

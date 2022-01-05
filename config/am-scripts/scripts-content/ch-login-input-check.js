@@ -4,12 +4,6 @@ _log('Starting');
 var username = sharedState.get('username');
 var password = transientState.get('password');
 
-// validates email format
-function validateEmail (email) {
-  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
-}
-
 var NodeOutcome = {
   TRUE: 'true',
   FALSE: 'false'
@@ -20,7 +14,7 @@ try {
   //both credentials are supplied
   if (username && password) {
     // email has wrong format
-    if (!validateEmail(username)) {
+    if (!_isValidEmail(username)) {
       errorMessage = errorMessage.concat('Invalid email format: ').concat(username);
       _log('invalid email format');
       sharedState.put('errorMessage', errorMessage);
