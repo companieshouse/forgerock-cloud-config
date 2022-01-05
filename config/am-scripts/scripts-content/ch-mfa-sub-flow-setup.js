@@ -20,15 +20,21 @@ var useOutcome = NodeOutcome.DEFAULT;
 var isRegistrationMFA = sharedState.get('registrationMFA');
 _log('Is Registration MFA : ' + isRegistrationMFA);
 
+var sharedStateMfaRoute = sharedState.get('mfa-route');
+_log('Shared State MFA route : ' + sharedStateMfaRoute);
+
 if (journeyName === 'CHChangePhoneNumber') {
   useStageName = 'UPDATE_PHONE_2';
   useOutcome = NodeOutcome.FORCE_TEXT;
 } else if (journeyName === 'CHChangeEmailAddress') {
   useStageName = 'CHANGE_EMAIL_INPUT';
   useOutcome = NodeOutcome.FORCE_EMAIL;
-} else if (journeyName === 'CHResetPassword') {
+} else if (journeyName === 'CHResetPassword' && ('sms' === sharedStateMfaRoute)) {
   useStageName = 'RESET_PASSWORD_3';
   useOutcome = NodeOutcome.FORCE_TEXT;
+} else if (journeyName === 'CHResetPassword' && ('email' === sharedStateMfaRoute)) {
+  useStageName = 'RESET_PASSWORD_3';
+  useOutcome = NodeOutcome.FORCE_EMAIL;
 } else if (journeyName === 'CHWebFiling-Login' && isRegistrationMFA) {
   // Complete Profile
   useStageName = 'PHONE_OTP';

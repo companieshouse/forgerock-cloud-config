@@ -33,6 +33,16 @@ function raiseErrorCallback (level, stage, userName, companyName, infoMessage, e
 
 try {
   var userName = sharedState.get('userName');
+
+  if (!userName) {
+    var userId = sharedState.get('_id');
+    if (userId) {
+      if (idRepository.getAttribute(userId, 'mail').iterator().hasNext()) {
+        userName = idRepository.getAttribute(userId, 'mail').iterator().next();
+      }
+    }
+  }
+
   // journey selector variables
   var isOnboarding = sharedState.get('isOnboarding');
   var isResetPassword = sharedState.get('isResetPassword');
@@ -43,7 +53,7 @@ try {
   var stageName = (isOnboarding || isSCRSActivation) ? 'ONBOARDING_PWD' : (isResetPassword ? 'RESET_PASSWORD_4' : (isRegistration ? 'REGISTRATION_4' : 'N/A'));
 
   if (callbacks.isEmpty()) {
-    var infoMessage = 'Please create new password for user '.concat(sharedState.get('userName'));
+    var infoMessage = 'Please create new password for user '.concat(userName);
     var level = fr.TextOutputCallback.INFORMATION;
     var errorMessage = sharedState.get('errorMessage');
     if (errorMessage !== null) {
