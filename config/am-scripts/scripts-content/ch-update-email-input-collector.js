@@ -16,11 +16,6 @@ var NodeOutcome = {
   MISMATCH: 'mismatch'
 };
 
-function validateEmail (email) {
-  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
-}
-
 function raiseError (message, token) {
   action = fr.Action.send(
     new fr.HiddenValueCallback(
@@ -132,7 +127,7 @@ try {
     var confirmNewEmail = fr.String(callbacks.get(3).getName());
     var userExistenceCheckResponse = checkUserExistence(newEmail);
 
-    if (!validateEmail(newEmail)) {
+    if (!_isValidEmail(newEmail)) {
       _log('Invalid email: ' + newEmail);
       sharedState.put('errorMessage', 'Invalid email address.');
       sharedState.put('pagePropsJSON', JSON.stringify(

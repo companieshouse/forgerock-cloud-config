@@ -66,6 +66,11 @@ function _obfuscateEmail (email) {
   return username.substring(0, 1).concat('*****@').concat(domain);
 }
 
+function _isValidEmail (email) {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
+
 function _obfuscatePhone (phone) {
   var NUM_CHARS_TO_SHOW = 4;
 
@@ -101,6 +106,16 @@ function _padPhone (phone) {
   }
 
   return phone;
+}
+
+function _isValidPhone (number) {
+  var mobileValid = /^((0044|0|\+44)7\d{3}\s?\d{6})$/.test(number);
+  if (mobileValid) {
+    _log('phone number : \'' + number + '\' is valid');
+    return true;
+  }
+  _log('phone number : \'' + number + '\' is NOT valid');
+  return false;
 }
 
 function _getJourneyName () {
