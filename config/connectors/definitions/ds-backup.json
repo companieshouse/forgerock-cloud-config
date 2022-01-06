@@ -4,7 +4,7 @@
   "excludeUnmodified": true,
   "connectorRef": {
     "bundleName": "org.forgerock.openicf.connectors.ldap-connector",
-    "bundleVersion": "1.5.20.0",
+    "bundleVersion": "1.5.20.4",
     "connectorName": "org.identityconnectors.ldap.LdapConnector",
     "connectorHostRef": "chs-group"
   },
