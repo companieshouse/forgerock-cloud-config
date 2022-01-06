@@ -4,6 +4,7 @@ coverage
 .env
 .idea
 qa-tests/Reports
+FIDC_RESTART_REQUIRED.txt
 
 # Sensitive config files
 config/services/oauth2-provider.json
