@@ -194,6 +194,7 @@ try {
       if (!isUserAuthorisedResponse.success) {
         raiseError(isUserAuthorisedResponse.error, isUserAuthorisedResponse.code);
       } else {
+        sharedState.put('invitedCompanyName', isUserAuthorisedResponse.companyName);
         var userResponse = _getUserInfoById(params.userId, accessToken);
         if (userResponse.user.accountStatus === 'active') {
           outcome = NodeOutcome.USER_ALREADY_ACTIVE;
