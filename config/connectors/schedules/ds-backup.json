@@ -1,19 +1,20 @@
 {
-    "isCron": true,
-    "enabled": false,
-    "persisted": true,
-    "type": "cron",
-    "misfirePolicy": "fireAndProceed",
-    "invokeService": "sync",
-    "invokeLogLevel": "info",
-    "timeZone": null,
-    "startTime": null,
-    "endTime": null,
-    "concurrentExecution": false,
-    "invokeContext": {
-      "action": "reconcile",
-      "mapping": "managedAlpha_user_systemDsbackupAccount"
-    },
-    "_id": "Alpha Users to DS backup",
-    "schedule": "0 0 */4 * * ?"
-  }
+  "_id": "DR: Alpha User to DS Backup",
+  "enabled": false,
+	"persisted": true,
+	"recoverable": false,
+	"misfirePolicy": "fireAndProceed",
+	"schedule": "0 0 */5 * * ?",
+	"repeatInterval": 0,
+	"repeatCount": 0,
+	"type": "cron",
+	"invokeService": "sync",
+	"invokeContext": {
+		"action": "reconcile",
+		"mapping": "managedAlpha_user_systemDsbackupAccount"
+	},
+	"invokeLogLevel": "info",
+	"startTime": null,
+	"endTime": null,
+	"concurrentExecution": false
+}

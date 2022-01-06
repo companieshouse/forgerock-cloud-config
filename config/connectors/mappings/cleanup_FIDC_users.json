@@ -1,6 +1,6 @@
 {
   "target": "managed/alpha_user",
-  "enabled": true,
+  "enabled": false,
   "source": "system/WebfilingUser/webfilingUser",
   "name": "user_cleanup_mapping",
   "displayName": "user_cleanup_mapping",

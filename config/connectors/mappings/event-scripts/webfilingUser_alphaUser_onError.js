@@ -1,8 +1,8 @@
 // webfilingUser_alphaUser On Error
-logger.error('Sync of webfilingUser_alphaUser with sourceId: ' + sourceId + ' failed with error: ' + error)
-logger.error('Source object: ' + JSON.stringify(source))
+logger.error('[CH-SYNC][EWF-TO-ALPHA-USER][ERROR] Sync of webfilingUser_alphaUser with sourceId: ' + sourceId + ' failed with error: ' + error)
+logger.error('[CH-SYNC][EWF-TO-ALPHA-USER][ERROR] Source object: ' + JSON.stringify(source))
 try {
-    logger.error('Sync webfilingUser_alphaUser - error: ' + JSON.stringify(target))
+    logger.error('[CH-SYNC][EWF-TO-ALPHA-USER][ERROR] Sync webfilingUser_alphaUser - error: ' + JSON.stringify(target))
 } catch (e) {
-    logger.error('Error' + e);
+    logger.error('[CH-SYNC][EWF-TO-ALPHA-USER][ERROR] Error' + e);
 }
