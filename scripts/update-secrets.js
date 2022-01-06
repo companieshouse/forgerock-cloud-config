@@ -2,6 +2,7 @@ const getAccessToken = require('../helpers/get-access-token')
 const fidcGet = require('../helpers/fidc-get')
 const fidcRequest = require('../helpers/fidc-request')
 const fidcPost = require('../helpers/fidc-post')
+const manageRestartFidcFileMarker = require('../helpers/restart-fidc-file-helper')
 const path = require('path')
 const fs = require('fs')
 
@@ -105,9 +106,7 @@ const updateSecrets = async (argv) => {
 
     console.log('Secrets processed.')
 
-    if (restartRequired) {
-      console.log('\n** FIDC RESTART REQUIRED **\n')
-    }
+    manageRestartFidcFileMarker(restartRequired)
   } catch (error) {
     console.error(error.message)
     process.exit(1)

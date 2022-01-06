@@ -4,6 +4,7 @@ const getAccessToken = require('../helpers/get-access-token')
 const fidcRequest = require('../helpers/fidc-request')
 const fidcGet = require('../helpers/fidc-get')
 const fidcPost = require('../helpers/fidc-post')
+const manageRestartFidcFileMarker = require('../helpers/restart-fidc-file-helper')
 
 async function alreadyExists (variableName, valueBase64, requestUrl, scriptUrl, accessToken) {
   const ret = {
@@ -100,9 +101,7 @@ const updateVariables = async (argv) => {
 
     console.log('Variables processed.')
 
-    if (restartRequired) {
-      console.log('\n** FIDC RESTART REQUIRED **\n')
-    }
+    manageRestartFidcFileMarker(restartRequired)
   } catch (error) {
     console.error(error.message)
     process.exit(1)
