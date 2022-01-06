@@ -14,7 +14,7 @@ var NodeOutcome = {
   FORCE_TEXT: 'forceText'
 };
 
-var useStageName = 'DEFAULT_OTP_STAGE_NAME';
+var useStageName = 'GENERIC_ERROR';
 var useOutcome = NodeOutcome.DEFAULT;
 
 var isRegistrationMFA = sharedState.get('registrationMFA');
@@ -45,6 +45,13 @@ if (journeyName === 'CHChangePhoneNumber') {
 } else if (journeyName === 'CHRegistration') {
   useStageName = 'REGISTRATION_MFA';
   useOutcome = NodeOutcome.FORCE_TEXT;
+} else if (journeyName === 'CHSCRSActivation' && isRegistrationMFA) {
+  // Complete Profile (SCRS)
+  useStageName = 'PHONE_OTP';
+  useOutcome = NodeOutcome.FORCE_TEXT;
+} else if (journeyName === 'CHSCRSActivation') {
+  useStageName = 'EWF_LOGIN_OTP';
+  useOutcome = NodeOutcome.DEFAULT;
 }
 
 sharedState.put(config.otpCheckStageNameVariable, useStageName);
