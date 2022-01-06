@@ -84,7 +84,6 @@
   "reconSourceQueryPageSize": 10000,
   "sourceQueryFullEntry": true,
   "sourceQuery": {
-    "_queryFilter": "true",
     "_sortKeys": "PARENT_USERNAME"
   },
   "taskThreads": 20,
