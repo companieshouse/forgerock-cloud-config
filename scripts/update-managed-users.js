@@ -5,7 +5,7 @@ const fidcRequest = require('../helpers/fidc-request')
 const replaceSensitiveValues = require('../helpers/replace-sensitive-values')
 
 const updateManagedUsers = async (argv) => {
-  const { FIDC_URL, treeServiceUserPassword } = process.env
+  const { FIDC_URL, AUTH_TREE_PASSWORD } = process.env
 
   try {
     const accessToken = await getAccessToken(argv)
@@ -13,11 +13,11 @@ const updateManagedUsers = async (argv) => {
     // Combine managed object JSON files
     const dir = path.resolve(__dirname, '../config/managed-users')
 
-    const tsup = treeServiceUserPassword || argv.treeServiceUserPassword
+    const tsup = argv.treeServiceUserPassword || AUTH_TREE_PASSWORD
 
     await replaceSensitiveValues(
       dir,
-      [/{TREE_SERVICE_USER_PASSWORD}/g],
+      [/{AUTH_TREE_PASSWORD}/g],
       [tsup]
     )
 
