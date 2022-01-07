@@ -5,7 +5,7 @@ const fidcRequest = require('../helpers/fidc-request')
 const replaceSensitiveValues = require('../helpers/replace-sensitive-values')
 
 const updateManagedUsers = async (argv) => {
-  const { FIDC_URL, AUTH_TREE_PASSWORD } = process.env
+  const { FIDC_URL, AUTH_TREE_PASSWORD, ADMIN_CLIENT_TEST_PASSWORD } = process.env
 
   try {
     const accessToken = await getAccessToken(argv)
@@ -17,8 +17,14 @@ const updateManagedUsers = async (argv) => {
 
     await replaceSensitiveValues(
       dir,
-      [/{AUTH_TREE_PASSWORD}/g],
-      [tsup]
+      [
+        /{AUTH_TREE_PASSWORD}/g,
+        /{ADMIN_CLIENT_TEST_PASSWORD}/g
+      ],
+      [
+        tsup,
+        ADMIN_CLIENT_TEST_PASSWORD
+      ]
     )
 
     const managedUsersFileContent = fs

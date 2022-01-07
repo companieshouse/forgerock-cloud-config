@@ -1,8 +1,8 @@
 {
-  "_id": "9dbbf03c-6c71-45a9-9afb-cbde39b53ead",
+  "_id": "513024f7-110c-4ee6-b31a-bf6026b15678",
 
-  "userName": "tree-service-user@companieshouse.com",
-  "password": "{AUTH_TREE_PASSWORD}",
+  "userName": "AdminClientTest@example.com",
+  "password": "{ADMIN_CLIENT_TEST_PASSWORD}",
   "authzRoles": [
     {
       "_ref": "internal/role/openidm-admin"
@@ -16,16 +16,16 @@
   "stateProvince": null,
   "postalAddress": null,
   "displayName": null,
-  "description": "Tree Service User",
+  "description": null,
   "country": null,
   "city": null,
-  "givenName": "Tree Service",
+  "givenName": null,
   "profileImage": null,
-  "sn": "tree-service-user@companieshouse.com",
+  "sn": "AdminClientTest@example.com",
   "telephoneNumber": null,
-  "mail": "tree-service-user@companieshouse.com",
+  "mail": "AdminClientTest@example.com",
   "isMemberOf": null,
-  "frIndexedString1": "11111111111111111111111111111112",
+  "frIndexedString1": null,
   "frIndexedString3": "migrated",
   "frIndexedString4": null,
   "frIndexedString5": "webfiling",
