@@ -2,6 +2,7 @@ node_modules
 coverage
 .DS_Store
 .env
+.env.*
 .idea
 qa-tests/Reports
 FIDC_RESTART_REQUIRED.txt
