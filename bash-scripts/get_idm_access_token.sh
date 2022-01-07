@@ -34,6 +34,17 @@ if [[ ( -z "${username}" ) || ( -z "${password}" ) || ( -z "${fidcServer}" ) ]];
 fi
 
 #################################
+# 0. SETUP COOKIE NAME
+#################################
+
+# Dev Cookie by default
+COOKIE_NAME="dd8758f44f45905"
+
+if [[ "${fidcServer}" == *"staging"* ]]; then
+  COOKIE_NAME="8fa4178f20bdf21"
+fi
+
+#################################
 # 1. GET AM ADMIN SESSION
 #################################
 
@@ -61,7 +72,7 @@ TOKEN_ID=$(echo ${CURL_RESPONSE} | jq -r '.tokenId')
 #################################
 
 CURL_COMMAND="curl -v --silent --location --request GET '${fidcServer}/am/oauth2/authorize?redirect_uri=${fidcServer}/platform/appAuthHelperRedirect.html&client_id=idmAdminClient&response_type=code&scope=fr:idm:*&code_challenge=gX2yL78GGlz3QHsQZKPf96twOmUBKxn1-IXPd5_EHdA&code_challenge_method=S256' \
-              --header 'Cookie: amlbcookie=01; dd8758f44f45905=${TOKEN_ID}'"
+              --header 'Cookie: amlbcookie=01; ${COOKIE_NAME}=${TOKEN_ID}'"
 
 CURL_RESPONSE=$(eval ${CURL_COMMAND} 2>&1 | grep "< location:")
 
