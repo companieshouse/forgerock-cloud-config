@@ -13,7 +13,7 @@ const updateManagedUsers = async (argv) => {
     // Combine managed object JSON files
     const dir = path.resolve(__dirname, '../config/managed-users')
 
-    const tsup = AUTH_TREE_PASSWORD || argv.treeServiceUserPassword
+    const tsup = argv.treeServiceUserPassword || AUTH_TREE_PASSWORD
 
     await replaceSensitiveValues(
       dir,
