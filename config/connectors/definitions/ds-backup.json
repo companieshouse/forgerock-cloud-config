@@ -9,7 +9,7 @@
     "connectorHostRef": "chs-group"
   },
   "configurationProperties": {
-    "host": "forgerock-data-ds-backup-a40b0b52539efe2f.elb.eu-west-2.amazonaws.com",
+    "host": "&{esv.02f979b6fa.configurationpropertieshost}",
     "port": "389",
     "ssl": false,
     "principal": "uid=admin",

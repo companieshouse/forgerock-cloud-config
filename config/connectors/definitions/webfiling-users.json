@@ -1,155 +1,141 @@
 {
-	"_id": "provisioner.openicf/WebfilingUser",
-	"connectorRef": {
-		"connectorHostRef": "ewf-group",
-		"displayName": "Database Table Connector",
-		"bundleVersion": "1.5.20.3-SNAPSHOT",
-		"systemType": "provisioner.openicf",
-		"bundleName": "org.forgerock.openicf.connectors.databasetable-connector",
-		"connectorName": "org.identityconnectors.databasetable.DatabaseTableConnector"
-	},
-	"poolConfigOption": {
-		"maxObjects": 2,
-		"maxIdle": 2,
-		"maxWait": 150000,
-		"minEvictableIdleTimeMillis": 120000,
-		"minIdle": 2
-	},
-	"resultsHandlerConfig": {
-		"enableNormalizingResultsHandler": false,
-		"enableFilteredResultsHandler": false,
-		"enableCaseInsensitiveFilter": false,
-		"enableAttributesToGetSearchResultsHandler": true
-	},
-	"operationTimeout": {
-		"CREATE": -1,
-		"UPDATE": -1,
-		"DELETE": -1,
-		"TEST": -1,
-		"SCRIPT_ON_CONNECTOR": -1,
-		"SCRIPT_ON_RESOURCE": -1,
-		"GET": -1,
-		"RESOLVEUSERNAME": -1,
-		"AUTHENTICATE": -1,
-		"SEARCH": -1,
-		"VALIDATE": -1,
-		"SYNC": -1,
-		"SCHEMA": -1
-	},
-	"configurationProperties": {
-		"connectionProperties": null,
-		"propagateInterruptState": false,
-		"useDisposableConnectionFacade": true,
-		"defaultCatalog": null,
-		"validationInterval": "3000",
-		"ignoreExceptionOnPreLoad": false,
-		"jmxEnabled": true,
-		"commitOnReturn": false,
-		"logAbandoned": false,
-		"maxIdle": "2",
-		"testWhileIdle": false,
-		"removeAbandoned": false,
-		"abandonWhenPercentageFull": 0,
-		"minIdle": "2",
-		"defaultReadOnly": null,
-		"maxWait": "30000",
-		"logValidationErrors": false,
-		"driverClassName": "oracle.jdbc.OracleDriver",
-		"name": "Tomcat Connection Pool[1-1835529707]",
-		"useStatementFacade": true,
-		"initSQL": null,
-		"validationQueryTimeout": "-1",
-		"validationQuery": null,
-		"rollbackOnReturn": false,
-		"alternateUsernameAllowed": false,
-		"validatorClassName": null,
-		"suspectTimeout": 0,
-		"useEquals": true,
-		"removeAbandonedTimeout": 60,
-		"defaultAutoCommit": null,
-		"testOnConnect": false,
-		"jdbcInterceptors": null,
-		"initialSize": "2",
-		"defaultTransactionIsolation": -1,
-		"numTestsPerEvictionRun": 0,
-		"url": "jdbc:oracle:thin:@//ewfdb.development.heritage.aws.internal:1521/EWF",
-		"testOnBorrow": false,
-		"fairQueue": true,
-		"accessToUnderlyingConnectionAllowed": true,
-		"maxAge": "0",
-		"minEvictableIdleTimeMillis": "60000",
-		"timeBetweenEvictionRunsMillis": "5000",
-		"testOnReturn": false,
-		"useLock": false,
-		"maxActive": "2",
-		"username": "KERMITEWF",
-		"password": {
-			"$crypto": {
-				"type": "x-simple-encryption",
-				"value": {
-					"cipher": "AES/CBC/PKCS5Padding",
-					"stableId": "openidm-sym-default",
-					"salt": "YtmBlhCW8cq/TgvB3DKIPA==",
-					"data": "CcTtGPrE+m1M2ihvaOijmg==",
-					"keySize": 16,
-					"purpose": "idm.config.encryption",
-					"iv": "smh+VcNKGpc7Ri5XPLd29Q==",
-					"mac": "79+upJDAsNEY/fAQ3SWaDg=="
-				}
-			}
-		},
-		"quoting": "NONE",
-		"table": "CUSTOMER_VIEW",
-		"keyColumn": "PARENT_USERNAME",
-		"passwordColumn": null,
-		"disablePaging": false,
-		"enableEmptyString": false,
-		"rethrowAllSQLExceptions": true,
-		"nativeTimestamps": false,
-		"allNative": false,
-		"changeLogColumn": null,
-		"suppressPassword": true,
-		"inclusiveSync": false
-	},
-	"enabled": true,
-	"objectTypes": {
-		"webfilingUser": {
-			"$schema": "http://json-schema.org/draft-03/schema",
-			"type": "object",
-			"id": "PARENT_USERNAME",
-			"nativeType": "__ACCOUNT__",
-			"properties": {
-				"EMAIL": {
-					"type": "string",
-					"nativeName": "EMAIL",
-					"nativeType": "string",
-					"required": true
-				},
-				"PASSWORD": {
-					"type": "string",
-					"nativeName": "PASSWORD",
-					"nativeType": "string",
-					"required": true
-				},
-				"PARENT_USERNAME": {
-					"type": "string",
-					"nativeName": "__NAME__",
-					"nativeType": "string",
-					"required": false
-				},
-				"FORENAME": {
-					"type": "string",
-					"nativeName": "FORENAME",
-					"nativeType": "string",
-					"required": false
-				},
-				"SURNAME": {
-					"type": "string",
-					"nativeName": "SURNAME",
-					"nativeType": "string",
-					"required": false
-				}
-			}
-		}
-	}
+  "_id": "provisioner.openicf/WebfilingUser",
+  "connectorRef": {
+    "connectorHostRef": "ewf-group",
+    "displayName": "Database Table Connector",
+    "bundleVersion": "1.5.20.3-SNAPSHOT",
+    "systemType": "provisioner.openicf",
+    "bundleName": "org.forgerock.openicf.connectors.databasetable-connector",
+    "connectorName": "org.identityconnectors.databasetable.DatabaseTableConnector"
+  },
+  "poolConfigOption": {
+    "maxObjects": 2,
+    "maxIdle": 2,
+    "maxWait": 150000,
+    "minEvictableIdleTimeMillis": 120000,
+    "minIdle": 2
+  },
+  "resultsHandlerConfig": {
+    "enableNormalizingResultsHandler": false,
+    "enableFilteredResultsHandler": false,
+    "enableCaseInsensitiveFilter": false,
+    "enableAttributesToGetSearchResultsHandler": true
+  },
+  "operationTimeout": {
+    "CREATE": -1,
+    "UPDATE": -1,
+    "DELETE": -1,
+    "TEST": -1,
+    "SCRIPT_ON_CONNECTOR": -1,
+    "SCRIPT_ON_RESOURCE": -1,
+    "GET": -1,
+    "RESOLVEUSERNAME": -1,
+    "AUTHENTICATE": -1,
+    "SEARCH": -1,
+    "VALIDATE": -1,
+    "SYNC": -1,
+    "SCHEMA": -1
+  },
+  "configurationProperties": {
+    "connectionProperties": null,
+    "propagateInterruptState": false,
+    "useDisposableConnectionFacade": true,
+    "defaultCatalog": null,
+    "validationInterval": "3000",
+    "ignoreExceptionOnPreLoad": false,
+    "jmxEnabled": true,
+    "commitOnReturn": false,
+    "logAbandoned": false,
+    "maxIdle": "2",
+    "testWhileIdle": false,
+    "removeAbandoned": false,
+    "abandonWhenPercentageFull": 0,
+    "minIdle": "2",
+    "defaultReadOnly": null,
+    "maxWait": "30000",
+    "logValidationErrors": false,
+    "driverClassName": "oracle.jdbc.OracleDriver",
+    "name": "Tomcat Connection Pool[1-1835529707]",
+    "useStatementFacade": true,
+    "initSQL": null,
+    "validationQueryTimeout": "-1",
+    "validationQuery": null,
+    "rollbackOnReturn": false,
+    "alternateUsernameAllowed": false,
+    "validatorClassName": null,
+    "suspectTimeout": 0,
+    "useEquals": true,
+    "removeAbandonedTimeout": 60,
+    "defaultAutoCommit": null,
+    "testOnConnect": false,
+    "jdbcInterceptors": null,
+    "initialSize": "2",
+    "defaultTransactionIsolation": -1,
+    "numTestsPerEvictionRun": 0,
+    "url": "&{esv.778b694e17.configurationpropertiesurl}",
+    "testOnBorrow": false,
+    "fairQueue": true,
+    "accessToUnderlyingConnectionAllowed": true,
+    "maxAge": "0",
+    "minEvictableIdleTimeMillis": "60000",
+    "timeBetweenEvictionRunsMillis": "5000",
+    "testOnReturn": false,
+    "useLock": false,
+    "maxActive": "2",
+    "username": "&{esv.2099bcaeaf.configurationpropertiesusername}",
+    "password": "&{esv.2099bcaeaf.configurationpropertiespassword}",
+    "quoting": "NONE",
+    "table": "CUSTOMER_VIEW",
+    "keyColumn": "&{esv.a147709bca.manualsourcequerysortkeys}",
+    "passwordColumn": null,
+    "disablePaging": false,
+    "enableEmptyString": false,
+    "rethrowAllSQLExceptions": true,
+    "nativeTimestamps": false,
+    "allNative": false,
+    "changeLogColumn": null,
+    "suppressPassword": true,
+    "inclusiveSync": false
+  },
+  "enabled": true,
+  "objectTypes": {
+    "webfilingUser": {
+      "$schema": "http://json-schema.org/draft-03/schema",
+      "type": "object",
+      "id": "PARENT_USERNAME",
+      "nativeType": "__ACCOUNT__",
+      "properties": {
+        "EMAIL": {
+          "type": "string",
+          "nativeName": "EMAIL",
+          "nativeType": "string",
+          "required": true
+        },
+        "PASSWORD": {
+          "type": "string",
+          "nativeName": "PASSWORD",
+          "nativeType": "string",
+          "required": true
+        },
+        "PARENT_USERNAME": {
+          "type": "string",
+          "nativeName": "__NAME__",
+          "nativeType": "string",
+          "required": false
+        },
+        "FORENAME": {
+          "type": "string",
+          "nativeName": "FORENAME",
+          "nativeType": "string",
+          "required": false
+        },
+        "SURNAME": {
+          "type": "string",
+          "nativeName": "SURNAME",
+          "nativeType": "string",
+          "required": false
+        }
+      }
+    }
+  }
 }

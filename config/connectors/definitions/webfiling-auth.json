@@ -1,160 +1,146 @@
 {
-	"_id": "provisioner.openicf/WebfilingAuth",
-	"connectorRef": {
-		"connectorHostRef": "ewf-group",
-		"displayName": "Database Table Connector",
-		"bundleVersion": "1.5.20.3-SNAPSHOT",
-		"systemType": "provisioner.openicf",
-		"bundleName": "org.forgerock.openicf.connectors.databasetable-connector",
-		"connectorName": "org.identityconnectors.databasetable.DatabaseTableConnector"
-	},
-	"poolConfigOption": {
-		"maxObjects": 10,
-		"maxIdle": 10,
-		"maxWait": 150000,
-		"minEvictableIdleTimeMillis": 120000,
-		"minIdle": 1
-	},
-	"resultsHandlerConfig": {
-		"enableNormalizingResultsHandler": false,
-		"enableFilteredResultsHandler": false,
-		"enableCaseInsensitiveFilter": false,
-		"enableAttributesToGetSearchResultsHandler": true
-	},
-	"operationTimeout": {
-		"CREATE": -1,
-		"UPDATE": -1,
-		"DELETE": -1,
-		"TEST": -1,
-		"SCRIPT_ON_CONNECTOR": -1,
-		"SCRIPT_ON_RESOURCE": -1,
-		"GET": -1,
-		"RESOLVEUSERNAME": -1,
-		"AUTHENTICATE": -1,
-		"SEARCH": -1,
-		"VALIDATE": -1,
-		"SYNC": -1,
-		"SCHEMA": -1
-	},
-	"configurationProperties": {
-		"connectionProperties": null,
-		"propagateInterruptState": false,
-		"useDisposableConnectionFacade": true,
-		"defaultCatalog": null,
-		"validationInterval": "3000",
-		"ignoreExceptionOnPreLoad": false,
-		"jmxEnabled": true,
-		"commitOnReturn": false,
-		"logAbandoned": false,
-		"maxIdle": "100",
-		"testWhileIdle": false,
-		"removeAbandoned": false,
-		"abandonWhenPercentageFull": 0,
-		"minIdle": "10",
-		"defaultReadOnly": null,
-		"maxWait": "30000",
-		"logValidationErrors": false,
-		"driverClassName": "oracle.jdbc.OracleDriver",
-		"name": "Tomcat Connection Pool[1-1677976140]",
-		"useStatementFacade": true,
-		"initSQL": null,
-		"validationQueryTimeout": "-1",
-		"validationQuery": null,
-		"rollbackOnReturn": false,
-		"alternateUsernameAllowed": false,
-		"validatorClassName": null,
-		"suspectTimeout": 0,
-		"useEquals": true,
-		"removeAbandonedTimeout": 60,
-		"defaultAutoCommit": null,
-		"testOnConnect": false,
-		"jdbcInterceptors": null,
-		"initialSize": "10",
-		"defaultTransactionIsolation": -1,
-		"numTestsPerEvictionRun": 0,
-		"url": "jdbc:oracle:thin:@//chd-webdb.internal.ch:1521/WEBDEV",
-		"testOnBorrow": false,
-		"fairQueue": true,
-		"accessToUnderlyingConnectionAllowed": true,
-		"maxAge": "0",
-		"minEvictableIdleTimeMillis": "60000",
-		"timeBetweenEvictionRunsMillis": "5000",
-		"testOnReturn": false,
-		"useLock": false,
-		"maxActive": "100",
-		"username": "KERMITEWF",
-		"password": {
-			"$crypto": {
-				"type": "x-simple-encryption",
-				"value": {
-					"cipher": "AES/CBC/PKCS5Padding",
-					"stableId": "openidm-sym-default",
-					"salt": "RieXmGMZyArVLZUm4HOLqw==",
-					"data": "/PMioHIf+K6wEEIz1R580Q==",
-					"keySize": 16,
-					"purpose": "idm.config.encryption",
-					"iv": "ibY3trgh8kZ0xEImxspWVw==",
-					"mac": "ESzX/GNwMCmdzCQhk7e+vQ=="
-				}
-			}
-		},
-		"quoting": "NONE",
-		"table": "AUTH",
-		"keyColumn": "AUTHID",
-		"passwordColumn": null,
-		"disablePaging": false,
-		"enableEmptyString": false,
-		"rethrowAllSQLExceptions": true,
-		"nativeTimestamps": false,
-		"allNative": false,
-		"changeLogColumn": null,
-		"suppressPassword": true,
-		"inclusiveSync": false
-	},
-	"enabled": false,
-	"objectTypes": {
-		"auth": {
-			"$schema": "http://json-schema.org/draft-03/schema",
-			"id": "AUTHID",
-			"type": "object",
-			"nativeType": "__ACCOUNT__",
-			"properties": {
-				"PASSWORD": {
-					"type": "string",
-					"required": true,
-					"nativeName": "PASSWORD",
-					"nativeType": "string"
-				},
-				"PARENTID": {
-					"type": "number",
-					"nativeName": "PARENTID",
-					"nativeType": "JAVA_TYPE_BIGDECIMAL"
-				},
-				"CUSTVERSION": {
-					"type": "number",
-					"required": true,
-					"nativeName": "CUSTVERSION",
-					"nativeType": "JAVA_TYPE_BIGDECIMAL"
-				},
-				"CUSTID": {
-					"type": "number",
-					"required": true,
-					"nativeName": "CUSTID",
-					"nativeType": "JAVA_TYPE_BIGDECIMAL"
-				},
-				"USERNAME": {
-					"type": "string",
-					"required": true,
-					"nativeName": "USERNAME",
-					"nativeType": "string"
-				},
-				"__NAME__": {
-					"type": "string",
-					"required": true,
-					"nativeName": "__NAME__",
-					"nativeType": "string"
-				}
-			}
-		}
-	}
+  "_id": "provisioner.openicf/WebfilingAuth",
+  "connectorRef": {
+    "connectorHostRef": "ewf-group",
+    "displayName": "Database Table Connector",
+    "bundleVersion": "1.5.20.3-SNAPSHOT",
+    "systemType": "provisioner.openicf",
+    "bundleName": "org.forgerock.openicf.connectors.databasetable-connector",
+    "connectorName": "org.identityconnectors.databasetable.DatabaseTableConnector"
+  },
+  "poolConfigOption": {
+    "maxObjects": 10,
+    "maxIdle": 10,
+    "maxWait": 150000,
+    "minEvictableIdleTimeMillis": 120000,
+    "minIdle": 1
+  },
+  "resultsHandlerConfig": {
+    "enableNormalizingResultsHandler": false,
+    "enableFilteredResultsHandler": false,
+    "enableCaseInsensitiveFilter": false,
+    "enableAttributesToGetSearchResultsHandler": true
+  },
+  "operationTimeout": {
+    "CREATE": -1,
+    "UPDATE": -1,
+    "DELETE": -1,
+    "TEST": -1,
+    "SCRIPT_ON_CONNECTOR": -1,
+    "SCRIPT_ON_RESOURCE": -1,
+    "GET": -1,
+    "RESOLVEUSERNAME": -1,
+    "AUTHENTICATE": -1,
+    "SEARCH": -1,
+    "VALIDATE": -1,
+    "SYNC": -1,
+    "SCHEMA": -1
+  },
+  "configurationProperties": {
+    "connectionProperties": null,
+    "propagateInterruptState": false,
+    "useDisposableConnectionFacade": true,
+    "defaultCatalog": null,
+    "validationInterval": "3000",
+    "ignoreExceptionOnPreLoad": false,
+    "jmxEnabled": true,
+    "commitOnReturn": false,
+    "logAbandoned": false,
+    "maxIdle": "100",
+    "testWhileIdle": false,
+    "removeAbandoned": false,
+    "abandonWhenPercentageFull": 0,
+    "minIdle": "10",
+    "defaultReadOnly": null,
+    "maxWait": "30000",
+    "logValidationErrors": false,
+    "driverClassName": "oracle.jdbc.OracleDriver",
+    "name": "Tomcat Connection Pool[1-1677976140]",
+    "useStatementFacade": true,
+    "initSQL": null,
+    "validationQueryTimeout": "-1",
+    "validationQuery": null,
+    "rollbackOnReturn": false,
+    "alternateUsernameAllowed": false,
+    "validatorClassName": null,
+    "suspectTimeout": 0,
+    "useEquals": true,
+    "removeAbandonedTimeout": 60,
+    "defaultAutoCommit": null,
+    "testOnConnect": false,
+    "jdbcInterceptors": null,
+    "initialSize": "10",
+    "defaultTransactionIsolation": -1,
+    "numTestsPerEvictionRun": 0,
+    "url": "jdbc:oracle:thin:@//chd-webdb.internal.ch:1521/WEBDEV",
+    "testOnBorrow": false,
+    "fairQueue": true,
+    "accessToUnderlyingConnectionAllowed": true,
+    "maxAge": "0",
+    "minEvictableIdleTimeMillis": "60000",
+    "timeBetweenEvictionRunsMillis": "5000",
+    "testOnReturn": false,
+    "useLock": false,
+    "maxActive": "100",
+    "username": "&{esv.2099bcaeaf.configurationpropertiesusername}",
+    "password": "&{esv.2099bcaeaf.configurationpropertiespassword}",
+    "quoting": "NONE",
+    "table": "AUTH",
+    "keyColumn": "AUTHID",
+    "passwordColumn": null,
+    "disablePaging": false,
+    "enableEmptyString": false,
+    "rethrowAllSQLExceptions": true,
+    "nativeTimestamps": false,
+    "allNative": false,
+    "changeLogColumn": null,
+    "suppressPassword": true,
+    "inclusiveSync": false
+  },
+  "enabled": false,
+  "objectTypes": {
+    "auth": {
+      "$schema": "http://json-schema.org/draft-03/schema",
+      "id": "AUTHID",
+      "type": "object",
+      "nativeType": "__ACCOUNT__",
+      "properties": {
+        "PASSWORD": {
+          "type": "string",
+          "required": true,
+          "nativeName": "PASSWORD",
+          "nativeType": "string"
+        },
+        "PARENTID": {
+          "type": "number",
+          "nativeName": "PARENTID",
+          "nativeType": "JAVA_TYPE_BIGDECIMAL"
+        },
+        "CUSTVERSION": {
+          "type": "number",
+          "required": true,
+          "nativeName": "CUSTVERSION",
+          "nativeType": "JAVA_TYPE_BIGDECIMAL"
+        },
+        "CUSTID": {
+          "type": "number",
+          "required": true,
+          "nativeName": "CUSTID",
+          "nativeType": "JAVA_TYPE_BIGDECIMAL"
+        },
+        "USERNAME": {
+          "type": "string",
+          "required": true,
+          "nativeName": "USERNAME",
+          "nativeType": "string"
+        },
+        "__NAME__": {
+          "type": "string",
+          "required": true,
+          "nativeName": "__NAME__",
+          "nativeType": "string"
+        }
+      }
+    }
+  }
 }

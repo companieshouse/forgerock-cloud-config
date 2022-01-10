@@ -23,7 +23,7 @@
     },
     {
       "target": "frIndexedString1",
-      "source": "PARENT_USERNAME"
+      "source": "&{esv.a147709bca.manualsourcequerysortkeys}"
     }
   ],
   "policies": [
@@ -84,7 +84,7 @@
   "reconSourceQueryPageSize": 10000,
   "sourceQueryFullEntry": true,
   "sourceQuery": {
-    "_sortKeys": "PARENT_USERNAME"
+    "_sortKeys": "&{esv.a147709bca.manualsourcequerysortkeys}"
   },
   "taskThreads": 20,
   "correlationQuery": [],
