@@ -21,10 +21,8 @@ var ConfirmIndex = {
 
 var stageName = 'OTP_RESEND';
 
-// For now we will just force a resend until the UI is updated - SJD 16/12/21
 outcome = NodeOutcome.RESEND;
 
-/*
 try {
   var mfaRoute = sharedState.get('mfa-route');
   var userId = sharedState.get('_id');
@@ -81,8 +79,8 @@ try {
         'pagePropsJSON',
         JSON.stringify(
           {
-            'emailAddress': email,
-            'phoneNumber': phoneNumber,
+            'emailAddress': _obfuscateEmail(email),
+            'phoneNumber': _obfuscatePhone(phoneNumber),
             'type': mfaRoute
           }
         )
@@ -102,7 +100,6 @@ try {
   _log('ERROR ' + e);
   outcome = NodeOutcome.ERROR;
 }
- */
 
 _log('Outcome = ' + _getOutcomeForDisplay());
 
