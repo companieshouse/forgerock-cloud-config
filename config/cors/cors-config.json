@@ -1,66 +1,62 @@
 {
-    "corsServiceGlobal": {
-        "enabled": true,
-        "_id": "",
-        "_type": {
-            "_id": "CorsService",
-            "name": "CORS Service",
-            "collection": false
-        }
-    },
-    "corsServiceConfig": {
-        "maxAge": 0,
-        "acceptedMethods": [
-            "HEAD",
-            "DELETE",
-            "POST",
-            "GET",
-            "OPTIONS",
-            "PUT",
-            "PATCH"
-        ],
-        "acceptedHeaders": [
-            "authorization",
-            "accept-api-version",
-            "content-type",
-            "*"
-        ],
-        "enabled": true,
-        "acceptedOrigins": [
-            "https://sdkapp.example.com:8443",
-            "http://localhost:3000",
-            "https://idam-ui.amido.aws.chdev.org",
-            "https://ui-amido-demo.forgeblocks.com",
-            "https://example.com"
-        ],
-        "allowCredentials": true,
-        "exposedHeaders": [
-            "*"
-        ],
-        "_id": "org-ui",
-        "_type": {
-            "_id": "configuration",
-            "name": "Cors Configuration",
-            "collection": true
-        }
-    },
-    "idmCorsConfig": {
-        "_id": "servletfilter/cors",
-        "classPathURLs": [],
-        "systemProperties": {},
-        "requestAttributes": {},
-        "scriptExtensions": {},
-        "initParams": {
-            "allowedOrigins": "&{byos.ba5058c071.initparamsallowedorigins}",
-            "allowedMethods": "GET,POST,PUT,DELETE,PATCH,HEAD,OPTIONS",
-            "allowedHeaders": "authorization,content-type,accept-api-version,*",
-            "allowCredentials": true,
-            "exposedHeaders": "*",
-            "chainPreflight": false
-        },
-        "urlPatterns": [
-            "/*"
-        ],
-        "filterClass": "org.eclipse.jetty.servlets.CrossOriginFilter"
+  "corsServiceGlobal": {
+    "enabled": true,
+    "_id": "",
+    "_type": {
+      "_id": "CorsService",
+      "name": "CORS Service",
+      "collection": false
     }
+  },
+  "corsServiceConfig": {
+    "maxAge": 0,
+    "acceptedMethods": [
+      "HEAD",
+      "DELETE",
+      "POST",
+      "GET",
+      "OPTIONS",
+      "PUT",
+      "PATCH"
+    ],
+    "acceptedHeaders": [
+      "authorization",
+      "accept-api-version",
+      "content-type",
+      "*"
+    ],
+    "enabled": true,
+    "acceptedOrigins": {
+      "$array": "&{esv.93fcfd459d.dataacceptedorigins}"
+    },
+    "allowCredentials": true,
+    "exposedHeaders": [
+      "*"
+    ],
+    "_id": "org-ui",
+    "_type": {
+      "_id": "configuration",
+      "name": "Cors Configuration",
+      "collection": true
+    }
+  },
+  "idmCorsConfig": {
+    "_id": "servletfilter/cors",
+    "classPathURLs": [],
+    "systemProperties": {},
+    "requestAttributes": {},
+    "scriptExtensions": {},
+    "initParams": {
+      "allowedOrigins": "&{esv.ba5058c071.initparamsallowedorigins}",
+      "allowedMethods": "GET,POST,PUT,DELETE,PATCH,HEAD,OPTIONS",
+      "allowedHeaders": "authorization,content-type,accept-api-version,*",
+      "allowCredentials": true,
+      "exposedHeaders": "*",
+      "chainPreflight": false
+    },
+    "urlPatterns": [
+      "/*"
+    ],
+    "filterClass": "org.eclipse.jetty.servlets.CrossOriginFilter"
+  }
 }

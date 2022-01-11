@@ -86,7 +86,9 @@
     "source": "target.userName !== 'tree-service-user@companieshouse.com' && 'tree-service-user@companieshouse.co.uk' && target.userName !== 'ConcourseUser@companieshouse.gov.uk' && target.userName !== 'AdminClientTest@example.com' && target.userName !== 'pxtdbugadc1@gmail.com' && target.userName !== 'pxtdbugadc2@gmail.com' && target.userName !== 'pxtdbugadc3@gmail.com' && target.userName !== 'pxtdbugadc4@gmail.com' && target.userName !== 'testautomationfr36@test.companieshouse.gov.uk' && target.userName !== 'testautomationfr37@test.companieshouse.gov.uk' && target.userName !== 'fcalvino@companieshouse.gov.uk' && target.userName !== 'francesco.calvino@amido.com'"
   },
   "clusteredSourceReconEnabled": true,
-  "reconSourceQueryPageSize": 100000,
+  "reconSourceQueryPageSize": {
+    "$int": "&{esv.a147709bca.manualreconsourcequerypagesize}"
+  },
   "sourceQueryFullEntry": true,
   "sourceQuery": {
     "_queryFilter": "true",

@@ -1,15 +1,11 @@
 {
-    "validGotoDestinations": [
-        "https://openam-companieshouse-uk-dev.id.forgerock.io/*?*",
-        "https://ewf-kermit.companieshouse.gov.uk/*",
-        "https://ewf-kermit.companieshouse.gov.uk/*?*",
-        "https://idam.amido.aws.chdev.org/*?*",
-        "https://idam.amido.aws.chdev.org/*"
-    ],
+  "validGotoDestinations": {
+    "$array": "${esv.77c831284e.datavalidgotodestinations}"
+  },
+  "_id": "validation",
+  "_type": {
     "_id": "validation",
-    "_type": {
-        "_id": "validation",
-        "name": "Validation Service",
-        "collection": false
-    }
+    "name": "Validation Service",
+    "collection": false
+  }
 }
