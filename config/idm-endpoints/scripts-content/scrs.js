@@ -325,7 +325,8 @@
       {
         'number': companyIncorp.company_number,
         'name': companyIncorp.company_name,
-        'creationDate': fixCreationDate(companyIncorp.incorporated_on)
+        'creationDate': fixCreationDate(companyIncorp.incorporated_on),
+        'status': 'active'
       });
   }
 
