@@ -161,7 +161,7 @@ function buildJwt (claims, issuer, audience, jwtType) {
 //builds the URL which will be sent via email
 function buildReturnUrl (jwt) {
   try {
-    returnUrl = host.concat('/am/XUI/?realm=/alpha&service=CHResetPassword&token=', jwt);
+    returnUrl = host.concat('/password-recovery/verify/?token=', jwt);
     _log('URL: ' + returnUrl);
     return returnUrl;
   } catch (e) {
