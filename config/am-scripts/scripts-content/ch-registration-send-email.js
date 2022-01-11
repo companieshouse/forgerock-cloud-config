@@ -187,9 +187,7 @@ function sendEmail (language, jwt) {
 
   var notifyJWT = transientState.get('notifyJWT');
   var templates = transientState.get('notifyTemplates');
-  // var returnUrl = host.concat('/am/XUI/?realm=/alpha&service=CHVerifyReg&token=', jwt);
   var returnUrl = host.concat('/account/register/verify/?token=', jwt);
-  //var returnUrl = host.concat('/am/XUI/?service=CHVerifyReg&token=', jwt);
 
   _log('JWT from transient state: ' + notifyJWT);
   _log('Templates from transient state: ' + templates);
