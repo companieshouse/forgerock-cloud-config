@@ -79,8 +79,8 @@ try {
         'pagePropsJSON',
         JSON.stringify(
           {
-            'emailAddress': email,
-            'phoneNumber': phoneNumber,
+            'emailAddress': _obfuscateEmail(email),
+            'phoneNumber': _obfuscatePhone(phoneNumber),
             'type': mfaRoute
           }
         )
