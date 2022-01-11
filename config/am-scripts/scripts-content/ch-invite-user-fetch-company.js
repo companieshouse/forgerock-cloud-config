@@ -72,7 +72,7 @@ function fetchQueryParameters () {
 //checks whether the user with the given email already exists in IDM
 function getUserInfo (userId) {
   try {
-    var idmUserIdEndpoint = idmUserEndpoint.concat(userId);
+    var idmUserIdEndpoint = idmUserEndpoint + userId;
     var request = new org.forgerock.http.protocol.Request();
     var accessToken = transientState.get('idmAccessToken');
     if (!accessToken) {
