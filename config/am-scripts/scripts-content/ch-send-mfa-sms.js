@@ -46,7 +46,7 @@ function sendErrorCallbacks () {
     action = fr.Action.send(
       new fr.HiddenValueCallback(
         'stage',
-        'SEND_MFA_SMS_ERROR'
+        'REGISTRATION_1'
       ),
       new fr.TextOutputCallback(
         fr.TextOutputCallback.ERROR,
@@ -159,7 +159,6 @@ try {
     sendErrorCallbacks();
   } else {
     if (sendTextMessage(language, phoneNumber, code)) {
-      // action = fr.Action.goTo('true').build();
       outcome = 'true';
     } else {
       sendErrorCallbacks();
