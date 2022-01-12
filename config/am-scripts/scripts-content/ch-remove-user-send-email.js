@@ -72,7 +72,7 @@ function sendErrorCallbacks (token, message) {
 }
 
 //sends the email (via Notify) to the recipient using the given JWT
-function sendEmail (language, removerName, userToRemove, companyName) {
+function sendEmail (removerName, userToRemove, companyName) {
 
   _log('params: company name:' + companyName);
 
@@ -86,7 +86,7 @@ function sendEmail (language, removerName, userToRemove, companyName) {
   try {
     var requestBodyJson = {
       'email_address': userToRemove,
-      'template_id': language === 'EN' ? JSON.parse(templates).en_removal : JSON.parse(templates).cy_removal,
+      'template_id': JSON.parse(templates).en_removal,
       'personalisation': {
         'company': companyName,
         'remover': removerName
@@ -131,12 +131,11 @@ function sendEmail (language, removerName, userToRemove, companyName) {
 try {
   var request = new org.forgerock.http.protocol.Request();
   var removalData = extractRemovalDataFromState();
-  var language = _getSelectedLanguage(requestHeaders);
 
   if (!removalData) {
     sendErrorCallbacks('REMOVE_AUTHZ_USER_ERROR', 'Error while extracting data from shared state');
   } else {
-    var sendEmailResult = sendEmail(language, removalData.removerName, removalData.userToRemove, removalData.companyName);
+    var sendEmailResult = sendEmail(removalData.removerName, removalData.userToRemove, removalData.companyName);
     var userDisplayName = removalData.displayName;
     var notificationId = transientState.get('notificationId');
 

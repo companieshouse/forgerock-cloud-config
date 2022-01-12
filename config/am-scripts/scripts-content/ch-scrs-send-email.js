@@ -62,31 +62,23 @@ function buildReturnUrl (email, companyNumber, isNewUser, host, userId, linkToke
   }
 }
 
-function getEmailTemplateId (templates, language, newUser) {
+function getEmailTemplateId (templates, newUser) {
   var templateId;
   var templatesParsed = JSON.parse(templates);
 
   _log(JSON.stringify(templatesParsed, null, 2));
 
-  if (language === 'EN' || language === 'en') {
-    if (String(newUser) === 'true') {
-      templateId = templatesParsed.en_scrs_notification_new;
-    } else {
-      templateId = templatesParsed.en_scrs_notification;
-    }
+  
+  if (String(newUser) === 'true') {
+    templateId = templatesParsed.en_scrs_notification_new;
   } else {
-    if (String(newUser) === 'true') {
-      templateId = templatesParsed.cy_scrs_notification_new;
-    } else {
-      templateId = templatesParsed.cy_scrs_notification;
-    }
+    templateId = templatesParsed.en_scrs_notification;
   }
 
-  _log('TemplateId for : Language = ' + language + ' / New User = ' + newUser + ' -> ' + templateId);
   return templateId;
 }
 
-function sendEmail (language, email, companyName, returnUrl, newUser) {
+function sendEmail (email, companyName, returnUrl, newUser) {
   _log('params: ' + email + ' - ' + companyName + ' (New User = ' + newUser + ')');
 
   var notifyJWT = transientState.get('notifyJWT');
@@ -102,7 +94,7 @@ function sendEmail (language, email, companyName, returnUrl, newUser) {
   try {
     requestBodyJson = {
       'email_address': email,
-      'template_id': getEmailTemplateId(templates, language, newUser),
+      'template_id': getEmailTemplateId(templates, newUser),
       'personalisation': {
         'link': returnUrl,
         'company': companyName,
@@ -145,16 +137,6 @@ function sendEmail (language, email, companyName, returnUrl, newUser) {
   };
 }
 
-function getHeaderParams (requestHeaders) {
-  if (requestHeaders && requestHeaders.get('Chosen-Language')) {
-    var lang = requestHeaders.get('Chosen-Language').get(0);
-    _log('selected language: ' + lang);
-    return lang;
-  }
-  _log('no selected language found - defaulting to EN');
-  return 'EN';
-}
-
 function sendErrorCallbacks (token, message) {
   action = fr.Action.send(
     new fr.HiddenValueCallback(
@@ -190,7 +172,6 @@ try {
   var companyNumber = sharedState.get('scrsCompanyNumber');
   var host = sharedState.get('scrsLink');
   var isNewUser = sharedState.get('scrsNewUser');
-  var language = sharedState.get('scrsLanguage') || getHeaderParams(requestHeaders);
   var userId = sharedState.get('scrsUserId');
   var linkTokenId = sharedState.get('scrsLinkTokenUuid');
 
@@ -199,7 +180,7 @@ try {
   if (!returnUrlResponse.success) {
     sendErrorCallbacks('error build URL', returnUrlResponse.message);
   } else {
-    var sendEmailResult = sendEmail(language, email, companyName, returnUrlResponse.returnUrl, isNewUser);
+    var sendEmailResult = sendEmail(email, companyName, returnUrlResponse.returnUrl, isNewUser);
 
     if (sendEmailResult.success) {
       outcome = NodeOutcome.SUCCESS;
