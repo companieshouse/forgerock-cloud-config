@@ -1,6 +1,6 @@
 {
   "validGotoDestinations": {
-    "$array": "${esv.77c831284e.datavalidgotodestinations}"
+    "$array": "&{esv.77c831284e.datavalidgotodestinations}"
   },
   "_id": "validation",
   "_type": {
