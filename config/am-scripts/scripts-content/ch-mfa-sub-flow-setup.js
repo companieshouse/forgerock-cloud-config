@@ -52,6 +52,9 @@ if (journeyName === 'CHChangePhoneNumber') {
 } else if (journeyName === 'CHSCRSActivation') {
   useStageName = 'EWF_LOGIN_OTP';
   useOutcome = NodeOutcome.DEFAULT;
+} else if (journeyName === 'CHOnboarding') {
+  useStageName = 'EWF_LOGIN_OTP';
+  useOutcome = NodeOutcome.FORCE_TEXT;
 }
 
 sharedState.put(config.otpCheckStageNameVariable, useStageName);

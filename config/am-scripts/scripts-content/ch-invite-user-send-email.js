@@ -1,27 +1,3 @@
-/* 
-  ** INPUT DATA
-    * SHARED STATE:
-      - 'companyData': the company data which has been previously looked up from IDM
-      - '_id': id of the current user (session owner)
-      - 'email': email of the invited user
-      - 'inviterName': the full name of the inviter (or email of name is not set)
-
-    * TRANSIENT STATE
-      - 'notifyJWT': the Notify JWT to be used for requests to Notify
-      - 'notifyTemplates': the list of all Notify templates 
-
-  ** OUTPUT DATA
-    * TRANSIENT STATE:
-      - 'notificationId': the notification ID returned by Notify if the call was successful
-    
-  ** OUTCOMES
-    - true: message sent successfully
-  
-  ** CALLBACKS:
-    - error while sending 
-    - generic error
-*/
-
 var _scriptName = 'COMPANY INVITE SEND EMAIL';
 _log('Starting');
 
@@ -296,6 +272,85 @@ function sendEmail (language, invitedEmail, companyName, inviterName, returnUrl)
   };
 }
 
+function lookupUser (email) {
+  try {
+    var idmUserEndpoint = FIDC_ENDPOINT + '/openidm/managed/alpha_user?_queryFilter=userName+eq+%22' + email + '%22';
+    var request = new org.forgerock.http.protocol.Request();
+
+    var accessToken = transientState.get('idmAccessToken');
+    if (accessToken == null) {
+      _log('Access token not in transient state');
+      return {
+        success: false,
+        message: 'Access token not in transient state'
+      };
+    }
+
+    request.setMethod('GET');
+    request.setUri(idmUserEndpoint);
+    request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
+    request.getHeaders().add('Content-Type', 'application/json');
+    request.getHeaders().add('Accept-API-Version', 'resource=1.0');
+
+    var response = httpClient.send(request).get();
+
+    if (response.getStatus().getCode() === 200) {
+      var searchResponse = JSON.parse(response.getEntity().getString());
+      if (searchResponse && searchResponse.result && searchResponse.result.length > 0) {
+        _log('user found: ' + searchResponse.result[0].toString());
+        return {
+          success: true,
+          user: searchResponse.result[0]
+        };
+      } else {
+        _log('user NOT found: ' + email);
+        return {
+          success: true,
+          user: null
+        };
+      }
+    } else {
+      _log('Error while looking up user: ' + response.getStatus().getCode());
+      return {
+        success: false,
+        error: 'Error while looking up user: ' + response.getStatus().getCode()
+      };
+    }
+  } catch (e) {
+    _log(e);
+    return {
+      success: false,
+      error: 'Error while checking user existence: ' + e.toString()
+    };
+  }
+}
+
+function checkIfOnboarding () {
+  _log('Checking onboarding state for user');
+
+  if (sharedState.get('isOnboarding')) {
+    _log('isOnboarding sharedState flag : true, returning as still onboarding');
+    return true;
+  }
+
+  if (inviteData && inviteData.invitedEmail) {
+    _log('inviteData.invitedEmail : ' + inviteData.invitedEmail);
+
+    var userDetails = lookupUser(inviteData.invitedEmail);
+
+    if (userDetails && userDetails.user && userDetails.user.frIndexedDate2) {
+      var onboardDate = userDetails.user.frIndexedDate2;
+      _log('Users frIndexedDate2 is set as : ' + onboardDate + ', returning as still onboarding');
+      return true;
+    } else {
+      _log('Could not retrieve user details for : ' + inviteData.invitedEmail);
+    }
+  }
+
+  _log('Determined user as not onboarding');
+  return false;
+}
+
 var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
 
 // main execution flow
@@ -310,8 +365,8 @@ var config = {
 try {
   var host = requestHeaders.get('origin').get(0);
   var request = new org.forgerock.http.protocol.Request();
-  var isOnboarding = sharedState.get('isOnboarding');
   var inviteData = extractInviteDataFromState();
+  var isOnboarding = checkIfOnboarding();
   var language = _getSelectedLanguage(requestHeaders);
 
   if (!inviteData) {
