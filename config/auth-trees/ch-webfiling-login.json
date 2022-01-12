@@ -68,13 +68,6 @@
       }
     },
     {
-      "_id": "31fa4b8d-9686-4bec-8db2-45d442533b22",
-      "nodeType": "InnerTreeEvaluatorNode",
-      "details": {
-        "tree": "ProgressiveProfile"
-      }
-    },
-    {
       "_id": "6129ae01-2f10-4e6a-ab4f-eba00524c6b0",
       "nodeType": "ScriptedDecisionNode",
       "details": {
@@ -439,24 +432,14 @@
         "displayName": "Increment Login Count"
       },
       "318d16a5-37ca-4d58-a3ec-54a4699881e3": {
-        "x": 2942,
-        "y": 202.015625,
+        "x": 2703,
+        "y": 211.015625,
         "connections": {
           "false": "b3f513ec-f284-476d-b040-00918b40b772",
           "true": "7f0f8fa9-357a-4139-b407-d9a0336faaa9"
         },
         "nodeType": "InnerTreeEvaluatorNode",
         "displayName": "Complete Profile"
-      },
-      "31fa4b8d-9686-4bec-8db2-45d442533b22": {
-        "x": 2676,
-        "y": 209.5,
-        "connections": {
-          "false": "b3f513ec-f284-476d-b040-00918b40b772",
-          "true": "318d16a5-37ca-4d58-a3ec-54a4699881e3"
-        },
-        "nodeType": "InnerTreeEvaluatorNode",
-        "displayName": "Progressive Profiling"
       },
       "6129ae01-2f10-4e6a-ab4f-eba00524c6b0": {
         "x": 1160,
@@ -498,8 +481,8 @@
         "displayName": "Identify Existing User"
       },
       "7f0f8fa9-357a-4139-b407-d9a0336faaa9": {
-        "x": 3194,
-        "y": 206.015625,
+        "x": 2976,
+        "y": 213.015625,
         "connections": {
           "false": "b3f513ec-f284-476d-b040-00918b40b772",
           "true": "f9659606-3900-4580-8513-0e197e62452a"
@@ -550,7 +533,7 @@
         "x": 2423,
         "y": 234.5,
         "connections": {
-          "true": "31fa4b8d-9686-4bec-8db2-45d442533b22"
+          "true": "318d16a5-37ca-4d58-a3ec-54a4699881e3"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Update Last Login"
@@ -565,8 +548,8 @@
         "displayName": "Login Form (EWF)"
       },
       "f9659606-3900-4580-8513-0e197e62452a": {
-        "x": 3453,
-        "y": 241.015625,
+        "x": 3195,
+        "y": 247.015625,
         "connections": {
           "success": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
         },
@@ -644,8 +627,8 @@
         "y": 190
       },
       "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
-        "x": 3790,
-        "y": 236.66666666666666
+        "x": 3521,
+        "y": 238.66666666666666
       },
       "e301438c-0bd0-429c-ab0c-66126501069a": {
         "x": 3302,
