@@ -152,8 +152,8 @@ try {
               'errors': [{
                 label: 'Invalid mobile number entered',
                 token: 'UPDATE_PHONE_INVALID_MOBILE_NUMBER',
-                fieldName: 'IDToken'.concat(PHONE_CALLBACK_INDEX),
-                anchor: 'IDToken'.concat(PHONE_CALLBACK_INDEX)
+                fieldName: 'IDToken' + (PHONE_CALLBACK_INDEX + 1),
+                anchor: 'IDToken' + (PHONE_CALLBACK_INDEX + 1)
               }]
             }));
           action = fr.Action.goTo(NodeOutcome.FAIL).build();
