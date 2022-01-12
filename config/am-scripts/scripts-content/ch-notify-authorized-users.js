@@ -171,14 +171,14 @@ function getCompanyData (companyNo) {
   }
 }
 
-function bodyBuilder (action, recipient, companyName, language, actorName, subjectName) {
+function bodyBuilder (action, recipient, companyName, actorName, subjectName) {
   var templates = transientState.get('notifyTemplates');
   var requestBodyJson;
 
   if (action === Actions.USER_AUTHZ_AUTH_CODE) {
     requestBodyJson = {
       'email_address': recipient,
-      'template_id': language === 'EN' ? JSON.parse(templates).en_notify_user_added_auth_code : JSON.parse(templates).cy_notify_user_added_auth_code,
+      'template_id': JSON.parse(templates).en_notify_user_added_auth_code,
       'personalisation': {
         'company': companyName,
         'actor': actorName
@@ -187,7 +187,7 @@ function bodyBuilder (action, recipient, companyName, language, actorName, subje
   } else if (action === Actions.AUTHZ_USER_REMOVED) {
     requestBodyJson = {
       'email_address': recipient,
-      'template_id': language === 'EN' ? JSON.parse(templates).en_notify_user_removed : JSON.parse(templates).cy_notify_user_removed,
+      'template_id': JSON.parse(templates).en_notify_user_removed,
       'personalisation': {
         'company': companyName,
         'actor': actorName,
@@ -197,7 +197,7 @@ function bodyBuilder (action, recipient, companyName, language, actorName, subje
   } else if (action === Actions.USER_ACCEPT_INVITE) {
     requestBodyJson = {
       'email_address': recipient,
-      'template_id': language === 'EN' ? JSON.parse(templates).en_notify_user_accepted : JSON.parse(templates).cy_notify_user_accepted,
+      'template_id': JSON.parse(templates).en_notify_user_accepted,
       'personalisation': {
         'company': companyName,
         'actor': actorName,
@@ -207,7 +207,7 @@ function bodyBuilder (action, recipient, companyName, language, actorName, subje
   } else if (action === Actions.USER_DECLINE_INVITE) {
     requestBodyJson = {
       'email_address': recipient,
-      'template_id': language === 'EN' ? JSON.parse(templates).en_notify_user_declined : JSON.parse(templates).cy_notify_user_declined,
+      'template_id': JSON.parse(templates).en_notify_user_declined,
       'personalisation': {
         'company': companyName,
         'actor': actorName,
@@ -217,7 +217,7 @@ function bodyBuilder (action, recipient, companyName, language, actorName, subje
   } else if (action === Actions.USER_INVITED) {
     requestBodyJson = {
       'email_address': recipient,
-      'template_id': language === 'EN' ? JSON.parse(templates).en_notify_user_invited : JSON.parse(templates).cy_notify_user_invited,
+      'template_id': JSON.parse(templates).en_notify_user_invited,
       'personalisation': {
         'company': companyName,
         'actor': actorName,
@@ -229,7 +229,7 @@ function bodyBuilder (action, recipient, companyName, language, actorName, subje
 }
 
 //sends the email (via Notify) to the recipient
-function sendEmail (language, action, recipient, companyName, actorName, subjectName) {
+function sendEmail (action, recipient, companyName, actorName, subjectName) {
   var notifyJWT = transientState.get('notifyJWT');
   var templates = transientState.get('notifyTemplates');
   var request = new org.forgerock.http.protocol.Request();
@@ -241,7 +241,7 @@ function sendEmail (language, action, recipient, companyName, actorName, subject
   request.setUri(_fromConfig('NOTIFY_EMAIL_ENDPOINT'));
 
   try {
-    requestBodyJson = bodyBuilder(action, recipient, companyName, language, actorName, subjectName);
+    requestBodyJson = bodyBuilder(action, recipient, companyName, actorName, subjectName);
   } catch (e) {
     _log('Error while preparing request for Notify: ' + e);
     return {
@@ -309,7 +309,6 @@ var idmCompanyAuthEndpoint = FIDC_ENDPOINT + '/openidm/endpoint/companyauth/';
 
 try {
   var notifyEventData = extractEventFromState();
-  var language = _getSelectedLanguage(requestHeaders);
 
   if (!notifyEventData) {
     _log('Error while extracting notification input data from shared state - skipping notification email sending.');
@@ -328,7 +327,7 @@ try {
       for (var index = 0; index < company.members.length; index++) {
         if (company.members[index].membershipStatus === 'confirmed' && isSendToMemberAllowed(company.members[index], notifyEventData)) {
           _log('Sending email to  : ' + company.members[index].email + ' - ID: ' + company.members[index]._id);
-          var sendEmailResult = sendEmail(language, notifyEventData.action, company.members[index].email, company.name, actorName, subjectName);
+          var sendEmailResult = sendEmail(notifyEventData.action, company.members[index].email, company.name, actorName, subjectName);
           if (!sendEmailResult.success) {
             _log('Error while sending email to : ' + company.members[index].email + ' - error: ' + sendEmailResult.message);
             failedEmails++;
