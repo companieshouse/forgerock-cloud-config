@@ -206,7 +206,7 @@ function buildReturnUrl (invitedEmail, companyNumber) {
 }
 
 //sends the email (via Notify) to the recipient using the given JWT
-function sendEmail (language, invitedEmail, companyName, inviterName, returnUrl) {
+function sendEmail (invitedEmail, companyName, inviterName, returnUrl) {
 
   _log('params: ' + invitedEmail + ' - ' + companyName + ' - ' + inviterName);
 
@@ -221,7 +221,7 @@ function sendEmail (language, invitedEmail, companyName, inviterName, returnUrl)
   try {
     var requestBodyJson = {
       'email_address': invitedEmail,
-      'template_id': language === 'EN' ? JSON.parse(templates).en_invite : JSON.parse(templates).cy_invite,
+      'template_id': JSON.parse(templates).en_invite,
       'personalisation': {
         'link': returnUrl,
         'company': companyName,
@@ -367,7 +367,6 @@ try {
   var request = new org.forgerock.http.protocol.Request();
   var inviteData = extractInviteDataFromState();
   var isOnboarding = checkIfOnboarding();
-  var language = _getSelectedLanguage(requestHeaders);
 
   if (!inviteData) {
     sendErrorCallbacks('INVITE_USER_ERROR', 'INVITE_USER_ERROR', 'An error has occurred! Please try again later.');
@@ -376,7 +375,7 @@ try {
     if (!returnUrlResponse.success) {
       sendErrorCallbacks('INVITE_USER_ERROR', 'INVITE_USER_ERROR', returnUrlResponse.message);
     } else {
-      var sendEmailResult = sendEmail(language, inviteData.invitedEmail, inviteData.companyName, inviteData.inviterName, returnUrlResponse.returnUrl);
+      var sendEmailResult = sendEmail(inviteData.invitedEmail, inviteData.companyName, inviteData.inviterName, returnUrlResponse.returnUrl);
       if (sendEmailResult.success) {
 
         var companyNotificationData = {
