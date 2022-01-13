@@ -394,34 +394,33 @@
     companyData.authCodeIsActive = isCompanyAuthCodeActive(validFrom, validTo);
   }
 
-  function isCompanyAuthCodeActive (startDate, expiryDate) {
-    _log('XStart Date : ' + startDate + ' ' + (typeof startDate));
-    _log('XExpiry Date : ' + expiryDate + ' ' + (typeof expiryDate));
+  function mapCHSCompanyType (companyData, data) {
+    if (!companyData || !data || !data.type) {
+      return;
+    }
 
-    const unixNow = Date.parse(new Date());
+    companyData.type = data.type;
+  }
+
+  function isCompanyAuthCodeActive (startDate, expiryDate) {
+    const now = new Date();
 
     try {
       if (startDate && expiryDate) {
-        //const parsedStart = new Date(startDate.substring(0, 10));
-        //const unixStart = Date.parse(parsedStart);
+        _log('AAA1');
+        const parsedStartA = new Date(startDate.substring(0, 10));
+        const parsedExpiryA = new Date(expiryDate.substring(0, 10));
 
-        //const parsedExpiry = new Date(expiryDate.substring(0, 10));
-        //const unixExpiry = Date.parse(parsedExpiry);
-
-        //return (unixNow >= unixStart) && (unixNow < unixExpiry);
-        return true;
+        return (now >= parsedStartA) && (now < parsedExpiryA);
       } else if (startDate && !expiryDate) {
+        const parsedStartB = new Date(startDate.substring(0, 10));
 
-        //const parsedStart = new Date(startDate.substring(0, 10));
-        //const unixStart = Date.parse(parsedStart);
-
-        //return unixNow >= unixStart;
-        return true;
+        return now >= parsedStartB;
       } else {
         return true;
       }
     } catch (e) {
-      _log('Error : ' + e);
+      _log('Error checking auth code active status : ' + e);
       return true;
     }
   }
@@ -431,23 +430,21 @@
 
     let chsResponse = openidm.query(
       SYSTEM_CHS_COMPANY,
-      { '_queryFilter': '_id eq "' + '04082995' + '"' }
+      { '_queryFilter': '_id eq "' + companyIncorp.company_number + '"' }
     );
-
-    _log('XXXXXXX CHS Response : ' + chsResponse);
 
     if (chsResponse && chsResponse.resultCount && chsResponse.resultCount === 1 && chsResponse.result[0] && chsResponse.result[0].data) {
 
       let authCodeResponse = openidm.query(
         SYSTEM_WEBFILING_AUTHCODE,
-        { '_queryFilter': '_id eq "' + '04082995' + '"' }
+        { '_queryFilter': '_id eq "' + companyIncorp.company_number + '"' }
       );
-
-      _log('XXXXXXX Auth Code Response : ' + authCodeResponse);
 
       if (authCodeResponse && authCodeResponse.resultCount && authCodeResponse.resultCount === 1 && authCodeResponse.result[0]) {
 
         // Create the company using the retrieved data
+
+        _log('Creating company using retrieved CHS & Auth Code data');
 
         const companyData = {
           'number': companyIncorp.company_number,
@@ -458,6 +455,8 @@
         };
 
         mapCHSCompanyRegisteredOfficeAddress(companyData, chsResponse.result[0].data);
+        mapCHSCompanyType(companyData, chsResponse.result[0].data);
+
         mapCHSCompanyAuthCode(companyData, authCodeResponse.result[0]);
 
         return openidm.create('managed/' + OBJECT_COMPANY,
@@ -470,6 +469,8 @@
     } else {
 
       // Create the company manually for now with the limited data we have
+
+      _log('Creating company using SCRS supplied data');
 
       return openidm.create('managed/' + OBJECT_COMPANY,
         null,
