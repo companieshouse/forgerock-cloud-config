@@ -407,7 +407,6 @@
 
     try {
       if (startDate && expiryDate) {
-        _log('AAA1');
         const parsedStartA = new Date(startDate.substring(0, 10));
         const parsedExpiryA = new Date(expiryDate.substring(0, 10));
 
