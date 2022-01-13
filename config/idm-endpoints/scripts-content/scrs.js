@@ -12,7 +12,10 @@
 
   const OBJECT_USER = 'alpha_user';
   const OBJECT_COMPANY = 'alpha_organization';
+
   const SYSTEM_WEBFILING_USER = 'system/WebfilingUser/webfilingUser';
+  const SYSTEM_CHS_COMPANY = 'system/CHSCompany/company_profile';
+  const SYSTEM_WEBFILING_AUTHCODE = 'system/WebfilingAuthCode/authCode';
 
   const DEFAULT_SUBMISSIONS_PER_PAGE = 50;
   const IDAM_USERNAME = _getVariableOrSecret('esv.c5d3143c84.manualidmusername');
@@ -317,17 +320,168 @@
     return response.result[0];
   }
 
+  function mapCHSCompanyJurisdiction (data) {
+    if (!data || !data.jurisdiction) {
+      return null;
+    }
+
+    if (data.jurisdiction === 'england-wales' || data.jurisdiction === 'wales' || data.jurisdiction === 'england') {
+      return 'EW';
+    } else if (data.jurisdiction === 'scotland') {
+      return 'SC';
+    } else if (data.jurisdiction === 'northern-ireland') {
+      return 'NI';
+    } else {
+      return data.jurisdiction;
+    }
+  }
+
+  function mapCHSCompanyStatus (data) {
+    if (!data || !data.company_status) {
+      return 'inactive';
+    }
+
+    if (data.company_status === 'active') {
+      return 'active';
+    }
+
+    return 'inactive';
+  }
+
+  function mapCHSCompanyRegisteredOfficeAddress (companyData, data) {
+    if (!companyData || !data || !data.registered_office_address) {
+      return;
+    }
+
+    if (data.registered_office_address.address_line_1) {
+      companyData.addressLine1 = data.registered_office_address.address_line_1;
+    }
+
+    if (data.registered_office_address.locality) {
+      companyData.locality = data.registered_office_address.locality;
+    }
+
+    if (data.registered_office_address.region) {
+      companyData.region = data.registered_office_address.region;
+    }
+
+    if (data.registered_office_address.postal_code) {
+      companyData.postalCode = data.registered_office_address.postal_code;
+    }
+  }
+
+  function mapCHSCompanyAuthCode (companyData, data) {
+    if (!companyData || !data || !data.AUTHCODE) {
+      return;
+    }
+
+    companyData.authCode = data.AUTHCODE;
+
+    let validFrom = null;
+    let validTo = null;
+
+    if (data.STARTDTE) {
+      validFrom = data.STARTDTE;
+    }
+
+    if (data.EXPIRYDTE) {
+      validTo = data.EXPIRYDTE;
+    }
+
+    companyData.authCodeValidFrom = validFrom;
+    companyData.authCodeValidTo = validTo;
+
+    companyData.authCodeIsActive = isCompanyAuthCodeActive(validFrom, validTo);
+  }
+
+  function mapCHSCompanyType (companyData, data) {
+    if (!companyData || !data || !data.type) {
+      return;
+    }
+
+    companyData.type = data.type;
+  }
+
+  function isCompanyAuthCodeActive (startDate, expiryDate) {
+    const now = new Date();
+
+    try {
+      if (startDate && expiryDate) {
+        const parsedStartA = new Date(startDate.substring(0, 10));
+        const parsedExpiryA = new Date(expiryDate.substring(0, 10));
+
+        return (now >= parsedStartA) && (now < parsedExpiryA);
+      } else if (startDate && !expiryDate) {
+        const parsedStartB = new Date(startDate.substring(0, 10));
+
+        return now >= parsedStartB;
+      } else {
+        return true;
+      }
+    } catch (e) {
+      _log('Error checking auth code active status : ' + e);
+      return true;
+    }
+  }
+
   function createCompany (companyIncorp) {
     _log('Creating new company with details : ' + companyIncorp);
 
-    return openidm.create('managed/' + OBJECT_COMPANY,
-      null,
-      {
-        'number': companyIncorp.company_number,
-        'name': companyIncorp.company_name,
-        'creationDate': fixCreationDate(companyIncorp.incorporated_on),
-        'status': 'active'
-      });
+    let chsResponse = openidm.query(
+      SYSTEM_CHS_COMPANY,
+      { '_queryFilter': '_id eq "' + companyIncorp.company_number + '"' }
+    );
+
+    if (chsResponse && chsResponse.resultCount && chsResponse.resultCount === 1 && chsResponse.result[0] && chsResponse.result[0].data) {
+
+      let authCodeResponse = openidm.query(
+        SYSTEM_WEBFILING_AUTHCODE,
+        { '_queryFilter': '_id eq "' + companyIncorp.company_number + '"' }
+      );
+
+      if (authCodeResponse && authCodeResponse.resultCount && authCodeResponse.resultCount === 1 && authCodeResponse.result[0]) {
+
+        // Create the company using the retrieved data
+
+        _log('Creating company using retrieved CHS & Auth Code data');
+
+        const companyData = {
+          'number': companyIncorp.company_number,
+          'name': companyIncorp.company_name,
+          'creationDate': fixCreationDate(companyIncorp.incorporated_on),
+          'jurisdiction': mapCHSCompanyJurisdiction(chsResponse.result[0].data),
+          'status': mapCHSCompanyStatus(chsResponse.result[0].data)
+        };
+
+        mapCHSCompanyRegisteredOfficeAddress(companyData, chsResponse.result[0].data);
+        mapCHSCompanyType(companyData, chsResponse.result[0].data);
+
+        mapCHSCompanyAuthCode(companyData, authCodeResponse.result[0]);
+
+        return openidm.create('managed/' + OBJECT_COMPANY,
+          null,
+          companyData
+        );
+
+      }
+
+    } else {
+
+      // Create the company manually for now with the limited data we have
+
+      _log('Creating company using SCRS supplied data');
+
+      return openidm.create('managed/' + OBJECT_COMPANY,
+        null,
+        {
+          'number': companyIncorp.company_number,
+          'name': companyIncorp.company_name,
+          'creationDate': fixCreationDate(companyIncorp.incorporated_on),
+          'status': 'active'
+        });
+
+    }
+
   }
 
   function addConfirmedRelationshipToCompany (subjectId, companyId, companyLabel) {
