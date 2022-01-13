@@ -12,7 +12,10 @@
 
   const OBJECT_USER = 'alpha_user';
   const OBJECT_COMPANY = 'alpha_organization';
+
   const SYSTEM_WEBFILING_USER = 'system/WebfilingUser/webfilingUser';
+  const SYSTEM_CHS_COMPANY = 'system/CHSCompany/company_profile';
+  const SYSTEM_WEBFILING_AUTHCODE = 'system/WebfilingAuthCode/authCode';
 
   const DEFAULT_SUBMISSIONS_PER_PAGE = 50;
   const IDAM_USERNAME = _getVariableOrSecret('esv.c5d3143c84.manualidmusername');
@@ -320,6 +323,20 @@
   function createCompany (companyIncorp) {
     _log('Creating new company with details : ' + companyIncorp);
 
+    let chsResponse = openidm.query(
+      SYSTEM_CHS_COMPANY,
+      { '_queryFilter': '_id eq "' + '04082995' + '"' }
+    );
+
+    _log('XXXXXXX CHS Response : ' + chsResponse);
+
+    let authCodeResponse = openidm.query(
+      SYSTEM_WEBFILING_AUTHCODE,
+      { '_queryFilter': '_id eq "' + '04082995' + '"' }
+    );
+
+    _log('XXXXXXX Auth Code Response : ' + authCodeResponse);
+
     return openidm.create('managed/' + OBJECT_COMPANY,
       null,
       {
@@ -328,6 +345,33 @@
         'creationDate': fixCreationDate(companyIncorp.incorporated_on),
         'status': 'active'
       });
+  }
+
+  function isCompanyAuthCodeActive (startDate, expiryDate) {
+    const unixNow = Date.parse(new Date());
+
+    try {
+      if (startDate && expiryDate) {
+        const parsedStart = new Date(startDate.substring(0, 10));
+        const unixStart = Date.parse(parsedStart);
+
+        var parsedExpiry = new Date(expiryDate.substring(0, 10));
+        var unixExpiry = Date.parse(parsedExpiry);
+
+        return (unixNow >= unixStart) && (unixNow < unixExpiry);
+      } else if (startDate && !expiryDate) {
+
+        const parsedStart = new Date(startDate.substring(0, 10));
+        const unixStart = Date.parse(parsedStart);
+
+        return unixNow >= unixStart;
+      } else {
+        return true;
+      }
+    } catch (e) {
+      _log('Error : ' + e);
+      return true;
+    }
   }
 
   function addConfirmedRelationshipToCompany (subjectId, companyId, companyLabel) {
