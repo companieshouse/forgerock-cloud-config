@@ -34,6 +34,7 @@ var fr = JavaImporter(
 
 // This variable value will be replaced with the relevant value in the target environment (stored in AM secret store) 
 var notifyDetails = _getVariable('esv.0e0fbba507.notifydetails');
+var notifySecretKey = _getSecret('esv.ad277e8149.notifysecretkey');
 var notifyObj;
 
 var NodeOutcome = {
@@ -48,6 +49,7 @@ function buildJwt () {
   var secret;
 
   try {
+    notifyDetails = notifyDetails.replace('SECRET_KEY_GOES_HERE', notifySecretKey);
     notifyObj = JSON.parse(notifyDetails);
     secret = notifyObj.secretKey;
     secretbytes = java.lang.String(secret).getBytes();
