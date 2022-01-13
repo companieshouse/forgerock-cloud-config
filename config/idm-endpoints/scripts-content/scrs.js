@@ -320,6 +320,112 @@
     return response.result[0];
   }
 
+  function mapCHSCompanyJurisdiction (data) {
+    if (!data || !data.jurisdiction) {
+      return null;
+    }
+
+    if (data.jurisdiction === 'england-wales' || data.jurisdiction === 'wales' || data.jurisdiction === 'england') {
+      return 'EW';
+    } else if (data.jurisdiction === 'scotland') {
+      return 'SC';
+    } else if (data.jurisdiction === 'northern-ireland') {
+      return 'NI';
+    } else {
+      return data.jurisdiction;
+    }
+  }
+
+  function mapCHSCompanyStatus (data) {
+    if (!data || !data.company_status) {
+      return 'inactive';
+    }
+
+    if (data.company_status === 'active') {
+      return 'active';
+    }
+
+    return 'inactive';
+  }
+
+  function mapCHSCompanyRegisteredOfficeAddress (companyData, data) {
+    if (!companyData || !data || !data.registered_office_address) {
+      return;
+    }
+
+    if (data.registered_office_address.address_line_1) {
+      companyData.addressLine1 = data.registered_office_address.address_line_1;
+    }
+
+    if (data.registered_office_address.locality) {
+      companyData.locality = data.registered_office_address.locality;
+    }
+
+    if (data.registered_office_address.region) {
+      companyData.region = data.registered_office_address.region;
+    }
+
+    if (data.registered_office_address.postal_code) {
+      companyData.postalCode = data.registered_office_address.postal_code;
+    }
+  }
+
+  function mapCHSCompanyAuthCode (companyData, data) {
+    if (!companyData || !data || !data.AUTHCODE) {
+      return;
+    }
+
+    companyData.authCode = data.AUTHCODE;
+
+    let validFrom = null;
+    let validTo = null;
+
+    if (data.STARTDTE) {
+      validFrom = data.STARTDTE;
+    }
+
+    if (data.EXPIRYDTE) {
+      validTo = data.EXPIRYDTE;
+    }
+
+    companyData.authCodeValidFrom = validFrom;
+    companyData.authCodeValidTo = validTo;
+
+    companyData.authCodeIsActive = isCompanyAuthCodeActive(validFrom, validTo);
+  }
+
+  function isCompanyAuthCodeActive (startDate, expiryDate) {
+    _log('XStart Date : ' + startDate + ' ' + (typeof startDate));
+    _log('XExpiry Date : ' + expiryDate + ' ' + (typeof expiryDate));
+
+    const unixNow = Date.parse(new Date());
+
+    try {
+      if (startDate && expiryDate) {
+        //const parsedStart = new Date(startDate.substring(0, 10));
+        //const unixStart = Date.parse(parsedStart);
+
+        //const parsedExpiry = new Date(expiryDate.substring(0, 10));
+        //const unixExpiry = Date.parse(parsedExpiry);
+
+        //return (unixNow >= unixStart) && (unixNow < unixExpiry);
+        return true;
+      } else if (startDate && !expiryDate) {
+
+        //const parsedStart = new Date(startDate.substring(0, 10));
+        //const unixStart = Date.parse(parsedStart);
+
+        //return unixNow >= unixStart;
+        return true;
+      } else {
+        return true;
+      }
+    } catch (e) {
+      _log('Error : ' + e);
+      return true;
+    }
+  }
+
   function createCompany (companyIncorp) {
     _log('Creating new company with details : ' + companyIncorp);
 
@@ -330,48 +436,52 @@
 
     _log('XXXXXXX CHS Response : ' + chsResponse);
 
-    let authCodeResponse = openidm.query(
-      SYSTEM_WEBFILING_AUTHCODE,
-      { '_queryFilter': '_id eq "' + '04082995' + '"' }
-    );
+    if (chsResponse && chsResponse.resultCount && chsResponse.resultCount === 1 && chsResponse.result[0] && chsResponse.result[0].data) {
 
-    _log('XXXXXXX Auth Code Response : ' + authCodeResponse);
+      let authCodeResponse = openidm.query(
+        SYSTEM_WEBFILING_AUTHCODE,
+        { '_queryFilter': '_id eq "' + '04082995' + '"' }
+      );
 
-    return openidm.create('managed/' + OBJECT_COMPANY,
-      null,
-      {
-        'number': companyIncorp.company_number,
-        'name': companyIncorp.company_name,
-        'creationDate': fixCreationDate(companyIncorp.incorporated_on),
-        'status': 'active'
-      });
-  }
+      _log('XXXXXXX Auth Code Response : ' + authCodeResponse);
 
-  function isCompanyAuthCodeActive (startDate, expiryDate) {
-    const unixNow = Date.parse(new Date());
+      if (authCodeResponse && authCodeResponse.resultCount && authCodeResponse.resultCount === 1 && authCodeResponse.result[0]) {
 
-    try {
-      if (startDate && expiryDate) {
-        const parsedStart = new Date(startDate.substring(0, 10));
-        const unixStart = Date.parse(parsedStart);
+        // Create the company using the retrieved data
 
-        var parsedExpiry = new Date(expiryDate.substring(0, 10));
-        var unixExpiry = Date.parse(parsedExpiry);
+        const companyData = {
+          'number': companyIncorp.company_number,
+          'name': companyIncorp.company_name,
+          'creationDate': fixCreationDate(companyIncorp.incorporated_on),
+          'jurisdiction': mapCHSCompanyJurisdiction(chsResponse.result[0].data),
+          'status': mapCHSCompanyStatus(chsResponse.result[0].data)
+        };
 
-        return (unixNow >= unixStart) && (unixNow < unixExpiry);
-      } else if (startDate && !expiryDate) {
+        mapCHSCompanyRegisteredOfficeAddress(companyData, chsResponse.result[0].data);
+        mapCHSCompanyAuthCode(companyData, authCodeResponse.result[0]);
 
-        const parsedStart = new Date(startDate.substring(0, 10));
-        const unixStart = Date.parse(parsedStart);
+        return openidm.create('managed/' + OBJECT_COMPANY,
+          null,
+          companyData
+        );
 
-        return unixNow >= unixStart;
-      } else {
-        return true;
       }
-    } catch (e) {
-      _log('Error : ' + e);
-      return true;
+
+    } else {
+
+      // Create the company manually for now with the limited data we have
+
+      return openidm.create('managed/' + OBJECT_COMPANY,
+        null,
+        {
+          'number': companyIncorp.company_number,
+          'name': companyIncorp.company_name,
+          'creationDate': fixCreationDate(companyIncorp.incorporated_on),
+          'status': 'active'
+        });
+
     }
+
   }
 
   function addConfirmedRelationshipToCompany (subjectId, companyId, companyLabel) {
