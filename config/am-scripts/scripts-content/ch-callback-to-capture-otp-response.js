@@ -125,6 +125,9 @@ if (callbacks.isEmpty()) {
     pageProps.resend = otpResend;
   }
 
+  var correctOtp = sharedState.get(config.otpSharedStateVariable);
+  pageProps.secretOtp = correctOtp;
+
   action = fr.Action.send(
     new fr.HiddenValueCallback(
       'pagePropsJSON',
