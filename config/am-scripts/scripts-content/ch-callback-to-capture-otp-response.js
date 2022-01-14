@@ -103,6 +103,22 @@ if (callbacks.isEmpty()) {
 
   if (otpError) {
     pageProps.incorrect = otpError;
+
+    if (mfaRoute === 'sms') {
+      pageProps.errors = [{
+        label: 'Enter the security code exactly as it is shown in the text message',
+        token: 'OTP_NOT_VALID_SMS',
+        fieldName: 'IDToken4',
+        anchor: 'IDToken4'
+      }];
+    } else if (mfaRoute === 'email') {
+      pageProps.errors = [{
+        label: 'Enter the security code exactly as it is shown in the email',
+        token: 'OTP_NOT_VALID_EMAIL',
+        fieldName: 'IDToken4',
+        anchor: 'IDToken4'
+      }];
+    }
   }
 
   if (otpResend) {
