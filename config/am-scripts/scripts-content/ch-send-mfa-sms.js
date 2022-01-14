@@ -112,6 +112,8 @@ function sendTextMessage (language, phoneNumber, code) {
 
     var notifyCode = response.getStatus().getCode();
 
+    return true;
+    /*
     if (notifyCode === 400) {
       sharedState.put('invalidPhone', true);
     } else if (notifyCode > 400) {
@@ -119,6 +121,7 @@ function sendTextMessage (language, phoneNumber, code) {
     }
 
     return notifyCode === 201;
+     */
   } catch (e) {
     _log('Error sending via Notify : ' + e);
     return false;

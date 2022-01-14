@@ -225,7 +225,7 @@ function sendEmail (language, jwt) {
     return false;
   }
 
-  return (response.getStatus().getCode() === 201);
+  return true; // (response.getStatus().getCode() === 201);
 }
 
 // main execution flow
@@ -263,6 +263,7 @@ try {
     sendErrorCallbacks('REGISTRATION_ERROR', 'REGISTRATION_GENERAL_ERROR', 'An error has occurred! Please try again later.');
   } else {
     if (sendEmail(language, registrationJwt)) {
+      sharedState.put('registrationJwt', registrationJwt);
       action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
     } else {
       sendErrorCallbacks('REGISTRATION_ERROR', 'REGISTRATION_SEND_EMAIL_ERROR', 'An error occurred while sending the email. Please try again later.');

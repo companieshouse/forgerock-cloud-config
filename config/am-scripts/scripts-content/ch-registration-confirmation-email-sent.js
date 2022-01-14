@@ -22,6 +22,7 @@ try {
   var email = sharedState.get('objectAttributes').get('mail');
   var notificationId = transientState.get('notificationId');
   var isEmailResend = sharedState.get('resendEmail');
+  var registrationJwt = sharedState.get('registrationJwt');
 
   if (callbacks.isEmpty()) {
     action = fr.Action.send(
@@ -38,7 +39,8 @@ try {
         JSON.stringify(
           {
             'email': email,
-            'resend': isEmailResend
+            'resend': isEmailResend,
+            'registrationJwt': registrationJwt
           })
       ),
       new fr.HiddenValueCallback(
