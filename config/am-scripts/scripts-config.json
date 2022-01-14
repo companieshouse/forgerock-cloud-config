@@ -1586,6 +1586,38 @@
         "lastModifiedDate": 1617810491969
       },
       "filename": "ch-check-otp-resend-address.js"
+    },
+    {
+      "payload": {
+        "_id": "0be76ade-2b6c-4ee9-8ffb-5b8c4d7446da",
+        "name": "CH - Registration Initial Capture",
+        "description": "Registration Initial Capture",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-registration-initial-capture.js"
+    },
+    {
+      "payload": {
+        "_id": "eac3ce3e-0dae-4eea-8ec8-cb9be9479ee4",
+        "name": "CH - Registration Initial Capture - Check",
+        "description": "Registration Initial Capture - Check",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-registration-initial-capture-check.js"
     }
   ]
 }

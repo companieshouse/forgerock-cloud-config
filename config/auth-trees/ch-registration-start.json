@@ -195,44 +195,43 @@
       }
     },
     {
-      "_id": "eb711261-5253-4e17-9357-43e175a5005d",
-      "nodeType": "PageNode",
-      "details": {
-        "nodes": [
-          {
-            "_id": "f07f1b4a-8aef-4c53-b04f-e41fd06ed859",
-            "nodeType": "AttributeCollectorNode",
-            "displayName": "Attribute Collector"
-          }
-        ],
-        "stage": "REGISTRATION_1",
-        "pageDescription": {
-          "en": "Signing up is fast and easy.<br>Already have an account? <a href='#/service/Login'>Sign In</a>"
-        },
-        "pageHeader": {
-          "en": "Sign Up"
-        }
-      }
-    },
-    {
-      "_id": "f07f1b4a-8aef-4c53-b04f-e41fd06ed859",
-      "nodeType": "AttributeCollectorNode",
-      "details": {
-        "attributesToCollect": [
-          "givenName",
-          "mail",
-          "telephoneNumber"
-        ],
-        "identityAttribute": "userName",
-        "validateInputs": true,
-        "required": false
-      }
-    },
-    {
       "_id": "17c4c923-5d2d-4b22-8850-a4a4d8904a3d",
       "nodeType": "InnerTreeEvaluatorNode",
       "details": {
         "tree": "CHMultiFactorGeneric"
+      }
+    },
+    {
+      "_id": "170c78c3-ec39-46e0-b533-23c4d5aeb914",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "0be76ade-2b6c-4ee9-8ffb-5b8c4d7446da",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "4a12b6bb-4412-49f4-8276-715e329c1d9f",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "eac3ce3e-0dae-4eea-8ec8-cb9be9479ee4",
+        "outcomes": [
+          "true",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
       }
     }
   ],
@@ -240,7 +239,7 @@
     "_id": "CHRegistration",
     "identityResource": "managed/alpha_user",
     "uiConfig": {},
-    "entryNodeId": "eb711261-5253-4e17-9357-43e175a5005d",
+    "entryNodeId": "170c78c3-ec39-46e0-b533-23c4d5aeb914",
     "nodes": {
       "0245c9e5-297b-4092-9e40-e3453f3581b6": {
         "x": 497,
@@ -277,7 +276,7 @@
         "y": 143.015625,
         "connections": {
           "resend": "781e185e-f4da-442b-9fcd-827a4f235066",
-          "change_email": "eb711261-5253-4e17-9357-43e175a5005d"
+          "change_email": "170c78c3-ec39-46e0-b533-23c4d5aeb914"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Email Sent Confirmation"
@@ -302,7 +301,7 @@
         "x": 1068,
         "y": 228.015625,
         "connections": {
-          "change_email": "eb711261-5253-4e17-9357-43e175a5005d",
+          "change_email": "170c78c3-ec39-46e0-b533-23c4d5aeb914",
           "resend": "997cc39b-afde-4935-b9b5-a0d4e3034072"
         },
         "nodeType": "ScriptedDecisionNode",
@@ -358,15 +357,6 @@
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Load Keys"
       },
-      "eb711261-5253-4e17-9357-43e175a5005d": {
-        "x": 231,
-        "y": 57,
-        "connections": {
-          "outcome": "817f8595-f2cc-45ce-b4f8-ad7aa6fdd1ea"
-        },
-        "nodeType": "PageNode",
-        "displayName": "Email Collector"
-      },
       "17c4c923-5d2d-4b22-8850-a4a4d8904a3d": {
         "x": 749,
         "y": 396.015625,
@@ -376,6 +366,25 @@
         },
         "nodeType": "InnerTreeEvaluatorNode",
         "displayName": "Check OTP SubFlow"
+      },
+      "170c78c3-ec39-46e0-b533-23c4d5aeb914": {
+        "x": 229,
+        "y": 90.015625,
+        "connections": {
+          "true": "4a12b6bb-4412-49f4-8276-715e329c1d9f"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Capture Name & Email"
+      },
+      "4a12b6bb-4412-49f4-8276-715e329c1d9f": {
+        "x": 492,
+        "y": 66.015625,
+        "connections": {
+          "error": "170c78c3-ec39-46e0-b533-23c4d5aeb914",
+          "true": "817f8595-f2cc-45ce-b4f8-ad7aa6fdd1ea"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Check Name & Email"
       }
     },
     "staticNodes": {
