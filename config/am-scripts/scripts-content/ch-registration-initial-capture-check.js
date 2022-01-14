@@ -20,13 +20,26 @@ if (sharedState.get('objectAttributes')) {
 
   var emailAddress = sharedState.get('objectAttributes').get('mail');
 
-  if (!emailAddress || (emailAddress && !_isValidEmail(emailAddress))) {
+  if (!emailAddress) {
+
+    invalidEmail = true;
+
+    errors.push({
+      label: 'No email address entered',
+      token: 'REGISTRATION_REQUIRED(mail)',
+      fieldName: 'IDToken3',
+      anchor: 'IDToken3'
+    });
+
+    outcome = NodeOutcome.ERROR;
+
+  } else if (emailAddress && !_isValidEmail(emailAddress)) {
 
     invalidEmail = true;
 
     errors.push({
       label: 'Invalid email address entered',
-      token: 'UPDATE_EMAIL_INVALID_EMAIL_ADDRESS',
+      token: 'REGISTRATION_VALID_EMAIL_ADDRESS_FORMAT(mail)',
       fieldName: 'IDToken3',
       anchor: 'IDToken3'
     });
