@@ -19,21 +19,40 @@ var fr = JavaImporter(
 var errorMessage = sharedState.get('errorMessage');
 var errorProps = sharedState.get('pagePropsJSON');
 
+var fullName = '';
+var emailAddress = '';
+var mobileNumber = '';
+
+if (sharedState.get('objectAttributes')) {
+  fullName = sharedState.get('objectAttributes').get('givenName');
+  emailAddress = sharedState.get('objectAttributes').get('mail');
+  mobileNumber = sharedState.get('objectAttributes').get('telephoneNumber');
+}
+
 if (callbacks.isEmpty()) {
+  var cName = new fr.NameCallback('Full Name (optional)');
+  cName.setName(fullName);
+
+  var eName = new fr.NameCallback('Email Address');
+  eName.setName(emailAddress);
+
+  var mName = new fr.NameCallback('Mobile Number (optional)');
+  mName.setName(mobileNumber);
+
   action = fr.Action.send(
     new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, 'Sign Up'),
-    new fr.NameCallback('Full Name (optional)'),
-    new fr.NameCallback('Email Address'),
-    new fr.NameCallback('Mobile Number (optional)'),
+    cName,
+    eName,
+    mName,
     new fr.HiddenValueCallback('stage', 'REGISTRATION_1'),
     new fr.HiddenValueCallback('header', 'Sign Up'),
     new fr.HiddenValueCallback('description', 'Signing up is fast and easy.<br>Already have an account? <a href="#/service/Login">Sign In</a>'),
     new fr.HiddenValueCallback('pagePropsJSON', errorProps)
   ).build();
 } else {
-  var fullName = callbacks.get(1).getName();
-  var emailAddress = callbacks.get(2).getName();
-  var mobileNumber = callbacks.get(3).getName();
+  fullName = callbacks.get(1).getName();
+  emailAddress = callbacks.get(2).getName();
+  mobileNumber = callbacks.get(3).getName();
 
   _log('fullName : ' + fullName);
   _log('emailAddress : ' + emailAddress);
