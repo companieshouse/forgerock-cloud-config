@@ -465,23 +465,20 @@
 
       }
 
-    } else {
-
-      // Create the company manually for now with the limited data we have
-
-      _log('Creating company using SCRS supplied data');
-
-      return openidm.create('managed/' + OBJECT_COMPANY,
-        null,
-        {
-          'number': companyIncorp.company_number,
-          'name': companyIncorp.company_name,
-          'creationDate': fixCreationDate(companyIncorp.incorporated_on),
-          'status': 'active'
-        });
-
     }
 
+    // Create the company manually for now with the limited data we have
+
+    _log('Creating company using SCRS supplied data');
+
+    return openidm.create('managed/' + OBJECT_COMPANY,
+      null,
+      {
+        'number': companyIncorp.company_number,
+        'name': companyIncorp.company_name,
+        'creationDate': fixCreationDate(companyIncorp.incorporated_on),
+        'status': 'active'
+      });
   }
 
   function addConfirmedRelationshipToCompany (subjectId, companyId, companyLabel) {
