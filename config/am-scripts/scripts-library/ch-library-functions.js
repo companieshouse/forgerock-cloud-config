@@ -202,6 +202,50 @@ function _getUserInfoById (userId, accessToken) {
   }
 }
 
+// convert jurisdiction name to code
+function _getJurisdictionCode (data) {
+
+  if (!data || !data.jurisdiction) {
+    return null;
+  }
+
+  if (data.jurisdiction === 'england-wales' || data.jurisdiction === 'wales' || data.jurisdiction === 'england') {
+    return 'EW';
+  } else if (data.jurisdiction === 'scotland') {
+    return 'SC';
+  } else if (data.jurisdiction === 'northern-ireland') {
+    return 'NI';
+  } else {
+    return data.jurisdiction;
+  }
+}
+
+function _convertDateToString (date) {
+  var result = [];
+  result.push(date.getFullYear());
+  result.push(padding(date.getMonth() + 1));
+  result.push(padding(date.getDate()));
+  result.push(padding(date.getHours()));
+  result.push(padding(date.getMinutes()));
+  result.push(padding(date.getSeconds()));
+  result.push('Z');
+  return result.join('');
+}
+
+function _convertStringToDate (dateStr) {
+  const year = dateStr.substring(0, 4);
+  var offsetYear = Number(year);
+  const month = dateStr.substring(5, 7);
+  var offsetMonth = Number(month) - 1;
+  const day = dateStr.substring(8, 10);
+  var offsetDay = Number(day);
+  return Date.UTC(offsetYear, offsetMonth, offsetDay);
+}
+
+function _padding (num) {
+  return num < 10 ? '0' + num : num;
+}
+
 function _getVariable (varName) {
   try {
     if (varName) {

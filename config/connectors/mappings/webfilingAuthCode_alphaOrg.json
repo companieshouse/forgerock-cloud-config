@@ -16,16 +16,6 @@
       "source": "AUTHCODE"
     },
     {
-      "target": "authCodeIsActive",
-      "transform": {
-        "type": "text/javascript",
-        "globals": {},
-        "source": "// change via external file"
-      },
-      "default": false,
-      "source": ""
-    },
-    {
       "source": "STARTDTE",
       "target": "authCodeValidFrom"
     },
