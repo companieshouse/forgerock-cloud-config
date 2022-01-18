@@ -68,8 +68,157 @@ function fetchIDMToken () {
   return accessToken;
 }
 
+// fetches the company by number
+function getCompanyByNumber (accessToken, companyNumber) {
+    
+  var request = new org.forgerock.http.protocol.Request();
+
+  request.setMethod('GET');
+
+  var searchTerm = '?_queryFilter=number+eq+%22' + companyNumber + '%22';
+  request.setUri(idmCompanyEndpoint + searchTerm);
+  request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
+  request.getHeaders().add('Content-Type', 'application/json');
+
+  var response = httpClient.send(request).get();
+  
+  if (response.getStatus().getCode() === 200) {
+    _log('200 response from IDM');
+    var companyResponse = JSON.parse(response.getEntity().getString());
+
+    if (companyResponse.resultCount > 0) {
+      var companyData = companyResponse.result[0];
+
+      _log('Got a result: ' + JSON.stringify(companyData));
+      return {
+        success: true,
+        companyData: companyData
+      };
+    } else {
+      return {
+        success: false,
+        reason: 'NO_RESULTS'
+      };
+    }
+  } else {
+    return {
+      success: false,
+      reason: 'ERROR'
+    };
+  }
+}
+
+function createPatchItem (fieldName, value){
+  if (!value){
+    return {
+      'operation': 'remove',
+      'field': '/' + fieldName
+    };
+  } else return {
+    'operation': 'replace',
+    'field': '/' + fieldName,
+    'value': value
+  };
+}
+
+
+//creates a company with the given data, or update it if already exists
+function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
+  try {
+    
+    
+    //gets company data from CHS
+    var chsCompanyData = fetchCompanyFromCHS(accessToken, companyNumber);
+    //gets auth code data from EWF
+    var ewfAuthCodeData = fetchAuthCodeFromEWF(accessToken, companyNumber);
+
+    if(!chsCompanyData.success && !ewfAuthCodeData.success && !idmCompanyResult.success){
+      return {
+        success: false,
+        message: 'Company with number ' + companyNumber + ' not found in CHS, EWF or FIDC'
+      };
+    }
+
+    //if the record is not found in neither CHS nor EWF, but is in FIDC, we skip the update/create logic and return the FIDC version
+    if(!chsCompanyData.success && !ewfAuthCodeData.success && idmCompanyResult.success){
+      return {
+        success: true,
+        companyData: idmCompanyResult.companyData,
+        message: 'Company with number ' + companyNumber + ' not found in CHS or EWF - returning current IDM version'
+      };
+    }
+
+    var request = new org.forgerock.http.protocol.Request();
+    var requestBodyJson;
+    
+    if(!idmCompanyResult.success){
+      request.setMethod('POST');
+      request.setUri(idmCompanyEndpoint + '?_action=create');
+      requestBodyJson = {
+        //if the record is found in either CHS or EWF we create the record in FIDC
+        number: chsCompanyData.success ? chsCompanyData.data.number : ewfAuthCodeData.data.number,
+        type: chsCompanyData.success ? chsCompanyData.data.type : null,
+        status: chsCompanyData.success? chsCompanyData.data.status : null,
+        locality: chsCompanyData.success ? chsCompanyData.data.locality : null,
+        postalCode: chsCompanyData.success ? chsCompanyData.data.postalCode : null,
+        addressLine1: chsCompanyData.success ? chsCompanyData.data.addressLine1 : null,
+        addressLine2: chsCompanyData.success ? chsCompanyData.data.addressLine2 : null,
+        region: chsCompanyData.success ? chsCompanyData.data.region : null,
+        creationDate: chsCompanyData.success ? chsCompanyData.data.creationDate : null,
+        jurisdiction: chsCompanyData.success ? chsCompanyData.data.jurisdiction : null,
+        name: chsCompanyData.success ? chsCompanyData.data.name : null,
+        authCode: ewfAuthCodeData.success ? ewfAuthCodeData.data.authCode : null,
+        authCodeValidFrom: ewfAuthCodeData.success ? ewfAuthCodeData.data.authCodeValidFrom : null,
+        authCodeValidUntil: ewfAuthCodeData.success ?  ewfAuthCodeData.data.authCodeValidUntil : null
+      };
+    } else {
+      var companyId = idmCompanyResult.companyData._id;
+      request.setMethod('PATCH');
+      request.setUri(idmCompanyEndpoint + companyId);
+      requestBodyJson = [
+        createPatchItem('type', chsCompanyData.success ? chsCompanyData.data.type : null),
+        createPatchItem('status', chsCompanyData.success? chsCompanyData.data.status : null),
+        createPatchItem('locality', chsCompanyData.success ? chsCompanyData.data.locality : null),
+        createPatchItem('postalCode', chsCompanyData.success ? chsCompanyData.data.postalCode : null),
+        createPatchItem('addressLine1', chsCompanyData.success ? chsCompanyData.data.addressLine1 : null),
+        createPatchItem('addressLine2', chsCompanyData.success ? chsCompanyData.data.addressLine2 : null),
+        createPatchItem('region', chsCompanyData.success ? chsCompanyData.data.region : null),
+        createPatchItem('creationDate', chsCompanyData.success ? chsCompanyData.data.creationDate : null),
+        createPatchItem('jurisdiction', chsCompanyData.success ? chsCompanyData.data.jurisdiction : null),
+        createPatchItem('name', chsCompanyData.success ? chsCompanyData.data.name : null),
+        createPatchItem('authCode', ewfAuthCodeData.success ? ewfAuthCodeData.data.authCode : null),
+        createPatchItem('authCodeValidFrom', ewfAuthCodeData.success ? ewfAuthCodeData.data.authCodeValidFrom : null),
+        createPatchItem('authCodeValidUntil', ewfAuthCodeData.success ?  ewfAuthCodeData.data.authCodeValidUntil : null)     
+      ];
+    }
+
+    request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
+    request.getHeaders().add('Content-Type', 'application/json');
+    request.getHeaders().add('Accept-API-Version', 'resource=1.0');
+    request.setEntity(requestBodyJson);
+
+    var response = httpClient.send(request).get();
+
+    if (response.getStatus().getCode() === 201 || response.getStatus().getCode() === 200) {
+      _log('201/200 response from IDM');
+      return {
+        success: true,
+        companyData: JSON.parse(response.getEntity().getString())
+      };
+    } else {
+      _log('Error during user creation');
+      return {
+        success: false,
+        message: JSON.parse(response.getEntity().getString())
+      };
+    }
+  } catch (e) {
+    _log(e);
+  }
+}
+
 // fetch the Company object given a company number
-function fetchCompany (idmToken, companyNumber, skipConfirmation) {
+function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdiction, skipConfirmation) {
   if (companyNumber == null) {
     _log('No company number in shared state');
     sharedState.put('errorMessage', 'No company number in shared state.');
@@ -79,13 +228,7 @@ function fetchCompany (idmToken, companyNumber, skipConfirmation) {
     };
   }
 
-  var jurisdiction = sharedState.get('jurisdiction');
-  var request = new org.forgerock.http.protocol.Request();
-
-  request.setMethod('GET');
-
   var searchTerm;
-
   // if the user selected Scotland and provided a company number without 'SC' at the beginning, search for a match with either '<company no>' or 'SC<company no>'
   if (jurisdiction.equals(jurisdictions.SC) && companyNumber.indexOf('SC') !== 0) {
     _log('looking for SC company without \'SC\' prefix - adding it');
@@ -94,11 +237,18 @@ function fetchCompany (idmToken, companyNumber, skipConfirmation) {
     //for other jurisdictions, do not make any logic on prefixes
     searchTerm = '?_queryFilter=number+eq+%22' + companyNumber + '%22+and+jurisdiction+eq+%22' + jurisdiction + '%22';
   }
-
   _log('Using search term: ' + searchTerm);
 
+  //gets company data currently in IDM
+  var idmCompanyResult = getCompanyByNumber(accessToken, companyNumber);
+
+  //company gets created/updated from source in IDM
+  var updateResult = createOrUpdateCompany(accessToken, companyNumber, idmCompanyResult);
+
+  var request = new org.forgerock.http.protocol.Request();
+  request.setMethod('GET');
   request.setUri(idmCompanyEndpoint + searchTerm);
-  request.getHeaders().add('Authorization', 'Bearer ' + idmToken);
+  request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
   request.getHeaders().add('Content-Type', 'application/json');
 
   var response = httpClient.send(request).get();
@@ -251,11 +401,150 @@ function fetchCompany (idmToken, companyNumber, skipConfirmation) {
   }
 }
 
+// fetch the Company from the Mongo connector
+function fetchCompanyFromCHS (accessToken, companyNumber) {
+
+  try {
+    if (!companyNumber || companyNumber.trim() === '') {
+      return null;
+    }
+
+    companyNumber = companyNumber.trim();
+
+    // var cacheKey = companyNumber.toUpperCase();
+
+    // if (_chsCompanyMap.has(cacheKey)) {
+    //   _log('CHS company number query for : ' + companyNumber + ', Cached Value = ' + _chsCompanyMap.get(cacheKey));
+    //   return _chsCompanyMap.get(cacheKey);
+    // }
+
+    var searchTerm = '?_queryFilter=_id+eq+%22' + companyNumber + '%22';
+    var request = new org.forgerock.http.protocol.Request();
+    request.setMethod('GET');
+    request.setUri(SYSTEM_CHS_COMPANY + searchTerm);
+    request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
+    request.getHeaders().add('Content-Type', 'application/json');
+    request.getHeaders().add('Accept-API-Version', 'resource=1.0');
+
+    var httpResp = httpClient.send(request).get();
+    var response = JSON.parse(httpResp.getEntity().getString());
+    _log('CHS Company query for : ' + companyNumber + ', Count = ' + response.resultCount);
+
+    if (response.resultCount === 1) {
+      _log('Response from CHS Company connector : ' + httpResp.getEntity().getString());
+
+      if (response.result[0]._id) {
+
+        _log('CHS Company query for : ' + companyNumber + ', Value put in Cache = ' + response.result[0]._id);
+        var data = {
+          name: response.result[0].data.company_name,
+          number: response.result[0].data.company_number,
+          type: response.result[0].data.company_number,
+          status: response.result[0].data.company_status,
+          locality: response.result[0].data.registered_office_address ? response.result[0].data.registered_office_address.locality : null,
+          postalCode: response.result[0].data.registered_office_address ? response.result[0].data.registered_office_address.postal_code : null,
+          addressLine1: response.result[0].data.registered_office_address ? response.result[0].data.registered_office_address.address_line_1 : null,
+          addressLine2: response.result[0].data.registered_office_address ? response.result[0].data.registered_office_address.address_line_2 : null,
+          region: response.result[0].data.registered_office_address ? response.result[0].data.registered_office_address.region : null,
+          creationDate: response.result[0].data.date_of_creation,
+          jurisdiction: _getJurisdictionCode(response.result[0].data)
+        };
+        //_chsCompanyMap.set(cacheKey, data);
+        return {
+          success: true,
+          data: data
+        };
+      } else {
+        return {
+          success: false,
+          message: '_id is not found'
+        };
+      }
+    } else {
+      return {
+        success: false,
+        message: 'no results - ' + response.resultCount 
+      };
+    }
+  } catch (e) {
+    _log('Error : ' + e);
+    return {
+      success: false,
+      message: 'error - ' + e.toString() 
+    };
+  }
+
+  return null;
+}
+
+// fetch the Auth code from the Oracle DB connector
+function fetchAuthCodeFromEWF (accessToken, companyNumber) {
+  try {
+    if (!companyNumber || companyNumber.trim() === '') {
+      return null;
+    }
+
+    companyNumber = companyNumber.trim();
+
+    //var cacheKey = companyNumber.toUpperCase();
+
+    // if (_ewfAuthCodeMap.has(cacheKey)) {
+    //   _log('EWF company auth code for : ' + companyNumber + ', Cached Value = ' + _ewfAuthCodeMap.get(cacheKey));
+    //   return _ewfAuthCodeMap.get(cacheKey);
+    // }
+
+    var searchTerm = '?_queryFilter=_id+eq+%22' + companyNumber + '%22';
+    var request = new org.forgerock.http.protocol.Request();
+    request.setMethod('GET');
+    request.setUri(SYSTEM_WEBFILING_AUTH_CODE + searchTerm);
+    request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
+    request.getHeaders().add('Content-Type', 'application/json');
+
+    var httpResp = httpClient.send(request).get();
+    var response = JSON.parse(httpResp.getEntity().getString());
+
+    _log('EWF company auth code for : ' + companyNumber + ', Count = ' + response.resultCount);
+
+    if (response.resultCount === 1) {
+      _log('Response from EWF connector: ' + JSON.stringify(response.result[0]));
+
+      if (response.result[0]._id) {
+
+        _log('EWF company auth code query for : ' + companyNumber + ', Value put in Cache = ' + response.result[0]._id);
+        var data = {
+          authCode: response.result[0].AUTHCODE,
+          authCodeValidFrom: response.result[0].STARTDTE,
+          authCodeValidUntil: response.result[0].EXPIRYDTE,
+          number: response.result[0]._id
+          //authCodeIsActive: _isCompanyAuthCodeActive(response.result[0].STARTDTE, response.result[0].EXPIRYDTE)
+        };
+        //_ewfAuthCodeMap.set(cacheKey, data);
+        return {
+          success: true,
+          data: data
+        };
+      }
+    } else {
+      return {
+        success: false,
+        message: 'no results - ' + response.resultCount 
+      };
+    }
+  } catch (e) {
+    _log('Error : ' + e);
+    return {
+      success: false,
+      message: 'error - ' + e.toString() 
+    };
+  }
+}
+
 // main execution flow
 var YES_OPTION_INDEX = 0;
 var NO_OPTION_INDEX = 1;
 var idmCompanyEndpoint = _fromConfig('FIDC_ENDPOINT') + '/openidm/managed/alpha_organization/';
-
+var SYSTEM_CHS_COMPANY = _fromConfig('FIDC_ENDPOINT') + '/openidm/system/CHSCompany/company_profile';
+var SYSTEM_WEBFILING_AUTH_CODE = _fromConfig('FIDC_ENDPOINT') + '/openidm/system/WebfilingAuthCode/authCode';
 var skipConfirmation = sharedState.get('skipConfirmation');
 var isEWF = sharedState.get('EWF-JOURNEY');
 
@@ -285,9 +574,20 @@ try {
         outcome = NodeOutcome.ERROR;
       } else {
         var companyNumber = sharedState.get('companyNumber');
+        var jurisdiction = sharedState.get('jurisdiction');
+
         //fetchCompany can only result in callbacks, does not transition anywhere
-        var fetchResult = fetchCompany(accessToken, companyNumber, skipConfirmation);
-        if (!fetchResult.success) {
+        var idmCompanyData = getCompanyByNumberAndJurisdiction(accessToken, companyNumber, jurisdiction, skipConfirmation);
+        // var authCodeStartDate = updateResult.authCodeValidFrom;
+        // var authCodeExpiryDate = updateResult.authCodeValidUntil;
+        // action = fr.Action.send(
+        //   new fr.TextOutputCallback(
+        //     fr.TextOutputCallback.INFORMATION,
+        //     _isCompanyAuthCodeActive(authCodeStartDate, authCodeExpiryDate) 
+        //   )
+        // ).build();
+        
+        if (!idmCompanyData.success) {
           outcome = NodeOutcome.FALSE;
         }
       }
@@ -300,9 +600,13 @@ try {
       outcome = NodeOutcome.ERROR;
     } else {
       var companyNumber = sharedState.get('companyNumber');
+      var jurisdiction = sharedState.get('jurisdiction');
+      
+      var updateResult = createOrUpdateCompany (accessToken, companyNumber);
+      
       //fetchCompany can only result in callbacks, does not transition anywhere
-      var fetchResult = fetchCompany(accessToken, companyNumber, skipConfirmation);
-      if (!fetchResult.success) {
+      var idmCompanyData = getCompanyByNumberAndJurisdiction(accessToken, companyNumber, jurisdiction, skipConfirmation);
+      if (!idmCompanyData.success) {
         outcome = NodeOutcome.FALSE;
       } else {
         _log('Company fetched successfully');

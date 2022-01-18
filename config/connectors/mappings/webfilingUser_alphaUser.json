@@ -83,9 +83,6 @@
   "clusteredSourceReconEnabled": true,
   "reconSourceQueryPageSize": 10000,
   "sourceQueryFullEntry": true,
-  "sourceQuery": {
-    "_sortKeys": "PARENT_USERNAME"
-  },
   "taskThreads": 20,
   "correlationQuery": [],
   "onCreate": {
