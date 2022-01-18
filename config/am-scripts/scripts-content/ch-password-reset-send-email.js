@@ -1,24 +1,6 @@
 var _scriptName = 'CH PASSWORD RESET SEND EMAIL';
 _log('Starting');
 
-/* 
-  ** INPUT DATA
-    * SHARED STATE
-     - 'objectAttributes.mail': the email address entered by the user in the password reset page
-    * TRANSIENT STATE
-      - 'secretKey': key to sing the JWT
-      - 'notifyJWT': JWT to use for the Notify call
-      - 'notifyTemplates': list of Notify templates available
-       
-  ** OUTCOMES
-    - success: email sent correctly
-    - error: general error while sending email
-  
-  ** CALLBACKS: 
-    - output: email sending error
-    - output: general error
-*/
-
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
   java.lang.Math,
@@ -283,7 +265,7 @@ var config = {
 
 try {
   var request = new org.forgerock.http.protocol.Request();
-  var host = requestHeaders.get('origin').get(0);
+  var host = _getVariable('esv.c5d3143c84.manualcustomuiurl');
   var now = new Date();
   var language = _getSelectedLanguage(requestHeaders);
   var resetPasswordjJwt;
