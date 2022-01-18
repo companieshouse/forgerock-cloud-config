@@ -356,22 +356,14 @@ function validateOnboardingDate (user) {
   _log('onboarding date: ' + onboardDate);
 
   if (onboardDate.length > 0) {
-    var year = onboardDate.substring(0, 4);
-    var month = onboardDate.substring(4, 6);
-    var offsetMonth = parseInt(month) - 1;
-    var day = onboardDate.substring(6, 8);
-    var hour = onboardDate.substring(8, 10);
-    var min = onboardDate.substring(10, 12);
-    var sec = onboardDate.substring(12, 14);
-
-    var lastLoginDateUTC = Date.UTC(year, offsetMonth, day, hour, min, sec);
+    var onboardDateUTC = _convertStringToDateTime(onboardDate);
 
     var now = new Date();
 
     var intervalDays = 7;
     var intervalInMillis = intervalDays * 86400 * 1000;
 
-    var delta = now.getTime() - lastLoginDateUTC; // Difference in ms
+    var delta = now.getTime() - onboardDateUTC; // Difference in ms
     if (delta > intervalInMillis) {
       _log('Onboarding date is older than ' + intervalDays + ' days');
       return false;

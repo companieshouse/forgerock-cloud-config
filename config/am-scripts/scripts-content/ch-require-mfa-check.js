@@ -19,16 +19,7 @@ try {
     _log('lastLogin: ' + lastLogin); // e.g. 20210317114005Z
 
     if (lastLogin.length > 0) {
-      var year = lastLogin.substring(0, 4);
-      var month = lastLogin.substring(4, 6);
-      var offsetMonth = parseInt(month) - 1;
-      var day = lastLogin.substring(6, 8);
-      var hour = lastLogin.substring(8, 10);
-      var min = lastLogin.substring(10, 12);
-      var sec = lastLogin.substring(12, 14);
-
-      var lastLoginDateUTC = Date.UTC(year, offsetMonth, day, hour, min, sec);
-
+      var lastLoginDateUTC = _convertStringToDateTime(lastLogin);
       var now = new Date();
 
       var intervalDays = 30;

@@ -146,15 +146,6 @@ function buildErrorCallback (stageName, message) {
   }
 }
 
-function debug (message) {
-  action = fr.Action.send(
-    new fr.TextOutputCallback(
-      fr.TextOutputCallback.ERROR,
-      message
-    )
-  ).build();
-}
-
 //fetches the IDM access token from transient state
 function fetchIDMToken () {
   var ACCESS_TOKEN_STATE_FIELD = 'idmAccessToken';
@@ -164,6 +155,38 @@ function fetchIDMToken () {
     return false;
   }
   return accessToken;
+}
+
+function isCompanyAuthCodeActive (startDate, expiryDate) {
+  var now = new Date();
+  try {
+
+    if (startDate && expiryDate) {
+      const parsedStartA = _convertStringToDate(startDate.substring(0, 10));
+      const parsedExpiryA = _convertStringToDate(expiryDate.substring(0, 10));
+      return {
+        success: true,
+        isActive: (now >= parsedStartA) && (now < parsedExpiryA)
+      };
+    } else if (startDate && !expiryDate) {
+      const parsedStartB = _convertStringToDate(startDate.substring(0, 10));
+      return {
+        success: true,
+        isActive: (now >= parsedStartB)
+      };
+    } else {
+      return { 
+        success: true,
+        isActive: false
+      };
+    }
+  } catch (e) {
+    _log('Error checking auth code active status : ' + e);
+    return {
+      success: false,
+      error: true
+    };
+  }
 }
 
 // main execution flow
@@ -180,6 +203,10 @@ try {
   if (!accessToken) {
     action = fr.Action.goTo(NodeOutcome.NodeOutcome.ERROR).build();
   }
+
+  var authCodeStartDate = JSON.parse(companyData).authCodeValidFrom;
+  var authCodeExpiryDate = JSON.parse(companyData).authCodeValidUntil;
+  var authCodeActiveResult = isCompanyAuthCodeActive(authCodeStartDate, authCodeExpiryDate);
 
   if (checkUserAlreadyAuthzForCompany(userId, JSON.parse(companyData))) {
     _log('The user is already authorised (CONFIRMED) for company ' + JSON.parse(companyData).name);
@@ -199,14 +226,30 @@ try {
     action = fr.Action.goTo(NodeOutcome.COMPANY_ALREADY_ASSOCIATED)
       .putSessionProperty('language', language.toLowerCase())
       .build();
-  } else if (!JSON.parse(companyData).authCodeIsActive) {
+  } else if (authCodeActiveResult.success && !authCodeActiveResult.isActive) {
     _log('The company ' + JSON.parse(companyData).name + ' does not have an active auth code');
-    sharedState.put('errorMessage', 'The company ' + JSON.parse(companyData).name + ' does not have an active auth code.');
+    sharedState.put('errorMessage', 'The company ' + JSON.parse(companyData).name + ' does not have an active auth code. ');
     sharedState.put('pagePropsJSON', JSON.stringify(
       {
         'errors': [{
           label: 'The company ' + JSON.parse(companyData).name + 'does not have an active auth code.',
           token: 'AUTH_CODE_INACTIVE',
+          fieldName: 'IDToken1',
+          anchor: 'IDToken1'
+        }],
+        'company': {
+          name: JSON.parse(companyData).name
+        }
+      }));
+    action = fr.Action.goTo(NodeOutcome.AUTH_CODE_INACTIVE).build();
+  } else if (authCodeActiveResult.error) {
+    _log('Could not verify expiration date of auth code for company ' + JSON.parse(companyData).name);
+    sharedState.put('errorMessage', 'Could not verify expiration date of auth code for company ' + JSON.parse(companyData).name);
+    sharedState.put('pagePropsJSON', JSON.stringify(
+      {
+        'errors': [{
+          label: 'Could not verify expiration date of auth code for company ' + JSON.parse(companyData).name,
+          token: 'AUTH_CODE_UNVERIFIABLE',
           fieldName: 'IDToken1',
           anchor: 'IDToken1'
         }],
