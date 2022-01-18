@@ -220,6 +220,12 @@ function _getJurisdictionCode (data) {
   }
 }
 
+function _getCurrentDateAsString () {
+  var date = new Date();
+  return _convertDateToString (date)
+}
+
+//converts a JS date/time into a string in RFC-4517 format (YYYY-MM-DDTHH:MM:SSZ)
 function _convertDateToString (date) {
   var result = [];
   result.push(date.getFullYear());
@@ -232,6 +238,8 @@ function _convertDateToString (date) {
   return result.join('');
 }
 
+//accepts a date in string format (YYYY-MM-DD) and converts it into UTC Date (e.g. 2022-01-14T00:00:00Z)
+//example input: 2022-01-14
 function _convertStringToDate (dateStr) {
   const year = dateStr.substring(0, 4);
   var offsetYear = Number(year);
@@ -240,6 +248,20 @@ function _convertStringToDate (dateStr) {
   const day = dateStr.substring(8, 10);
   var offsetDay = Number(day);
   return Date.UTC(offsetYear, offsetMonth, offsetDay);
+}
+
+//accepts a datetime in string format (YYYY-MM-DDTHH:MM:SSZ) and converts it into UTC Date 
+//example input: 2022-01-14T13:41:33Z
+function _convertStringToDateTime (dateStr) {
+  const year = dateStr.substring(0, 4);
+  const month = dateStr.substring(4, 6);
+  const offsetMonth = parseInt(month) - 1;
+  const day = dateStr.substring(6, 8);
+  const hour = dateStr.substring(8, 10);
+  const min = dateStr.substring(10, 12);
+  const sec = dateStr.substring(12, 14);
+
+  return Date.UTC(year, offsetMonth, day, hour, min, sec);
 }
 
 function _padding (num) {

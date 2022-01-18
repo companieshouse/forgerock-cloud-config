@@ -39,23 +39,6 @@ var NodeOutcome = {
 var invitedEmail = sharedState.get('email');
 var inviterName = sharedState.get('inviterName');
 
-function formatDate () {
-  var date = new Date();
-  var result = [];
-  result.push(date.getFullYear());
-  result.push(padding(date.getMonth() + 1));
-  result.push(padding(date.getDate()));
-  result.push(padding(date.getHours()));
-  result.push(padding(date.getMinutes()));
-  result.push(padding(date.getSeconds()));
-  result.push('Z');
-  return result.join('');
-}
-
-function padding (num) {
-  return num < 10 ? '0' + num : num;
-}
-
 function logResponse (response) {
   _log('Scripted Node HTTP Response: ' + response.getStatus() + ', Body: ' + response.getEntity().getString());
 }
@@ -116,7 +99,7 @@ function createUser (invitedEmail) {
     var idmUserEndpoint = FIDC_ENDPOINT.concat('/openidm/managed/alpha_user?_action=create');
     var request = new org.forgerock.http.protocol.Request();
     var accessToken = fetchIDMToken();
-    var onboardingDate = formatDate();
+    var onboardingDate = _getCurrentDateAsString();
     if (!accessToken) {
       action = fr.Action.goTo(NodeOutcome.ERROR).build();
     }
@@ -156,7 +139,7 @@ function createUser (invitedEmail) {
 //main execution flow
 try {
   var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
-  var onboardingDate = formatDate();
+  var onboardingDate = _getCurrentDateAsString();
   _log('Setting onboarding date to ' + onboardingDate);
 
   var userExists = checkUserExistence(invitedEmail);
