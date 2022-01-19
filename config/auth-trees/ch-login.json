@@ -1,6 +1,258 @@
 {
   "nodes": [
     {
+      "_id": "0e167098-4f1b-4a6d-a383-9a415b143dda",
+      "nodeType": "OneTimePasswordGeneratorNode",
+      "details": {
+        "length": 6
+      }
+    },
+    {
+      "_id": "0e91440f-8d40-4946-88c9-1a7e22da57bc",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "b480d9f7-5908-45cf-91d1-bc1fe56fe8de",
+        "outcomes": [
+          "true",
+          "false"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "1031a228-600a-4325-82da-c93e6a13ab5b",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "df67765e-df3a-4503-9ba5-35c992b39259",
+        "outcomes": [
+          "true",
+          "false"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "3147767a-bb7b-47b2-9b43-6d297e7cc2fa",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "df67765e-df3a-4503-9ba5-35c992b39259",
+        "outcomes": [
+          "true",
+          "false"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "35194bf4-8dcc-41a2-8545-4a965b8f6ec0",
+      "nodeType": "PageNode",
+      "details": {
+        "nodes": [
+          {
+            "_id": "60732b03-b048-432e-be0f-cb13e211586e",
+            "nodeType": "ScriptedDecisionNode",
+            "displayName": "Scripted Decision"
+          },
+          {
+            "_id": "3633da1e-04fc-4d44-a6c8-b199cfade38a",
+            "nodeType": "OneTimePasswordCollectorDecisionNode",
+            "displayName": "OTP Collector Decision"
+          }
+        ],
+        "pageDescription": {
+          "desc": "Please enter the code you received"
+        },
+        "stage": "CH_LOGIN_3",
+        "pageHeader": {
+          "header": "Please enter your code"
+        }
+      }
+    },
+    {
+      "_id": "60732b03-b048-432e-be0f-cb13e211586e",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "ace951c8-d169-4426-9357-d5b44e0aa728",
+        "outcomes": [
+          "True"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "3633da1e-04fc-4d44-a6c8-b199cfade38a",
+      "nodeType": "OneTimePasswordCollectorDecisionNode",
+      "details": {
+        "passwordExpiryTime": 30
+      }
+    },
+    {
+      "_id": "4a8df6a5-8e56-4765-8ea0-2ff6200b6297",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "e0aec02a-ad8b-427d-a72e-cdfd8cb6c0e0",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "4f019558-f468-46f2-8000-5bba1d9dac45",
+      "nodeType": "IdentifyExistingUserNode",
+      "details": {
+        "identityAttribute": "mail",
+        "identifier": "userName"
+      }
+    },
+    {
+      "_id": "5e76d32e-9180-4a20-b0bd-ff9b89773cbb",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "a5778ce7-addf-4fb6-a7db-92929f1314c4",
+        "outcomes": [
+          "true",
+          "false"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "6486165d-fb00-4248-93c8-4f36ad2b2cb1",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "329154d4-5e55-4cc5-a17e-19d4fd3729aa",
+        "outcomes": [
+          "success",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "739919ca-5a2b-4788-a447-36fe83a011f9",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "bf6c0ac8-8e13-4f11-8d99-d01b23e02a5c",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "758e3d0a-3211-4850-8847-86981f75888e",
+      "nodeType": "InnerTreeEvaluatorNode",
+      "details": {
+        "tree": "CHUpdateLegacyPassword"
+      }
+    },
+    {
+      "_id": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "e69b137b-1bae-4804-af6b-6a93371733ca",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "860b9b8a-260a-4123-85f5-7cf50e20a291",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "b276c566-622e-11eb-ae93-0242ac130002",
+        "outcomes": [
+          "true",
+          "false"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "9339d5b3-f917-46a5-918e-a8b4ce884d81",
+      "nodeType": "PageNode",
+      "details": {
+        "nodes": [
+          {
+            "_id": "7c1389a2-2b21-483b-a2f2-2e2ad42f52b2",
+            "nodeType": "ChoiceCollectorNode",
+            "displayName": "Choice Collector"
+          }
+        ],
+        "pageDescription": {
+          "desc": "How do you want to confirm it's you?"
+        },
+        "stage": "CH_LOGIN_2",
+        "pageHeader": {
+          "header": "How do you want to confirm it's you?"
+        }
+      }
+    },
+    {
+      "_id": "7c1389a2-2b21-483b-a2f2-2e2ad42f52b2",
+      "nodeType": "ChoiceCollectorNode",
+      "details": {
+        "defaultChoice": "email",
+        "choices": [
+          "email",
+          "text"
+        ],
+        "prompt": "How do you want to confirm it's you?"
+      }
+    },
+    {
       "_id": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
       "nodeType": "PageNode",
       "details": {
@@ -24,10 +276,10 @@
         "pageDescription": {
           "en": "New here? <a href=\"#/service/Registration\">Create an account</a><br><a href=\"#/service/ForgottenUsername\">Forgot username?</a><a href=\"#/service/ResetPassword\"> Forgot password?</a>"
         },
+        "stage": "CH_LOGIN_1",
         "pageHeader": {
           "en": "Sign In"
-        },
-        "stage": "CH_LOGIN_1"
+        }
       }
     },
     {
@@ -47,214 +299,36 @@
       }
     },
     {
-      "_id": "4f019558-f468-46f2-8000-5bba1d9dac45",
-      "nodeType": "IdentifyExistingUserNode",
-      "details": {
-        "identifier": "userName",
-        "identityAttribute": "mail"
-      }
-    },
-    {
-      "_id": "758e3d0a-3211-4850-8847-86981f75888e",
-      "nodeType": "InnerTreeEvaluatorNode",
-      "details": {
-        "tree": "CHUpdateLegacyPassword"
-      }
-    },
-    {
-      "_id": "c32fab79-8836-4657-bef0-9f03a1e1165f",
+      "_id": "3b1940b6-a238-455e-8d13-ceb0f2848be4",
       "nodeType": "ScriptedDecisionNode",
       "details": {
-        "inputs": [
-          "*"
-        ],
+        "script": "064705f3-93d3-482c-ad3f-4531a28ce0a0",
         "outcomes": [
-          "true",
-          "false"
+          "true"
         ],
         "outputs": [
           "*"
         ],
-        "script": "20a3599f-b742-4554-a8b7-27862f248dd5"
+        "inputs": [
+          "*"
+        ]
       }
     },
     {
-      "_id": "0e91440f-8d40-4946-88c9-1a7e22da57bc",
+      "_id": "9d8e176e-3175-45a5-8ff3-ca0138c1b300",
       "nodeType": "ScriptedDecisionNode",
       "details": {
-        "inputs": [
-          "*"
-        ],
+        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149",
         "outcomes": [
-          "true",
-          "false"
+          "success",
+          "error"
         ],
         "outputs": [
           "*"
         ],
-        "script": "b480d9f7-5908-45cf-91d1-bc1fe56fe8de"
-      }
-    },
-    {
-      "_id": "9339d5b3-f917-46a5-918e-a8b4ce884d81",
-      "nodeType": "PageNode",
-      "details": {
-        "nodes": [
-          {
-            "_id": "7c1389a2-2b21-483b-a2f2-2e2ad42f52b2",
-            "nodeType": "ChoiceCollectorNode",
-            "displayName": "Choice Collector"
-          }
-        ],
-        "pageDescription": {
-          "desc": "How do you want to confirm it's you?"
-        },
-        "pageHeader": {
-          "header": "How do you want to confirm it's you?"
-        },
-        "stage": "CH_LOGIN_2"
-      }
-    },
-    {
-      "_id": "7c1389a2-2b21-483b-a2f2-2e2ad42f52b2",
-      "nodeType": "ChoiceCollectorNode",
-      "details": {
-        "choices": [
-          "email",
-          "text"
-        ],
-        "defaultChoice": "email",
-        "prompt": "How do you want to confirm it's you?"
-      }
-    },
-    {
-      "_id": "3147767a-bb7b-47b2-9b43-6d297e7cc2fa",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
         "inputs": [
           "*"
-        ],
-        "outcomes": [
-          "true",
-          "false"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "script": "df67765e-df3a-4503-9ba5-35c992b39259"
-      }
-    },
-    {
-      "_id": "0e167098-4f1b-4a6d-a383-9a415b143dda",
-      "nodeType": "OneTimePasswordGeneratorNode",
-      "details": {
-        "length": 6
-      }
-    },
-    {
-      "_id": "860b9b8a-260a-4123-85f5-7cf50e20a291",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "inputs": [
-          "*"
-        ],
-        "outcomes": [
-          "true",
-          "false"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "script": "b276c566-622e-11eb-ae93-0242ac130002"
-      }
-    },
-    {
-      "_id": "1031a228-600a-4325-82da-c93e6a13ab5b",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "inputs": [
-          "*"
-        ],
-        "outcomes": [
-          "true",
-          "false"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "script": "df67765e-df3a-4503-9ba5-35c992b39259"
-      }
-    },
-    {
-      "_id": "c20b82fd-458d-4a46-8d0f-41d589f3976b",
-      "nodeType": "OneTimePasswordGeneratorNode",
-      "details": {
-        "length": 6
-      }
-    },
-    {
-      "_id": "5e76d32e-9180-4a20-b0bd-ff9b89773cbb",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "inputs": [
-          "*"
-        ],
-        "outcomes": [
-          "true",
-          "false"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "script": "a5778ce7-addf-4fb6-a7db-92929f1314c4"
-      }
-    },
-    {
-      "_id": "35194bf4-8dcc-41a2-8545-4a965b8f6ec0",
-      "nodeType": "PageNode",
-      "details": {
-        "nodes": [
-          {
-            "_id": "60732b03-b048-432e-be0f-cb13e211586e",
-            "nodeType": "ScriptedDecisionNode",
-            "displayName": "Scripted Decision"
-          },
-          {
-            "_id": "3633da1e-04fc-4d44-a6c8-b199cfade38a",
-            "nodeType": "OneTimePasswordCollectorDecisionNode",
-            "displayName": "OTP Collector Decision"
-          }
-        ],
-        "pageDescription": {
-          "desc": "Please enter the code you received"
-        },
-        "pageHeader": {
-          "header": "Please enter your code"
-        },
-        "stage": "CH_LOGIN_3"
-      }
-    },
-    {
-      "_id": "60732b03-b048-432e-be0f-cb13e211586e",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "inputs": [
-          "*"
-        ],
-        "outcomes": [
-          "True"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "script": "ace951c8-d169-4426-9357-d5b44e0aa728"
-      }
-    },
-    {
-      "_id": "3633da1e-04fc-4d44-a6c8-b199cfade38a",
-      "nodeType": "OneTimePasswordCollectorDecisionNode",
-      "details": {
-        "passwordExpiryTime": 30
+        ]
       }
     },
     {
@@ -266,22 +340,6 @@
       }
     },
     {
-      "_id": "739919ca-5a2b-4788-a447-36fe83a011f9",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "inputs": [
-          "*"
-        ],
-        "outcomes": [
-          "true"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "script": "bf6c0ac8-8e13-4f11-8d99-d01b23e02a5c"
-      }
-    },
-    {
       "_id": "ae62ed05-3a04-456b-8642-7bc222e0dd43",
       "nodeType": "IncrementLoginCountNode",
       "details": {
@@ -289,19 +347,94 @@
       }
     },
     {
+      "_id": "bd940aa3-c854-4934-b67a-1183d89be21f",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149",
+        "outcomes": [
+          "success",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
       "_id": "bf46b661-96c6-443a-b012-3b5608b7051f",
       "nodeType": "ScriptedDecisionNode",
       "details": {
-        "inputs": [
-          "*"
-        ],
+        "script": "d7da3b35-af63-499b-aa0a-bb03666508db",
         "outcomes": [
           "true"
         ],
         "outputs": [
           "*"
         ],
-        "script": "d7da3b35-af63-499b-aa0a-bb03666508db"
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "c20b82fd-458d-4a46-8d0f-41d589f3976b",
+      "nodeType": "OneTimePasswordGeneratorNode",
+      "details": {
+        "length": 6
+      }
+    },
+    {
+      "_id": "c32fab79-8836-4657-bef0-9f03a1e1165f",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "20a3599f-b742-4554-a8b7-27862f248dd5",
+        "outcomes": [
+          "true",
+          "false"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "c99c82c6-20f5-456d-a94e-680c4f4a6307",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "188d3f9d-ca04-4df7-bcd7-eed3fe27e21e",
+        "outcomes": [
+          "true",
+          "false"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "d1f2eef5-5ad7-4ad6-bc5a-e65710879ff4",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "a1ebbcd2-39c1-47c2-a152-4bebcf8cfb5b",
+        "outcomes": [
+          "true",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
       }
     },
     {
@@ -312,179 +445,63 @@
       }
     },
     {
-      "_id": "3b1940b6-a238-455e-8d13-ceb0f2848be4",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "outcomes": [
-          "true"
-        ],
-        "inputs": [
-          "*"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "script": "064705f3-93d3-482c-ad3f-4531a28ce0a0"
-      }
-    },
-    {
-      "_id": "c99c82c6-20f5-456d-a94e-680c4f4a6307",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "outcomes": [
-          "true",
-          "false"
-        ],
-        "inputs": [
-          "*"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "script": "188d3f9d-ca04-4df7-bcd7-eed3fe27e21e"
-      }
-    },
-    {
-      "_id": "d1f2eef5-5ad7-4ad6-bc5a-e65710879ff4",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "outcomes": [
-          "true",
-          "error"
-        ],
-        "inputs": [
-          "*"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "script": "a1ebbcd2-39c1-47c2-a152-4bebcf8cfb5b"
-      }
-    },
-    {
-      "_id": "bd940aa3-c854-4934-b67a-1183d89be21f",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "outcomes": [
-          "success",
-          "error"
-        ],
-        "inputs": [
-          "*"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149"
-      }
-    },
-    {
       "_id": "fa88fc01-a7a2-429f-b7cc-546fe67a70b4",
       "nodeType": "ScriptedDecisionNode",
       "details": {
+        "script": "7837ccb6-2e56-44bf-a5df-7cfdb0bfc38b",
         "outcomes": [
           "locked",
           "error",
           "lock_expired",
           "not_locked"
         ],
-        "inputs": [
-          "*"
-        ],
         "outputs": [
           "*"
         ],
-        "script": "7837ccb6-2e56-44bf-a5df-7cfdb0bfc38b"
+        "inputs": [
+          "*"
+        ]
       }
     },
     {
       "_id": "fc36693f-b04c-46f8-a683-1e1c1498c8bd",
       "nodeType": "ScriptedDecisionNode",
       "details": {
+        "script": "329154d4-5e55-4cc5-a17e-19d4fd3729aa",
         "outcomes": [
           "success",
           "error"
         ],
-        "inputs": [
-          "*"
-        ],
         "outputs": [
           "*"
         ],
-        "script": "329154d4-5e55-4cc5-a17e-19d4fd3729aa"
+        "inputs": [
+          "*"
+        ]
       }
     },
     {
-      "_id": "6486165d-fb00-4248-93c8-4f36ad2b2cb1",
+      "_id": "60decb8a-2e0a-4526-a4e3-a525ee6e25d4",
       "nodeType": "ScriptedDecisionNode",
       "details": {
+        "script": "6b876ea7-c36e-475a-9706-f2ff658543cb",
         "outcomes": [
           "success",
           "error"
         ],
-        "inputs": [
-          "*"
-        ],
         "outputs": [
           "*"
         ],
-        "script": "329154d4-5e55-4cc5-a17e-19d4fd3729aa"
-      }
-    },
-    {
-      "_id": "9d8e176e-3175-45a5-8ff3-ca0138c1b300",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "outcomes": [
-          "success",
-          "error"
-        ],
         "inputs": [
           "*"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149"
-      }
-    },
-    {
-      "_id": "4a8df6a5-8e56-4765-8ea0-2ff6200b6297",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "outcomes": [
-          "true"
-        ],
-        "inputs": [
-          "*"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "script": "e0aec02a-ad8b-427d-a72e-cdfd8cb6c0e0"
-      }
-    },
-    {
-      "_id": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "outcomes": [
-          "true"
-        ],
-        "inputs": [
-          "*"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "script": "e69b137b-1bae-4804-af6b-6a93371733ca"
+        ]
       }
     }
   ],
   "tree": {
     "_id": "CHLogin",
-    "description": "CH Platform Login Tree with MFA and legacy password check",
     "identityResource": "managed/alpha_user",
+    "description": "CH Platform Login Tree with MFA and legacy password check",
     "uiConfig": {},
     "entryNodeId": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
     "nodes": {
@@ -537,12 +554,21 @@
         "nodeType": "PageNode",
         "displayName": "Enter OTP"
       },
-      "4f019558-f468-46f2-8000-5bba1d9dac45": {
-        "x": 432,
-        "y": 80.015625,
+      "4a8df6a5-8e56-4765-8ea0-2ff6200b6297": {
+        "x": 324,
+        "y": 597.015625,
         "connections": {
-          "true": "bd940aa3-c854-4934-b67a-1183d89be21f",
-          "false": "4a8df6a5-8e56-4765-8ea0-2ff6200b6297"
+          "true": "94a5f48e-d6e3-4bf4-8edc-45c028a70900"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Login Error message"
+      },
+      "4f019558-f468-46f2-8000-5bba1d9dac45": {
+        "x": 517,
+        "y": 168.015625,
+        "connections": {
+          "false": "4a8df6a5-8e56-4765-8ea0-2ff6200b6297",
+          "true": "fa88fc01-a7a2-429f-b7cc-546fe67a70b4"
         },
         "nodeType": "IdentifyExistingUserNode",
         "displayName": "Identify Existing User"
@@ -585,6 +611,13 @@
         },
         "nodeType": "InnerTreeEvaluatorNode",
         "displayName": "Update Legacy Password"
+      },
+      "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a": {
+        "x": 2261,
+        "y": 700.015625,
+        "connections": {},
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "General Error"
       },
       "860b9b8a-260a-4123-85f5-7cf50e20a291": {
         "x": 2246,
@@ -645,11 +678,11 @@
         "displayName": "Increment Login Count"
       },
       "bd940aa3-c854-4934-b67a-1183d89be21f": {
-        "x": 614,
-        "y": 13.015625,
+        "x": 349,
+        "y": 11,
         "connections": {
           "error": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
-          "success": "fa88fc01-a7a2-429f-b7cc-546fe67a70b4"
+          "success": "60decb8a-2e0a-4526-a4e3-a525ee6e25d4"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Get IDM Token"
@@ -686,8 +719,8 @@
         "x": 324,
         "y": 442.015625,
         "connections": {
-          "true": "4f019558-f468-46f2-8000-5bba1d9dac45",
-          "false": "94a5f48e-d6e3-4bf4-8edc-45c028a70900"
+          "false": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
+          "true": "bd940aa3-c854-4934-b67a-1183d89be21f"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "check format"
@@ -734,21 +767,15 @@
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Reset Counter"
       },
-      "4a8df6a5-8e56-4765-8ea0-2ff6200b6297": {
-        "x": 324,
-        "y": 597.015625,
+      "60decb8a-2e0a-4526-a4e3-a525ee6e25d4": {
+        "x": 537,
+        "y": 1.015625,
         "connections": {
-          "true": "94a5f48e-d6e3-4bf4-8edc-45c028a70900"
+          "success": "4f019558-f468-46f2-8000-5bba1d9dac45",
+          "error": "4f019558-f468-46f2-8000-5bba1d9dac45"
         },
         "nodeType": "ScriptedDecisionNode",
-        "displayName": "Login Error message"
-      },
-      "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a": {
-        "x": 2261,
-        "y": 700.015625,
-        "connections": {},
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "General Error"
+        "displayName": "Create/Update user"
       }
     },
     "staticNodes": {

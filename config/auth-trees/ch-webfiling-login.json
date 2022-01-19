@@ -1,6 +1,22 @@
 {
   "nodes": [
     {
+      "_id": "01946a80-f2e1-49ce-826f-ccb90f525341",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "a39f3f71-1782-46dc-97cf-7cc417d4ca4a",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
       "_id": "01c83c4f-764f-4479-9da3-e6ab1708e741",
       "nodeType": "ScriptedDecisionNode",
       "details": {
@@ -65,6 +81,33 @@
       "nodeType": "InnerTreeEvaluatorNode",
       "details": {
         "tree": "CHWebFiling-CompleteProfile"
+      }
+    },
+    {
+      "_id": "378fd5ba-ed7f-45dd-95a2-0a73ef514e31",
+      "nodeType": "AttributeValueDecisionNode",
+      "details": {
+        "comparisonValue": "resetpwd",
+        "comparisonOperation": "EQUALS",
+        "identityAttribute": "mail",
+        "comparisonAttribute": "frIndexedString3"
+      }
+    },
+    {
+      "_id": "57a66005-6843-49a9-a983-749a5c81fdd6",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "df67765e-df3a-4503-9ba5-35c992b39259",
+        "outcomes": [
+          "true",
+          "false"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
       }
     },
     {
@@ -133,10 +176,43 @@
       }
     },
     {
+      "_id": "9f65d202-327b-42e7-85fe-6d903c1fed46",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "1a6815f1-0272-490b-8d6b-69609c3ee9d6",
+        "outcomes": [
+          "true",
+          "false"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
       "_id": "a6ab1111-936e-49e9-86cf-45ced5596dde",
       "nodeType": "ScriptedDecisionNode",
       "details": {
         "script": "e0aec02a-ad8b-427d-a72e-cdfd8cb6c0e0",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "b3f513ec-f284-476d-b040-00918b40b772",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "e69b137b-1bae-4804-af6b-6a93371733ca",
         "outcomes": [
           "true"
         ],
@@ -156,10 +232,34 @@
       }
     },
     {
+      "_id": "c20d2d99-dc1a-4a02-9931-2a3885ca160b",
+      "nodeType": "InnerTreeEvaluatorNode",
+      "details": {
+        "tree": "CHMultiFactorGeneric"
+      }
+    },
+    {
       "_id": "ca5a5885-e8be-4006-9004-28cf71922e75",
       "nodeType": "ScriptedDecisionNode",
       "details": {
         "script": "188d3f9d-ca04-4df7-bcd7-eed3fe27e21e",
+        "outcomes": [
+          "true",
+          "false"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "d5cd1470-f55b-4491-8d32-7ace7aa30e3e",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "c056951c-622e-11eb-ae93-0242ac130002",
         "outcomes": [
           "true",
           "false"
@@ -196,6 +296,22 @@
         "script": "d7da3b35-af63-499b-aa0a-bb03666508db",
         "outcomes": [
           "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "f9659606-3900-4580-8513-0e197e62452a",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "1a782857-b6fc-438d-9244-ae7ddc1dec26",
+        "outcomes": [
+          "success"
         ],
         "outputs": [
           "*"
@@ -268,12 +384,13 @@
       }
     },
     {
-      "_id": "f9659606-3900-4580-8513-0e197e62452a",
+      "_id": "e7321f4e-79cf-4046-9a9b-9a0fafed6a19",
       "nodeType": "ScriptedDecisionNode",
       "details": {
-        "script": "1a782857-b6fc-438d-9244-ae7ddc1dec26",
+        "script": "6b876ea7-c36e-475a-9706-f2ff658543cb",
         "outcomes": [
-          "success"
+          "success",
+          "error"
         ],
         "outputs": [
           "*"
@@ -281,118 +398,26 @@
         "inputs": [
           "*"
         ]
-      }
-    },
-    {
-      "_id": "378fd5ba-ed7f-45dd-95a2-0a73ef514e31",
-      "nodeType": "AttributeValueDecisionNode",
-      "details": {
-        "comparisonValue": "resetpwd",
-        "comparisonOperation": "EQUALS",
-        "identityAttribute": "mail",
-        "comparisonAttribute": "frIndexedString3"
-      }
-    },
-    {
-      "_id": "57a66005-6843-49a9-a983-749a5c81fdd6",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "script": "df67765e-df3a-4503-9ba5-35c992b39259",
-        "outcomes": [
-          "true",
-          "false"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
-      }
-    },
-    {
-      "_id": "9f65d202-327b-42e7-85fe-6d903c1fed46",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "script": "1a6815f1-0272-490b-8d6b-69609c3ee9d6",
-        "outcomes": [
-          "true",
-          "false"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
-      }
-    },
-    {
-      "_id": "d5cd1470-f55b-4491-8d32-7ace7aa30e3e",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "script": "c056951c-622e-11eb-ae93-0242ac130002",
-        "outcomes": [
-          "true",
-          "false"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
-      }
-    },
-    {
-      "_id": "01946a80-f2e1-49ce-826f-ccb90f525341",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "script": "a39f3f71-1782-46dc-97cf-7cc417d4ca4a",
-        "outcomes": [
-          "true"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
-      }
-    },
-    {
-      "_id": "b3f513ec-f284-476d-b040-00918b40b772",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "script": "e69b137b-1bae-4804-af6b-6a93371733ca",
-        "outcomes": [
-          "true"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
-      }
-    },
-    {
-      "_id": "c20d2d99-dc1a-4a02-9931-2a3885ca160b",
-      "nodeType": "InnerTreeEvaluatorNode",
-      "details": {
-        "tree": "CHMultiFactorGeneric"
       }
     }
   ],
   "tree": {
     "_id": "CHWebFiling-Login",
+    "description": "CH WebFiling Login journey",
     "identityResource": "managed/alpha_user",
     "uiConfig": {},
     "entryNodeId": "fb8f7fbe-2fa7-4de8-a5c1-c55c54b1fd3d",
     "nodes": {
+      "01946a80-f2e1-49ce-826f-ccb90f525341": {
+        "x": 1631,
+        "y": 652.03125,
+        "connections": {},
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Email Sent Confirmation"
+      },
       "01c83c4f-764f-4479-9da3-e6ab1708e741": {
         "x": 691,
-        "y": 316.015625,
+        "y": 322.015625,
         "connections": {
           "error": "fb8f7fbe-2fa7-4de8-a5c1-c55c54b1fd3d",
           "success": "bd62a4ef-dcf4-4952-904f-f7f3601b8ae3"
@@ -411,8 +436,8 @@
         "displayName": "Get New IDM Token"
       },
       "101c8cf0-1527-48e6-858b-6dcf1032de40": {
-        "x": 788,
-        "y": 120.015625,
+        "x": 925,
+        "y": 126.015625,
         "connections": {
           "error": "fb8f7fbe-2fa7-4de8-a5c1-c55c54b1fd3d",
           "lock_expired": "01c83c4f-764f-4479-9da3-e6ab1708e741",
@@ -440,6 +465,26 @@
         },
         "nodeType": "InnerTreeEvaluatorNode",
         "displayName": "Complete Profile"
+      },
+      "378fd5ba-ed7f-45dd-95a2-0a73ef514e31": {
+        "x": 457,
+        "y": 426.015625,
+        "connections": {
+          "false": "101c8cf0-1527-48e6-858b-6dcf1032de40",
+          "true": "57a66005-6843-49a9-a983-749a5c81fdd6"
+        },
+        "nodeType": "AttributeValueDecisionNode",
+        "displayName": "Password Reset Required"
+      },
+      "57a66005-6843-49a9-a983-749a5c81fdd6": {
+        "x": 759,
+        "y": 731.015625,
+        "connections": {
+          "false": "b3f513ec-f284-476d-b040-00918b40b772",
+          "true": "9f65d202-327b-42e7-85fe-6d903c1fed46"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Create Notify JWT"
       },
       "6129ae01-2f10-4e6a-ab4f-eba00524c6b0": {
         "x": 1160,
@@ -471,8 +516,8 @@
         "displayName": "Reset Counter after login OK"
       },
       "6bc10407-960b-4e7d-8290-b8fc554eefa4": {
-        "x": 429,
-        "y": 94.015625,
+        "x": 704,
+        "y": 21.015625,
         "connections": {
           "false": "a6ab1111-936e-49e9-86cf-45ced5596dde",
           "true": "378fd5ba-ed7f-45dd-95a2-0a73ef514e31"
@@ -490,6 +535,16 @@
         "nodeType": "InnerTreeEvaluatorNode",
         "displayName": "Email Consent"
       },
+      "9f65d202-327b-42e7-85fe-6d903c1fed46": {
+        "x": 1061,
+        "y": 683.03125,
+        "connections": {
+          "false": "b3f513ec-f284-476d-b040-00918b40b772",
+          "true": "d5cd1470-f55b-4491-8d32-7ace7aa30e3e"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Load Keys"
+      },
       "a6ab1111-936e-49e9-86cf-45ced5596dde": {
         "x": 258,
         "y": 555.015625,
@@ -499,9 +554,16 @@
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Email not exist msg"
       },
+      "b3f513ec-f284-476d-b040-00918b40b772": {
+        "x": 2456,
+        "y": 803.015625,
+        "connections": {},
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "General Error"
+      },
       "bd62a4ef-dcf4-4952-904f-f7f3601b8ae3": {
-        "x": 894,
-        "y": 394.015625,
+        "x": 957,
+        "y": 438.015625,
         "connections": {
           "false": "6170276a-52bc-4311-b479-b6cd4fc6c544",
           "true": "6129ae01-2f10-4e6a-ab4f-eba00524c6b0"
@@ -509,22 +571,42 @@
         "nodeType": "InnerTreeEvaluatorNode",
         "displayName": "Update Legacy Password"
       },
+      "c20d2d99-dc1a-4a02-9931-2a3885ca160b": {
+        "x": 1934,
+        "y": 199.015625,
+        "connections": {
+          "false": "b3f513ec-f284-476d-b040-00918b40b772",
+          "true": "24d11b28-95b9-478c-aede-990c2471109c"
+        },
+        "nodeType": "InnerTreeEvaluatorNode",
+        "displayName": "Check OTP SubFlow"
+      },
       "ca5a5885-e8be-4006-9004-28cf71922e75": {
-        "x": 241,
-        "y": 408.015625,
+        "x": 220,
+        "y": 417.015625,
         "connections": {
           "false": "fb8f7fbe-2fa7-4de8-a5c1-c55c54b1fd3d",
-          "true": "6bc10407-960b-4e7d-8290-b8fc554eefa4"
+          "true": "e69f6be3-d125-4f8c-9a54-d5960d481c7a"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Check Format"
       },
+      "d5cd1470-f55b-4491-8d32-7ace7aa30e3e": {
+        "x": 1321,
+        "y": 650.03125,
+        "connections": {
+          "false": "b3f513ec-f284-476d-b040-00918b40b772",
+          "true": "01946a80-f2e1-49ce-826f-ccb90f525341"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Send Pwd Reset Email"
+      },
       "e69f6be3-d125-4f8c-9a54-d5960d481c7a": {
-        "x": 614,
-        "y": 13.015625,
+        "x": 292,
+        "y": 18.015625,
         "connections": {
           "error": "b3f513ec-f284-476d-b040-00918b40b772",
-          "success": "101c8cf0-1527-48e6-858b-6dcf1032de40"
+          "success": "e7321f4e-79cf-4046-9a9b-9a0fafed6a19"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Get IDM Token"
@@ -538,15 +620,6 @@
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Update Last Login"
       },
-      "fb8f7fbe-2fa7-4de8-a5c1-c55c54b1fd3d": {
-        "x": 218,
-        "y": 136,
-        "connections": {
-          "true": "ca5a5885-e8be-4006-9004-28cf71922e75"
-        },
-        "nodeType": "PageNode",
-        "displayName": "Login Form (EWF)"
-      },
       "f9659606-3900-4580-8513-0e197e62452a": {
         "x": 3195,
         "y": 247.015625,
@@ -556,75 +629,30 @@
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Add Language to session"
       },
-      "378fd5ba-ed7f-45dd-95a2-0a73ef514e31": {
-        "x": 443,
-        "y": 670.015625,
+      "fb8f7fbe-2fa7-4de8-a5c1-c55c54b1fd3d": {
+        "x": 172,
+        "y": 154,
         "connections": {
-          "false": "e69f6be3-d125-4f8c-9a54-d5960d481c7a",
-          "true": "57a66005-6843-49a9-a983-749a5c81fdd6"
+          "true": "ca5a5885-e8be-4006-9004-28cf71922e75"
         },
-        "nodeType": "AttributeValueDecisionNode",
-        "displayName": "Password Reset Required"
+        "nodeType": "PageNode",
+        "displayName": "Login Form (EWF)"
       },
-      "57a66005-6843-49a9-a983-749a5c81fdd6": {
-        "x": 759,
-        "y": 731.015625,
+      "e7321f4e-79cf-4046-9a9b-9a0fafed6a19": {
+        "x": 503,
+        "y": 8.015625,
         "connections": {
-          "false": "b3f513ec-f284-476d-b040-00918b40b772",
-          "true": "9f65d202-327b-42e7-85fe-6d903c1fed46"
-        },
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "Create Notify JWT"
-      },
-      "9f65d202-327b-42e7-85fe-6d903c1fed46": {
-        "x": 1061,
-        "y": 683.03125,
-        "connections": {
-          "false": "b3f513ec-f284-476d-b040-00918b40b772",
-          "true": "d5cd1470-f55b-4491-8d32-7ace7aa30e3e"
+          "success": "6bc10407-960b-4e7d-8290-b8fc554eefa4",
+          "error": "6bc10407-960b-4e7d-8290-b8fc554eefa4"
         },
         "nodeType": "ScriptedDecisionNode",
-        "displayName": "Load Keys"
-      },
-      "d5cd1470-f55b-4491-8d32-7ace7aa30e3e": {
-        "x": 1321,
-        "y": 650.03125,
-        "connections": {
-          "false": "b3f513ec-f284-476d-b040-00918b40b772",
-          "true": "01946a80-f2e1-49ce-826f-ccb90f525341"
-        },
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "Send Pwd Reset Email"
-      },
-      "01946a80-f2e1-49ce-826f-ccb90f525341": {
-        "x": 1631,
-        "y": 652.03125,
-        "connections": {},
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "Email Sent Confirmation"
-      },
-      "b3f513ec-f284-476d-b040-00918b40b772": {
-        "x": 2456,
-        "y": 803.015625,
-        "connections": {},
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "General Error"
-      },
-      "c20d2d99-dc1a-4a02-9931-2a3885ca160b": {
-        "x": 1934,
-        "y": 199.015625,
-        "connections": {
-          "true": "24d11b28-95b9-478c-aede-990c2471109c",
-          "false": "b3f513ec-f284-476d-b040-00918b40b772"
-        },
-        "nodeType": "InnerTreeEvaluatorNode",
-        "displayName": "Check OTP SubFlow"
+        "displayName": "Create/Update user"
       }
     },
     "staticNodes": {
       "startNode": {
-        "x": 70,
-        "y": 190
+        "x": 33,
+        "y": 189
       },
       "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
         "x": 3521,
@@ -634,7 +662,6 @@
         "x": 3302,
         "y": 671.3333333333334
       }
-    },
-    "description": "CH WebFiling Login journey"
+    }
   }
 }
