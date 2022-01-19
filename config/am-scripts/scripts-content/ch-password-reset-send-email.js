@@ -212,13 +212,13 @@ function sendEmail (language) {
   request.setUri(_fromConfig('NOTIFY_EMAIL_ENDPOINT'));
   try {
     var requestBodyJson = isUserExisting ? {
-        'email_address': email,
-        'template_id': language === 'EN' ? JSON.parse(templates).en_existingUser : JSON.parse(templates).cy_existingUser,
-        'personalisation': {
-          'link': returnUrl,
-          'email': email
-        }
-      } :
+      'email_address': email,
+      'template_id': language === 'EN' ? JSON.parse(templates).en_existingUser : JSON.parse(templates).cy_existingUser,
+      'personalisation': {
+        'link': returnUrl,
+        'email': email
+      }
+    } :
       {
         'email_address': email,
         'template_id': language === 'EN' ? JSON.parse(templates).en_resetPwd : JSON.parse(templates).cy_resetPwd,

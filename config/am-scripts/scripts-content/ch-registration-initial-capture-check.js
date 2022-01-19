@@ -46,7 +46,8 @@ if (sharedState.get('objectAttributes')) {
 
     outcome = NodeOutcome.ERROR;
   }
-
+  
+  sharedState.put('username', emailAddress);
   var phoneNumber = sharedState.get('objectAttributes').get('telephoneNumber');
 
   if (phoneNumber) {
