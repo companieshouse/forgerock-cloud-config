@@ -72,7 +72,7 @@ function getHeaderParams (requestHeaders) {
   if (requestHeaders.get(headerNotificationEmail)) {
     email = requestHeaders.get(headerNotificationEmail).get(0);
   }
-  
+
   if (requestHeaders.get(headerNewUser)) {
     newUser = (String(requestHeaders.get(headerNewUser).get(0)) === 'true');
   }
@@ -99,7 +99,7 @@ function getHeaderParams (requestHeaders) {
 
   _log('Got individual headers');
 
-  if ((!username || !username.equals('tree-service-user@companieshouse.com')) ||
+  if ((!username || !username.equals('tree-service-user@companieshouse.gov.uk')) ||
     !pwd ||
     !link ||
     !email ||

@@ -25,7 +25,7 @@ describe('update-managed-users', () => {
   const mockConfig = {
     _id: '99999999-6c71-45a9-9afb-cbde39b53ead',
 
-    userName: 'test-tree-service-user@companieshouse.com',
+    userName: 'test-tree-service-user@companieshouse.gov.uk',
     password: 'LetMeIn1234!',
     authzRoles: [
       {
@@ -45,9 +45,9 @@ describe('update-managed-users', () => {
     city: null,
     givenName: null,
     profileImage: null,
-    sn: 'test-tree-service-user@companieshouse.com',
+    sn: 'test-tree-service-user@companieshouse.gov.uk',
     telephoneNumber: null,
-    mail: 'test-tree-service-user@companieshouse.com',
+    mail: 'test-tree-service-user@companieshouse.gov.uk',
     isMemberOf: null,
     frIndexedString1: '11111111111111111111111111111112',
     frIndexedString3: 'migrated',
