@@ -295,7 +295,7 @@
     var response = openidm.query('managed/' + OBJECT_COMPANY,
       { '_queryFilter': '/number eq "' + number + '"' },
       ['_id', 'number', 'name', 'authCode', 'status', 'members', 'addressLine1', 'addressLine2',
-        'authCodeIsActive', 'jurisdiction', 'locality', 'postalCode', 'region', 'type']);
+        'jurisdiction', 'locality', 'postalCode', 'region', 'type']);
 
     if (response.resultCount === 0) {
       log('getCompany: Bad result count: ' + response.resultCount);
@@ -839,7 +839,6 @@
         name: company.name,
         number: company.number,
         authCode: company.authCode,
-        authCodeIsActive: company.authCodeIsActive,
         jurisdiction: company.jurisdiction,
         status: company.status,
         type: company.type,
