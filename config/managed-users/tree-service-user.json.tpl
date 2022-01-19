@@ -1,7 +1,7 @@
 {
   "_id": "9dbbf03c-6c71-45a9-9afb-cbde39b53ead",
 
-  "userName": "tree-service-user@companieshouse.com",
+  "userName": "tree-service-user@companieshouse.gov.uk",
   "password": "{AUTH_TREE_PASSWORD}",
   "authzRoles": [
     {
@@ -21,9 +21,9 @@
   "city": null,
   "givenName": "Tree Service",
   "profileImage": null,
-  "sn": "tree-service-user@companieshouse.com",
+  "sn": "tree-service-user@companieshouse.gov.uk",
   "telephoneNumber": null,
-  "mail": "tree-service-user@companieshouse.com",
+  "mail": "tree-service-user@companieshouse.gov.uk",
   "isMemberOf": null,
   "frIndexedString1": "11111111111111111111111111111112",
   "frIndexedString3": "migrated",
