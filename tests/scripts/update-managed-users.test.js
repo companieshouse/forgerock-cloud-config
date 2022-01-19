@@ -1,26 +1,26 @@
 describe('update-managed-users', () => {
-  jest.mock('fs');
-  const fs = require('fs');
-  const path = require('path');
-  jest.mock('../../helpers/get-access-token');
-  const getAccessToken = require('../../helpers/get-access-token');
-  jest.mock('../../helpers/fidc-request');
-  const fidcRequest = require('../../helpers/fidc-request');
-  jest.spyOn(console, 'log').mockImplementation(() => {});
-  jest.spyOn(console, 'error').mockImplementation(() => {});
-  jest.spyOn(process, 'exit').mockImplementation(() => {});
+  jest.mock('fs')
+  const fs = require('fs')
+  const path = require('path')
+  jest.mock('../../helpers/get-access-token')
+  const getAccessToken = require('../../helpers/get-access-token')
+  jest.mock('../../helpers/fidc-request')
+  const fidcRequest = require('../../helpers/fidc-request')
+  jest.spyOn(console, 'log').mockImplementation(() => {})
+  jest.spyOn(console, 'error').mockImplementation(() => {})
+  jest.spyOn(process, 'exit').mockImplementation(() => {})
 
-  const updateManagedUsers = require('../../scripts/update-managed-users');
+  const updateManagedUsers = require('../../scripts/update-managed-users')
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
     accessToken: 'forgerock-token'
-  };
+  }
 
   const mockConfigFile = path.resolve(
     __dirname,
     '../../config/managed-users/tree-service-user.json'
-  );
+  )
 
   const mockConfig = {
     _id: '99999999-6c71-45a9-9afb-cbde39b53ead',
@@ -93,63 +93,63 @@ describe('update-managed-users', () => {
     preferences: null,
     aliasList: [],
     memberOfOrgIDs: []
-  };
+  }
 
   beforeEach(() => {
-    fidcRequest.mockImplementation(() => Promise.resolve());
+    fidcRequest.mockImplementation(() => Promise.resolve())
     getAccessToken.mockImplementation(() =>
       Promise.resolve(mockValues.accessToken)
-    );
-    process.env.FIDC_URL = mockValues.fidcUrl;
-    fs.readdirSync.mockReturnValue(['tree-service-user.json']);
-    jest.mock(mockConfigFile, () => mockConfig, { virtual: true });
-  });
+    )
+    process.env.FIDC_URL = mockValues.fidcUrl
+    fs.readdirSync.mockReturnValue(['tree-service-user.json'])
+    jest.mock(mockConfigFile, () => mockConfig, { virtual: true })
+  })
 
   afterEach(() => {
-    jest.resetAllMocks();
-    console.log.mockClear();
-    console.error.mockClear();
-    process.exit.mockClear();
-  });
+    jest.resetAllMocks()
+    console.log.mockClear()
+    console.error.mockClear()
+    process.exit.mockClear()
+  })
 
   afterAll(() => {
-    console.log.mockRestore();
-    console.error.mockRestore();
-    process.exit.mockRestore();
-  });
+    console.log.mockRestore()
+    console.error.mockRestore()
+    process.exit.mockRestore()
+  })
 
   it('should error if getAccessToken functions fails', async () => {
-    expect.assertions(2);
-    const errorMessage = 'Invalid user';
+    expect.assertions(2)
+    const errorMessage = 'Invalid user'
     getAccessToken.mockImplementation(() =>
       Promise.reject(new Error(errorMessage))
-    );
-    await updateManagedUsers(mockValues);
-    expect(console.error).toHaveBeenCalledWith(errorMessage);
-    expect(process.exit).toHaveBeenCalledWith(1);
-  });
+    )
+    await updateManagedUsers(mockValues)
+    expect(console.error).toHaveBeenCalledWith(errorMessage)
+    expect(process.exit).toHaveBeenCalledWith(1)
+  })
 
   it('should call API using config file', async () => {
-    expect.assertions(2);
-    const expectedUrl = `${mockValues.fidcUrl}/openidm/managed/alpha_user/${mockConfig._id}`;
-    await updateManagedUsers(mockValues);
-    expect(fidcRequest.mock.calls.length).toEqual(1);
+    expect.assertions(2)
+    const expectedUrl = `${mockValues.fidcUrl}/openidm/managed/alpha_user/${mockConfig._id}`
+    await updateManagedUsers(mockValues)
+    expect(fidcRequest.mock.calls.length).toEqual(1)
     expect(fidcRequest).toHaveBeenCalledWith(
       expectedUrl,
       mockConfig,
       mockValues.accessToken,
       false
-    );
-  });
+    )
+  })
 
   it('should error if API request fails', async () => {
-    expect.assertions(2);
-    const errorMessage = 'Something went wrong';
+    expect.assertions(2)
+    const errorMessage = 'Something went wrong'
     fidcRequest.mockImplementation(() =>
       Promise.reject(new Error(errorMessage))
-    );
-    await updateManagedUsers(mockValues);
-    expect(console.error).toHaveBeenCalledWith(errorMessage);
-    expect(process.exit).toHaveBeenCalledWith(1);
-  });
-});
+    )
+    await updateManagedUsers(mockValues)
+    expect(console.error).toHaveBeenCalledWith(errorMessage)
+    expect(process.exit).toHaveBeenCalledWith(1)
+  })
+})
