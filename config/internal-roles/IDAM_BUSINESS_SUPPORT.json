@@ -1,240 +1,237 @@
 {
-	"_id": "IDAM_BUSINESS_SUPPORT",
-	"name": "IDAM_BUSINESS_SUPPORT",
-	"description": "IDAM Business Support role",
-	"privileges": [
-		{
-			"path": "managed/alpha_organization",
-			"name": "CH Companies",
-			"actions": [],
-			"filter": "/status eq \"active\" or /status eq \"dormant\"",
-			"permissions": [
-				"VIEW"
-			],
-			"accessFlags": [
-				{
-					"attribute": "name",
-					"readOnly": true
-				},
-				{
-					"attribute": "description",
-					"readOnly": true
-				},
-				{
-					"attribute": "owners",
-					"readOnly": true
-				},
-				{
-					"attribute": "admins",
-					"readOnly": true
-				},
-				{
-					"attribute": "members",
-					"readOnly": true
-				},
-				{
-					"attribute": "parent",
-					"readOnly": true
-				},
-				{
-					"attribute": "children",
-					"readOnly": true
-				},
-				{
-					"attribute": "adminIDs",
-					"readOnly": true
-				},
-				{
-					"attribute": "ownerIDs",
-					"readOnly": true
-				},
-				{
-					"attribute": "parentAdminIDs",
-					"readOnly": true
-				},
-				{
-					"attribute": "parentOwnerIDs",
-					"readOnly": true
-				},
-				{
-					"attribute": "parentIDs",
-					"readOnly": true
-				},
-				{
-					"attribute": "number",
-					"readOnly": true
-				},
-				{
-					"attribute": "type",
-					"readOnly": true
-				},
-				{
-					"attribute": "status",
-					"readOnly": true
-				},
-				{
-					"attribute": "authCode",
-					"readOnly": true
-				},
-				{
-					"attribute": "authCodeIsActive",
-					"readOnly": true
-				},
-				{
-					"attribute": "authCodeValidFrom",
-					"readOnly": true
-				},
-				{
-					"attribute": "locality",
-					"readOnly": true
-				},
-				{
-					"attribute": "postalCode",
-					"readOnly": true
-				},
-				{
-					"attribute": "addressLine1",
-					"readOnly": true
-				},
-				{
-					"attribute": "addressLine2",
-					"readOnly": true
-				},
-				{
-					"attribute": "region",
-					"readOnly": true
-				},
-				{
-					"attribute": "creationDate",
-					"readOnly": true
-				},
-				{
-					"attribute": "jurisdiction",
-					"readOnly": true
-				}
-			]
-		},
-		{
-			"path": "internal/role",
-			"name": "Internal Roles",
-			"actions": [],
-			"permissions": [
-				"VIEW"
-			],
-			"accessFlags": [
-				{
-					"attribute": "name",
-					"readOnly": true
-				},
-				{
-					"attribute": "description",
-					"readOnly": true
-				},
-				{
-					"attribute": "privileges",
-					"readOnly": true
-				},
-				{
-					"attribute": "authzMembers",
-					"readOnly": true
-				},
-				{
-					"attribute": "temporalConstraints",
-					"readOnly": true
-				},
-				{
-					"attribute": "condition",
-					"readOnly": true
-				}
-			],
-			"filter": "/name co \"IDAM_BUSINESS_SUPPORT\""
-		},
-		{
-			"path": "managed/alpha_user",
-			"name": "CH Users",
-			"actions": [],
-			"permissions": [
-				"VIEW",
-				"UPDATE"
-			],
-			"accessFlags": [
-				{
-					"attribute": "authzRoles",
-					"readOnly": false
-				},
-				{
-					"attribute": "userName",
-					"readOnly": true
-				},
-				{
-					"attribute": "givenName",
-					"readOnly": true
-				},
-				{
-					"attribute": "cn",
-					"readOnly": true
-				},
-				{
-					"attribute": "sn",
-					"readOnly": true
-				},
-				{
-					"attribute": "mail",
-					"readOnly": true
-				},
-				{
-					"attribute": "accountStatus",
-					"readOnly": true
-				},
-				{
-					"attribute": "telephoneNumber",
-					"readOnly": true
-				},
-				{
-					"attribute": "roles",
-					"readOnly": true
-				},
-				{
-					"attribute": "frIndexedString2",
-					"readOnly": true
-				},
-				{
-					"attribute": "frIndexedString3",
-					"readOnly": true
-				},
-				{
-					"attribute": "frIndexedString5",
-					"readOnly": true
-				},
-				{
-					"attribute": "memberOfOrg",
-					"readOnly": true
-				},
-				{
-					"attribute": "memberOfOrgIDs",
-					"readOnly": true
-				},
-				{
-					"attribute": "frIndexedDate1",
-					"readOnly": true
-				},
-				{
-					"attribute": "frIndexedDate2",
-					"readOnly": true
-				},
-				{
-					"attribute": "preferences",
-					"readOnly": true
-				},
-				{
-					"attribute": "frIndexedMultivalued2",
-					"readOnly": true
-				}, 
-				{
-					"attribute": "frIndexedMultivalued3",
-					"readOnly": true
-				}
-			]
-		}
-	]
+  "_id": "IDAM_BUSINESS_SUPPORT",
+  "name": "IDAM_BUSINESS_SUPPORT",
+  "description": "IDAM Business Support role",
+  "condition": null,
+  "privileges": [
+    {
+      "path": "managed/alpha_organization",
+      "name": "CH Companies",
+      "actions": [],
+      "filter": "/status eq \"active\" or /status eq \"dormant\"",
+      "permissions": [
+        "VIEW"
+      ],
+      "accessFlags": [
+        {
+          "attribute": "name",
+          "readOnly": true
+        },
+        {
+          "attribute": "description",
+          "readOnly": true
+        },
+        {
+          "attribute": "owners",
+          "readOnly": true
+        },
+        {
+          "attribute": "admins",
+          "readOnly": true
+        },
+        {
+          "attribute": "members",
+          "readOnly": true
+        },
+        {
+          "attribute": "parent",
+          "readOnly": true
+        },
+        {
+          "attribute": "children",
+          "readOnly": true
+        },
+        {
+          "attribute": "adminIDs",
+          "readOnly": true
+        },
+        {
+          "attribute": "ownerIDs",
+          "readOnly": true
+        },
+        {
+          "attribute": "parentAdminIDs",
+          "readOnly": true
+        },
+        {
+          "attribute": "parentOwnerIDs",
+          "readOnly": true
+        },
+        {
+          "attribute": "parentIDs",
+          "readOnly": true
+        },
+        {
+          "attribute": "number",
+          "readOnly": true
+        },
+        {
+          "attribute": "type",
+          "readOnly": true
+        },
+        {
+          "attribute": "status",
+          "readOnly": true
+        },
+        {
+          "attribute": "authCode",
+          "readOnly": true
+        },
+        {
+          "attribute": "authCodeValidFrom",
+          "readOnly": true
+        },
+        {
+          "attribute": "locality",
+          "readOnly": true
+        },
+        {
+          "attribute": "postalCode",
+          "readOnly": true
+        },
+        {
+          "attribute": "addressLine1",
+          "readOnly": true
+        },
+        {
+          "attribute": "addressLine2",
+          "readOnly": true
+        },
+        {
+          "attribute": "region",
+          "readOnly": true
+        },
+        {
+          "attribute": "creationDate",
+          "readOnly": true
+        },
+        {
+          "attribute": "jurisdiction",
+          "readOnly": true
+        }
+      ]
+    },
+    {
+      "path": "internal/role",
+      "name": "Internal Roles",
+      "actions": [],
+      "permissions": [
+        "VIEW"
+      ],
+      "accessFlags": [
+        {
+          "attribute": "name",
+          "readOnly": true
+        },
+        {
+          "attribute": "description",
+          "readOnly": true
+        },
+        {
+          "attribute": "privileges",
+          "readOnly": true
+        },
+        {
+          "attribute": "authzMembers",
+          "readOnly": true
+        },
+        {
+          "attribute": "temporalConstraints",
+          "readOnly": true
+        },
+        {
+          "attribute": "condition",
+          "readOnly": true
+        }
+      ],
+      "filter": "/name co \"IDAM_BUSINESS_SUPPORT\""
+    },
+    {
+      "path": "managed/alpha_user",
+      "name": "CH Users",
+      "actions": [],
+      "permissions": [
+        "VIEW",
+        "UPDATE"
+      ],
+      "accessFlags": [
+        {
+          "attribute": "authzRoles",
+          "readOnly": false
+        },
+        {
+          "attribute": "userName",
+          "readOnly": true
+        },
+        {
+          "attribute": "givenName",
+          "readOnly": true
+        },
+        {
+          "attribute": "cn",
+          "readOnly": true
+        },
+        {
+          "attribute": "sn",
+          "readOnly": true
+        },
+        {
+          "attribute": "mail",
+          "readOnly": true
+        },
+        {
+          "attribute": "accountStatus",
+          "readOnly": true
+        },
+        {
+          "attribute": "telephoneNumber",
+          "readOnly": true
+        },
+        {
+          "attribute": "roles",
+          "readOnly": true
+        },
+        {
+          "attribute": "frIndexedString2",
+          "readOnly": true
+        },
+        {
+          "attribute": "frIndexedString3",
+          "readOnly": true
+        },
+        {
+          "attribute": "frIndexedString5",
+          "readOnly": true
+        },
+        {
+          "attribute": "memberOfOrg",
+          "readOnly": true
+        },
+        {
+          "attribute": "memberOfOrgIDs",
+          "readOnly": true
+        },
+        {
+          "attribute": "frIndexedDate1",
+          "readOnly": true
+        },
+        {
+          "attribute": "frIndexedDate2",
+          "readOnly": true
+        },
+        {
+          "attribute": "preferences",
+          "readOnly": true
+        },
+        {
+          "attribute": "frIndexedMultivalued2",
+          "readOnly": true
+        },
+        {
+          "attribute": "frIndexedMultivalued3",
+          "readOnly": true
+        }
+      ]
+    }
+  ]
 }

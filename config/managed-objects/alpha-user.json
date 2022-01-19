@@ -672,12 +672,12 @@
         "title": "Legacy Password",
         "type": "string",
         "usageDescription": "Password as migrated from CH source",
-        "userEditable": false,
+        "userEditable": true,
         "viewable": true,
         "deleteQueryConfig": false,
         "isVirtual": false,
-        "scope": "private",
-        "searchable": false
+       
+        "searchable": true
       },
       "frIndexedString3": {
         "description": "Migrated Password Status",

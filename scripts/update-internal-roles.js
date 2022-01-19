@@ -17,13 +17,12 @@ const updateInternalRoles = async (argv) => {
       .filter((name) => path.extname(name) === '.json') // Filter out any non JSON files
       .map((filename) => require(path.join(dir, filename))) // Map JSON file content to an array
 
-    await Promise.all(
-      internalRolesFileContent.map(async (internalRoleFile) => {
-        console.log(`Updating role ${internalRoleFile.name}`)
-        const requestUrl = `${FIDC_URL}/openidm/internal/role/${internalRoleFile._id}`
-        await fidcRequest(requestUrl, internalRoleFile, accessToken)
-      })
-    )
+    for (const internalRoleFile of internalRolesFileContent) {
+      console.log(`Updating role ${internalRoleFile.name}`)
+      const requestUrl = `${FIDC_URL}/openidm/internal/role/${internalRoleFile._id}`
+      await fidcRequest(requestUrl, internalRoleFile, accessToken)
+    }
+
     console.log('Internal roles updated')
   } catch (error) {
     console.error(error.message)

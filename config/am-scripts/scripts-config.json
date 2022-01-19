@@ -1618,6 +1618,22 @@
         "lastModifiedDate": 1617810491969
       },
       "filename": "ch-registration-initial-capture-check.js"
+    },
+    {
+      "payload": {
+        "_id": "6b876ea7-c36e-475a-9706-f2ff658543cb",
+        "name": "CH - Create/Update user from source",
+        "description": "Create/Update user from source",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-check-user-source.js"
     }
   ]
 }

@@ -229,11 +229,11 @@ function _getCurrentDateAsString () {
 function _convertDateToString (date) {
   var result = [];
   result.push(date.getFullYear());
-  result.push(padding(date.getMonth() + 1));
-  result.push(padding(date.getDate()));
-  result.push(padding(date.getHours()));
-  result.push(padding(date.getMinutes()));
-  result.push(padding(date.getSeconds()));
+  result.push(_padding(date.getMonth() + 1));
+  result.push(_padding(date.getDate()));
+  result.push(_padding(date.getHours()));
+  result.push(_padding(date.getMinutes()));
+  result.push(_padding(date.getSeconds()));
   result.push('Z');
   return result.join('');
 }

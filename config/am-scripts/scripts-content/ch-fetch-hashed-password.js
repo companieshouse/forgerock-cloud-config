@@ -28,7 +28,7 @@ function fetchHashedPassword () {
     if (idRepository.getAttribute(userId, ORIGIN_FIELD).iterator().hasNext()) {
       var origin = idRepository.getAttribute(userId, ORIGIN_FIELD).iterator().next();
       _log('Origin: ' + origin);
-      if (origin === WEBFILING_USER) {
+      if (String(origin) === WEBFILING_USER) {
         validateMethod = WEBFILING_USER;
       }
     }
