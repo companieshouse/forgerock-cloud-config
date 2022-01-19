@@ -82,6 +82,10 @@
           "readOnly": true
         },
         {
+          "attribute": "authCodeValidUntil",
+          "readOnly": true
+        },
+        {
           "attribute": "locality",
           "readOnly": true
         },
