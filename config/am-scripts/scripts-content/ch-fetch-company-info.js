@@ -206,7 +206,7 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
         companyData: JSON.parse(response.getEntity().getString())
       };
     } else {
-      _log('Error during user creation');
+      _log('Error during user creation/update');
       return {
         success: false,
         message: JSON.parse(response.getEntity().getString())
@@ -411,13 +411,6 @@ function fetchCompanyFromCHS (accessToken, companyNumber) {
 
     companyNumber = companyNumber.trim();
 
-    // var cacheKey = companyNumber.toUpperCase();
-
-    // if (_chsCompanyMap.has(cacheKey)) {
-    //   _log('CHS company number query for : ' + companyNumber + ', Cached Value = ' + _chsCompanyMap.get(cacheKey));
-    //   return _chsCompanyMap.get(cacheKey);
-    // }
-
     var searchTerm = '?_queryFilter=_id+eq+%22' + companyNumber + '%22';
     var request = new org.forgerock.http.protocol.Request();
     request.setMethod('GET');
@@ -435,11 +428,10 @@ function fetchCompanyFromCHS (accessToken, companyNumber) {
 
       if (response.result[0]._id) {
 
-        _log('CHS Company query for : ' + companyNumber + ', Value put in Cache = ' + response.result[0]._id);
         var data = {
           name: response.result[0].data.company_name,
           number: response.result[0].data.company_number,
-          type: response.result[0].data.company_number,
+          type: response.result[0].data.type,
           status: response.result[0].data.company_status,
           locality: response.result[0].data.registered_office_address ? response.result[0].data.registered_office_address.locality : null,
           postalCode: response.result[0].data.registered_office_address ? response.result[0].data.registered_office_address.postal_code : null,
@@ -449,7 +441,6 @@ function fetchCompanyFromCHS (accessToken, companyNumber) {
           creationDate: response.result[0].data.date_of_creation,
           jurisdiction: _getJurisdictionCode(response.result[0].data)
         };
-        //_chsCompanyMap.set(cacheKey, data);
         return {
           success: true,
           data: data
@@ -486,13 +477,6 @@ function fetchAuthCodeFromEWF (accessToken, companyNumber) {
 
     companyNumber = companyNumber.trim();
 
-    //var cacheKey = companyNumber.toUpperCase();
-
-    // if (_ewfAuthCodeMap.has(cacheKey)) {
-    //   _log('EWF company auth code for : ' + companyNumber + ', Cached Value = ' + _ewfAuthCodeMap.get(cacheKey));
-    //   return _ewfAuthCodeMap.get(cacheKey);
-    // }
-
     var searchTerm = '?_queryFilter=_id+eq+%22' + companyNumber + '%22';
     var request = new org.forgerock.http.protocol.Request();
     request.setMethod('GET');
@@ -516,9 +500,7 @@ function fetchAuthCodeFromEWF (accessToken, companyNumber) {
           authCodeValidFrom: response.result[0].STARTDTE,
           authCodeValidUntil: response.result[0].EXPIRYDTE,
           number: response.result[0]._id
-          //authCodeIsActive: _isCompanyAuthCodeActive(response.result[0].STARTDTE, response.result[0].EXPIRYDTE)
         };
-        //_ewfAuthCodeMap.set(cacheKey, data);
         return {
           success: true,
           data: data
@@ -578,14 +560,6 @@ try {
 
         //fetchCompany can only result in callbacks, does not transition anywhere
         var idmCompanyData = getCompanyByNumberAndJurisdiction(accessToken, companyNumber, jurisdiction, skipConfirmation);
-        // var authCodeStartDate = updateResult.authCodeValidFrom;
-        // var authCodeExpiryDate = updateResult.authCodeValidUntil;
-        // action = fr.Action.send(
-        //   new fr.TextOutputCallback(
-        //     fr.TextOutputCallback.INFORMATION,
-        //     _isCompanyAuthCodeActive(authCodeStartDate, authCodeExpiryDate) 
-        //   )
-        // ).build();
         
         if (!idmCompanyData.success) {
           outcome = NodeOutcome.FALSE;
