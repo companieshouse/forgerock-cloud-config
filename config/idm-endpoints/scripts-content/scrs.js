@@ -310,7 +310,7 @@
       'managed/' + OBJECT_COMPANY,
       { '_queryFilter': '/number eq "' + companyNumber + '"' },
       ['_id', 'number', 'name', 'authCode', 'status', 'members', 'addressLine1', 'addressLine2',
-        'authCodeIsActive', 'jurisdiction', 'locality', 'postalCode', 'region', 'type', 'members']
+        'jurisdiction', 'locality', 'postalCode', 'region', 'type', 'members']
     );
 
     if (response.resultCount === 0) {
@@ -390,8 +390,6 @@
 
     companyData.authCodeValidFrom = validFrom;
     companyData.authCodeValidTo = validTo;
-
-    companyData.authCodeIsActive = isCompanyAuthCodeActive(validFrom, validTo);
   }
 
   function mapCHSCompanyType (companyData, data) {
@@ -400,28 +398,6 @@
     }
 
     companyData.type = data.type;
-  }
-
-  function isCompanyAuthCodeActive (startDate, expiryDate) {
-    const now = new Date();
-
-    try {
-      if (startDate && expiryDate) {
-        const parsedStartA = new Date(startDate.substring(0, 10));
-        const parsedExpiryA = new Date(expiryDate.substring(0, 10));
-
-        return (now >= parsedStartA) && (now < parsedExpiryA);
-      } else if (startDate && !expiryDate) {
-        const parsedStartB = new Date(startDate.substring(0, 10));
-
-        return now >= parsedStartB;
-      } else {
-        return true;
-      }
-    } catch (e) {
-      _log('Error checking auth code active status : ' + e);
-      return true;
-    }
   }
 
   function createCompany (companyIncorp) {
