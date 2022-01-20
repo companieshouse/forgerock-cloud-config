@@ -156,16 +156,24 @@ function createOrUpdateUser (accessToken, email) {
         _log('User has PARENT_USERNAME set: ' + idmUserResult.userData.frIndexedString1);
         //search user in EWF by PARENT_USERNAME
         ewfUserResult = fetchUserFromEWFByParentUsername (idmUserResult.userData.frIndexedString1);
+        if(!ewfUserResult.success){
+          //Edge case: the user with the same email may have a different PARENT_USERNAME in EWF now (e.g. database refresh) - fetch user by email instead
+          _log('User not found in EWF for PARENT_USERNAME ' + idmUserResult.userData.frIndexedString1);
+          ewfUserResult = fetchUserFromEWFByEmail (email);
+          if(!ewfUserResult.success){
+            _log('User not found in EWF for email ' + email);
+            return false;
+          }
+        } 
       } else {
         _log('User does not have PARENT_USERNAME set: ' + email);
         //search user in EWF by email
         ewfUserResult = fetchUserFromEWFByEmail (email);
+        if(!ewfUserResult.success){
+          _log('User not found in EWF for email ' + email);
+          return false;
+        } 
       }
-
-      if(!ewfUserResult.success){
-        _log('User not found in EWF for email ' + email);
-        return false;
-      } 
 
       _log('USER in EWF: ' + JSON.stringify(ewfUserResult));
       _log('Updating the user in fIDC: ' + email);
