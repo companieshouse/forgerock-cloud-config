@@ -1,29 +1,6 @@
 var _scriptName = 'CH REGISTRATION SEND EMAIL';
 _log('Starting');
 
-/* 
-  ** INPUT DATA
-    * SHARED STATE:
-      - 'objectAttributes.telephoneNumber': the user telephone number (entered in a previous screen)
-      - 'objectAttributes.givenName': the user full name (entered in a previous screen)
-      - 'objectAttributes.mail': the user email (entered in a previous screen)
-
-    * TRANSIENT STATE
-      - 'notifyJWT': the Notify JWT to be used for requests to Notify
-      - 'templates': the list of all Notify templates 
-
-  ** OUTPUT DATA
-    * TRANSIENT STATE:
-      - 'notificationId': the notification ID returned by Notify if the call was successful
-    
-  ** OUTCOMES
-    - true: message sent successfully
-  
-  ** CALLBACKS:
-    - error while sending (SEND_MFA_SMS_ERROR)
-    - generic error (REGISTRATION_ERROR)
-*/
-
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
   java.lang.Math,
@@ -239,9 +216,8 @@ var config = {
 };
 
 try {
-  var returnUrl;
   var registrationJwt;
-  var host = requestHeaders.get('origin').get(0);
+  var host = _getVariable('esv.c5d3143c84.manualcustomuiurl');
   var request = new org.forgerock.http.protocol.Request();
   var language = _getSelectedLanguage(requestHeaders);
   var now = new Date();
