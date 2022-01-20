@@ -25,23 +25,6 @@
       }
     },
     {
-      "_id": "16dcf5f0-0df5-4e9c-8fc5-c5d356f5e64e",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149",
-        "outcomes": [
-          "success",
-          "error"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
-      }
-    },
-    {
       "_id": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50",
       "nodeType": "ScriptedDecisionNode",
       "details": {
@@ -82,23 +65,6 @@
       }
     },
     {
-      "_id": "74199d6d-3081-4171-ae85-4900e16dd12b",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "script": "b559209e-541e-47f5-9a35-d455c564a2ea",
-        "outcomes": [
-          "user_unlocked",
-          "error"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
-      }
-    },
-    {
       "_id": "b0eb0351-07cb-478b-8c11-8bac04ab6a94",
       "nodeType": "ScriptedDecisionNode",
       "details": {
@@ -113,13 +79,6 @@
         "inputs": [
           "*"
         ]
-      }
-    },
-    {
-      "_id": "b849a08d-2f47-4e4c-8c5c-99bb5f6f5c30",
-      "nodeType": "InnerTreeEvaluatorNode",
-      "details": {
-        "tree": "CHWebFiling-Login"
       }
     },
     {
@@ -186,12 +145,54 @@
           "*"
         ]
       }
+    },
+    {
+      "_id": "b849a08d-2f47-4e4c-8c5c-99bb5f6f5c30",
+      "nodeType": "InnerTreeEvaluatorNode",
+      "details": {
+        "tree": "CHWebFiling-Login"
+      }
+    },
+    {
+      "_id": "74199d6d-3081-4171-ae85-4900e16dd12b",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "b559209e-541e-47f5-9a35-d455c564a2ea",
+        "outcomes": [
+          "user_unlocked",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "16dcf5f0-0df5-4e9c-8fc5-c5d356f5e64e",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149",
+        "outcomes": [
+          "success",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
     }
   ],
   "tree": {
     "_id": "CHSCRSActivation",
     "identityResource": "managed/alpha_user",
     "uiConfig": {},
+    "description": "Activate an user who has been created and/or associated with a company via the SCRS process.",
     "entryNodeId": "680989b5-052e-4c96-9f11-0950f524b442",
     "nodes": {
       "00e99fef-7db0-4751-ae63-ff6e8c754676": {
@@ -213,16 +214,6 @@
         },
         "nodeType": "InnerTreeEvaluatorNode",
         "displayName": "Complete Profile"
-      },
-      "16dcf5f0-0df5-4e9c-8fc5-c5d356f5e64e": {
-        "x": 1225,
-        "y": 689.015625,
-        "connections": {
-          "error": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50",
-          "success": "74199d6d-3081-4171-ae85-4900e16dd12b"
-        },
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "Get IDM token"
       },
       "3971f45f-3b9c-4c4b-b938-e3631f1d2b50": {
         "x": 984,
@@ -251,16 +242,6 @@
         "nodeType": "ScriptedDecisionNode",
         "displayName": "get IDM token"
       },
-      "74199d6d-3081-4171-ae85-4900e16dd12b": {
-        "x": 1485,
-        "y": 639.015625,
-        "connections": {
-          "error": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50",
-          "user_unlocked": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
-        },
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "Unlock user"
-      },
       "b0eb0351-07cb-478b-8c11-8bac04ab6a94": {
         "x": 1325,
         "y": 22.015625,
@@ -270,16 +251,6 @@
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Load New Pwd for Patch"
-      },
-      "b849a08d-2f47-4e4c-8c5c-99bb5f6f5c30": {
-        "x": 684,
-        "y": 626.015625,
-        "connections": {
-          "false": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50",
-          "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
-        },
-        "nodeType": "InnerTreeEvaluatorNode",
-        "displayName": "Inner Tree Evaluator"
       },
       "bc31d437-ef87-4f98-84ff-b08ac9d186ba": {
         "x": 922,
@@ -316,12 +287,42 @@
         "x": 443,
         "y": 129.015625,
         "connections": {
-          "already_active": "b849a08d-2f47-4e4c-8c5c-99bb5f6f5c30",
           "error": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50",
+          "already_active": "b849a08d-2f47-4e4c-8c5c-99bb5f6f5c30",
           "not_active": "00e99fef-7db0-4751-ae63-ff6e8c754676"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Check activation params"
+      },
+      "b849a08d-2f47-4e4c-8c5c-99bb5f6f5c30": {
+        "x": 684,
+        "y": 626.015625,
+        "connections": {
+          "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
+          "false": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50"
+        },
+        "nodeType": "InnerTreeEvaluatorNode",
+        "displayName": "Inner Tree Evaluator"
+      },
+      "74199d6d-3081-4171-ae85-4900e16dd12b": {
+        "x": 1485,
+        "y": 639.015625,
+        "connections": {
+          "user_unlocked": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
+          "error": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Unlock user"
+      },
+      "16dcf5f0-0df5-4e9c-8fc5-c5d356f5e64e": {
+        "x": 1225,
+        "y": 689.015625,
+        "connections": {
+          "success": "74199d6d-3081-4171-ae85-4900e16dd12b",
+          "error": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Get IDM token"
       }
     },
     "staticNodes": {
@@ -337,7 +338,6 @@
         "x": 596,
         "y": 898
       }
-    },
-    "description": "Activate an user who has been created and/or associated with a company via the SCRS process."
+    }
   }
 }
