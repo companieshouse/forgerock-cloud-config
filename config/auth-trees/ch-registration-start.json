@@ -18,6 +18,29 @@
       }
     },
     {
+      "_id": "170c78c3-ec39-46e0-b533-23c4d5aeb914",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "0be76ade-2b6c-4ee9-8ffb-5b8c4d7446da",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "17c4c923-5d2d-4b22-8850-a4a4d8904a3d",
+      "nodeType": "InnerTreeEvaluatorNode",
+      "details": {
+        "tree": "CHMultiFactorGeneric"
+      }
+    },
+    {
       "_id": "24595c6d-40a2-4592-a8f2-7823bb5d84be",
       "nodeType": "ScriptedDecisionNode",
       "details": {
@@ -75,6 +98,23 @@
         "script": "d67457d4-b0ed-4b77-9ca1-23295246c9fd",
         "outcomes": [
           "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "4a12b6bb-4412-49f4-8276-715e329c1d9f",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "eac3ce3e-0dae-4eea-8ec8-cb9be9479ee4",
+        "outcomes": [
+          "true",
+          "error"
         ],
         "outputs": [
           "*"
@@ -195,19 +235,13 @@
       }
     },
     {
-      "_id": "17c4c923-5d2d-4b22-8850-a4a4d8904a3d",
-      "nodeType": "InnerTreeEvaluatorNode",
-      "details": {
-        "tree": "CHMultiFactorGeneric"
-      }
-    },
-    {
-      "_id": "170c78c3-ec39-46e0-b533-23c4d5aeb914",
+      "_id": "048b731f-e190-4f52-98e3-18e5c009a2d0",
       "nodeType": "ScriptedDecisionNode",
       "details": {
-        "script": "0be76ade-2b6c-4ee9-8ffb-5b8c4d7446da",
+        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149",
         "outcomes": [
-          "true"
+          "success",
+          "error"
         ],
         "outputs": [
           "*"
@@ -218,12 +252,12 @@
       }
     },
     {
-      "_id": "4a12b6bb-4412-49f4-8276-715e329c1d9f",
+      "_id": "83d28f4a-5397-4553-a131-135de0ee2b6d",
       "nodeType": "ScriptedDecisionNode",
       "details": {
-        "script": "eac3ce3e-0dae-4eea-8ec8-cb9be9479ee4",
+        "script": "6b876ea7-c36e-475a-9706-f2ff658543cb",
         "outcomes": [
-          "true",
+          "success",
           "error"
         ],
         "outputs": [
@@ -251,6 +285,25 @@
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Load Keys"
       },
+      "170c78c3-ec39-46e0-b533-23c4d5aeb914": {
+        "x": 229,
+        "y": 90.015625,
+        "connections": {
+          "true": "4a12b6bb-4412-49f4-8276-715e329c1d9f"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Capture Name & Email"
+      },
+      "17c4c923-5d2d-4b22-8850-a4a4d8904a3d": {
+        "x": 749,
+        "y": 396.015625,
+        "connections": {
+          "false": "6ca3881c-7762-4280-a8be-692395b136d4",
+          "true": "997cc39b-afde-4935-b9b5-a0d4e3034072"
+        },
+        "nodeType": "InnerTreeEvaluatorNode",
+        "displayName": "Check OTP SubFlow"
+      },
       "24595c6d-40a2-4592-a8f2-7823bb5d84be": {
         "x": 714,
         "y": 829.015625,
@@ -275,8 +328,8 @@
         "x": 1724,
         "y": 143.015625,
         "connections": {
-          "resend": "781e185e-f4da-442b-9fcd-827a4f235066",
-          "change_email": "170c78c3-ec39-46e0-b533-23c4d5aeb914"
+          "change_email": "170c78c3-ec39-46e0-b533-23c4d5aeb914",
+          "resend": "781e185e-f4da-442b-9fcd-827a4f235066"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Email Sent Confirmation"
@@ -289,6 +342,16 @@
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Set User Existing"
+      },
+      "4a12b6bb-4412-49f4-8276-715e329c1d9f": {
+        "x": 492,
+        "y": 66.015625,
+        "connections": {
+          "error": "170c78c3-ec39-46e0-b533-23c4d5aeb914",
+          "true": "048b731f-e190-4f52-98e3-18e5c009a2d0"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Check Name & Email"
       },
       "6ca3881c-7762-4280-a8be-692395b136d4": {
         "x": 1519,
@@ -308,8 +371,8 @@
         "displayName": "Resend Or Change address"
       },
       "817f8595-f2cc-45ce-b4f8-ad7aa6fdd1ea": {
-        "x": 169,
-        "y": 254.015625,
+        "x": 303,
+        "y": 327.015625,
         "connections": {
           "false": "a87fa542-b6d3-49a1-bbdf-30370ae7042e",
           "true": "453352a5-1e8a-4696-a439-0f09555ebc4f"
@@ -357,34 +420,25 @@
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Load Keys"
       },
-      "17c4c923-5d2d-4b22-8850-a4a4d8904a3d": {
-        "x": 749,
-        "y": 396.015625,
+      "048b731f-e190-4f52-98e3-18e5c009a2d0": {
+        "x": 75,
+        "y": 256.015625,
         "connections": {
-          "true": "997cc39b-afde-4935-b9b5-a0d4e3034072",
-          "false": "6ca3881c-7762-4280-a8be-692395b136d4"
-        },
-        "nodeType": "InnerTreeEvaluatorNode",
-        "displayName": "Check OTP SubFlow"
-      },
-      "170c78c3-ec39-46e0-b533-23c4d5aeb914": {
-        "x": 229,
-        "y": 90.015625,
-        "connections": {
-          "true": "4a12b6bb-4412-49f4-8276-715e329c1d9f"
+          "success": "83d28f4a-5397-4553-a131-135de0ee2b6d",
+          "error": "6ca3881c-7762-4280-a8be-692395b136d4"
         },
         "nodeType": "ScriptedDecisionNode",
-        "displayName": "Capture Name & Email"
+        "displayName": "Get IDM token"
       },
-      "4a12b6bb-4412-49f4-8276-715e329c1d9f": {
-        "x": 492,
-        "y": 66.015625,
+      "83d28f4a-5397-4553-a131-135de0ee2b6d": {
+        "x": 86,
+        "y": 450.015625,
         "connections": {
-          "error": "170c78c3-ec39-46e0-b533-23c4d5aeb914",
-          "true": "817f8595-f2cc-45ce-b4f8-ad7aa6fdd1ea"
+          "success": "817f8595-f2cc-45ce-b4f8-ad7aa6fdd1ea",
+          "error": "817f8595-f2cc-45ce-b4f8-ad7aa6fdd1ea"
         },
         "nodeType": "ScriptedDecisionNode",
-        "displayName": "Check Name & Email"
+        "displayName": "Create/Update user"
       }
     },
     "staticNodes": {

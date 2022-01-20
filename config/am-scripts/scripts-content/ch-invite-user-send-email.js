@@ -363,7 +363,7 @@ var config = {
 };
 
 try {
-  var host = requestHeaders.get('origin').get(0);
+  var host = _getVariable('esv.c5d3143c84.manualcustomuiurl');
   var request = new org.forgerock.http.protocol.Request();
   var inviteData = extractInviteDataFromState();
   var isOnboarding = checkIfOnboarding();

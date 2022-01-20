@@ -275,43 +275,39 @@ function fetchUserFromEWFBySearchTerm (accessToken, searchTerm) {
   return null;
 }
 
+function extractEmailAddressFromState (){
+  var username = sharedState.get('username');
+  if(!username){
+    username = sharedState.get('objectAttributes').get('mail');
+  }
+  return username;
+}
 
 // main execution flow
 try {
   var ACCESS_TOKEN_STATE_FIELD = 'idmAccessToken';
   var alphaUserUrl = _fromConfig('FIDC_ENDPOINT') + '/openidm/managed/alpha_user/';
   var SYSTEM_WEBFILING_USER = _fromConfig('FIDC_ENDPOINT') + '/openidm/system/WebfilingUser/webfilingUser';
-  var username = sharedState.get('username');
-  var password = transientState.get('password');
+  var username = extractEmailAddressFromState();
+
 
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
-  if (accessToken == null) {
-    _log('Access token not in shared state');
+  if (!accessToken || !username) {
+    _log('Access token or user email not in shared state');      
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
+  } else {
+    var result = createOrUpdateUser (accessToken, username);
+    if(!result){
+      _log('User create/update from source failed - proceeding to login with existing IDM credentials');
+      action = fr.Action.goTo(NodeOutcome.ERROR).build(); 
+    } else {
+      action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
+    } 
   }
-
-  var result = createOrUpdateUser (accessToken, username);
-  if(!result){
-    _log('User create/update from source failed - proceeding to login with existing IDM credentials');
-  }
-  // action = fr.Action.send(
-  //   new fr.TextOutputCallback(
-  //     fr.TextOutputCallback.INFORMATION,
-  //     JSON.stringify(result)
-  //   )
-  // ).build();
-
-  action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
 } catch (e) {
   sharedState.put('errorMessage', e.toString());
   _log('error - ' + e);
-  //action = fr.Action.goTo(NodeOutcome.ERROR).build();
-  action = fr.Action.send(
-    new fr.TextOutputCallback(
-      fr.TextOutputCallback.INFORMATION,
-      e.toString()
-    )
-  ).build();
+  action = fr.Action.goTo(NodeOutcome.ERROR).build();
 }
 
 // LIBRARY START
