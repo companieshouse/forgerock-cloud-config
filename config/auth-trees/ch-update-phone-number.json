@@ -42,6 +42,30 @@
       }
     },
     {
+      "_id": "4a256d89-2e4a-41d4-bb48-ef024969af95",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "6811d9da-4d44-488e-9e32-19a199dc0b3f",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "697a1140-9e54-4150-805f-6d5ea7cee7a0",
+      "nodeType": "IdentifyExistingUserNode",
+      "details": {
+        "identityAttribute": "mail",
+        "identifier": "userName"
+      }
+    },
+    {
       "_id": "6e941621-19ff-4354-bf46-8368756a4c37",
       "nodeType": "ScriptedDecisionNode",
       "details": {
@@ -79,35 +103,6 @@
       }
     },
     {
-      "_id": "de15cac3-ec51-4d79-9a25-271ba0b3d850",
-      "nodeType": "DataStoreDecisionNode",
-      "details": {}
-    },
-    {
-      "_id": "697a1140-9e54-4150-805f-6d5ea7cee7a0",
-      "nodeType": "IdentifyExistingUserNode",
-      "details": {
-        "identityAttribute": "mail",
-        "identifier": "userName"
-      }
-    },
-    {
-      "_id": "4a256d89-2e4a-41d4-bb48-ef024969af95",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "script": "6811d9da-4d44-488e-9e32-19a199dc0b3f",
-        "outcomes": [
-          "true"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
-      }
-    },
-    {
       "_id": "a2dbeefa-1379-4062-8c70-217e6867f0a3",
       "nodeType": "ScriptedDecisionNode",
       "details": {
@@ -124,10 +119,31 @@
       }
     },
     {
+      "_id": "de15cac3-ec51-4d79-9a25-271ba0b3d850",
+      "nodeType": "DataStoreDecisionNode",
+      "details": {}
+    },
+    {
       "_id": "e64ccc56-1a09-4f86-8225-98b3b8e48b64",
       "nodeType": "InnerTreeEvaluatorNode",
       "details": {
         "tree": "CHMultiFactorGeneric"
+      }
+    },
+    {
+      "_id": "333e7d00-4900-4877-b916-690eae53f160",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "fdac4efb-d8b8-478b-8300-e11a4c3503df",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
       }
     }
   ],
@@ -151,8 +167,8 @@
         "x": 682,
         "y": 382.015625,
         "connections": {
-          "Retry": "173f27f6-a619-4e73-9008-e55252030161",
-          "Reject": "a2dbeefa-1379-4062-8c70-217e6867f0a3"
+          "Reject": "333e7d00-4900-4877-b916-690eae53f160",
+          "Retry": "173f27f6-a619-4e73-9008-e55252030161"
         },
         "nodeType": "RetryLimitDecisionNode",
         "displayName": "Retry Limit Decision"
@@ -165,6 +181,25 @@
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Login Error"
+      },
+      "4a256d89-2e4a-41d4-bb48-ef024969af95": {
+        "x": 1928,
+        "y": 269.015625,
+        "connections": {
+          "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Update Phone Confirmation"
+      },
+      "697a1140-9e54-4150-805f-6d5ea7cee7a0": {
+        "x": 425,
+        "y": 242.015625,
+        "connections": {
+          "false": "a2dbeefa-1379-4062-8c70-217e6867f0a3",
+          "true": "173f27f6-a619-4e73-9008-e55252030161"
+        },
+        "nodeType": "IdentifyExistingUserNode",
+        "displayName": "Identify Existing User"
       },
       "6e941621-19ff-4354-bf46-8368756a4c37": {
         "x": 74,
@@ -189,11 +224,18 @@
         "x": 1682,
         "y": 256.015625,
         "connections": {
-          "PATCHED": "4a256d89-2e4a-41d4-bb48-ef024969af95",
-          "FAILURE": "a2dbeefa-1379-4062-8c70-217e6867f0a3"
+          "FAILURE": "a2dbeefa-1379-4062-8c70-217e6867f0a3",
+          "PATCHED": "4a256d89-2e4a-41d4-bb48-ef024969af95"
         },
         "nodeType": "PatchObjectNode",
         "displayName": "Patch Object"
+      },
+      "a2dbeefa-1379-4062-8c70-217e6867f0a3": {
+        "x": 1552,
+        "y": 648.015625,
+        "connections": {},
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "generic error"
       },
       "de15cac3-ec51-4d79-9a25-271ba0b3d850": {
         "x": 973,
@@ -205,41 +247,22 @@
         "nodeType": "DataStoreDecisionNode",
         "displayName": "Data Store Decision"
       },
-      "697a1140-9e54-4150-805f-6d5ea7cee7a0": {
-        "x": 425,
-        "y": 242.015625,
-        "connections": {
-          "true": "173f27f6-a619-4e73-9008-e55252030161",
-          "false": "a2dbeefa-1379-4062-8c70-217e6867f0a3"
-        },
-        "nodeType": "IdentifyExistingUserNode",
-        "displayName": "Identify Existing User"
-      },
-      "4a256d89-2e4a-41d4-bb48-ef024969af95": {
-        "x": 1928,
-        "y": 269.015625,
-        "connections": {
-          "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
-        },
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "Update Phone Confirmation"
-      },
-      "a2dbeefa-1379-4062-8c70-217e6867f0a3": {
-        "x": 1552,
-        "y": 648.015625,
-        "connections": {},
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "generic error"
-      },
       "e64ccc56-1a09-4f86-8225-98b3b8e48b64": {
         "x": 1328,
         "y": 244.015625,
         "connections": {
-          "true": "8fe21f7c-e4ac-4456-afd2-67dc27b9db8e",
-          "false": "a2dbeefa-1379-4062-8c70-217e6867f0a3"
+          "false": "a2dbeefa-1379-4062-8c70-217e6867f0a3",
+          "true": "8fe21f7c-e4ac-4456-afd2-67dc27b9db8e"
         },
         "nodeType": "InnerTreeEvaluatorNode",
         "displayName": "Check OTP SubFlow"
+      },
+      "333e7d00-4900-4877-b916-690eae53f160": {
+        "x": 1055,
+        "y": 702.015625,
+        "connections": {},
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "max attempts exceeded"
       }
     },
     "staticNodes": {
