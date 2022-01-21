@@ -82,23 +82,62 @@ try {
       ).build();
     }
   } else {
+
     var newPassword = fr.String(callbacks.get(1).getPassword());
     var confirmNewPassword = fr.String(callbacks.get(2).getPassword());
-    if (!confirmNewPassword.equals(newPassword)) {
-      var infoMessage = 'The new password and confirmation do not match.';
+
+    if (newPassword && newPassword.trim().length === 0) {
+      newPassword = null;
+    }
+
+    if (confirmNewPassword && confirmNewPassword.trim().length === 0) {
+      confirmNewPassword = null;
+    }
+
+    var errors = [];
+
+    if (!newPassword) {
+      errors.push({
+        label: 'The new password cannot be empty.',
+        token: 'CREATE_PASSWORD_REQUIRED',
+        fieldName: 'IDToken2',
+        anchor: 'IDToken2'
+      });
+    }
+
+    if (!confirmNewPassword) {
+      errors.push({
+        label: 'The confirmation password cannot be empty.',
+        token: 'CREATE_REENTER_PASSWORD_REQUIRED',
+        fieldName: 'IDToken3',
+        anchor: 'IDToken3'
+      });
+    }
+
+    if (newPassword && confirmNewPassword && (newPassword !== confirmNewPassword)) {
+      errors.push({
+        label: 'The new password and confirmation do not match.',
+        token: 'PWD_MISMATCH',
+        fieldName: 'IDToken3',
+        anchor: 'IDToken3'
+      });
+    }
+
+    if (errors.length > 0) {
+      var infoMessage = 'There is an issue with the password supplied.';
+
       var errorProps = JSON.stringify(
         {
-          'errors': [{
-            label: infoMessage,
-            token: 'PWD_MISMATCH',
-            fieldName: 'IDToken2',
-            anchor: 'IDToken2'
-          }]
+          'errors': errors
         });
+
       raiseErrorCallback(fr.TextOutputCallback.ERROR, stageName, userName, invitedCompanyName, infoMessage, errorProps);
+
     } else {
+
       transientState.put('newPassword', newPassword);
       action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
+
     }
   }
 } catch (e) {
