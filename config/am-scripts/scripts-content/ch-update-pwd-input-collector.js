@@ -64,8 +64,8 @@ if (callbacks.isEmpty()) {
     errors.push({
       label: 'The new password cannot be empty.',
       token: 'CREATE_PASSWORD_REQUIRED',
-      fieldName: 'IDToken2',
-      anchor: 'IDToken2'
+      fieldName: 'IDToken3',
+      anchor: 'IDToken3'
     });
   }
 
@@ -73,8 +73,8 @@ if (callbacks.isEmpty()) {
     errors.push({
       label: 'The confirmation password cannot be empty.',
       token: 'CREATE_REENTER_PASSWORD_REQUIRED',
-      fieldName: 'IDToken3',
-      anchor: 'IDToken3'
+      fieldName: 'IDToken4',
+      anchor: 'IDToken4'
     });
   }
 
