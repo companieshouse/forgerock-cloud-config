@@ -1,33 +1,6 @@
 var _scriptName = 'CH FETCH COMPANY INFO';
 _log('Starting');
 
-/* 
-  ** INPUT DATA
-    * SHARED STATE:
-    - 'companyNumber' : the company number we need to lookup 
-    - 'implicitConfirmSelection': 
-    
-    * TRANSIENT STATE
-    - 'idmAccessToken' : the IDM Access Token, which can be obtained by executing a scripted decision node configured with the script 'CH - Get IDM Access Token'
-
-  ** OUTPUT DATA
-    * SHARED STATE:
-    - 'companyData': the company data, result of the lookup
-    - 'hashedCredential': the company auth code
-    - 'validateMethod': the hashing type ('CHS' for auth codes)
-    - [optional] 'errorMessage': error message to display from previous attempts
-
-  ** OUTCOMES
-    - true: user confirms to go ahdead with association
-    - false: user goes back to company selection, or no company number found in context, auth code not set for company, company cannot be found in IDM, generic error
-    - error: IDM token not found
-  
-  ** CALLBACKS:
-    - Output INFO: Display of company information
-    - Input: User confirmation if they want to file for this company (YES proceeds to association, NO goes back to company no. prompt)
-    - Output ERROR: Error - company number not found
-*/
-
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
   javax.security.auth.callback.TextOutputCallback,
@@ -57,7 +30,6 @@ function logResponse (response) {
   _log('Scripted Node HTTP Response: ' + response.getStatus() + ', Body: ' + response.getEntity().getString());
 }
 
-//fetches the IDM access token from transient state
 function fetchIDMToken () {
   var ACCESS_TOKEN_STATE_FIELD = 'idmAccessToken';
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
@@ -68,9 +40,8 @@ function fetchIDMToken () {
   return accessToken;
 }
 
-// fetches the company by number
 function getCompanyByNumber (accessToken, companyNumber) {
-    
+
   var request = new org.forgerock.http.protocol.Request();
 
   request.setMethod('GET');
@@ -81,7 +52,7 @@ function getCompanyByNumber (accessToken, companyNumber) {
   request.getHeaders().add('Content-Type', 'application/json');
 
   var response = httpClient.send(request).get();
-  
+
   if (response.getStatus().getCode() === 200) {
     _log('200 response from IDM');
     var companyResponse = JSON.parse(response.getEntity().getString());
@@ -108,8 +79,8 @@ function getCompanyByNumber (accessToken, companyNumber) {
   }
 }
 
-function createPatchItem (fieldName, value){
-  if (!value){
+function createPatchItem (fieldName, value) {
+  if (!value) {
     return {
       'operation': 'remove',
       'field': '/' + fieldName
@@ -121,18 +92,15 @@ function createPatchItem (fieldName, value){
   };
 }
 
-
-//creates a company with the given data, or update it if already exists
 function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
   try {
-    
-    
+
     //gets company data from CHS
     var chsCompanyData = fetchCompanyFromCHS(accessToken, companyNumber);
     //gets auth code data from EWF
     var ewfAuthCodeData = fetchAuthCodeFromEWF(accessToken, companyNumber);
 
-    if(!chsCompanyData.success && !ewfAuthCodeData.success && !idmCompanyResult.success){
+    if (!chsCompanyData.success && !ewfAuthCodeData.success && !idmCompanyResult.success) {
       return {
         success: false,
         message: 'Company with number ' + companyNumber + ' not found in CHS, EWF or FIDC'
@@ -140,7 +108,7 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
     }
 
     //if the record is not found in neither CHS nor EWF, but is in FIDC, we skip the update/create logic and return the FIDC version
-    if(!chsCompanyData.success && !ewfAuthCodeData.success && idmCompanyResult.success){
+    if (!chsCompanyData.success && !ewfAuthCodeData.success && idmCompanyResult.success) {
       return {
         success: true,
         companyData: idmCompanyResult.companyData,
@@ -150,15 +118,14 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
 
     var request = new org.forgerock.http.protocol.Request();
     var requestBodyJson;
-    
-    if(!idmCompanyResult.success){
+
+    if (!idmCompanyResult.success) {
       request.setMethod('POST');
       request.setUri(idmCompanyEndpoint + '?_action=create');
       requestBodyJson = {
-        //if the record is found in either CHS or EWF we create the record in FIDC
         number: chsCompanyData.success ? chsCompanyData.data.number : ewfAuthCodeData.data.number,
         type: chsCompanyData.success ? chsCompanyData.data.type : null,
-        status: chsCompanyData.success? chsCompanyData.data.status : null,
+        status: chsCompanyData.success ? chsCompanyData.data.status : null,
         locality: chsCompanyData.success ? chsCompanyData.data.locality : null,
         postalCode: chsCompanyData.success ? chsCompanyData.data.postalCode : null,
         addressLine1: chsCompanyData.success ? chsCompanyData.data.addressLine1 : null,
@@ -169,7 +136,7 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
         name: chsCompanyData.success ? chsCompanyData.data.name : null,
         authCode: ewfAuthCodeData.success ? ewfAuthCodeData.data.authCode : null,
         authCodeValidFrom: ewfAuthCodeData.success ? ewfAuthCodeData.data.authCodeValidFrom : null,
-        authCodeValidUntil: ewfAuthCodeData.success ?  ewfAuthCodeData.data.authCodeValidUntil : null
+        authCodeValidUntil: ewfAuthCodeData.success ? ewfAuthCodeData.data.authCodeValidUntil : null
       };
     } else {
       var companyId = idmCompanyResult.companyData._id;
@@ -177,7 +144,7 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
       request.setUri(idmCompanyEndpoint + companyId);
       requestBodyJson = [
         createPatchItem('type', chsCompanyData.success ? chsCompanyData.data.type : null),
-        createPatchItem('status', chsCompanyData.success? chsCompanyData.data.status : null),
+        createPatchItem('status', chsCompanyData.success ? chsCompanyData.data.status : null),
         createPatchItem('locality', chsCompanyData.success ? chsCompanyData.data.locality : null),
         createPatchItem('postalCode', chsCompanyData.success ? chsCompanyData.data.postalCode : null),
         createPatchItem('addressLine1', chsCompanyData.success ? chsCompanyData.data.addressLine1 : null),
@@ -188,7 +155,7 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
         createPatchItem('name', chsCompanyData.success ? chsCompanyData.data.name : null),
         createPatchItem('authCode', ewfAuthCodeData.success ? ewfAuthCodeData.data.authCode : null),
         createPatchItem('authCodeValidFrom', ewfAuthCodeData.success ? ewfAuthCodeData.data.authCodeValidFrom : null),
-        createPatchItem('authCodeValidUntil', ewfAuthCodeData.success ?  ewfAuthCodeData.data.authCodeValidUntil : null)     
+        createPatchItem('authCodeValidUntil', ewfAuthCodeData.success ? ewfAuthCodeData.data.authCodeValidUntil : null)
       ];
     }
 
@@ -217,7 +184,6 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
   }
 }
 
-// fetch the Company object given a company number
 function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdiction, skipConfirmation) {
   if (companyNumber == null) {
     _log('No company number in shared state');
@@ -364,14 +330,14 @@ function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdic
       }
     } else {
       _log('No company results for company number ' + companyNumber);
-      sharedState.put('errorMessage', 'The company ' + companyNumber + ' could not be found. ' + searchTerm);
+      sharedState.put('errorMessage', 'The company ' + companyNumber + ' could not be found.');
       sharedState.put('pagePropsJSON', JSON.stringify(
         {
           'errors': [{
-            label: 'The company ${companyNumber} could not be found.',
+            label: 'The company ' + companyNumber + ' could not be found.',
             token: 'COMPANY_NOT_FOUND',
-            fieldName: isEWF ? 'IDToken3' : 'IDToken2',
-            anchor: isEWF ? 'IDToken3' : 'IDToken2'
+            fieldName: 'IDToken2',
+            anchor: 'IDToken2'
           }],
           'company': { number: companyNumber }
         }));
@@ -389,8 +355,8 @@ function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdic
         'errors': [{
           label: 'Error while retrieving company ' + companyNumber + '.',
           token: 'COMPANY_FETCH_ERROR',
-          fieldName: isEWF ? 'IDToken3' : 'IDToken2',
-          anchor: isEWF ? 'IDToken3' : 'IDToken2'
+          fieldName: 'IDToken2',
+          anchor: 'IDToken2'
         }],
         'company': { number: companyNumber }
       }));
@@ -401,7 +367,6 @@ function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdic
   }
 }
 
-// fetch the Company from the Mongo connector
 function fetchCompanyFromCHS (accessToken, companyNumber) {
 
   try {
@@ -454,21 +419,20 @@ function fetchCompanyFromCHS (accessToken, companyNumber) {
     } else {
       return {
         success: false,
-        message: 'no results - ' + response.resultCount 
+        message: 'no results - ' + response.resultCount
       };
     }
   } catch (e) {
     _log('Error : ' + e);
     return {
       success: false,
-      message: 'error - ' + e.toString() 
+      message: 'error - ' + e.toString()
     };
   }
 
   return null;
 }
 
-// fetch the Auth code from the Oracle DB connector
 function fetchAuthCodeFromEWF (accessToken, companyNumber) {
   try {
     if (!companyNumber || companyNumber.trim() === '') {
@@ -509,21 +473,21 @@ function fetchAuthCodeFromEWF (accessToken, companyNumber) {
     } else {
       return {
         success: false,
-        message: 'no results - ' + response.resultCount 
+        message: 'no results - ' + response.resultCount
       };
     }
   } catch (e) {
     _log('Error : ' + e);
     return {
       success: false,
-      message: 'error - ' + e.toString() 
+      message: 'error - ' + e.toString()
     };
   }
 }
 
 // main execution flow
+
 var YES_OPTION_INDEX = 0;
-var NO_OPTION_INDEX = 1;
 var idmCompanyEndpoint = _fromConfig('FIDC_ENDPOINT') + '/openidm/managed/alpha_organization/';
 var SYSTEM_CHS_COMPANY = _fromConfig('FIDC_ENDPOINT') + '/openidm/system/CHSCompany/company_profile';
 var SYSTEM_WEBFILING_AUTH_CODE = _fromConfig('FIDC_ENDPOINT') + '/openidm/system/WebfilingAuthCode/authCode';
@@ -560,7 +524,7 @@ try {
 
         //fetchCompany can only result in callbacks, does not transition anywhere
         var idmCompanyData = getCompanyByNumberAndJurisdiction(accessToken, companyNumber, jurisdiction, skipConfirmation);
-        
+
         if (!idmCompanyData.success) {
           outcome = NodeOutcome.FALSE;
         }
@@ -575,9 +539,9 @@ try {
     } else {
       var companyNumber = sharedState.get('companyNumber');
       var jurisdiction = sharedState.get('jurisdiction');
-      
-      var updateResult = createOrUpdateCompany (accessToken, companyNumber);
-      
+
+      var updateResult = createOrUpdateCompany(accessToken, companyNumber);
+
       //fetchCompany can only result in callbacks, does not transition anywhere
       var idmCompanyData = getCompanyByNumberAndJurisdiction(accessToken, companyNumber, jurisdiction, skipConfirmation);
       if (!idmCompanyData.success) {
