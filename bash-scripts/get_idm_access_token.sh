@@ -37,8 +37,12 @@ fi
 # 0. SETUP COOKIE NAME
 #################################
 
-# Dev Cookie by default
-COOKIE_NAME="dd8758f44f45905"
+# Live Cookie by default
+COOKIE_NAME="92a4e3521f3bb0d"
+
+if [[ "${fidcServer}" == *"dev"* ]]; then
+  COOKIE_NAME="dd8758f44f45905"
+fi
 
 if [[ "${fidcServer}" == *"staging"* ]]; then
   COOKIE_NAME="8fa4178f20bdf21"
