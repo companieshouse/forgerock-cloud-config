@@ -493,16 +493,25 @@
   }
 
   function getCompanyEmails (companyNumber) {
-    let request = {
-      'url': ENDPOINT_AUTHORISED_FILERS_EMAILS + '?companyNo=' + companyNumber,
-      'method': 'GET',
-      'headers': {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + BEARER_TOKEN_AUTHORISED_FILERS_EMAILS
-      }
-    };
+    try {
+      let request = {
+        'url': ENDPOINT_AUTHORISED_FILERS_EMAILS + '?companyNo=' + companyNumber,
+        'method': 'GET',
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + BEARER_TOKEN_AUTHORISED_FILERS_EMAILS
+        }
+      };
 
-    return openidm.action('external/rest', 'call', request);
+      _log('Get Company Emails request : ' + JSON.stringify(request));
+      const result = openidm.action('external/rest', 'call', request);
+      _log('Get Company Emails response : ' + JSON.stringify(result));
+
+      return result;
+    } catch (e) {
+      _log('Error in getCompanyEmails() call : ' + e);
+      return {};
+    }
   }
 
   function determineTimePoint () {
@@ -778,7 +787,7 @@
                     try {
                       _log('Getting Company Emails for No : ' + companyIncorpItem.company_number);
                       let emailsResponse = getCompanyEmails(companyIncorpItem.company_number);
-                      _log('Emails response : ' + emailsResponse);
+                      _log('Emails response : ' + JSON.stringify(emailsResponse));
 
                       if (emailsResponse && emailsResponse.items) {
                         let emailsUnique = removeDuplicateEmails(emailsResponse.items);
@@ -798,6 +807,8 @@
                             associateUserWithCompany(email, companyInfo);
                           }
                         });
+                      } else {
+                        _log('No emails provided to associate with company : ' + companyIncorpItem.company_number);
                       }
 
                     } catch (e) {
