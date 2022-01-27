@@ -1,0 +1,20 @@
+{
+  "_id": "CHS Companies to alpha organization",
+  "enabled": true,
+	"persisted": true,
+	"recoverable": false,
+	"misfirePolicy": "fireAndProceed",
+	"schedule": "0 0 5,17 ? * * *",
+	"repeatInterval": 0,
+	"repeatCount": 0,
+	"type": "cron",
+	"invokeService": "sync",
+	"invokeContext": {
+		"action": "reconcile",
+		"mapping": "chsMongoCompanyProfile_alphaOrg"
+	},
+	"invokeLogLevel": "info",
+	"startTime": null,
+	"endTime": null,
+	"concurrentExecution": false
+}
