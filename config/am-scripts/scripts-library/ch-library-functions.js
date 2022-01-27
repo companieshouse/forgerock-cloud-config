@@ -52,12 +52,21 @@ function _getSelectedLanguage (requestHeaders) {
   return 'EN';
 }
 
+function _loginBasedObfuscation () {
+  // If logged in, we won't obfuscate any content
+  return _isAuthenticated();
+}
+
 function _obfuscateEmail (email) {
   if (!email || email.replace(/\s/g, '').length === 0 || email.replace(/\s/g, '').indexOf('@') <= 0) {
     return email;
   }
 
   email = email.replace(/\s/g, '');
+
+  if (_loginBasedObfuscation()) {
+    return email;
+  }
 
   var at = email.indexOf('@');
   var username = email.substring(0, at).trim();
@@ -79,6 +88,10 @@ function _obfuscatePhone (phone) {
   }
 
   phone = phone.replace(/\s/g, '');
+
+  if (_loginBasedObfuscation()) {
+    return _padPhone(phone);
+  }
 
   var buffer = '';
   for (var i = 0; i < phone.length - NUM_CHARS_TO_SHOW; i++) {
@@ -222,7 +235,7 @@ function _getJurisdictionCode (data) {
 
 function _getCurrentDateAsString () {
   var date = new Date();
-  return _convertDateToString (date)
+  return _convertDateToString(date);
 }
 
 //converts a JS date/time into a string in RFC-4517 format (YYYY-MM-DDTHH:MM:SSZ)
