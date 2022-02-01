@@ -122,13 +122,32 @@ function _padPhone (phone) {
 }
 
 function _isValidPhone (number) {
-  var mobileValid = /^((0044|0|\+44)7\d{3}\s?\d{6})$/.test(number);
-  if (mobileValid) {
-    _log('phone number : \'' + number + '\' is valid');
-    return true;
+  var mobileValid = false;
+
+  if (number) {
+    number = number.replace(/\s/g, '');
+
+    var digitsCount = number.replace(/\D/g, '').length;
+    var containsInvalidChar = false;
+
+    for (var i = 0; i < number.length; i++) {
+      var ch = number[i];
+
+      if (ch === ' ' || /^\d+$/.test(ch)) {
+        continue;
+      }
+
+      if (!(ch === '+' || ch === '-' || ch === '(' || ch === ')')) {
+        containsInvalidChar = true;
+        break;
+      }
+    }
+
+    mobileValid = (!containsInvalidChar && (digitsCount >= 11 && digitsCount <= 13));
   }
-  _log('phone number : \'' + number + '\' is NOT valid');
-  return false;
+
+  _log('Phone number : \'' + number + '\' is ' + (mobileValid ? 'VALID' : '*NOT* VALID'));
+  return mobileValid;
 }
 
 function _getJourneyName () {
@@ -168,6 +187,56 @@ function _fetchIDMToken () {
     return false;
   }
   return accessToken;
+}
+
+function _getFromSharedState (propName) {
+  var propNameValue = sharedState.get(propName);
+
+  if (propNameValue) {
+    _log('SharedState -> ' + propName + ' : ' + propNameValue);
+    return propNameValue;
+  }
+
+  return '';
+}
+
+function _getUserIdFromSharedState () {
+  var idProp = _getFromSharedState('_id');
+  if (idProp) {
+    return idProp;
+  }
+
+  if (sharedState.get('objectAttributes')) {
+    var oaIdProp = sharedState.get('objectAttributes').get('_id');
+    if (oaIdProp) {
+      _log('SharedState -> objectAttributes._id : ' + oaIdProp);
+      return oaIdProp;
+    }
+  }
+
+  return '';
+}
+
+function _getUserNameFromSharedState () {
+  var userNameProp = _getFromSharedState('userName');
+  if (userNameProp) {
+    return userNameProp;
+  }
+
+  var usernameProp = _getFromSharedState('username');
+  if (usernameProp) {
+    return usernameProp;
+  }
+
+  if (sharedState.get('objectAttributes')) {
+    var oaMailProp = sharedState.get('objectAttributes').get('mail');
+    if (oaMailProp) {
+      _log('SharedState -> objectAttributes.mail : ' + oaMailProp);
+      return oaMailProp;
+    }
+  }
+
+  return '';
 }
 
 function _getUserInfoById (userId, accessToken) {

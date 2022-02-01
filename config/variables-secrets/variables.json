@@ -168,5 +168,10 @@
     "_id": "esv-983ec39961-validateservicesecretendpoint",
     "description": "Validate Service Secret Endpoint in ch-config-functions.js",
     "valueBase64": "%ESV_983EC39961_VALIDATESERVICESECRETENDPOINT%"
+  },
+  {
+    "_id": "esv-5759beed9b-generatehashapiurl",
+    "description": "API endpoint for hash generation",
+    "valueBase64": "%ESV_5759BEED9B_GENERATEHASHAPIURL%"
   }
 ]

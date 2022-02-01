@@ -235,6 +235,22 @@
           "*"
         ]
       }
+    },
+    {
+      "_id": "6f79626f-852c-4ff2-be25-b0720f1fb64c",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "fdac4efb-d8b8-478b-8300-e11a4c3503df",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
     }
   ],
   "tree": {
@@ -356,7 +372,7 @@
         "x": 2409,
         "y": 304.6666666666667,
         "connections": {
-          "Reject": "c61c207e-8c12-4119-a87f-08aa91fbbe85",
+          "Reject": "6f79626f-852c-4ff2-be25-b0720f1fb64c",
           "Retry": "47af5379-9faf-4712-b7cc-752d2c97d305"
         },
         "nodeType": "RetryLimitDecisionNode",
@@ -402,6 +418,13 @@
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Check OTP Resend Address"
+      },
+      "6f79626f-852c-4ff2-be25-b0720f1fb64c": {
+        "x": 2668,
+        "y": 474.015625,
+        "connections": {},
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "max attempts message"
       }
     },
     "staticNodes": {
