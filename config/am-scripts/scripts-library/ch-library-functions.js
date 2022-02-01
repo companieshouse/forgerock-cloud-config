@@ -176,6 +176,56 @@ function _fetchIDMToken () {
   return accessToken;
 }
 
+function _getFromSharedState (propName) {
+  var propNameValue = sharedState.get(propName);
+
+  if (propNameValue) {
+    _log('SharedState -> ' + propName + ' : ' + propNameValue);
+    return propNameValue;
+  }
+
+  return '';
+}
+
+function _getUserIdFromSharedState () {
+  var idProp = _getFromSharedState('_id');
+  if (idProp) {
+    return idProp;
+  }
+
+  if (sharedState.get('objectAttributes')) {
+    var oaIdProp = sharedState.get('objectAttributes').get('_id');
+    if (oaIdProp) {
+      _log('SharedState -> objectAttributes._id : ' + oaIdProp);
+      return oaIdProp;
+    }
+  }
+
+  return '';
+}
+
+function _getUserNameFromSharedState () {
+  var userNameProp = _getFromSharedState('userName');
+  if (userNameProp) {
+    return userNameProp;
+  }
+
+  var usernameProp = _getFromSharedState('username');
+  if (usernameProp) {
+    return usernameProp;
+  }
+
+  if (sharedState.get('objectAttributes')) {
+    var oaMailProp = sharedState.get('objectAttributes').get('mail');
+    if (oaMailProp) {
+      _log('SharedState -> objectAttributes.mail : ' + oaMailProp);
+      return oaMailProp;
+    }
+  }
+
+  return '';
+}
+
 function _getUserInfoById (userId, accessToken) {
   var idmUserEndpoint = _fromConfig('FIDC_ENDPOINT') + '/openidm/managed/alpha_user/';
   try {
