@@ -91,7 +91,7 @@ function policyCompliant (userObject, pwd) {
 
   _log('Error');
   sharedState.put('errorMessage', '[CHANGE PWD - POLICY CHECK] Error');
-  
+
   return NodeOutcome.ERROR;
 }
 
@@ -105,16 +105,24 @@ function getUserObject () {
     var userData = getUserData(activeUserName, activeUserId);
 
     if (userData && userData.success && userData.user) {
+      _log('Using user object from getUserData()');
+
       ret.sn = userData.user.sn;
       ret.givenName = userData.user.givenName;
       ret.mail = userData.user.mail;
       ret.userName = userData.user.userName;
+    } else {
+      if (sharedState.get('objectAttributes')) {
+        _log('Using objectAttributes from sharedState');
+
+        ret = sharedState.get('objectAttributes');
+      }
+
     }
   } catch (e) {
     _log('Error getting user object info ' + e);
   }
 
-  _log('Treacle : ' + JSON.stringify(ret));
   return ret;
 }
 
