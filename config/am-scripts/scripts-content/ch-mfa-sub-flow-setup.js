@@ -23,36 +23,36 @@ _log('Is Registration MFA : ' + isRegistrationMFA);
 var sharedStateMfaRoute = sharedState.get('mfa-route');
 _log('Shared State MFA route : ' + sharedStateMfaRoute);
 
-if (journeyName === 'CHChangePhoneNumber') {
+if (String(journeyName) === 'CHChangePhoneNumber') {
   useStageName = 'UPDATE_PHONE_2';
   useOutcome = NodeOutcome.FORCE_TEXT;
-} else if (journeyName === 'CHChangeEmailAddress') {
+} else if (String(journeyName) === 'CHChangeEmailAddress') {
   useStageName = 'CHANGE_EMAIL_INPUT';
   useOutcome = NodeOutcome.FORCE_EMAIL;
-} else if (journeyName === 'CHResetPassword' && ('sms' === sharedStateMfaRoute)) {
+} else if (String(journeyName) === 'CHResetPassword' && ('sms' === sharedStateMfaRoute)) {
   useStageName = 'RESET_PASSWORD_3';
   useOutcome = NodeOutcome.FORCE_TEXT;
-} else if (journeyName === 'CHResetPassword' && ('email' === sharedStateMfaRoute)) {
+} else if (String(journeyName) === 'CHResetPassword' && ('email' === sharedStateMfaRoute)) {
   useStageName = 'RESET_PASSWORD_3';
   useOutcome = NodeOutcome.FORCE_EMAIL;
-} else if (journeyName === 'CHWebFiling-Login' && isRegistrationMFA) {
+} else if (String(journeyName) === 'CHWebFiling-Login' && isRegistrationMFA) {
   // Complete Profile
   useStageName = 'PHONE_OTP';
   useOutcome = NodeOutcome.FORCE_TEXT;
-} else if (journeyName === 'CHWebFiling-Login') {
+} else if (String(journeyName) === 'CHWebFiling-Login') {
   useStageName = 'EWF_LOGIN_OTP';
   useOutcome = NodeOutcome.DEFAULT;
-} else if (journeyName === 'CHRegistration') {
+} else if (String(journeyName) === 'CHRegistration') {
   useStageName = 'REGISTRATION_MFA';
   useOutcome = NodeOutcome.FORCE_TEXT;
-} else if (journeyName === 'CHSCRSActivation' && isRegistrationMFA) {
+} else if (String(journeyName) === 'CHSCRSActivation' && isRegistrationMFA) {
   // Complete Profile (SCRS)
   useStageName = 'PHONE_OTP';
   useOutcome = NodeOutcome.FORCE_TEXT;
-} else if (journeyName === 'CHSCRSActivation') {
+} else if (String(journeyName) === 'CHSCRSActivation') {
   useStageName = 'EWF_LOGIN_OTP';
   useOutcome = NodeOutcome.DEFAULT;
-} else if (journeyName === 'CHOnboarding') {
+} else if (String(journeyName) === 'CHOnboarding') {
   useStageName = 'EWF_LOGIN_OTP';
   useOutcome = NodeOutcome.FORCE_TEXT;
 }
