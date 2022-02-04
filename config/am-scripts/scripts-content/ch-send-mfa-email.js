@@ -94,10 +94,21 @@ try {
       action = fr.Action.goTo(NodeOutcome.TRUE).build();
     } else {
 
+      var errorStageName = 'REGISTRATION_1';
+      var journeyName = _getJourneyName();
+
+      _log('JOURNEY NAME = ' + journeyName);
+
+      if (journeyName && String(journeyName) === 'CHChangeEmailAddress') {
+        errorStageName = 'GENERIC_ERROR';
+      }
+
+      _log('USING errorStageName = ' + errorStageName);
+
       action = fr.Action.send(
         new fr.HiddenValueCallback(
           'stage',
-          'REGISTRATION_1'
+          errorStageName
         ),
         new fr.TextOutputCallback(
           fr.TextOutputCallback.ERROR,

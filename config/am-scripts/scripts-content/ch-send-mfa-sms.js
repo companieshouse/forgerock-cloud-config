@@ -43,10 +43,21 @@ function sendErrorCallbacks () {
     var pagePropsJSON = JSON.stringify(pageProps);
     _log('pagePropsJSON = ' + pagePropsJSON);
 
+    var errorStageName = 'REGISTRATION_1';
+    var journeyName = _getJourneyName();
+
+    _log('JOURNEY NAME = ' + journeyName);
+
+    if (journeyName && String(journeyName) === 'CHChangePhoneNumber') {
+      errorStageName = 'GENERIC_ERROR';
+    }
+
+    _log('USING errorStageName = ' + errorStageName);
+
     action = fr.Action.send(
       new fr.HiddenValueCallback(
         'stage',
-        'REGISTRATION_1'
+        errorStageName
       ),
       new fr.TextOutputCallback(
         fr.TextOutputCallback.ERROR,
