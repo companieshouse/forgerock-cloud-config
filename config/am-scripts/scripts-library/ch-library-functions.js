@@ -24,6 +24,9 @@ function _getOutcomeForDisplay () {
 }
 
 function _log (message, logLevel) {
+  // Shortcut Gov.Notify
+  return;
+
   if (!logLevel) {
     logLevel = 'MESSAGE';
   }

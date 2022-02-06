@@ -75,6 +75,9 @@ function sendTextMessage (language, phoneNumber, code) {
   sharedState.put('invalidPhone', null);
   sharedState.put('smsSendError', null);
 
+  // Shortcut Gov.Notify
+  return true;
+
   var notifyJWT = transientState.get('notifyJWT');
   var templates = transientState.get('notifyTemplates');
 

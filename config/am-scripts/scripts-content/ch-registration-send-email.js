@@ -162,6 +162,9 @@ function sendErrorCallbacks (stage, token, message) {
 //sends the email (via Notify) to the recipient using the given registration JWT
 function sendEmail (language, jwt) {
 
+  // Shortcut Gov.Notify
+  return true;
+
   var notifyJWT = transientState.get('notifyJWT');
   var templates = transientState.get('notifyTemplates');
   var returnUrl = host.concat('/account/register/verify/?token=', jwt);
