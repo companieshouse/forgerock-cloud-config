@@ -31,6 +31,11 @@
   }
   
   function getCompanies (_refArray) {
+    
+    if(!_refArray || _refArray.length === 0){
+      return [];
+    }
+    
     let companyIds = _refArray.map(refItem => {
       return '/_id eq "' + refItem._refResourceId + '"' ;      
     });
@@ -46,7 +51,7 @@
     );
   
     if (response.resultCount === 0) {
-      return null;
+      return [];
     }
   
     return response.result;
@@ -56,7 +61,11 @@
   function getCompaniesDataFromSource (companyArray) {
     let companiesSourceData;
     let authCodesSourceData;
-      
+    
+    if(!companyArray || companyArray.length === 0){
+      return null;
+    }
+
     let companyNumbers = companyArray.map(company => {
       return '/_id eq "' + company.number + '"' ;      
     });
@@ -123,7 +132,7 @@
   
   //updates company data from the source
   function updateCompanyData (fetchedCompanies, sourceData){
-  
+    
     let companiesSourceData = sourceData.companiesSourceData;
     let authCodesSourceData = sourceData.authCodesSourceData;
       
@@ -314,9 +323,11 @@
     //query 3/4: fetch source data set for associated companies (including auth codes) by company number
     sourceData = getCompaniesDataFromSource(fetchedCompanies);
   
-    //UPDATES: UPDATE companies in IDM
-    updateCompanyData(fetchedCompanies, sourceData);
-      
+    //UPDATES: UPDATE companies in IDM if source data info is found
+    if(sourceData){
+      updateCompanyData(fetchedCompanies, sourceData);
+    }
+
     //query 5: fetch updated companies data
     fetchedCompanies = getCompanies(actor.memberOfOrg);
   
