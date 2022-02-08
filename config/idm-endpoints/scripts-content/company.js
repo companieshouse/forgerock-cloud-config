@@ -326,6 +326,8 @@
     //UPDATES: UPDATE companies in IDM if source data info is found
     if(sourceData){
       updateCompanyData(fetchedCompanies, sourceData);
+    } else {
+      _log('No source data found for user ' + actor.userName);
     }
 
     //query 5: fetch updated companies data
