@@ -173,5 +173,35 @@
     "_id": "esv-5759beed9b-generatehashapiurl",
     "description": "API endpoint for hash generation",
     "valueBase64": "%ESV_5759BEED9B_GENERATEHASHAPIURL%"
+  },
+  {
+    "_id": "esv-566930381b-reconscheduleusersenabled",
+    "description": "Enabled flag for Users recon schedule",
+    "valueBase64": "%ESV_566930381B_RECONSCHEDULEUSERSENABLED%"
+  },
+  {
+    "_id": "esv-1dc20f579c-reconscheduleuserscronexp",
+    "description": "CRON expression for Users recon schedule",
+    "valueBase64": "%ESV_1DC20F579C_RECONSCHEDULEUSERSCRONEXP%"
+  },
+  {
+    "_id": "esv-b1ea4bdc4a-reconscheduleucompaniesenabled",
+    "description": "Enabled flag for Companies recon schedule",
+    "valueBase64": "%ESV_B1EA4BDC4A_RECONSCHEDULEUCOMPANIESENABLED%"
+  },
+  {
+    "_id": "esv-c827402089-reconscheduleucompaniescronexp",
+    "description": "CRON expression for Companies recon schedule",
+    "valueBase64": "%ESV_C827402089_RECONSCHEDULEUCOMPANIESCRONEXP%"
+  },
+  {
+    "_id": "esv-2bb35d546a-reconscheduleauthcodesenabled",
+    "description": "Enabled flag for Auth Codes recon schedule",
+    "valueBase64": "%ESV_2BB35D546A_RECONSCHEDULEAUTHCODESENABLED%"
+  },
+  {
+    "_id": "esv-9db15a3625-reconscheduleauthcodescronexp",
+    "description": "CRON expression for Auth Codes recon schedule",
+    "valueBase64": "%ESV_9DB15A3625_RECONSCHEDULEAUTHCODESCRONEXP%"
   }
 ]
