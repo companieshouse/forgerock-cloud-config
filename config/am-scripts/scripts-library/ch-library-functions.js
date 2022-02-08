@@ -143,7 +143,7 @@ function _isValidPhone (number) {
       }
     }
 
-    mobileValid = (!containsInvalidChar && (digitsCount >= 11 && digitsCount <= 13));
+    mobileValid = (!containsInvalidChar && (digitsCount >= 11 && digitsCount <= 14));
   }
 
   _log('Phone number : \'' + number + '\' is ' + (mobileValid ? 'VALID' : '*NOT* VALID'));
