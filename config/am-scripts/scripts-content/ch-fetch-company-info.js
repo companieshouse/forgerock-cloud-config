@@ -100,7 +100,11 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
     //gets auth code data from EWF
     var ewfAuthCodeData = fetchAuthCodeFromEWF(accessToken, companyNumber);
 
-    if (!chsCompanyData.success && !ewfAuthCodeData.success && !idmCompanyResult.success) {
+    _log('chsCompanyData : ' + chsCompanyData);
+    _log('ewfAuthCodeData : ' + ewfAuthCodeData);
+    _log('idmCompanyResult : ' + idmCompanyResult);
+
+    if (!chsCompanyData || !ewfAuthCodeData || !idmCompanyResult || (!chsCompanyData.success && !ewfAuthCodeData.success && !idmCompanyResult.success)) {
       return {
         success: false,
         message: 'Company with number ' + companyNumber + ' not found in CHS, EWF or FIDC'
@@ -108,7 +112,7 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
     }
 
     //if the record is not found in neither CHS nor EWF, but is in FIDC, we skip the update/create logic and return the FIDC version
-    if (!chsCompanyData.success && !ewfAuthCodeData.success && idmCompanyResult.success) {
+    if (!chsCompanyData || !ewfAuthCodeData || !idmCompanyResult || (!chsCompanyData.success && !ewfAuthCodeData.success && idmCompanyResult.success)) {
       return {
         success: true,
         companyData: idmCompanyResult.companyData,
@@ -181,6 +185,10 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
     }
   } catch (e) {
     _log(e);
+    return {
+      success: false,
+      message: 'Exception : ' + e
+    };
   }
 }
 
@@ -206,10 +214,12 @@ function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdic
   _log('Using search term: ' + searchTerm);
 
   //gets company data currently in IDM
+  _log('Getting company by number : ' + companyNumber);
   var idmCompanyResult = getCompanyByNumber(accessToken, companyNumber);
+  _log('Result from getCompanyByNumber : ' + idmCompanyResult);
 
   //company gets created/updated from source in IDM
-  var updateResult = createOrUpdateCompany(accessToken, companyNumber, idmCompanyResult);
+  createOrUpdateCompany(accessToken, companyNumber, idmCompanyResult);
 
   var request = new org.forgerock.http.protocol.Request();
   request.setMethod('GET');
@@ -371,6 +381,7 @@ function fetchCompanyFromCHS (accessToken, companyNumber) {
 
   try {
     if (!companyNumber || companyNumber.trim() === '') {
+      _log('No company number from CHS!');
       return null;
     }
 
@@ -436,6 +447,7 @@ function fetchCompanyFromCHS (accessToken, companyNumber) {
 function fetchAuthCodeFromEWF (accessToken, companyNumber) {
   try {
     if (!companyNumber || companyNumber.trim() === '') {
+      _log('No company number from EWF!');
       return null;
     }
 
@@ -525,7 +537,7 @@ try {
         //fetchCompany can only result in callbacks, does not transition anywhere
         var idmCompanyData = getCompanyByNumberAndJurisdiction(accessToken, companyNumber, jurisdiction, skipConfirmation);
 
-        if (!idmCompanyData.success) {
+        if (!idmCompanyData || !idmCompanyData.success) {
           outcome = NodeOutcome.FALSE;
         }
       }
@@ -544,7 +556,7 @@ try {
 
       //fetchCompany can only result in callbacks, does not transition anywhere
       var idmCompanyData = getCompanyByNumberAndJurisdiction(accessToken, companyNumber, jurisdiction, skipConfirmation);
-      if (!idmCompanyData.success) {
+      if (!idmCompanyData || !idmCompanyData.success) {
         outcome = NodeOutcome.FALSE;
       } else {
         _log('Company fetched successfully');

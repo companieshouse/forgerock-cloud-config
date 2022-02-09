@@ -74,12 +74,20 @@ try {
   } else {
     if (companyMembership.company.status !== MembershipStatus.CONFIRMED) {
       _log('User not associated with company! Current status: ' + companyMembership.company.status);
+
+      outcome = NodeOutcome.USER_NOT_ASSOCIATED;
+
       action = fr.Action.goTo(NodeOutcome.USER_NOT_ASSOCIATED)
         .build();
     } else {
       _log('User already associated with company!');
+      var useAuthCode = JSON.parse(sharedState.get('companyData')).authCode;
+      _log('Company auth code = ' + useAuthCode + ', language = ' + language);
+
+      outcome = NodeOutcome.USER_ASSOCIATED;
+
       action = fr.Action.goTo(NodeOutcome.USER_ASSOCIATED)
-        .putSessionProperty('authCode', JSON.parse(sharedState.get('companyData')).authCode)
+        .putSessionProperty('authCode', useAuthCode)
         .putSessionProperty('language', language.toLowerCase())
         .build();
     }
