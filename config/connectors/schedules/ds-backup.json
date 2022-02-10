@@ -1,5 +1,5 @@
 {
-  "_id": "DR: Alpha User to DS Backup",
+  "_id": "DR: alpha_user to DS Backup",
   "enabled": false,
 	"persisted": true,
 	"recoverable": false,
