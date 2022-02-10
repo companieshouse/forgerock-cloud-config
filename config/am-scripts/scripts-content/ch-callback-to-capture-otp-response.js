@@ -34,7 +34,12 @@ function getMfaRouteOptions (mfaRoute) {
 }
 
 var phoneNumber = '';
+
+var isUpdatePhoneNumber = sharedState.get('updatePhoneNumber');
+var newPhoneNumber = sharedState.get('newPhoneNumber');
+
 var emailAddress = '';
+
 var notificationId = transientState.get('notificationId');
 var mfaRoute = sharedState.get('mfa-route');
 
@@ -42,18 +47,23 @@ try {
   var userId = sharedState.get('_id');
 
   if (mfaRoute === 'sms') {
-    if (idRepository.getAttribute(userId, 'telephoneNumber').iterator().hasNext()) {
-      phoneNumber = idRepository.getAttribute(userId, 'telephoneNumber').iterator().next();
-      _log('phoneNumber : ' + phoneNumber);
+    if (isUpdatePhoneNumber && newPhoneNumber) {
+      phoneNumber = newPhoneNumber;
+      _log('phoneNumber : ' + newPhoneNumber + ' (new)');
     } else {
-      _log('Couldn\'t find telephoneNumber from user record');
+      if (idRepository.getAttribute(userId, 'telephoneNumber').iterator().hasNext()) {
+        phoneNumber = idRepository.getAttribute(userId, 'telephoneNumber').iterator().next();
+        _log('phoneNumber : ' + phoneNumber);
+      } else {
+        _log('Couldn\'t find telephoneNumber from user record');
 
-      // Do we have it in shared state instead? For example, as part of onboarding so it's not
-      // actually persisted to the user yet?
-      _log('shared: ' + sharedState.get('objectAttributes'));
-      if (sharedState.get('objectAttributes')) {
-        phoneNumber = sharedState.get('objectAttributes').get('telephoneNumber');
-        _log('phoneNumber (sharedState): ' + phoneNumber);
+        // Do we have it in shared state instead? For example, as part of onboarding so it's not
+        // actually persisted to the user yet?
+        _log('shared: ' + sharedState.get('objectAttributes'));
+        if (sharedState.get('objectAttributes')) {
+          phoneNumber = sharedState.get('objectAttributes').get('telephoneNumber');
+          _log('phoneNumber (sharedState): ' + phoneNumber);
+        }
       }
     }
   } else if (mfaRoute === 'email') {

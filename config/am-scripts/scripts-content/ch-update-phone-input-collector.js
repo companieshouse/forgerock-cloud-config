@@ -121,6 +121,7 @@ if (callbacks.isEmpty()) {
         'telephoneNumber': newPhoneNumber
       });
 
+    sharedState.put('newPhoneNumber', newPhoneNumber);
     sharedState.put('updatePhoneNumber', true);
     sharedState.put('password', currentPassword);
 
