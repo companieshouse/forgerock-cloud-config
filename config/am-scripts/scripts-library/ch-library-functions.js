@@ -110,13 +110,17 @@ function _padPhone (phone) {
 
   phone = phone.replace(/\s/g, '');
 
-  if (phone.length > 5) {
-    phone = phone.substring(0, 5).concat(' ') + phone.substring(5);
+  phone = phone.split('').reverse().join('');
+
+  if (phone.length > 6) {
+    phone = phone.substring(0, 6).concat(' ') + phone.substring(6);
   }
 
-  if (phone.length > 9) {
-    phone = phone.substring(0, 9).concat(' ') + phone.substring(9);
+  if (phone.length > 3) {
+    phone = phone.substring(0, 3).concat(' ') + phone.substring(3);
   }
+
+  phone = phone.split('').reverse().join('');
 
   return phone;
 }
