@@ -104,7 +104,7 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
     _log('ewfAuthCodeData : ' + ewfAuthCodeData);
     _log('idmCompanyResult : ' + idmCompanyResult);
 
-    if (!chsCompanyData || !ewfAuthCodeData || !idmCompanyResult || (!chsCompanyData.success && !ewfAuthCodeData.success && !idmCompanyResult.success)) {
+    if (!chsCompanyData.success && !ewfAuthCodeData.success && !idmCompanyResult.success) {
       return {
         success: false,
         message: 'Company with number ' + companyNumber + ' not found in CHS, EWF or FIDC'
@@ -382,7 +382,10 @@ function fetchCompanyFromCHS (accessToken, companyNumber) {
   try {
     if (!companyNumber || companyNumber.trim() === '') {
       _log('No company number from CHS!');
-      return null;
+      return {
+        success: false,
+        message: 'no company number present'
+      };
     }
 
     companyNumber = companyNumber.trim();
@@ -448,7 +451,10 @@ function fetchAuthCodeFromEWF (accessToken, companyNumber) {
   try {
     if (!companyNumber || companyNumber.trim() === '') {
       _log('No company number from EWF!');
-      return null;
+      return {
+        success: false,
+        message: 'no company number present'
+      };
     }
 
     companyNumber = companyNumber.trim();
@@ -552,7 +558,8 @@ try {
       var companyNumber = sharedState.get('companyNumber');
       var jurisdiction = sharedState.get('jurisdiction');
 
-      var updateResult = createOrUpdateCompany(accessToken, companyNumber);
+      var idmCompanyResult = getCompanyByNumber(accessToken, companyNumber);
+      createOrUpdateCompany(accessToken, companyNumber, idmCompanyResult);
 
       //fetchCompany can only result in callbacks, does not transition anywhere
       var idmCompanyData = getCompanyByNumberAndJurisdiction(accessToken, companyNumber, jurisdiction, skipConfirmation);
