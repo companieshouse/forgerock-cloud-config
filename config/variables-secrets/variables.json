@@ -203,5 +203,15 @@
     "_id": "esv-9db15a3625-reconscheduleauthcodescronexp",
     "description": "CRON expression for Auth Codes recon schedule",
     "valueBase64": "%ESV_9DB15A3625_RECONSCHEDULEAUTHCODESCRONEXP%"
+  },
+  {
+    "_id": "esv-f0198c128c-authcodereconsourcequerypagesize",
+    "description": "Auth Codes mapping sourcequery size",
+    "valueBase64": "%ESV_F0198C128C_AUTHCODERECONSOURCEQUERYPAGESIZE%"
+  },
+  {
+    "_id": "esv-659b97c692-companyreconsourcequerypagesize",
+    "description": "Companies mapping sourcequery size",
+    "valueBase64": "%ESV_659B97C692_COMPANYRECONSOURCEQUERYPAGESIZE%"
   }
 ]

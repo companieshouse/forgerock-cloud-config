@@ -1,6 +1,6 @@
 {
-	"_id": "DR: Alpha User to DS Backup",
-	"enabled": false,
+  "_id": "DR: alpha_user to DS Backup",
+  "enabled": false,
 	"persisted": true,
 	"recoverable": false,
 	"misfirePolicy": "fireAndProceed",
