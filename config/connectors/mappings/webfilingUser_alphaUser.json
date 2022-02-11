@@ -81,7 +81,9 @@
     }
   ],
   "clusteredSourceReconEnabled": true,
-  "reconSourceQueryPageSize": 10000,
+  "reconSourceQueryPageSize": {
+    "$int": "&{esv.a147709bca.manualreconsourcequerypagesize}"
+  },
   "sourceQueryFullEntry": true,
   "taskThreads": 20,
   "correlationQuery": [],
