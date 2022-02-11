@@ -35,7 +35,10 @@ try {
   var mfaRouteText = 'MFA Route not supported : ' + mfaRoute + ' for userId : ' + userId;
 
   if (mfaRoute === 'sms') {
-    if (idRepository.getAttribute(userId, 'telephoneNumber').iterator().hasNext()) {
+    var isUpdatePhoneNumber = sharedState.get('updatePhoneNumber');
+    if (isUpdatePhoneNumber) {
+      phoneNumber = sharedState.get('newPhoneNumber');
+    } else if (idRepository.getAttribute(userId, 'telephoneNumber').iterator().hasNext()) {
       phoneNumber = idRepository.getAttribute(userId, 'telephoneNumber').iterator().next();
     } else {
       _log('Failed to get phoneNumber for userId : ' + userId);
@@ -49,7 +52,10 @@ try {
 
     mfaRouteText = 'Do you want to resend the SMS to '.concat(phoneNumber).concat('?');
   } else if (mfaRoute === 'email') {
-    if (idRepository.getAttribute(userId, 'mail').iterator().hasNext()) {
+    var isChangeEmail = sharedState.get('isChangeEmail');
+    if (isChangeEmail) {
+      email = sharedState.get('newEmail');
+    } else if (idRepository.getAttribute(userId, 'mail').iterator().hasNext()) {
       email = idRepository.getAttribute(userId, 'mail').iterator().next();
     } else {
       _log('Failed to get email for userId : ' + userId);
