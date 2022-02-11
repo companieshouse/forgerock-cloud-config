@@ -96,7 +96,9 @@
     }
   ],
   "clusteredSourceReconEnabled": true,
-  "reconSourceQueryPageSize": 10000,
+  "reconSourceQueryPageSize": {
+    "$int": "&{esv.f0198c128c.authcodereconsourcequerypagesize}"
+   },
   "sourceQueryFullEntry": true,
   "taskThreads": 20
 }

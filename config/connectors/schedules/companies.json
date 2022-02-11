@@ -1,6 +1,6 @@
 {
-  "_id": "CHS Companies to alpha organization",
-  "enabled": true,
+	"_id": "CHS Companies to alpha organization",
+	"enabled": true,
 	"persisted": true,
 	"recoverable": false,
 	"misfirePolicy": "fireAndProceed",
