@@ -1,5 +1,5 @@
 {
-  "_id": "EWF Auth Codes to Alpha User",
+  "_id": "EWF Auth Codes to alpha_organization",
   "enabled": true,
 	"persisted": true,
 	"recoverable": false,
