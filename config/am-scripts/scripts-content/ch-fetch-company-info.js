@@ -404,16 +404,17 @@ function fetchCompanyFromCHS (accessToken, companyNumber) {
     request.getHeaders().add('Accept-API-Version', 'resource=1.0');
 
     var httpResp = httpClient.send(request).get();
-    var response = JSON.parse(httpResp.getEntity().getString());
-    _log('CHS Company query for : ' + companyNumber + ', Count = ' + response.resultCount);
 
-    if (!response.getStatus().getCode() === 200) {
+    if (!httpResp.getStatus().getCode() === 200) {
       _log('Error while fetching CHS Company: ' + response.getEntity().getString());
       return {
         success: false,
         message: 'Error in querying the Mongo connector'
       };
-    } 
+    }
+
+    var response = JSON.parse(httpResp.getEntity().getString());
+    _log('CHS Company query for : ' + companyNumber + ', Count = ' + response.resultCount);
 
     if (response.resultCount === 1) {
       _log('Response from CHS Company connector : ' + httpResp.getEntity().getString());
@@ -479,9 +480,8 @@ function fetchAuthCodeFromEWF (accessToken, companyNumber) {
     request.getHeaders().add('Content-Type', 'application/json');
 
     var httpResp = httpClient.send(request).get();
-    var response = JSON.parse(httpResp.getEntity().getString());
 
-    if (!response.getStatus().getCode() === 200) {
+    if (!httpResp.getStatus().getCode() === 200) {
       _log('Error while fetching EWF Auth Code: ' + response.getEntity().getString());
       return {
         success: false,
@@ -489,6 +489,7 @@ function fetchAuthCodeFromEWF (accessToken, companyNumber) {
       };
     } 
 
+    var response = JSON.parse(httpResp.getEntity().getString());
     _log('EWF company auth code for : ' + companyNumber + ', Count = ' + response.resultCount);
 
     if (response.resultCount === 1) {
