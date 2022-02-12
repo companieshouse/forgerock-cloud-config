@@ -104,7 +104,10 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
     _log('ewfAuthCodeData : ' + ewfAuthCodeData);
     _log('idmCompanyResult : ' + idmCompanyResult);
 
-    if (!chsCompanyData.success && !ewfAuthCodeData.success && !idmCompanyResult.success) {
+    // if the connectors were queried OK but no company data was found at source, AND no data is in IDM for that company, skip the update
+    if ((chsCompanyData.success && chsCompanyData.isEmpty) && 
+        (ewfAuthCodeData.success && ewfAuthCodeData.isEmpty) && 
+        !idmCompanyResult.success) {
       return {
         success: false,
         message: 'Company with number ' + companyNumber + ' not found in CHS, EWF or FIDC'
@@ -112,7 +115,9 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
     }
 
     //if the record is not found in neither CHS nor EWF, but is in FIDC, we skip the update/create logic and return the FIDC version
-    if (!chsCompanyData || !ewfAuthCodeData || !idmCompanyResult || (!chsCompanyData.success && !ewfAuthCodeData.success && idmCompanyResult.success)) {
+    if ((chsCompanyData.success && chsCompanyData.isEmpty) && 
+        (ewfAuthCodeData.success && ewfAuthCodeData.isEmpty) &&
+        idmCompanyResult.success) {
       return {
         success: true,
         companyData: idmCompanyResult.companyData,
@@ -402,6 +407,14 @@ function fetchCompanyFromCHS (accessToken, companyNumber) {
     var response = JSON.parse(httpResp.getEntity().getString());
     _log('CHS Company query for : ' + companyNumber + ', Count = ' + response.resultCount);
 
+    if (!response.getStatus().getCode() === 200) {
+      _log('Error while fetching CHS Company: ' + response.getEntity().getString());
+      return {
+        success: false,
+        message: 'Error in querying the Mongo connector'
+      };
+    } 
+
     if (response.resultCount === 1) {
       _log('Response from CHS Company connector : ' + httpResp.getEntity().getString());
 
@@ -422,29 +435,28 @@ function fetchCompanyFromCHS (accessToken, companyNumber) {
         };
         return {
           success: true,
+          isEmpty: false,
           data: data
         };
       } else {
         return {
           success: false,
-          message: '_id is not found'
+          message: 'result found without _id in payload'
         };
       }
     } else {
       return {
-        success: false,
-        message: 'no results - ' + response.resultCount
+        success: true,
+        isEmpty: true
       };
     }
   } catch (e) {
     _log('Error : ' + e);
     return {
       success: false,
-      message: 'error - ' + e.toString()
+      message: 'error: ' + e.toString()
     };
   }
-
-  return null;
 }
 
 function fetchAuthCodeFromEWF (accessToken, companyNumber) {
@@ -469,6 +481,14 @@ function fetchAuthCodeFromEWF (accessToken, companyNumber) {
     var httpResp = httpClient.send(request).get();
     var response = JSON.parse(httpResp.getEntity().getString());
 
+    if (!response.getStatus().getCode() === 200) {
+      _log('Error while fetching EWF Auth Code: ' + response.getEntity().getString());
+      return {
+        success: false,
+        message: 'Error in querying the Oracle connector'
+      };
+    } 
+
     _log('EWF company auth code for : ' + companyNumber + ', Count = ' + response.resultCount);
 
     if (response.resultCount === 1) {
@@ -485,20 +505,26 @@ function fetchAuthCodeFromEWF (accessToken, companyNumber) {
         };
         return {
           success: true,
+          isEmpty: false,
           data: data
+        };
+      } else {
+        return {
+          success: false,
+          message: 'result found without _id in payload'
         };
       }
     } else {
       return {
-        success: false,
-        message: 'no results - ' + response.resultCount
+        success: true,
+        isEmpty: true
       };
     }
   } catch (e) {
     _log('Error : ' + e);
     return {
       success: false,
-      message: 'error - ' + e.toString()
+      message: 'error: ' + e.toString()
     };
   }
 }
