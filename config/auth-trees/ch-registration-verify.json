@@ -198,6 +198,22 @@
         "identityAttribute": "mail",
         "identifier": "userName"
       }
+    },
+    {
+      "_id": "e774775d-5bda-4cea-b6f9-91365b89775d",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "19a9ba97-3eaf-46ed-9b59-ea9315d81407",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
     }
   ],
   "tree": {
@@ -207,8 +223,8 @@
     "entryNodeId": "c23cf0f2-e3fa-4838-a45b-2f7f11cb4eb6",
     "nodes": {
       "02d95fe8-1c39-4144-b411-13fcd4226c6a": {
-        "x": 2309,
-        "y": 189,
+        "x": 2629,
+        "y": 191,
         "connections": {
           "CREATED": "bb74cb44-5e3f-4634-9e5f-f18e121ca93f",
           "FAILURE": "4f6d3517-2bbe-4f86-b80f-27443a04fa61"
@@ -221,7 +237,7 @@
         "y": 182,
         "connections": {
           "false": "4f6d3517-2bbe-4f86-b80f-27443a04fa61",
-          "true": "ac4e4e6e-0b76-44d6-af80-a97fb83b70e4"
+          "true": "e774775d-5bda-4cea-b6f9-91365b89775d"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Load Password for patch"
@@ -273,8 +289,8 @@
         "displayName": "Callback Existing User"
       },
       "ac4e4e6e-0b76-44d6-af80-a97fb83b70e4": {
-        "x": 1815,
-        "y": 185.015625,
+        "x": 2135,
+        "y": 187.015625,
         "connections": {
           "outcome": "fd31a8fa-31c2-45b9-bddb-648f5d997686"
         },
@@ -282,8 +298,8 @@
         "displayName": "Consent"
       },
       "bb74cb44-5e3f-4634-9e5f-f18e121ca93f": {
-        "x": 2546,
-        "y": 190,
+        "x": 2866,
+        "y": 192,
         "connections": {
           "false": "4f6d3517-2bbe-4f86-b80f-27443a04fa61",
           "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
@@ -323,14 +339,23 @@
         "displayName": "Pwd Collector"
       },
       "fd31a8fa-31c2-45b9-bddb-648f5d997686": {
-        "x": 2051.828125,
-        "y": 186.015625,
+        "x": 2371.828125,
+        "y": 188.015625,
         "connections": {
           "false": "02d95fe8-1c39-4144-b411-13fcd4226c6a",
           "true": "9d7a87df-d656-4539-b1e4-7199950aa0e8"
         },
         "nodeType": "IdentifyExistingUserNode",
         "displayName": "Identify Existing User"
+      },
+      "e774775d-5bda-4cea-b6f9-91365b89775d": {
+        "x": 1859,
+        "y": 216.015625,
+        "connections": {
+          "true": "ac4e4e6e-0b76-44d6-af80-a97fb83b70e4"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Store pwd in session"
       }
     },
     "staticNodes": {
@@ -339,8 +364,8 @@
         "y": 180
       },
       "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
-        "x": 2836,
-        "y": 222
+        "x": 3156,
+        "y": 224
       },
       "e301438c-0bd0-429c-ab0c-66126501069a": {
         "x": 2510,
