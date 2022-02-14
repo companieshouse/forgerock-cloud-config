@@ -98,6 +98,7 @@
         ],
         "loaMapping": {
             "webfiling": "CHWebFiling-Login",
+            "webfilingcomp": "CHWebFiling",
             "chs": "CHLogin"
         },
         "storeOpsTokens": true,
