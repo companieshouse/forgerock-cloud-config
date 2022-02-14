@@ -13,7 +13,10 @@ var password = transientState.get('newPassword');
 try {
   var objectAttributes = sharedState.get('objectAttributes');
   objectAttributes.put('password', password);
+
   sharedState.put('objectAttributes', objectAttributes);
+  sharedState.put('password', password);
+  
   _log('updated sharedstate: ' + sharedState.get('objectAttributes'));
 
   _log('new password: ' + password);
