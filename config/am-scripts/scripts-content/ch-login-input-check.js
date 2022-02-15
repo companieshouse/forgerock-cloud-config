@@ -39,7 +39,7 @@ try {
 
     if (!username) {
       errors.push({
-        label: 'Username or password missing 1.',
+        label: 'Username missing',
         token: 'CREDENTIALS_MISSING_USERNAME',
         fieldName: 'IDToken1',
         anchor: 'IDToken1'
@@ -48,7 +48,7 @@ try {
 
     if (!password) {
       errors.push({
-        label: 'Username or password missing 2.',
+        label: 'Password missing',
         token: 'CREDENTIALS_MISSING_PASSWORD',
         fieldName: 'IDToken2',
         anchor: 'IDToken2'
