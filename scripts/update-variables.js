@@ -54,8 +54,8 @@ const updateVariables = async (argv) => {
               const envValue = process.env[envName]
 
               if (!envValue) {
-                console.error(`No environment value with key : '${envName}' for ESV named : '${varEntry._id}', skipping!`)
-                return
+                console.error(`No environment value with key : '${envName}' for ESV named : '${varEntry._id}', exiting!`)
+                process.exit(1)
               }
 
               varEntry.valueBase64 = envValue
