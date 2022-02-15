@@ -1,4 +1,4 @@
-var _scriptName = 'CH UPDATE PWD CONFIRMATION';
+var _scriptName = 'CH UPDATE EMAIL CONFIRMATION';
 _log('Starting');
 
 var fr = JavaImporter(
@@ -11,7 +11,7 @@ var NodeOutcome = {
   SUCCESS: 'true'
 };
 
-var infoMessage = 'Your password has been changed successfully';
+var infoMessage = 'Your email has been changed successfully';
 
 if (callbacks.isEmpty()) {
 
@@ -22,7 +22,7 @@ if (callbacks.isEmpty()) {
     ),
     new fr.HiddenValueCallback(
       'pagePropsJSON',
-      JSON.stringify({ 'bannerName': 'changePassword' })
+      JSON.stringify({ 'bannerName': 'changeEmail' })
     ),
     new fr.HiddenValueCallback(
       'stage',

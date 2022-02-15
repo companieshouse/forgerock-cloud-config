@@ -168,6 +168,22 @@
         "sessionDataKey": "UserId",
         "sharedStateKey": "_id"
       }
+    },
+    {
+      "_id": "f0e06632-3666-43ae-b510-3b6ee2c3c991",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "7576d62c-b649-4a9e-b9ea-4efc6bc61fde",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
     }
   ],
   "tree": {
@@ -269,7 +285,7 @@
         "y": 329.015625,
         "connections": {
           "false": "a4ecc762-8785-4d34-aa1a-6852f1f9f789",
-          "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+          "true": "f0e06632-3666-43ae-b510-3b6ee2c3c991"
         },
         "nodeType": "IdentifyExistingUserNode",
         "displayName": "Set Username in Shared State"
@@ -308,6 +324,15 @@
         },
         "nodeType": "SessionDataNode",
         "displayName": "Get Session Data"
+      },
+      "f0e06632-3666-43ae-b510-3b6ee2c3c991": {
+        "x": 2041,
+        "y": 362.015625,
+        "connections": {
+          "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Confirmation"
       }
     },
     "staticNodes": {
@@ -316,8 +341,8 @@
         "y": 103
       },
       "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
-        "x": 2047,
-        "y": 343
+        "x": 2372,
+        "y": 353
       },
       "e301438c-0bd0-429c-ab0c-66126501069a": {
         "x": 1895,
