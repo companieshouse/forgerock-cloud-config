@@ -35,16 +35,32 @@ try {
 
     _log('username or pwd missing');
 
+    var errors = [];
+
+    if (!username) {
+      errors.push({
+        label: 'Username missing',
+        token: 'CREDENTIALS_MISSING_USERNAME',
+        fieldName: 'IDToken1',
+        anchor: 'IDToken1'
+      });
+    }
+
+    if (!password) {
+      errors.push({
+        label: 'Password missing',
+        token: 'CREDENTIALS_MISSING_PASSWORD',
+        fieldName: 'IDToken2',
+        anchor: 'IDToken2'
+      });
+    }
+
     sharedState.put('errorMessage', 'Username or password missing.');
     sharedState.put('pagePropsJSON', JSON.stringify(
       {
-        'errors': [{
-          label: 'Username or password missing.',
-          token: 'USER_CREDENTIALS_INCOMPLETE',
-          fieldName: 'IDToken1',
-          anchor: 'IDToken1'
-        }]
+        'errors': errors
       }));
+
     outcome = NodeOutcome.FALSE;
   } else {
     outcome = NodeOutcome.TRUE;
