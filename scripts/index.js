@@ -23,6 +23,7 @@ const updateVariables = require('./update-variables')
 const updateSecrets = require('./update-secrets')
 const restartFidc = require('./restart-fidc')
 const getEsvConcourse = require('./get-esv-concourse')
+const updateEsvAndRestart = require('./update-esv-and-restart')
 
 module.exports = {
   updateAgents,
@@ -49,5 +50,6 @@ module.exports = {
   updateVariables,
   updateSecrets,
   restartFidc,
-  getEsvConcourse
+  getEsvConcourse,
+  updateEsvAndRestart
 }
