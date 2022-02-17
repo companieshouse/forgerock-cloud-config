@@ -26,7 +26,8 @@ const {
   updateVariables,
   updateSecrets,
   restartFidc,
-  getEsvConcourse
+  getEsvConcourse,
+  updateEsvAndRestart
 } = require('./scripts')
 
 require('dotenv').config()
@@ -279,6 +280,12 @@ yargs
     desc: 'Get Variables and Secrets (Concourse style)',
     builder: cliOptions(['regionName', 'decodeValue']),
     handler: (argv) => getEsvConcourse(argv)
+  })
+  .command({
+    command: 'update-esv-and-optional-restart',
+    desc: 'Update Variables and Secrets and Optinal Restart',
+    builder: cliOptions(['username', 'password', 'realm']),
+    handler: (argv) => updateEsvAndRestart(argv)
   })
   .demandCommand()
   .parse()
