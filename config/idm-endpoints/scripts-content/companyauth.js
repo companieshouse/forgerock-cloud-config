@@ -173,7 +173,7 @@
         null,
         payload);
     } catch (e) {
-      log('Error patching: ' + e);
+      log('addConfirmedRelationshipToCompany - Error patching: ' + e);
     }
 
     log('addConfirmedRelationshipToCompany - newObject = ' + newObject);
