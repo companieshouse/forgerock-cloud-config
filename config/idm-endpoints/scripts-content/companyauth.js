@@ -1114,7 +1114,7 @@
       }
     };
 
-    log.debug('Returning = ' + ret);
+    log('Returning = ' + ret);
 
     return ret;
   } else {
