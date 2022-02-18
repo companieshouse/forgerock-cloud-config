@@ -41,7 +41,7 @@
   // Debug loggers
 
   function log (message) {
-    logger.error('AUTHEND ' + message);
+    logger.error('[CHLOG][COMPANYAUTH] ' + message);
   }
 
   function logResponse (response) {
@@ -64,7 +64,7 @@
     logResponse('IDM User membershipStatus found: ' + response);
 
     if (response.resultCount === 0) {
-      log('No companies currently authorised');
+      log('getStatus - No companies currently authorised');
     } else {
       response.result.forEach(function (entry) {
         if (entry._refResourceId === companyId) {
@@ -92,8 +92,8 @@
   function deleteRelationship (subjectId, companyId) {
     var currentStatusResponse = getStatus(subjectId, companyId);
 
-    log('Deleting relationship for company ' + companyId);
-    log('patching: ' + 'managed/' + OBJECT_USER + '/' + subjectId);
+    log('deleteRelationship - Deleting relationship for company ' + companyId);
+    log('deleteRelationship - patching: ' + 'managed/' + OBJECT_USER + '/' + subjectId);
 
     var payload = [
       {
@@ -119,7 +119,7 @@
         message: 'The relationship with company ' + companyId + ' could not be removed from the user'
       };
     } else {
-      log('Relationship removed');
+      log('deleteRelationship - Relationship removed');
     }
 
     return {
@@ -129,6 +129,8 @@
 
   // adds a CONFIRMED relationship between the provided user and company, and replaces it if there's one in PENDING status already
   function addConfirmedRelationshipToCompany (subjectId, companyId, companyLabel) {
+
+    log('addConfirmedRelationshipToCompany - Adding confirmed relationship to company');
 
     var currentStatusResponse = getStatus(subjectId, companyId);
 
@@ -142,6 +144,8 @@
         };
       }
     }
+
+    log('addConfirmedRelationshipToCompany - Got status - ' + JSON.stringify(currentStatusResponse));
 
     var payload = [
       {
@@ -159,15 +163,32 @@
       }
     ];
 
-    var newObject = openidm.patch('managed/' + OBJECT_USER + '/' + subjectId,
-      null,
-      payload);
+    log('addConfirmedRelationshipToCompany - Patch URL = ' + 'managed/' + OBJECT_USER + '/' + subjectId);
+    log('addConfirmedRelationshipToCompany - Payload = ' + JSON.stringify(payload));
 
-    if (JSON.stringify(newObject.memberOfOrgIDs).indexOf(companyId) > -1) {
-      return {
-        success: true
-      };
+    var newObject = null;
+
+    try {
+      newObject = openidm.patch('managed/' + OBJECT_USER + '/' + subjectId,
+        null,
+        payload);
+    } catch (e) {
+      log('Error patching: ' + e);
     }
+
+    log('addConfirmedRelationshipToCompany - newObject = ' + newObject);
+
+    if (newObject) {
+      if (!newObject.memberOfOrgIDs || JSON.stringify(newObject.memberOfOrgIDs).indexOf(companyId) > -1) {
+        log('addConfirmedRelationshipToCompany - SUCCESS');
+
+        return {
+          success: true
+        };
+      }
+    }
+
+    log('addConfirmedRelationshipToCompany - FAILED');
 
     return {
       success: false,
@@ -180,7 +201,7 @@
 
     var currentStatusResponse = getStatus(subjectId, companyId);
     if (currentStatusResponse.status === AuthorisationStatus.NONE) {
-      log('Creating new relationship for company ' + companyId + ' with status ' + newStatus);
+      log('setStatus - Creating new relationship for company ' + companyId + ' with status ' + newStatus);
       openidm.create('managed/' + OBJECT_USER + '/' + subjectId + '/' + USER_RELATIONSHIP,
         null,
         {
@@ -194,7 +215,7 @@
         });
     } else if (currentStatusResponse.status === newStatus) {
       if (currentStatusResponse.status === AuthorisationStatus.PENDING) {
-        log('Status already PENDING: updating invite timestamp');
+        log('setStatus - Status already PENDING: updating invite timestamp');
         inviteTimestampUpdate = {
           operation: 'replace',
           field: '/_refProperties/inviteTimestamp',
@@ -205,7 +226,7 @@
           [inviteTimestampUpdate]);
       }
     } else {
-      log('Updating status from ' + currentStatusResponse.status + ' to ' + newStatus + ' for company ' + companyId);
+      log('setStatus - Updating status from ' + currentStatusResponse.status + ' to ' + newStatus + ' for company ' + companyId);
 
       var statusUpdate = {
         operation: 'replace',
@@ -259,55 +280,48 @@
     return num < 10 ? '0' + num : num;
   }
 
-  // Look up a uid from a username
   function getUserByUsername (username) {
-    // log("Looking up user " + username);
     var response = openidm.query('managed/' + OBJECT_USER,
       { '_queryFilter': '/userName eq "' + username + '"' },
       ['_id', 'userName', 'givenName', 'roles', 'authzRoles', 'memberOfOrg', 'memberOfOrgIDs']);
 
     if (response.resultCount !== 1) {
-      log('getUserByUsername: Bad result count: ' + response.resultCount);
+      log('getUserByUsername - Bad result count: ' + response.resultCount);
       return null;
     }
 
     return response.result[0];
   }
 
-  // Look up a uid from a username
   function getUserById (userId) {
-    // log("Looking up user " + userId);
     var response = openidm.query('managed/' + OBJECT_USER,
       { '_queryFilter': '/_id eq "' + userId + '"' },
       ['_id', 'userName', 'givenName', 'roles', 'authzRoles', 'memberOfOrg', 'memberOfOrgIDs']);
 
     if (response.resultCount !== 1) {
-      log('getUserById: Bad result count: ' + response.resultCount);
+      log('getUserById - Bad result count: ' + response.resultCount);
       return null;
     }
 
     return response.result[0];
   }
 
-  // Look up a company from a company number
   function getCompany (number) {
-    // log("Looking up  company " + number);
     var response = openidm.query('managed/' + OBJECT_COMPANY,
       { '_queryFilter': '/number eq "' + number + '"' },
       ['_id', 'number', 'name', 'authCode', 'status', 'members', 'addressLine1', 'addressLine2',
         'jurisdiction', 'locality', 'postalCode', 'region', 'type']);
 
     if (response.resultCount === 0) {
-      log('getCompany: Bad result count: ' + response.resultCount);
+      log('getCompany - Bad result count: ' + response.resultCount);
       return null;
     }
 
     return response.result[0];
   }
 
-  // Authorisation logic to allow a user (caller) to accept an invitation to become authorised for a Company
   function allowInviteAcceptance (callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe) {
-    log('ACCEPT INVITE AUTHZ CHECK: callerStatus ' + callerStatus + ', subjectStatus ' + subjectStatus + ', newStatus ' + newStatus + ', isAdminUser ' + isCallerAdminUser + ', isMe ' + isMe);
+    log('allowInviteAcceptance - ACCEPT INVITE AUTHZ CHECK: callerStatus ' + callerStatus + ', subjectStatus ' + subjectStatus + ', newStatus ' + newStatus + ', isAdminUser ' + isCallerAdminUser + ', isMe ' + isMe);
 
     if (subjectStatus === AuthorisationStatus.NONE) {
       return {
@@ -319,7 +333,7 @@
     if (isCallerAdminUser &&
       subjectStatus === AuthorisationStatus.PENDING &&
       newStatus === AuthorisationStatus.CONFIRMED) {
-      log('Caller is admin - changing from \'' + subjectStatus + '\' to \'' + newStatus + '\' allowed');
+      log('allowInviteAcceptance - Caller is admin - changing from \'' + subjectStatus + '\' to \'' + newStatus + '\' allowed');
       return {
         allowed: true
       };
@@ -329,7 +343,7 @@
     if (isMe &&
       subjectStatus === AuthorisationStatus.PENDING &&
       newStatus === AuthorisationStatus.CONFIRMED) {
-      log('Caller is also subject - changing from \'' + subjectStatus + '\' to \'' + newStatus + '\' allowed');
+      log('allowInviteAcceptance - Caller is also subject - changing from \'' + subjectStatus + '\' to \'' + newStatus + '\' allowed');
       return {
         allowed: true
       };
@@ -339,7 +353,7 @@
     if (callerStatus === AuthorisationStatus.CONFIRMED &&
       subjectStatus === AuthorisationStatus.PENDING &&
       newStatus === AuthorisationStatus.CONFIRMED) {
-      log('Caller is already authorised - changing subject relationship from PENDING to CONFIRMED: status change allowed');
+      log('allowInviteAcceptance - Caller is already authorised - changing subject relationship from PENDING to CONFIRMED: status change allowed');
       return {
         allowed: true
       };
@@ -349,7 +363,7 @@
     if (callerStatus === AuthorisationStatus.CONFIRMED &&
       subjectStatus === AuthorisationStatus.CONFIRMED &&
       newStatus === AuthorisationStatus.CONFIRMED) {
-      log('Caller is already authorised - subject status for company is already CONFIRMED - Status change NOT allowed');
+      log('allowInviteAcceptance - Caller is already authorised - subject status for company is already CONFIRMED - Status change NOT allowed');
       return {
         message: 'The subject is already authorised for the company.',
         allowed: false
@@ -365,11 +379,11 @@
 
   // Authorisation logic to allow a user (caller) to remove an authorised/invited from a Company
   function allowUserRemoval (callerStatus, callerId, subjectStatus, subjectInviterId, isCallerAdminUser, isMe) {
-    log('REMOVE USER AUTHZ CHECK: callerStatus ' + callerStatus + ', subjectStatus ' + subjectStatus + ', isAdminUser ' + isCallerAdminUser + ', isMe ' + isMe);
+    log('allowUserRemoval - REMOVE USER AUTHZ CHECK: callerStatus ' + callerStatus + ', subjectStatus ' + subjectStatus + ', isAdminUser ' + isCallerAdminUser + ', isMe ' + isMe);
 
     // if the caller is an admin and the subject is CONFIRMED, allow the removal
     if (isCallerAdminUser) {
-      log('Caller is admin - changing from \'' + subjectStatus + '\' to \'NONE\' allowed');
+      log('allowUserRemoval - Caller is admin - changing from \'' + subjectStatus + '\' to \'NONE\' allowed');
       return {
         allowed: true
       };
@@ -378,7 +392,7 @@
     // if the caller is a company authorised user and and the subject is also authorised, allow the removal
     if (callerStatus === AuthorisationStatus.CONFIRMED &&
       (subjectStatus === AuthorisationStatus.CONFIRMED || subjectStatus === AuthorisationStatus.PENDING)) {
-      log('Caller is authorised for the company - changing from \'' + subjectStatus + '\' to \'NONE\' allowed');
+      log('allowUserRemoval - Caller is authorised for the company - changing from \'' + subjectStatus + '\' to \'NONE\' allowed');
       return {
         allowed: true
       };
@@ -401,11 +415,11 @@
 
   // Authorisation logic to allow a user (caller) to add an authorised/invited to a Company: only possible if the user has an auth code
   function allowUserAdd (callerStatus, subjectStatus, isCallerAdminUser) {
-    log('ADD USER AUTHZ CHECK: callerStatus ' + callerStatus + ', subjectStatus ' + subjectStatus + ', isAdminUser ' + isCallerAdminUser);
+    log('allowUserAdd - ADD USER AUTHZ CHECK: callerStatus ' + callerStatus + ', subjectStatus ' + subjectStatus + ', isAdminUser ' + isCallerAdminUser);
 
     // if the caller is an admin and the subject is CONFIRMED, allow the removal
     if (isCallerAdminUser) {
-      log('Caller is admin - changing from \'' + subjectStatus + '\' to \'CONFIRMED\' allowed');
+      log('allowUserAdd - Caller is admin - changing from \'' + subjectStatus + '\' to \'CONFIRMED\' allowed');
       return {
         allowed: true
       };
@@ -420,7 +434,7 @@
 
   // Authorisation logic to allow a user (caller) to decline an invitation to become authorised for a Company
   function allowInviteDecline (callerStatus, subjectStatus, isCallerAdminUser, isMe) {
-    log('DECLINE INVITE AUTHZ CHECK: callerStatus ' + callerStatus + ', subjectStatus ' + subjectStatus + ', isAdminUser ' + isCallerAdminUser + ', isMe ' + isMe);
+    log('allowInviteDecline - DECLINE INVITE AUTHZ CHECK: callerStatus ' + callerStatus + ', subjectStatus ' + subjectStatus + ', isAdminUser ' + isCallerAdminUser + ', isMe ' + isMe);
 
     if (subjectStatus === AuthorisationStatus.NONE) {
       return {
@@ -431,7 +445,7 @@
 
     if (isCallerAdminUser &&
       subjectStatus === AuthorisationStatus.PENDING) {
-      log('Caller is admin - deleting relationship in status \'' + subjectStatus + '\' allowed');
+      log('allowInviteDecline - Caller is admin - deleting relationship in status \'' + subjectStatus + '\' allowed');
       return {
         allowed: true
       };
@@ -440,7 +454,7 @@
     // if caller is also subject, and the current status is PENDING and the target is CONFIRMED
     if (isMe &&
       subjectStatus === AuthorisationStatus.PENDING) {
-      log('Caller is also subject - deleting relationship in status \'' + subjectStatus + '\' allowed');
+      log('allowInviteDecline - Caller is also subject - deleting relationship in status \'' + subjectStatus + '\' allowed');
       return {
         allowed: true
       };
@@ -449,7 +463,7 @@
     // if caller is authorised, allow subject transition from NONE to PENDING
     if (callerStatus === AuthorisationStatus.CONFIRMED &&
       subjectStatus === AuthorisationStatus.PENDING) {
-      log('Caller is already authorised - deleting relationship in status PENDING allowed');
+      log('allowInviteDecline - Caller is already authorised - deleting relationship in status PENDING allowed');
       return {
         allowed: true
       };
@@ -465,11 +479,11 @@
   // Authorisation logic to allow a user (caller) to send an invite to another user (subject) to become authorised for a Company
   function allowInviteSending (callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe) {
 
-    log('INVITE AUTHZ CHECK: callerStatus ' + callerStatus + ' subjectStatus ' + subjectStatus + ' newStatus ' + newStatus + ' isAdminUser ' + isCallerAdminUser + ' isMe ' + isMe);
+    log('allowInviteSending - INVITE AUTHZ CHECK: callerStatus ' + callerStatus + ' subjectStatus ' + subjectStatus + ' newStatus ' + newStatus + ' isAdminUser ' + isCallerAdminUser + ' isMe ' + isMe);
 
     // if the caller is an admin, allow to invite any user to any company
     if (isCallerAdminUser) {
-      log('Caller is admin - changing from \'' + subjectStatus + '\' to \'' + newStatus + '\' allowed');
+      log('allowInviteSending - Caller is admin - changing from \'' + subjectStatus + '\' to \'' + newStatus + '\' allowed');
       return {
         allowed: true
       };
@@ -479,7 +493,7 @@
     if (callerStatus === AuthorisationStatus.CONFIRMED &&
       subjectStatus === AuthorisationStatus.NONE &&
       newStatus === AuthorisationStatus.PENDING) {
-      log('Caller is already authorised - changing subject relationship from NONE to PENDING: status change allowed');
+      log('allowInviteSending - Caller is already authorised - changing subject relationship from NONE to PENDING: status change allowed');
       return {
         allowed: true
       };
@@ -489,7 +503,7 @@
     if (callerStatus === AuthorisationStatus.CONFIRMED &&
       subjectStatus === AuthorisationStatus.PENDING &&
       newStatus === AuthorisationStatus.PENDING) {
-      log('Caller is already authorised - subject status for company is already PENDING - Status change allowed');
+      log('allowInviteSending - Caller is already authorised - subject status for company is already PENDING - Status change allowed');
       return {
         allowed: true
       };
@@ -499,7 +513,7 @@
     if (callerStatus === AuthorisationStatus.CONFIRMED &&
       subjectStatus === AuthorisationStatus.CONFIRMED &&
       newStatus === AuthorisationStatus.PENDING) {
-      log('Caller is already authorised - subject status for company is already CONFIRMED, cannot set it to PENDING');
+      log('allowInviteSending - Caller is already authorised - subject status for company is already CONFIRMED, cannot set it to PENDING');
       return {
         allowed: false,
         message: 'subject status for company is already CONFIRMED, cannot set it to PENDING'
@@ -1044,7 +1058,12 @@
       };
     }
 
+    log('Adding Authorised User - calling allowUserAdd');
+
     var statusChangeAllowedResult = allowUserAdd(callerStatus, subjectStatus, isCallerAdminUser);
+
+    log('statusChangeAllowedResult = ' + JSON.stringify(statusChangeAllowedResult));
+
     if (!statusChangeAllowedResult.allowed) {
       log('Blocked user adding performed by user ' + actor._id);
       throw {
@@ -1056,7 +1075,12 @@
       };
     }
 
+    log('addConfirmedRelationshipToCompany starting ...');
+
     var addRelationshipResult = addConfirmedRelationshipToCompany(subject._id, companyId, companyLabel);
+
+    log('addConfirmedRelationshipToCompany => addRelationshipResult = ' + JSON.stringify(addRelationshipResult));
+
     if (!addRelationshipResult || !addRelationshipResult.success) {
       throw {
         code: 400,
@@ -1067,7 +1091,9 @@
       };
     }
 
-    return {
+    log('Building addRelationshipResult.success return');
+
+    var ret = {
       success: addRelationshipResult.success,
       caller: {
         id: actor._id,
@@ -1088,6 +1114,9 @@
       }
     };
 
+    log.debug('Returning = ' + ret);
+
+    return ret;
   } else {
     throw {
       code: 400,
