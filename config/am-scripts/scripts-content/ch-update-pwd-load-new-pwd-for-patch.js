@@ -17,9 +17,8 @@ try {
   sharedState.put('objectAttributes', objectAttributes);
   sharedState.put('password', password);
   
-  _log('updated sharedstate: ' + sharedState.get('objectAttributes'));
+  // _log('updated sharedstate: ' + sharedState.get('objectAttributes'));
 
-  _log('new password: ' + password);
   if (!password) {
     sharedState.put('errorMessage', 'The new password could not be found in transient state.');
     outcome = 'error';

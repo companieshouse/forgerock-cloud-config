@@ -42,7 +42,6 @@ function validateAuthCode (credential, authCode) {
 var credential = sharedState.get('credential');
 var companyData = sharedState.get('companyData');
 
-_log('credential: ' + credential);
 _log('companyData: ' + companyData);
 
 var authCode = JSON.parse(companyData).authCode;
