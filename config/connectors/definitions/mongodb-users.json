@@ -85,7 +85,7 @@
 		"minConnectionsPerHost": "0",
 		"maxConnectionsPerHost": "5"
 	},
-	"enabled": true,
+	"enabled": false,
 	"objectTypes": {
 		"users": {
 			"$schema": "http://json-schema.org/draft-03/schema",

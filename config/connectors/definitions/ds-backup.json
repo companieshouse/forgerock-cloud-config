@@ -1,6 +1,6 @@
 {
   "_id": "provisioner.openicf/DSBackup",
-  "enabled": true,
+  "enabled": false,
   "excludeUnmodified": true,
   "connectorRef": {
     "bundleName": "org.forgerock.openicf.connectors.ldap-connector",
