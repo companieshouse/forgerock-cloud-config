@@ -15,7 +15,8 @@ var fr = JavaImporter(
 );
 
 if (_isAuthenticated()) {
-  _log('existing session: ' + existingSession.toString());
+  // _log('Existing session: ' + existingSession.toString());
+  _log('Has existing session');
 } else {
   _log('no session!');
 }
@@ -24,7 +25,7 @@ sharedState.put('errorMessage', null);
 sharedState.put('pagePropsJSON', null);
 var password = transientState.get('password') ? transientState.get('password') : sharedState.get('password');
 
-_log('Storing password in session: ' + password);
+// _log('Storing password in session: ' + password);
 
 action = fr.Action.goTo('true')
   .putSessionProperty('password', password)

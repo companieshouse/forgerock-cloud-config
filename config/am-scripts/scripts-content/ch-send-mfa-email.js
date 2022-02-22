@@ -83,7 +83,7 @@ try {
   var emailAddress = extractEmail();
 
   _log('User email address: ' + emailAddress);
-  _log('Code: ' + code);
+  // _log('Code: ' + code);
 
   if (!emailAddress) {
     _log('Cannot find email address to send to.');

@@ -24,7 +24,7 @@ var NodeOutcome = {
 };
 
 var companyData = sharedState.get('companyData');
-_log('company data: ' + companyData);
+// _log('company data: ' + companyData);
 var infoMessage = 'The company has been added to your account';
 
 if (callbacks.isEmpty()) {
