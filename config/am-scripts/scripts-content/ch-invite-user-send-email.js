@@ -244,7 +244,8 @@ function sendEmail (invitedEmail, companyName, inviterName, returnUrl) {
   var response = httpClient.send(request).get();
   var notificationId;
   var notifyErrorMessage;
-  _log('Notify Response: ' + response.getStatus().getCode() + ' - ' + response.getEntity().getString());
+  // _log('Notify Response: ' + response.getStatus().getCode() + ' - ' + response.getEntity().getString());
+  _log('Notify Response: ' + response.getStatus().getCode());
 
   try {
     notificationId = JSON.parse(response.getEntity().getString()).id;

@@ -33,7 +33,7 @@ function setPolicyErrorMessage (policyResponse) {
 }
 
 function policyCompliant (userObject, pwd) {
-  _log('Checking password [' + pwd + '] against policy');
+  // _log('Checking password [' + pwd + '] against policy');
 
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
 

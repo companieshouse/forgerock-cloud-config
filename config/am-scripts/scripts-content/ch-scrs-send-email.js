@@ -68,7 +68,6 @@ function getEmailTemplateId (templates, newUser) {
 
   _log(JSON.stringify(templatesParsed, null, 2));
 
-  
   if (String(newUser) === 'true') {
     templateId = templatesParsed.en_scrs_notification_new;
   } else {
@@ -117,7 +116,8 @@ function sendEmail (email, companyName, returnUrl, newUser) {
   var response = httpClient.send(request).get();
   var notificationId;
 
-  _log('Notify Response: ' + response.getStatus().getCode() + ' - ' + response.getEntity().getString());
+  // _log('Notify Response: ' + response.getStatus().getCode() + ' - ' + response.getEntity().getString());
+  _log('Notify Response: ' + response.getStatus().getCode());
 
   try {
     notificationId = JSON.parse(response.getEntity().getString()).id;

@@ -172,7 +172,8 @@ if (callbacks.isEmpty()) {
   var otp = fr.String(callbacks.get(3).getPassword());
   var correctOtp = sharedState.get(config.otpSharedStateVariable);
 
-  _log('Resend = ' + resend + ', correctOtp = ' + correctOtp);
+  // _log('Resend = ' + resend + ', correctOtp = ' + correctOtp);
+  _log('Resend = ' + resend);
 
   if (resend === 'true') {
     _log('Resend requested');

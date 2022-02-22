@@ -258,7 +258,8 @@ function sendEmail (action, recipient, companyName, actorName, subjectName) {
   request.setEntity(requestBodyJson);
 
   var response = httpClient.send(request).get();
-  _log('Notify Response: ' + response.getStatus().getCode() + ' - ' + response.getEntity().getString());
+  // _log('Notify Response: ' + response.getStatus().getCode() + ' - ' + response.getEntity().getString());
+  _log('Notify Response: ' + response.getStatus().getCode());
 
   return {
     success: (response.getStatus().getCode() === 201),

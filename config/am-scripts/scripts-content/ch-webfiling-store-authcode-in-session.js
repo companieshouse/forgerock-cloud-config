@@ -15,7 +15,8 @@ var fr = JavaImporter(
 );
 
 if (_isAuthenticated()) {
-  _log('Existing session: ' + existingSession.toString());
+  // _log('Existing session: ' + existingSession.toString());
+  _log('Has existing session');
 } else {
   _log('no session!');
 }

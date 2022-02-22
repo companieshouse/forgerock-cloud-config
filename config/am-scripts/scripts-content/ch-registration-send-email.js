@@ -191,7 +191,8 @@ function sendEmail (language, jwt) {
 
   var response = httpClient.send(request).get();
   var notificationId;
-  _log('Notify Response: ' + response.getStatus().getCode() + ' - ' + response.getEntity().getString());
+  // _log('Notify Response: ' + response.getStatus().getCode() + ' - ' + response.getEntity().getString());
+  _log('Notify Response: ' + response.getStatus().getCode());
 
   try {
     notificationId = JSON.parse(response.getEntity().getString()).id;

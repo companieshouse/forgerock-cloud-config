@@ -105,7 +105,8 @@ function sendTextMessage (language, phoneNumber, code) {
 
     var notificationId;
     var response = httpClient.send(request).get();
-    _log('Notify Response: ' + response.getStatus().getCode() + ' cause= ' + response.getCause() + ' body=' + response.getEntity().getString());
+    // _log('Notify Response: ' + response.getStatus().getCode() + ' cause= ' + response.getCause() + ' body=' + response.getEntity().getString());
+    _log('Notify Response: ' + response.getStatus().getCode() + ' cause= ' + response.getCause());
 
     try {
       notificationId = JSON.parse(response.getEntity().getString()).id;
@@ -119,7 +120,8 @@ function sendTextMessage (language, phoneNumber, code) {
       return false;
     }
 
-    _log('Notify Response: ' + response.getStatus().getCode() + response.getCause() + response.getEntity().getString());
+    // _log('Notify Response: ' + response.getStatus().getCode() + response.getCause() + response.getEntity().getString());
+    _log('Notify Response: ' + response.getStatus().getCode() + ' cause=' + response.getCause());
 
     var notifyCode = response.getStatus().getCode();
 
@@ -159,7 +161,7 @@ try {
   var code = sharedState.get('oneTimePassword');
   var isRegistrationMFA = sharedState.get('registrationMFA');
 
-  _log('Code: ' + code);
+  // _log('Code: ' + code);
 
   var language = _getSelectedLanguage(requestHeaders);
   var phoneNumber = extractPhoneNumber();
