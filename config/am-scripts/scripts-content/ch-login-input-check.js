@@ -4,6 +4,9 @@ _log('Starting');
 var username = sharedState.get('username');
 var password = transientState.get('password');
 
+_log('Checking input for username : ' + username);
+// _log('Shared State : ' + sharedState.toString());
+
 var NodeOutcome = {
   TRUE: 'true',
   FALSE: 'false'

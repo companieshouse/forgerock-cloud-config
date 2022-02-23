@@ -63,6 +63,7 @@ function getCounterValue (userId, accessToken) {
 function updateCounterValue (userId, value, accessToken) {
 
   _log('Updating counter to ' + value);
+
   var convertedCounter = fr.Integer.valueOf(value);
   var request = new org.forgerock.http.protocol.Request();
   request.setMethod('PATCH');
@@ -97,10 +98,12 @@ function performSoftLock (userId, accessToken) {
 
   var dateNow = new Date();
   var request = new org.forgerock.http.protocol.Request();
+
   request.setMethod('PATCH');
   request.setUri(alphaUserUrl + userId);
   request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
   request.getHeaders().add('Content-Type', 'application/json');
+
   var requestBodyJson = [
     {
       'operation': 'replace',
@@ -108,8 +111,8 @@ function performSoftLock (userId, accessToken) {
       'value': dateNow.toString()
     }
   ];
+
   request.setEntity(requestBodyJson);
-  //_log("[UPDATE SOFT LOCK COUNTER] request JSON: " + JSON.stringify(requestBodyJson));
 
   var response = httpClient.send(request).get();
   logResponse(response);
@@ -127,7 +130,9 @@ function performSoftLock (userId, accessToken) {
 
 var SOFT_LOCK_THRESHOLD = 5;
 var SOFT_LOCK_MINUTES = 5;
+
 var errorMessage = sharedState.get('errorMessage');
+
 _log('error message from login flow: ' + errorMessage);
 
 if (errorMessage.equals('Enter a correct username and password.')) {
@@ -139,24 +144,36 @@ if (errorMessage.equals('Enter a correct username and password.')) {
   }
 
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
+
   if (accessToken == null) {
     _log('Access token not in transient state');
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
   }
 
   var counter = getCounterValue(userId, accessToken);
+
   _log('Value of counter: ' + counter);
+
   if (counter === false) {
+
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
+
   } else {
     var newCounter = updateCounterValue(userId, counter + 1, accessToken);
+
     if (!newCounter) {
+
       action = fr.Action.goTo(NodeOutcome.ERROR).build();
+
     } else if (newCounter === SOFT_LOCK_THRESHOLD) {
+
       outcome = performSoftLock(userId, accessToken);
+
       if (outcome === NodeOutcome.TRUE) {
+
         _log('soft lock performed successfully');
         sharedState.put('errorMessage', 'You have entered incorrect details too many times. Your account is now locked for '.concat(String(SOFT_LOCK_MINUTES), ' minutes.'));
+
         sharedState.put('pagePropsJSON', JSON.stringify(
           {
             'errors': [{
@@ -171,7 +188,9 @@ if (errorMessage.equals('Enter a correct username and password.')) {
     } else {
       var softLockMsg = '';
       var softLockToken = '';
+
       var remainingAttempts = (SOFT_LOCK_THRESHOLD - newCounter);
+
       if (newCounter === SOFT_LOCK_THRESHOLD - 1) {
         softLockMsg = 'Enter a correct email address and password. You have 1 attempt left. If the details you enter are incorrect again your account will be locked for '.concat(String(SOFT_LOCK_MINUTES), ' minutes.');
         softLockToken = 'SOFT_LOCK_LAST_ATTEMPT';
@@ -179,7 +198,9 @@ if (errorMessage.equals('Enter a correct username and password.')) {
         softLockMsg = 'Enter a correct email address and password. You have '.concat(String(remainingAttempts), ' attempts left.');
         softLockToken = 'SOFT_LOCK_REMAINING_ATTEMPTS';
       }
+
       sharedState.put('errorMessage', softLockMsg);
+
       sharedState.put('pagePropsJSON', JSON.stringify(
         {
           'errors': [{
@@ -191,12 +212,20 @@ if (errorMessage.equals('Enter a correct username and password.')) {
           'remainingAttempts': (SOFT_LOCK_THRESHOLD - newCounter),
           'softLockMinutes': SOFT_LOCK_MINUTES
         }));
+
       action = fr.Action.goTo(NodeOutcome.TRUE).build();
     }
   }
 }
 
 outcome = NodeOutcome.TRUE;
+
+// Clear down any state as otherwise we get bound to the wrong user
+// when we get back to the login page...
+sharedState.put('_id', null);
+sharedState.put('username', null);
+sharedState.put('objectAttributes', {});
+sharedState.put('password', null);
 
 _log('Outcome = ' + _getOutcomeForDisplay());
 

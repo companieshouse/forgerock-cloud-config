@@ -49,6 +49,8 @@ function checkPasswordStatus () {
   }
 }
 
+// _log('Shared State : ' + sharedState.toString());
+
 // restore the password from shared state
 pwdRestore();
 
