@@ -39,12 +39,14 @@ function fetchSecret () {
 // perform the credentials comparison against an external service
 function validateCredential (credential, hash, validateMethod) {
   var validateServiceInfo = fetchSecret();
+
   if (!validateServiceInfo) {
     _log('validateServiceInfo is invalid');
     outcome = NodeOutcome.FALSE;
   }
 
   var request = new org.forgerock.http.protocol.Request();
+
   request.setUri(validateServiceInfo.endpoint);
   request.setMethod('POST');
   request.getHeaders().add('Content-Type', 'application/json');
@@ -55,6 +57,7 @@ function validateCredential (credential, hash, validateMethod) {
     'hash': hash,
     'method': validateMethod
   };
+
   request.getEntity().setString(JSON.stringify(requestBodyJson));
 
   var response = httpClient.send(request).get();
@@ -62,23 +65,27 @@ function validateCredential (credential, hash, validateMethod) {
 
   if (response.getStatus().getCode() === 200) {
     var validationResponse = JSON.parse(response.getEntity().getString());
+
     _log('validationResponse: ' + validationResponse);
+
     if (validationResponse.errorMessage) {
       _log('cannot parse hash: ' + hash);
       return NodeOutcome.FALSE; //TOD return error outcome and handle it in tree
     }
 
-    if (validationResponse === 'true') {
-      _log('Credential VALID');
+    if (String(validationResponse) === 'true') {
+      _log('Credentials are VALID');
       return NodeOutcome.TRUE;
-    } else if (validationResponse === 'false') {
-      _log('Credential INVALID');
+    } else if (String(validationResponse) === 'false') {
+      _log('Credentials are INVALID');
       return NodeOutcome.FALSE;
     }
   } else {
     _log('Invalid response returned: ' + response.getStatus().getCode());
     return NodeOutcome.FALSE;
   }
+
+  return NodeOutcome.FALSE;
 }
 
 // main execution flow
@@ -86,7 +93,8 @@ var credential = sharedState.get('credential');
 var hash = sharedState.get('hashedCredential');
 var validateMethod = sharedState.get('validateMethod');
 
-_log('credential: ' + credential);
+//_log('credential: ' + credential);
+
 _log('hashedCredential: ' + hash);
 _log('validateMethod: ' + validateMethod);
 

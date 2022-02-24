@@ -11,7 +11,7 @@ if (callbacks.isEmpty()) {
     new fr.NameCallback('Enter Credential')
   ).build();
 } else {
-  _log('Credential: ' + callbacks.get(0).getName());
+  // _log('Credential: ' + callbacks.get(0).getName());
   sharedState.put('credential', callbacks.get(0).getName());
   action = fr.Action.goTo('true').build();
 }

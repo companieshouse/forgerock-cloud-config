@@ -29,7 +29,7 @@ if (callbacks.isEmpty()) {
   var credential = callbacks.get(0).getName();
   var companyNumber = callbacks.get(1).getName();
 
-  _log('Credential: ' + credential);
+  // _log('Credential: ' + credential);
   _log('CompanyNumber: ' + companyNumber);
 
   sharedState.put('credential', credential);
