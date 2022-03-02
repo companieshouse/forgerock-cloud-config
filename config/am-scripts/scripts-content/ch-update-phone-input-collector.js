@@ -56,8 +56,8 @@ if (callbacks.isEmpty()) {
 
     action = fr.Action.send(
       fr.TextOutputCallback(level, infoMessage),
-      fr.NameCallback('Enter new phone number'),
       fr.PasswordCallback('Enter your password', false),
+      fr.NameCallback('Enter new phone number'),
       fr.HiddenValueCallback('stage', 'UPDATE_PHONE_1'),
       fr.HiddenValueCallback('pagePropsJSON', errorProps)
     ).build();
@@ -66,8 +66,8 @@ if (callbacks.isEmpty()) {
 
     action = fr.Action.send(
       fr.TextOutputCallback(level, infoMessage),
-      fr.NameCallback('Enter new phone number'),
       fr.PasswordCallback('Enter your password', false),
+      fr.NameCallback('Enter new phone number'),
       fr.HiddenValueCallback('stage', 'UPDATE_PHONE_1')
     ).build();
 
@@ -75,8 +75,8 @@ if (callbacks.isEmpty()) {
 } else {
   _log('Callbacks are NOT empty..');
 
-  var newPhoneNumber = callbacks.get(1).getName();
-  var currentPassword = fr.String(callbacks.get(2).getPassword());
+  var newPhoneNumber = callbacks.get(2).getName();
+  var currentPassword = fr.String(callbacks.get(1).getPassword());
 
   _log('New phone number ' + newPhoneNumber);
 
@@ -88,8 +88,8 @@ if (callbacks.isEmpty()) {
         'errors': [{
           label: 'Invalid mobile number entered',
           token: 'UPDATE_PHONE_INVALID_MOBILE_NUMBER',
-          fieldName: 'IDToken2',
-          anchor: 'IDToken2'
+          fieldName: 'IDToken3',
+          anchor: 'IDToken3'
         }]
       }));
 
@@ -104,8 +104,8 @@ if (callbacks.isEmpty()) {
         'errors': [{
           label: 'Invalid credential entered.',
           token: 'UPDATE_PHONE_INVALID_CREDENTIALS',
-          fieldName: 'IDToken3',
-          anchor: 'IDToken3'
+          fieldName: 'IDToken2',
+          anchor: 'IDToken2'
         }]
       }));
 
