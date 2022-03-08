@@ -12,7 +12,8 @@ var fr = JavaImporter(
 
 var NodeOutcome = {
   SUCCESS: 'success',
-  FAIL: 'fail'
+  FAIL: 'fail',
+  PHONE_REMOVED: 'phone_removed'
 };
 
 var PHONE_NUMBER_FIELD = 'telephoneNumber';
@@ -80,7 +81,20 @@ if (callbacks.isEmpty()) {
 
   _log('New phone number ' + newPhoneNumber);
 
-  if (!newPhoneNumber || !_isValidPhone(newPhoneNumber)) {
+  if(!newPhoneNumber){
+    _log('SUCCESS - PHONE REMOVED');
+
+    sharedState.put('objectAttributes',
+      {
+        'telephoneNumber': null
+      });
+
+    sharedState.put('newPhoneNumber', null);
+    sharedState.put('updatePhoneNumber', true);
+    sharedState.put('password', currentPassword);
+
+    action = fr.Action.goTo(NodeOutcome.PHONE_REMOVED).build();
+  } else if (newPhoneNumber && !_isValidPhone(newPhoneNumber)) {
 
     sharedState.put('errorMessage', 'Invalid mobile number entered.');
     sharedState.put('pagePropsJSON', JSON.stringify(
@@ -114,7 +128,7 @@ if (callbacks.isEmpty()) {
 
   } else {
 
-    _log('SUCCESS');
+    _log('SUCCESS - PHONE SET');
 
     sharedState.put('objectAttributes',
       {

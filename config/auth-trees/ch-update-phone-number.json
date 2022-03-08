@@ -7,7 +7,8 @@
         "script": "f1413023-6fa4-43de-92a9-1f63f889c8b4",
         "outcomes": [
           "success",
-          "fail"
+          "fail",
+          "phone_removed"
         ],
         "outputs": [
           "*"
@@ -23,6 +24,22 @@
       "details": {
         "incrementUserAttributeOnFailure": false,
         "retryLimit": 3
+      }
+    },
+    {
+      "_id": "333e7d00-4900-4877-b916-690eae53f160",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "fdac4efb-d8b8-478b-8300-e11a4c3503df",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
       }
     },
     {
@@ -131,20 +148,9 @@
       }
     },
     {
-      "_id": "333e7d00-4900-4877-b916-690eae53f160",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "script": "fdac4efb-d8b8-478b-8300-e11a4c3503df",
-        "outcomes": [
-          "true"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
-      }
+      "_id": "7b76545f-8493-4c00-b991-24c675768d3f",
+      "nodeType": "DataStoreDecisionNode",
+      "details": {}
     }
   ],
   "tree": {
@@ -158,7 +164,8 @@
         "y": 176.015625,
         "connections": {
           "fail": "2fa15e3f-2b3d-48c6-93ee-9661538e2255",
-          "success": "de15cac3-ec51-4d79-9a25-271ba0b3d850"
+          "success": "de15cac3-ec51-4d79-9a25-271ba0b3d850",
+          "phone_removed": "7b76545f-8493-4c00-b991-24c675768d3f"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Update Phone Input Collector"
@@ -172,6 +179,13 @@
         },
         "nodeType": "RetryLimitDecisionNode",
         "displayName": "Retry Limit Decision"
+      },
+      "333e7d00-4900-4877-b916-690eae53f160": {
+        "x": 1055,
+        "y": 702.015625,
+        "connections": {},
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "max attempts exceeded"
       },
       "40828bf9-7d43-4435-8f17-9ba01d42d288": {
         "x": 617,
@@ -257,12 +271,14 @@
         "nodeType": "InnerTreeEvaluatorNode",
         "displayName": "Check OTP SubFlow"
       },
-      "333e7d00-4900-4877-b916-690eae53f160": {
-        "x": 1055,
-        "y": 702.015625,
-        "connections": {},
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "max attempts exceeded"
+      "7b76545f-8493-4c00-b991-24c675768d3f": {
+        "x": 967,
+        "y": 79.015625,
+        "connections": {
+          "true": "8fe21f7c-e4ac-4456-afd2-67dc27b9db8e"
+        },
+        "nodeType": "DataStoreDecisionNode",
+        "displayName": "Data Store Decision"
       }
     },
     "staticNodes": {
