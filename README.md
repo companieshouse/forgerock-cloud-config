@@ -40,3 +40,4 @@ All scripts can also be ran locally using the CLI with the correct arguments and
 The available CLI commands can be found using the help option: `update-fidc -h`
 
 Each command also has it's own help option, for example: `update-fidc applications -h`
+
