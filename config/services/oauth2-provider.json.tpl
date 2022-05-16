@@ -7,12 +7,12 @@
     },
     "advancedOAuth2Config": {
         "allowedAudienceValues": [],
-        "authenticationAttributes": [
+        "forgerock-oauth2-provider-authentication-attributes": [
             "uid"
         ],
         "codeVerifierEnforced": "false",
         "customLoginUrlTemplate": "https://idam-ui.amido.aws.chdev.org/account/login/?goto=${goto}<#if acrValues??>&acr_values=${acrValues}</#if><#if realm??>&realm=${realm}</#if><#if module??>&module=${module}</#if><#if service??>&service=${service}</#if><#if locale??>&locale=${locale}</#if><#if authIndexType??>&authIndexType=${authIndexType}</#if><#if authIndexValue??>&authIndexValue=${authIndexValue}</#if>&mode=AUTHN_ONLY",
-        "defaultScopes": [
+        "forgerock-oauth2-provider-default-scopes": [
             "address",
             "phone",
             "openid",
@@ -20,7 +20,7 @@
             "email"
         ],
         "displayNameAttribute": "cn",
-        "grantTypes": [
+        "supportedGrantTypes": [
             "implicit",
             "urn:ietf:params:oauth:grant-type:saml2-bearer",
             "refresh_token",
@@ -32,7 +32,7 @@
             "urn:ietf:params:oauth:grant-type:uma-ticket",
             "urn:ietf:params:oauth:grant-type:jwt-bearer"
         ],
-        "hashSalt": "{HASH_SALT}",
+        "forgerock-oauth2-provider-hash-salt": "{HASH_SALT}",
         "macaroonTokenFormat": "V2",
         "moduleMessageEnabledInPasswordGrant": false,
         "passwordGrantAuthService": "PasswordGrant",
