@@ -32,7 +32,7 @@
             "urn:ietf:params:oauth:grant-type:uma-ticket",
             "urn:ietf:params:oauth:grant-type:jwt-bearer"
         ],
-        "forgerock-oauth2-provider-hash-salt": "{HASH_SALT}",
+        "forgerock-oauth2-provider-hash-salt": "n0FLWZh88zPTlWf2c3OEBlBd5r4=",
         "macaroonTokenFormat": "V2",
         "moduleMessageEnabledInPasswordGrant": false,
         "passwordGrantAuthService": "PasswordGrant",
