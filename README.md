@@ -41,3 +41,4 @@ The available CLI commands can be found using the help option: `update-fidc -h`
 
 Each command also has it's own help option, for example: `update-fidc applications -h`
 
+
