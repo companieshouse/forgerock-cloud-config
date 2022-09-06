@@ -509,7 +509,20 @@
 
       return result;
     } catch (e) {
-      _log('Error in getCompanyEmails() call : ' + e);
+
+      if(e.javaException){
+          const code = e.javaException.code;
+          const detail = e.javaException.detail ? JSON.parse(e.javaException.detail) : {};
+
+          if(code === 400 && (detail.body.error_code === "1000" || detail.body.error_code === "1001")){
+               _log('Error in calling filers endpoint for company ' + companyNumber + ' - code: ' + detail.body.error_code + ' - ' + detail.body.message);
+          } else {
+               _log('Error in getCompanyEmails() call : ' + e);
+          }
+      } else {
+          _log('Error in getCompanyEmails() call : ' + e);
+      }
+
       return {};
     }
   }
