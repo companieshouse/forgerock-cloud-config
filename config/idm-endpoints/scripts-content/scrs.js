@@ -514,8 +514,9 @@
 
       if(code === 400 && (detail.body.error_code === "1000" || detail.body.error_code === "1001")){
          _log('Did not find any filers for company : ' + companyNumber);
+      } else {
+         _log('Error in getCompanyEmails() call : ' + e);
       }
-      _log('Error in getCompanyEmails() call : ' + e);
       return {};
     }
   }
