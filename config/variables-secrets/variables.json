@@ -213,5 +213,20 @@
     "_id": "esv-659b97c692-companyreconsourcequerypagesize",
     "description": "Companies mapping sourcequery size",
     "valueBase64": "%ESV_659B97C692_COMPANYRECONSOURCEQUERYPAGESIZE%"
+  },
+  {
+    "_id": "esv-removeexpiredonboardedusers-repeatinterval",
+    "description": "Frequency of execution of removeExpiredOnboardedUsers task",
+    "valueBase64": "%ESV_REMOVEEXPIREDONBOARDEDUSERS_REPEATINTERVAL%"
+  },
+  {
+    "_id": "esv-removeexpiredinvitations-repeatinterval",
+    "description": "Frequency of execution of removeExpiredInvitations task",
+    "valueBase64": "%ESV_REMOVEEXPIREDINVITATIONS_REPEATINTERVAL%"
+  },
+  {
+    "_id": "esv-scrs-script-repeatinterval",
+    "description": "Frequency of execution of SCRS script",
+    "valueBase64": "%ESV_SCRS_SCRIPT_REPEATINTERVAL%"
   }
 ]

@@ -16,13 +16,17 @@
   "tasks": [
     {
       "taskName": "removeExpiredOnboardedUsers",
-      "repeatInterval": 300000,
+      "repeatInterval": {
+        "$int": "&{esv.removeexpiredonboardedusers.repeatinterval|1800000}"
+      },
       "queryFilter": "((/frIndexedDate2 lt \"${Time.now - 7d}Z\"))",
       "scriptFileName": "removeExpiredOnboardedUsers.js"
     },
     {
       "taskName": "removeExpiredInvitations",
-      "repeatInterval": 300000,
+      "repeatInterval": {
+        "$int": "&{esv.removeexpiredinvitations.repeatinterval|1800000}"
+      },
       "queryFilter": "((/frIndexedMultivalued1 lt \"${Time.now - 7d}Z\"))",
       "scriptFileName": "removeExpiredInvitations.js"
     }
@@ -31,7 +35,9 @@
     {
       "scheduleName": "scrs",
       "scriptFileName": "scrs-wrapper.js",
-      "repeatInterval": 1800000
+      "repeatInterval": {
+        "$int": "&{esv.scrs.script.repeatinterval|1800000}"
+      }
     }
   ]
 }
