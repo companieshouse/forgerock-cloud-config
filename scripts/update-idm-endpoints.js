@@ -137,9 +137,8 @@ const updateScripts = async (argv) => {
                   invokeLogLevel: 'info'
                 }
               }
-              // console.log(`IDM task code: ${JSON.stringify(body)}`)
-
-              const requestUrl = `${FIDC_URL}/openidm/scheduler/job/${task.taskName}`
+              
+              const requestUrl = `${FIDC_URL}/openidm/config/schedule/${task.taskName}`
               await fidcRequest(requestUrl, body, accessToken)
               console.log(`IDM Task updated: ${task.taskName}`)
             })
@@ -200,7 +199,7 @@ const updateScripts = async (argv) => {
 
               // console.log(`IDM task code: ${JSON.stringify(body)}`)
 
-              const requestUrl = `${FIDC_URL}/openidm/scheduler/job/${schedule.scheduleName}`
+              const requestUrl = `${FIDC_URL}/openidm/config/schedule/${schedule.scheduleName}`
               await fidcRequest(requestUrl, body, accessToken)
               console.log(`IDM Scheduled script updated: ${schedule.scheduleName}`)
             })
