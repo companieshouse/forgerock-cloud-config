@@ -29,7 +29,7 @@ function validateAuthCode (credential, authCode) {
     return NodeOutcome.FALSE;
   }
 
-  if (credential.equals(authCode)) {
+  if (credential.toLowerCase().equals(authCode.toLowerCase())) {
     _log('Credential VALID');
     return NodeOutcome.TRUE;
   } else {
