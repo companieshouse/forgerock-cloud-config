@@ -51,7 +51,6 @@ function getUserMembershipForCompany (userIdentifier, companyNo) {
 
   logResponse(response);
   if (response.getStatus().getCode() === 200) {
-    _log('200 response from IDM');
     var membershipResponse = JSON.parse(response.getEntity().getString());
     return membershipResponse;
   } else {

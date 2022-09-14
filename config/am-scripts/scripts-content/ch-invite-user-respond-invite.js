@@ -108,7 +108,7 @@ function respondToInvite (callerId, company, action) {
   logResponse(response);
 
   if (response.getStatus().getCode() === 200) {
-    _log('200 response from IDM');
+    _log('Invite Response processed ' + action + ' - company: ' + JSON.parse(company).number + ' - response: ' + response.getEntity().getString());
     return {
       success: actionResponse.success,
       inviterId: actionResponse.company.inviterId

@@ -77,7 +77,7 @@ function sendTextMessage (language, phoneNumber, code) {
 
   var notifyJWT = transientState.get('notifyJWT');
   var templates = transientState.get('notifyTemplates');
-
+  var requestBodyJson;
   _log('JWT from transient state: ' + notifyJWT);
   _log('Templates from transient state: ' + templates);
 
@@ -85,7 +85,7 @@ function sendTextMessage (language, phoneNumber, code) {
   request.setUri(_fromConfig('NOTIFY_SMS_ENDPOINT'));
 
   try {
-    var requestBodyJson = {
+    requestBodyJson = {
       'phone_number': phoneNumber,
       'template_id': language === 'EN' ? JSON.parse(templates).en_otpSms : JSON.parse(templates).cy_otpSms,
       'personalisation': {

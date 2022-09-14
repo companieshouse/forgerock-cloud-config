@@ -43,6 +43,16 @@ var JwtType = {
   ENCRYPTED_THEN_SIGNED: 3
 };
 
+var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
+
+var config = {
+  signingKey: transientState.get('chJwtSigningKey'),
+  encryptionKey: transientState.get('chJwtEncryptionKey'),
+  issuer: FIDC_ENDPOINT,
+  audience: 'CH Account',
+  validityMinutes: 1440
+};
+
 function getKey (secret, keyType) {
   if (keyType == KeyType.ENCRYPTION) {
     return new fr.SecretKeySpec(fr.Base64.decode(config.encryptionKey), 'AES');
@@ -161,7 +171,7 @@ function sendErrorCallbacks (stage, token, message) {
 
 //sends the email (via Notify) to the recipient using the given registration JWT
 function sendEmail (language, jwt) {
-
+  var requestBodyJson;
   var notifyJWT = transientState.get('notifyJWT');
   var templates = transientState.get('notifyTemplates');
   var returnUrl = host.concat('/account/register/verify/?token=', jwt);
@@ -172,7 +182,7 @@ function sendEmail (language, jwt) {
 
   request.setUri(_fromConfig('NOTIFY_EMAIL_ENDPOINT'));
   try {
-    var requestBodyJson = {
+    requestBodyJson = {
       'email_address': email,
       'template_id': language === 'EN' ? JSON.parse(templates).en_verifyReg : JSON.parse(templates).cy_verifyReg,
       'personalisation': {
@@ -207,14 +217,7 @@ function sendEmail (language, jwt) {
 }
 
 // main execution flow
-var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
-var config = {
-  signingKey: transientState.get('chJwtSigningKey'),
-  encryptionKey: transientState.get('chJwtEncryptionKey'),
-  issuer: FIDC_ENDPOINT,
-  audience: 'CH Account',
-  validityMinutes: 1440
-};
+
 
 try {
   var registrationJwt;

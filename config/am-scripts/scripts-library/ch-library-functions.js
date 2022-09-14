@@ -24,12 +24,16 @@ function _getOutcomeForDisplay () {
 }
 
 function _log (message, logLevel) {
+  
+  var userName = _getUserNameFromSharedState ();
+  var userId = _getUserIdFromSharedState ();
+  
   if (!logLevel) {
     logLevel = 'MESSAGE';
   }
 
   var chLogMarker = '[CHLOG]';
-  var scriptNameForDisplay = _getScriptNameForDisplay() + '[SPAN:' + _getSpanId() + ']';
+  var scriptNameForDisplay = _getScriptNameForDisplay() + '[SPAN:' + _getSpanId() + ']' + '[USER: ' + userName + '/' + userId + ']';
 
   if (logLevel === 'MESSAGE' && logger.messageEnabled()) {
     logger.message(chLogMarker.concat(scriptNameForDisplay).concat(' ').concat(message));
@@ -171,7 +175,7 @@ function _getJourneyName () {
     }
   }
 
-  _log('Resolved Journey Name as : ' + journeyName);
+  //_log('Resolved Journey Name as : ' + journeyName);
   return journeyName;
 }
 
@@ -187,7 +191,7 @@ function _getSpanId () {
 function _fetchIDMToken () {
   var accessToken = transientState.get('idmAccessToken');
   if (accessToken === null) {
-    _log('Access token not in transient state');
+   // _log('Access token not in transient state');
     return false;
   }
   return accessToken;
@@ -197,7 +201,7 @@ function _getFromSharedState (propName) {
   var propNameValue = sharedState.get(propName);
 
   if (propNameValue) {
-    _log('SharedState -> ' + propName + ' : ' + propNameValue);
+    //_log('SharedState -> ' + propName + ' : ' + propNameValue);
     return propNameValue;
   }
 
@@ -213,7 +217,7 @@ function _getUserIdFromSharedState () {
   if (sharedState.get('objectAttributes')) {
     var oaIdProp = sharedState.get('objectAttributes').get('_id');
     if (oaIdProp) {
-      _log('SharedState -> objectAttributes._id : ' + oaIdProp);
+      //_log('SharedState -> objectAttributes._id : ' + oaIdProp);
       return oaIdProp;
     }
   }
@@ -235,7 +239,7 @@ function _getUserNameFromSharedState () {
   if (sharedState.get('objectAttributes')) {
     var oaMailProp = sharedState.get('objectAttributes').get('mail');
     if (oaMailProp) {
-      _log('SharedState -> objectAttributes.mail : ' + oaMailProp);
+      //_log('SharedState -> objectAttributes.mail : ' + oaMailProp);
       return oaMailProp;
     }
   }

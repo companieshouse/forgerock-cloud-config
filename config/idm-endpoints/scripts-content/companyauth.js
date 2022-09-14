@@ -22,7 +22,8 @@
 
   var CompanyStatus = {
     ACTIVE: 'active',
-    DORMANT: 'dormant'
+    DORMANT: 'dormant',
+    DISSOLVED: 'dissolved'
   };
 
   // Endpoint actions
@@ -833,10 +834,10 @@
         };
       }
 
-      if (company.status !== CompanyStatus.ACTIVE && company.status !== CompanyStatus.DORMANT) {
+      if (company.status === CompanyStatus.DISSOLVED) {
         return {
           success: false,
-          message: 'The company ' + request.content.companyNumber + ' is not active or dormant.'
+          message: 'The company ' + request.content.companyNumber + ' is dissolved.'
         };
       }
     }
