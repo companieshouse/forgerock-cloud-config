@@ -68,8 +68,6 @@ function getCompanyInfo (companyNo) {
   var response = httpClient.send(request).get();
   var companyResponse = JSON.parse(response.getEntity().getString());
   if (response.getStatus().getCode() === 200) {
-    _log('200 response from IDM');
-
     if (companyResponse.success) {
       return {
         success: true,
@@ -175,7 +173,6 @@ function getSubjectStatusForCompany (userId, companyNo) {
   var response = httpClient.send(request).get();
   var actionResponse = JSON.parse(response.getEntity().getString());
   if (response.getStatus().getCode() === 200) {
-    _log('200 response from IDM');
     return actionResponse;
   } else {
     _log('Error during action processing');

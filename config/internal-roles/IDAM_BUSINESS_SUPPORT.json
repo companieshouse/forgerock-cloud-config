@@ -8,7 +8,7 @@
       "path": "managed/alpha_organization",
       "name": "CH Companies",
       "actions": [],
-      "filter": "/status eq \"active\" or /status eq \"dormant\"",
+      "filter": "!(/status eq \"dissolved\")",
       "permissions": [
         "VIEW"
       ],

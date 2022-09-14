@@ -1,4 +1,4 @@
-var _scriptName = 'CH CREATE/UPDATE USER FROM SOURCE';
+var _scriptName = 'CH CREATE-UPDATE USER FROM SOURCE';
 _log('Starting');
 
 var fr = JavaImporter(
@@ -37,7 +37,6 @@ function getUserBySearchTerm (accessToken, searchTerm) {
   var response = httpClient.send(request).get();
 
   if (response.getStatus().getCode() === 200) {
-    _log('200 response from IDM');
     var userResponse = JSON.parse(response.getEntity().getString());
 
     if (userResponse.resultCount > 0) {
@@ -198,14 +197,21 @@ function createOrUpdateUser (accessToken, email) {
     _log('IDM response: ' + response.getStatus().getCode() + ' ' + response.getEntity().getString());
 
     if (response.getStatus().getCode() === 201 || response.getStatus().getCode() === 200) {
-      _log('201/200 response from IDM');
+
+      if (response.getStatus().getCode() === 200){
+        _log('User Updated from EWF: ' + email);
+      }
+      if (response.getStatus().getCode() === 201){
+        _log('User Created from EWF: ' + email);
+      }
+
       return {
         success: true,
         operation: operation,
         userData: JSON.parse(response.getEntity().getString())
       };
     } else {
-      _log('Error during user creation/update');
+      _log('Error during user creation/update of user ' + email);
       return {
         success: false,
         operation: operation,

@@ -23,7 +23,8 @@ var jurisdictions = {
 
 var CompanyStatus = {
   ACTIVE: 'active',
-  DORMANT: 'dormant'
+  DORMANT: 'dormant',
+  DISSOLVED: 'dissolved'
 };
 
 function logResponse (response) {
@@ -54,7 +55,6 @@ function getCompanyByNumber (accessToken, companyNumber) {
   var response = httpClient.send(request).get();
 
   if (response.getStatus().getCode() === 200) {
-    _log('200 response from IDM');
     var companyResponse = JSON.parse(response.getEntity().getString());
 
     if (companyResponse.resultCount > 0) {
@@ -176,13 +176,20 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
     var response = httpClient.send(request).get();
 
     if (response.getStatus().getCode() === 201 || response.getStatus().getCode() === 200) {
-      _log('201/200 response from IDM');
+      
+      if (response.getStatus().getCode() === 200){
+        _log('Company Updated from CHS: ' + companyNumber);
+      }
+      if (response.getStatus().getCode() === 201){
+        _log('Company Created from CHS: ' + companyNumber);
+      }
+
       return {
         success: true,
         companyData: JSON.parse(response.getEntity().getString())
       };
     } else {
-      _log('Error during user creation/update');
+      _log('Error during company creation/update');
       return {
         success: false,
         message: JSON.parse(response.getEntity().getString())
@@ -237,7 +244,6 @@ function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdic
   logResponse(response);
 
   if (response.getStatus().getCode() === 200) {
-    _log('200 response from IDM');
     var companyResponse = JSON.parse(response.getEntity().getString());
 
     if (companyResponse.resultCount > 0) {
@@ -268,13 +274,13 @@ function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdic
 
       _log('Found status: ' + companyStatus);
 
-      if (!companyStatus.equals(CompanyStatus.ACTIVE) && !companyStatus.equals(CompanyStatus.DORMANT)) {
-        _log('The company is not active/dormant');
-        sharedState.put('errorMessage', 'The company ' + companyName + ' is not active or dormant.');
+      if (companyStatus.equals(CompanyStatus.DISSOLVED)) {
+        _log('The company is dissolved');
+        sharedState.put('errorMessage', 'The company ' + companyName + ' is dissolved.');
         sharedState.put('pagePropsJSON', JSON.stringify(
           {
             'errors': [{
-              label: 'The company ' + companyName + ' is not active or dormant.',
+              label: 'The company ' + companyName + ' is dissolved.',
               token: 'COMPANY_NOT_ACTIVE',
               fieldName: isEWF ? 'IDToken3' : 'IDToken2',
               anchor: isEWF ? 'IDToken3' : 'IDToken2'
@@ -283,7 +289,7 @@ function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdic
           }));
         return {
           success: false,
-          message: 'The company ' + companyName + ' is not active or dormant.'
+          message: 'The company ' + companyName + ' is dissolved.'
         };
       }
 

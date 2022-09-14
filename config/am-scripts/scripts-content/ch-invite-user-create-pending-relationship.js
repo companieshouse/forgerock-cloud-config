@@ -88,7 +88,6 @@ function getUserMembershipForCompany (userIdentifier, company, idType) {
 
   logResponse(response);
   if (response.getStatus().getCode() === 200) {
-    _log('200 response from IDM');
     var membershipResponse = JSON.parse(response.getEntity().getString());
     return membershipResponse;
   } else {
@@ -130,7 +129,7 @@ function createPendingRelationship (callerId, userName, company) {
   logResponse(response);
   var membershipResponse = JSON.parse(response.getEntity().getString());
   if (response.getStatus().getCode() === 200) {
-    _log('200 response from IDM');
+    _log('Created Pending relationship with company - user: ' + userName + ' - company: ' + companyNo);
     return {
       success: membershipResponse.success
     };

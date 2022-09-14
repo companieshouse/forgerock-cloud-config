@@ -75,7 +75,6 @@ function checkUserAlreadyAuthzForCompany (userId, company) {
   var response = httpClient.send(request).get();
   var actionResponse = JSON.parse(response.getEntity().getString());
   if (response.getStatus().getCode() === 200) {
-    _log('200 response from IDM');
     return (actionResponse.success && actionResponse.company.status === 'confirmed');
   } else {
     _log('Error during action processing');
@@ -113,7 +112,7 @@ function addRelationshipToCompany (userId, company) {
   var response = httpClient.send(request).get();
   var actionResponse = JSON.parse(response.getEntity().getString());
   if (response.getStatus().getCode() === 200) {
-    _log('200 response from IDM');
+    _log('Created relationship with company - user: ' + userId + ' - company: ' + company.number);
     return {
       success: actionResponse.success
     };

@@ -148,7 +148,6 @@ function getCompanyData (companyNo) {
   var companyResponse = JSON.parse(response.getEntity().getString());
 
   if (response.getStatus().getCode() === 200) {
-    _log('200 response from IDM');
 
     if (companyResponse.success) {
       return {

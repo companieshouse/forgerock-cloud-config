@@ -267,7 +267,6 @@ function isUserInvitedForCompany (userEmail, companyNo) {
   var response = httpClient.send(request).get();
 
   if (response.getStatus().getCode() === 200) {
-    _log('200 response from IDM');
     var membershipResponse = JSON.parse(response.getEntity().getString());
     return {
       success: true,

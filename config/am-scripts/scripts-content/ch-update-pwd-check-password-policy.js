@@ -63,7 +63,6 @@ function policyCompliant (userObject, pwd) {
   logResponse(response);
 
   if (response.getStatus().getCode() === 200) {
-    _log('200 response from IDM');
     var policyResponse = JSON.parse(response.getEntity().getString());
     if (policyResponse == null) {
       _log('No policy result in response');

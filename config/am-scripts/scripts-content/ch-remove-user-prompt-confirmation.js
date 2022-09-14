@@ -120,13 +120,13 @@ function removeUserFromCompany (callerId, companyNo, userIdToRemove) {
   var response = httpClient.send(request).get();
   var actionResponse = JSON.parse(response.getEntity().getString());
   if (response.getStatus().getCode() === 200) {
-    _log('200 response from IDM');
+    _log('User removed from company - user: ' + userIdToRemove + ' - company: '+companyNo);
     return {
       success: actionResponse.success,
       removerName: (actionResponse.caller.fullName ? actionResponse.caller.fullName : actionResponse.caller.userName)
     };
   } else {
-    _log('Error during action processing');
+    _log('Error while removing user from company');
     return {
       success: false,
       message: actionResponse.detail.reason

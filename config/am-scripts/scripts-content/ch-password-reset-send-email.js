@@ -206,12 +206,13 @@ function raiseEmailSendError () {
 function sendEmail (language) {
   var notifyJWT = transientState.get('notifyJWT');
   var templates = transientState.get('notifyTemplates');
+  var requestBodyJson;
   _log('Notify JWT from transient state: ' + notifyJWT);
   _log('Templates from transient state: ' + templates);
   var isUserExisting = transientState.get('isUserExisting');
   request.setUri(_fromConfig('NOTIFY_EMAIL_ENDPOINT'));
   try {
-    var requestBodyJson = isUserExisting ? {
+    requestBodyJson = isUserExisting ? {
       'email_address': email,
       'template_id': language === 'EN' ? JSON.parse(templates).en_existingUser : JSON.parse(templates).cy_existingUser,
       'personalisation': {

@@ -85,7 +85,6 @@ function updateUserPassword (userId, password) {
   logResponse(response);
 
   if (response.getStatus().getCode() === 200) {
-    _log('200 response from IDM');
     transientState.put('password', password);
     return NodeOutcome.TRUE;
   } else if (response.getStatus().getCode() === 401) {
