@@ -43,16 +43,6 @@ var JwtType = {
   ENCRYPTED_THEN_SIGNED: 3
 };
 
-var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
-
-var config = {
-  signingKey: transientState.get('chJwtSigningKey'),
-  encryptionKey: transientState.get('chJwtEncryptionKey'),
-  issuer: FIDC_ENDPOINT,
-  audience: 'CH Account',
-  validityMinutes: 1440
-};
-
 function getKey (secret, keyType) {
   if (keyType == KeyType.ENCRYPTION) {
     return new fr.SecretKeySpec(fr.Base64.decode(config.encryptionKey), 'AES');
@@ -217,7 +207,15 @@ function sendEmail (language, jwt) {
 }
 
 // main execution flow
+var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
 
+var config = {
+  signingKey: transientState.get('chJwtSigningKey'),
+  encryptionKey: transientState.get('chJwtEncryptionKey'),
+  issuer: FIDC_ENDPOINT,
+  audience: 'CH Account',
+  validityMinutes: 1440
+};
 
 try {
   var registrationJwt;
