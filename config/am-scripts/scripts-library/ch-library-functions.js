@@ -215,10 +215,13 @@ function _getUserIdFromSharedState () {
   }
 
   if (sharedState.get('objectAttributes')) {
-    var oaIdProp = sharedState.get('objectAttributes').get('_id');
-    if (oaIdProp) {
-      //_log('SharedState -> objectAttributes._id : ' + oaIdProp);
-      return oaIdProp;
+    var objAttributes = sharedState.get('objectAttributes');
+    if(objAttributes && objAttributes.toString().indexOf('get') != -1) {
+      var oaIdProp = objAttributes.get('_id');
+      if (oaIdProp) {
+        //_log('SharedState -> objectAttributes._id : ' + oaIdProp);
+        return oaIdProp;
+      }
     }
   }
 
@@ -236,12 +239,16 @@ function _getUserNameFromSharedState () {
     return usernameProp;
   }
 
-  if (sharedState.get('objectAttributes')) {
-    var oaMailProp = sharedState.get('objectAttributes').get('mail');
-    if (oaMailProp) {
-      //_log('SharedState -> objectAttributes.mail : ' + oaMailProp);
-      return oaMailProp;
-    }
+  if (sharedState) {
+    var objAttributes = sharedState.get('objectAttributes')
+    
+    var oaMailProp;
+    if (objAttributes && objAttributes.toString().indexOf('get') != -1){
+      oaMailProp = objAttributes.get('mail');
+      if(oaMailProp){
+        return oaMailProp;
+      }
+    }    
   }
 
   return '';
