@@ -19,7 +19,7 @@ try {
     // email has wrong format
     if (!_isValidEmail(username)) {
       errorMessage = errorMessage.concat('Invalid email format: ').concat(username);
-      _log('invalid email format');
+      _log(errorMessage);
       sharedState.put('errorMessage', errorMessage);
       sharedState.put('pagePropsJSON', JSON.stringify(
         {
@@ -32,6 +32,7 @@ try {
         }));
       outcome = NodeOutcome.FALSE;
     } else {
+      _log('User ' + username + ' logging in...');
       outcome = NodeOutcome.TRUE;
     }
   } else if (!username || !password) {

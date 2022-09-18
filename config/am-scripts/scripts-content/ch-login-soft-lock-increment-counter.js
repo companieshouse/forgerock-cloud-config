@@ -171,7 +171,7 @@ if (errorMessage.equals('Enter a correct username and password.')) {
 
       if (outcome === NodeOutcome.TRUE) {
 
-        _log('soft lock performed successfully');
+        _log('Incorrect details entered too many times. Account is now locked for '.concat(String(SOFT_LOCK_MINUTES), ' minutes.'));
         sharedState.put('errorMessage', 'You have entered incorrect details too many times. Your account is now locked for '.concat(String(SOFT_LOCK_MINUTES), ' minutes.'));
 
         sharedState.put('pagePropsJSON', JSON.stringify(
@@ -199,6 +199,7 @@ if (errorMessage.equals('Enter a correct username and password.')) {
         softLockToken = 'SOFT_LOCK_REMAINING_ATTEMPTS';
       }
 
+      _log(softLockMsg);
       sharedState.put('errorMessage', softLockMsg);
 
       sharedState.put('pagePropsJSON', JSON.stringify(

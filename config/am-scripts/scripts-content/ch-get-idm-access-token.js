@@ -32,8 +32,8 @@ function getAccessToken () {
   if (!clientInfo) {
     return NodeOutcome.ERROR;
   }
-  _log('Secret retrieved: ' + JSON.stringify(clientInfo));
-  _log('Getting IDM Access Token');
+  //_log('Secret retrieved: ' + JSON.stringify(clientInfo));
+  _log('Getting IDM Access Token...');
   var request = new org.forgerock.http.protocol.Request();
   request.setUri(tokenEndpoint);
   request.setMethod('POST');
@@ -46,7 +46,7 @@ function getAccessToken () {
     '&password=' + encodeURIComponent(clientInfo.servicePassword);
   request.setEntity(params);
   var response = httpClient.send(request).get();
-  logResponse(response);
+  //logResponse(response);
 
   var oauth2response = JSON.parse(response.getEntity().getString());
   if (!oauth2response) {

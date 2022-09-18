@@ -46,12 +46,13 @@ function getCompanyByNumber (accessToken, companyNumber) {
   var request = new org.forgerock.http.protocol.Request();
 
   request.setMethod('GET');
-
-  var searchTerm = '?_queryFilter=number+eq+%22' + companyNumber + '%22';
+  var encodedCompanyNo = encodeURIComponent(companyNumber.trim());
+  var searchTerm = '?_queryFilter=number+eq+%22' + encodedCompanyNo + '%22';
   request.setUri(idmCompanyEndpoint + searchTerm);
   request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
   request.getHeaders().add('Content-Type', 'application/json');
 
+  _log('Fetch Company - requesting: ' + idmCompanyEndpoint + searchTerm);
   var response = httpClient.send(request).get();
 
   if (response.getStatus().getCode() === 200) {
@@ -60,18 +61,20 @@ function getCompanyByNumber (accessToken, companyNumber) {
     if (companyResponse.resultCount > 0) {
       var companyData = companyResponse.result[0];
 
-      _log('Got a result: ' + JSON.stringify(companyData));
+      _log('Fetch Company - Got a result: ' + JSON.stringify(companyData));
       return {
         success: true,
         companyData: companyData
       };
     } else {
+      _log('Fetch Company - no results found for : ' + companyNumber);
       return {
         success: false,
         reason: 'NO_RESULTS'
       };
     }
   } else {
+    _log('Fetch Company - error while fetching : ' + companyNumber);
     return {
       success: false,
       reason: 'ERROR'
@@ -100,14 +103,19 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
     //gets auth code data from EWF
     var ewfAuthCodeData = fetchAuthCodeFromEWF(accessToken, companyNumber);
 
-    _log('chsCompanyData : ' + chsCompanyData);
-    _log('ewfAuthCodeData : ' + ewfAuthCodeData);
-    _log('idmCompanyResult : ' + idmCompanyResult);
+    if (!chsCompanyData.success || !ewfAuthCodeData.success){
+      _log('[SYNC COMPANY] CHS and/or EWF connectors are unavailable - skipping company update from source');     
+      return {
+        success: false,
+        message: 'CHS and/or EWF connectors are unavailable - skipping company update from source for ' + companyNumber
+      };
+    }
 
     // if the connectors were queried OK but no company data was found at source, AND no data is in IDM for that company, skip the update
     if ((chsCompanyData.success && chsCompanyData.isEmpty) && 
         (ewfAuthCodeData.success && ewfAuthCodeData.isEmpty) && 
         !idmCompanyResult.success) {
+      _log('[SYNC COMPANY] Company with number ' + companyNumber + ' not found in CHS, EWF or FIDC');     
       return {
         success: false,
         message: 'Company with number ' + companyNumber + ' not found in CHS, EWF or FIDC'
@@ -118,6 +126,7 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
     if ((chsCompanyData.success && chsCompanyData.isEmpty) && 
         (ewfAuthCodeData.success && ewfAuthCodeData.isEmpty) &&
         idmCompanyResult.success) {
+      _log('[SYNC COMPANY] Company with number ' + companyNumber + ' not found in CHS or EWF - returning current IDM version'); 
       return {
         success: true,
         companyData: idmCompanyResult.companyData,
@@ -147,6 +156,8 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
         authCodeValidFrom: ewfAuthCodeData.success ? ewfAuthCodeData.data.authCodeValidFrom : null,
         authCodeValidUntil: ewfAuthCodeData.success ? ewfAuthCodeData.data.authCodeValidUntil : null
       };
+      _log('[SYNC COMPANY] Creating Company: ' + JSON.stringify(requestBodyJson)); 
+
     } else {
       var companyId = idmCompanyResult.companyData._id;
       request.setMethod('PATCH');
@@ -166,6 +177,7 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
         createPatchItem('authCodeValidFrom', ewfAuthCodeData.success ? ewfAuthCodeData.data.authCodeValidFrom : null),
         createPatchItem('authCodeValidUntil', ewfAuthCodeData.success ? ewfAuthCodeData.data.authCodeValidUntil : null)
       ];
+      _log('[SYNC COMPANY] Updating Company: ' + JSON.stringify(requestBodyJson)); 
     }
 
     request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
@@ -178,10 +190,10 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
     if (response.getStatus().getCode() === 201 || response.getStatus().getCode() === 200) {
       
       if (response.getStatus().getCode() === 200){
-        _log('Company Updated from CHS: ' + companyNumber);
+        _log('[SYNC COMPANY] Company Updated from CHS: ' + companyNumber);
       }
       if (response.getStatus().getCode() === 201){
-        _log('Company Created from CHS: ' + companyNumber);
+        _log('[SYNC COMPANY] Company Created from CHS: ' + companyNumber);
       }
 
       return {
@@ -189,14 +201,14 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
         companyData: JSON.parse(response.getEntity().getString())
       };
     } else {
-      _log('Error during company creation/update');
+      _log('[SYNC COMPANY] Error during company creation/update - ' + response.getEntity().getString());
       return {
         success: false,
         message: JSON.parse(response.getEntity().getString())
       };
     }
   } catch (e) {
-    _log(e);
+    _log('[SYNC COMPANY] TOP LEVEL EXCEPTION IN CREATING/UPDATING COMPANY FROM CHS - ' + e);
     return {
       success: false,
       message: 'Exception : ' + e
@@ -215,15 +227,17 @@ function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdic
   }
 
   var searchTerm;
+  var encodedCompanyNo = encodeURIComponent(companyNumber.trim());
+  _log('Trimmed & encoded company number: ' + encodedCompanyNo);
   // if the user selected Scotland and provided a company number without 'SC' at the beginning, search for a match with either '<company no>' or 'SC<company no>'
   if (jurisdiction.equals(jurisdictions.SC) && companyNumber.indexOf('SC') !== 0) {
     _log('looking for SC company without \'SC\' prefix - adding it');
-    searchTerm = '?_queryFilter=(number+eq+%22' + companyNumber + '%22+or+number+eq+%22SC' + companyNumber + '%22)+and+jurisdiction+eq+%22' + jurisdiction + '%22';
+    searchTerm = '?_queryFilter=(number+eq+%22' + encodedCompanyNo + '%22+or+number+eq+%22SC' + encodedCompanyNo + '%22)+and+jurisdiction+eq+%22' + jurisdiction + '%22';
   } else {
     //for other jurisdictions, do not make any logic on prefixes
-    searchTerm = '?_queryFilter=number+eq+%22' + companyNumber + '%22+and+jurisdiction+eq+%22' + jurisdiction + '%22';
+    searchTerm = '?_queryFilter=number+eq+%22' + encodedCompanyNo + '%22+and+jurisdiction+eq+%22' + jurisdiction + '%22';
   }
-  _log('Using search term: ' + searchTerm);
+  _log('Company loolup using search term: ' + searchTerm);
 
   //gets company data currently in IDM
   _log('Getting company by number : ' + companyNumber);
@@ -241,8 +255,6 @@ function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdic
 
   var response = httpClient.send(request).get();
 
-  logResponse(response);
-
   if (response.getStatus().getCode() === 200) {
     var companyResponse = JSON.parse(response.getEntity().getString());
 
@@ -251,10 +263,10 @@ function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdic
       var companyStatus = companyData.status;
       var authCode = companyData.authCode;
       var companyName = companyData.name;
-      _log('Got a result: ' + JSON.stringify(companyData));
+      _log('Got a company result: ' + JSON.stringify(companyData));
 
       if (authCode == null) {
-        _log('No auth code associated with company');
+        _log('No auth code associated with company ' + companyNumber);
         sharedState.put('errorMessage', 'No auth code associated with company ' + companyName + '.');
         sharedState.put('pagePropsJSON', JSON.stringify(
           {
@@ -272,10 +284,10 @@ function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdic
         };
       }
 
-      _log('Found status: ' + companyStatus);
+      _log('Found company status for company ' + companyNumber +': ' + companyStatus);
 
       if (companyStatus.equals(CompanyStatus.DISSOLVED)) {
-        _log('The company is dissolved');
+        _log('The company ' + companyNumber + ' is dissolved');
         sharedState.put('errorMessage', 'The company ' + companyName + ' is dissolved.');
         sharedState.put('pagePropsJSON', JSON.stringify(
           {
@@ -392,38 +404,40 @@ function fetchCompanyFromCHS (accessToken, companyNumber) {
 
   try {
     if (!companyNumber || companyNumber.trim() === '') {
-      _log('No company number from CHS!');
+      _log('[SYNC COMPANY FROM CHS] No company number from CHS!');
       return {
         success: false,
         message: 'no company number present'
-      };
+      };  
     }
 
-    companyNumber = companyNumber.trim();
-
-    var searchTerm = '?_queryFilter=_id+eq+%22' + companyNumber + '%22';
+    //companyNumber = companyNumber.trim();
+    var encodedCompanyNo = encodeURIComponent(companyNumber.trim());
+    var searchTerm = '?_queryFilter=_id+eq+%22' + encodedCompanyNo + '%22';
     var request = new org.forgerock.http.protocol.Request();
     request.setMethod('GET');
     request.setUri(SYSTEM_CHS_COMPANY + searchTerm);
+    _log('[SYNC COMPANY FROM CHS] Request to MongoDB connector (companies): '+ SYSTEM_CHS_COMPANY + searchTerm)
     request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
     request.getHeaders().add('Content-Type', 'application/json');
     request.getHeaders().add('Accept-API-Version', 'resource=1.0');
 
     var httpResp = httpClient.send(request).get();
+    _log('[SYNC COMPANY FROM CHS] Response from MongoDB connector: '+ httpResp.getEntity().getString());
+    var response = JSON.parse(httpResp.getEntity().getString())
 
-    if (!httpResp.getStatus().getCode() === 200) {
-      _log('Error while fetching CHS Company: ' + response.getEntity().getString());
+    if (response.code !== 200) {
+      _log('[SYNC COMPANY FROM CHS] Error while fetching CHS Company: ' + response.getEntity().getString());
       return {
         success: false,
-        message: 'Error in querying the Mongo connector'
+        message: 'Error in querying the Mongo connector - ' + httpResp.getEntity().getString()
       };
     }
-
-    var response = JSON.parse(httpResp.getEntity().getString());
-    _log('CHS Company query for : ' + companyNumber + ', Count = ' + response.resultCount);
+    
+    _log('[SYNC COMPANY FROM CHS] CHS Company query for : ' + companyNumber + ', Count = ' + response.resultCount);
 
     if (response.resultCount === 1) {
-      _log('Response from CHS Company connector : ' + httpResp.getEntity().getString());
+      _log('[SYNC COMPANY FROM CHS] Response from CHS Company connector : ' + httpResp.getEntity().getString());
 
       if (response.result[0]._id) {
 
@@ -458,7 +472,7 @@ function fetchCompanyFromCHS (accessToken, companyNumber) {
       };
     }
   } catch (e) {
-    _log('Error : ' + e);
+    _log('[SYNC COMPANY FROM CHS] Error while fetching company data from CHS: ' + e);
     return {
       success: false,
       message: 'error: ' + e.toString()
@@ -469,41 +483,42 @@ function fetchCompanyFromCHS (accessToken, companyNumber) {
 function fetchAuthCodeFromEWF (accessToken, companyNumber) {
   try {
     if (!companyNumber || companyNumber.trim() === '') {
-      _log('No company number from EWF!');
+      _log('[SYNC AUTHCODE FROM EWF] No company number from EWF!');
       return {
         success: false,
         message: 'no company number present'
       };
     }
 
-    companyNumber = companyNumber.trim();
-
-    var searchTerm = '?_queryFilter=_id+eq+%22' + companyNumber + '%22';
+    //companyNumber = companyNumber.trim();
+    var encodedCompanyNo = encodeURIComponent(companyNumber.trim());
+    var searchTerm = '?_queryFilter=_id+eq+%22' + encodedCompanyNo + '%22';
     var request = new org.forgerock.http.protocol.Request();
     request.setMethod('GET');
     request.setUri(SYSTEM_WEBFILING_AUTH_CODE + searchTerm);
     request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
     request.getHeaders().add('Content-Type', 'application/json');
-
+    _log('[SYNC AUTHCODE FROM EWF] Request to Oracle connector (auth codes): '+ SYSTEM_WEBFILING_AUTH_CODE + searchTerm)
     var httpResp = httpClient.send(request).get();
+    _log('[SYNC AUTHCODE FROM EWF] Response from Oracle connector: '+ httpResp.getEntity().getString())
+    var response = JSON.parse(httpResp.getEntity().getString());
 
-    if (!httpResp.getStatus().getCode() === 200) {
-      _log('Error while fetching EWF Auth Code: ' + response.getEntity().getString());
+    if (response.code !== 200) {
+      _log('[SYNC AUTHCODE FROM EWF] Error while fetching EWF Auth Code: ' + httpResp.getEntity().getString());
       return {
         success: false,
         message: 'Error in querying the Oracle connector'
       };
     } 
 
-    var response = JSON.parse(httpResp.getEntity().getString());
-    _log('EWF company auth code for : ' + companyNumber + ', Count = ' + response.resultCount);
+    _log('[SYNC AUTHCODE FROM EWF] EWF company auth code for : ' + companyNumber + ', Count = ' + response.resultCount);
 
     if (response.resultCount === 1) {
-      _log('Response from EWF connector: ' + JSON.stringify(response.result[0]));
+      _log('[SYNC AUTHCODE FROM EWF] Response from EWF connector: ' + JSON.stringify(response.result[0]));
 
       if (response.result[0]._id) {
 
-        _log('EWF company auth code query for : ' + companyNumber + ', Value put in Cache = ' + response.result[0]._id);
+        _log('[SYNC AUTHCODE FROM EWF] EWF company auth code query for : ' + companyNumber + ', Value put in Cache = ' + response.result[0]._id);
         var data = {
           authCode: response.result[0].AUTHCODE,
           authCodeValidFrom: response.result[0].STARTDTE,
@@ -528,7 +543,7 @@ function fetchAuthCodeFromEWF (accessToken, companyNumber) {
       };
     }
   } catch (e) {
-    _log('Error : ' + e);
+    _log('[SYNC AUTHCODE FROM EWF] Error while fetching auth code data from EWF: ' + e);
     return {
       success: false,
       message: 'error: ' + e.toString()

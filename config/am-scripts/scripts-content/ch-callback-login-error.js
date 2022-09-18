@@ -19,6 +19,9 @@ var fr = JavaImporter(
   com.sun.identity.authentication.callbacks.HiddenValueCallback
 );
 
+var errorMessage = sharedState.get('errorMessage');
+_log('Error: ' + errorMessage + ' - Shared State : ' + sharedState.toString());
+
 if (callbacks.isEmpty()) {
   var errorMessage = sharedState.get('errorMessage');
   var level = fr.TextOutputCallback.INFORMATION;
