@@ -14,12 +14,14 @@ var NodeOutcome = {
 
 function getUserByEmail (accessToken, email) {
   var searchTerm = '?_queryFilter=userName+eq+%22' + email + '%22';
-  return getUserBySearchTerm(accessToken, searchTerm);
+  var searchTermEncoded = encodeURIComponent(searchTerm.trim());
+  return getUserBySearchTerm(accessToken, searchTermEncoded);
 }
 
 function getUserByParentUsername (accessToken, parentUsername) {
   var searchTerm = '?_queryFilter=frIndexedString1+eq+%22' + parentUsername + '%22';
-  return getUserBySearchTerm(accessToken, searchTerm);
+  var searchTermEncoded = encodeURIComponent(searchTerm.trim());
+  return getUserBySearchTerm(accessToken, searchTermEncoded);
 }
 
 // fetches the company by number
@@ -219,18 +221,20 @@ function createOrUpdateUser (accessToken, email) {
       };
     }
   } catch (e) {
-    _log(e);
+    _log('TOPLEVEL Error during user creation/update of user ' + email + ' - ' + e);
   }
 }
 
 function fetchUserFromEWFByParentUsername (parentUsername) {
   var searchTerm = '?_queryFilter=_id+eq+%22' + parentUsername + '%22';
-  return fetchUserFromEWFBySearchTerm(accessToken, searchTerm);
+  var searchTermEncoded = encodeURIComponent(searchTerm.trim());
+  return fetchUserFromEWFBySearchTerm(accessToken, searchTermEncoded);
 }
 
 function fetchUserFromEWFByEmail (email) {
   var searchTerm = '?_queryFilter=EMAIL+eq+%22' + email + '%22';
-  return fetchUserFromEWFBySearchTerm(accessToken, searchTerm);
+  var searchTermEncoded = encodeURIComponent(searchTerm.trim());
+  return fetchUserFromEWFBySearchTerm(accessToken, searchTermEncoded);
 }
 
 // fetch the Company from the Mongo connector
@@ -279,10 +283,10 @@ function fetchUserFromEWFBySearchTerm (accessToken, searchTerm) {
       };
     }
   } catch (e) {
-    _log('Error : ' + e);
+    _log('Error while fetching user from EWF: ' + e);
     return {
       success: false,
-      message: 'error - ' + e.toString()
+      message: 'Error while fetching user from EWF - ' + e.toString()
     };
   }
 
@@ -308,33 +312,31 @@ try {
   var SYSTEM_WEBFILING_USER = _fromConfig('FIDC_ENDPOINT') + '/openidm/system/WebfilingUser/webfilingUser';
   var username = extractEmailAddressFromState();
 
-  _log('Using username : ' + username);
+  _log('[SYNC USER] Using username : ' + username);
 
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
 
   if (!accessToken || !username) {
-    _log('Access token or user email not in shared state');
+    _log('[SYNC USER] Access token or user email not in shared state');
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
   } else {
-
-    _log('Calling createOrUpdateUser for username : ' + username);
 
     var result = createOrUpdateUser(accessToken, username);
 
     if (!result) {
-      _log('User create/update from source failed - proceeding to login with existing IDM credentials');
+      _log('[SYNC USER] User create/update from source failed - proceeding to login with existing IDM credentials');
       action = fr.Action.goTo(NodeOutcome.ERROR).build();
     } else {
-      _log('Success');
+      _log('[SYNC USER] User successfully create/update from EWF source');
       action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
     }
   }
 
-  _log('Shared state objectAttributes = ' + sharedState.get('objectAttributes'));
-  _log('Completed checking user at source.');
+  //_log('Shared state objectAttributes = ' + sharedState.get('objectAttributes'));
+  _log('[SYNC USER] Completed checking user at source.');
 } catch (e) {
   sharedState.put('errorMessage', e.toString());
-  _log('error - ' + e);
+  _log('[SYNC USER] Error during sync of user from EWF source - ' + e);
   action = fr.Action.goTo(NodeOutcome.ERROR).build();
 }
 
