@@ -1,5 +1,5 @@
 var _scriptName = 'CH CALLBACK LOGIN ERROR';
-_log('Starting');
+//_log('Starting');
 
 /* 
   ** OUTPUT DATA
@@ -19,11 +19,14 @@ var fr = JavaImporter(
   com.sun.identity.authentication.callbacks.HiddenValueCallback
 );
 
-var errorMessage = sharedState.get('errorMessage');
-_log('Error: ' + errorMessage + ' - Shared State : ' + sharedState.toString());
-
 if (callbacks.isEmpty()) {
-  var errorMessage = sharedState.get('errorMessage');
+  var errorMessage = sharedState.get('errorMessage'); 
+  if(!errorMessage){
+    _log('Rendered login first time or redirected after session timeout');
+  } else {
+    _log('Error: ' + errorMessage + ' - Shared State : ' + sharedState.toString());
+  }
+  
   var level = fr.TextOutputCallback.INFORMATION;
   var infoMessage;
   var errorProps;
@@ -37,12 +40,16 @@ if (callbacks.isEmpty()) {
       new fr.HiddenValueCallback('stage', 'CH_LOGIN_1'),
       new fr.HiddenValueCallback('pagePropsJSON', errorProps)
     ).build();
+  } 
+} else {
+  if(errorMessage){
+    _log('Error with callbacks: ' + errorMessage + ' - Shared State : ' + sharedState.toString());
   }
 }
 
 outcome = 'true';
 
-_log('Outcome = ' + _getOutcomeForDisplay());
+//_log('Outcome = ' + _getOutcomeForDisplay());
 
 // LIBRARY START
 // LIBRARY END

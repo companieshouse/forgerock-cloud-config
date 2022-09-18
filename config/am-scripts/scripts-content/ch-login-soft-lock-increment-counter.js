@@ -82,7 +82,7 @@ function updateCounterValue (userId, value, accessToken) {
 
   var response = httpClient.send(request).get();
 
-  logResponse(response);
+  //logResponse(response);
 
   if (response.getStatus().getCode() === 200) {
     _log('Counter updated correctly');
