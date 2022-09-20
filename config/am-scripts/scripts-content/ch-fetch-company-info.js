@@ -423,8 +423,8 @@ function fetchCompanyFromCHS (accessToken, companyNumber) {
     request.getHeaders().add('Accept-API-Version', 'resource=1.0');
 
     var httpResp = httpClient.send(request).get();
-    _log('[SYNC COMPANY FROM CHS] Response from MongoDB connector: '+ httpResp.getEntity().getString());
-
+    _log('[SYNC COMPANY FROM CHS] Response from MongoDB connector: Status ' + httpResp.getStatus().getCode() + ' - Response: '+ httpResp.getEntity().getString());
+   
     if (httpResp.getStatus().getCode() !== 200) {
       _log('[SYNC COMPANY FROM CHS] Error while fetching CHS Company: ' + httpResp.getEntity().getString());
       return {
@@ -437,7 +437,7 @@ function fetchCompanyFromCHS (accessToken, companyNumber) {
     _log('[SYNC COMPANY FROM CHS] CHS Company query for : ' + companyNumber + ', Count = ' + response.resultCount);
 
     if (response.resultCount === 1) {
-      _log('[SYNC COMPANY FROM CHS] Response from CHS Company connector : ' + httpResp.getEntity().getString());
+      _log('[SYNC COMPANY FROM CHS] Company data found via CHS connector: ' + httpResp.getEntity().getString());
 
       if (response.result[0]._id) {
 
@@ -500,7 +500,7 @@ function fetchAuthCodeFromEWF (accessToken, companyNumber) {
     request.getHeaders().add('Content-Type', 'application/json');
     _log('[SYNC AUTHCODE FROM EWF] Request to Oracle connector (auth codes): '+ SYSTEM_WEBFILING_AUTH_CODE + searchTerm)
     var httpResp = httpClient.send(request).get();
-    _log('[SYNC AUTHCODE FROM EWF] Response from Oracle connector: '+ httpResp.getEntity().getString())
+    _log('[SYNC AUTHCODE FROM EWF] Response from Oracle connector: Status ' + httpResp.getStatus().getCode() + ' - Response: '+ httpResp.getEntity().getString());
     
     if (httpResp.getStatus().getCode() !== 200) {
       _log('[SYNC AUTHCODE FROM EWF] Error while fetching EWF Auth Code: ' + httpResp.getEntity().getString());
@@ -514,7 +514,7 @@ function fetchAuthCodeFromEWF (accessToken, companyNumber) {
     _log('[SYNC AUTHCODE FROM EWF] EWF company auth code for : ' + companyNumber + ', Count = ' + response.resultCount);
 
     if (response.resultCount === 1) {
-      _log('[SYNC AUTHCODE FROM EWF] Response from EWF connector: ' + JSON.stringify(response.result[0]));
+      _log('[SYNC AUTHCODE FROM EWF] Auth Code data found via EWF connector: ' + JSON.stringify(response.result[0]));
 
       if (response.result[0]._id) {
 
