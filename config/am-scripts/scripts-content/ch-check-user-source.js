@@ -252,7 +252,7 @@ function fetchUserFromEWFBySearchTerm (accessToken, searchTerm) {
     request.getHeaders().add('Accept-API-Version', 'resource=1.0');
     _log('[SYNC USER FROM EWF] Request to Oracle connector (users): '+ SYSTEM_WEBFILING_USER + searchTerm)
     var httpResp = httpClient.send(request).get();
-    _log('[SYNC USER FROM EWF] Response from EWF User connector : ' + httpResp.getEntity().getString());
+    _log('[SYNC USER FROM EWF] Response from EWF User connector: Status ' + httpResp.getStatus().getCode() + ' - Response: ' + httpResp.getEntity().getString());
     
     if (httpResp.getStatus().getCode() !== 200) {
       _log('[SYNC USER FROM EWF] Error while fetching EWF User: ' + httpResp.getEntity().getString());
