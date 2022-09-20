@@ -20,7 +20,7 @@
   };
   
   function _log (message) {
-    logger.error('[CHLOG][GETCOMPANY][' + logNowMsecs + '] ' + message);
+    logger.error('[CHLOG][GETCOMPANY][' + new Date(logNowMsecs).toISOString() + '] ' + message);
   }
   
   // Look up a user
@@ -41,7 +41,7 @@
     });
       
     let searchTerm = companyIds.join(' or ');
-    _log('search term: ' + searchTerm);
+    //_log('Search term for companies search: ' + searchTerm);
   
     let response = openidm.query(
       'managed/' + OBJECT_COMPANY,
@@ -71,38 +71,50 @@
     });
       
     let searchTerm = companyNumbers.join(' or ');
-    _log('search term: ' + searchTerm);
+    _log('[SEARCH COMPANY IN CHS] search term: ' + searchTerm);
   
     try {
       let chsResponse = openidm.query(
         SYSTEM_CHS_COMPANY,
         { '_queryFilter': searchTerm }
       );
-  
-      _log('CHS query for companies: Count = ' + chsResponse.resultCount);
+      
+      _log('[SEARCH COMPANY IN CHS] CHS companies response: '+ chsResponse);
+      _log('[SEARCH COMPANY IN CHS] No. of results of CHS query for companies: ' + chsResponse.resultCount);
       //_log('Response from CHS : ' + JSON.stringify(chsResponse.result));
   
       companiesSourceData = chsResponse.result;
-        
+    } catch (e) {
+      _log('[SEARCH COMPANY DATA IN CHS] Error during company lookup from CHS : ' + e);
+      return {
+        success: false,
+        message: 'Error during company lookup from CHS : ' + e
+      };
+    }
+    
+    try {
       let ewfResponse = openidm.query(
         SYSTEM_WEBFILING_AUTHCODE,
         { '_queryFilter': searchTerm }
       );
-  
-      _log('EWF query for auth codes: Count = ' + ewfResponse.resultCount);
+      
+      _log('[SEARCH AUTH CODE IN EWF] EWF aut codes response: '+ ewfResponse);
+      _log('[SEARCH AUTH CODE IN EWF] No. of results of  EWF query for auth codes: ' + ewfResponse.resultCount);
       //_log('Response from EWF : ' + JSON.stringify(ewfResponse.result));
       authCodesSourceData = ewfResponse.result;
-        
-      return {
-        companiesSourceData: companiesSourceData,
-        authCodesSourceData: authCodesSourceData
-      };
-        
     } catch (e) {
-      _log('Error : ' + e);
+      _log('[SEARCH AUTH CODE IN EWF] Error during lookup of auth code search from EWF : ' + e);
+      return {
+        success: false,
+        message: 'Error during lookup of auth code search from EWF : ' + e
+      };
     }
-  
-    return null;
+
+    return {
+      success: true,
+      companiesSourceData: companiesSourceData,
+      authCodesSourceData: authCodesSourceData
+    };    
   }
   
   function createPatchItem (fieldName, value) {
@@ -324,10 +336,11 @@
     sourceData = getCompaniesDataFromSource(fetchedCompanies);
   
     //UPDATES: UPDATE companies in IDM if source data info is found
-    if(sourceData){
+    if(sourceData.success){
+      _log('[ON-DEMAND SYNC] Successfully looked up source company/auth code data from CHS/EWF');
       updateCompanyData(fetchedCompanies, sourceData);
     } else {
-      _log('No source data found for user ' + actor.userName);
+      _log('[ON-DEMAND SYNC] Error while looking up source company/auth code data from CHS/EWF - ' + sourceData.message);
     }
 
     //query 5: fetch updated companies data

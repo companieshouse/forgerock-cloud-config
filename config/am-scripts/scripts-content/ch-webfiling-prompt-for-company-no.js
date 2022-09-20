@@ -46,13 +46,13 @@ function fetchCompanyParameters () {
   var companyNo = requestParameters.get('companyNo');
   var jurisdiction = requestParameters.get('jurisdiction');
   if (companyNo && jurisdiction) {
-    _log('company number/jurisdiction found in request: ' + companyNo.get(0) + ' - ' + jurisdiction.get(0));
+    _log('company number/jurisdiction found in query params: ' + companyNo.get(0) + ' - ' + jurisdiction.get(0));
     return {
       companyNo: companyNo.get(0),
       jurisdiction: jurisdiction.get(0)
     };
   }
-  _log('Company number or jurisdiction not found in request');
+  _log('Company number or jurisdiction not found in query params');
   return false;
 }
 

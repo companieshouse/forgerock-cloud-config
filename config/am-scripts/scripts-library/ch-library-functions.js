@@ -29,7 +29,7 @@ function _log (message, logLevel) {
   var userId = _getUserIdFromSharedState ();
   
   if (!logLevel) {
-    logLevel = 'MESSAGE';
+    logLevel = 'WARNING';
   }
 
   var chLogMarker = '[CHLOG]';

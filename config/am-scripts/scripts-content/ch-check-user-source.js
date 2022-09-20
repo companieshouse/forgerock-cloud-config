@@ -14,12 +14,14 @@ var NodeOutcome = {
 
 function getUserByEmail (accessToken, email) {
   var searchTerm = '?_queryFilter=userName+eq+%22' + email + '%22';
-  return getUserBySearchTerm(accessToken, searchTerm);
+  var searchTermEncoded = encodeURIComponent(searchTerm.trim());
+  return getUserBySearchTerm(accessToken, searchTermEncoded);
 }
 
 function getUserByParentUsername (accessToken, parentUsername) {
   var searchTerm = '?_queryFilter=frIndexedString1+eq+%22' + parentUsername + '%22';
-  return getUserBySearchTerm(accessToken, searchTerm);
+  var searchTermEncoded = encodeURIComponent(searchTerm.trim());
+  return getUserBySearchTerm(accessToken, searchTermEncoded);
 }
 
 // fetches the company by number
@@ -109,17 +111,17 @@ function createOrUpdateUser (accessToken, email) {
     var operation;
     //the user does not exists in IDM
     if (!idmUserResult.success) {
-      _log('User NOT found in IDM with email ' + email);
+      _log('[SYNC USER] User NOT found in IDM with email ' + email);
       //search user in EWF by email
       ewfUserResult = fetchUserFromEWFByEmail(email);
       //the user exists in EWF
       if (ewfUserResult.success) {
-        _log('User found in EWF for email ' + email) + ' - Creating user in IDM';
+        _log('[SYNC USER] User found in EWF for email ' + email) + ' - Creating user in IDM';
         //check if a user with the same PARENT_USERNAME exist in IDM - if so, we need to update that instead of creating a new user
         var idmUserWithSameParentUsername = getUserByParentUsername(accessToken, ewfUserResult.data.frIndexedString1);
 
         if (idmUserWithSameParentUsername.success) {
-          _log('User found in IDM with parent_username ' + ewfUserResult.data.frIndexedString1);
+          _log('[SYNC USER] User found in IDM with parent_username ' + ewfUserResult.data.frIndexedString1);
           var userId = idmUserWithSameParentUsername.userData._id;
           operation = 'UPDATE';
           request.setMethod('PATCH');
@@ -128,7 +130,7 @@ function createOrUpdateUser (accessToken, email) {
           requestBodyJson = buildUpdateUserPayload(ewfUserResult, idmUserWithSameParentUsername.userData.frIndexedString2);
         } else {
           //create user in FIDC with EWF data
-          _log('User NOT found in IDM with parent_username ' + ewfUserResult.data.frIndexedString1);
+          _log('[SYNC USER] User NOT found in IDM with parent_username ' + ewfUserResult.data.frIndexedString1);
           operation = 'CREATE';
           request.setMethod('POST');
           request.setUri(alphaUserUrl + '?_action=create');
@@ -142,40 +144,40 @@ function createOrUpdateUser (accessToken, email) {
         }
       } else {
         //the users does not exist in EWF either
-        _log('User not found in EWF or IDM for email ' + email);
+        _log('[SYNC USER] User not found in EWF or IDM for email ' + email);
         return {
           success: false,
           message: 'Cannot find the user FIDC or EWF'
         };
       }
     } else { //the user already exists in IDM
-      _log('User exists in IDM for email ' + email);
+      _log('[SYNC USER] User exists in IDM for email ' + email);
       //the IDM user has a PARENT_USERNAME set
       if (idmUserResult.userData.frIndexedString1) {
-        _log('User has PARENT_USERNAME set: ' + idmUserResult.userData.frIndexedString1);
+        _log('[SYNC USER] User has PARENT_USERNAME set: ' + idmUserResult.userData.frIndexedString1);
         //search user in EWF by PARENT_USERNAME
         ewfUserResult = fetchUserFromEWFByParentUsername(idmUserResult.userData.frIndexedString1);
         if (!ewfUserResult.success) {
           //Edge case: the user with the same email may have a different PARENT_USERNAME in EWF now (e.g. database refresh) - fetch user by email instead
-          _log('User not found in EWF for PARENT_USERNAME ' + idmUserResult.userData.frIndexedString1);
+          _log('[SYNC USER] User not found in EWF for PARENT_USERNAME ' + idmUserResult.userData.frIndexedString1);
           ewfUserResult = fetchUserFromEWFByEmail(email);
           if (!ewfUserResult.success) {
-            _log('User not found in EWF for email ' + email);
+            _log('[SYNC USER] User not found in EWF for email ' + email);
             return false;
           }
         }
       } else {
-        _log('User does not have PARENT_USERNAME set: ' + email);
+        _log('[SYNC USER] User does not have PARENT_USERNAME set: ' + email);
         //search user in EWF by email
         ewfUserResult = fetchUserFromEWFByEmail(email);
         if (!ewfUserResult.success) {
-          _log('User not found in EWF for email ' + email);
+          _log('[SYNC USER] User not found in EWF for email ' + email);
           return false;
         }
       }
 
-      _log('USER in EWF: ' + JSON.stringify(ewfUserResult));
-      _log('Updating the user in fIDC: ' + email);
+      _log('[SYNC USER] USER in EWF: ' + JSON.stringify(ewfUserResult));
+      _log('[SYNC USER] Updating the user in fIDC: ' + email);
       //update user in FIDC
       var userId = idmUserResult.userData._id;
       operation = 'UPDATE';
@@ -186,7 +188,7 @@ function createOrUpdateUser (accessToken, email) {
       requestBodyJson = buildUpdateUserPayload(ewfUserResult, idmUserResult.userData.frIndexedString2);
     }
 
-    _log('IDM payload fIDC: ' + operation + ' ' + JSON.stringify(requestBodyJson));
+    _log('[SYNC USER] IDM payload fIDC: ' + operation + ' ' + JSON.stringify(requestBodyJson));
 
     request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
     request.getHeaders().add('Content-Type', 'application/json');
@@ -194,15 +196,15 @@ function createOrUpdateUser (accessToken, email) {
     request.setEntity(requestBodyJson);
 
     var response = httpClient.send(request).get();
-    _log('IDM response: ' + response.getStatus().getCode() + ' ' + response.getEntity().getString());
+    _log('[SYNC USER] IDM response: ' + response.getStatus().getCode() + ' ' + response.getEntity().getString());
 
     if (response.getStatus().getCode() === 201 || response.getStatus().getCode() === 200) {
 
       if (response.getStatus().getCode() === 200){
-        _log('User Updated from EWF: ' + email);
+        _log('[SYNC USER] User Updated from EWF: ' + email);
       }
       if (response.getStatus().getCode() === 201){
-        _log('User Created from EWF: ' + email);
+        _log('[SYNC USER] User Created from EWF: ' + email);
       }
 
       return {
@@ -211,7 +213,7 @@ function createOrUpdateUser (accessToken, email) {
         userData: JSON.parse(response.getEntity().getString())
       };
     } else {
-      _log('Error during user creation/update of user ' + email);
+      _log('[SYNC USER] Error during user creation/update of user ' + email);
       return {
         success: false,
         operation: operation,
@@ -219,7 +221,7 @@ function createOrUpdateUser (accessToken, email) {
       };
     }
   } catch (e) {
-    _log(e);
+    _log('[SYNC USER] TOPLEVEL Exception occurred during user creation/update of user ' + email + ' - ' + e);
   }
 }
 
@@ -229,7 +231,8 @@ function fetchUserFromEWFByParentUsername (parentUsername) {
 }
 
 function fetchUserFromEWFByEmail (email) {
-  var searchTerm = '?_queryFilter=EMAIL+eq+%22' + email + '%22';
+  var emailEncoded = encodeURIComponent(email.trim());
+  var searchTerm = '?_queryFilter=EMAIL+eq+%22' + emailEncoded + '%22';
   return fetchUserFromEWFBySearchTerm(accessToken, searchTerm);
 }
 
@@ -247,14 +250,21 @@ function fetchUserFromEWFBySearchTerm (accessToken, searchTerm) {
     request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
     request.getHeaders().add('Content-Type', 'application/json');
     request.getHeaders().add('Accept-API-Version', 'resource=1.0');
-
+    _log('[SYNC USER FROM EWF] Request to Oracle connector (users): '+ SYSTEM_WEBFILING_USER + searchTerm)
     var httpResp = httpClient.send(request).get();
+    _log('[SYNC USER FROM EWF] Response from EWF User connector : ' + httpResp.getEntity().getString());
     var response = JSON.parse(httpResp.getEntity().getString());
-    _log('EWF User query : search term: ' + searchTerm + ', Count = ' + response.resultCount);
+
+    if (response.code !== 200) {
+      _log('[SYNC USER FROM EWF] Error while fetching EWF User: ' + httpResp.getEntity().getString());
+      return {
+        success: false,
+        message: 'Error in querying the Oracle connector - ' + httpResp.getEntity().getString()
+      };
+    }
 
     if (response.resultCount === 1) {
-      _log('Response from EWF User connector : ' + httpResp.getEntity().getString());
-
+      _log('[SYNC USER FROM EWF] User found in EWF database - searchTerm = ' + searchTerm);
       if (response.result[0]._id) {
 
         var data = {
@@ -267,22 +277,24 @@ function fetchUserFromEWFBySearchTerm (accessToken, searchTerm) {
           data: data
         };
       } else {
+        _log('[SYNC USER FROM EWF] _id not found in response from EWF connector');
         return {
           success: false,
-          message: '_id is not found'
+          message: ' _id not found in response from EWF connector'
         };
       }
     } else {
+      _log('[SYNC USER FROM EWF] No Users found in EWF database for searchTerm ' + + searchTerm);
       return {
         success: false,
         message: 'no results - ' + response.resultCount
       };
     }
   } catch (e) {
-    _log('Error : ' + e);
+    _log('[SYNC USER FROM EWF] Error while fetching user from EWF: ' + e);
     return {
       success: false,
-      message: 'error - ' + e.toString()
+      message: 'Error while fetching user from EWF - ' + e.toString()
     };
   }
 
@@ -308,33 +320,31 @@ try {
   var SYSTEM_WEBFILING_USER = _fromConfig('FIDC_ENDPOINT') + '/openidm/system/WebfilingUser/webfilingUser';
   var username = extractEmailAddressFromState();
 
-  _log('Using username : ' + username);
+  _log('[SYNC USER] Using username : ' + username);
 
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
 
   if (!accessToken || !username) {
-    _log('Access token or user email not in shared state');
+    _log('[SYNC USER] Access token or user email not in shared state');
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
   } else {
-
-    _log('Calling createOrUpdateUser for username : ' + username);
 
     var result = createOrUpdateUser(accessToken, username);
 
     if (!result) {
-      _log('User create/update from source failed - proceeding to login with existing IDM credentials');
+      _log('[SYNC USER] User creation/update from source failed - proceeding to login with existing IDM credentials');
       action = fr.Action.goTo(NodeOutcome.ERROR).build();
     } else {
-      _log('Success');
+      _log('[SYNC USER] User successfully created/updated from EWF source');
       action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
     }
   }
 
-  _log('Shared state objectAttributes = ' + sharedState.get('objectAttributes'));
-  _log('Completed checking user at source.');
+  //_log('Shared state objectAttributes = ' + sharedState.get('objectAttributes'));
+  //_log('[SYNC USER] Completed checking user at source.');
 } catch (e) {
   sharedState.put('errorMessage', e.toString());
-  _log('error - ' + e);
+  _log('[SYNC USER] Error during sync of user from EWF source - ' + e);
   action = fr.Action.goTo(NodeOutcome.ERROR).build();
 }
 
