@@ -424,9 +424,8 @@ function fetchCompanyFromCHS (accessToken, companyNumber) {
 
     var httpResp = httpClient.send(request).get();
     _log('[SYNC COMPANY FROM CHS] Response from MongoDB connector: '+ httpResp.getEntity().getString());
-    var response = JSON.parse(httpResp.getEntity().getString())
 
-    if (response.code !== 200) {
+    if (httpResp.getStatus().getCode() !== 200) {
       _log('[SYNC COMPANY FROM CHS] Error while fetching CHS Company: ' + httpResp.getEntity().getString());
       return {
         success: false,
@@ -434,6 +433,7 @@ function fetchCompanyFromCHS (accessToken, companyNumber) {
       };
     }
     
+    var response = JSON.parse(httpResp.getEntity().getString())
     _log('[SYNC COMPANY FROM CHS] CHS Company query for : ' + companyNumber + ', Count = ' + response.resultCount);
 
     if (response.resultCount === 1) {
@@ -501,9 +501,8 @@ function fetchAuthCodeFromEWF (accessToken, companyNumber) {
     _log('[SYNC AUTHCODE FROM EWF] Request to Oracle connector (auth codes): '+ SYSTEM_WEBFILING_AUTH_CODE + searchTerm)
     var httpResp = httpClient.send(request).get();
     _log('[SYNC AUTHCODE FROM EWF] Response from Oracle connector: '+ httpResp.getEntity().getString())
-    var response = JSON.parse(httpResp.getEntity().getString());
-
-    if (response.code !== 200) {
+    
+    if (httpResp.getStatus().getCode() !== 200) {
       _log('[SYNC AUTHCODE FROM EWF] Error while fetching EWF Auth Code: ' + httpResp.getEntity().getString());
       return {
         success: false,
@@ -511,6 +510,7 @@ function fetchAuthCodeFromEWF (accessToken, companyNumber) {
       };
     } 
 
+    var response = JSON.parse(httpResp.getEntity().getString());
     _log('[SYNC AUTHCODE FROM EWF] EWF company auth code for : ' + companyNumber + ', Count = ' + response.resultCount);
 
     if (response.resultCount === 1) {

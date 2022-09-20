@@ -253,9 +253,8 @@ function fetchUserFromEWFBySearchTerm (accessToken, searchTerm) {
     _log('[SYNC USER FROM EWF] Request to Oracle connector (users): '+ SYSTEM_WEBFILING_USER + searchTerm)
     var httpResp = httpClient.send(request).get();
     _log('[SYNC USER FROM EWF] Response from EWF User connector : ' + httpResp.getEntity().getString());
-    var response = JSON.parse(httpResp.getEntity().getString());
-
-    if (response.code !== 200) {
+    
+    if (httpResp.getStatus().getCode() !== 200) {
       _log('[SYNC USER FROM EWF] Error while fetching EWF User: ' + httpResp.getEntity().getString());
       return {
         success: false,
@@ -263,6 +262,7 @@ function fetchUserFromEWFBySearchTerm (accessToken, searchTerm) {
       };
     }
 
+    var response = JSON.parse(httpResp.getEntity().getString());
     if (response.resultCount === 1) {
       _log('[SYNC USER FROM EWF] User found in EWF database - searchTerm = ' + searchTerm);
       if (response.result[0]._id) {
