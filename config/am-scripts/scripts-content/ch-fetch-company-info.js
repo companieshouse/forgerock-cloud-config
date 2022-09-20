@@ -427,7 +427,7 @@ function fetchCompanyFromCHS (accessToken, companyNumber) {
     var response = JSON.parse(httpResp.getEntity().getString())
 
     if (response.code !== 200) {
-      _log('[SYNC COMPANY FROM CHS] Error while fetching CHS Company: ' + response.getEntity().getString());
+      _log('[SYNC COMPANY FROM CHS] Error while fetching CHS Company: ' + httpResp.getEntity().getString());
       return {
         success: false,
         message: 'Error in querying the Mongo connector - ' + httpResp.getEntity().getString()
