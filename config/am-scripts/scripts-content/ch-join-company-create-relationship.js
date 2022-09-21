@@ -108,7 +108,7 @@ function addRelationshipToCompany (userId, company) {
   request.getHeaders().add('Content-Type', 'application/json');
   request.getHeaders().add('Accept-API-Version', 'resource=1.0');
   request.setEntity(requestBodyJson);
-
+  _log('Calling IDM endpoint: ' + idmCompanyAuthEndpoint + '?_action=addAuthorisedUser');
   var response = httpClient.send(request).get();
   var actionResponse = JSON.parse(response.getEntity().getString());
   if (response.getStatus().getCode() === 200) {
@@ -258,6 +258,7 @@ try {
       }));
     action = fr.Action.goTo(NodeOutcome.AUTH_CODE_INACTIVE).build();
   } else {
+    _log('Adding relationship between user ' + userId + ' and company ' + JSON.parse(companyData).number);
     var addUserResult = addRelationshipToCompany(userId, JSON.parse(companyData));
 
     var companyNotificationData = {

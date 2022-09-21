@@ -14,14 +14,12 @@ var NodeOutcome = {
 
 function getUserByEmail (accessToken, email) {
   var searchTerm = '?_queryFilter=userName+eq+%22' + email + '%22';
-  var searchTermEncoded = encodeURIComponent(searchTerm.trim());
-  return getUserBySearchTerm(accessToken, searchTermEncoded);
+  return getUserBySearchTerm(accessToken, searchTerm);
 }
 
 function getUserByParentUsername (accessToken, parentUsername) {
   var searchTerm = '?_queryFilter=frIndexedString1+eq+%22' + parentUsername + '%22';
-  var searchTermEncoded = encodeURIComponent(searchTerm.trim());
-  return getUserBySearchTerm(accessToken, searchTermEncoded);
+  return getUserBySearchTerm(accessToken, searchTerm);
 }
 
 // fetches the company by number
@@ -30,9 +28,9 @@ function getUserBySearchTerm (accessToken, searchTerm) {
   var request = new org.forgerock.http.protocol.Request();
 
   request.setMethod('GET');
-
-  //var searchTerm = '?_queryFilter=userName+eq+%22' + email + '%22';
+  _log('Searching user in IDM with URL: ' +alphaUserUrl + searchTerm);
   request.setUri(alphaUserUrl + searchTerm);
+
   request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
   request.getHeaders().add('Content-Type', 'application/json');
 
@@ -44,7 +42,7 @@ function getUserBySearchTerm (accessToken, searchTerm) {
     if (userResponse.resultCount > 0) {
       var userData = userResponse.result[0];
 
-      _log('Got a result: ' + JSON.stringify(userData));
+      _log('User found in IDM: ' + JSON.stringify(userData));
       return {
         success: true,
         userData: userData
@@ -188,7 +186,7 @@ function createOrUpdateUser (accessToken, email) {
       requestBodyJson = buildUpdateUserPayload(ewfUserResult, idmUserResult.userData.frIndexedString2);
     }
 
-    _log('[SYNC USER] IDM payload fIDC: ' + operation + ' ' + JSON.stringify(requestBodyJson));
+    _log('[SYNC USER] IDM payload: ' + operation + ' ' + JSON.stringify(requestBodyJson));
 
     request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
     request.getHeaders().add('Content-Type', 'application/json');

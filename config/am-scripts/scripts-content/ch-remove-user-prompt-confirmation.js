@@ -116,7 +116,7 @@ function removeUserFromCompany (callerId, companyNo, userIdToRemove) {
   request.getHeaders().add('Content-Type', 'application/json');
   request.getHeaders().add('Accept-API-Version', 'resource=1.0');
   request.setEntity(requestBodyJson);
-
+  _log('Calling IDM endpoint: ' + idmCompanyAuthEndpoint + '?_action=removeAuthorisedUser');
   var response = httpClient.send(request).get();
   var actionResponse = JSON.parse(response.getEntity().getString());
   if (response.getStatus().getCode() === 200) {
@@ -126,7 +126,7 @@ function removeUserFromCompany (callerId, companyNo, userIdToRemove) {
       removerName: (actionResponse.caller.fullName ? actionResponse.caller.fullName : actionResponse.caller.userName)
     };
   } else {
-    _log('Error while removing user from company');
+    _log('Error while removing user from company: ' + response.getEntity().getString());
     return {
       success: false,
       message: actionResponse.detail.reason
@@ -219,6 +219,7 @@ try {
           action = fr.Action.goTo(NodeOutcome.MISSING_CONFIRM).build();
         } else {
           // removal logic
+          _log('Removing user ' + userResponse._id  + ' from company ' + companyLookupResponse.number);
           var removeResponse = removeUserFromCompany(sessionOwnerId, companyLookupResponse.number, userResponse._id);
           if (removeResponse.success) {
 
@@ -234,10 +235,12 @@ try {
             sharedState.put('removerName', removeResponse.removerName);
             action = fr.Action.goTo(NodeOutcome.CONFIRMED).build();
           } else {
+            _log('Failed to Remove user ' + userResponse._id + ' from company ' + companyNo + ': ' + removeResponse.message);
             raiseError(removeResponse.message, 'USER_REMOVAL_FAILED');
           }
         }
       } else {
+        _log('Remove action canceled');
         action = fr.Action.goTo(NodeOutcome.CANCEL).build();
       }
     }
