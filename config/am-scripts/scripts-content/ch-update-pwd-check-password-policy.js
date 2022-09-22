@@ -38,7 +38,7 @@ function policyCompliant (userObject, pwd) {
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
 
   if (accessToken == null) {
-    _log('Access token not in transient state');
+    _log('[IS POLICY COMPLIANT] Access token not in transient state');
     sharedState.put('errorMessage', 'Access token not in transient state');
     return NodeOutcome.ERROR;
   }
@@ -65,30 +65,30 @@ function policyCompliant (userObject, pwd) {
   if (response.getStatus().getCode() === 200) {
     var policyResponse = JSON.parse(response.getEntity().getString());
     if (policyResponse == null) {
-      _log('No policy result in response');
+      _log('[IS POLICY COMPLIANT] ]No policy result in response');
       sharedState.put('errorMessage', 'No policy result in response');
       return NodeOutcome.ERROR;
     }
     var compliant = policyResponse.result;
     if (compliant) {
-      _log('Password compliant with policy');
+      _log('[IS POLICY COMPLIANT] Password compliant with policy');
       sharedState.put('errorMessage', null);
       sharedState.put('pagePropsJSON', null);
       //transientState.put("newPassword", newPassword);
       return NodeOutcome.PASS;
     } else {
-      _log('Password not compliant with policy');
+      _log('[IS POLICY COMPLIANT] Password not compliant with policy');
       sharedState.put('errorMessage', 'Password not compliant with policy');
       setPolicyErrorMessage(policyResponse);
       return NodeOutcome.FAIL;
     }
   } else if (response.getStatus().getCode() === 401) {
-    _log('Authentication failed for policy lookup');
+    _log('[IS POLICY COMPLIANT] Authentication failed for policy lookup');
     sharedState.put('errorMessage', 'Authentication failed for policy lookup');
     return NodeOutcome.ERROR;
   }
 
-  _log('Error');
+  _log('[IS POLICY COMPLIANT] Error');
   sharedState.put('errorMessage', '[CHANGE PWD - POLICY CHECK] Error');
 
   return NodeOutcome.ERROR;
@@ -104,7 +104,7 @@ function getUserObject () {
     var userData = getUserData(activeUserName, activeUserId);
 
     if (userData && userData.success && userData.user) {
-      _log('Using user object from getUserData()');
+      _log('GET USER OBJ] Using user object from getUserData()');
 
       ret.sn = userData.user.sn;
       ret.givenName = userData.user.givenName;
@@ -112,14 +112,14 @@ function getUserObject () {
       ret.userName = userData.user.userName;
     } else {
       if (sharedState.get('objectAttributes')) {
-        _log('Using objectAttributes from sharedState');
+        _log('GET USER OBJ] Using objectAttributes from sharedState');
 
         ret = sharedState.get('objectAttributes');
       }
 
     }
   } catch (e) {
-    _log('Error getting user object info ' + e);
+    _log('[GET USER OBJ] Error getting user object info ' + e);
   }
 
   return ret;
@@ -128,14 +128,14 @@ function getUserObject () {
 function getUserData (email, id) {
   try {
     var searchTerm = email ? ('/openidm/managed/alpha_user?_queryFilter=userName+eq+%22' + email + '%22') : '/openidm/managed/alpha_user?_queryFilter=_id+eq+%22' + id + '%22';
-    _log('User Search term: ' + searchTerm);
+    _log('[GET USER DATA] User Search term: ' + searchTerm);
 
     var idmUserEndpoint = _fromConfig('FIDC_ENDPOINT') + searchTerm;
     var request = new org.forgerock.http.protocol.Request();
     var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
 
     if (accessToken == null) {
-      _log('Access token not in shared state');
+      _log('[GET USER DATA] Access token not in shared state');
       return {
         success: false,
         message: 'Access token not in shared state'
@@ -154,27 +154,27 @@ function getUserData (email, id) {
     if (response.getStatus().getCode() === 200) {
       var searchResponse = JSON.parse(response.getEntity().getString());
       if (searchResponse && searchResponse.result && searchResponse.result.length > 0) {
-        _log('User found: ' + searchResponse.result[0].toString());
+        _log('[GET USER DATA] User found: ' + searchResponse.result[0].toString());
         return {
           success: true,
           user: searchResponse.result[0]
         };
       } else {
-        _log('User NOT found: ' + email);
+        _log('[GET USER DATA] User NOT found: ' + email);
         return {
           success: false,
           message: 'User NOT found: ' + email
         };
       }
     } else {
-      _log('Error while checking user existence: ' + response.getStatus().getCode());
+      _log('[GET USER DATA] Error while checking user existence: ' + response.getStatus().getCode());
       return {
         success: false,
         message: 'Error while checking user existence: ' + response.getStatus().getCode()
       };
     }
   } catch (e) {
-    _log('Error : ' + e);
+    _log('[GET USER DATA] Error : ' + e);
     return {
       success: false,
       message: 'Error: ' + e
@@ -199,7 +199,7 @@ if (newPassword == null) {
 
     outcome = policyCompliant(userObject, newPassword);
   } catch (e) {
-    _log('error! ' + e);
+    _log('[TOPLEVEL] Error - ' + e);
     sharedState.put('errorMessage', e.toString());
     outcome = NodeOutcome.ERROR;
   }

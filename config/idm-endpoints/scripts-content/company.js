@@ -63,7 +63,16 @@
     let authCodesSourceData;
     
     if(!companyArray || companyArray.length === 0){
+      _log('[SEARCH COMPANY DATA IN CHS] User has no companies to lookup');
       return null;
+    }
+
+    if(companyArray.length > 100){
+      _log('[SEARCH COMPANY DATA IN CHS] Error during company lookup from CHS - Cannot query more than 100 companies at once (found '+ companyArray.length +')');
+      return {
+        success: false,
+        message: 'Error during company lookup from CHS - Cannot query more than 100 companies at once (found '+ companyArray.length +')'
+      };
     }
 
     let companyNumbers = companyArray.map(company => {

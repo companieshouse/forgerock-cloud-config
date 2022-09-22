@@ -11,7 +11,7 @@ try {
   // Get current time in RFC-4517 format
   var lastLogin = _getCurrentDateAsString();
 
-  _log('Setting last login to ' + lastLogin + ' for user ' + userId);
+  _log('Setting last login (fr-attr-idate1) to ' + lastLogin + ' for user ' + userId);
 
   // Use AM representation of attribute
   idRepository.setAttribute(userId, 'fr-attr-idate1', [lastLogin]);
