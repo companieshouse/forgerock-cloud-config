@@ -47,80 +47,94 @@ function logResponse (response) {
 
 // checks whether the user has already the company associated with their profile
 function checkUserAlreadyAuthzForCompany (userId, company) {
-  var request = new org.forgerock.http.protocol.Request();
+  try{
+    var request = new org.forgerock.http.protocol.Request();
 
-  var accessToken = transientState.get('idmAccessToken');
-  if (accessToken == null) {
-    _log('Access token not in transient state');
-    return {
-      success: false,
-      message: 'Access token not in transient state'
-    };
-  }
+    var accessToken = transientState.get('idmAccessToken');
+    if (accessToken == null) {
+      _log('[CHECK USER AUTHZ] Access token not in transient state');
+      return {
+        success: false,
+        message: 'Access token not in transient state'
+      };
+    }
 
-  var requestBodyJson =
-    {
-      'subjectId': userId,
-      'companyNumber': company.number
-    };
+    var requestBodyJson =
+      {
+        'subjectId': userId,
+        'companyNumber': company.number
+      };
 
-  request.setMethod('POST');
+    request.setMethod('POST');
 
-  request.setUri(idmCompanyAuthEndpoint + '?_action=getCompanyStatusByUserId');
-  request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
-  request.getHeaders().add('Content-Type', 'application/json');
-  request.getHeaders().add('Accept-API-Version', 'resource=1.0');
-  request.setEntity(requestBodyJson);
+    request.setUri(idmCompanyAuthEndpoint + '?_action=getCompanyStatusByUserId');
+    _log('[CHECK USER AUTHZ] Call URL: ' + idmCompanyAuthEndpoint + '?_action=getCompanyStatusByUserId');
+    request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
+    request.getHeaders().add('Content-Type', 'application/json');
+    request.getHeaders().add('Accept-API-Version', 'resource=1.0');
+    request.setEntity(requestBodyJson);
 
-  var response = httpClient.send(request).get();
-  var actionResponse = JSON.parse(response.getEntity().getString());
-  if (response.getStatus().getCode() === 200) {
-    return (actionResponse.success && actionResponse.company.status === 'confirmed');
-  } else {
-    _log('Error during action processing');
+    var response = httpClient.send(request).get();
+    var actionResponse = JSON.parse(response.getEntity().getString());
+    if (response.getStatus().getCode() === 200) {
+      return (actionResponse.success && actionResponse.company.status === 'confirmed');
+    } else {
+      _log('[CHECK USER AUTHZ] Error during action processing');
+      return false;
+    }
+  }catch(e){
+    _log('[CHECK USER AUTHZ] Error during action processing');
     return false;
   }
 }
 
 //creates the relationship between the user and the given company
 function addRelationshipToCompany (userId, company) {
-  var request = new org.forgerock.http.protocol.Request();
+  try{
+    var request = new org.forgerock.http.protocol.Request();
 
-  var accessToken = transientState.get('idmAccessToken');
-  if (accessToken == null) {
-    _log('Access token not in transient state');
+    var accessToken = transientState.get('idmAccessToken');
+    if (accessToken == null) {
+      _log('[ADD RELATIONSHIP] Access token not in transient state');
+      return {
+        success: false,
+        message: 'Access token not in transient state'
+      };
+    }
+
+    var requestBodyJson =
+      {
+        'subjectId': userId,
+        'companyNumber': company.number
+      };
+
+    request.setMethod('POST');
+
+    request.setUri(idmCompanyAuthEndpoint + '?_action=addAuthorisedUser');
+    request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
+    request.getHeaders().add('Content-Type', 'application/json');
+    request.getHeaders().add('Accept-API-Version', 'resource=1.0');
+    request.setEntity(requestBodyJson);
+    _log('[ADD RELATIONSHIP] Calling IDM endpoint: ' + idmCompanyAuthEndpoint + '?_action=addAuthorisedUser');
+    var response = httpClient.send(request).get();
+    var actionResponse = JSON.parse(response.getEntity().getString());
+    if (response.getStatus().getCode() === 200) {
+      _log('[ADD RELATIONSHIP] Created relationship with company - user: ' + userId + ' - company: ' + company.number);
+      return {
+        success: actionResponse.success
+      };
+    } else {
+      _log('[ADD RELATIONSHIP] Error during action processing - ' + actionResponse.detail.reason);
+      return {
+        success: false,
+        message: actionResponse.detail.reason
+      };
+    }
+  } catch (e){
+    _log('[ADD RELATIONSHIP] Exception while adding relationship - ' + e);
     return {
       success: false,
-      message: 'Access token not in transient state'
-    };
-  }
-
-  var requestBodyJson =
-    {
-      'subjectId': userId,
-      'companyNumber': company.number
-    };
-
-  request.setMethod('POST');
-
-  request.setUri(idmCompanyAuthEndpoint + '?_action=addAuthorisedUser');
-  request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
-  request.getHeaders().add('Content-Type', 'application/json');
-  request.getHeaders().add('Accept-API-Version', 'resource=1.0');
-  request.setEntity(requestBodyJson);
-  _log('Calling IDM endpoint: ' + idmCompanyAuthEndpoint + '?_action=addAuthorisedUser');
-  var response = httpClient.send(request).get();
-  var actionResponse = JSON.parse(response.getEntity().getString());
-  if (response.getStatus().getCode() === 200) {
-    _log('Created relationship with company - user: ' + userId + ' - company: ' + company.number);
-    return {
-      success: actionResponse.success
-    };
-  } else {
-    _log('Error during action processing - ' + actionResponse.detail.reason);
-    return {
-      success: false,
-      message: actionResponse.detail.reason
+      message: e.toString()
     };
   }
 }
@@ -275,7 +289,7 @@ try {
       .build();
   }
 } catch (e) {
-  _log('ERROR: ' + e);
+  _log('[TOPLEVEL] ERROR: ' + e);
   sharedState.put('errorMessage', e.toString());
   action = fr.Action.goTo(NodeOutcome.ERROR).build();
 }

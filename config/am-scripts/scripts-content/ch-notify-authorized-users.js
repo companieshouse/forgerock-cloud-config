@@ -119,53 +119,61 @@ function getUserData (email, id) {
 
 // gets company information
 function getCompanyData (companyNo) {
-  var request = new org.forgerock.http.protocol.Request();
-  var accessToken = transientState.get('idmAccessToken');
-  if (accessToken == null) {
-    _log('Access token not in shared state');
-    return {
-      success: false,
-      message: '[INVITE USER - GET COMPANY DETAILS] Access token not in shared state'
-    };
-  }
-
-  var requestBodyJson =
-    {
-      'companyNumber': companyNo
-    };
-
-  request.setMethod('POST');
-
-  _log('Get company details for ' + companyNo);
-
-  request.setUri(idmCompanyAuthEndpoint + '?_action=getCompanyByNumber');
-  request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
-  request.getHeaders().add('Content-Type', 'application/json');
-  request.getHeaders().add('Accept-API-Version', 'resource=1.0');
-  request.setEntity(requestBodyJson);
-
-  var response = httpClient.send(request).get();
-  var companyResponse = JSON.parse(response.getEntity().getString());
-
-  if (response.getStatus().getCode() === 200) {
-
-    if (companyResponse.success) {
-      return {
-        success: true,
-        company: companyResponse.company
-      };
-    } else {
-      _log('Error during company lookup: ' + companyResponse.message);
+  try{
+    var request = new org.forgerock.http.protocol.Request();
+    var accessToken = transientState.get('idmAccessToken');
+    if (accessToken == null) {
+      _log('Access token not in shared state');
       return {
         success: false,
-        message: '[NOTIFY AUTHZ USER - GET COMPANY DETAILS] Error during company lookup: ' + companyResponse.message
+        message: '[INVITE USER - GET COMPANY DETAILS] Access token not in shared state'
       };
     }
-  } else {
-    _log('Could not get company ' + companyNo + ' - Error ' + response.getEntity().getString());
+
+    var requestBodyJson =
+      {
+        'companyNumber': companyNo
+      };
+
+    request.setMethod('POST');
+
+    _log('Get company details for ' + companyNo);
+
+    request.setUri(idmCompanyAuthEndpoint + '?_action=getCompanyByNumber');
+    request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
+    request.getHeaders().add('Content-Type', 'application/json');
+    request.getHeaders().add('Accept-API-Version', 'resource=1.0');
+    request.setEntity(requestBodyJson);
+
+    var response = httpClient.send(request).get();
+    var companyResponse = JSON.parse(response.getEntity().getString());
+
+    if (response.getStatus().getCode() === 200) {
+
+      if (companyResponse.success) {
+        return {
+          success: true,
+          company: companyResponse.company
+        };
+      } else {
+        _log('Error during company lookup: ' + companyResponse.message);
+        return {
+          success: false,
+          message: '[NOTIFY AUTHZ USER - GET COMPANY DETAILS] Error during company lookup: ' + companyResponse.message
+        };
+      }
+    } else {
+      _log('Could not get company ' + companyNo + ' - Error ' + response.getEntity().getString());
+      return {
+        success: false,
+        message: '[NOTIFY AUTHZ USER - GET COMPANY DETAILS] Could not get company ' + companyNo + ' - Error ' + response.getEntity().getString()
+      };
+    }
+  } catch(e){
+    _log('Could not get company ' + companyNo + ' - Error ' + e);
     return {
       success: false,
-      message: '[NOTIFY AUTHZ USER - GET COMPANY DETAILS] Could not get company ' + companyNo + ' - Error ' + response.getEntity().getString()
+      message: '[NOTIFY AUTHZ USER - GET COMPANY DETAILS] Could not get company ' + companyNo + ' - Error ' + e
     };
   }
 }
