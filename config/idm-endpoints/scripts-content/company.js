@@ -67,14 +67,6 @@
       return null;
     }
 
-    if(companyArray.length > 100){
-      _log('[SEARCH COMPANY DATA IN CHS] Error during company lookup from CHS - Cannot query more than 100 companies at once (found '+ companyArray.length +')');
-      return {
-        success: false,
-        message: 'Error during company lookup from CHS - Cannot query more than 100 companies at once (found '+ companyArray.length +')'
-      };
-    }
-
     let companyNumbers = companyArray.map(company => {
       return '/_id eq "' + company.number + '"' ;      
     });
@@ -342,14 +334,25 @@
     let fetchedCompanies = getCompanies(actor.memberOfOrg);
 
     //query 3/4: fetch source data set for associated companies (including auth codes) by company number
-    sourceData = getCompaniesDataFromSource(fetchedCompanies);
-  
-    //UPDATES: UPDATE companies in IDM if source data info is found
-    if(sourceData.success){
-      _log('[ON-DEMAND SYNC] Successfully looked up source company/auth code data from CHS/EWF');
-      updateCompanyData(fetchedCompanies, sourceData);
-    } else {
-      _log('[ON-DEMAND SYNC] Error while looking up source company/auth code data from CHS/EWF - ' + sourceData.message);
+    _log('[ON-DEMAND SYNC] User ' + actor.userName + ' is member of ' + fetchedCompanies.length + ' companies!');
+    const chunkSize = 100;
+    let pageCount = 0;
+    const res = [];
+        
+    for (let i = 0; i < fetchedCompanies.length; i += chunkSize) {
+        let chunk = fetchedCompanies.slice(i, i + chunkSize);
+        
+        let companiesInPage = chunk.map(c => {return c.number});
+        _log('[ON-DEMAND SYNC] processing page of results ' + pageCount++ + ' - ' + JSON.stringify(companiesInPage));
+        sourceData = getCompaniesDataFromSource(chunk);
+        
+        //UPDATES: UPDATE companies in IDM if source data info is found
+        if(sourceData.success){
+          _log('[ON-DEMAND SYNC] Successfully looked up source company/auth code data from CHS/EWF');
+          updateCompanyData(fetchedCompanies, sourceData);
+        } else {
+          _log('[ON-DEMAND SYNC] Error while looking up source company/auth code data from CHS/EWF - ' + sourceData.message);
+        }
     }
 
     //query 5: fetch updated companies data
