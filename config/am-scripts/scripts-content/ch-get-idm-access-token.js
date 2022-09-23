@@ -68,6 +68,7 @@ function getAccessToken () {
 try {
   outcome = getAccessToken();
 } catch (e) {
+  _log('Exception in getting Access token: ' + e.toString());
   sharedState.put('errorMessage', e.toString());
   outcome = NodeOutcome.ERROR;
 }

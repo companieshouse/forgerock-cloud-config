@@ -24,41 +24,49 @@ function getUserByParentUsername (accessToken, parentUsername) {
 
 // fetches the company by number
 function getUserBySearchTerm (accessToken, searchTerm) {
+  try {
+    var request = new org.forgerock.http.protocol.Request();
 
-  var request = new org.forgerock.http.protocol.Request();
+    request.setMethod('GET');
+    _log('[GET USER] Searching user in IDM with URL: ' + alphaUserUrl + searchTerm);
+    request.setUri(alphaUserUrl + searchTerm);
 
-  request.setMethod('GET');
-  _log('Searching user in IDM with URL: ' +alphaUserUrl + searchTerm);
-  request.setUri(alphaUserUrl + searchTerm);
+    request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
+    request.getHeaders().add('Content-Type', 'application/json');
 
-  request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
-  request.getHeaders().add('Content-Type', 'application/json');
+    var response = httpClient.send(request).get();
 
-  var response = httpClient.send(request).get();
+    if (response.getStatus().getCode() === 200) {
+      var userResponse = JSON.parse(response.getEntity().getString());
 
-  if (response.getStatus().getCode() === 200) {
-    var userResponse = JSON.parse(response.getEntity().getString());
+      if (userResponse.resultCount > 0) {
+        var userData = userResponse.result[0];
 
-    if (userResponse.resultCount > 0) {
-      var userData = userResponse.result[0];
-
-      _log('User found in IDM: ' + JSON.stringify(userData));
-      return {
-        success: true,
-        userData: userData
-      };
+        _log('[GET USER] User found in IDM: ' + JSON.stringify(userData));
+        return {
+          success: true,
+          userData: userData
+        };
+      } else {
+        return {
+          success: false,
+          reason: 'NO_RESULTS'
+        };
+      }
     } else {
       return {
         success: false,
-        reason: 'NO_RESULTS'
+        reason: 'ERROR'
       };
     }
-  } else {
+  } catch (e) {
+    _log('[GET USER] Exception while getting user: ' + e);
     return {
       success: false,
       reason: 'ERROR'
     };
   }
+
 }
 
 function createPatchItem (fieldName, value) {

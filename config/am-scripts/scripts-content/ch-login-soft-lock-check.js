@@ -49,34 +49,39 @@ function logResponse (response) {
 // return 'error' if there is an error in checking the soft lock status
 function checkUserLockStatus (userId, accessToken) {
 
-  var request = new org.forgerock.http.protocol.Request();
+  try {
+    var request = new org.forgerock.http.protocol.Request();
 
-  request.setMethod('GET');
-  request.setUri(alphaUserUrl + userId);
-  request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
-  request.getHeaders().add('Content-Type', 'application/json');
-  var response = httpClient.send(request).get();
-  if (response.getStatus().getCode() === 200) {
-    var userResponse = JSON.parse(response.getEntity().getString());
-    var softLockDate = userResponse.frIndexedString4;
-    if (!softLockDate) {
-      _log('The user is not locked');
-      return NodeOutcome.NOT_LOCKED;
-    } else {
-      _log('found lock date: ' + softLockDate);
-      var now = new Date();
-      var differenceInTime = now.getTime() - (new Date(softLockDate)).getTime();
-      if (Math.round(differenceInTime / (1000 * 60)) < SOFT_LOCK_MINUTES) {
-        _log('lock still valid: time diff in min: ' + Math.round(differenceInTime / (1000 * 60)));
-        return NodeOutcome.LOCKED;
+    request.setMethod('GET');
+    request.setUri(alphaUserUrl + userId);
+    request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
+    request.getHeaders().add('Content-Type', 'application/json');
+    var response = httpClient.send(request).get();
+    if (response.getStatus().getCode() === 200) {
+      var userResponse = JSON.parse(response.getEntity().getString());
+      var softLockDate = userResponse.frIndexedString4;
+      if (!softLockDate) {
+        _log('[CHECK LOCK STATUS] The user is not locked');
+        return NodeOutcome.NOT_LOCKED;
       } else {
-        _log('lock expired: time diff in min: ' + Math.round(differenceInTime / (1000 * 60)));
-        return NodeOutcome.LOCK_EXPIRED;
+        _log('[CHECK LOCK STATUS] found lock date: ' + softLockDate);
+        var now = new Date();
+        var differenceInTime = now.getTime() - (new Date(softLockDate)).getTime();
+        if (Math.round(differenceInTime / (1000 * 60)) < SOFT_LOCK_MINUTES) {
+          _log('[CHECK LOCK STATUS] lock still valid: time diff in min: ' + Math.round(differenceInTime / (1000 * 60)));
+          return NodeOutcome.LOCKED;
+        } else {
+          _log('[CHECK LOCK STATUS] lock expired: time diff in min: ' + Math.round(differenceInTime / (1000 * 60)));
+          return NodeOutcome.LOCK_EXPIRED;
+        }
       }
+    } else {
+      _log('[CHECK LOCK STATUS] Error while getting soft lock date: ' + response.getStatus().getCode());
+      return NodeOutcome.ERROR;
     }
-  } else {
-    _log('Error while getting soft lock date: ' + response.getStatus().getCode());
-    return NodeOutcome.ERROR;
+  } catch(e){
+    _log('[CHECK LOCK STATUS] Error while chcking user lock status: ' + e);
+      return NodeOutcome.ERROR;
   }
 }
 
@@ -86,19 +91,19 @@ try {
   var userId = sharedState.get('_id');
 
   if (userId == null) {
-    _log('No user name in shared state');
+    _log('[TOPLEVEL] No user name in shared state');
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
   }
 
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
   if (accessToken == null) {
-    _log('Access token not in shared state');
+    _log('[TOPLEVEL] Access token not in shared state');
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
   }
 
   var lockStatus = checkUserLockStatus(userId, accessToken);
 
-  _log('Is user locked: ' + lockStatus);
+  _log('[TOPLEVEL] Is user locked: ' + lockStatus);
   if (lockStatus === NodeOutcome.LOCKED) {
     sharedState.put('errorMessage', 'You have entered incorrect details too many times. Your account is now locked for '.concat(String(SOFT_LOCK_MINUTES), ' minutes.'));
     sharedState.put('pagePropsJSON', JSON.stringify(
@@ -131,7 +136,7 @@ try {
   action = fr.Action.goTo(lockStatus).build();
 } catch (e) {
   sharedState.put('errorMessage', e.toString());
-  _log('error - ' + e);
+  _log('[TOPLEVEL] Error - ' + e);
   action = fr.Action.goTo(NodeOutcome.ERROR).build();
 }
 

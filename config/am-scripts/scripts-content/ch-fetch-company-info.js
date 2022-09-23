@@ -43,38 +43,46 @@ function fetchIDMToken () {
 
 function getCompanyByNumber (accessToken, companyNumber) {
 
-  var request = new org.forgerock.http.protocol.Request();
+  try{
+    var request = new org.forgerock.http.protocol.Request();
 
-  request.setMethod('GET');
-  var encodedCompanyNo = encodeURIComponent(companyNumber.trim());
-  var searchTerm = '?_queryFilter=number+eq+%22' + encodedCompanyNo + '%22';
-  request.setUri(idmCompanyEndpoint + searchTerm);
-  request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
-  request.getHeaders().add('Content-Type', 'application/json');
+    request.setMethod('GET');
+    var encodedCompanyNo = encodeURIComponent(companyNumber.trim());
+    var searchTerm = '?_queryFilter=number+eq+%22' + encodedCompanyNo + '%22';
+    request.setUri(idmCompanyEndpoint + searchTerm);
+    request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
+    request.getHeaders().add('Content-Type', 'application/json');
 
-  _log('Fetch Company - requesting: ' + idmCompanyEndpoint + searchTerm);
-  var response = httpClient.send(request).get();
+    _log('[GET COMPANY BY NO] requesting: ' + idmCompanyEndpoint + searchTerm);
+    var response = httpClient.send(request).get();
 
-  if (response.getStatus().getCode() === 200) {
-    var companyResponse = JSON.parse(response.getEntity().getString());
+    if (response.getStatus().getCode() === 200) {
+      var companyResponse = JSON.parse(response.getEntity().getString());
 
-    if (companyResponse.resultCount > 0) {
-      var companyData = companyResponse.result[0];
+      if (companyResponse.resultCount > 0) {
+        var companyData = companyResponse.result[0];
 
-      _log('Fetch Company - Got a result: ' + JSON.stringify(companyData));
-      return {
-        success: true,
-        companyData: companyData
-      };
+        _log('[GET COMPANY BY NO] Fetch Company - Got a result: ' + JSON.stringify(companyData));
+        return {
+          success: true,
+          companyData: companyData
+        };
+      } else {
+        _log('[GET COMPANY BY NO] Fetch Company - no results found for : ' + companyNumber);
+        return {
+          success: false,
+          reason: 'NO_RESULTS'
+        };
+      }
     } else {
-      _log('Fetch Company - no results found for : ' + companyNumber);
+      _log('[GET COMPANY BY NO] Fetch Company - error while fetching : ' + companyNumber);
       return {
         success: false,
-        reason: 'NO_RESULTS'
+        reason: 'ERROR'
       };
     }
-  } else {
-    _log('Fetch Company - error while fetching : ' + companyNumber);
+  } catch(e){
+    _log('[GET COMPANY BY NO] Fetch Company - error while fetching : ' + e);
     return {
       success: false,
       reason: 'ERROR'
@@ -139,6 +147,7 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
 
     if (!idmCompanyResult.success) {
       request.setMethod('POST');
+      _log('[SYNC COMPANY] Creating Company via URL: ' + idmCompanyEndpoint + '?_action=create'); 
       request.setUri(idmCompanyEndpoint + '?_action=create');
       requestBodyJson = {
         number: chsCompanyData.success ? chsCompanyData.data.number : ewfAuthCodeData.data.number,
@@ -156,12 +165,13 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
         authCodeValidFrom: ewfAuthCodeData.success ? ewfAuthCodeData.data.authCodeValidFrom : null,
         authCodeValidUntil: ewfAuthCodeData.success ? ewfAuthCodeData.data.authCodeValidUntil : null
       };
-      _log('[SYNC COMPANY] Creating Company: ' + JSON.stringify(requestBodyJson)); 
+      _log('[SYNC COMPANY] Creating Company body: ' + JSON.stringify(requestBodyJson)); 
 
     } else {
       var companyId = idmCompanyResult.companyData._id;
       request.setMethod('PATCH');
       request.setUri(idmCompanyEndpoint + companyId);
+      _log('[SYNC COMPANY] Updating Company via URL: ' + idmCompanyEndpoint + companyId); 
       requestBodyJson = [
         createPatchItem('type', chsCompanyData.success ? chsCompanyData.data.type : null),
         createPatchItem('status', chsCompanyData.success ? chsCompanyData.data.status : null),
@@ -201,7 +211,7 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
         companyData: JSON.parse(response.getEntity().getString())
       };
     } else {
-      _log('[SYNC COMPANY] Error during company creation/update - ' + response.getEntity().getString());
+      _log('[SYNC COMPANY] Error during company creation/update: code ' + response.getStatus().getCode() + ' - response:' + response.getEntity().getString());
       return {
         success: false,
         message: JSON.parse(response.getEntity().getString())
@@ -218,7 +228,7 @@ function createOrUpdateCompany (accessToken, companyNumber, idmCompanyResult) {
 
 function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdiction, skipConfirmation) {
   if (companyNumber == null) {
-    _log('No company number in shared state');
+    _log('[GET COMPANY] No company number in shared state');
     sharedState.put('errorMessage', 'No company number in shared state.');
     return {
       success: false,
@@ -228,33 +238,35 @@ function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdic
 
   var searchTerm;
   var encodedCompanyNo = encodeURIComponent(companyNumber.trim());
-  _log('Trimmed & encoded company number: ' + encodedCompanyNo);
+  _log('[GET COMPANY] Trimmed & encoded company number: ' + encodedCompanyNo);
   // if the user selected Scotland and provided a company number without 'SC' at the beginning, search for a match with either '<company no>' or 'SC<company no>'
   if (jurisdiction.equals(jurisdictions.SC) && companyNumber.indexOf('SC') !== 0) {
-    _log('looking for SC company without \'SC\' prefix - adding it');
+    _log('[GET COMPANY] looking for SC company without \'SC\' prefix - adding it');
     searchTerm = '?_queryFilter=(number+eq+%22' + encodedCompanyNo + '%22+or+number+eq+%22SC' + encodedCompanyNo + '%22)+and+jurisdiction+eq+%22' + jurisdiction + '%22';
   } else {
     //for other jurisdictions, do not make any logic on prefixes
     searchTerm = '?_queryFilter=number+eq+%22' + encodedCompanyNo + '%22+and+jurisdiction+eq+%22' + jurisdiction + '%22';
   }
-  _log('Company loolup using search term: ' + searchTerm);
+  _log('[GET COMPANY] Company lookup using search term: ' + searchTerm);
 
   //gets company data currently in IDM
-  _log('Getting company by number : ' + companyNumber);
+  _log('[GET COMPANY] Getting company by number : ' + companyNumber);
   var idmCompanyResult = getCompanyByNumber(accessToken, companyNumber);
-  _log('Result from getCompanyByNumber : ' + idmCompanyResult);
+  _log('[GET COMPANY] Result from getCompanyByNumber : ' + JSON.stringify(idmCompanyResult));
 
   //company gets created/updated from source in IDM
-  createOrUpdateCompany(accessToken, companyNumber, idmCompanyResult);
+  var updateResult = createOrUpdateCompany(accessToken, companyNumber, idmCompanyResult);
+  _log('[GET COMPANY] Update result - success: ' + updateResult.success + ' - msg: ' + updateResult.message);
 
   var request = new org.forgerock.http.protocol.Request();
   request.setMethod('GET');
   request.setUri(idmCompanyEndpoint + searchTerm);
+  _log('[GET COMPANY] Get company with URL: ' + idmCompanyEndpoint + searchTerm);
   request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
   request.getHeaders().add('Content-Type', 'application/json');
 
   var response = httpClient.send(request).get();
-
+  _log('[GET COMPANY] Get company http returned status code: ' + response.getStatus().getCode());
   if (response.getStatus().getCode() === 200) {
     var companyResponse = JSON.parse(response.getEntity().getString());
 
@@ -263,10 +275,10 @@ function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdic
       var companyStatus = companyData.status;
       var authCode = companyData.authCode;
       var companyName = companyData.name;
-      _log('Got a company result: ' + JSON.stringify(companyData));
+      _log('[GET COMPANY] Got a company result: ' + JSON.stringify(companyData));
 
       if (authCode == null) {
-        _log('No auth code associated with company ' + companyNumber);
+        _log('[GET COMPANY] No auth code associated with company ' + companyNumber);
         sharedState.put('errorMessage', 'No auth code associated with company ' + companyName + '.');
         sharedState.put('pagePropsJSON', JSON.stringify(
           {
@@ -284,10 +296,10 @@ function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdic
         };
       }
 
-      _log('Found company status for company ' + companyNumber +': ' + companyStatus);
+      _log('[GET COMPANY] Found company status for company ' + companyNumber +': ' + companyStatus);
 
       if (companyStatus.equals(CompanyStatus.DISSOLVED)) {
-        _log('The company ' + companyNumber + ' is dissolved');
+        _log('[GET COMPANY] The company ' + companyNumber + ' is dissolved');
         sharedState.put('errorMessage', 'The company ' + companyName + ' is dissolved.');
         sharedState.put('pagePropsJSON', JSON.stringify(
           {
@@ -362,7 +374,7 @@ function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdic
         };
       }
     } else {
-      _log('No company results for company number ' + companyNumber);
+      _log('[GET COMPANY] No company results for company number ' + companyNumber);
       sharedState.put('errorMessage', 'The company ' + companyNumber + ' could not be found.');
       sharedState.put('pagePropsJSON', JSON.stringify(
         {
@@ -381,7 +393,7 @@ function getCompanyByNumberAndJurisdiction (accessToken, companyNumber, jurisdic
       };
     }
   } else {
-    _log('Error while retrieving company with ID ' + companyNumber);
+    _log('[GET COMPANY] Error while retrieving company with ID ' + companyNumber);
     sharedState.put('errorMessage', 'Error while retrieving company ' + companyNumber + '.');
     sharedState.put('pagePropsJSON', JSON.stringify(
       {
@@ -566,14 +578,14 @@ try {
     // if the user has selected to proceed with association or to not go ahead, callbacks will be not empty
     if (!callbacks.isEmpty()) {
       var fileForThiscompanySelection = callbacks.get(3).getSelectedIndex();
-      _log('\'File for this company selection\' ' + fileForThiscompanySelection);
+      //_log('\'File for this company selection\' ' + fileForThiscompanySelection);
       if (fileForThiscompanySelection === YES_OPTION_INDEX) {
-        _log('File for this company: selected YES');
+        _log('[TOPLEVEL] File for this company: selected YES');
         sharedState.put('errorMessage', null);
         sharedState.put('pagePropsJSON', null);
         outcome = NodeOutcome.TRUE;
       } else {
-        _log('File for this company: selected NO');
+        _log('[TOPLEVEL] File for this company: selected NO');
         sharedState.put('errorMessage', null);
         sharedState.put('pagePropsJSON', null);
         outcome = NodeOutcome.OTHER_COMPANY;
@@ -582,7 +594,7 @@ try {
       // if the user has started the journey, the callbacks will be empty, then fetch company info
       var accessToken = fetchIDMToken();
       if (!accessToken) {
-        _log('Access token not in transient state');
+        _log('[TOPLEVEL] Error: Access token not in transient state');
         outcome = NodeOutcome.ERROR;
       } else {
         var companyNumber = sharedState.get('companyNumber');
@@ -597,30 +609,34 @@ try {
       }
     }
   } else {
-    _log('SKIP USER CONFIRMATION');
+    _log('[TOPLEVEL] SKIP USER CONFIRMATION');
     var accessToken = fetchIDMToken();
     if (!accessToken) {
-      _log('Access token not in transient state');
+      _log('[TOPLEVEL] Error: Access token not in transient state');
       outcome = NodeOutcome.ERROR;
     } else {
       var companyNumber = sharedState.get('companyNumber');
       var jurisdiction = sharedState.get('jurisdiction');
 
+      _log('[TOPLEVEL] Initial Fetching company from IDM...');
       var idmCompanyResult = getCompanyByNumber(accessToken, companyNumber);
-      createOrUpdateCompany(accessToken, companyNumber, idmCompanyResult);
+      _log('[TOPLEVEL] Updating company from EWF/CHS...');
+      var updateResult = createOrUpdateCompany(accessToken, companyNumber, idmCompanyResult);
+      _log('[TOPLEVEL] Update result - success: ' + updateResult.success + ' - msg: ' + updateResult.message);
 
       //fetchCompany can only result in callbacks, does not transition anywhere
+      _log('[TOPLEVEL] Fetching company by number and jurisdiction from IDM...');
       var idmCompanyData = getCompanyByNumberAndJurisdiction(accessToken, companyNumber, jurisdiction, skipConfirmation);
       if (!idmCompanyData || !idmCompanyData.success) {
         outcome = NodeOutcome.FALSE;
       } else {
-        _log('Company fetched successfully');
+        _log('[TOPLEVEL] Company fetched successfully');
         outcome = NodeOutcome.TRUE;
       }
     }
   }
 } catch (e) {
-  _log('error ' + e);
+  _log('[TOPLEVEL] error ' + e);
   sharedState.put('errorMessage', e.toString());
   outcome = NodeOutcome.ERROR;
 }
