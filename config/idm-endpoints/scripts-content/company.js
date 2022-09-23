@@ -165,12 +165,15 @@
           
         if(sourceAuthCode){
           if(sourceAuthCode.AUTHCODE !== company.authCode){
+            _log('[UPDATE COMPANY] Auth code AUTHCODE at source different from auth code in IDM for company ' + company.number);
             patchItems.push(createPatchItem('authCode', sourceAuthCode.AUTHCODE));
           }
           if(sourceAuthCode.STARTDTE !== company.authCodeValidFrom){
+            _log('[UPDATE COMPANY] Auth code STARTDTE at source different from auth code in IDM for company ' + company.number);
             patchItems.push(createPatchItem('authCodeValidFrom', sourceAuthCode.STARTDTE));
           } 
           if(sourceAuthCode.EXPIRYDTE !== company.authCodeValidUntil){
+            _log('[UPDATE COMPANY] Auth code EXPIRYDTE at source different from auth code in IDM for company ' + company.number);
             patchItems.push(createPatchItem('authCodeValidUntil', sourceAuthCode.EXPIRYDTE));
           } 
         } else {
@@ -179,33 +182,43 @@
   
         if(sourceCompany && sourceCompany.data){
           if(sourceCompany.data.company_name !== company.name){
+            _log('[UPDATE COMPANY] Company name at source different from the one IDM for company ' + company.number);
             patchItems.push(createPatchItem('name', sourceCompany.data.company_name));
           }
           if(sourceCompany.data.type !== company.type){
+            _log('[UPDATE COMPANY] Company type at source different from the one in IDM for company ' + company.number);
             patchItems.push(createPatchItem('type', sourceCompany.data.type));
           }
           if(sourceCompany.data.company_status !== company.status){
+            _log('[UPDATE COMPANY] Company status at source different from the one in IDM for company ' + company.number);
             patchItems.push(createPatchItem('status', sourceCompany.data.company_status));
           }       
           if(sourceCompany.data.registered_office_address.locality !== company.locality){
+            _log('[UPDATE COMPANY] Company locality at source different from the one in IDM for company ' + company.number);
             patchItems.push(createPatchItem('locality', sourceCompany.data.registered_office_address.locality));
           }            
           if(sourceCompany.data.registered_office_address.postal_code !== company.postalCode){
+            _log('[UPDATE COMPANY] Company postal code at source different from the one in IDM for company ' + company.number);
             patchItems.push(createPatchItem('postalCode', sourceCompany.data.registered_office_address.postal_code));
           }
           if(sourceCompany.data.registered_office_address.address_line_1 !== company.addressLine1){
+            _log('[UPDATE COMPANY] Company address line 1 at source different from the one in IDM for company ' + company.number);
             patchItems.push(createPatchItem('addressLine1', sourceCompany.data.registered_office_address.address_line_1));
           }
           if(sourceCompany.data.registered_office_address.address_line_2 !== company.addressLine2){
+            _log('[UPDATE COMPANY] Company address line 2 at source different from the one in IDM for company ' + company.number);
             patchItems.push(createPatchItem('addressLine2', sourceCompany.data.registered_office_address.address_line_2));
           }
           if(sourceCompany.data.registered_office_address.region !== company.region){
+            _log('[UPDATE COMPANY] Company region at source different from the one in IDM for company ' + company.number);
             patchItems.push(createPatchItem('region', sourceCompany.data.registered_office_address.region));
           }
           if(sourceCompany.data.date_of_creation !== company.creationDate){
+            _log('[UPDATE COMPANY] Company creation date at source different from the one in IDM for company ' + company.number);
             patchItems.push(createPatchItem('creationDate', sourceCompany.data.date_of_creation));
           }
           if(mapCHSCompanyJurisdiction(sourceCompany.data.jurisdiction) !== company.jurisdiction){
+            _log('[UPDATE COMPANY] Company jurisdiction at source different from the one in IDM for company ' + company.number);
             patchItems.push(createPatchItem('jurisdiction', mapCHSCompanyJurisdiction(sourceCompany.data.jurisdiction)));
           }
         } else {
