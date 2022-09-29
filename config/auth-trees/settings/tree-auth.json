@@ -2,5 +2,5 @@
   "authenticationSessionsStateManagement": "JWT",
   "suspendedAuthenticationTimeout": 1440,
   "authenticationSessionsWhitelist": false,
-  "authenticationSessionsMaxDuration": 30
+  "authenticationSessionsMaxDuration": 60
 }
