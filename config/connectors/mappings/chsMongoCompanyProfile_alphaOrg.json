@@ -178,7 +178,7 @@
 			"file": "ui/correlateTreeToQueryFilter.js"
 		}
 	],
-	"clusteredSourceReconEnabled": false,
+	"clusteredSourceReconEnabled": true,
 	"reconSourceQueryPageSize": {
 		"$int": "&{esv.659b97c692.companyreconsourcequerypagesize}"
 	},

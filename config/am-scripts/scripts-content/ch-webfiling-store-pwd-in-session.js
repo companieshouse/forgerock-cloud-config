@@ -15,9 +15,9 @@ var fr = JavaImporter(
 );
 
 if (_isAuthenticated()) {
-  _log('[STORE PWD IN SESSION] Existing session: ' + existingSession.toString());
+  //_log('[STORE PWD IN SESSION] Existing session: ' + existingSession.toString());
   _log('[STORE PWD IN SESSION] Has existing session');
-  _log('[STORE PWD IN SESSION] ' + existingSession.get('password'));
+  _log('[STORE PWD IN SESSION] Pwd found in session: ' + (existingSession.get('password') != null));
   sharedState.put('password', existingSession.get('password'));
 } else {
   _log('[STORE PWD IN SESSION] no session!');
