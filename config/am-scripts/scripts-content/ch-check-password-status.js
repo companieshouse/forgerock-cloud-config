@@ -25,7 +25,7 @@ function pwdRestore () {
   transientState.put('password', sharedState.get('password'));
   transientState.put('objectAttributes', { 'password': sharedState.get('password') });
   //cleanup the password from shared state
-  sharedState.put('password', null);
+  //sharedState.put('password', null);
 }
 
 function checkPasswordStatus () {

@@ -1,20 +1,38 @@
 {
   "nodes": [
     {
-      "_id": "35f0b7c1-ac55-406d-aebe-12e33ab6125a",
+      "_id": "074551cb-6074-4ded-b08e-03c638bfd1a1",
       "nodeType": "ScriptedDecisionNode",
       "details": {
-        "inputs": [
-          "*"
-        ],
+        "script": "e69b137b-1bae-4804-af6b-6a93371733ca",
         "outcomes": [
-          "noSession",
-          "hasSession"
+          "true"
         ],
         "outputs": [
           "*"
         ],
-        "script": "ddce54ff-70fe-4ef7-bdfe-3c83488ef266"
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "09352d71-046f-4fbf-b831-aefb8954705a",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "16975ea5-4f0a-4ac6-861f-00dbf39ca441",
+        "outcomes": [
+          "true",
+          "error",
+          "already_associated",
+          "auth_code_inactive"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
       }
     },
     {
@@ -25,62 +43,10 @@
       }
     },
     {
-      "_id": "ffad651d-d017-43dc-bc3e-ec4768de5cc5",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "inputs": [
-          "*"
-        ],
-        "outcomes": [
-          "true"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "script": "19a9ba97-3eaf-46ed-9b59-ea9315d81407"
-      }
-    },
-    {
-      "_id": "61877889-8233-4048-b76c-39f882081e40",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "inputs": [
-          "*"
-        ],
-        "outcomes": [
-          "true",
-          "false"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "script": "ca6cbc1b-d83b-4946-b327-be15402894fa"
-      }
-    },
-    {
-      "_id": "9e1930dd-6045-417c-9286-d2083f454f01",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "inputs": [
-          "*"
-        ],
-        "outcomes": [
-          "success",
-          "error"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149"
-      }
-    },
-    {
       "_id": "0dc8c791-4b84-4f63-af32-5f10a58c54c1",
       "nodeType": "ScriptedDecisionNode",
       "details": {
-        "inputs": [
-          "*"
-        ],
+        "script": "55801756-11bf-493d-b49c-195488cf939a",
         "outcomes": [
           "true",
           "false",
@@ -90,40 +56,43 @@
         "outputs": [
           "*"
         ],
-        "script": "55801756-11bf-493d-b49c-195488cf939a"
+        "inputs": [
+          "*"
+        ]
       }
     },
     {
-      "_id": "fc86f06d-b17e-4cda-b10c-fb9fae255d59",
+      "_id": "304e305a-a2f4-4380-a5db-3bca9b5da30e",
       "nodeType": "ScriptedDecisionNode",
       "details": {
-        "inputs": [
-          "*"
-        ],
+        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149",
         "outcomes": [
-          "true",
-          "false"
+          "success",
+          "error"
         ],
         "outputs": [
           "*"
         ],
-        "script": "ad7a63a6-fae2-46c0-be70-bec1f059f064"
+        "inputs": [
+          "*"
+        ]
       }
     },
     {
-      "_id": "4b27ff9e-407a-4880-8c81-92be95c0e46f",
+      "_id": "35f0b7c1-ac55-406d-aebe-12e33ab6125a",
       "nodeType": "ScriptedDecisionNode",
       "details": {
-        "inputs": [
-          "*"
-        ],
+        "script": "ddce54ff-70fe-4ef7-bdfe-3c83488ef266",
         "outcomes": [
-          "true"
+          "noSession",
+          "hasSession"
         ],
         "outputs": [
           "*"
         ],
-        "script": "917f36a9-f21e-43e4-bed5-9b2171228387"
+        "inputs": [
+          "*"
+        ]
       }
     },
     {
@@ -135,28 +104,26 @@
       }
     },
     {
-      "_id": "9f02e20d-5cee-4608-af7c-3732d3838d88",
+      "_id": "4b27ff9e-407a-4880-8c81-92be95c0e46f",
       "nodeType": "ScriptedDecisionNode",
       "details": {
-        "inputs": [
-          "*"
-        ],
+        "script": "917f36a9-f21e-43e4-bed5-9b2171228387",
         "outcomes": [
           "true"
         ],
         "outputs": [
           "*"
         ],
-        "script": "460f8d31-5f90-440a-9f47-f5951778ea4f"
+        "inputs": [
+          "*"
+        ]
       }
     },
     {
-      "_id": "eba4be16-8b25-4ffd-ac41-97d7354a860d",
+      "_id": "61877889-8233-4048-b76c-39f882081e40",
       "nodeType": "ScriptedDecisionNode",
       "details": {
-        "inputs": [
-          "*"
-        ],
+        "script": "ca6cbc1b-d83b-4946-b327-be15402894fa",
         "outcomes": [
           "true",
           "false"
@@ -164,16 +131,16 @@
         "outputs": [
           "*"
         ],
-        "script": "78da2828-68cc-4f63-b003-b8a250b1753d"
+        "inputs": [
+          "*"
+        ]
       }
     },
     {
-      "_id": "304e305a-a2f4-4380-a5db-3bca9b5da30e",
+      "_id": "9e1930dd-6045-417c-9286-d2083f454f01",
       "nodeType": "ScriptedDecisionNode",
       "details": {
-        "inputs": [
-          "*"
-        ],
+        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149",
         "outcomes": [
           "success",
           "error"
@@ -181,43 +148,32 @@
         "outputs": [
           "*"
         ],
-        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149"
+        "inputs": [
+          "*"
+        ]
       }
     },
     {
-      "_id": "09352d71-046f-4fbf-b831-aefb8954705a",
+      "_id": "9f02e20d-5cee-4608-af7c-3732d3838d88",
       "nodeType": "ScriptedDecisionNode",
       "details": {
-        "inputs": [
-          "*"
-        ],
+        "script": "460f8d31-5f90-440a-9f47-f5951778ea4f",
         "outcomes": [
-          "true",
-          "error",
-          "already_associated",
-          "auth_code_inactive"
+          "true"
         ],
         "outputs": [
           "*"
         ],
-        "script": "16975ea5-4f0a-4ac6-861f-00dbf39ca441"
-      }
-    },
-    {
-      "_id": "c549d83a-f796-4a27-b6da-91cb626a0bd1",
-      "nodeType": "SessionDataNode",
-      "details": {
-        "sharedStateKey": "userName",
-        "sessionDataKey": "UserToken"
+        "inputs": [
+          "*"
+        ]
       }
     },
     {
       "_id": "b13495ba-6ac2-4877-8535-4f63dffb813f",
       "nodeType": "ScriptedDecisionNode",
       "details": {
-        "inputs": [
-          "*"
-        ],
+        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149",
         "outcomes": [
           "success",
           "error"
@@ -225,16 +181,48 @@
         "outputs": [
           "*"
         ],
-        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149"
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "bfcdaf66-5730-40b7-a847-00f62cd539ca",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "fdac4efb-d8b8-478b-8300-e11a4c3503df",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "c549d83a-f796-4a27-b6da-91cb626a0bd1",
+      "nodeType": "SessionDataNode",
+      "details": {
+        "sessionDataKey": "UserToken",
+        "sharedStateKey": "userName"
+      }
+    },
+    {
+      "_id": "cd37f8c8-249f-4d7c-be85-4c2bd262225b",
+      "nodeType": "IdentifyExistingUserNode",
+      "details": {
+        "identityAttribute": "mail",
+        "identifier": "userName"
       }
     },
     {
       "_id": "dfb2d5fd-8a2f-4b59-9f7b-347046b69e5c",
       "nodeType": "ScriptedDecisionNode",
       "details": {
-        "inputs": [
-          "*"
-        ],
+        "script": "d8d0c71c-ddfb-47f6-a577-33aa0b7c2bcd",
         "outcomes": [
           "user_associated",
           "user_not_associated",
@@ -243,89 +231,116 @@
         "outputs": [
           "*"
         ],
-        "script": "d8d0c71c-ddfb-47f6-a577-33aa0b7c2bcd"
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "eba4be16-8b25-4ffd-ac41-97d7354a860d",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "78da2828-68cc-4f63-b003-b8a250b1753d",
+        "outcomes": [
+          "true",
+          "false"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
       }
     },
     {
       "_id": "fbf0037d-0557-4111-bd01-edeb685c836f",
       "nodeType": "ScriptedDecisionNode",
       "details": {
+        "script": "df75d4ae-8f25-48f4-af14-bb87206e029d",
         "outcomes": [
           "true",
           "false"
         ],
+        "outputs": [
+          "*"
+        ],
         "inputs": [
           "*"
+        ]
+      }
+    },
+    {
+      "_id": "fc86f06d-b17e-4cda-b10c-fb9fae255d59",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "ad7a63a6-fae2-46c0-be70-bec1f059f064",
+        "outcomes": [
+          "true",
+          "false"
         ],
         "outputs": [
           "*"
         ],
-        "script": "df75d4ae-8f25-48f4-af14-bb87206e029d"
+        "inputs": [
+          "*"
+        ]
       }
     },
     {
-      "_id": "bfcdaf66-5730-40b7-a847-00f62cd539ca",
+      "_id": "ffad651d-d017-43dc-bc3e-ec4768de5cc5",
       "nodeType": "ScriptedDecisionNode",
       "details": {
+        "script": "19a9ba97-3eaf-46ed-9b59-ea9315d81407",
         "outcomes": [
           "true"
         ],
-        "inputs": [
-          "*"
-        ],
         "outputs": [
           "*"
         ],
-        "script": "fdac4efb-d8b8-478b-8300-e11a4c3503df"
+        "inputs": [
+          "*"
+        ]
       }
     },
     {
-      "_id": "cd37f8c8-249f-4d7c-be85-4c2bd262225b",
-      "nodeType": "IdentifyExistingUserNode",
-      "details": {
-        "identifier": "userName",
-        "identityAttribute": "mail"
-      }
-    },
-    {
-      "_id": "22ba2520-ea77-4eb7-b9fb-6767cb98e54e",
-      "nodeType": "InnerTreeEvaluatorNode",
-      "details": {
-        "tree": "CHManageEmailConsent"
-      }
-    },
-    {
-      "_id": "074551cb-6074-4ded-b08e-03c638bfd1a1",
+      "_id": "92108dd7-ce04-4a98-85e5-f429eceb2892",
       "nodeType": "ScriptedDecisionNode",
       "details": {
+        "script": "19a9ba97-3eaf-46ed-9b59-ea9315d81407",
         "outcomes": [
           "true"
         ],
-        "inputs": [
-          "*"
-        ],
         "outputs": [
           "*"
         ],
-        "script": "e69b137b-1bae-4804-af6b-6a93371733ca"
+        "inputs": [
+          "*"
+        ]
       }
     }
   ],
   "tree": {
     "_id": "CHWebFiling",
-    "description": "Journey for WebFiling users",
     "identityResource": "managed/alpha_user",
     "uiConfig": {},
     "entryNodeId": "35f0b7c1-ac55-406d-aebe-12e33ab6125a",
     "nodes": {
+      "074551cb-6074-4ded-b08e-03c638bfd1a1": {
+        "x": 1106,
+        "y": 780.015625,
+        "connections": {},
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "General Error"
+      },
       "09352d71-046f-4fbf-b831-aefb8954705a": {
-        "x": 1546,
+        "x": 1545,
         "y": 425.015625,
         "connections": {
-          "already_associated": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
+          "already_associated": "92108dd7-ce04-4a98-85e5-f429eceb2892",
           "auth_code_inactive": "61877889-8233-4048-b76c-39f882081e40",
           "error": "074551cb-6074-4ded-b08e-03c638bfd1a1",
-          "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+          "true": "92108dd7-ce04-4a98-85e5-f429eceb2892"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Create Association"
@@ -461,7 +476,7 @@
         "y": 211.015625,
         "connections": {
           "error": "074551cb-6074-4ded-b08e-03c638bfd1a1",
-          "user_associated": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
+          "user_associated": "92108dd7-ce04-4a98-85e5-f429eceb2892",
           "user_not_associated": "fc86f06d-b17e-4cda-b10c-fb9fae255d59"
         },
         "nodeType": "ScriptedDecisionNode",
@@ -471,7 +486,7 @@
         "x": 1552,
         "y": 180.015625,
         "connections": {
-          "false": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
+          "false": "92108dd7-ce04-4a98-85e5-f429eceb2892",
           "true": "304e305a-a2f4-4380-a5db-3bca9b5da30e"
         },
         "nodeType": "ScriptedDecisionNode",
@@ -506,12 +521,14 @@
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Add to Session"
       },
-      "074551cb-6074-4ded-b08e-03c638bfd1a1": {
-        "x": 1106,
-        "y": 780.015625,
-        "connections": {},
+      "92108dd7-ce04-4a98-85e5-f429eceb2892": {
+        "x": 1832,
+        "y": 296.015625,
+        "connections": {
+          "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+        },
         "nodeType": "ScriptedDecisionNode",
-        "displayName": "General Error"
+        "displayName": "Add pwd to session"
       }
     },
     "staticNodes": {
@@ -520,13 +537,15 @@
         "y": 80
       },
       "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
-        "x": 1819,
-        "y": 487
+        "x": 1942,
+        "y": 490
       },
       "e301438c-0bd0-429c-ab0c-66126501069a": {
         "x": 1323,
         "y": 769
       }
-    }
+    },
+    "description": "Journey for WebFiling users",
+    "enabled": true
   }
 }
