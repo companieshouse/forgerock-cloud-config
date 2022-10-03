@@ -46,13 +46,13 @@ function fetchCompanyParameters () {
   var companyNo = requestParameters.get('companyNo');
   var jurisdiction = requestParameters.get('jurisdiction');
   if (companyNo && jurisdiction) {
-    _log('company number/jurisdiction found in query params: ' + companyNo.get(0) + ' - ' + jurisdiction.get(0));
+    _log('[FILE FOR THIS COMPANY - FETCH COMPANY QUERY PARAMS] company number/jurisdiction found in query params: ' + companyNo.get(0) + ' - ' + jurisdiction.get(0));
     return {
       companyNo: companyNo.get(0),
       jurisdiction: jurisdiction.get(0)
     };
   }
-  _log('Company number or jurisdiction not found in query params');
+  _log('[FILE FOR THIS COMPANY - FETCH COMPANY QUERY PARAMS] Company number or jurisdiction not found in query params');
   return false;
 }
 
@@ -103,10 +103,10 @@ try {
       }
     } else {
       var jurisdictionIndex = callbacks.get(2).getSelectedIndexes()[0];
-      _log('jurisdiction: ' + jurisdictions[jurisdictionIndex]);
+      _log('[ENTER COMPANY DETAILS] selected jurisdiction: ' + jurisdictions[jurisdictionIndex]);
 
       var companyNumber = callbacks.get(1).getName();
-      _log('companyNumber: ' + companyNumber);
+      _log('[ENTER COMPANY DETAILS] entered companyNumber: ' + companyNumber);
 
       sharedState.put('companyNumber', companyNumber);
       sharedState.put('jurisdiction', jurisdictions[jurisdictionIndex]);
@@ -116,7 +116,7 @@ try {
         .build();
     }
   } else {
-    _log('companyNumber (from query params): ' + companyParamsResponse.companyNo + ' - ' + companyParamsResponse.jurisdiction);
+    _log('[FILE FOR THIS COMPANY - FETCH COMPANY QUERY PARAMS] companyNumber (from query params): ' + companyParamsResponse.companyNo + ' - ' + companyParamsResponse.jurisdiction);
     sharedState.put('companyNumber', companyParamsResponse.companyNo);
     sharedState.put('jurisdiction', companyParamsResponse.jurisdiction);
     sharedState.put('skipConfirmation', true);
@@ -124,6 +124,8 @@ try {
       .putSessionProperty('companyNumber', companyParamsResponse.companyNo)
       .putSessionProperty('jurisdiction', companyParamsResponse.jurisdiction)
       .build();
+
+    //_log('[FILE FOR THIS COMPANY - FETCH COMPANY QUERY PARAMS] Existing session: ' + existingSession.toString());
   }
 } catch (e) {
   _log('ERROR: ' + e);
