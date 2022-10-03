@@ -16,7 +16,8 @@
   
   var StatusFilter = {
     CONFIRMED: 'confirmed',
-    PENDING: 'pending'
+    PENDING: 'pending',
+    NONE: 'none'
   };
   
   function _log (message) {
@@ -314,7 +315,7 @@
         email: fullUser.userName,
         displayName: fullUser.givenName ? fullUser.givenName : fullUser.userName,
         phone: fullUser.telephoneNumber ? fullUser.telephoneNumber : undefined,
-        membershipStatus: status._refProperties.membershipStatus
+        membershipStatus: status ? status._refProperties.membershipStatus : StatusFilter.NONE
       });
     });
     return mapped;
@@ -379,14 +380,20 @@
       });
         
       let mappedMembers = mapCompanyMembers(company._refResourceId, companyInfo.members);
-      let inviter = mapInviter(company._refProperties.inviterId);
-  
+      let inviter;
+      let membershipStatus;
+      
+      if(company._refProperties){
+        inviter = mapInviter(company._refProperties.inviterId);
+        membershipStatus = company._refProperties.membershipStatus;
+      }
+
       outputCompanies.push({
         _id: companyInfo._id,
         name: companyInfo.name,
         number: companyInfo.number,
         membershipStatus: company._refProperties.membershipStatus,
-        members: company._refProperties.membershipStatus === 'confirmed' ? mappedMembers : null,
+        members: membershipStatus === StatusFilter.CONFIRMED ? mappedMembers : null,
         status: companyInfo.status,
         addressLine1: companyInfo.addressLine1,
         addressLine2: companyInfo.addressLine2,

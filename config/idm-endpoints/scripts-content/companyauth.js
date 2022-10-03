@@ -96,6 +96,13 @@
     log('[DELETE RELATIONSHIP] Deleting relationship with company ' + companyId + ' from user ' + subjectId);
     log('[DELETE RELATIONSHIP] patching: ' + 'managed/' + OBJECT_USER + '/' + subjectId);
 
+    if(!currentStatusResponse.status){
+      return {
+        success: false,
+        message: 'No relationship with company ' + companyId + ' could be found for the user ' + subjectId
+      };
+    }
+    
     var payload = [
       {
         operation: 'remove',
@@ -546,7 +553,7 @@
         _id: fullUser._id,
         name: fullUser.givenName,
         email: fullUser.userName,
-        membershipStatus: status._refProperties.membershipStatus
+        membershipStatus: status ? status._refProperties.membershipStatus : AuthorisationStatus.NONE
       });
     });
     return mapped;
