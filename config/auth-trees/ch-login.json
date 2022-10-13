@@ -148,6 +148,23 @@
       }
     },
     {
+      "_id": "60decb8a-2e0a-4526-a4e3-a525ee6e25d4",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "6b876ea7-c36e-475a-9706-f2ff658543cb",
+        "outcomes": [
+          "success",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
       "_id": "6486165d-fb00-4248-93c8-4f36ad2b2cb1",
       "nodeType": "ScriptedDecisionNode",
       "details": {
@@ -481,13 +498,13 @@
       }
     },
     {
-      "_id": "60decb8a-2e0a-4526-a4e3-a525ee6e25d4",
+      "_id": "ca5bf530-da0f-4a75-9399-a8314c668bb5",
       "nodeType": "ScriptedDecisionNode",
       "details": {
-        "script": "6b876ea7-c36e-475a-9706-f2ff658543cb",
+        "script": "7234ebca-e9ca-454f-83c2-79493126c0b8",
         "outcomes": [
-          "success",
-          "error"
+          "noSession",
+          "hasSession"
         ],
         "outputs": [
           "*"
@@ -496,14 +513,29 @@
           "*"
         ]
       }
+    },
+    {
+      "_id": "a047b2d1-e735-40d4-8fa1-648e9ba5454f",
+      "nodeType": "SessionDataNode",
+      "details": {
+        "sessionDataKey": "UserToken",
+        "sharedStateKey": "userName"
+      }
+    },
+    {
+      "_id": "11a167ea-7991-44e8-8cc9-e34a83220e3a",
+      "nodeType": "IdentifyExistingUserNode",
+      "details": {
+        "identityAttribute": "mail",
+        "identifier": "userName"
+      }
     }
   ],
   "tree": {
     "_id": "CHLogin",
     "identityResource": "managed/alpha_user",
-    "description": "CH Platform Login Tree with MFA and legacy password check",
     "uiConfig": {},
-    "entryNodeId": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
+    "entryNodeId": "ca5bf530-da0f-4a75-9399-a8314c668bb5",
     "nodes": {
       "0e167098-4f1b-4a6d-a383-9a415b143dda": {
         "x": 1992,
@@ -583,6 +615,16 @@
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Send MFA email via Notify"
       },
+      "60decb8a-2e0a-4526-a4e3-a525ee6e25d4": {
+        "x": 760,
+        "y": 15.015625,
+        "connections": {
+          "error": "4f019558-f468-46f2-8000-5bba1d9dac45",
+          "success": "4f019558-f468-46f2-8000-5bba1d9dac45"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Create/Update user"
+      },
       "6486165d-fb00-4248-93c8-4f36ad2b2cb1": {
         "x": 1239,
         "y": 251.015625,
@@ -640,8 +682,8 @@
         "displayName": "Choose Email/SMS"
       },
       "94a5f48e-d6e3-4bf4-8edc-45c028a70900": {
-        "x": 218,
-        "y": 136,
+        "x": 216,
+        "y": 93,
         "connections": {
           "true": "c99c82c6-20f5-456d-a94e-680c4f4a6307"
         },
@@ -678,8 +720,8 @@
         "displayName": "Increment Login Count"
       },
       "bd940aa3-c854-4934-b67a-1183d89be21f": {
-        "x": 349,
-        "y": 11,
+        "x": 513,
+        "y": 12,
         "connections": {
           "error": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
           "success": "60decb8a-2e0a-4526-a4e3-a525ee6e25d4"
@@ -716,8 +758,8 @@
         "displayName": "Require MFA"
       },
       "c99c82c6-20f5-456d-a94e-680c4f4a6307": {
-        "x": 324,
-        "y": 442.015625,
+        "x": 363,
+        "y": 429.015625,
         "connections": {
           "false": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
           "true": "bd940aa3-c854-4934-b67a-1183d89be21f"
@@ -767,21 +809,40 @@
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Reset Counter"
       },
-      "60decb8a-2e0a-4526-a4e3-a525ee6e25d4": {
-        "x": 537,
-        "y": 1.015625,
+      "ca5bf530-da0f-4a75-9399-a8314c668bb5": {
+        "x": 112,
+        "y": 423.015625,
         "connections": {
-          "success": "4f019558-f468-46f2-8000-5bba1d9dac45",
-          "error": "4f019558-f468-46f2-8000-5bba1d9dac45"
+          "noSession": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
+          "hasSession": "a047b2d1-e735-40d4-8fa1-648e9ba5454f"
         },
         "nodeType": "ScriptedDecisionNode",
-        "displayName": "Create/Update user"
+        "displayName": "Check Session"
+      },
+      "a047b2d1-e735-40d4-8fa1-648e9ba5454f": {
+        "x": 136,
+        "y": 740.015625,
+        "connections": {
+          "outcome": "11a167ea-7991-44e8-8cc9-e34a83220e3a"
+        },
+        "nodeType": "SessionDataNode",
+        "displayName": "Get Session Data"
+      },
+      "11a167ea-7991-44e8-8cc9-e34a83220e3a": {
+        "x": 1999.828125,
+        "y": 786.015625,
+        "connections": {
+          "false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
+          "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+        },
+        "nodeType": "IdentifyExistingUserNode",
+        "displayName": "Identify Existing User"
       }
     },
     "staticNodes": {
       "startNode": {
-        "x": 70,
-        "y": 190
+        "x": 35,
+        "y": 183
       },
       "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
         "x": 3625,
@@ -791,6 +852,8 @@
         "x": 3639,
         "y": 797.3333333333334
       }
-    }
+    },
+    "description": "CH Platform Login Tree with MFA and legacy password check",
+    "enabled": true
   }
 }

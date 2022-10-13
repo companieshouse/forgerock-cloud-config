@@ -32,24 +32,24 @@ import groovy.json.JsonSlurper
 
  def clientId = clientProperties.clientId
 accessToken.setField("client-id", clientId)
-
+logger.message('[CHSLOG][ATMS] ACCESS TOKEN MOD SCRIPT')
 def claims = accessToken.getClaims()
 if (claims == null) {
-    logger.message('No claims in token')
+    logger.message('[CHSLOG] No claims in token')
 } else {
-    logger.message('Got claims ' + claims)
+    logger.message('[CHSLOG] Got claims ' + claims)
     def claimsObject = new JsonSlurper().parseText(claims)
     if (claimsObject == null) {
-        logger.error('Could not decode claims to object')
+        logger.error('[CHSLOG] Could not decode claims to object')
   } else if (claimsObject.userInfo == null) {
-        logger.error('No userInfo in claims')
+        logger.error('[CHSLOG] No userInfo in claims')
   } else if (claimsObject.userInfo.company == null) {
-        logger.error('No company in claims')
+        logger.error('[CHSLOG] No company in claims')
   } else if (claimsObject.userInfo.company.value == null) {
-        logger.error('No company value in claims')
+        logger.error('[CHSLOG] No company value in claims')
   } else {
         def company = claimsObject.userInfo.company.value
-        logger.error('Got company ' + company)
+        logger.error('[CHSLOG] Got company ' + company)
         accessToken.setField('company', company)
 
         def attributes = identity.getAttributes(["fr-attr-istr1", "fr-attr-imulti2"].toSet())
