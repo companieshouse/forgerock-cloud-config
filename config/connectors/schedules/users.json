@@ -1,0 +1,20 @@
+{
+	"_id": "EWF Users to alpha_user",
+	"enabled": true,
+	"persisted": true,
+	"recoverable": false,
+	"misfirePolicy": "fireAndProceed",
+	"schedule": "0 0 1,13 ? * * *",
+	"repeatInterval": 0,
+	"repeatCount": 0,
+	"type": "cron",
+	"invokeService": "sync",
+	"invokeContext": {
+		"action": "reconcile",
+		"mapping": "webfilingUser_alphaUser"
+	},
+	"invokeLogLevel": "info",
+	"startTime": null,
+	"endTime": null,
+	"concurrentExecution": false
+}

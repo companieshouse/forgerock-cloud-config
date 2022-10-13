@@ -1,3 +1,6 @@
+var _scriptName = 'CH CALLBACK LOGIN ERROR';
+//_log('Starting');
+
 /* 
   ** OUTPUT DATA
     * SHARED STATE:
@@ -11,27 +14,42 @@
 */
 
 var fr = JavaImporter(
-    org.forgerock.openam.auth.node.api.Action,
-    javax.security.auth.callback.TextOutputCallback,
-    com.sun.identity.authentication.callbacks.HiddenValueCallback
-)
+  org.forgerock.openam.auth.node.api.Action,
+  javax.security.auth.callback.TextOutputCallback,
+  com.sun.identity.authentication.callbacks.HiddenValueCallback
+);
 
 if (callbacks.isEmpty()) {
-    var errorMessage = sharedState.get("errorMessage");
-    var level = fr.TextOutputCallback.INFORMATION;
-    var infoMessage;
-    var errorProps;
-    if (errorMessage !== null) {
-        logger.error("[LOGIN ERROR CALLBACK] Generating callback for error: " + errorMessage);
-        level = fr.TextOutputCallback.ERROR;
-        errorProps = sharedState.get("pagePropsJSON");
-        infoMessage = errorMessage;
-        action = fr.Action.send(
-            new fr.TextOutputCallback(level, infoMessage),
-            new fr.HiddenValueCallback("stage", "CH_LOGIN_1"),
-            new fr.HiddenValueCallback("pagePropsJSON", errorProps)
-        ).build();
-    }
+  var errorMessage = sharedState.get('errorMessage'); 
+  if(!errorMessage){
+    _log('Rendered login first time or redirected after session timeout');
+  } else {
+    _log('Error: ' + errorMessage + ' - Shared State : ' + sharedState.toString());
+  }
+  
+  var level = fr.TextOutputCallback.INFORMATION;
+  var infoMessage;
+  var errorProps;
+  if (errorMessage !== null) {
+    _log('Generating callback for error: ' + errorMessage);
+    level = fr.TextOutputCallback.ERROR;
+    errorProps = sharedState.get('pagePropsJSON');
+    infoMessage = errorMessage;
+    action = fr.Action.send(
+      new fr.TextOutputCallback(level, infoMessage),
+      new fr.HiddenValueCallback('stage', 'CH_LOGIN_1'),
+      new fr.HiddenValueCallback('pagePropsJSON', errorProps)
+    ).build();
+  } 
+} else {
+  if(errorMessage){
+    _log('Error with callbacks: ' + errorMessage + ' - Shared State : ' + sharedState.toString());
+  }
 }
 
-outcome = "true";
+outcome = 'true';
+
+//_log('Outcome = ' + _getOutcomeForDisplay());
+
+// LIBRARY START
+// LIBRARY END

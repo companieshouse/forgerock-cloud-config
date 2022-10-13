@@ -1,0 +1,140 @@
+{
+  "target": "managed/alpha_user",
+  "enabled": false,
+  "source": "system/DSBackup/account",
+  "name": "systemDsbackupAccount_managedAlpha_user",
+  "consentRequired": false,
+  "icon": null,
+  "displayName": "systemDsbackupAccount_managedAlpha_user",
+  "properties": [
+    {
+      "target": "mail",
+      "source": "mail"
+    },
+    {
+      "target": "sn",
+      "source": "sn"
+    },
+    {
+      "target": "userName",
+      "source": "uid"
+    },
+    {
+      "target": "givenName",
+      "source": "givenName"
+    },
+    {
+      "target": "password",
+      "source": "userPassword"
+    },
+    {
+      "target": "telephoneNumber",
+      "source": "telephoneNumber"
+    },
+    {
+      "target": "accountStatus",
+      "source": "status"
+    },
+    {
+      "target": "frIndexedString3",
+      "source": "migratedPasswordStatus"
+    },
+    {
+      "target": "frIndexedString2",
+      "source": "legacyPassword"
+    },
+    {
+      "target": "frIndexedString5",
+      "source": "origin"
+    },
+    {
+      "target": "frIndexedInteger1",
+      "source": "ewfCustomerID",
+      "transform": {
+        "type": "text/javascript",
+        "globals": {},
+        "source": "parseInt(source)"
+      }
+    },
+    {
+      "target": "frIndexedInteger2",
+      "source": "ewfAuthID",
+      "transform": {
+        "type": "text/javascript",
+        "globals": {},
+        "source": "parseInt(source)"
+      }
+    },
+    {
+      "target": "frIndexedMultivalued2",
+      "source": "authorisedCompanies"
+    }
+  ],
+  "policies": [
+    {
+      "action": "EXCEPTION",
+      "situation": "AMBIGUOUS"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "SOURCE_MISSING"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "MISSING"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "FOUND_ALREADY_LINKED"
+    },
+    {
+      "action": "DELETE",
+      "situation": "UNQUALIFIED"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "UNASSIGNED"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "LINK_ONLY"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "TARGET_IGNORED"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "SOURCE_IGNORED"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "ALL_GONE"
+    },
+    {
+      "action": "UPDATE",
+      "situation": "CONFIRMED"
+    },
+    {
+      "action": "UPDATE",
+      "situation": "FOUND"
+    },
+    {
+      "action": "CREATE",
+      "situation": "ABSENT"
+    }
+  ],
+  "correlationQuery": [
+    {
+      "linkQualifier": "default",
+      "expressionTree": {
+        "any": [
+          "userName"
+        ]
+      },
+      "mapping": "systemDsbackupAccount_managedAlpha_user",
+      "type": "text/javascript",
+      "file": "ui/correlateTreeToQueryFilter.js"
+    }
+  ]
+}

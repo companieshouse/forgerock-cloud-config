@@ -72,7 +72,7 @@
 		"initialSize": "2",
 		"defaultTransactionIsolation": -1,
 		"numTestsPerEvictionRun": 0,
-		"url": "jdbc:oracle:thin:@//chd-webdb.internal.ch:1521/WEBDEV",
+		"url": "jdbc:oracle:thin:@//ewfdb.development.heritage.aws.internal:1521/EWF",
 		"testOnBorrow": false,
 		"fairQueue": true,
 		"accessToUnderlyingConnectionAllowed": true,
@@ -133,7 +133,7 @@
 				},
 				"PARENT_USERNAME": {
 					"type": "string",
-					"nativeName": "PARENT_USERNAME",
+					"nativeName": "__NAME__",
 					"nativeType": "string",
 					"required": false
 				},

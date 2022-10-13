@@ -1,282 +1,182 @@
 {
-	"nodes": [
-		{
-			"_id": "b802b783-cae6-4b4e-849c-2ab9c7b80391",
-			"nodeType": "ScriptedDecisionNode",
-			"details": {
-				"inputs": ["*"],
-				"outcomes": ["hasSession", "noSession"],
-				"outputs": ["*"],
-				"script": "c4001e02-469c-4cc4-bf95-9f43d7e46568"
-			}
-		},
-		{
-			"_id": "535f7949-b52e-4a8b-835d-ba46dff7ea51",
-			"nodeType": "SessionDataNode", 
-			"details": {
-				"sharedStateKey":"userName",
-				"sessionDataKey":"UserToken"
-			}				
-		},
-		{
-            "_id": "3ece9748-a455-43b1-99b2-20fea28ed6ee",
-            "nodeType":"IdentifyExistingUserNode",
-            "details": {
-                "identifier":"userName",
-                "identityAttribute":"mail"
-            }
+  "nodes": [
+    {
+      "_id": "1aeb1667-8dfe-417f-abaf-b02626fa5392",
+      "nodeType": "PatchObjectNode",
+      "details": {
+        "identityResource": "managed/alpha_user",
+        "patchAsObject": false,
+        "ignoredFields": [
+          "userName"
+        ],
+        "identityAttribute": "userName"
+      }
+    },
+    {
+      "_id": "3ece9748-a455-43b1-99b2-20fea28ed6ee",
+      "nodeType": "IdentifyExistingUserNode",
+      "details": {
+        "identityAttribute": "mail",
+        "identifier": "userName"
+      }
+    },
+    {
+      "_id": "535f7949-b52e-4a8b-835d-ba46dff7ea51",
+      "nodeType": "SessionDataNode",
+      "details": {
+        "sessionDataKey": "UserToken",
+        "sharedStateKey": "userName"
+      }
+    },
+    {
+      "_id": "9cebfbba-00c4-41a2-9772-7d4e80699e47",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "fdac4efb-d8b8-478b-8300-e11a4c3503df",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "a46a26c4-eb14-4f61-be94-1eca72022424",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "6cd2619d-84ec-4eaf-a377-e6a6230c82a6",
+        "outcomes": [
+          "skip",
+          "fail",
+          "otp",
+          "name_only"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "b802b783-cae6-4b4e-849c-2ab9c7b80391",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "c4001e02-469c-4cc4-bf95-9f43d7e46568",
+        "outcomes": [
+          "hasSession",
+          "noSession"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "59c4be80-649a-491e-b1be-92299e3b85ca",
+      "nodeType": "InnerTreeEvaluatorNode",
+      "details": {
+        "tree": "CHMultiFactorGeneric"
+      }
+    }
+  ],
+  "tree": {
+    "_id": "CHWebFiling-CompleteProfile",
+    "identityResource": "managed/alpha_user",
+    "uiConfig": {},
+    "entryNodeId": "3ece9748-a455-43b1-99b2-20fea28ed6ee",
+    "nodes": {
+      "1aeb1667-8dfe-417f-abaf-b02626fa5392": {
+        "x": 1542,
+        "y": 278.015625,
+        "connections": {
+          "FAILURE": "e301438c-0bd0-429c-ab0c-66126501069a",
+          "PATCHED": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
         },
-		{
-			"_id": "a46a26c4-eb14-4f61-be94-1eca72022424",
-			"nodeType": "ScriptedDecisionNode",
-			"details": {
-				"inputs": ["*"],
-				"outcomes": ["skip", "fail", "otp", "name_only"],
-				"outputs": ["*"],
-				"script": "6cd2619d-84ec-4eaf-a377-e6a6230c82a6"
-			}
-		},
-		{
-			"_id": "609cc371-1b68-4b18-8d95-4162b83662e9",
-			"nodeType": "ScriptedDecisionNode",
-			"details": {
-				"inputs": ["*"],
-				"outcomes": ["true", "false"],
-				"outputs": ["*"],
-				"script": "df67765e-df3a-4503-9ba5-35c992b39259"
-			}
-		},
-		{
-            "_id": "6feedc53-41e0-49d0-b181-a8b43ccdadfe",
-            "nodeType": "OneTimePasswordGeneratorNode",
-			"details": {
-                "length": 6
-            }
+        "nodeType": "PatchObjectNode",
+        "displayName": "Patch Object"
+      },
+      "3ece9748-a455-43b1-99b2-20fea28ed6ee": {
+        "x": 401,
+        "y": 229.015625,
+        "connections": {
+          "false": "e301438c-0bd0-429c-ab0c-66126501069a",
+          "true": "a46a26c4-eb14-4f61-be94-1eca72022424"
         },
-		{
-			"_id": "816ad4ee-870e-473b-aac6-feb203f3811f",
-			"nodeType": "ScriptedDecisionNode",
-			"details": {
-				"inputs": ["*"],
-				"outcomes": ["true", "false"],
-				"outputs": ["*"],
-				"script": "b276c566-622e-11eb-ae93-0242ac130002"
-			}
-		},
-		{
-            "_id": "45d936c3-7d04-48d8-b7cb-02448fc9991e",
-            "nodeType": "PageNode",
-			"details": {
-                "nodes": [{
-                    "_id": "50869d72-4bbf-4ab5-b331-037ab48ada38",
-                    "nodeType": "ScriptedDecisionNode",
-                    "displayName": "Callback Show Number"
-                }, {
-                    "_id": "02d1400e-cf84-4b6e-984e-7958d8a11636",
-                    "nodeType": "OneTimePasswordCollectorDecisionNode",
-                    "displayName": "OTP Collector Decision"
-                }],
-                "pageDescription": {
-                    "desc": "Please enter the code you received"
-                },
-                "pageHeader": {
-                    "header": "Please enter your code"
-                },
-                "stage": "PHONE_OTP"
-            }
+        "nodeType": "IdentifyExistingUserNode",
+        "displayName": "Identify Existing User"
+      },
+      "535f7949-b52e-4a8b-835d-ba46dff7ea51": {
+        "x": 249,
+        "y": 414.015625,
+        "connections": {
+          "outcome": "3ece9748-a455-43b1-99b2-20fea28ed6ee"
         },
-		{
-			"_id": "50869d72-4bbf-4ab5-b331-037ab48ada38",
-			"nodeType": "ScriptedDecisionNode",
-			"details": {
-				"inputs": ["*"],
-				"outcomes": ["True"],
-				"outputs": ["*"],
-				"script": "72e60c8b-f4e9-4696-8218-6efee1f5d97b"
-			}
-		},
-		{
-            "_id": "02d1400e-cf84-4b6e-984e-7958d8a11636",
-            "nodeType": "OneTimePasswordCollectorDecisionNode",
-			"details": {
-                "passwordExpiryTime": 5
-            }
+        "nodeType": "SessionDataNode",
+        "displayName": "Get Session Data"
+      },
+      "9cebfbba-00c4-41a2-9772-7d4e80699e47": {
+        "x": 1312,
+        "y": 534.015625,
+        "connections": {},
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Max Number Exceeded"
+      },
+      "a46a26c4-eb14-4f61-be94-1eca72022424": {
+        "x": 808,
+        "y": 44.015625,
+        "connections": {
+          "fail": "3ece9748-a455-43b1-99b2-20fea28ed6ee",
+          "name_only": "1aeb1667-8dfe-417f-abaf-b02626fa5392",
+          "skip": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
+          "otp": "59c4be80-649a-491e-b1be-92299e3b85ca"
         },
-		{
-            "_id": "1aeb1667-8dfe-417f-abaf-b02626fa5392",
-            "nodeType": "PatchObjectNode",
-			"details": {
-                "identityAttribute": "userName",
-                "identityResource": "managed/alpha_user",
-                "ignoredFields": ["userName"],
-                "patchAsObject": false
-            }
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "complete profile"
+      },
+      "b802b783-cae6-4b4e-849c-2ab9c7b80391": {
+        "x": 74,
+        "y": 548.015625,
+        "connections": {
+          "hasSession": "535f7949-b52e-4a8b-835d-ba46dff7ea51",
+          "noSession": "e301438c-0bd0-429c-ab0c-66126501069a"
         },
-		{
-            "_id": "c91bca42-14ab-44de-a17b-ca6201fddfcc",
-            "nodeType": "RetryLimitDecisionNode",
-			"details": {
-                "retryLimit": 3
-            }
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Check for Session"
+      },
+      "59c4be80-649a-491e-b1be-92299e3b85ca": {
+        "x": 1144,
+        "y": 339.015625,
+        "connections": {
+          "false": "9cebfbba-00c4-41a2-9772-7d4e80699e47",
+          "true": "1aeb1667-8dfe-417f-abaf-b02626fa5392"
         },
-		{
-            "_id": "a892b1a6-5f10-4ea6-aa5c-31772a90c987",
-            "nodeType": "ScriptedDecisionNode",
-			"details": {
-                "inputs": ["*"],
-                "outcomes": ["true"],
-                "outputs": ["*"],
-                "script": "bf6c0ac8-8e13-4f11-8d99-d01b23e02a5c"
-            }
-        },
-		{
-			"_id": "9cebfbba-00c4-41a2-9772-7d4e80699e47",
-            "nodeType": "ScriptedDecisionNode",
-			"details": {
-                "inputs": ["*"],
-                "outcomes": ["true"],
-                "outputs": ["*"],
-                "script": "fdac4efb-d8b8-478b-8300-e11a4c3503df"
-            }
-        }
-	],
-    "tree": {
-		"_id": "CHWebFiling-CompleteProfile",
-		"description": "Add name and phone number to existing account",
-		"identityResource": "managed/alpha_user",
-		"uiConfig": {},
-		"entryNodeId": "3ece9748-a455-43b1-99b2-20fea28ed6ee",
-		"nodes": {
-			"1aeb1667-8dfe-417f-abaf-b02626fa5392": {
-				"x": 1907,
-				"y": 122.015625,
-				"connections": {
-					"FAILURE": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"PATCHED": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
-				},
-				"nodeType": "PatchObjectNode",
-				"displayName": "Patch Object"
-			},
-			"3ece9748-a455-43b1-99b2-20fea28ed6ee": {
-				"x": 401,
-				"y": 229.015625,
-				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"true": "a46a26c4-eb14-4f61-be94-1eca72022424"
-				},
-				"nodeType": "IdentifyExistingUserNode",
-				"displayName": "Identify Existing User"
-			},
-			"45d936c3-7d04-48d8-b7cb-02448fc9991e": {
-				"x": 1648,
-				"y": 172.015625,
-				"connections": {
-					"false": "c91bca42-14ab-44de-a17b-ca6201fddfcc",
-					"true": "1aeb1667-8dfe-417f-abaf-b02626fa5392"
-				},
-				"nodeType": "PageNode",
-				"displayName": "Enter OTP"
-			},
-			"535f7949-b52e-4a8b-835d-ba46dff7ea51": {
-				"x": 249,
-				"y": 414.015625,
-				"connections": {
-					"outcome": "3ece9748-a455-43b1-99b2-20fea28ed6ee"
-				},
-				"nodeType": "SessionDataNode",
-				"displayName": "Get Session Data"
-			},
-			"609cc371-1b68-4b18-8d95-4162b83662e9": {
-				"x": 1062,
-				"y": 247.015625,
-				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"true": "6feedc53-41e0-49d0-b181-a8b43ccdadfe"
-				},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Create Notify JWT - SMS"
-			},
-			"6feedc53-41e0-49d0-b181-a8b43ccdadfe": {
-				"x": 1241,
-				"y": 73.015625,
-				"connections": {
-					"outcome": "816ad4ee-870e-473b-aac6-feb203f3811f"
-				},
-				"nodeType": "OneTimePasswordGeneratorNode",
-				"displayName": "HOTP Generator"
-			},
-			"816ad4ee-870e-473b-aac6-feb203f3811f": {
-				"x": 1386,
-				"y": 193.015625,
-				"connections": {
-					"false": "e301438c-0bd0-429c-ab0c-66126501069a",
-					"true": "45d936c3-7d04-48d8-b7cb-02448fc9991e"
-				},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Send OTP"
-			},
-			"9cebfbba-00c4-41a2-9772-7d4e80699e47": {
-				"x": 1868,
-				"y": 750.015625,
-				"connections": {},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Max Number Exceeded"
-			},
-			"a46a26c4-eb14-4f61-be94-1eca72022424": {
-				"x": 808,
-				"y": 44.015625,
-				"connections": {
-					"fail": "3ece9748-a455-43b1-99b2-20fea28ed6ee",
-					"name_only": "1aeb1667-8dfe-417f-abaf-b02626fa5392",
-					"otp": "609cc371-1b68-4b18-8d95-4162b83662e9",
-					"skip": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
-				},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "complete profile"
-			},
-			"a892b1a6-5f10-4ea6-aa5c-31772a90c987": {
-				"x": 2098,
-				"y": 653.015625,
-				"connections": {
-					"true": "45d936c3-7d04-48d8-b7cb-02448fc9991e"
-				},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Raise OTP Error"
-			},
-			"b802b783-cae6-4b4e-849c-2ab9c7b80391": {
-				"x": 74,
-				"y": 548.015625,
-				"connections": {
-					"hasSession": "535f7949-b52e-4a8b-835d-ba46dff7ea51",
-					"noSession": "e301438c-0bd0-429c-ab0c-66126501069a"
-				},
-				"nodeType": "ScriptedDecisionNode",
-				"displayName": "Check for Session"
-			},
-			"c91bca42-14ab-44de-a17b-ca6201fddfcc": {
-				"x": 1873,
-				"y": 620.015625,
-				"connections": {
-					"Reject": "9cebfbba-00c4-41a2-9772-7d4e80699e47",
-					"Retry": "a892b1a6-5f10-4ea6-aa5c-31772a90c987"
-				},
-				"nodeType": "RetryLimitDecisionNode",
-				"displayName": "Retry Limit Decision"
-			}
-		},
-		"staticNodes": {
-			"startNode": {
-				"x": 62,
-				"y": 103
-			},
-			"70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
-				"x": 2196,
-				"y": 254
-			},
-			"e301438c-0bd0-429c-ab0c-66126501069a": {
-				"x": 1615,
-				"y": 836
-			}
-		}
-	}
+        "nodeType": "InnerTreeEvaluatorNode",
+        "displayName": "Check OTP SubFlow"
+      }
+    },
+    "staticNodes": {
+      "startNode": {
+        "x": 62,
+        "y": 103
+      },
+      "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
+        "x": 1818,
+        "y": 187
+      },
+      "e301438c-0bd0-429c-ab0c-66126501069a": {
+        "x": 1615,
+        "y": 836
+      }
+    },
+    "description": "Add name and phone number to existing account"
+  }
 }

@@ -1,30 +1,43 @@
 {
-    "endpoints": [
-        {
-            "endpointName": "companyauth",
-            "scriptFileName": "companyauth.js"
-        },
-        {
-            "endpointName": "company",
-            "scriptFileName": "company.js"
-        },
-        {
-            "endpointName": "scrs",
-            "scriptFileName": "scrs.js"
-        }
-    ],
-    "tasks": [
-        {
-            "taskName": "removeExpiredOnboardedUsers",
-            "repeatInterval": 300000,
-            "queryFilter": "((/frIndexedDate2 lt \"${Time.now - 7d}Z\"))",
-            "scriptFileName": "removeExpiredOnboardedUsers.js"
-        },
-        {
-            "taskName": "removeExpiredInvitations",
-            "repeatInterval": 300000,
-            "queryFilter": "((/frIndexedMultivalued1 lt \"${Time.now - 7d}Z\"))",
-            "scriptFileName": "removeExpiredInvitations.js"
-        }
-    ]
+  "endpoints": [
+    {
+      "endpointName": "companyauth",
+      "scriptFileName": "companyauth.js"
+    },
+    {
+      "endpointName": "company",
+      "scriptFileName": "company.js"
+    },
+    {
+      "endpointName": "scrs",
+      "scriptFileName": "scrs.js"
+    }
+  ],
+  "tasks": [
+    {
+      "taskName": "removeExpiredOnboardedUsers",
+      "repeatInterval": {
+        "$int": "&{esv.removeexpiredonboardedusers.repeatinterval|1800000}"
+      },
+      "queryFilter": "((/frIndexedDate2 lt \"${Time.now - 7d}Z\"))",
+      "scriptFileName": "removeExpiredOnboardedUsers.js"
+    },
+    {
+      "taskName": "removeExpiredInvitations",
+      "repeatInterval": {
+        "$int": "&{esv.removeexpiredinvitations.repeatinterval|1800000}"
+      },
+      "queryFilter": "((/frIndexedMultivalued1 lt \"${Time.now - 7d}Z\"))",
+      "scriptFileName": "removeExpiredInvitations.js"
+    }
+  ],
+  "scheduledScripts": [
+    {
+      "scheduleName": "scrs",
+      "scriptFileName": "scrs-wrapper.js",
+      "repeatInterval": {
+        "$int": "&{esv.scrs.script.repeatinterval|1800000}"
+      }
+    }
+  ]
 }

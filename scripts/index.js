@@ -1,6 +1,7 @@
 const updateAgents = require('./update-agents')
 const updateApplications = require('./update-applications')
 const updateAuthTrees = require('./update-auth-trees')
+const getAuthTree = require('./get-auth-tree')
 const updateConnectorDefinitions = require('./update-connector-definitions')
 const updateConnectorMappings = require('./update-connector-mappings')
 const updateConnectorSchedules = require('./update-connector-schedules')
@@ -16,11 +17,19 @@ const updateUiConfig = require('./update-ui-config')
 const updateUserRoles = require('./update-user-roles')
 const updateIdmEndpoints = require('./update-idm-endpoints')
 const updateIdmAccessConfig = require('./update-idm-access-config')
+const updateManagedUsers = require('./update-managed-users')
+const getManagedUser = require('./get_managed_user')
+const updateVariables = require('./update-variables')
+const updateSecrets = require('./update-secrets')
+const restartFidc = require('./restart-fidc')
+const getEsvConcourse = require('./get-esv-concourse')
+const updateEsvAndRestart = require('./update-esv-and-restart')
 
 module.exports = {
   updateAgents,
   updateApplications,
   updateAuthTrees,
+  getAuthTree,
   updateConnectorDefinitions,
   updateConnectorMappings,
   updateConnectorSchedules,
@@ -35,5 +44,12 @@ module.exports = {
   updateUiConfig,
   updateUserRoles,
   updateIdmEndpoints,
-  updateIdmAccessConfig
+  updateIdmAccessConfig,
+  getManagedUser,
+  updateManagedUsers,
+  updateVariables,
+  updateSecrets,
+  restartFidc,
+  getEsvConcourse,
+  updateEsvAndRestart
 }

@@ -1,6 +1,8 @@
 # ForgeRock Identity Cloud Configuration
 
-This repository contains scripts and configuration for Companies House ForgeRock Identity Cloud instance. All scripts are used as part of the CI/CD pipeline but can also be ran locally.
+This repository contains scripts and configuration for the Companies House ForgeRock Identity Cloud tenant. All scripts are used as part of the CI/CD pipeline but can also be ran locally.
+
+Not all steps can be run against Staging and Production tenants; all changes to static configuration must be applied via the configuration promotion process. Changes to dynamic configuration can be aplied to all types of tenants. For more information refer to the Identity Cloud docs: https://backstage.forgerock.com/docs/idcloud/latest/tenants/promote-configuration.html  
 
 ## Running Locally
 

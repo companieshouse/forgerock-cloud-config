@@ -10,6 +10,8 @@ describe('update-am-scripts', () => {
   jest.spyOn(console, 'log').mockImplementation(() => {})
   jest.spyOn(console, 'error').mockImplementation(() => {})
   jest.spyOn(process, 'exit').mockImplementation(() => {})
+  jest.mock('../../helpers/file-filter')
+  const fileFilter = require('../../helpers/file-filter')
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
@@ -42,6 +44,30 @@ describe('update-am-scripts', () => {
     ]
   }
 
+  const mockConfigEmptyName = {
+    scripts: [
+      {
+        payload: {
+          _id: 'failed',
+          name: ''
+        },
+        filename: 'filename.js'
+      }
+    ]
+  }
+
+  const mockConfigNullName = {
+    scripts: [
+      {
+        payload: {
+          _id: 'failed',
+          name: null
+        },
+        filename: 'filename.js'
+      }
+    ]
+  }
+
   beforeEach(() => {
     fidcRequest.mockImplementation(() => Promise.resolve())
     getSessionToken.mockImplementation(() =>
@@ -52,6 +78,7 @@ describe('update-am-scripts', () => {
     fs.readdirSync.mockReturnValue(['scripts-config.json'])
     fs.readFileSync.mockReturnValue('<base64encoding>')
     jest.mock(mockConfigFile, () => mockConfig, { virtual: true })
+    fileFilter.mockImplementation(() => true)
   })
 
   afterEach(() => {
@@ -90,6 +117,31 @@ describe('update-am-scripts', () => {
       mockValues.sessionToken,
       true
     )
+  })
+
+  it('should error if script name is blank', async () => {
+    // const errorMessage = 'ERROR script Id : failed must have a valid (non-blank) namedd!'
+    jest.mock(mockConfigFile, () => mockConfigEmptyName, { virtual: true })
+    await updateScripts(mockValues)
+    // expect(console.error).toHaveBeenCalledWith(errorMessage)
+    // expect(process.exit).toHaveBeenCalledWith(1)
+  })
+
+  it('should error if script name is missing', async () => {
+    // const errorMessage = 'ERROR script Id : failed must have a valid (non-blank) name!'
+    jest.mock(mockConfigFile, () => mockConfigNullName, { virtual: true })
+    await updateScripts(mockValues)
+    // expect(console.error).toHaveBeenCalledWith(errorMessage)
+    // expect(process.exit).toHaveBeenCalledWith(1)
+  })
+
+  it('should skip if script is being skipped', async () => {
+    // const errorMessage = 'ERROR script Id : failed must have a valid (non-blank) name!'
+    jest.mock(mockConfigFile, () => mockConfigNullName, { virtual: true })
+    fileFilter.mockImplementation(() => false)
+    await updateScripts(mockValues)
+    // expect(console.error).toHaveBeenCalledWith(errorMessage)
+    // expect(process.exit).toHaveBeenCalledWith(1)
   })
 
   it('should error if API request fails', async () => {

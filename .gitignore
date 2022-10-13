@@ -2,7 +2,10 @@ node_modules
 coverage
 .DS_Store
 .env
+.env.*
+.idea
 qa-tests/Reports
+FIDC_RESTART_REQUIRED.txt
 
 # Sensitive config files
 config/services/oauth2-provider.json
@@ -17,3 +20,6 @@ config/applications/api-filing-m2m-client.json
 config/applications/api-filing-web-client.json
 config/applications/chs-internal-client.json
 config/agents/ig-agent.json
+config/managed-users/tree-service-user.json
+config/managed-users/admin-client-test.json
+

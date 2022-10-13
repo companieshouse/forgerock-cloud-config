@@ -1,3 +1,6 @@
+var _scriptName = 'CH CHECK PASSWORD STATUS';
+_log('Starting');
+
 /*
   ** INPUT DATA
     * SHARED STATE:
@@ -10,43 +13,50 @@
 */
 
 var NodeOutcome = {
-    VALID: "valid",
-    UPDATE: "update"
-}
+  VALID: 'valid',
+  UPDATE: 'update'
+};
 
 // frIndexedString3
-var PASSWORD_MIGRATED_FIELD = "fr-attr-istr3";
+var PASSWORD_MIGRATED_FIELD = 'fr-attr-istr3';
 
 // restore the password from shared state
-function pwdRestore() {
-    transientState.put("password", sharedState.get("password"));
-    transientState.put("objectAttributes", { "password": sharedState.get("password") });
-    //cleanup the password from shared state
-    sharedState.put("password", null);
+function pwdRestore () {
+  transientState.put('password', sharedState.get('password'));
+  transientState.put('objectAttributes', { 'password': sharedState.get('password') });
+  //cleanup the password from shared state
+  //sharedState.put('password', null);
 }
 
-function checkPasswordStatus() {
-    var userId = sharedState.get("_id");
-    logger.error("[CHECK PASSWORD STATUS] Found userId: " + userId);
+function checkPasswordStatus () {
+  var userId = sharedState.get('_id');
+  _log('Found userId: ' + userId);
 
-    if (idRepository.getAttribute(userId, PASSWORD_MIGRATED_FIELD).iterator().hasNext()) {
-        var status = idRepository.getAttribute(userId, PASSWORD_MIGRATED_FIELD).iterator().next();
-        logger.error("[CHECK PASSWORD STATUS] Found status: " + status);
-        if (status.equals("migrated")) {
-            // Migrated user has already validated their password
-            return NodeOutcome.VALID;
-        } else {
-            // Migrated user validation is pending
-            return NodeOutcome.UPDATE;
-        }
+  if (idRepository.getAttribute(userId, PASSWORD_MIGRATED_FIELD).iterator().hasNext()) {
+    var status = idRepository.getAttribute(userId, PASSWORD_MIGRATED_FIELD).iterator().next();
+    _log('[CHECK PASSWORD STATUS] Found status: ' + status);
+    if (status.equals('migrated')) {
+      // Migrated user has already validated their password
+      return NodeOutcome.VALID;
     } else {
-        // Not a migrated user
-        logger.error("[CHECK PASSWORD STATUS] " + PASSWORD_MIGRATED_FIELD + " not set");
-        return NodeOutcome.VALID;
+      // Migrated user validation is pending
+      return NodeOutcome.UPDATE;
     }
+  } else {
+    // Not a migrated user
+    _log(PASSWORD_MIGRATED_FIELD + ' not set');
+    return NodeOutcome.VALID;
+  }
 }
+
+// _log('Shared State : ' + sharedState.toString());
 
 // restore the password from shared state
 pwdRestore();
 
 outcome = checkPasswordStatus();
+
+_log('Outcome = ' + _getOutcomeForDisplay());
+
+// LIBRARY START
+// LIBRARY END

@@ -24,6 +24,7 @@ describe('update-connector-mappings', () => {
 
   const mockConfig = {
     consentRequired: false,
+    enabled: true,
     displayName: 'MongodbUsers',
     icon: null,
     name: 'MongodbUsers',
@@ -45,6 +46,44 @@ describe('update-connector-mappings', () => {
         target: 'sn'
       }
     ]
+  }
+
+  const mockConfigWithScript = {
+    consentRequired: false,
+    enabled: true,
+    displayName: 'MongodbUsers',
+    icon: null,
+    name: 'MongodbUsers',
+    properties: [
+      {
+        source: 'email',
+        target: 'mail'
+      },
+      {
+        source: 'email',
+        target: 'userName'
+      },
+      {
+        source: 'forename',
+        target: 'givenName'
+      },
+      {
+        source: 'surname',
+        target: 'sn'
+      }
+    ],
+    onCreate: {
+      source: 'my script',
+      type: 'text/javascript'
+    },
+    onError: {
+      source: 'my script',
+      type: 'text/javascript'
+    },
+    onUpdate: {
+      source: 'my script',
+      type: 'text/javascript'
+    }
   }
 
   const expectedUrl = `${mockValues.fidcUrl}/openidm/config/sync`
@@ -81,6 +120,38 @@ describe('update-connector-mappings', () => {
     await updateConnectorMappings(mockValues)
     expect(console.error).toHaveBeenCalledWith(errorMessage)
     expect(process.exit).toHaveBeenCalledWith(1)
+  })
+
+  it('should call API using config file merging scripts', async () => {
+    expect.assertions(2)
+    const expectedBody = { mappings: [mockConfig] }
+
+    fs.existsSync.mockReturnValue(true)
+    fs.readFileSync.mockReturnValue('my script')
+
+    await updateConnectorMappings(mockValues)
+    expect(fidcRequest.mock.calls.length).toEqual(1)
+    expect(fidcRequest).toHaveBeenCalledWith(
+      expectedUrl,
+      expectedBody,
+      mockValues.accessToken
+    )
+  })
+
+  it('should call API using config file merging scripts where exists', async () => {
+    expect.assertions(2)
+    const expectedBody = { mappings: [mockConfigWithScript] }
+
+    fs.existsSync.mockReturnValue(true)
+    fs.readFileSync.mockReturnValue('my script')
+
+    await updateConnectorMappings(mockValues)
+    expect(fidcRequest.mock.calls.length).toEqual(1)
+    expect(fidcRequest).toHaveBeenCalledWith(
+      expectedUrl,
+      expectedBody,
+      mockValues.accessToken
+    )
   })
 
   it('should call API using config file', async () => {

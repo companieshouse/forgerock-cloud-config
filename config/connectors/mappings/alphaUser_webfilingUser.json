@@ -1,0 +1,99 @@
+{
+  "target": "system/WebfilingUser/webfilingUser",
+  "enabled": true,
+  "source": "managed/alpha_user",
+  "name": "alphaUser_webfilingUser",
+  "consentRequired": false,
+  "icon": null,
+  "displayName": "Sync FIDC user to WebFiling user",
+  "onError": {
+    "type": "text/javascript",
+    "source": "// change via external file"
+  },
+  "onUpdate": {
+    "type": "text/javascript",
+    "source": "// change via external file"
+  },
+  "properties": [
+    {
+      "target": "PARENT_USERNAME",
+      "source": "frIndexedString1"
+    },
+    {
+      "target": "PASSWORD",
+      "source": "frIndexedString2"
+    },
+    {
+      "target": "EMAIL",
+      "source": "mail"
+    }
+  ],
+  "policies": [
+    {
+      "action": "EXCEPTION",
+      "situation": "AMBIGUOUS"
+    },
+    {
+      "action": "DELETE",
+      "situation": "SOURCE_MISSING"
+    },
+    {
+      "action": "CREATE",
+      "situation": "MISSING"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "FOUND_ALREADY_LINKED"
+    },
+    {
+      "action": "DELETE",
+      "situation": "UNQUALIFIED"
+    },
+    {
+      "action": "UPDATE",
+      "situation": "UNASSIGNED"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "LINK_ONLY"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "TARGET_IGNORED"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "SOURCE_IGNORED"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "ALL_GONE"
+    },
+    {
+      "action": "UPDATE",
+      "situation": "CONFIRMED"
+    },
+    {
+      "action": "UPDATE",
+      "situation": "FOUND"
+    },
+    {
+      "action": "CREATE",
+      "situation": "ABSENT"
+    }
+  ],
+  "links": "webfilingUser_alphaUser",
+  "correlationQuery": [
+    {
+      "linkQualifier": "default",
+      "expressionTree": {
+        "all": [
+          "PARENT_USERNAME"
+        ]
+      },
+      "mapping": "alphaUser_webfilingUser",
+      "type": "text/javascript",
+      "file": "ui/correlateTreeToQueryFilter.js"
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "nodes": [
+    {
+      "_id": "0c091c49-f3af-48fb-ac6f-07fba0499dd6",
+      "nodeType": "PageNode",
+      "details": {
+        "nodes": [
+          {
+            "_id": "7fcaf48e-a754-4959-858b-05b2933b825f",
+            "nodeType": "ValidatedUsernameNode",
+            "displayName": "Platform Username"
+          },
+          {
+            "_id": "d3ce2036-1523-4ce8-b1a2-895a2a036667",
+            "nodeType": "AttributeCollectorNode",
+            "displayName": "Attribute Collector"
+          },
+          {
+            "_id": "3d8709a1-f09f-4d1f-8094-2850e472c1db",
+            "nodeType": "ValidatedPasswordNode",
+            "displayName": "Platform Password"
+          },
+          {
+            "_id": "120c69d3-90b4-4ad4-b7af-380e8b119340",
+            "nodeType": "KbaCreateNode",
+            "displayName": "KBA Definition"
+          },
+          {
+            "_id": "b4a0e915-c15d-4b83-9c9d-18347d645976",
+            "nodeType": "AcceptTermsAndConditionsNode",
+            "displayName": "Accept Terms and Conditions"
+          }
+        ],
+        "pageDescription": {
+          "en": "Signing up is fast and easy.<br>Already have an account? <a href='#/service/Login'>Sign In</a>"
+        },
+        "pageHeader": {
+          "en": "Sign Up"
+        }
+      }
+    },
+    {
+      "_id": "7fcaf48e-a754-4959-858b-05b2933b825f",
+      "nodeType": "ValidatedUsernameNode",
+      "details": {
+        "usernameAttribute": "userName",
+        "validateInput": true
+      }
+    },
+    {
+      "_id": "d3ce2036-1523-4ce8-b1a2-895a2a036667",
+      "nodeType": "AttributeCollectorNode",
+      "details": {
+        "attributesToCollect": [
+          "givenName",
+          "sn",
+          "mail",
+          "preferences/marketing",
+          "preferences/updates"
+        ],
+        "identityAttribute": "userName",
+        "validateInputs": true,
+        "required": true
+      }
+    },
+    {
+      "_id": "3d8709a1-f09f-4d1f-8094-2850e472c1db",
+      "nodeType": "ValidatedPasswordNode",
+      "details": {
+        "passwordAttribute": "password",
+        "validateInput": true
+      }
+    },
+    {
+      "_id": "120c69d3-90b4-4ad4-b7af-380e8b119340",
+      "nodeType": "KbaCreateNode",
+      "details": {
+        "message": {
+          "en": "Select a security question"
+        }
+      }
+    },
+    {
+      "_id": "b4a0e915-c15d-4b83-9c9d-18347d645976",
+      "nodeType": "AcceptTermsAndConditionsNode",
+      "details": {}
+    },
+    {
+      "_id": "97a15eb2-a015-4b6d-81a0-be78c3aa1a3b",
+      "nodeType": "IncrementLoginCountNode",
+      "details": {
+        "identityAttribute": "userName"
+      }
+    },
+    {
+      "_id": "ad5dcbb3-7335-49b7-b3e7-7d850bb88237",
+      "nodeType": "CreateObjectNode",
+      "details": {
+        "identityResource": "managed/alpha_user"
+      }
+    }
+  ],
+  "tree": {
+    "_id": "Registration",
+    "identityResource": "managed/alpha_user",
+    "uiConfig": {},
+    "entryNodeId": "0c091c49-f3af-48fb-ac6f-07fba0499dd6",
+    "nodes": {
+      "0c091c49-f3af-48fb-ac6f-07fba0499dd6": {
+        "connections": {
+          "outcome": "ad5dcbb3-7335-49b7-b3e7-7d850bb88237"
+        },
+        "displayName": "Page Node",
+        "nodeType": "PageNode",
+        "x": 190,
+        "y": 179
+      },
+      "97a15eb2-a015-4b6d-81a0-be78c3aa1a3b": {
+        "connections": {
+          "outcome": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+        },
+        "displayName": "Increment Login Count",
+        "nodeType": "IncrementLoginCountNode",
+        "x": 984,
+        "y": 177
+      },
+      "ad5dcbb3-7335-49b7-b3e7-7d850bb88237": {
+        "connections": {
+          "CREATED": "97a15eb2-a015-4b6d-81a0-be78c3aa1a3b",
+          "FAILURE": "e301438c-0bd0-429c-ab0c-66126501069a"
+        },
+        "displayName": "Create Object",
+        "nodeType": "CreateObjectNode",
+        "x": 660,
+        "y": 228
+      }
+    },
+    "description": "Platform Registration Tree",
+    "staticNodes": {
+      "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
+        "x": 1473,
+        "y": 298
+      },
+      "e301438c-0bd0-429c-ab0c-66126501069a": {
+        "x": 1334,
+        "y": 440
+      },
+      "startNode": {
+        "x": 50,
+        "y": 25
+      }
+    }
+  }
+}

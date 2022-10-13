@@ -16,15 +16,11 @@ const updateConnectorDefinitions = async (argv) => {
       .filter((name) => path.extname(name) === '.json') // Filter out any non JSON files
       .map((filename) => require(path.join(`${dir}`, filename))) // Map JSON file content to an array
 
-    // Update each connector
-    await Promise.all(
-      connectorFileContent.map(async (connectorFile) => {
-        const requestUrl = `${FIDC_URL}/openidm/config/${connectorFile._id}`
-        await fidcRequest(requestUrl, connectorFile, accessToken)
-        console.log(`${connectorFile._id} updated`)
-        return Promise.resolve()
-      })
-    )
+    for (const connectorFile of connectorFileContent) {
+      const requestUrl = `${FIDC_URL}/openidm/config/${connectorFile._id}`
+      await fidcRequest(requestUrl, connectorFile, accessToken)
+      console.log(`${connectorFile._id} updated`)
+    }
   } catch (error) {
     console.error(error.message)
     process.exit(1)

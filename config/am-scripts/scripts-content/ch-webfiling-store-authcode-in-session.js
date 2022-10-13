@@ -1,3 +1,6 @@
+var _scriptName = 'CH WEBFILING STORE AUTHCODE IN SESSION';
+_log('Starting');
+
 /* 
   ** OUTPUT DATA:
     * SESSION:
@@ -8,16 +11,19 @@
 */
 
 var fr = JavaImporter(
-    org.forgerock.openam.auth.node.api.Action
-)
+  org.forgerock.openam.auth.node.api.Action
+);
 
-if (typeof existingSession !== 'undefined') {
-    logger.error("[EWF SESSION STORE] existing session: " + existingSession.toString());
-}
-else {
-    logger.error("[EWF SESSION STORE] no session!");
+if (_isAuthenticated()) {
+  // _log('Existing session: ' + existingSession.toString());
+  _log('Has existing session');
+} else {
+  _log('no session!');
 }
 
-action = fr.Action.goTo("true")
-    .putSessionProperty("authCode", sharedState.get("credential"))
-    .build()
+action = fr.Action.goTo('true')
+  .putSessionProperty('authCode', sharedState.get('credential'))
+  .build();
+
+// LIBRARY START
+// LIBRARY END

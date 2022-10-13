@@ -1,0 +1,116 @@
+{
+  "target": "managed/alpha_user",
+  "enabled": false,
+  "source": "system/CHSUser/users",
+  "name": "chsUsers_alphaUser",
+  "consentRequired": false,
+  "icon": null,
+  "displayName": "chsUsers_alphaUser",
+  "properties": [
+    {
+      "target": "userName",
+      "source": "email"
+    },
+    {
+      "target": "sn",
+      "source": "email"
+    },
+    {
+      "target": "mail",
+      "source": "email"
+    },
+    {
+      "source": "",
+      "target": "givenName",
+      "transform": {
+        "globals": {},
+        "source": "if (source.forename && source.surname) {\n  source.forename + \" \" + source.surname\n} else if (source.forename) {\n  source.forename\n} else if (source.surname) {\n  source.surname\n}",
+        "type": "text/javascript"
+      }
+    }
+  ],
+  "policies": [
+    {
+      "action": "EXCEPTION",
+      "situation": "AMBIGUOUS"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "SOURCE_MISSING"
+    },
+    {
+      "action": "CREATE",
+      "situation": "MISSING"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "FOUND_ALREADY_LINKED"
+    },
+    {
+      "action": "DELETE",
+      "situation": "UNQUALIFIED"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "UNASSIGNED"
+    },
+    {
+      "action": "EXCEPTION",
+      "situation": "LINK_ONLY"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "TARGET_IGNORED"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "SOURCE_IGNORED"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "ALL_GONE"
+    },
+    {
+      "action": "UPDATE",
+      "situation": "CONFIRMED"
+    },
+    {
+      "action": "UPDATE",
+      "situation": "FOUND"
+    },
+    {
+      "action": "CREATE",
+      "situation": "ABSENT"
+    }
+  ],
+  "correlationQuery": [
+    {
+      "linkQualifier": "default",
+      "expressionTree": {
+        "any": [
+          "userName"
+        ]
+      },
+      "mapping": "chsUsers_alphaUser",
+      "type": "text/javascript",
+      "file": "ui/correlateTreeToQueryFilter.js"
+    }
+  ],
+  "onCreate": {
+    "globals": {},
+    "source": "// change via external file",
+    "type": "text/javascript"
+  },
+  "onUpdate": {
+    "type": "text/javascript",
+    "globals": {},
+    "source": "// change via external file"
+  },
+  "clusteredSourceReconEnabled": true,
+  "reconSourceQueryPageSize": 10000,
+  "sourceQueryFullEntry": true,
+  "sourceQuery": {
+    "_queryFilter": "true"
+  },
+  "taskThreads": 20
+}

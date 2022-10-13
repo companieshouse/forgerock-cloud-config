@@ -112,15 +112,28 @@ userAddressClaimResolver = { claim, identity ->
     [:]
 }
 
+if (logger.warningEnabled()) {
+    logger.warning('OIDC Claims Script : Has session ? ' + sessionPresent)
+    logger.warning('OIDC Claims Script : Identity : ' + identity)
+    logger.warning('OIDC Claims Script : ClientId : ' + clientProperties.clientId)
+}
+
 webFilingClaimResolver = { claim, identity ->
+
     if (identity != null) {
-        return [
+        def webFilingData = [
             'company_no' : (sessionPresent ? session.getProperty('companyNumber') : null),
             'password' : (sessionPresent ? session.getProperty('password') : null),
             'jurisdiction': (sessionPresent ? session.getProperty('jurisdiction') : null),
             'auth_code': (sessionPresent ? session.getProperty('authCode') : null),
-            'language': (sessionPresent ? session.getProperty('language') : null)
+            'language': (sessionPresent ? session.getProperty('language') : null),
         ]
+
+        if (logger.warningEnabled()) {
+            logger.warning('OIDC Claims Script : webFilingData = ' + webFilingData)
+        }
+
+        return webFilingData
     }
     [:]
 }
@@ -255,6 +268,10 @@ if (logger.messageEnabled()) {
  */
 def computeClaim = { claim ->
     try {
+        if (logger.warningEnabled()) {
+            logger.warning('OIDC Claims Script : Computing Claim : ' + claim.getName())
+        }
+
         claimResolver = claimAttributes.get(claim.getName(), { claimObj, identity -> defaultClaimResolver(claim) })
         claimResolver(claim, identity)
     } catch (IdRepoException e) {
@@ -264,6 +281,10 @@ def computeClaim = { claim ->
     } catch (SSOException e) {
         if (logger.warningEnabled()) {
             logger.warning("OpenAMScopeValidator.getUserInfo(): Unable to retrieve attribute=$attribute", e)
+        }
+    } catch (Exception e) {
+        if (logger.warningEnabled()) {
+            logger.warning('OIDC Claims Script : Exception : ' + e)
         }
     }
 }
@@ -279,8 +300,17 @@ def convertScopeToClaims = {
 }
 }
 
+if (logger.warningEnabled()) {
+    logger.warning('OIDC Claims Script : scopes (requested) = ' + scopes)
+}
+
 // Creates a full list of claims to resolve from requested scopes, claims provided by AS and requested claims
 def claimsToResolve = convertScopeToClaims() + claimObjects + requestedTypedClaims
+
+
+if (logger.warningEnabled()) {
+    logger.warning('OIDC Claims Script : claimsToResolve = ' + claimsToResolve)
+}
 
 // Computes the claim return key and values for all requested claims
 computedClaims = claimsToResolve.collectEntries() { claim ->

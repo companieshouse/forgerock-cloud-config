@@ -1,1496 +1,1703 @@
 {
-    "scripts": [
-        {
-            "payload": {
-                "_id":"df67765e-df3a-4503-9ba5-35c992b39259",
-                "name":"CH - Create Notify JWT",
-                "description":"This script creates a JWT compatible with Gov Notify service. \nThe resulting JWT (along with the template IDs) is then put in the transient state.",
-                "script":"<replace>",
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "creationDate": 1436807766258,
-                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate": 1436807766258
-            },
-            "filename": "ch-create-notify-jwt.js"
-        },
-        {
-            "payload": {
-                "_id": "b9d881b7-75c0-4cd6-8ede-e42193665657",
-                "name": "CH - Registration - Verify Token",
-                "description": "Verify User Registration token",
-                "script": "<replace>",
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "creationDate": 1436807766258,
-                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate": 1436807766258
-            },
-            "filename": "ch-registration-verify-token.js"
-        },
-        {
-            "payload": {
-                "_id": "a15a784a-489e-49ee-af79-a7153447c843",
-                "name": "CH - Enter and confirm new password",
-                "description": "Enter and confirm a new password (shared between Registration, Pwd Reset, Onboarding)",
-                "script": "<replace>",
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "creationDate": 1436807766258,
-                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate": 1436807766258
-            },
-            "filename": "ch-pwd-input-collector.js"
-        },
-        {
-            "payload": {
-                "_id": "e69b137b-1bae-4804-af6b-6a93371733ca",
-                "name": "CH - Generic Error Message",
-                "description": "Generic Error Message",
-                "script": "<replace>",
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "creationDate": 1436807766258,
-                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate": 1436807766258
-            },
-            "filename": "ch-callback-general-error.js"
-        },
-        {
-            "payload": {
-                "_id": "8b203967-fa57-4ce2-9dad-2f387ca52a61",
-                "name": "CH - Registration - Sent Email Confirmation",
-                "description": "Displays a confirmation message when registration email is sent",
-                "script": "<replace>",
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "creationDate": 1436807766258,
-                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate": 1436807766258
-            },
-            "filename": "ch-registration-confirmation-email-sent.js"
-        },
-        {
-            "payload": {
-                "_id": "d67457d4-b0ed-4b77-9ca1-23295246c9fd",
-                "name": "CH - Registration - Set User Existing Flag",
-                "description": "Sets a flag in transient state to mark the user as already existing",
-                "script": "<replace>",
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "creationDate": 1436807766258,
-                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate": 1436807766258
-            },
-            "filename": "ch-registration-mark-user-existing.js"
-        },        
-        {
-            "payload": {
-                "_id": "181f73fa-ec30-4ef4-b78a-9790a4918b23",
-                "name": "CH - Callback for User Already Exists",
-                "description": "Callback to return the existing user message during registration",
-                "script": "<replace>",
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "creationDate": 1436807766258,
-                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate": 1436807766258
-            },
-            "filename": "ch-registration-error-user-exists.js"
-        },
-        {
-            "payload": {
-                "_id":"b6ca4a1f-573f-4a3a-a410-d18b01207f6e",
-                "name":"CH - Registration - Create token and send Email",
-                "description":"Creates a registration link and sends it via email to the user via Notify.",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"null",
-                "lastModifiedDate":0
-            },
-            "filename": "ch-registration-send-email.js"
-        },
-        {
-            "payload": {
-                "_id": "b276c566-622e-11eb-ae93-0242ac130002",
-                "name": "CH - Send MFA text",
-                "description": "Send an MFA code to a user via SMS",
-                "script": "<replace>",
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "creationDate": 1436807766258,
-                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate": 1436807766258
-            },
-            "filename": "ch-send-mfa-sms.js"
-        },
-        {
-            "payload": {
-                "_id": "a5778ce7-addf-4fb6-a7db-92929f1314c4",
-                "name": "CH - Send MFA email",
-                "description": "Send an MFA code to a user via email",
-                "script": "<replace>",
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "creationDate": 1436807766258,
-                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate": 1436807766258
-            },
-            "filename": "ch-send-mfa-email.js"
-        },
-        {
-            "payload": {
-                "_id": "c056951c-622e-11eb-ae93-0242ac130002",
-                "name": "CH - Reset Password - Create token and Send Email",
-                "description": "Send Reset Password Email",
-                "script": "<replace>",
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "creationDate": 1436807766258,
-                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate": 1436807766258
-            },
-            "filename": "ch-password-reset-send-email.js"
-        },
-        {
-            "payload": {
-                "_id":"8f08bdfd-08b9-42ce-8f45-99da5bc9dcfd",
-                "name":"CH - Callback for Cannot Find User",
-                "description":"Callback to inform the user the email supplied cannot be found",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1615203069195
-             },
-             "filename": "ch-callback-cannot-find-user.js"
-        },
-        {
-            "payload": {
-                "_id":"a39f3f71-1782-46dc-97cf-7cc417d4ca4a",
-                "name":"CH - Reset Password - Confirmation of Email Sent",
-                "description":"Callback to show confirmation the password reset email has been sent",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1615203506316
-             },
-            "filename": "ch-password-reset-confirmation-email-sent.js"
-        },
-        {
-            "payload": {
-                "_id":"fdac4efb-d8b8-478b-8300-e11a4c3503df",
-                "name":"CH - Max number of login attempts",
-                "description":"Callback to show error when the maximum number of consecutive access attempts has been reached",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1615203506316
-             },
-            "filename": "ch-callback-max-retry-limit.js"
-        },
-        {
-            "payload": {
-                "_id":"24b1421b-8130-4eae-a999-a44dc6e94fa6",
-                "name":"CH - Callback to show recipient Phone Number",
-                "description":"Callback to show the phone number used to sent the OTP code",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1615203506316
-             },
-            "filename": "ch-password-reset-text-sent.js"
-        },
-        {
-            "payload": {
-                "_id":"ae90c22f-2613-49a6-9091-2238ec13eacb",
-                "name":"CH - Callback for Password Updated",
-                "description":"Callback to show confirmation of updated",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1615203563966
-             },
-            "filename": "ch-password-reset-pwd-updated.js"
-        },
-        {
-            "payload": {
-                "_id":"7fc79258-1c54-4df3-baa4-b51850ef3474",
-                "name":"CH - Reset Password - Verify Token",
-                "description":"Checks whether to resume or start the password reset journey, and verifies the Password reset token",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1615203762946
-            },
-            "filename": "ch-password-reset-verify-token.js"
-        },
-        {
-            "payload": {
-                "_id":"bf6c0ac8-8e13-4f11-8d99-d01b23e02a5c",
-                "name":"CH - Callback to show OTP not valid",
-                "description":"",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1615378956486
-            },
-            "filename": "ch-callback-otp-not-valid.js"
-        },
-        {
-            "payload": {
-                "_id":"20a3599f-b742-4554-a8b7-27862f248dd5",
-                "name":"CH - Require MFA Check",
-                "description":"Check whether the user has logged in within a certain time period.",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1615378956486
-            },
-            "filename": "ch-require-mfa-check.js"
-        },
-        {
-            "payload": {
-                "_id": "d7da3b35-af63-499b-aa0a-bb03666508db",
-                "name": "CH - Update Last Login",
-                "description": "Update user last login date",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
-                "lastModifiedDate": 1616152574918
-            },
-            "filename": "ch-update-last-login.js"
-        },
-        {
-            "payload": {
-                "_id": "9bab9cb5-c723-4fb1-aa02-825aaaa7a266",
-                "name": "CH - Update Legacy Password",
-                "description": "Update user password after validation of legacy password",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
-                "lastModifiedDate": 1617289605774
-            },
-            "filename": "ch-update-legacy-password.js"
-        },
-        {
-            "payload": {
-                "_id": "2c9f9d6a-4b93-493a-bf0d-44fe53d8d1d1",
-                "name": "CH - Check Password Status",
-                "description": "Check the user's legacy password status",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
-                "lastModifiedDate": 1617294253241
-            },
-            "filename": "ch-check-password-status.js"
-        },
-        { 
-            "payload": {
-                "_id": "ace951c8-d169-4426-9357-d5b44e0aa728",
-                "name": "CH - Callback to show recipient phone number or mail",
-                "description": "Callback to show the phone number or mail used to send the OTP code",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
-                "lastModifiedDate": 1616507095258
-            },
-            "filename": "ch-callback-show-phone-or-mail.js"
-        },
-        {
-            "payload": {
-                "_id": "b480d9f7-5908-45cf-91d1-bc1fe56fe8de",
-                "name": "CH - Phone Number in IDM profile",
-                "description": "Checks whether the Phone Number is set within the IDM user profile",
-                "script": "<replace>",
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "creationDate": 1436807766258,
-                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate": 1436807766258
-            },
-            "filename": "ch-phone-number-present.js"
-        },
-        {
-            "payload": {
-                "_id": "000c65e1-c9c6-4edb-96d2-298a9b152b40",
-                "name": "CH - Phone Number entered by user",
-                "description": "Checks whether the Phone Number has been entered by end user",
-                "script": "<replace>",
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "creationDate": 1436807766258,
-                "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate": 1436807766258
-            },
-            "filename": "ch-phone-number-entered.js"
-        },
-        {
-            "payload": {
-                "_id":"c4001e02-469c-4cc4-bf95-9f43d7e46568",
-                "name":"CH - Check for session",
-                "description":"Checks for an existing session",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1616675205613
-             },
-            "filename": "ch-check-for-session.js"
-        },
-        {
-            "payload": {
-                "_id":"c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149",
-                "name":"CH - Get IDM Access Token",
-                "description":"Gets an IDM Access Token using service user access credentials",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1616675452183
-             },
-            "filename": "ch-get-idm-access-token.js"
-        }, 
-        {
-            "payload": {
-                "_id":"c089f1fe-fa0f-4f61-a3d1-a1fce6e953cf",
-                "name":"CH - Change Password - Check Pwd Policy",
-                "description":"Checks the new password against the IDM password policy",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1616675550921
-             },
-            "filename": "ch-update-pwd-check-password-policy.js"
-        }, 
-        {
-            "payload": {
-                "_id":"1a7ced42-93f3-4739-a9b8-b773b489ed1d",
-                "name":"CH - Change Password - Confirmation",
-                "description":"Shows a password updated confirmation message",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1616675641669
-             },
-            "filename": "ch-update-pwd-confirmation.js"
-        }, 
-        {
-            "payload": {
-                "_id":"52014433-9b16-4f21-a00c-1ab477c918f8",
-                "name":"CH - Change Password - Input Collector",
-                "description":"Display the update password form",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1616675734162
-             },
-            "filename": "ch-update-pwd-input-collector.js"
-        },
-        {
-            "payload": {
-                "_id":"84caf8b3-813a-4998-85ff-a3dd8eee4bcf",
-                "name":"CH - Change Password - Load New Password for Patch",
-                "description":"Loads the new password in preparation for patching the user",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1616675797845
-             },
-            "filename": "ch-update-pwd-load-new-pwd-for-patch.js"
-        },
-        {
-            "payload": {
-                "_id":"04e99c63-2875-43ca-9e5f-84832bf59a34",
-                "name":"CH - Change Password - Error Message",
-                "description":"Displays an error message if the password cannot be updated",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1616675860999
-             },
-            "filename": "ch-update-pwd-password-error-message.js"
-        },
-        {
-            "payload": {
-                "_id":"db0f9e36-6d51-4f86-99a7-aa66287fad58",
-                "name":"CH - Change Full Name - Input Collectoe",
-                "description":"Prompts the user for the full name",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1616675641669
-             },
-            "filename": "ch-update-name-input-collector.js"
-        },
-        {
-            "payload": {
-                "_id":"4d27c5a1-e42c-47cb-90c1-d411902eb674",
-                "name":"CH - Change Full Name - Confirmation",
-                "description":"Shows a full name updated confirmation message",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1616675641669
-             },
-            "filename": "ch-update-name-confirmation.js"
-        },
-        {
-            "payload": {
-                "_id":"55801756-11bf-493d-b49c-195488cf939a",
-                "name":"CH - Get Company Data By Company Number",
-                "description":"Performs a lookup of a Company in IDM given a company number",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810393533
-             },
-            "filename": "ch-fetch-company-info.js"
-        }, 
-        {
-            "payload": {
-                "_id":"4ec1ca31-0009-4266-8790-3cca5f931f2f",
-                "name":"CH - Get Company Data - Set Implicit Confirm",
-                "description":"Performs a lookup of a Company in IDM given a company number",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810393533
-             },
-            "filename": "ch-fetch-company-set-implicit-confirm.js"
-        }, 
-        {
-            "payload": {
-                "_id":"16975ea5-4f0a-4ac6-861f-00dbf39ca441",
-                "name":"CH - Associate User to Company",
-                "description":"Given a User ID and a Company data, creates a relationship between the user and the company",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-join-company-create-relationship.js"
-        }, 
-        {
-            "payload": {
-                "_id":"10f63087-b21b-40eb-9c90-8e3fb3fabfa1",
-                "name":"CH - Callback for User Associated to Company",
-                "description":"Confirmation that the company has been added to the user account successfully",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-join-company-confirmation.js"
-        }, 
-        {
-            "payload": {
-                "_id":"838ab622-d892-44e6-a5c5-f45238aed210",
-                "name":"CH - Prompt for Company Number",
-                "description":"Prompts the user to enter the Company Number",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-join-company-prompt-for-company-no.js"
-        }, 
-        {
-            "payload": {
-                "_id":"ad7a63a6-fae2-46c0-be70-bec1f059f064",
-                "name":"CH - Prompt for Company Auth Code",
-                "description":"Prompts the user to enter the Company Auth Code",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-join-company-prompt-for-company-authcode.js"
-        }, 
-        {
-            "payload": {
-                "_id":"917f36a9-f21e-43e4-bed5-9b2171228387",
-                "name":"CH - Prompt Error Message for wrong Company Auth Code",
-                "description":"Prompts the user an error message when the Company Auth Code is not valid",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-join-company-wrong-code-error-message.js"
-        }, 
-        {
-            "payload": {
-                "_id":"3607eaf7-49ae-448e-8919-18a8e39bd359",
-                "name":"CH - Invite User - Input Collector",
-                "description":"Prompts the user to enter the email and full name of the user to invite.",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-invite-user-prompt-for-email.js"
-        }, 
-        {
-            "payload": {
-                "_id":"bf5841ef-c6a4-4e4c-9c5e-15ca35ba9ca9",
-                "name":"CH - Invite User - Create Pending Relationship",
-                "description":"Create a 'pending' relationship between the user and the company",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-invite-user-create-pending-relationship.js"
-        }, 
-        {
-            "payload": {
-                "_id":"1a4c078c-6667-4246-8069-105c4c80473e",
-                "name":"CH - Invite User - Send Invitation Email",
-                "description":"Sends the invitation email to the target user",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-invite-user-send-email.js"
-        }, 
-        {
-            "payload": {
-                "_id":"164f8d89-f0d6-4094-aeed-0ec94149c590",
-                "name":"CH - Invite User - Email sent confirmation",
-                "description":"Displays the user a confirmation message when the invite has been sent.",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-invite-user-email-sent.js"
-        }, 
-        {
-            "payload": {
-                "_id":"0b0cf5cd-c570-475c-851e-e3e8035113d2",
-                "name":"CH - Invite User - Check parameter and Lookup Company",
-                "description":"Checks the presence of company number and looks the company up.",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-invite-user-fetch-company.js"
-        }, 
-        {
-            "payload": {
-                "_id":"6049a931-e9e9-4c28-a4de-5dff15134236",
-                "name":"CH - Invite User - Parameters errors",
-                "description":"Shows error message if the supplied data is in the wrong format.",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-invite-user-invalid-email-error-message.js"
-        }, 
-        {
-            "payload": {
-                "_id":"f2e4ee99-bcbb-4f3b-9ea8-36c1d547d620",
-                "name":"CH - Invite User - Respond to invite (accept/decline)",
-                "description":"Processes the user response to the invite.",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-invite-user-respond-invite.js"
-        },
-        {
-            "payload": {
-                "_id":"14296e66-f0a8-4922-b04c-a94b25630f1b",
-                "name":"CH - Invite User - Confirmation of invite accept/decline",
-                "description": "Shows the confirmation message for invite accept/decline.",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-invite-user-respond-confirmation.js"
-        },
-        {
-            "payload": {
-                "_id":"e502a152-bc0a-49b3-82cd-233bafdabcad",
-                "name":"CH - Invite User - Onboard unregistered user",
-                "description":"Onboards an unregistered user as part of the invitation process.",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-invite-user-prepare-user-onboarding.js"
-        },  
-        {
-            "payload": {
-                "_id":"9130bbdf-bb9d-4ef9-8226-c95c6192c1d7",
-                "name":"CH - Onboard User - Verify token",
-                "description":"Verify token, user existence, invite and onboarding date",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-onboarding-verify-token.js"
-        },
-        {
-            "payload": {
-                "_id":"d22f9a0c-426a-4466-b95e-d0f125b0d5fa",
-                "name":"OAuth2 Access Token Modification Script",
-                "description":"Default global script for OAuth2 Access Token Modification",
-                "script":"<replace>",
-                "default":true,
-                "language":"GROOVY",
-                "context":"OAUTH2_ACCESS_TOKEN_MODIFICATION",
-                "createdBy":"id=dsameuser,ou=user,dc=openam,dc=forgerock,dc=org",
-                "creationDate":1433147666269,
-                "lastModifiedBy":"id=dsameuser,ou=user,dc=openam,dc=forgerock,dc=org",
-                "lastModifiedDate":1433147666269
-                },
-            "filename": "oauth2-token-mod.groovy"
-        },
-        {
-            "payload": {
-                "_id":"36863ffb-40ec-48b9-94b1-9a99f71cc3b5",
-                "name":"OIDC Claims Script",
-                "description":"Default global script for OIDC claims",
-                "script":"<replace>",
-                "default":true,
-                "language":"GROOVY",
-                "context":"OIDC_CLAIMS",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"null",
-                "lastModifiedDate":0
-             },
-             "filename": "oidc-claims-script.groovy"
-        },
-        {
-            "payload": {
-                "_id":"9de3eb62-f131-4fac-a294-7bd170fd4acb",
-                "name":"Scripted Policy Condition",
-                "description":"Default global script for Scripted Policy Conditions",
-                "script":"<replace>",
-                "default":true,
-                "language":"JAVASCRIPT",
-                "context":"POLICY_CONDITION",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"null",
-                "lastModifiedDate":0
-             },
-             "filename": "scripted-policy-condition.js"
-        },
-        {
-            "payload": {
-                "_id": "137e1fd5-19f4-425d-96eb-2a8c20cabcf8",
-                "name": "CH - Fetch Hashed Password",
-                "description": "Fetch user hashed (legacy) password value",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
-                "lastModifiedDate": 1616707782244
-            },
-            "filename": "ch-fetch-hashed-password.js"
-        },
-        {
-            "payload": {
-                "_id": "7f9c55bb-9307-45b7-9b4f-7d1bf4e8ea49",
-                "name": "CH - Callback to prompt for validate credential",
-                "description": "Enter value to validate against hash",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
-                "lastModifiedDate": 1616707988997
-            },
-            "filename": "ch-callback-prompt-for-validate-credential.js"
-        },
-        {
-            "payload": {
-                "_id": "65d2099f-9583-47d3-8303-8051709cb436",
-                "name": "CH - Validate credential",
-                "description": "Call validation service to validate cleartext against hash",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
-                "lastModifiedDate": 1616708148417
-            },
-            "filename": "ch-validate-credential.js"
-        },
-        {
-            "payload": {
-                "_id": "9dc0bbc6-8894-4d23-a13f-8619a3fcad5b",
-                "name": "CH - Prompt for Company Number/Auth Code",
-                "description": "Prompts the user to enter Company Number and Company Auth Code",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
-                "lastModifiedDate": 1617036446946
-            },
-            "filename": "ch-callback-prompt-for-company-info.js"
-        },
-        {
-            "payload": {
-                "_id": "14c3cb5d-1010-459d-9747-6ff19a8de70d",
-                "name": "CH - Update Legacy Password Required",
-                "description": "Inform user that they need to update their legacy password",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
-                "lastModifiedDate": 1617813412567
-            },
-            "filename": "ch-update-legacy-password-required.js"
-        },
-        {
-            "payload": {
-                "_id": "a5042601-6867-4566-81d1-fad4ecd61487",
-                "name": "CH - Update Legacy Password Check Original",
-                "description": "Check the originally entered user password against the value entered in the update password dialog",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
-                "lastModifiedDate": 1617813675725
-            },
-            "filename": "ch-update-legacy-password-check-original.js"
-        },
-        {
-            "payload": {
-                "_id": "188d3f9d-ca04-4df7-bcd7-eed3fe27e21e",
-                "name": "CH - Check Login Credentials Format",
-                "description": "check login credentials format",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "null",
-                "lastModifiedDate": 0
-            },
-            "filename": "ch-login-input-check.js" 
-        },
-        {
-            "payload": {
-                "_id": "e0aec02a-ad8b-427d-a72e-cdfd8cb6c0e0",
-                "name": "CH - Login Error Message",
-                "description": "Create error message structure for login page",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "null",
-                "lastModifiedDate": 0
-            },
-            "filename": "ch-login-error-message.js"
-        },
-        {
-            "payload": {
-                "_id": "a1ebbcd2-39c1-47c2-a152-4bebcf8cfb5b",
-                "name": "CH - Login - Soft Lock - Increment Counter",
-                "description": "Increments the invalid login attempts and sets the soft lock field",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "null",
-                "lastModifiedDate": 0
-            },
-            "filename": "ch-login-soft-lock-increment-counter.js"
-        },
-        {
-            "payload": {
-                "_id": "7837ccb6-2e56-44bf-a5df-7cfdb0bfc38b",
-                "name": "CH - Login - Soft Lock - Check Lock Status",
-                "description": "Increments the invalid login attempts and sets the soft lock field",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "null",
-                "lastModifiedDate": 0
-            },
-            "filename": "ch-login-soft-lock-check.js"
-        },        
-        {
-            "payload": {
-                "_id": "329154d4-5e55-4cc5-a17e-19d4fd3729aa",
-                "name": "CH - Login - Soft Lock - Reset Counter",
-                "description": "Resets to zero the number invalid login attempts and empties the soft lock date",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "null",
-                "lastModifiedDate": 0
-            },
-            "filename": "ch-login-soft-lock-reset-counter.js"
-        },     
-        {
-            "payload": {
-                "_id": "064705f3-93d3-482c-ad3f-4531a28ce0a0",
-                "name": "CH - Callback Login Error",
-                "description": "Handle error message structure for login page",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "null",
-                "lastModifiedDate": 0
-            },
-            "filename": "ch-callback-login-error.js"
-        },
-        {
-            "payload": {
-                "_id": "13e9d2a5-e93a-47f2-894d-4d732918c383",
-                "name": "CH - Update Legacy Password Error Message",
-                "description": "Create error message structure for login page from update legacy password journey",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "null",
-                "lastModifiedDate": 0
-            },
-            "filename": "ch-update-legacy-password-error-message.js"
-        },
-        {
-            "payload": {
-                "_id": "72e60c8b-f4e9-4696-8218-6efee1f5d97b",
-                "name": "CH - Callback update phone show number",
-                "description": "Feedback for the update phone number journey",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "null",
-                "lastModifiedDate": 0
-            },
-            "filename": "ch-callback-update-phone-show-number.js"
-        },
-        {
-            "payload": {
-                "_id": "353f5e9a-5d80-4d43-a77f-7968d05b1157",
-                "name": "CH - Update Phone Error Message",
-                "description": "Update phone error message",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "null",
-                "lastModifiedDate": 0
-            },
-            "filename": "ch-update-phone-error-message.js"
-        },
-        {
-            "payload": {
-                "_id": "f1413023-6fa4-43de-92a9-1f63f889c8b4",
-                "name": "CH - Update Phone Input Collector",
-                "description": "Capture phone number and user's current password",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
-                "lastModifiedDate": 1619453115206
-            },
-            "filename": "ch-update-phone-input-collector.js"
-        },
-        {
-            "payload": {
-                "_id": "6811d9da-4d44-488e-9e32-19a199dc0b3f",
-                "name": "CH - Update Phone Confirmation",
-                "description": "Confirmation of updated phone number",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
-                "lastModifiedDate": 1619454785434
-            },
-            "filename": "ch-update-phone-confirmation.js"
-        },
-        {
-            "payload": {
-                "_id": "256dac17-1055-4798-9b98-a1321f3a8f09",
-                "name": "CH - Reset Password Clear Parameters",
-                "description": "When resetting password, clear soft-lock parameters and migrated password status parameter",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
-                "lastModifiedDate": 1621011931193
-            },
-            "filename": "ch-reset-password-clear-parameters.js"
-        },
-        {
-            "payload": {
-                "_id": "df75d4ae-8f25-48f4-af14-bb87206e029d",
-                "name": "CH - Validate Authcode",
-                "description": "Validate user-entered cleartext company authcode",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
-                "lastModifiedDate": 1622752327061
-            },
-            "filename": "ch-validate-authcode.js"
-        },
-        {
-            "payload": {
-                "_id":"ca6cbc1b-d83b-4946-b327-be15402894fa",
-                "name":"CH - EWF: Prompt for Company Number",
-                "description":"Prompts the user to enter the Company Number",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-webfiling-prompt-for-company-no.js"
-        },
-        {
-            "payload": {
-                "_id":"19a9ba97-3eaf-46ed-9b59-ea9315d81407",
-                "name":"CH - EWF: Add password to Session",
-                "description":"stores EWF user password in session",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-webfiling-store-pwd-in-session.js"
-        },
-        {
-            "payload": {
-                "_id":"ddce54ff-70fe-4ef7-bdfe-3c83488ef266",
-                "name":"CH - EWF: Check for Session",
-                "description":"checks if session exists",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-webfiling-check-for-session.js"
-        },
-        {
-            "payload": {
-                "_id":"78da2828-68cc-4f63-b003-b8a250b1753d",
-                "name":"CH - EWF: Prompt for Association Confirmation",
-                "description":"Prompts the user for confirmation to add the company to their account",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-webfiling-prompt-for-link-confirmation.js"
-        },
-        {
-            "payload": {
-                "_id":"460f8d31-5f90-440a-9f47-f5951778ea4f",
-                "name":"CH - EWF: Add auth code to Session",
-                "description":"stores EWF company auth code in session",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-webfiling-store-authcode-in-session.js"
-        },
-        {
-            "payload": {
-                "_id":"d8d0c71c-ddfb-47f6-a577-33aa0b7c2bcd",
-                "name":"CH - EWF: Checks user association with company",
-                "description":"Checks user association with company",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-webfiling-check-for-company-assoc-status.js"
-        },
-        {
-            "payload": {
-                "_id":"6cd2619d-84ec-4eaf-a377-e6a6230c82a6",
-                "name":"CH - EWF: Prompts the user to complete profile",
-                "description":"Prompts the user to complete profile with full name and phone number",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-webfiling-update-profile.js"
-        },
-        {
-            "payload": {
-                "_id":"16727fa5-71c7-4a81-8639-1dfffa8f034b",
-                "name":"CH - Remove User - Fetch User and Company data",
-                "description":"Fetch user and company data, and user status for given company",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-remove-user-fetch-company-and-user.js"
-        },
-        {
-            "payload": {
-                "_id":"5000bb7b-29da-4bf4-a2cf-6f028d32a4d9",
-                "name":"CH - Remove User - Prompt for confirmation",
-                "description":"Prompts the user to confirm user removal from a company",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-remove-user-prompt-confirmation.js"
-        },
-        {
-            "payload": {
-                "_id":"a221047b-706f-48f9-8d39-3fcd518543aa",
-                "name":"CH - Remove User - Send Notification email to removed user",
-                "description":"Send Notification email to removed user",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-remove-user-send-email.js"
-        },
-        {
-            "payload": {
-                "_id":"bdfa0ec4-ad50-484f-9732-77c789a900cb",
-                "name":"CH - Email Consent Collector/Changer",
-                "description":"Collect email consent and allow the user to change it",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-email-consent-change.js"
-        },
-        {
-            "payload": {
-                "_id":"80333df7-d987-4333-8e65-dcd194e62a07",
-                "name":"CH - Change Email - Input Collector",
-                "description":"Collect password, email and confirmation email from user.",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-update-email-input-collector.js"
-        },
-        {
-            "payload": {
-                "_id":"47d1222b-1825-4522-98ff-1c462c42e4ff",
-                "name":"CH - Change Email - Patch User",
-                "description":"Patch user.",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-update-email-patch-new-email.js"
-        },
-        {
-            "payload": {
-                "_id":"1a6815f1-0272-490b-8d6b-69609c3ee9d6",
-                "name":"CH - Load JWT signing/encryption keys",
-                "description":"Load signing/encryption keys used to create/sign/encrypt the Registration/Pwd Reset/Onboarding JWTs",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-load-jwt-keys.js"
-        },
-        {
-            "payload": {
-                "_id":"1a782857-b6fc-438d-9244-ae7ddc1dec26",
-                "name":"CH - Load Language into session",
-                "description":"Load the selected language to session (defaults to EN)",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-webfiling-store-lang-in-session.js"
-        },
-        {
-            "payload": {
-                "_id":"1b3c84cf-411a-4e5b-998f-768191e735f1",
-                "name":"CH - Notify Authorised Company Users",
-                "description":"Sends an email notification to all authorised members of a company",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-notify-authorized-users.js"
-        },
-        {
-            "payload": {
-                "_id": "26c31a86-df26-4dd3-8675-55e29388d568",
-                "name": "CH - Process Request",
-                "description": "Process request for consent journey",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
-                "lastModifiedDate": 1630445552147
-            },
-            "filename": "ch-process-request-consent.js"
-        },
-        {
-            "payload": {
-                "_id": "f981c992-2b82-4f38-919a-93ea83e7b8fb",
-                "name": "CH - Get Consent",
-                "description": "Get user consent",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
-                "lastModifiedDate": 1630446169326
-            },
-            "filename": "ch-get-consent.js"
-        },
-        {
-            "payload": {
-                "_id": "3de821a3-7c07-4ae4-858f-8e46192ed667",
-                "name": "CH - Send Consent Response",
-                "description": "Send consent response",
-                "script": "<replace>",
-                "default": false,
-                "language": "JAVASCRIPT",
-                "context": "AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy": "null",
-                "creationDate": 0,
-                "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
-                "lastModifiedDate": 1630446313640
-            },
-            "filename": "ch-send-consent-response.js"
-        },
-        {
-             "payload": {           
-                "_id":"1968af0f-92d4-45ec-b8bd-f08b5aac4b7b",
-                "name":"CH - Notify Users post-SCRS",
-                "description":"Sends an email notification to all users authorised via SCRS",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-scrs-send-email.js"
-        },
-        {
-            "payload": {
-                "_id":"bce73aab-8659-4ee0-ac00-7419f88b78ed",
-                "name":"CH - Check incoming parameters from SCRS endpoint",
-                "description":"Check incoming parameters from SCRS endpoint",
-                "script":"<replace>",
-                "default":false,
-                "language":"JAVASCRIPT",
-                "context":"AUTHENTICATION_TREE_DECISION_NODE",
-                "createdBy":"null",
-                "creationDate":0,
-                "lastModifiedBy":"id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
-                "lastModifiedDate":1617810491969
-             },
-            "filename": "ch-scrs-validate-params.js"
-        }
-    ]
+  "scripts": [
+    {
+      "payload": {
+        "_id": "df67765e-df3a-4503-9ba5-35c992b39259",
+        "name": "CH - Create Notify JWT",
+        "description": "This script creates a JWT compatible with Gov Notify service. \nThe resulting JWT (along with the template IDs) is then put in the transient state.",
+        "script": "<replace>",
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "creationDate": 1436807766258,
+        "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "lastModifiedDate": 1436807766258
+      },
+      "filename": "ch-create-notify-jwt.js"
+    },
+    {
+      "payload": {
+        "_id": "b9d881b7-75c0-4cd6-8ede-e42193665657",
+        "name": "CH - Registration - Verify Token",
+        "description": "Verify User Registration token",
+        "script": "<replace>",
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "creationDate": 1436807766258,
+        "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "lastModifiedDate": 1436807766258
+      },
+      "filename": "ch-registration-verify-token.js"
+    },
+    {
+      "payload": {
+        "_id": "3e1aa9b2-7ca9-4292-8378-a08b27f09fd5",
+        "name": "CH - Registration - Resend email or Change Address",
+        "description": "Resend registration email or Change Address",
+        "script": "<replace>",
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "creationDate": 1436807766258,
+        "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "lastModifiedDate": 1436807766258
+      },
+      "filename": "ch-registration-resend-email-confirm.js"
+    },
+    {
+      "payload": {
+        "_id": "a15a784a-489e-49ee-af79-a7153447c843",
+        "name": "CH - Enter and confirm new password",
+        "description": "Enter and confirm a new password (shared between Registration, Pwd Reset, Onboarding)",
+        "script": "<replace>",
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "creationDate": 1436807766258,
+        "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "lastModifiedDate": 1436807766258
+      },
+      "filename": "ch-pwd-input-collector.js"
+    },
+    {
+      "payload": {
+        "_id": "e69b137b-1bae-4804-af6b-6a93371733ca",
+        "name": "CH - Generic Error Message",
+        "description": "Generic Error Message",
+        "script": "<replace>",
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "creationDate": 1436807766258,
+        "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "lastModifiedDate": 1436807766258
+      },
+      "filename": "ch-callback-general-error.js"
+    },
+    {
+      "payload": {
+        "_id": "8b203967-fa57-4ce2-9dad-2f387ca52a61",
+        "name": "CH - Registration - Sent Email Confirmation",
+        "description": "Displays a confirmation message when registration email is sent",
+        "script": "<replace>",
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "creationDate": 1436807766258,
+        "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "lastModifiedDate": 1436807766258
+      },
+      "filename": "ch-registration-confirmation-email-sent.js"
+    },
+    {
+      "payload": {
+        "_id": "d67457d4-b0ed-4b77-9ca1-23295246c9fd",
+        "name": "CH - Registration - Set User Existing Flag",
+        "description": "Sets a flag in transient state to mark the user as already existing",
+        "script": "<replace>",
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "creationDate": 1436807766258,
+        "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "lastModifiedDate": 1436807766258
+      },
+      "filename": "ch-registration-mark-user-existing.js"
+    },
+    {
+      "payload": {
+        "_id": "181f73fa-ec30-4ef4-b78a-9790a4918b23",
+        "name": "CH - Callback for User Already Exists",
+        "description": "Callback to return the existing user message during registration",
+        "script": "<replace>",
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "creationDate": 1436807766258,
+        "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "lastModifiedDate": 1436807766258
+      },
+      "filename": "ch-registration-error-user-exists.js"
+    },
+    {
+      "payload": {
+        "_id": "b6ca4a1f-573f-4a3a-a410-d18b01207f6e",
+        "name": "CH - Registration - Create token and send Email",
+        "description": "Creates a registration link and sends it via email to the user via Notify.",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "null",
+        "lastModifiedDate": 0
+      },
+      "filename": "ch-registration-send-email.js"
+    },
+    {
+      "payload": {
+        "_id": "b276c566-622e-11eb-ae93-0242ac130002",
+        "name": "CH - Send MFA text",
+        "description": "Send an MFA code to a user via SMS",
+        "script": "<replace>",
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "creationDate": 1436807766258,
+        "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "lastModifiedDate": 1436807766258
+      },
+      "filename": "ch-send-mfa-sms.js"
+    },
+    {
+      "payload": {
+        "_id": "a5778ce7-addf-4fb6-a7db-92929f1314c4",
+        "name": "CH - Send MFA email",
+        "description": "Send an MFA code to a user via email",
+        "script": "<replace>",
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "creationDate": 1436807766258,
+        "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "lastModifiedDate": 1436807766258
+      },
+      "filename": "ch-send-mfa-email.js"
+    },
+    {
+      "payload": {
+        "_id": "c056951c-622e-11eb-ae93-0242ac130002",
+        "name": "CH - Reset Password - Create token and Send Email",
+        "description": "Send Reset Password Email",
+        "script": "<replace>",
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "creationDate": 1436807766258,
+        "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "lastModifiedDate": 1436807766258
+      },
+      "filename": "ch-password-reset-send-email.js"
+    },
+    {
+      "payload": {
+        "_id": "8f08bdfd-08b9-42ce-8f45-99da5bc9dcfd",
+        "name": "CH - Callback for Cannot Find User",
+        "description": "Callback to inform the user the email supplied cannot be found",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1615203069195
+      },
+      "filename": "ch-callback-cannot-find-user.js"
+    },
+    {
+      "payload": {
+        "_id": "a39f3f71-1782-46dc-97cf-7cc417d4ca4a",
+        "name": "CH - Reset Password - Confirmation of Email Sent",
+        "description": "Callback to show confirmation the password reset email has been sent",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1615203506316
+      },
+      "filename": "ch-password-reset-confirmation-email-sent.js"
+    },
+    {
+      "payload": {
+        "_id": "fdac4efb-d8b8-478b-8300-e11a4c3503df",
+        "name": "CH - Max number of login attempts",
+        "description": "Callback to show error when the maximum number of consecutive access attempts has been reached",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1615203506316
+      },
+      "filename": "ch-callback-max-retry-limit.js"
+    },
+    {
+      "payload": {
+        "_id": "24b1421b-8130-4eae-a999-a44dc6e94fa6",
+        "name": "CH - Callback to show recipient Phone Number",
+        "description": "Callback to show the phone number used to sent the OTP code",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1615203506316
+      },
+      "filename": "ch-password-reset-text-sent.js"
+    },
+    {
+      "payload": {
+        "_id": "ae90c22f-2613-49a6-9091-2238ec13eacb",
+        "name": "CH - Callback for Password Updated",
+        "description": "Callback to show confirmation of updated",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1615203563966
+      },
+      "filename": "ch-password-reset-pwd-updated.js"
+    },
+    {
+      "payload": {
+        "_id": "7fc79258-1c54-4df3-baa4-b51850ef3474",
+        "name": "CH - Reset Password - Verify Token",
+        "description": "Checks whether to resume or start the password reset journey, and verifies the Password reset token",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1615203762946
+      },
+      "filename": "ch-password-reset-verify-token.js"
+    },
+    {
+      "payload": {
+        "_id": "bf6c0ac8-8e13-4f11-8d99-d01b23e02a5c",
+        "name": "CH - Callback to show OTP not valid",
+        "description": "",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1615378956486
+      },
+      "filename": "ch-callback-otp-not-valid.js"
+    },
+    {
+      "payload": {
+        "_id": "20a3599f-b742-4554-a8b7-27862f248dd5",
+        "name": "CH - Require MFA Check",
+        "description": "Check whether the user has logged in within a certain time period.",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1615378956486
+      },
+      "filename": "ch-require-mfa-check.js"
+    },
+    {
+      "payload": {
+        "_id": "d7da3b35-af63-499b-aa0a-bb03666508db",
+        "name": "CH - Update Last Login",
+        "description": "Update user last login date",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+        "lastModifiedDate": 1616152574918
+      },
+      "filename": "ch-update-last-login.js"
+    },
+    {
+      "payload": {
+        "_id": "9bab9cb5-c723-4fb1-aa02-825aaaa7a266",
+        "name": "CH - Update Legacy Password",
+        "description": "Update user password after validation of legacy password",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+        "lastModifiedDate": 1617289605774
+      },
+      "filename": "ch-update-legacy-password.js"
+    },
+    {
+      "payload": {
+        "_id": "2c9f9d6a-4b93-493a-bf0d-44fe53d8d1d1",
+        "name": "CH - Check Password Status",
+        "description": "Check the user's legacy password status",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+        "lastModifiedDate": 1617294253241
+      },
+      "filename": "ch-check-password-status.js"
+    },
+    {
+      "payload": {
+        "_id": "ace951c8-d169-4426-9357-d5b44e0aa728",
+        "name": "CH - Callback to show recipient phone number or mail",
+        "description": "Callback to show the phone number or mail used to send the OTP code",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+        "lastModifiedDate": 1616507095258
+      },
+      "filename": "ch-callback-show-phone-or-mail.js"
+    },
+    {
+      "payload": {
+        "_id": "b480d9f7-5908-45cf-91d1-bc1fe56fe8de",
+        "name": "CH - Phone Number in IDM profile",
+        "description": "Checks whether the Phone Number is set within the IDM user profile",
+        "script": "<replace>",
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "creationDate": 1436807766258,
+        "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "lastModifiedDate": 1436807766258
+      },
+      "filename": "ch-phone-number-present.js"
+    },
+    {
+      "payload": {
+        "_id": "000c65e1-c9c6-4edb-96d2-298a9b152b40",
+        "name": "CH - Phone Number entered by user",
+        "description": "Checks whether the Phone Number has been entered by end user",
+        "script": "<replace>",
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "creationDate": 1436807766258,
+        "lastModifiedBy": "id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org",
+        "lastModifiedDate": 1436807766258
+      },
+      "filename": "ch-phone-number-entered.js"
+    },
+    {
+      "payload": {
+        "_id": "c4001e02-469c-4cc4-bf95-9f43d7e46568",
+        "name": "CH - Check for session",
+        "description": "Checks for an existing session",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1616675205613
+      },
+      "filename": "ch-check-for-session.js"
+    },
+    {
+      "payload": {
+        "_id": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149",
+        "name": "CH - Get IDM Access Token",
+        "description": "Gets an IDM Access Token using service user access credentials",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1616675452183
+      },
+      "filename": "ch-get-idm-access-token.js"
+    },
+    {
+      "payload": {
+        "_id": "c089f1fe-fa0f-4f61-a3d1-a1fce6e953cf",
+        "name": "CH - Change Password - Check Pwd Policy",
+        "description": "Checks the new password against the IDM password policy",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1616675550921
+      },
+      "filename": "ch-update-pwd-check-password-policy.js"
+    },
+    {
+      "payload": {
+        "_id": "1a7ced42-93f3-4739-a9b8-b773b489ed1d",
+        "name": "CH - Change Password - Confirmation",
+        "description": "Shows a password updated confirmation message",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1616675641669
+      },
+      "filename": "ch-update-pwd-confirmation.js"
+    },
+    {
+      "payload": {
+        "_id": "52014433-9b16-4f21-a00c-1ab477c918f8",
+        "name": "CH - Change Password - Input Collector",
+        "description": "Display the update password form",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1616675734162
+      },
+      "filename": "ch-update-pwd-input-collector.js"
+    },
+    {
+      "payload": {
+        "_id": "84caf8b3-813a-4998-85ff-a3dd8eee4bcf",
+        "name": "CH - Change Password - Load New Password for Patch",
+        "description": "Loads the new password in preparation for patching the user",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1616675797845
+      },
+      "filename": "ch-update-pwd-load-new-pwd-for-patch.js"
+    },
+    {
+      "payload": {
+        "_id": "04e99c63-2875-43ca-9e5f-84832bf59a34",
+        "name": "CH - Change Password - Error Message",
+        "description": "Displays an error message if the password cannot be updated",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1616675860999
+      },
+      "filename": "ch-update-pwd-password-error-message.js"
+    },
+    {
+      "payload": {
+        "_id": "db0f9e36-6d51-4f86-99a7-aa66287fad58",
+        "name": "CH - Change Full Name - Input Collectoe",
+        "description": "Prompts the user for the full name",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1616675641669
+      },
+      "filename": "ch-update-name-input-collector.js"
+    },
+    {
+      "payload": {
+        "_id": "4d27c5a1-e42c-47cb-90c1-d411902eb674",
+        "name": "CH - Change Full Name - Confirmation",
+        "description": "Shows a full name updated confirmation message",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1616675641669
+      },
+      "filename": "ch-update-name-confirmation.js"
+    },
+    {
+      "payload": {
+        "_id": "55801756-11bf-493d-b49c-195488cf939a",
+        "name": "CH - Get Company Data By Company Number",
+        "description": "Performs a lookup of a Company in IDM given a company number",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810393533
+      },
+      "filename": "ch-fetch-company-info.js"
+    },
+    {
+      "payload": {
+        "_id": "4ec1ca31-0009-4266-8790-3cca5f931f2f",
+        "name": "CH - Get Company Data - Set Implicit Confirm",
+        "description": "Performs a lookup of a Company in IDM given a company number",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810393533
+      },
+      "filename": "ch-fetch-company-set-implicit-confirm.js"
+    },
+    {
+      "payload": {
+        "_id": "16975ea5-4f0a-4ac6-861f-00dbf39ca441",
+        "name": "CH - Associate User to Company",
+        "description": "Given a User ID and a Company data, creates a relationship between the user and the company",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-join-company-create-relationship.js"
+    },
+    {
+      "payload": {
+        "_id": "10f63087-b21b-40eb-9c90-8e3fb3fabfa1",
+        "name": "CH - Callback for User Associated to Company",
+        "description": "Confirmation that the company has been added to the user account successfully",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-join-company-confirmation.js"
+    },
+    {
+      "payload": {
+        "_id": "838ab622-d892-44e6-a5c5-f45238aed210",
+        "name": "CH - Prompt for Company Number",
+        "description": "Prompts the user to enter the Company Number",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-join-company-prompt-for-company-no.js"
+    },
+    {
+      "payload": {
+        "_id": "ad7a63a6-fae2-46c0-be70-bec1f059f064",
+        "name": "CH - Prompt for Company Auth Code",
+        "description": "Prompts the user to enter the Company Auth Code",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-join-company-prompt-for-company-authcode.js"
+    },
+    {
+      "payload": {
+        "_id": "917f36a9-f21e-43e4-bed5-9b2171228387",
+        "name": "CH - Prompt Error Message for wrong Company Auth Code",
+        "description": "Prompts the user an error message when the Company Auth Code is not valid",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-join-company-wrong-code-error-message.js"
+    },
+    {
+      "payload": {
+        "_id": "3607eaf7-49ae-448e-8919-18a8e39bd359",
+        "name": "CH - Invite User - Input Collector",
+        "description": "Prompts the user to enter the email and full name of the user to invite.",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-invite-user-prompt-for-email.js"
+    },
+    {
+      "payload": {
+        "_id": "bf5841ef-c6a4-4e4c-9c5e-15ca35ba9ca9",
+        "name": "CH - Invite User - Create Pending Relationship",
+        "description": "Create a 'pending' relationship between the user and the company",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-invite-user-create-pending-relationship.js"
+    },
+    {
+      "payload": {
+        "_id": "1a4c078c-6667-4246-8069-105c4c80473e",
+        "name": "CH - Invite User - Send Invitation Email",
+        "description": "Sends the invitation email to the target user",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-invite-user-send-email.js"
+    },
+    {
+      "payload": {
+        "_id": "164f8d89-f0d6-4094-aeed-0ec94149c590",
+        "name": "CH - Invite User - Email sent confirmation",
+        "description": "Displays the user a confirmation message when the invite has been sent.",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-invite-user-email-sent.js"
+    },
+    {
+      "payload": {
+        "_id": "0b0cf5cd-c570-475c-851e-e3e8035113d2",
+        "name": "CH - Invite User - Check parameter and Lookup Company",
+        "description": "Checks the presence of company number and looks the company up.",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-invite-user-fetch-company.js"
+    },
+    {
+      "payload": {
+        "_id": "6049a931-e9e9-4c28-a4de-5dff15134236",
+        "name": "CH - Invite User - Parameters errors",
+        "description": "Shows error message if the supplied data is in the wrong format.",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-invite-user-invalid-email-error-message.js"
+    },
+    {
+      "payload": {
+        "_id": "f2e4ee99-bcbb-4f3b-9ea8-36c1d547d620",
+        "name": "CH - Invite User - Respond to invite (accept/decline)",
+        "description": "Processes the user response to the invite.",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-invite-user-respond-invite.js"
+    },
+    {
+      "payload": {
+        "_id": "14296e66-f0a8-4922-b04c-a94b25630f1b",
+        "name": "CH - Invite User - Confirmation of invite accept/decline",
+        "description": "Shows the confirmation message for invite accept/decline.",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-invite-user-respond-confirmation.js"
+    },
+    {
+      "payload": {
+        "_id": "e502a152-bc0a-49b3-82cd-233bafdabcad",
+        "name": "CH - Invite User - Onboard unregistered user",
+        "description": "Onboards an unregistered user as part of the invitation process.",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-invite-user-prepare-user-onboarding.js"
+    },
+    {
+      "payload": {
+        "_id": "6afae8cf-4428-4b98-a281-37d823123e1f",
+        "name": "CH - Invite User - Ask for Email Sending confirmation",
+        "description": "Ask for Email Sending confirmation.",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-invite-user-send-email-confirm.js"
+    },
+    {
+      "payload": {
+        "_id": "9130bbdf-bb9d-4ef9-8226-c95c6192c1d7",
+        "name": "CH - Onboard User - Verify token",
+        "description": "Verify token, user existence, invite and onboarding date",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-onboarding-verify-token.js"
+    },
+    {
+      "payload": {
+        "_id": "d22f9a0c-426a-4466-b95e-d0f125b0d5fa",
+        "name": "OAuth2 Access Token Modification Script",
+        "description": "Default global script for OAuth2 Access Token Modification",
+        "script": "<replace>",
+        "default": true,
+        "language": "GROOVY",
+        "context": "OAUTH2_ACCESS_TOKEN_MODIFICATION",
+        "createdBy": "id=dsameuser,ou=user,dc=openam,dc=forgerock,dc=org",
+        "creationDate": 1433147666269,
+        "lastModifiedBy": "id=dsameuser,ou=user,dc=openam,dc=forgerock,dc=org",
+        "lastModifiedDate": 1433147666269
+      },
+      "filename": "oauth2-token-mod.groovy"
+    },
+    {
+      "payload": {
+        "_id": "36863ffb-40ec-48b9-94b1-9a99f71cc3b5",
+        "name": "OIDC Claims Script",
+        "description": "Default global script for OIDC claims",
+        "script": "<replace>",
+        "default": true,
+        "language": "GROOVY",
+        "context": "OIDC_CLAIMS",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "null",
+        "lastModifiedDate": 0
+      },
+      "filename": "oidc-claims-script.groovy"
+    },
+    {
+      "payload": {
+        "_id": "9de3eb62-f131-4fac-a294-7bd170fd4acb",
+        "name": "Scripted Policy Condition",
+        "description": "Default global script for Scripted Policy Conditions",
+        "script": "<replace>",
+        "default": true,
+        "language": "JAVASCRIPT",
+        "context": "POLICY_CONDITION",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "null",
+        "lastModifiedDate": 0
+      },
+      "filename": "scripted-policy-condition.js"
+    },
+    {
+      "payload": {
+        "_id": "137e1fd5-19f4-425d-96eb-2a8c20cabcf8",
+        "name": "CH - Fetch Hashed Password",
+        "description": "Fetch user hashed (legacy) password value",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+        "lastModifiedDate": 1616707782244
+      },
+      "filename": "ch-fetch-hashed-password.js"
+    },
+    {
+      "payload": {
+        "_id": "7f9c55bb-9307-45b7-9b4f-7d1bf4e8ea49",
+        "name": "CH - Callback to prompt for validate credential",
+        "description": "Enter value to validate against hash",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+        "lastModifiedDate": 1616707988997
+      },
+      "filename": "ch-callback-prompt-for-validate-credential.js"
+    },
+    {
+      "payload": {
+        "_id": "65d2099f-9583-47d3-8303-8051709cb436",
+        "name": "CH - Validate credential",
+        "description": "Call validation service to validate cleartext against hash",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+        "lastModifiedDate": 1616708148417
+      },
+      "filename": "ch-validate-credential.js"
+    },
+    {
+      "payload": {
+        "_id": "9dc0bbc6-8894-4d23-a13f-8619a3fcad5b",
+        "name": "CH - Prompt for Company Number/Auth Code",
+        "description": "Prompts the user to enter Company Number and Company Auth Code",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+        "lastModifiedDate": 1617036446946
+      },
+      "filename": "ch-callback-prompt-for-company-info.js"
+    },
+    {
+      "payload": {
+        "_id": "14c3cb5d-1010-459d-9747-6ff19a8de70d",
+        "name": "CH - Update Legacy Password Required",
+        "description": "Inform user that they need to update their legacy password",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+        "lastModifiedDate": 1617813412567
+      },
+      "filename": "ch-update-legacy-password-required.js"
+    },
+    {
+      "payload": {
+        "_id": "a5042601-6867-4566-81d1-fad4ecd61487",
+        "name": "CH - Update Legacy Password Check Original",
+        "description": "Check the originally entered user password against the value entered in the update password dialog",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+        "lastModifiedDate": 1617813675725
+      },
+      "filename": "ch-update-legacy-password-check-original.js"
+    },
+    {
+      "payload": {
+        "_id": "188d3f9d-ca04-4df7-bcd7-eed3fe27e21e",
+        "name": "CH - Check Login Credentials Format",
+        "description": "check login credentials format",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "null",
+        "lastModifiedDate": 0
+      },
+      "filename": "ch-login-input-check.js"
+    },
+    {
+      "payload": {
+        "_id": "e0aec02a-ad8b-427d-a72e-cdfd8cb6c0e0",
+        "name": "CH - Login Error Message",
+        "description": "Create error message structure for login page",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "null",
+        "lastModifiedDate": 0
+      },
+      "filename": "ch-login-error-message.js"
+    },
+    {
+      "payload": {
+        "_id": "a1ebbcd2-39c1-47c2-a152-4bebcf8cfb5b",
+        "name": "CH - Login - Soft Lock - Increment Counter",
+        "description": "Increments the invalid login attempts and sets the soft lock field",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "null",
+        "lastModifiedDate": 0
+      },
+      "filename": "ch-login-soft-lock-increment-counter.js"
+    },
+    {
+      "payload": {
+        "_id": "7837ccb6-2e56-44bf-a5df-7cfdb0bfc38b",
+        "name": "CH - Login - Soft Lock - Check Lock Status",
+        "description": "Increments the invalid login attempts and sets the soft lock field",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "null",
+        "lastModifiedDate": 0
+      },
+      "filename": "ch-login-soft-lock-check.js"
+    },
+    {
+      "payload": {
+        "_id": "329154d4-5e55-4cc5-a17e-19d4fd3729aa",
+        "name": "CH - Login - Soft Lock - Reset Counter",
+        "description": "Resets to zero the number invalid login attempts and empties the soft lock date",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "null",
+        "lastModifiedDate": 0
+      },
+      "filename": "ch-login-soft-lock-reset-counter.js"
+    },
+    {
+      "payload": {
+        "_id": "064705f3-93d3-482c-ad3f-4531a28ce0a0",
+        "name": "CH - Callback Login Error",
+        "description": "Handle error message structure for login page",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "null",
+        "lastModifiedDate": 0
+      },
+      "filename": "ch-callback-login-error.js"
+    },
+    {
+      "payload": {
+        "_id": "13e9d2a5-e93a-47f2-894d-4d732918c383",
+        "name": "CH - Update Legacy Password Error Message",
+        "description": "Create error message structure for login page from update legacy password journey",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "null",
+        "lastModifiedDate": 0
+      },
+      "filename": "ch-update-legacy-password-error-message.js"
+    },
+    {
+      "payload": {
+        "_id": "72e60c8b-f4e9-4696-8218-6efee1f5d97b",
+        "name": "CH - Callback update phone show number",
+        "description": "Feedback for the update phone number journey",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "null",
+        "lastModifiedDate": 0
+      },
+      "filename": "ch-callback-update-phone-show-number.js"
+    },
+    {
+      "payload": {
+        "_id": "353f5e9a-5d80-4d43-a77f-7968d05b1157",
+        "name": "CH - Update Phone Error Message",
+        "description": "Update phone error message",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "null",
+        "lastModifiedDate": 0
+      },
+      "filename": "ch-update-phone-error-message.js"
+    },
+    {
+      "payload": {
+        "_id": "f1413023-6fa4-43de-92a9-1f63f889c8b4",
+        "name": "CH - Update Phone Input Collector",
+        "description": "Capture phone number and user's current password",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+        "lastModifiedDate": 1619453115206
+      },
+      "filename": "ch-update-phone-input-collector.js"
+    },
+    {
+      "payload": {
+        "_id": "6811d9da-4d44-488e-9e32-19a199dc0b3f",
+        "name": "CH - Update Phone Confirmation",
+        "description": "Confirmation of updated phone number",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+        "lastModifiedDate": 1619454785434
+      },
+      "filename": "ch-update-phone-confirmation.js"
+    },
+    {
+      "payload": {
+        "_id": "256dac17-1055-4798-9b98-a1321f3a8f09",
+        "name": "CH - Reset Password Clear Parameters",
+        "description": "When resetting password, clear soft-lock parameters and migrated password status parameter",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+        "lastModifiedDate": 1621011931193
+      },
+      "filename": "ch-reset-password-clear-parameters.js"
+    },
+    {
+      "payload": {
+        "_id": "df75d4ae-8f25-48f4-af14-bb87206e029d",
+        "name": "CH - Validate Authcode",
+        "description": "Validate user-entered cleartext company authcode",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+        "lastModifiedDate": 1622752327061
+      },
+      "filename": "ch-validate-authcode.js"
+    },
+    {
+      "payload": {
+        "_id": "ca6cbc1b-d83b-4946-b327-be15402894fa",
+        "name": "CH - EWF: Prompt for Company Number",
+        "description": "Prompts the user to enter the Company Number",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-webfiling-prompt-for-company-no.js"
+    },
+    {
+      "payload": {
+        "_id": "19a9ba97-3eaf-46ed-9b59-ea9315d81407",
+        "name": "CH - EWF: Add password to Session",
+        "description": "stores EWF user password in session",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-webfiling-store-pwd-in-session.js"
+    },
+    {
+      "payload": {
+        "_id": "ddce54ff-70fe-4ef7-bdfe-3c83488ef266",
+        "name": "CH - EWF: Check for Session",
+        "description": "checks if session exists",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-webfiling-check-for-session.js"
+    },
+    {
+      "payload": {
+        "_id": "78da2828-68cc-4f63-b003-b8a250b1753d",
+        "name": "CH - EWF: Prompt for Association Confirmation",
+        "description": "Prompts the user for confirmation to add the company to their account",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-webfiling-prompt-for-link-confirmation.js"
+    },
+    {
+      "payload": {
+        "_id": "460f8d31-5f90-440a-9f47-f5951778ea4f",
+        "name": "CH - EWF: Add auth code to Session",
+        "description": "stores EWF company auth code in session",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-webfiling-store-authcode-in-session.js"
+    },
+    {
+      "payload": {
+        "_id": "d8d0c71c-ddfb-47f6-a577-33aa0b7c2bcd",
+        "name": "CH - EWF: Checks user association with company",
+        "description": "Checks user association with company",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-webfiling-check-for-company-assoc-status.js"
+    },
+    {
+      "payload": {
+        "_id": "6cd2619d-84ec-4eaf-a377-e6a6230c82a6",
+        "name": "CH - EWF: Prompts the user to complete profile",
+        "description": "Prompts the user to complete profile with full name and phone number",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-webfiling-update-profile.js"
+    },
+    {
+      "payload": {
+        "_id": "16727fa5-71c7-4a81-8639-1dfffa8f034b",
+        "name": "CH - Remove User - Fetch User and Company data",
+        "description": "Fetch user and company data, and user status for given company",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-remove-user-fetch-company-and-user.js"
+    },
+    {
+      "payload": {
+        "_id": "5000bb7b-29da-4bf4-a2cf-6f028d32a4d9",
+        "name": "CH - Remove User - Prompt for confirmation",
+        "description": "Prompts the user to confirm user removal from a company",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-remove-user-prompt-confirmation.js"
+    },
+    {
+      "payload": {
+        "_id": "a221047b-706f-48f9-8d39-3fcd518543aa",
+        "name": "CH - Remove User - Send Notification email to removed user",
+        "description": "Send Notification email to removed user",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-remove-user-send-email.js"
+    },
+    {
+      "payload": {
+        "_id": "bdfa0ec4-ad50-484f-9732-77c789a900cb",
+        "name": "CH - Email Consent Collector/Changer",
+        "description": "Collect email consent and allow the user to change it",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-email-consent-change.js"
+    },
+    {
+      "payload": {
+        "_id": "80333df7-d987-4333-8e65-dcd194e62a07",
+        "name": "CH - Change Email - Input Collector",
+        "description": "Collect password, email and confirmation email from user.",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-update-email-input-collector.js"
+    },
+    {
+      "payload": {
+        "_id": "47d1222b-1825-4522-98ff-1c462c42e4ff",
+        "name": "CH - Change Email - Patch User",
+        "description": "Patch user.",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-update-email-patch-new-email.js"
+    },
+    {
+      "payload": {
+        "_id": "1a6815f1-0272-490b-8d6b-69609c3ee9d6",
+        "name": "CH - Load JWT signing/encryption keys",
+        "description": "Load signing/encryption keys used to create/sign/encrypt the Registration/Pwd Reset/Onboarding JWTs",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-load-jwt-keys.js"
+    },
+    {
+      "payload": {
+        "_id": "1a782857-b6fc-438d-9244-ae7ddc1dec26",
+        "name": "CH - Load Language into session",
+        "description": "Load the selected language to session (defaults to EN)",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-webfiling-store-lang-in-session.js"
+    },
+    {
+      "payload": {
+        "_id": "1b3c84cf-411a-4e5b-998f-768191e735f1",
+        "name": "CH - Notify Authorised Company Users",
+        "description": "Sends an email notification to all authorised members of a company",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-notify-authorized-users.js"
+    },
+    {
+      "payload": {
+        "_id": "1968af0f-92d4-45ec-b8bd-f08b5aac4b7b",
+        "name": "CH - Notify Users post-SCRS",
+        "description": "Sends an email notification to all users authorised via SCRS",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-scrs-send-email.js"
+    },
+    {
+      "payload": {
+        "_id": "bce73aab-8659-4ee0-ac00-7419f88b78ed",
+        "name": "CH - Check incoming parameters from SCRS endpoint",
+        "description": "Check incoming parameters from SCRS endpoint",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-scrs-validate-params.js"
+    },
+    {
+      "payload": {
+        "_id": "39d33cdf-0fb9-46c7-8180-51b141cf321f",
+        "name": "CH - Resend OTP via MFA Route",
+        "description": "Resend OTP via MFA Route",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-resend-otp-via-mfa-route.js"
+    },
+    {
+      "payload": {
+        "_id": "da9c499e-d364-42df-a645-fa509c625622",
+        "name": "CH - Callback to capture OTP response",
+        "description": "Callback to capture OTP response",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-callback-to-capture-otp-response.js"
+    },
+    {
+      "payload": {
+        "_id": "610ba200-db35-4c44-80c9-a40d36cc6fc0",
+        "name": "CH - Choose OTP Method",
+        "description": "Choose OTP Method",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-choose-otp-method.js"
+    },
+    {
+      "payload": {
+        "_id": "b6d1b635-6216-4719-bb93-eff19a561084",
+        "name": "CH - MFA Sub-Flow Setup",
+        "description": "MFA Sub-Flow Setup",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-mfa-sub-flow-setup.js"
+    },
+    {
+      "payload": {
+        "_id": "e20fd099-54b2-4546-8f76-8ad3de3a4a08",
+        "name": "CH - SCRS Activation parameters check",
+        "description": "SCRS Activation parameters check",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-scrs-activation-check-params.js"
+    },
+    {
+      "payload": {
+        "_id": "b559209e-541e-47f5-9a35-d455c564a2ea",
+        "name": "CH - SCRS User Activation",
+        "description": "SCRS User Activation",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-scrs-unlock-user.js"
+    },
+    {
+      "payload": {
+        "_id": "e5b8f7b7-0dc2-46ba-bb3e-16e2d5543156",
+        "name": "CH - Check OTP Resend Address",
+        "description": "Check OTP Resend Address",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-check-otp-resend-address.js"
+    },
+    {
+      "payload": {
+        "_id": "0be76ade-2b6c-4ee9-8ffb-5b8c4d7446da",
+        "name": "CH - Registration Initial Capture",
+        "description": "Registration Initial Capture",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-registration-initial-capture.js"
+    },
+    {
+      "payload": {
+        "_id": "eac3ce3e-0dae-4eea-8ec8-cb9be9479ee4",
+        "name": "CH - Registration Initial Capture - Check",
+        "description": "Registration Initial Capture - Check",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-registration-initial-capture-check.js"
+    },
+    {
+      "payload": {
+        "_id": "6b876ea7-c36e-475a-9706-f2ff658543cb",
+        "name": "CH - Create/Update user from source",
+        "description": "Create/Update user from source",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-check-user-source.js"
+    },
+    {
+      "payload": {
+        "_id": "7576d62c-b649-4a9e-b9ea-4efc6bc61fde",
+        "name": "CH - Change Email - Confirmation",
+        "description": "Change Email - Confirmation",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1617810491969
+      },
+      "filename": "ch-update-email-confirmation.js"
+    },
+    {
+      "payload": {
+          "_id": "26c31a86-df26-4dd3-8675-55e29388d568",
+          "name": "CH - Process Request",
+          "description": "Process request for consent journey",
+          "script": "<replace>",
+          "default": false,
+          "language": "JAVASCRIPT",
+          "context": "AUTHENTICATION_TREE_DECISION_NODE",
+          "createdBy": "null",
+          "creationDate": 0,
+          "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+          "lastModifiedDate": 1630445552147
+      },
+      "filename": "ch-process-request-consent.js"
+  },
+  {
+      "payload": {
+          "_id": "f981c992-2b82-4f38-919a-93ea83e7b8fb",
+          "name": "CH - Get Consent",
+          "description": "Get user consent",
+          "script": "<replace>",
+          "default": false,
+          "language": "JAVASCRIPT",
+          "context": "AUTHENTICATION_TREE_DECISION_NODE",
+          "createdBy": "null",
+          "creationDate": 0,
+          "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+          "lastModifiedDate": 1630446169326
+      },
+      "filename": "ch-get-consent.js"
+  },
+  {
+      "payload": {
+          "_id": "3de821a3-7c07-4ae4-858f-8e46192ed667",
+          "name": "CH - Send Consent Response",
+          "description": "Send consent response",
+          "script": "<replace>",
+          "default": false,
+          "language": "JAVASCRIPT",
+          "context": "AUTHENTICATION_TREE_DECISION_NODE",
+          "createdBy": "null",
+          "creationDate": 0,
+          "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+          "lastModifiedDate": 1630446313640
+      },
+      "filename": "ch-send-consent-response.js"
+  }
+  ]
 }

@@ -1,0 +1,343 @@
+{
+  "nodes": [
+    {
+      "_id": "00e99fef-7db0-4751-ae63-ff6e8c754676",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "a15a784a-489e-49ee-af79-a7153447c843",
+        "outcomes": [
+          "success",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "145def5e-ea49-4f72-9a11-48824e654086",
+      "nodeType": "InnerTreeEvaluatorNode",
+      "details": {
+        "tree": "CHWebFiling-CompleteProfile"
+      }
+    },
+    {
+      "_id": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "e69b137b-1bae-4804-af6b-6a93371733ca",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "4b2e1065-d083-4fa2-afa3-a6e65b00acc5",
+      "nodeType": "InnerTreeEvaluatorNode",
+      "details": {
+        "tree": "CHManageEmailConsent"
+      }
+    },
+    {
+      "_id": "680989b5-052e-4c96-9f11-0950f524b442",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149",
+        "outcomes": [
+          "success",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "b0eb0351-07cb-478b-8c11-8bac04ab6a94",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "84caf8b3-813a-4998-85ff-a3dd8eee4bcf",
+        "outcomes": [
+          "true",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "bc31d437-ef87-4f98-84ff-b08ac9d186ba",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149",
+        "outcomes": [
+          "success",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "c2f18529-f964-4f3a-97a5-3a7406fc1fb3",
+      "nodeType": "PatchObjectNode",
+      "details": {
+        "identityResource": "managed/alpha_user",
+        "patchAsObject": false,
+        "ignoredFields": [
+          "userName"
+        ],
+        "identityAttribute": "userName"
+      }
+    },
+    {
+      "_id": "f0cee5a0-5d11-462d-b8ae-62b59f3d9791",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "c089f1fe-fa0f-4f61-a3d1-a1fce6e953cf",
+        "outcomes": [
+          "pass",
+          "fail",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "f523a556-6e1b-413f-8ec2-0ce00ddfec30",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "e20fd099-54b2-4546-8f76-8ad3de3a4a08",
+        "outcomes": [
+          "not_active",
+          "already_active",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "b849a08d-2f47-4e4c-8c5c-99bb5f6f5c30",
+      "nodeType": "InnerTreeEvaluatorNode",
+      "details": {
+        "tree": "CHWebFiling-Login"
+      }
+    },
+    {
+      "_id": "74199d6d-3081-4171-ae85-4900e16dd12b",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "b559209e-541e-47f5-9a35-d455c564a2ea",
+        "outcomes": [
+          "user_unlocked",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "16dcf5f0-0df5-4e9c-8fc5-c5d356f5e64e",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149",
+        "outcomes": [
+          "success",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    }
+  ],
+  "tree": {
+    "_id": "CHSCRSActivation",
+    "identityResource": "managed/alpha_user",
+    "uiConfig": {},
+    "description": "Activate an user who has been created and/or associated with a company via the SCRS process.",
+    "entryNodeId": "680989b5-052e-4c96-9f11-0950f524b442",
+    "nodes": {
+      "00e99fef-7db0-4751-ae63-ff6e8c754676": {
+        "x": 667,
+        "y": 42.015625,
+        "connections": {
+          "error": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50",
+          "success": "bc31d437-ef87-4f98-84ff-b08ac9d186ba"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Create Password"
+      },
+      "145def5e-ea49-4f72-9a11-48824e654086": {
+        "x": 1455,
+        "y": 325.015625,
+        "connections": {
+          "false": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50",
+          "true": "4b2e1065-d083-4fa2-afa3-a6e65b00acc5"
+        },
+        "nodeType": "InnerTreeEvaluatorNode",
+        "displayName": "Complete Profile"
+      },
+      "3971f45f-3b9c-4c4b-b938-e3631f1d2b50": {
+        "x": 984,
+        "y": 941.015625,
+        "connections": {},
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "General Error"
+      },
+      "4b2e1065-d083-4fa2-afa3-a6e65b00acc5": {
+        "x": 1460,
+        "y": 461.015625,
+        "connections": {
+          "false": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50",
+          "true": "16dcf5f0-0df5-4e9c-8fc5-c5d356f5e64e"
+        },
+        "nodeType": "InnerTreeEvaluatorNode",
+        "displayName": "Email consent"
+      },
+      "680989b5-052e-4c96-9f11-0950f524b442": {
+        "x": 189,
+        "y": 177.015625,
+        "connections": {
+          "error": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50",
+          "success": "f523a556-6e1b-413f-8ec2-0ce00ddfec30"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "get IDM token"
+      },
+      "b0eb0351-07cb-478b-8c11-8bac04ab6a94": {
+        "x": 1325,
+        "y": 22.015625,
+        "connections": {
+          "error": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50",
+          "true": "c2f18529-f964-4f3a-97a5-3a7406fc1fb3"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Load New Pwd for Patch"
+      },
+      "bc31d437-ef87-4f98-84ff-b08ac9d186ba": {
+        "x": 922,
+        "y": 143.015625,
+        "connections": {
+          "error": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50",
+          "success": "f0cee5a0-5d11-462d-b8ae-62b59f3d9791"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Get IDM Access Token"
+      },
+      "c2f18529-f964-4f3a-97a5-3a7406fc1fb3": {
+        "x": 1374,
+        "y": 175.015625,
+        "connections": {
+          "FAILURE": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50",
+          "PATCHED": "145def5e-ea49-4f72-9a11-48824e654086"
+        },
+        "nodeType": "PatchObjectNode",
+        "displayName": "Patch Object"
+      },
+      "f0cee5a0-5d11-462d-b8ae-62b59f3d9791": {
+        "x": 1120,
+        "y": 16,
+        "connections": {
+          "error": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50",
+          "fail": "00e99fef-7db0-4751-ae63-ff6e8c754676",
+          "pass": "b0eb0351-07cb-478b-8c11-8bac04ab6a94"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Check Pwd Policy"
+      },
+      "f523a556-6e1b-413f-8ec2-0ce00ddfec30": {
+        "x": 443,
+        "y": 129.015625,
+        "connections": {
+          "error": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50",
+          "already_active": "b849a08d-2f47-4e4c-8c5c-99bb5f6f5c30",
+          "not_active": "00e99fef-7db0-4751-ae63-ff6e8c754676"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Check activation params"
+      },
+      "b849a08d-2f47-4e4c-8c5c-99bb5f6f5c30": {
+        "x": 684,
+        "y": 626.015625,
+        "connections": {
+          "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
+          "false": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50"
+        },
+        "nodeType": "InnerTreeEvaluatorNode",
+        "displayName": "Inner Tree Evaluator"
+      },
+      "74199d6d-3081-4171-ae85-4900e16dd12b": {
+        "x": 1485,
+        "y": 639.015625,
+        "connections": {
+          "user_unlocked": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
+          "error": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Unlock user"
+      },
+      "16dcf5f0-0df5-4e9c-8fc5-c5d356f5e64e": {
+        "x": 1225,
+        "y": 689.015625,
+        "connections": {
+          "success": "74199d6d-3081-4171-ae85-4900e16dd12b",
+          "error": "3971f45f-3b9c-4c4b-b938-e3631f1d2b50"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Get IDM token"
+      }
+    },
+    "staticNodes": {
+      "startNode": {
+        "x": 62,
+        "y": 103
+      },
+      "70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
+        "x": 1895,
+        "y": 515
+      },
+      "e301438c-0bd0-429c-ab0c-66126501069a": {
+        "x": 596,
+        "y": 898
+      }
+    }
+  }
+}

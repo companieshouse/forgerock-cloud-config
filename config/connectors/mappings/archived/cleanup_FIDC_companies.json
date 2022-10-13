@@ -1,0 +1,182 @@
+{
+	"target": "managed/alpha_organization",
+	"enabled": false,
+	"source": "system/CHSCompany/company_profile",
+	"name": "companies_cleanup_mapping",
+	"displayName": "companies_cleanup_mapping",
+	"properties": [
+		{
+			"target": "name",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "source.company_name"
+			}
+		},
+		{
+			"target": "number",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "source.company_number"
+			}
+		},
+		{
+			"target": "type",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "source.type"
+			}
+		},
+		{
+			"target": "status",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "source.company_status"
+			}
+		},
+		{
+			"target": "locality",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "if (source.registered_office_address) {\n  source.registered_office_address.locality\n}"
+			}
+		},
+		{
+			"target": "postalCode",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "if (source.registered_office_address) {\n  source.registered_office_address.postal_code\n}"
+			}
+		},
+		{
+			"target": "addressLine1",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "if (source.registered_office_address) {\n  source.registered_office_address.address_line_1\n}"
+			}
+		},
+		{
+			"target": "addressLine2",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "if (source.registered_office_address) {\n  source.registered_office_address.address_line_2\n}"
+			}
+		},
+		{
+			"target": "region",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "if (source.registered_office_address) {\n  source.registered_office_address.region\n}"
+			}
+		},
+		{
+			"target": "creationDate",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "source.date_of_creation"
+			}
+		},
+		{
+			"target": "jurisdiction",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "if (source.jurisdiction == \"england-wales\") {\n  \"EW\"\n} else if (source.jurisdiction == \"scotland\") {\n  \"SC\"\n} else if (source.jurisdiction == \"northern-ireland\") {\n  \"NI\"\n} else {\n  source.jurisdiction\n}"
+			}
+		}
+	],
+	"policies": [
+		{
+			"action": "EXCEPTION",
+			"situation": "AMBIGUOUS"
+		},
+		{
+			"action": "DELETE",
+			"situation": "SOURCE_MISSING"
+		},
+		{
+			"action": "IGNORE",
+			"situation": "MISSING"
+		},
+		{
+			"action": "EXCEPTION",
+			"situation": "FOUND_ALREADY_LINKED"
+		},
+		{
+			"action": "DELETE",
+			"situation": "UNQUALIFIED"
+		},
+		{
+			"action": "DELETE",
+			"situation": "UNASSIGNED"
+		},
+		{
+			"action": "EXCEPTION",
+			"situation": "LINK_ONLY"
+		},
+		{
+			"action": "IGNORE",
+			"situation": "TARGET_IGNORED"
+		},
+		{
+			"action": "IGNORE",
+			"situation": "SOURCE_IGNORED"
+		},
+		{
+			"action": "IGNORE",
+			"situation": "ALL_GONE"
+		},
+		{
+			"action": "DELETE",
+			"situation": "CONFIRMED"
+		},
+		{
+			"action": "DELETE",
+			"situation": "FOUND"
+		},
+		{
+			"action": "IGNORE",
+			"situation": "ABSENT"
+		}
+	],
+	"correlationQuery": [
+		{
+			"linkQualifier": "default",
+			"expressionTree": {
+				"any": [
+					"number"
+				]
+			},
+			"mapping": "companies_cleanup_mapping",
+			"type": "text/javascript",
+			"file": "ui/correlateTreeToQueryFilter.js"
+		}
+	],
+	"clusteredSourceReconEnabled": true,
+	"reconSourceQueryPageSize": 10000,
+	"sourceQueryFullEntry": true,
+	"sourceQuery": {
+		"_queryFilter": "true"
+	},
+	"taskThreads": 20
+}

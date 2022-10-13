@@ -1,0 +1,15 @@
+{
+    "javascript.preferences.quoteStyle": "single",
+    "editor.autoClosingQuotes": "always",
+    "eslint.validate": [
+        "javascript"
+    ],
+    "eslint.options": {
+        "eslint.workingDirectories": [ 
+            "./scrips", 
+            "./config/idm-endpoints/scripts-content", 
+            "./config/am-scripts/scripts-content"
+        ]
+        
+    }
+}

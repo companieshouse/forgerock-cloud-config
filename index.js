@@ -5,6 +5,7 @@ const {
   updateAgents,
   updateApplications,
   updateAuthTrees,
+  getAuthTree,
   updateConnectorDefinitions,
   updateConnectorMappings,
   updateConnectorSchedules,
@@ -19,7 +20,14 @@ const {
   updateUiConfig,
   updateUserRoles,
   updateIdmEndpoints,
-  updateIdmAccessConfig
+  updateIdmAccessConfig,
+  getManagedUser,
+  updateManagedUsers,
+  updateVariables,
+  updateSecrets,
+  restartFidc,
+  getEsvConcourse,
+  updateEsvAndRestart
 } = require('./scripts')
 
 require('dotenv').config()
@@ -56,8 +64,14 @@ yargs
   .command({
     command: 'auth-trees',
     desc: 'Update AM Auth Trees (./config/auth-trees)',
-    builder: cliOptions(['username', 'password', 'realm']),
+    builder: cliOptions(['username', 'password', 'realm', 'filenameFilter']),
     handler: (argv) => updateAuthTrees(argv)
+  })
+  .command({
+    command: 'get-auth-tree',
+    desc: 'Get AM Auth Tree (Journey)',
+    builder: cliOptions(['username', 'password', 'realm', 'authTreeName']),
+    handler: (argv) => getAuthTree(argv)
   })
   .command({
     command: 'connector-definitions',
@@ -148,7 +162,7 @@ yargs
   .command({
     command: 'scripts',
     desc: 'Update AM Scripts (./config/am-scripts)',
-    builder: cliOptions(['username', 'password', 'realm']),
+    builder: cliOptions(['username', 'password', 'realm', 'filenameFilter']),
     handler: (argv) => updateScripts(argv)
   })
   .command({
@@ -214,7 +228,8 @@ yargs
       'idmPassword',
       'adminClientId',
       'adminClientSecret',
-      'realm'
+      'realm',
+      'filenameFilter'
     ]),
     handler: (argv) => updateIdmEndpoints(argv)
   })
@@ -229,6 +244,48 @@ yargs
       'realm'
     ]),
     handler: (argv) => updateIdmAccessConfig(argv)
+  })
+  .command({
+    command: 'get-managed-user',
+    desc: 'Get Managed User',
+    builder: cliOptions(['username', 'password', 'realm', 'managedUsername']),
+    handler: (argv) => getManagedUser(argv)
+  })
+  .command({
+    command: 'update-managed-users',
+    desc: 'Update Managed Users (./config/managed-users)',
+    builder: cliOptions(['username', 'password', 'realm', 'treeServiceUserPassword']),
+    handler: (argv) => updateManagedUsers(argv)
+  })
+  .command({
+    command: 'variables',
+    desc: 'Update Variables (.env)',
+    builder: cliOptions(['username', 'password', 'realm']),
+    handler: (argv) => updateVariables(argv)
+  })
+  .command({
+    command: 'secrets',
+    desc: 'Update Secrets (.env)',
+    builder: cliOptions(['username', 'password', 'realm']),
+    handler: (argv) => updateSecrets(argv)
+  })
+  .command({
+    command: 'restart-fidc',
+    desc: 'Restart FIDC services',
+    builder: cliOptions(['username', 'password', 'realm']),
+    handler: (argv) => restartFidc(argv)
+  })
+  .command({
+    command: 'esv-concourse',
+    desc: 'Get Variables and Secrets (Concourse style)',
+    builder: cliOptions(['regionName', 'decodeValue']),
+    handler: (argv) => getEsvConcourse(argv)
+  })
+  .command({
+    command: 'update-esv-and-optional-restart',
+    desc: 'Update Variables and Secrets and Optinal Restart',
+    builder: cliOptions(['username', 'password', 'realm']),
+    handler: (argv) => updateEsvAndRestart(argv)
   })
   .demandCommand()
   .parse()

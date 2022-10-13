@@ -55,6 +55,37 @@ const cliOptions = (requestedOptions) => {
       alias: 'ia',
       demandOption: true,
       describe: 'Password for the IG Agent'
+    },
+    authTreeName: {
+      alias: 'atn',
+      demandOption: false,
+      describe: 'Auth Tree Name'
+    },
+    managedUsername: {
+      alias: 'mu',
+      demandOption: false,
+      describe: 'Managed Username'
+    },
+    treeServiceUserPassword: {
+      alias: 'tsup',
+      demandOption: false,
+      describe: 'Password for the Tree Service User'
+    },
+    filenameFilter: {
+      alias: 'ff',
+      demandOption: false,
+      describe: 'Filename Filter (combine multiples using comma, use ~ prefix on entry for wildcard match)'
+    },
+    regionName: {
+      alias: 'rn',
+      demandOption: false,
+      describe: 'Region Name (dev, staging, live)'
+    },
+    decodeValue: {
+      alias: 'dv',
+      demandOption: false,
+      describe: 'Decode Value (show ESV data decoded)',
+      default: 'false'
     }
   }
 

@@ -1,0 +1,187 @@
+{
+	"target": "managed/alpha_organization",
+	"enabled": true,
+	"source": "system/CHSCompany/company_profile",
+	"name": "chsMongoCompanyProfile_alphaOrg",
+	"consentRequired": false,
+	"icon": null,
+	"displayName": "chsMongoCompanyProfile_alphaOrg",
+	"onError": {
+		"type": "text/javascript",
+		"source": "// change via external file"
+	},
+	"properties": [
+		{
+			"target": "name",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "source.company_name"
+			}
+		},
+		{
+			"target": "number",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "source.company_number"
+			}
+		},
+		{
+			"target": "type",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "source.type"
+			}
+		},
+		{
+			"target": "status",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "source.company_status"
+			}
+		},
+		{
+			"target": "locality",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "if (source.registered_office_address) {\n  source.registered_office_address.locality\n}"
+			}
+		},
+		{
+			"target": "postalCode",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "if (source.registered_office_address) {\n  source.registered_office_address.postal_code\n}"
+			}
+		},
+		{
+			"target": "addressLine1",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "if (source.registered_office_address) {\n  source.registered_office_address.address_line_1\n}"
+			}
+		},
+		{
+			"target": "addressLine2",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "if (source.registered_office_address) {\n  source.registered_office_address.address_line_2\n}"
+			}
+		},
+		{
+			"target": "region",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "if (source.registered_office_address) {\n  source.registered_office_address.region\n}"
+			}
+		},
+		{
+			"target": "creationDate",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "source.date_of_creation"
+			}
+		},
+		{
+			"target": "jurisdiction",
+			"source": "data",
+			"transform": {
+				"type": "text/javascript",
+				"globals": {},
+				"source": "if (source.jurisdiction == \"england-wales\" || source.jurisdiction == \"wales\" || source.jurisdiction == \"england\") {\n  \"EW\"\n} else if (source.jurisdiction == \"scotland\") {\n  \"SC\"\n} else if (source.jurisdiction == \"northern-ireland\") {\n  \"NI\"\n} else {\n  source.jurisdiction\n}"
+			}
+		}
+	],
+	"policies": [
+		{
+			"action": "EXCEPTION",
+			"situation": "AMBIGUOUS"
+		},
+		{
+			"action": "EXCEPTION",
+			"situation": "SOURCE_MISSING"
+		},
+		{
+			"action": "EXCEPTION",
+			"situation": "MISSING"
+		},
+		{
+			"action": "EXCEPTION",
+			"situation": "FOUND_ALREADY_LINKED"
+		},
+		{
+			"action": "DELETE",
+			"situation": "UNQUALIFIED"
+		},
+		{
+			"action": "EXCEPTION",
+			"situation": "UNASSIGNED"
+		},
+		{
+			"action": "EXCEPTION",
+			"situation": "LINK_ONLY"
+		},
+		{
+			"action": "IGNORE",
+			"situation": "TARGET_IGNORED"
+		},
+		{
+			"action": "IGNORE",
+			"situation": "SOURCE_IGNORED"
+		},
+		{
+			"action": "IGNORE",
+			"situation": "ALL_GONE"
+		},
+		{
+			"action": "UPDATE",
+			"situation": "CONFIRMED"
+		},
+		{
+			"action": "UPDATE",
+			"situation": "FOUND"
+		},
+		{
+			"action": "CREATE",
+			"situation": "ABSENT"
+		}
+	],
+	"correlationQuery": [
+		{
+			"linkQualifier": "default",
+			"expressionTree": {
+				"any": [
+					"number"
+				]
+			},
+			"mapping": "chsMongoCompanyProfile_alphaOrg",
+			"type": "text/javascript",
+			"file": "ui/correlateTreeToQueryFilter.js"
+		}
+	],
+	"clusteredSourceReconEnabled": true,
+	"reconSourceQueryPageSize": {
+		"$int": "&{esv.659b97c692.companyreconsourcequerypagesize}"
+	},
+	"sourceQueryFullEntry": true,
+	"taskThreads": 20
+}

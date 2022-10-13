@@ -4,7 +4,7 @@
 		"_id": "IdentityGatewayAgent"
 	},
   "igTokenIntrospection": "Realm_Subs",
-  "userpassword": "{PASSWORD}",
+  "userpassword": "{IG_AGENT_PASSWORD}",
   "status": "Active",
   "igCdssoRedirectUrls": []
 }

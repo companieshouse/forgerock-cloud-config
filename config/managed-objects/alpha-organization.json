@@ -1,5 +1,9 @@
 {
 	"name": "alpha_organization",
+	"onUpdate": {
+		"source": "// change via external file",
+		"type": "text/javascript"
+	},
 	"schema": {
 		"$schema": "http://forgerock.org/json-schema#",
 		"type": "object",
@@ -347,15 +351,15 @@
 				"searchable": true,
 				"userEditable": true
 			},
-			"authCodeIsActive": {
-				"title": "Authentication Code Active",
-				"type": "boolean",
-				"viewable": true,
-				"searchable": false,
-				"userEditable": true
-			},
 			"authCodeValidFrom": {
 				"title": "Authentication Code Valid From",
+				"type": "string",
+				"viewable": true,
+				"searchable": true,
+				"userEditable": true
+			},
+			"authCodeValidUntil": {
+				"title": "Authentication Code Valid Until",
 				"type": "string",
 				"viewable": true,
 				"searchable": true,
@@ -411,7 +415,7 @@
 				"userEditable": true
 			}
 		},
-		"order": ["name", "number", "description", "owners", "admins", "members", "parent", "children", "adminIDs", "ownerIDs", "parentAdminIDs", "parentOwnerIDs", "parentIDs", "type", "status", "authCode", "authCodeIsActive", "authCodeValidFrom", "locality", "postalCode", "addressLine1", "addressLine2", "region", "creationDate", "jurisdiction"],
-		"required": ["name", "number"]
+		"order": ["name", "number", "description", "owners", "admins", "members", "parent", "children", "adminIDs", "ownerIDs", "parentAdminIDs", "parentOwnerIDs", "parentIDs", "type", "status", "authCode", "authCodeValidFrom","authCodeValidUntil", "locality", "postalCode", "addressLine1", "addressLine2", "region", "creationDate", "jurisdiction"],
+		"required": ["number"]
 	}
 }

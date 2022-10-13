@@ -1,3 +1,6 @@
+var _scriptName = 'CH WEBFILING STORE PWD IN SESSION';
+_log('Starting');
+
 /* 
   ** OUTPUT DATA:
     * SESSION:
@@ -8,22 +11,27 @@
 */
 
 var fr = JavaImporter(
-    org.forgerock.openam.auth.node.api.Action
-)
+  org.forgerock.openam.auth.node.api.Action
+);
 
-if (typeof existingSession !== 'undefined') {
-    logger.error("[EWF SESSION STORE] existing session: " + existingSession.toString());
+if (_isAuthenticated()) {
+  //_log('[STORE PWD IN SESSION] Existing session: ' + existingSession.toString());
+  _log('[STORE PWD IN SESSION] Has existing session');
+  _log('[STORE PWD IN SESSION] Pwd found in session: ' + (existingSession.get('password') != null));
+  sharedState.put('password', existingSession.get('password'));
+} else {
+  _log('[STORE PWD IN SESSION] no session!');
 }
-else {
-    logger.error("[EWF SESSION STORE] no session!");
-}
 
-sharedState.put("errorMessage", null);
-sharedState.put("pagePropsJSON", null);
-var password = transientState.get("password") ? transientState.get("password") : sharedState.get("password");
+sharedState.put('errorMessage', null);
+sharedState.put('pagePropsJSON', null);
+var password = transientState.get('password') ? transientState.get('password') : sharedState.get('password');
 
-logger.error("[EWF SESSION STORE] storing password in session: " + password);
+_log('[STORE PWD IN SESSION] Storing password in session - Pwd set: ' + (password != null) );
 
-action = fr.Action.goTo("true")
-    .putSessionProperty("password", password)
-    .build()
+action = fr.Action.goTo('true')
+  .putSessionProperty('password', password)
+  .build();
+
+// LIBRARY START
+// LIBRARY END
