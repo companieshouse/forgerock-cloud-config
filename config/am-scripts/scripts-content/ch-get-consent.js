@@ -1,3 +1,5 @@
+var _scriptName = 'CH CONSENT - GET CONSENT';
+
 var fr = JavaImporter(
     org.forgerock.openam.auth.node.api.Action, 
     javax.security.auth.callback.TextOutputCallback,
@@ -24,7 +26,7 @@ function getConsentCallbacks() {
     var consentRequest = sharedState.get("consentRequest")
 
     if (consentRequest == null) {
-        logger.error("[GET CONSENT] No consent request in shared state")
+        _log("[GET CONSENT] No consent request in shared state")
         return null
     }
 
@@ -35,10 +37,10 @@ function getConsentCallbacks() {
     ]
 
     var scopes = consentRequest.get("scopes")
-    logger.error("[GET CONSENT] Got scopes " + scopes)
+    _log("[GET CONSENT] Got scopes " + scopes)
     scopes.keySet().toArray().forEach(function (key) {
         var value = scopes.get(key)
-        logger.error("[GET CONSENT] scope " + key + ": " + value)
+        _log("[GET CONSENT] scope " + key + ": " + value)
         if (value == null) {
             value = key
         }
@@ -46,13 +48,13 @@ function getConsentCallbacks() {
     })
   
     var claims = consentRequest.get("claims")
-    logger.error("[GET CONSENT] Got claims " + claims)
+    _log("[GET CONSENT] Got claims " + claims)
     if (claims != null && claims.get("userinfo") != null) {
         consentCallbacks.push(new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION,"Info"))
         var userinfo = claims.get("userinfo")
         userinfo.keySet().toArray().forEach(function (key) {
             var value = userinfo.get(key)
-            logger.error("[GET CONSENT] userinfo " + key + ": " + value)
+            _log("[GET CONSENT] userinfo " + key + ": " + value)
             consentCallbacks.push(new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION,("- ").concat(key).concat(": ").concat(value.get("value"))))
         })
     }
@@ -76,8 +78,11 @@ if (callbacks.isEmpty()) {
   }
 } else {
     var decisionIndex = callbacks.get(callbacks.size() - 1).getSelectedIndex()
-    logger.error("[GET CONSENT] Decision index " + decisionIndex)
+    _log("[GET CONSENT] Decision index " + decisionIndex)
     var consentDecision = (decisionIndex == 0)
     sharedState.put("consentDecision",consentDecision)
     action = fr.Action.goTo(NodeOutcome.SUCCESS).build()
 }
+
+// LIBRARY START
+// LIBRARY END
