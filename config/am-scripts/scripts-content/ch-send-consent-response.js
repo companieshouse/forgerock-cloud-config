@@ -1,3 +1,5 @@
+var _scriptName = 'CH CONSENT - SEND RESPONSE';
+
 var config = {
     rcsSecret: "eFg2TmVCckN4d2s5ZmVTQQ==",
     rcsIssuer: "journey-rcs",
@@ -25,19 +27,21 @@ var fr = JavaImporter(
     
 function getCookie(name) {
     var cookieHeader = requestHeaders.get("Cookie");
-    logger.error("[SEND CONSENT RESPONSE] cookieHeader: " + cookieHeader);
+    _log("[SEND CONSENT RESPONSE] cookieHeader: " + cookieHeader);
     if (cookieHeader == null) {
       return null;
     }
 
     var cookies = cookieHeader.get(0).split(";");
-    logger.error("[SEND CONSENT RESPONSE] Cookies: " + cookies);
+    _log("[SEND CONSENT RESPONSE] Cookies: " + cookies);
 
-    for each (cookie in cookies) {
-        logger.error("[SEND CONSENT RESPONSE] cookie: " + cookie);
+    for (var i=0; i<cookies.length; i++) {
+    //for each (cookie in cookies) {
+        var cookie = cookies[i];
+        _log("[SEND CONSENT RESPONSE] cookie: " + cookie);
         var cookieSpec = cookie.split("=");
         if (cookieSpec[0].trim() == name) {
-            logger.error("[SEND CONSENT RESPONSE] Gotcha " + cookieSpec);
+            _log("[SEND CONSENT RESPONSE] Gotcha " + cookieSpec);
             return cookieSpec[1].trim();
         }
     }
@@ -46,7 +50,7 @@ function getCookie(name) {
 }
   
 function logResponse(response) {
-    logger.error("[SEND CONSENT RESPONSE] HTTP Response: " + response.getStatus() + ", Body: " + response.getEntity().getString());
+    _log("[SEND CONSENT RESPONSE] HTTP Response: " + response.getStatus() + ", Body: " + response.getEntity().getString());
 }
 
 function raiseError(message) {
@@ -70,12 +74,12 @@ function postResponse(url,consentResponse,ssoCookieName,ssoToken) {
     logResponse(response);
 
     var location = response.getHeaders().getFirst("location")
-    logger.error("[SEND CONSENT RESPONSE] Got location " + location)
+    _log("[SEND CONSENT RESPONSE] Got location " + location)
     return location
 }
-  
+
 function buildJwt(consentRequest,secret,issuer) {
-    logger.error("[SEND CONSENT RESPONSE] Building response JWT")
+    _log("[SEND CONSENT RESPONSE] Building response JWT")
     var secretBytes = fr.Base64.decode(secret);
     var secretBuilder = new fr.SecretBuilder; 
     secretBuilder.secretKey(new javax.crypto.spec.SecretKeySpec(secretBytes, "Hmac")); 
@@ -114,39 +118,37 @@ function buildJwt(consentRequest,secret,issuer) {
                 .claims(jwtClaims)
                 .build();
   
-    logger.error("[SEND CONSENT RESPONSE] Signed JWT: " + jwt);
+    _log("[SEND CONSENT RESPONSE] Signed JWT: " + jwt);
     return jwt  
 }
-
-logger.error("[SEND CONSENT RESPONSE] Building consent response")
 
 var ssoToken = getCookie(config.ssoCookieName)                              
 var consentRequest = fr.JwtClaimsSet(sharedState.get("consentRequest"))
     
-logger.error("[SEND CONSENT RESPONSE] consent request " + consentRequest)
+_log("[SEND CONSENT RESPONSE] consent request " + consentRequest)
 
 if (!ssoToken) {
-    logger.error("[SEND CONSENT RESPONSE] No ssoToken cookie")
+    _log("[SEND CONSENT RESPONSE] No ssoToken cookie")
     //raiseError("[SEND CONSENT RESPONSE] No ssoToken cookie")
     outcome = NodeOutcome.ERROR
 } else if (!consentRequest) {
-    logger.error("[SEND CONSENT RESPONSE] No consent request in shared state")
+    _log("[SEND CONSENT RESPONSE] No consent request in shared state")
     //raiseError("[SEND CONSENT RESPONSE] No consent request in shared state")
     outcome = NodeOutcome.ERROR
 } else {
-    logger.error("[SEND CONSENT RESPONSE] posting on user's behalf")
+    _log("[SEND CONSENT RESPONSE] posting on user's behalf")
 
     var redirectUri = consentRequest.get("consentApprovalRedirectUri").asString()  
-    logger.error("[SEND CONSENT RESPONSE] posting to " + redirectUri)
+    _log("[SEND CONSENT RESPONSE] posting to " + redirectUri)
 
     var jwt = buildJwt(consentRequest,config.rcsSecret,config.rcsIssuer)
-    logger.error("[SEND CONSENT RESPONSE] built jwt " + jwt);
+    _log("[SEND CONSENT RESPONSE] built jwt " + jwt);
 
     var location = postResponse(redirectUri,jwt,config.ssoCookieName,ssoToken)
-    logger.error("[SEND CONSENT RESPONSE] got location " + location)
+    _log("[SEND CONSENT RESPONSE] got location " + location)
 
     if (location == null) {
-        logger.error("[SEND CONSENT RESPONSE] No redirect back from redirect URI")
+        _log("[SEND CONSENT RESPONSE] No redirect back from redirect URI")
         raiseError("[SEND CONSENT RESPONSE] No redirect back from redirect URI")
         //outcome = NodeOutcome.ERROR
     } else {
@@ -154,3 +156,6 @@ if (!ssoToken) {
         outcome = NodeOutcome.SUCCESS
     }
 }
+
+// LIBRARY START
+// LIBRARY END
