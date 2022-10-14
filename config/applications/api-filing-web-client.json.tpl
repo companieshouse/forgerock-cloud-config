@@ -1,5 +1,37 @@
 {
 	"_id": "ApiFilingWebClient",
+	"overrideOAuth2ClientConfig":{
+		"oidcClaimsPluginType":"SCRIPTED",
+		"customLoginUrlTemplate":"https://idam-ui.amido.aws.chdev.org/account/login/?goto=${goto}<#if acrValues??>&acr_values=${acrValues}</#if><#if realm??>&realm=${realm}</#if><#if module??>&module=${module}</#if><#if service??>&service=${service}</#if><#if locale??>&locale=${locale}</#if><#if authIndexType??>&authIndexType=${authIndexType}</#if><#if authIndexValue??>&authIndexValue=${authIndexValue}</#if><#if claims??>&claims=${claims}</#if>&mode=AUTHN_ONLY",
+		"oidcClaimsClass":"",
+		"accessTokenModifierClass":"",
+		"accessTokenModificationPluginType":"SCRIPTED",
+		"validateScopePluginType":"JAVA",
+		"statelessTokensEnabled":false,
+		"overrideableOIDCClaims":[
+			
+		],
+		"clientsCanSkipConsent":false,
+		"oidcClaimsScript":"36863ffb-40ec-48b9-94b1-9a99f71cc3b5",
+		"usePolicyEngineForScope":false,
+		"authorizeEndpointDataProviderClass":"",
+		"validateScopeClass":"",
+		"enableRemoteConsent":false,
+		"remoteConsentServiceId":"[Empty]",
+		"oidcMayActScript":"[Empty]",
+		"validateScopeScript":"[Empty]",
+		"providerOverridesEnabled":true,
+		"authorizeEndpointDataProviderScript":"[Empty]",
+		"evaluateScopeClass":"",
+		"tokenEncryptionEnabled":false,
+		"evaluateScopeScript":"[Empty]",
+		"issueRefreshTokenOnRefreshedToken":false,
+		"authorizeEndpointDataProviderPluginType":"JAVA",
+		"issueRefreshToken":true,
+		"accessTokenMayActScript":"[Empty]",
+		"evaluateScopePluginType":"JAVA",
+		"accessTokenModificationScript":"d22f9a0c-426a-4466-b95e-d0f125b0d5fa"
+    },
 	"coreOAuth2ClientConfig": {
 		"userpassword": "ApiFilingWebClient",
 		"loopbackInterfaceRedirection": {
