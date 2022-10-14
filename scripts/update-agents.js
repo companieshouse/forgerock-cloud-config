@@ -19,7 +19,7 @@ const updateAgents = async (argv) => {
       [/{IG_AGENT_PASSWORD}/g],
       [/{RCS_AGENT_PASSWORD}/g],
       [igAgentPassword],
-      [igAgentPassword] //using same password for both IG agent and RCS agent
+      [igAgentPassword] // using same password for both IG agent and RCS agent
     )
 
     const agentFileContent = fs
