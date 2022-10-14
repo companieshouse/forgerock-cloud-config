@@ -17,7 +17,9 @@ const updateAgents = async (argv) => {
     await replaceSensitiveValues(
       dir,
       [/{IG_AGENT_PASSWORD}/g],
-      [igAgentPassword]
+      [/{RCS_AGENT_PASSWORD}/g],
+      [igAgentPassword],
+      [igAgentPassword] //using same password for both IG agent and RCS agent
     )
 
     const agentFileContent = fs
@@ -28,7 +30,8 @@ const updateAgents = async (argv) => {
     // Update each application
     await Promise.all(
       agentFileContent.map(async (agentFile) => {
-        const requestUrl = `${FIDC_URL}/am/json/realms/root/realms/${realm}/realm-config/agents/IdentityGatewayAgent/${agentFile._id}`
+        const requestUrl = `${FIDC_URL}/am/json/realms/root/realms/${realm}/realm-config/agents/${agentFile._type._id}/${agentFile._id}`
+        delete agentFile._type
         await fidcRequest(requestUrl, agentFile, sessionToken, true)
         console.log(`${agentFile._id} updated`)
         return Promise.resolve()
