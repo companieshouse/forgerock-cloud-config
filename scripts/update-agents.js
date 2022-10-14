@@ -17,7 +17,9 @@ const updateAgents = async (argv) => {
     await replaceSensitiveValues(
       dir,
       [/{IG_AGENT_PASSWORD}/g],
-      [igAgentPassword]
+      [/{RCS_AGENT_PASSWORD}/g],
+      [igAgentPassword],
+      [igAgentPassword] //using same password for both IG agent and RCS agent
     )
 
     const agentFileContent = fs
