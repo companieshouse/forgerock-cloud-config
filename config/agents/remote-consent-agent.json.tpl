@@ -1,7 +1,6 @@
 {
 	"_id": "journey-rcs",
-	"userpassword": null,
-	"userpassword-encrypted": "AAAAA0FFUwIQ7iPgU3RR0csY1C9JscR6L+uOOaS9FWdulxABjKYDkYSCJiLsFGPq8A==",
+	"userpassword": "{RCS_AGENT_PASSWORD}",
 	"remoteConsentRequestEncryptionAlgorithm": {
 		"inherited": false,
 		"value": "RSA-OAEP-256"
