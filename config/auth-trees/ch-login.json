@@ -42,6 +42,14 @@
       }
     },
     {
+      "_id": "11a167ea-7991-44e8-8cc9-e34a83220e3a",
+      "nodeType": "IdentifyExistingUserNode",
+      "details": {
+        "identityAttribute": "mail",
+        "identifier": "userName"
+      }
+    },
+    {
       "_id": "3147767a-bb7b-47b2-9b43-6d297e7cc2fa",
       "nodeType": "ScriptedDecisionNode",
       "details": {
@@ -349,6 +357,14 @@
       }
     },
     {
+      "_id": "a047b2d1-e735-40d4-8fa1-648e9ba5454f",
+      "nodeType": "SessionDataNode",
+      "details": {
+        "sessionDataKey": "UserToken",
+        "sharedStateKey": "userName"
+      }
+    },
+    {
       "_id": "a2adb2e2-a3f7-4214-927c-0a47d5d0e1dc",
       "nodeType": "RetryLimitDecisionNode",
       "details": {
@@ -438,6 +454,23 @@
       }
     },
     {
+      "_id": "ca5bf530-da0f-4a75-9399-a8314c668bb5",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "7234ebca-e9ca-454f-83c2-79493126c0b8",
+        "outcomes": [
+          "noSession",
+          "hasSession"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
       "_id": "d1f2eef5-5ad7-4ad6-bc5a-e65710879ff4",
       "nodeType": "ScriptedDecisionNode",
       "details": {
@@ -498,36 +531,10 @@
       }
     },
     {
-      "_id": "ca5bf530-da0f-4a75-9399-a8314c668bb5",
-      "nodeType": "ScriptedDecisionNode",
+      "_id": "80011d0c-c8b1-4ab2-b09b-ec91e3f58f33",
+      "nodeType": "SetSuccessUrlNode",
       "details": {
-        "script": "7234ebca-e9ca-454f-83c2-79493126c0b8",
-        "outcomes": [
-          "noSession",
-          "hasSession"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
-      }
-    },
-    {
-      "_id": "a047b2d1-e735-40d4-8fa1-648e9ba5454f",
-      "nodeType": "SessionDataNode",
-      "details": {
-        "sessionDataKey": "UserToken",
-        "sharedStateKey": "userName"
-      }
-    },
-    {
-      "_id": "11a167ea-7991-44e8-8cc9-e34a83220e3a",
-      "nodeType": "IdentifyExistingUserNode",
-      "details": {
-        "identityAttribute": "mail",
-        "identifier": "userName"
+        "successUrl": "/hassession"
       }
     }
   ],
@@ -565,6 +572,16 @@
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Create Notify JWT - Email"
+      },
+      "11a167ea-7991-44e8-8cc9-e34a83220e3a": {
+        "x": 1999.828125,
+        "y": 786.015625,
+        "connections": {
+          "false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
+          "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+        },
+        "nodeType": "IdentifyExistingUserNode",
+        "displayName": "Identify Existing User"
       },
       "3147767a-bb7b-47b2-9b43-6d297e7cc2fa": {
         "x": 1732,
@@ -700,6 +717,15 @@
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Get New IDM Token"
       },
+      "a047b2d1-e735-40d4-8fa1-648e9ba5454f": {
+        "x": 136,
+        "y": 741.015625,
+        "connections": {
+          "outcome": "80011d0c-c8b1-4ab2-b09b-ec91e3f58f33"
+        },
+        "nodeType": "SessionDataNode",
+        "displayName": "Get Session Data"
+      },
       "a2adb2e2-a3f7-4214-927c-0a47d5d0e1dc": {
         "x": 2732,
         "y": 318.015625,
@@ -767,6 +793,16 @@
         "nodeType": "ScriptedDecisionNode",
         "displayName": "check format"
       },
+      "ca5bf530-da0f-4a75-9399-a8314c668bb5": {
+        "x": 112,
+        "y": 423.015625,
+        "connections": {
+          "hasSession": "a047b2d1-e735-40d4-8fa1-648e9ba5454f",
+          "noSession": "94a5f48e-d6e3-4bf4-8edc-45c028a70900"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Check Session"
+      },
       "d1f2eef5-5ad7-4ad6-bc5a-e65710879ff4": {
         "x": 700,
         "y": 552.015625,
@@ -809,34 +845,14 @@
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Reset Counter"
       },
-      "ca5bf530-da0f-4a75-9399-a8314c668bb5": {
-        "x": 112,
-        "y": 423.015625,
-        "connections": {
-          "noSession": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
-          "hasSession": "a047b2d1-e735-40d4-8fa1-648e9ba5454f"
-        },
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "Check Session"
-      },
-      "a047b2d1-e735-40d4-8fa1-648e9ba5454f": {
-        "x": 136,
-        "y": 740.015625,
+      "80011d0c-c8b1-4ab2-b09b-ec91e3f58f33": {
+        "x": 1288,
+        "y": 793.015625,
         "connections": {
           "outcome": "11a167ea-7991-44e8-8cc9-e34a83220e3a"
         },
-        "nodeType": "SessionDataNode",
-        "displayName": "Get Session Data"
-      },
-      "11a167ea-7991-44e8-8cc9-e34a83220e3a": {
-        "x": 1999.828125,
-        "y": 786.015625,
-        "connections": {
-          "false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
-          "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
-        },
-        "nodeType": "IdentifyExistingUserNode",
-        "displayName": "Identify Existing User"
+        "nodeType": "SetSuccessUrlNode",
+        "displayName": "Success URL"
       }
     },
     "staticNodes": {
