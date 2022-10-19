@@ -7,7 +7,7 @@
 		"accessTokenModifierClass":"",
 		"accessTokenModificationPluginType":"SCRIPTED",
 		"validateScopePluginType":"JAVA",
-		"statelessTokensEnabled":false,
+		"statelessTokensEnabled":true,
 		"overrideableOIDCClaims":[
 			
 		],
