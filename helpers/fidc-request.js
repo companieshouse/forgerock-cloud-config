@@ -28,13 +28,8 @@ const fidcRequest = async (requestUrl, body, token, sessionToken) => {
   }
 
   const { status, statusText } = await fetch(requestUrl, requestOptions)
-  // const response = await fetch(requestUrl, requestOptions)
-  // const responseJson = await response.json()
-  // const status = response.status
-  // const statusText = response.statusText
   if (status > 299) {
     console.log(`PUT Error ${status}: ${statusText} - ${requestUrl}`)
-    //console.log(JSON.stringify(responseJson))
     throw new Error(`${status}: ${statusText}`)
   }
   return Promise.resolve()

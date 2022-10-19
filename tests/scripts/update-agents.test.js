@@ -61,7 +61,7 @@ describe('update-agents', () => {
     process.env.FIDC_URL = mockValues.fidcUrl
     fs.readdirSync.mockReturnValue(['ig-agent.json', 'remote-consent-agent.json'])
     jest.mock(mockConfigFile, () => mockConfig, { virtual: true })
-    //jest.mock(mockConfigFile2, () => mockConfig2, { virtual: true })
+    // jest.mock(mockConfigFile2, () => mockConfig2, { virtual: true })
   })
 
   afterEach(() => {
