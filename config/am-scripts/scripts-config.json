@@ -421,6 +421,22 @@
     },
     {
       "payload": {
+        "_id": "7234ebca-e9ca-454f-83c2-79493126c0b8",
+        "name": "CH - Check for session (no callbacks)",
+        "description": "Checks for an existing session",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=f299b657-74e2-42cd-bc80-a27adf5b8602,ou=user,ou=am-config",
+        "lastModifiedDate": 1616675205613
+      },
+      "filename": "ch-check-for-session-no-error-callback.js"
+    },
+    {
+      "payload": {
         "_id": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149",
         "name": "CH - Get IDM Access Token",
         "description": "Gets an IDM Access Token using service user access credentials",

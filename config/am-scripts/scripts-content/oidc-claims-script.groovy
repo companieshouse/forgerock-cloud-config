@@ -113,9 +113,9 @@ userAddressClaimResolver = { claim, identity ->
 }
 
 if (logger.warningEnabled()) {
-    logger.warning('OIDC Claims Script : Has session ? ' + sessionPresent)
-    logger.warning('OIDC Claims Script : Identity : ' + identity)
-    logger.warning('OIDC Claims Script : ClientId : ' + clientProperties.clientId)
+    logger.warning('[CHSLOG] OIDC Claims Script : Has session ? ' + sessionPresent)
+    logger.warning('[CHSLOG] OIDC Claims Script : Identity : ' + identity)
+    logger.warning('[CHSLOG] OIDC Claims Script : ClientId : ' + clientProperties.clientId)
 }
 
 webFilingClaimResolver = { claim, identity ->
@@ -130,7 +130,7 @@ webFilingClaimResolver = { claim, identity ->
         ]
 
         if (logger.warningEnabled()) {
-            logger.warning('OIDC Claims Script : webFilingData = ' + webFilingData)
+            logger.warning('[CHSLOG] OIDC Claims Script : webFilingData = ' + webFilingData)
         }
 
         return webFilingData
@@ -258,7 +258,7 @@ scopeClaimsMap = [
 // ---------------- UPDATE BELOW FOR ADVANCED USAGES -------------------
 if (logger.messageEnabled()) {
     scopes.findAll { s -> !('openid'.equals(s) || scopeClaimsMap.containsKey(s)) }.each { s ->
-        logger.message("OpenAMScopeValidator.getUserInfo()::Message: scope not bound to claims: $s")
+        logger.message("[CHSLOG] OpenAMScopeValidator.getUserInfo()::Message: scope not bound to claims: $s")
 }
 }
 
@@ -269,22 +269,22 @@ if (logger.messageEnabled()) {
 def computeClaim = { claim ->
     try {
         if (logger.warningEnabled()) {
-            logger.warning('OIDC Claims Script : Computing Claim : ' + claim.getName())
+            logger.warning('[CHSLOG] OIDC Claims Script : Computing Claim : ' + claim.getName())
         }
 
         claimResolver = claimAttributes.get(claim.getName(), { claimObj, identity -> defaultClaimResolver(claim) })
         claimResolver(claim, identity)
     } catch (IdRepoException e) {
         if (logger.warningEnabled()) {
-            logger.warning("OpenAMScopeValidator.getUserInfo(): Unable to retrieve attribute=$attribute", e)
+            logger.warning("[CHSLOG] OpenAMScopeValidator.getUserInfo(): Unable to retrieve attribute=$attribute", e)
         }
     } catch (SSOException e) {
         if (logger.warningEnabled()) {
-            logger.warning("OpenAMScopeValidator.getUserInfo(): Unable to retrieve attribute=$attribute", e)
+            logger.warning("[CHSLOG] OpenAMScopeValidator.getUserInfo(): Unable to retrieve attribute=$attribute", e)
         }
     } catch (Exception e) {
         if (logger.warningEnabled()) {
-            logger.warning('OIDC Claims Script : Exception : ' + e)
+            logger.warning('[CHSLOG] OIDC Claims Script : Exception : ' + e)
         }
     }
 }
@@ -301,7 +301,7 @@ def convertScopeToClaims = {
 }
 
 if (logger.warningEnabled()) {
-    logger.warning('OIDC Claims Script : scopes (requested) = ' + scopes)
+    logger.warning('[CHSLOG] OIDC Claims Script : scopes (requested) = ' + scopes)
 }
 
 // Creates a full list of claims to resolve from requested scopes, claims provided by AS and requested claims
@@ -309,7 +309,7 @@ def claimsToResolve = convertScopeToClaims() + claimObjects + requestedTypedClai
 
 
 if (logger.warningEnabled()) {
-    logger.warning('OIDC Claims Script : claimsToResolve = ' + claimsToResolve)
+    logger.warning('[CHSLOG] OIDC Claims Script : claimsToResolve = ' + claimsToResolve)
 }
 
 // Computes the claim return key and values for all requested claims

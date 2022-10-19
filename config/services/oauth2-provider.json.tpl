@@ -39,7 +39,7 @@
       "dir",
       "A192KW"
     ],
-    "useForceAuthnForPromptLogin": false,
+    "useForceAuthnForPromptLogin": true,
     "alwaysAddClaimsToToken": true,
     "supportedTokenIntrospectionResponseSigningAlgorithms": [
       "PS384",
@@ -224,7 +224,7 @@
       "A256CBC-HS512"
     ],
     "supportedClaims": [
-      "company|en|company"
+      "company|en|Company Number"
     ],
     "supportedIDTokenSigningAlgorithms": [
       "PS384",
