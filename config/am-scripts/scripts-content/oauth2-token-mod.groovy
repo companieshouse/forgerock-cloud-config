@@ -166,32 +166,9 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
         def map = [:]
         map['user_profile'] = 'read'
         return map
-    } else if (scope.equals('https://account.companieshouse.gov.uk/user.write-full') ||
-        scope.equals('https://identity.company-information.service.gov.uk/user.write-full')) {
-        if (isInternalApp) {
-            def map = [:]
-            map['user_applications'] = 'create,read,update,delete'
-            map['user_profile'] = 'delete,read,update'
-            map['user_following'] = 'read,update'
-            map['user_transactions'] = 'read'
-            map['user_request_auth_code'] = 'create'
-            map['user_orders'] = 'create,read,update,delete'
-            map['user_secure_applications'] = 'create,read,update,delete'
-            map['user_third_party_apps'] = 'read,delete'
-            return map
-        } else {
-            def map = [:]
-            map['error'] = 'Permission denied. External app requested forbidden scope: /user.write-full'
-            return map
-        }
-    } else if (scope.equals('https://api.companieshouse.gov.uk/company/registered-office-address.update') ||
-        scope.equals('https://api.company-information.service.gov.uk/company/registered-office-address.update')) {
-        def map = [:]
-        map['company_number'] = companyNumber
-        map['company_roa'] = 'update'
-        return map
     } else if (scope.equals('https://api.companieshouse.gov.uk/company') ||
-        scope.equals('http://api.companieshouse.gov.uk/company')) {
+            scope.equals('http://api.companieshouse.gov.uk/company') ||
+            scope.equals('http://api.companieshouse.gov.uk/company/' + companyNumber)) {
         if (legacyScopesAllowed) {
             // Grant permission here for legacy scopes - no new domain option for this one!
             if (isInternalApp) {
@@ -215,7 +192,7 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
             return map
         }
     } else if (scope.equals('https://api.companieshouse.gov.uk/company/admin.write-full') ||
-        scope.equals('https://api.company-information.service.gov.uk/company/admin.write-full')) {
+            scope.equals('https://api.company-information.service.gov.uk/company/admin.write-full')) {
         if (isInternalApp) {
             def map = [:]
             map['company_accounts'] = 'update'
@@ -231,6 +208,471 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
             map['error'] = 'Permission denied. External app requested scope: admin.write-full for company number: ' + companyNumber
             return map
         }
+    } else if (scope.equals('https://account.companieshouse.gov.uk/user.write-full') ||
+            scope.equals('https://identity.company-information.service.gov.uk/user.write-full')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['user_applications'] = 'create,read,update,delete'
+            map['user_profile'] = 'delete,read,update'
+            map['user_following'] = 'read,update'
+            map['user_transactions'] = 'read'
+            map['user_request_auth_code'] = 'create'
+            map['user_orders'] = 'create,read,update,delete'
+            map['user_secure_applications'] = 'create,read,update,delete'
+            map['user_third_party_apps'] = 'read,delete'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /user.write-full'
+            return map
+        }
+    } else if (scope.equals('http://identity.company-information.service.gov.uk/user/profile.update')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['user_profile'] = 'read,update'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /profile.update'
+            return map
+        }
+    } else if (scope.equals('http://identity.company-information.service.gov.uk/user/profile.delete')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['user_profile'] = 'read,delete'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /profile.delete'
+            return map
+        }
+    } else if (scope.equals('http://identity.company-information.service.gov.uk/user/profile.write-full')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['user_profile'] = 'read,update,delete'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /profile.write-full'
+            return map
+        }
+    } else if (scope.equals('https://find-and-update.company-information.service.gov.uk/following.read')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['user_following'] = 'read'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /following.read'
+            return map
+        }
+    } else if (scope.equals('https://find-and-update.company-information.service.gov.uk/following.update')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['user_following'] = 'read,update'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /following.update'
+            return map
+        }
+    } else if (scope.equals('https://find-and-update.company-information.service.gov.uk/transactions.read')) {
+        def map = [:]
+        map['user_transactions'] = 'read'
+        return map
+    } else if (scope.equals('https://find-and-update.company-information.service.gov.uk/orders.read')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['user_orders'] = 'create,read,update,delete'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /orders.read'
+            return map
+        }
+    } else if (scope.equals('https://identity.company-information.service.gov.uk/applications.create')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['user_applications'] = 'create'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /applications.create'
+            return map
+        }
+    } else if (scope.equals('https://identity.company-information.service.gov.uk/applications.read')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['user_applications'] = 'read'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /applications.read'
+            return map
+        }
+    } else if (scope.equals('https://identity.company-information.service.gov.uk/applications.update')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['user_applications'] = 'update'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /applications.update'
+            return map
+        }
+    } else if (scope.equals('https://identity.company-information.service.gov.uk/applications.delete')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['user_applications'] = 'delete'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /applications.delete'
+            return map
+        }
+    } else if (scope.equals('https://identity.company-information.service.gov.uk/applications.write-full')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['user_applications'] = 'create,read,update,delete'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /applications.write-full'
+            return map
+        }
+    } else if (scope.equals('https://identity.company-information.service.gov.uk/authentication-code.create')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['user_request_auth_code'] = 'create'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /authentication-code.create'
+            return map
+        }
+    } else if (scope.equals('https://account.companieshouse.gov.uk/user.write-full') ||
+            scope.equals('https://identity.company-information.service.gov.uk/user.write-full')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['user_applications'] = 'create,read,update,delete'
+            map['user_profile'] = 'create,read,update,delete'
+            map['user_following'] = 'create,read,update,delete'
+            map['user_transactions'] = 'read'
+            map['user_request_auth_code'] = 'create'
+            map['user_orders'] = 'create,read,update,delete'
+            map['user_secure_applications'] = 'create,read,update,delete'
+            map['user_third_party_apps'] = 'create,read,update,delete'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /user.write-full'
+            return map
+        }
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company.create')) {
+        def map = [:]
+        map['company_incorporation'] = 'create'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyType + '.create')) {
+        def map = [:]
+        map['company_incorporation'] = companyType + ':create'
+        return map
+    } else if (scope.equals('https://account.companieshouse.gov.uk/company/' + companyNumber + '/authentication-code.update')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['company_auth_code'] = 'update'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /authentication-code.update'
+            return map
+        }
+    } else if (scope.equals('https://account.companieshouse.gov.uk/company/' + companyNumber + '/authentication-code.delete')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['company_auth_code'] = 'delete'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /authentication-code.delete'
+            return map
+        }
+    } else if (scope.equals('https://account.companieshouse.gov.uk/company/' + companyNumber + '/authentication-code.write-full')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['company_auth_code'] = 'update,delete'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /authentication-code.write-full'
+            return map
+        }
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/transactions')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['company_transactions'] = 'read'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /transactions'
+            return map
+        }
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/registered-office-address.update')) {
+        def map = [:]
+        map['company_roa'] = 'update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/charges.create')) {
+        def map = [:]
+        map['company_charges'] = 'create'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/charges.update')) {
+        def map = [:]
+        map['company_charges'] = 'update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/charges.write-full')) {
+        def map = [:]
+        map['company_charges'] = 'create,update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/charges/' + chargeId + '.update')) {
+        def map = [:]
+        map['company_charges'] = chargeId + ':update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/*/charges.create')) {
+        def map = [:]
+        map['charges'] = 'create'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/*/charges.update')) {
+        def map = [:]
+        map['charges'] = 'update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/*/charges.write-full')) {
+        def map = [:]
+        map['charges'] = 'create,update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/filing-history.update')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['company_filing_history'] = 'update'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /filing-history.update'
+            return map
+        }
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/officers.create')) {
+        def map = [:]
+        map['company_officers'] = 'create'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/officers.update')) {
+        def map = [:]
+        map['company_officers'] = 'update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/officers.write-full')) {
+        def map = [:]
+        map['company_officers'] = 'create,update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/officers.read-protected')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['company_officers'] = 'read-protected'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /officers.read-protected'
+            return map
+        }
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/officers.read-secure')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['company_officers'] = 'read-secure'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /officers.read-secure'
+            return map
+        }
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/officers.read-full')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['company_officers'] = 'read-protected,read-secure'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /officers.read-full'
+            return map
+        }
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/officers/' + officerType + '/' + officerId + '.update')) {
+        def map = [:]
+        map['company_officers'] = officerId + ':update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/officers/' + officerType + '/' + officerId + '.read-full')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['company_officers'] = officerId + ':read-full'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /' + officerId + '.read-full'
+            return map
+        }
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/registers.update')) {
+        def map = [:]
+        map['company_registers'] = 'update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/registers/' + registerType + '.update')) {
+        def map = [:]
+        map['company_registers'] = registerType + ':update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/foreign-company-details.update')) {
+        def map = [:]
+        map['company_foreign_company_details'] = 'update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/branch-company-details.update')) {
+        def map = [:]
+        map['company_branch_company_details'] = 'update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/company-name.update')) {
+        def map = [:]
+        map['company_name'] = 'update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/company-type.update')) {
+        def map = [:]
+        map['company_type'] = 'update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/share-capital.update')) {
+        def map = [:]
+        map['company_share_capital'] = 'update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/confirmation-statement.update')) {
+        def map = [:]
+        map['company_confirmation_statement'] = 'update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/accounts.update')) {
+        def map = [:]
+        map['company_accounts'] = 'update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/constitution.update')) {
+        def map = [:]
+        map['company_constitution'] = 'update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/secretarial.write-full')) {
+        def map = [:]
+        map['company_roa'] = 'update'
+        map['company_officers'] = 'create,update'
+        map['company_pscs'] = 'create,update'
+        map['company_psc_statements'] = 'create,update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/admin.write-full')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['company_number'] = companyNumber
+            map['company_transactions'] = 'read'
+            map['company_roa'] = 'update'
+            map['company_charges'] = 'create,update' //TODO
+            map['company_status'] = 'update'
+            map['company_auth_code'] = 'update' //TODO
+            map['company_filing_history'] = 'update'
+            map['company_officers'] = 'create' //TODO
+            map['company_registers'] = 'update' //TODO
+            map['company_foreign_company_details'] = 'update'
+            map['company_branch_company_details'] = 'update'
+            map['company_name'] = 'update'
+            map['company_type'] = 'update'
+            map['company_share_capital'] = 'update'
+            map['company_confirmation_statement'] = 'update'
+            map['company_accounts'] = 'update'
+            map['company_constitution'] = 'update'
+            map['company_pscs'] = 'create' //TODO
+            map['company_psc_statements'] = 'create' //TODO
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /admin.write-full'
+            return map
+        }
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/persons-with-significant-control.create')) {
+        def map = [:]
+        map['company_pscs'] = 'create'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/persons-with-significant-control.update')) {
+        def map = [:]
+        map['company_pscs'] = 'update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/persons-with-significant-control.write-full')) {
+        def map = [:]
+        map['company_pscs'] = 'create,update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/persons-with-significant-control.read-protected')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['company_pscs'] = 'read-protected'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /persons-with-significant-control.read-protected'
+            return map
+        }
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/persons-with-significant-control.read-secure')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['company_pscs'] = 'read-secure'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /persons-with-significant-control.read-secure'
+            return map
+        }
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/persons-with-significant-control.read-super-secure')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['company_pscs'] = 'read-super-secure'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /persons-with-significant-control.read-super-secure'
+            return map
+        }
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/persons-with-significant-control.read-full')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['company_pscs'] = 'read-protected,read-secure,read-super-secure'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /persons-with-significant-control.read-full'
+            return map
+        }
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/persons-with-significant-control/' + pscType + '/' + pscId + '.update')) {
+        def map = [:]
+        map['company_pscs'] = pscId + ':update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/persons-with-significant-control/' + pscType + '/' + pscId + '.read-full')) {
+        if (isInternalApp) {
+            def map = [:]
+            map['company_pscs'] = pscId + ':read-full'
+            return map
+        } else {
+            def map = [:]
+            map['error'] = 'Permission denied. External app requested forbidden scope: /' + pscId + '.read-full'
+            return map
+        }
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/persons-with-significant-control-statements.create')) {
+        def map = [:]
+        map['company_psc_statements'] = 'create'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/persons-with-significant-control-statements.update')) {
+        def map = [:]
+        map['company_psc_statements'] = 'update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/persons-with-significant-control-statements.write-full')) {
+        def map = [:]
+        map['company_psc_statements'] = 'create,update'
+        return map
+    } else if (scope.equals('https://api.companieshouse.gov.uk/company/registered-office-address.update') ||
+        scope.equals('https://api.company-information.service.gov.uk/company/registered-office-address.update')) {
+        def map = [:]
+        map['company_number'] = companyNumber
+        map['company_roa'] = 'update'
+        return map
     } else {
         def map = [:]
         map['error'] = 'No permissions found matching the scope: ' + scope + '. Please add a new scope to the token modification script'
