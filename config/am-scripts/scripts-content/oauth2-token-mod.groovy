@@ -428,10 +428,6 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
         def map = [:]
         map['company_charges'] = 'create,update'
         return map
-    } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/charges/' + chargeId + '.update')) {
-        def map = [:]
-        map['company_charges'] = chargeId + ':update'
-        return map
     } else if (scope.equals('https://api.companieshouse.gov.uk/company/*/charges.create')) {
         def map = [:]
         map['charges'] = 'create'
@@ -644,6 +640,7 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
         var officerIdRegex = /^https:\/\/api.companieshouse.gov.uk\/company\/(\d+)\/officers\/(\w+)\/(\d+).(\w+)/
         var registerTypeRegex = /^https:\/\/api.companieshouse.gov.uk\/company\/(\d+)\/registers\/(\w+).update/
         var pscIdRegex = /^https:\/\/api.companieshouse.gov.uk\/company\/(\d+)\/persons-with-significant-control\/(\w+)\/(\d+).(\w+)/
+        var chargeIdRegex = /^https:\/\/api.companieshouse.gov.uk\/company\/(\d+)\/charges\/(\d+).update/
 
         var matcher = scope =~ companyTypeRegex
         if (matcher.size() > 0) {
@@ -708,6 +705,17 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
                     map['error'] = 'Permission denied. External app requested forbidden scope: /' + pscId + '.read-full'
                     return map
                 }
+            }
+        }
+
+        matcher = scope =~ chargeIdRegex
+        if (matcher.size() > 0) {
+            var chargeId = matcher[1][0]
+
+            if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/charges/' + chargeId + '.update')) {
+                def map = [:]
+                map['company_charges'] = chargeId + ':update'
+                return map
             }
         }
 
