@@ -72,7 +72,7 @@
 			"inherited": false,
 			"value": [
 				"http://localhost:8090/redirect",
-				"https://test-harness-webapps.amido.aws.chdev.org/redirect"
+				"https://test-harness-api-filing-webapp.amido.aws.chdev.org/redirect"
 			]
 		},
 		"clientName": {
@@ -309,7 +309,7 @@
 			"inherited": false,
 			"value": [
 				"http://localhost:8090/redirect",
-				"https://test-harness-webapps.amido.aws.chdev.org/redirect"
+				"https://test-harness-api-filing-webapp.amido.aws.chdev.org/redirect"
 			]
 		},
 		"backchannel_logout_session_required": {
