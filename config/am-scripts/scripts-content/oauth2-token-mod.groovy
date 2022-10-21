@@ -41,14 +41,14 @@ if (claims == null) {
     def claimsObject = new JsonSlurper().parseText(claims)
     if (claimsObject == null) {
         logger.error('[CHSLOG] Could not decode claims to object')
-  } else if (claimsObject.userInfo == null) {
+    } else if (claimsObject.userinfo == null) {
         logger.error('[CHSLOG] No userInfo in claims')
-  } else if (claimsObject.userInfo.company == null) {
+    } else if (claimsObject.userinfo.company == null) {
         logger.error('[CHSLOG] No company in claims')
-  } else if (claimsObject.userInfo.company.value == null) {
+    } else if (claimsObject.userinfo.company.value == null) {
         logger.error('[CHSLOG] No company value in claims')
-  } else {
-        def company = claimsObject.userInfo.company.value
+    } else {
+        def company = claimsObject.userinfo.company.value
         logger.error('[CHSLOG] Got company ' + company)
         accessToken.setField('company', company)
 
@@ -71,8 +71,8 @@ if (claims == null) {
         // TODO Pass values in request
 
         // var scopes = ""
-        var scopes = "https://account.companieshouse.gov.uk/user/profile.read"
-        // var scopes = "https://identity.company-information.service.gov.uk/user/profile.read"
+        //var scopes = "https://account.companieshouse.gov.uk/user/profile.read"
+        var scopes = "https://identity.company-information.service.gov.uk/user/profile.read"
         // var scopes = "https://account.companieshouse.gov.uk/user.write-full"
         // var scopes = "https://identity.company-information.service.gov.uk/user.write-full"
         // var scopes = "https://api.companieshouse.gov.uk/company/registered-office-address.update"
