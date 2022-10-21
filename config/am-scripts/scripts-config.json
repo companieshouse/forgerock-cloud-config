@@ -1714,6 +1714,22 @@
           "lastModifiedDate": 1630446313640
       },
       "filename": "ch-send-consent-response.js"
-  }
+  },
+  {
+      "payload": {
+        "_id": "65d72980-a481-47b3-82c8-95cd34656af1",
+        "name": "CH - Confirm Registration Choices",
+        "description": "Confirm Registration Choices",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+        "lastModifiedDate": 1630446313640
+      },
+      "filename": "ch-registration-confirm.js"
+    }
   ]
 }
