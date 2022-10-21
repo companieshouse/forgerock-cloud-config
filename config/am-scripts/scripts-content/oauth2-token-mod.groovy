@@ -217,7 +217,7 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
             map['user_following'] = 'read,update'
             map['user_transactions'] = 'read'
             map['user_request_auth_code'] = 'create'
-            map['user_orders'] = 'create,read,update,delete'
+            map['user_orders'] = 'read'
             map['user_secure_applications'] = 'create,read,update,delete'
             map['user_third_party_apps'] = 'read,delete'
             return map
@@ -283,7 +283,7 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
     } else if (scope.equals('https://find-and-update.company-information.service.gov.uk/orders.read')) {
         if (isInternalApp) {
             def map = [:]
-            map['user_orders'] = 'create,read,update,delete'
+            map['user_orders'] = 'read'
             return map
         } else {
             def map = [:]
@@ -356,10 +356,10 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
             def map = [:]
             map['user_applications'] = 'create,read,update,delete'
             map['user_profile'] = 'create,read,update,delete'
-            map['user_following'] = 'create,read,update,delete'
+            map['user_following'] = 'read,update'
             map['user_transactions'] = 'read'
             map['user_request_auth_code'] = 'create'
-            map['user_orders'] = 'create,read,update,delete'
+            map['user_orders'] = 'read'
             map['user_secure_applications'] = 'create,read,update,delete'
             map['user_third_party_apps'] = 'create,read,update,delete'
             return map
@@ -541,12 +541,12 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
             map['company_number'] = companyNumber
             map['company_transactions'] = 'read'
             map['company_roa'] = 'update'
-            map['company_charges'] = 'create,update' //TODO
+            map['company_charges'] = 'create,update'
             map['company_status'] = 'update'
-            map['company_auth_code'] = 'update' //TODO
+            map['company_auth_code'] = 'update,delete'
             map['company_filing_history'] = 'update'
-            map['company_officers'] = 'create' //TODO
-            map['company_registers'] = 'update' //TODO
+            map['company_officers'] = 'create,update,read-protected,read-secure'
+            map['company_registers'] = 'update'
             map['company_foreign_company_details'] = 'update'
             map['company_branch_company_details'] = 'update'
             map['company_name'] = 'update'
@@ -555,8 +555,8 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
             map['company_confirmation_statement'] = 'update'
             map['company_accounts'] = 'update'
             map['company_constitution'] = 'update'
-            map['company_pscs'] = 'create' //TODO
-            map['company_psc_statements'] = 'create' //TODO
+            map['company_pscs'] = 'create,update,read-protected,read-secure,read-super-secure'
+            map['company_psc_statements'] = 'create,update'
             return map
         } else {
             def map = [:]
