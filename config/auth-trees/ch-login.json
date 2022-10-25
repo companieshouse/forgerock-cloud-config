@@ -1,117 +1,11 @@
 {
   "nodes": [
     {
-      "_id": "0e167098-4f1b-4a6d-a383-9a415b143dda",
-      "nodeType": "OneTimePasswordGeneratorNode",
-      "details": {
-        "length": 6
-      }
-    },
-    {
-      "_id": "0e91440f-8d40-4946-88c9-1a7e22da57bc",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "script": "b480d9f7-5908-45cf-91d1-bc1fe56fe8de",
-        "outcomes": [
-          "true",
-          "false"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
-      }
-    },
-    {
-      "_id": "1031a228-600a-4325-82da-c93e6a13ab5b",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "script": "df67765e-df3a-4503-9ba5-35c992b39259",
-        "outcomes": [
-          "true",
-          "false"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
-      }
-    },
-    {
       "_id": "11a167ea-7991-44e8-8cc9-e34a83220e3a",
       "nodeType": "IdentifyExistingUserNode",
       "details": {
         "identityAttribute": "mail",
         "identifier": "userName"
-      }
-    },
-    {
-      "_id": "3147767a-bb7b-47b2-9b43-6d297e7cc2fa",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "script": "df67765e-df3a-4503-9ba5-35c992b39259",
-        "outcomes": [
-          "true",
-          "false"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
-      }
-    },
-    {
-      "_id": "35194bf4-8dcc-41a2-8545-4a965b8f6ec0",
-      "nodeType": "PageNode",
-      "details": {
-        "nodes": [
-          {
-            "_id": "60732b03-b048-432e-be0f-cb13e211586e",
-            "nodeType": "ScriptedDecisionNode",
-            "displayName": "Scripted Decision"
-          },
-          {
-            "_id": "3633da1e-04fc-4d44-a6c8-b199cfade38a",
-            "nodeType": "OneTimePasswordCollectorDecisionNode",
-            "displayName": "OTP Collector Decision"
-          }
-        ],
-        "pageDescription": {
-          "desc": "Please enter the code you received"
-        },
-        "stage": "CH_LOGIN_3",
-        "pageHeader": {
-          "header": "Please enter your code"
-        }
-      }
-    },
-    {
-      "_id": "60732b03-b048-432e-be0f-cb13e211586e",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "script": "ace951c8-d169-4426-9357-d5b44e0aa728",
-        "outcomes": [
-          "True"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
-      }
-    },
-    {
-      "_id": "3633da1e-04fc-4d44-a6c8-b199cfade38a",
-      "nodeType": "OneTimePasswordCollectorDecisionNode",
-      "details": {
-        "passwordExpiryTime": 30
       }
     },
     {
@@ -136,23 +30,6 @@
       "details": {
         "identityAttribute": "mail",
         "identifier": "userName"
-      }
-    },
-    {
-      "_id": "5e76d32e-9180-4a20-b0bd-ff9b89773cbb",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "script": "a5778ce7-addf-4fb6-a7db-92929f1314c4",
-        "outcomes": [
-          "true",
-          "false"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
       }
     },
     {
@@ -229,52 +106,10 @@
       }
     },
     {
-      "_id": "860b9b8a-260a-4123-85f5-7cf50e20a291",
-      "nodeType": "ScriptedDecisionNode",
+      "_id": "80011d0c-c8b1-4ab2-b09b-ec91e3f58f33",
+      "nodeType": "SetSuccessUrlNode",
       "details": {
-        "script": "b276c566-622e-11eb-ae93-0242ac130002",
-        "outcomes": [
-          "true",
-          "false"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
-      }
-    },
-    {
-      "_id": "9339d5b3-f917-46a5-918e-a8b4ce884d81",
-      "nodeType": "PageNode",
-      "details": {
-        "nodes": [
-          {
-            "_id": "7c1389a2-2b21-483b-a2f2-2e2ad42f52b2",
-            "nodeType": "ChoiceCollectorNode",
-            "displayName": "Choice Collector"
-          }
-        ],
-        "pageDescription": {
-          "desc": "How do you want to confirm it's you?"
-        },
-        "stage": "CH_LOGIN_2",
-        "pageHeader": {
-          "header": "How do you want to confirm it's you?"
-        }
-      }
-    },
-    {
-      "_id": "7c1389a2-2b21-483b-a2f2-2e2ad42f52b2",
-      "nodeType": "ChoiceCollectorNode",
-      "details": {
-        "defaultChoice": "email",
-        "choices": [
-          "email",
-          "text"
-        ],
-        "prompt": "How do you want to confirm it's you?"
+        "successUrl": "/hassession"
       }
     },
     {
@@ -413,30 +248,6 @@
       }
     },
     {
-      "_id": "c20b82fd-458d-4a46-8d0f-41d589f3976b",
-      "nodeType": "OneTimePasswordGeneratorNode",
-      "details": {
-        "length": 6
-      }
-    },
-    {
-      "_id": "c32fab79-8836-4657-bef0-9f03a1e1165f",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "script": "20a3599f-b742-4554-a8b7-27862f248dd5",
-        "outcomes": [
-          "true",
-          "false"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
-      }
-    },
-    {
       "_id": "c99c82c6-20f5-456d-a94e-680c4f4a6307",
       "nodeType": "ScriptedDecisionNode",
       "details": {
@@ -531,10 +342,193 @@
       }
     },
     {
-      "_id": "80011d0c-c8b1-4ab2-b09b-ec91e3f58f33",
-      "nodeType": "SetSuccessUrlNode",
+      "_id": "fcac33d9-af0f-4ebd-89d6-6d9a23d3aaf5",
+      "nodeType": "ScriptedDecisionNode",
       "details": {
-        "successUrl": "/hassession"
+        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149",
+        "outcomes": [
+          "success",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "b57dae2b-e902-4ec0-8816-9f2306e07bd0",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "0f55abb8-f98c-450c-b06c-1610ea001868",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "d4a6e912-344a-4612-a3cf-036e92244039",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "55801756-11bf-493d-b49c-195488cf939a",
+        "outcomes": [
+          "true",
+          "false",
+          "other",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "5fba846b-f199-4119-a566-1fd89c4dd3e2",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149",
+        "outcomes": [
+          "success",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "34bbfd9b-a85c-4690-9ffe-0e741cd81f60",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "d8d0c71c-ddfb-47f6-a577-33aa0b7c2bcd",
+        "outcomes": [
+          "user_associated",
+          "user_not_associated",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "ac3f340b-aa2e-4def-9842-4eca4fbde95d",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "ad7a63a6-fae2-46c0-be70-bec1f059f064",
+        "outcomes": [
+          "true",
+          "false"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "c2b341f1-b762-44d1-bc8f-1f9f44fa04db",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "df75d4ae-8f25-48f4-af14-bb87206e029d",
+        "outcomes": [
+          "true",
+          "false"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "1c81800b-ba80-4991-8a74-170d9da3a1fe",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "460f8d31-5f90-440a-9f47-f5951778ea4f",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "80db6312-6962-43f4-943a-d0ef024c6d72",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "78da2828-68cc-4f63-b003-b8a250b1753d",
+        "outcomes": [
+          "true",
+          "false"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "2dc687c2-5241-47a5-8722-b37e6a6a823a",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "c0ab8c9c-b9b2-4bb7-b427-f10ddf9db149",
+        "outcomes": [
+          "success",
+          "error"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
+    },
+    {
+      "_id": "bbac607a-ef06-4d37-a987-10801278eba0",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "16975ea5-4f0a-4ac6-861f-00dbf39ca441",
+        "outcomes": [
+          "true",
+          "error",
+          "already_associated",
+          "auth_code_inactive"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
       }
     }
   ],
@@ -544,64 +538,15 @@
     "uiConfig": {},
     "entryNodeId": "ca5bf530-da0f-4a75-9399-a8314c668bb5",
     "nodes": {
-      "0e167098-4f1b-4a6d-a383-9a415b143dda": {
-        "x": 1992,
-        "y": 108.33333333333334,
-        "connections": {
-          "outcome": "860b9b8a-260a-4123-85f5-7cf50e20a291"
-        },
-        "nodeType": "OneTimePasswordGeneratorNode",
-        "displayName": "HOTP Generator"
-      },
-      "0e91440f-8d40-4946-88c9-1a7e22da57bc": {
-        "x": 1240,
-        "y": 31.5,
-        "connections": {
-          "false": "1031a228-600a-4325-82da-c93e6a13ab5b",
-          "true": "9339d5b3-f917-46a5-918e-a8b4ce884d81"
-        },
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "Has Phone Number"
-      },
-      "1031a228-600a-4325-82da-c93e6a13ab5b": {
-        "x": 1732,
-        "y": 248,
-        "connections": {
-          "false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
-          "true": "c20b82fd-458d-4a46-8d0f-41d589f3976b"
-        },
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "Create Notify JWT - Email"
-      },
       "11a167ea-7991-44e8-8cc9-e34a83220e3a": {
-        "x": 1999.828125,
-        "y": 786.015625,
+        "x": 2014.828125,
+        "y": 717.015625,
         "connections": {
           "false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
           "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
         },
         "nodeType": "IdentifyExistingUserNode",
         "displayName": "Identify Existing User"
-      },
-      "3147767a-bb7b-47b2-9b43-6d297e7cc2fa": {
-        "x": 1732,
-        "y": 75,
-        "connections": {
-          "false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
-          "true": "0e167098-4f1b-4a6d-a383-9a415b143dda"
-        },
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "Create Notify JWT - SMS"
-      },
-      "35194bf4-8dcc-41a2-8545-4a965b8f6ec0": {
-        "x": 2540,
-        "y": 64.015625,
-        "connections": {
-          "false": "a2adb2e2-a3f7-4214-927c-0a47d5d0e1dc",
-          "true": "ae62ed05-3a04-456b-8642-7bc222e0dd43"
-        },
-        "nodeType": "PageNode",
-        "displayName": "Enter OTP"
       },
       "4a8df6a5-8e56-4765-8ea0-2ff6200b6297": {
         "x": 324,
@@ -622,16 +567,6 @@
         "nodeType": "IdentifyExistingUserNode",
         "displayName": "Identify Existing User"
       },
-      "5e76d32e-9180-4a20-b0bd-ff9b89773cbb": {
-        "x": 2239,
-        "y": 260,
-        "connections": {
-          "false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
-          "true": "35194bf4-8dcc-41a2-8545-4a965b8f6ec0"
-        },
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "Send MFA email via Notify"
-      },
       "60decb8a-2e0a-4526-a4e3-a525ee6e25d4": {
         "x": 760,
         "y": 15.015625,
@@ -643,27 +578,25 @@
         "displayName": "Create/Update user"
       },
       "6486165d-fb00-4248-93c8-4f36ad2b2cb1": {
-        "x": 1239,
-        "y": 251.015625,
+        "x": 2555,
+        "y": 80.015625,
         "connections": {
           "error": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
-          "success": "c32fab79-8836-4657-bef0-9f03a1e1165f"
+          "success": "ae62ed05-3a04-456b-8642-7bc222e0dd43"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Reset Counter after login OK"
       },
       "739919ca-5a2b-4788-a447-36fe83a011f9": {
-        "x": 2967,
-        "y": 351.015625,
-        "connections": {
-          "true": "35194bf4-8dcc-41a2-8545-4a965b8f6ec0"
-        },
+        "x": 3040,
+        "y": 306.015625,
+        "connections": {},
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Raise Error"
       },
       "758e3d0a-3211-4850-8847-86981f75888e": {
-        "x": 894,
-        "y": 394.015625,
+        "x": 2263,
+        "y": 251.015625,
         "connections": {
           "false": "d1f2eef5-5ad7-4ad6-bc5a-e65710879ff4",
           "true": "9d8e176e-3175-45a5-8ff3-ca0138c1b300"
@@ -672,31 +605,20 @@
         "displayName": "Update Legacy Password"
       },
       "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a": {
-        "x": 2261,
-        "y": 700.015625,
+        "x": 1802,
+        "y": 769.015625,
         "connections": {},
         "nodeType": "ScriptedDecisionNode",
         "displayName": "General Error"
       },
-      "860b9b8a-260a-4123-85f5-7cf50e20a291": {
-        "x": 2246,
-        "y": 83,
+      "80011d0c-c8b1-4ab2-b09b-ec91e3f58f33": {
+        "x": 1292,
+        "y": 775.015625,
         "connections": {
-          "false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
-          "true": "35194bf4-8dcc-41a2-8545-4a965b8f6ec0"
+          "outcome": "11a167ea-7991-44e8-8cc9-e34a83220e3a"
         },
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "Send MFA text via Notify"
-      },
-      "9339d5b3-f917-46a5-918e-a8b4ce884d81": {
-        "x": 1469,
-        "y": 52.015625,
-        "connections": {
-          "email": "1031a228-600a-4325-82da-c93e6a13ab5b",
-          "text": "3147767a-bb7b-47b2-9b43-6d297e7cc2fa"
-        },
-        "nodeType": "PageNode",
-        "displayName": "Choose Email/SMS"
+        "nodeType": "SetSuccessUrlNode",
+        "displayName": "Success URL"
       },
       "94a5f48e-d6e3-4bf4-8edc-45c028a70900": {
         "x": 216,
@@ -708,8 +630,8 @@
         "displayName": "Login Form"
       },
       "9d8e176e-3175-45a5-8ff3-ca0138c1b300": {
-        "x": 1171,
-        "y": 422.015625,
+        "x": 2549,
+        "y": 243.015625,
         "connections": {
           "error": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
           "success": "6486165d-fb00-4248-93c8-4f36ad2b2cb1"
@@ -727,8 +649,8 @@
         "displayName": "Get Session Data"
       },
       "a2adb2e2-a3f7-4214-927c-0a47d5d0e1dc": {
-        "x": 2732,
-        "y": 318.015625,
+        "x": 2805,
+        "y": 280.015625,
         "connections": {
           "Reject": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
           "Retry": "739919ca-5a2b-4788-a447-36fe83a011f9"
@@ -737,8 +659,8 @@
         "displayName": "Retry Limit Decision"
       },
       "ae62ed05-3a04-456b-8642-7bc222e0dd43": {
-        "x": 2810,
-        "y": 195.5,
+        "x": 2846,
+        "y": 96.5,
         "connections": {
           "outcome": "bf46b661-96c6-443a-b012-3b5608b7051f"
         },
@@ -756,32 +678,13 @@
         "displayName": "Get IDM Token"
       },
       "bf46b661-96c6-443a-b012-3b5608b7051f": {
-        "x": 3059,
-        "y": 194.5,
+        "x": 3109,
+        "y": 166.5,
         "connections": {
           "true": "f8d1e6a3-14d1-4eda-9515-6e0dfacad539"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Update Last Login"
-      },
-      "c20b82fd-458d-4a46-8d0f-41d589f3976b": {
-        "x": 1994,
-        "y": 285.66666666666663,
-        "connections": {
-          "outcome": "5e76d32e-9180-4a20-b0bd-ff9b89773cbb"
-        },
-        "nodeType": "OneTimePasswordGeneratorNode",
-        "displayName": "HOTP Generator"
-      },
-      "c32fab79-8836-4657-bef0-9f03a1e1165f": {
-        "x": 1032,
-        "y": 39.5,
-        "connections": {
-          "false": "ae62ed05-3a04-456b-8642-7bc222e0dd43",
-          "true": "0e91440f-8d40-4946-88c9-1a7e22da57bc"
-        },
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "Require MFA"
       },
       "c99c82c6-20f5-456d-a94e-680c4f4a6307": {
         "x": 363,
@@ -830,14 +733,14 @@
           "error": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
           "lock_expired": "fc36693f-b04c-46f8-a683-1e1c1498c8bd",
           "locked": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
-          "not_locked": "758e3d0a-3211-4850-8847-86981f75888e"
+          "not_locked": "fcac33d9-af0f-4ebd-89d6-6d9a23d3aaf5"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Check soft lock"
       },
       "fc36693f-b04c-46f8-a683-1e1c1498c8bd": {
-        "x": 691,
-        "y": 316.015625,
+        "x": 719,
+        "y": 356.015625,
         "connections": {
           "error": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
           "success": "758e3d0a-3211-4850-8847-86981f75888e"
@@ -845,14 +748,117 @@
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Reset Counter"
       },
-      "80011d0c-c8b1-4ab2-b09b-ec91e3f58f33": {
-        "x": 1288,
-        "y": 793.015625,
+      "fcac33d9-af0f-4ebd-89d6-6d9a23d3aaf5": {
+        "x": 1019,
+        "y": 349.015625,
         "connections": {
-          "outcome": "11a167ea-7991-44e8-8cc9-e34a83220e3a"
+          "success": "b57dae2b-e902-4ec0-8816-9f2306e07bd0",
+          "error": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a"
         },
-        "nodeType": "SetSuccessUrlNode",
-        "displayName": "Success URL"
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Get IDM token"
+      },
+      "b57dae2b-e902-4ec0-8816-9f2306e07bd0": {
+        "x": 1235,
+        "y": 349.015625,
+        "connections": {
+          "true": "d4a6e912-344a-4612-a3cf-036e92244039"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Set Company Number"
+      },
+      "d4a6e912-344a-4612-a3cf-036e92244039": {
+        "x": 1516,
+        "y": 306.34375,
+        "connections": {
+          "true": "5fba846b-f199-4119-a566-1fd89c4dd3e2",
+          "error": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
+          "other": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
+          "false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Get Company Data"
+      },
+      "5fba846b-f199-4119-a566-1fd89c4dd3e2": {
+        "x": 1732,
+        "y": 474.34375,
+        "connections": {
+          "error": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
+          "success": "34bbfd9b-a85c-4690-9ffe-0e741cd81f60"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Get IDM Token for company check"
+      },
+      "34bbfd9b-a85c-4690-9ffe-0e741cd81f60": {
+        "x": 1706.3333740234375,
+        "y": 283.34375,
+        "connections": {
+          "user_not_associated": "ac3f340b-aa2e-4def-9842-4eca4fbde95d",
+          "user_associated": "758e3d0a-3211-4850-8847-86981f75888e",
+          "error": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Check Company Association"
+      },
+      "ac3f340b-aa2e-4def-9842-4eca4fbde95d": {
+        "x": 2005.3333740234375,
+        "y": 241.34375,
+        "connections": {
+          "false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
+          "true": "c2b341f1-b762-44d1-bc8f-1f9f44fa04db"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Enter Auth Code"
+      },
+      "c2b341f1-b762-44d1-bc8f-1f9f44fa04db": {
+        "x": 2017.3333740234375,
+        "y": 419.34375,
+        "connections": {
+          "false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
+          "true": "1c81800b-ba80-4991-8a74-170d9da3a1fe"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Validate Cleartext Auth Code"
+      },
+      "1c81800b-ba80-4991-8a74-170d9da3a1fe": {
+        "x": 2009,
+        "y": 593.015625,
+        "connections": {
+          "true": "80db6312-6962-43f4-943a-d0ef024c6d72"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Add Auth code to session"
+      },
+      "80db6312-6962-43f4-943a-d0ef024c6d72": {
+        "x": 2325,
+        "y": 512.015625,
+        "connections": {
+          "false": "758e3d0a-3211-4850-8847-86981f75888e",
+          "true": "2dc687c2-5241-47a5-8722-b37e6a6a823a"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Confirm association"
+      },
+      "2dc687c2-5241-47a5-8722-b37e6a6a823a": {
+        "x": 2323,
+        "y": 666.515625,
+        "connections": {
+          "success": "bbac607a-ef06-4d37-a987-10801278eba0"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Get IDM token again"
+      },
+      "bbac607a-ef06-4d37-a987-10801278eba0": {
+        "x": 2584,
+        "y": 519.515625,
+        "connections": {
+          "true": "758e3d0a-3211-4850-8847-86981f75888e",
+          "already_associated": "758e3d0a-3211-4850-8847-86981f75888e",
+          "auth_code_inactive": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
+          "error": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Create Association"
       }
     },
     "staticNodes": {
