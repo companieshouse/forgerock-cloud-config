@@ -364,7 +364,8 @@
       "details": {
         "script": "0f55abb8-f98c-450c-b06c-1610ea001868",
         "outcomes": [
-          "true"
+          "true",
+          "false"
         ],
         "outputs": [
           "*"
@@ -539,8 +540,8 @@
     "entryNodeId": "ca5bf530-da0f-4a75-9399-a8314c668bb5",
     "nodes": {
       "11a167ea-7991-44e8-8cc9-e34a83220e3a": {
-        "x": 2014.828125,
-        "y": 717.015625,
+        "x": 2041.828125,
+        "y": 879.015625,
         "connections": {
           "false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
           "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
@@ -595,8 +596,8 @@
         "displayName": "Raise Error"
       },
       "758e3d0a-3211-4850-8847-86981f75888e": {
-        "x": 2263,
-        "y": 251.015625,
+        "x": 2073,
+        "y": 87.015625,
         "connections": {
           "false": "d1f2eef5-5ad7-4ad6-bc5a-e65710879ff4",
           "true": "9d8e176e-3175-45a5-8ff3-ca0138c1b300"
@@ -612,8 +613,8 @@
         "displayName": "General Error"
       },
       "80011d0c-c8b1-4ab2-b09b-ec91e3f58f33": {
-        "x": 1292,
-        "y": 775.015625,
+        "x": 1372,
+        "y": 919.015625,
         "connections": {
           "outcome": "11a167ea-7991-44e8-8cc9-e34a83220e3a"
         },
@@ -717,8 +718,8 @@
         "displayName": "Soft Lock Increment Counter"
       },
       "f8d1e6a3-14d1-4eda-9515-6e0dfacad539": {
-        "x": 3311,
-        "y": 172.5,
+        "x": 3327,
+        "y": 103.5,
         "connections": {
           "false": "e301438c-0bd0-429c-ab0c-66126501069a",
           "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
@@ -762,7 +763,8 @@
         "x": 1235,
         "y": 349.015625,
         "connections": {
-          "true": "d4a6e912-344a-4612-a3cf-036e92244039"
+          "true": "d4a6e912-344a-4612-a3cf-036e92244039",
+          "false": "758e3d0a-3211-4850-8847-86981f75888e"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Set Company Number"
