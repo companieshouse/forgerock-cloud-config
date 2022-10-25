@@ -1,14 +1,6 @@
 {
   "nodes": [
     {
-      "_id": "11a167ea-7991-44e8-8cc9-e34a83220e3a",
-      "nodeType": "IdentifyExistingUserNode",
-      "details": {
-        "identityAttribute": "mail",
-        "identifier": "userName"
-      }
-    },
-    {
       "_id": "4a8df6a5-8e56-4765-8ea0-2ff6200b6297",
       "nodeType": "ScriptedDecisionNode",
       "details": {
@@ -83,13 +75,6 @@
       }
     },
     {
-      "_id": "758e3d0a-3211-4850-8847-86981f75888e",
-      "nodeType": "InnerTreeEvaluatorNode",
-      "details": {
-        "tree": "CHUpdateLegacyPassword"
-      }
-    },
-    {
       "_id": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
       "nodeType": "ScriptedDecisionNode",
       "details": {
@@ -103,13 +88,6 @@
         "inputs": [
           "*"
         ]
-      }
-    },
-    {
-      "_id": "80011d0c-c8b1-4ab2-b09b-ec91e3f58f33",
-      "nodeType": "SetSuccessUrlNode",
-      "details": {
-        "successUrl": "/hassession"
       }
     },
     {
@@ -272,23 +250,6 @@
         "outcomes": [
           "noSession",
           "hasSession"
-        ],
-        "outputs": [
-          "*"
-        ],
-        "inputs": [
-          "*"
-        ]
-      }
-    },
-    {
-      "_id": "d1f2eef5-5ad7-4ad6-bc5a-e65710879ff4",
-      "nodeType": "ScriptedDecisionNode",
-      "details": {
-        "script": "a1ebbcd2-39c1-47c2-a152-4bebcf8cfb5b",
-        "outcomes": [
-          "true",
-          "error"
         ],
         "outputs": [
           "*"
@@ -531,6 +492,30 @@
           "*"
         ]
       }
+    },
+    {
+      "_id": "2ab5e1fa-e6d8-4480-97d2-800dd09994f4",
+      "nodeType": "IdentifyExistingUserNode",
+      "details": {
+        "identityAttribute": "mail",
+        "identifier": "userName"
+      }
+    },
+    {
+      "_id": "5e6d6771-fc0b-4c8e-8008-e516d8661062",
+      "nodeType": "ScriptedDecisionNode",
+      "details": {
+        "script": "19a9ba97-3eaf-46ed-9b59-ea9315d81407",
+        "outcomes": [
+          "true"
+        ],
+        "outputs": [
+          "*"
+        ],
+        "inputs": [
+          "*"
+        ]
+      }
     }
   ],
   "tree": {
@@ -539,16 +524,6 @@
     "uiConfig": {},
     "entryNodeId": "ca5bf530-da0f-4a75-9399-a8314c668bb5",
     "nodes": {
-      "11a167ea-7991-44e8-8cc9-e34a83220e3a": {
-        "x": 2041.828125,
-        "y": 879.015625,
-        "connections": {
-          "false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
-          "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
-        },
-        "nodeType": "IdentifyExistingUserNode",
-        "displayName": "Identify Existing User"
-      },
       "4a8df6a5-8e56-4765-8ea0-2ff6200b6297": {
         "x": 324,
         "y": 597.015625,
@@ -595,31 +570,12 @@
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Raise Error"
       },
-      "758e3d0a-3211-4850-8847-86981f75888e": {
-        "x": 2073,
-        "y": 87.015625,
-        "connections": {
-          "false": "d1f2eef5-5ad7-4ad6-bc5a-e65710879ff4",
-          "true": "9d8e176e-3175-45a5-8ff3-ca0138c1b300"
-        },
-        "nodeType": "InnerTreeEvaluatorNode",
-        "displayName": "Update Legacy Password"
-      },
       "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a": {
         "x": 1802,
         "y": 769.015625,
         "connections": {},
         "nodeType": "ScriptedDecisionNode",
         "displayName": "General Error"
-      },
-      "80011d0c-c8b1-4ab2-b09b-ec91e3f58f33": {
-        "x": 1372,
-        "y": 919.015625,
-        "connections": {
-          "outcome": "11a167ea-7991-44e8-8cc9-e34a83220e3a"
-        },
-        "nodeType": "SetSuccessUrlNode",
-        "displayName": "Success URL"
       },
       "94a5f48e-d6e3-4bf4-8edc-45c028a70900": {
         "x": 216,
@@ -631,8 +587,8 @@
         "displayName": "Login Form"
       },
       "9d8e176e-3175-45a5-8ff3-ca0138c1b300": {
-        "x": 2549,
-        "y": 243.015625,
+        "x": 2460,
+        "y": 232.015625,
         "connections": {
           "error": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
           "success": "6486165d-fb00-4248-93c8-4f36ad2b2cb1"
@@ -641,10 +597,10 @@
         "displayName": "Get New IDM Token"
       },
       "a047b2d1-e735-40d4-8fa1-648e9ba5454f": {
-        "x": 136,
-        "y": 741.015625,
+        "x": 161,
+        "y": 816.015625,
         "connections": {
-          "outcome": "80011d0c-c8b1-4ab2-b09b-ec91e3f58f33"
+          "outcome": "2ab5e1fa-e6d8-4480-97d2-800dd09994f4"
         },
         "nodeType": "SessionDataNode",
         "displayName": "Get Session Data"
@@ -701,28 +657,18 @@
         "x": 112,
         "y": 423.015625,
         "connections": {
-          "hasSession": "a047b2d1-e735-40d4-8fa1-648e9ba5454f",
-          "noSession": "94a5f48e-d6e3-4bf4-8edc-45c028a70900"
+          "noSession": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
+          "hasSession": "a047b2d1-e735-40d4-8fa1-648e9ba5454f"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Check Session"
       },
-      "d1f2eef5-5ad7-4ad6-bc5a-e65710879ff4": {
-        "x": 700,
-        "y": 552.015625,
-        "connections": {
-          "error": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
-          "true": "94a5f48e-d6e3-4bf4-8edc-45c028a70900"
-        },
-        "nodeType": "ScriptedDecisionNode",
-        "displayName": "Soft Lock Increment Counter"
-      },
       "f8d1e6a3-14d1-4eda-9515-6e0dfacad539": {
-        "x": 3327,
-        "y": 103.5,
+        "x": 3196,
+        "y": 266.5,
         "connections": {
           "false": "e301438c-0bd0-429c-ab0c-66126501069a",
-          "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+          "true": "5e6d6771-fc0b-4c8e-8008-e516d8661062"
         },
         "nodeType": "InnerTreeEvaluatorNode",
         "displayName": "Inner Tree Evaluator"
@@ -740,11 +686,11 @@
         "displayName": "Check soft lock"
       },
       "fc36693f-b04c-46f8-a683-1e1c1498c8bd": {
-        "x": 719,
-        "y": 356.015625,
+        "x": 731,
+        "y": 394.015625,
         "connections": {
           "error": "94a5f48e-d6e3-4bf4-8edc-45c028a70900",
-          "success": "758e3d0a-3211-4850-8847-86981f75888e"
+          "success": "9d8e176e-3175-45a5-8ff3-ca0138c1b300"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Reset Counter"
@@ -764,14 +710,14 @@
         "y": 349.015625,
         "connections": {
           "true": "d4a6e912-344a-4612-a3cf-036e92244039",
-          "false": "758e3d0a-3211-4850-8847-86981f75888e"
+          "false": "9d8e176e-3175-45a5-8ff3-ca0138c1b300"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Set Company Number"
       },
       "d4a6e912-344a-4612-a3cf-036e92244039": {
-        "x": 1516,
-        "y": 306.34375,
+        "x": 1522,
+        "y": 330.34375,
         "connections": {
           "true": "5fba846b-f199-4119-a566-1fd89c4dd3e2",
           "error": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
@@ -792,19 +738,19 @@
         "displayName": "Get IDM Token for company check"
       },
       "34bbfd9b-a85c-4690-9ffe-0e741cd81f60": {
-        "x": 1706.3333740234375,
-        "y": 283.34375,
+        "x": 1658.3333740234375,
+        "y": 105.34375,
         "connections": {
           "user_not_associated": "ac3f340b-aa2e-4def-9842-4eca4fbde95d",
-          "user_associated": "758e3d0a-3211-4850-8847-86981f75888e",
+          "user_associated": "9d8e176e-3175-45a5-8ff3-ca0138c1b300",
           "error": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Check Company Association"
       },
       "ac3f340b-aa2e-4def-9842-4eca4fbde95d": {
-        "x": 2005.3333740234375,
-        "y": 241.34375,
+        "x": 1981.3333740234375,
+        "y": 139.34375,
         "connections": {
           "false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
           "true": "c2b341f1-b762-44d1-bc8f-1f9f44fa04db"
@@ -813,8 +759,8 @@
         "displayName": "Enter Auth Code"
       },
       "c2b341f1-b762-44d1-bc8f-1f9f44fa04db": {
-        "x": 2017.3333740234375,
-        "y": 419.34375,
+        "x": 2005.3333740234375,
+        "y": 317.34375,
         "connections": {
           "false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
           "true": "1c81800b-ba80-4991-8a74-170d9da3a1fe"
@@ -823,8 +769,8 @@
         "displayName": "Validate Cleartext Auth Code"
       },
       "1c81800b-ba80-4991-8a74-170d9da3a1fe": {
-        "x": 2009,
-        "y": 593.015625,
+        "x": 2051,
+        "y": 600.015625,
         "connections": {
           "true": "80db6312-6962-43f4-943a-d0ef024c6d72"
         },
@@ -832,18 +778,18 @@
         "displayName": "Add Auth code to session"
       },
       "80db6312-6962-43f4-943a-d0ef024c6d72": {
-        "x": 2325,
-        "y": 512.015625,
+        "x": 2227,
+        "y": 452.015625,
         "connections": {
-          "false": "758e3d0a-3211-4850-8847-86981f75888e",
+          "false": "9d8e176e-3175-45a5-8ff3-ca0138c1b300",
           "true": "2dc687c2-5241-47a5-8722-b37e6a6a823a"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Confirm association"
       },
       "2dc687c2-5241-47a5-8722-b37e6a6a823a": {
-        "x": 2323,
-        "y": 666.515625,
+        "x": 2458,
+        "y": 667.515625,
         "connections": {
           "success": "bbac607a-ef06-4d37-a987-10801278eba0"
         },
@@ -851,16 +797,35 @@
         "displayName": "Get IDM token again"
       },
       "bbac607a-ef06-4d37-a987-10801278eba0": {
-        "x": 2584,
-        "y": 519.515625,
+        "x": 2620,
+        "y": 449.515625,
         "connections": {
-          "true": "758e3d0a-3211-4850-8847-86981f75888e",
-          "already_associated": "758e3d0a-3211-4850-8847-86981f75888e",
+          "true": "9d8e176e-3175-45a5-8ff3-ca0138c1b300",
+          "already_associated": "9d8e176e-3175-45a5-8ff3-ca0138c1b300",
           "auth_code_inactive": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
           "error": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a"
         },
         "nodeType": "ScriptedDecisionNode",
         "displayName": "Create Association"
+      },
+      "2ab5e1fa-e6d8-4480-97d2-800dd09994f4": {
+        "x": 726.9479064941406,
+        "y": 803.34375,
+        "connections": {
+          "false": "7afb0b0e-8d8c-4e60-9cd3-8ef526129b0a",
+          "true": "fcac33d9-af0f-4ebd-89d6-6d9a23d3aaf5"
+        },
+        "nodeType": "IdentifyExistingUserNode",
+        "displayName": "Identify Existing User"
+      },
+      "5e6d6771-fc0b-4c8e-8008-e516d8661062": {
+        "x": 3431,
+        "y": 289.34375,
+        "connections": {
+          "true": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
+        },
+        "nodeType": "ScriptedDecisionNode",
+        "displayName": "Add password session"
       }
     },
     "staticNodes": {
