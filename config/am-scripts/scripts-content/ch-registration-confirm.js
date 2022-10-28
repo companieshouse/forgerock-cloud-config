@@ -34,8 +34,11 @@ var objectAttributes = sharedState.get('objectAttributes');
               ),
             new fr.HiddenValueCallback(
               'pagePropsJSON',
-              objectAttributes
-            )
+              JSON.stringify({
+                              'fullName': sharedState.get('objectAttributes').get('givenName') + "",
+                              'emailAddress': sharedState.get('objectAttributes').get('mail') + "",
+                              'mobileNumber': sharedState.get('objectAttributes').get('telephoneNumber') + ""
+     						 }))
           ).build();
 
         } else {
