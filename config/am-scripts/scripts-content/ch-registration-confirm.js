@@ -42,9 +42,7 @@ var objectAttributes = sharedState.get('objectAttributes');
           ).build();
 
         } else {
-        _log('[TOPLEVEL] Confirm Registration Choices:  here here');
            var selectedIndex = callbacks.get(2).getSelectedIndex();
-            _log('[TOPLEVEL] Confirm Registration Choices:  here here 1');
            if (selectedIndex === CONTINUE_OPTION_INDEX) {
                _log('[TOPLEVEL] Confirm Registration Choices: selected CONTINUE');
                outcome = NodeOutcome.CONTINUE;
