@@ -66,7 +66,7 @@ if (newObject.password !== oldObject.password) {
         'url': HASH_CONVERT_API_URL,
         'method': 'POST',
         'headers': {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json;charset=utf-8',
             'x-api-key': HASH_CONVERT_API_KEY
         },
         'body': '{"convert": "' + object.password + '"}'
