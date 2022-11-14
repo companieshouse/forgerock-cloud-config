@@ -1,6 +1,6 @@
 (function () {
   const logNowMsecs = new Date().getTime();
-  const SYSTEM_CHS_COMPANY = 'system/CHSCompanyReducedTimeout/company_profile';
+  const SYSTEM_CHS_COMPANY = 'system/CHSCompany/company_profile';
   const SYSTEM_WEBFILING_AUTHCODE = 'system/WebfilingAuthCode/authCode';
   const OBJECT_COMPANY = 'alpha_organization';
   
@@ -76,10 +76,14 @@
     _log('[SEARCH COMPANY IN CHS] search term: ' + searchTerm);
   
     try {
+      _log('Starting MongoDB getCompanies Query');
+
       let chsResponse = openidm.query(
         SYSTEM_CHS_COMPANY,
         { '_queryFilter': searchTerm }
       );
+
+      _log('Finished MongoDB getCompanies Query');
       
       _log('[SEARCH COMPANY IN CHS] CHS companies response: '+ chsResponse);
       _log('[SEARCH COMPANY IN CHS] No. of results of CHS query for companies: ' + chsResponse.resultCount);
@@ -95,10 +99,14 @@
     }
     
     try {
+      _log('Starting WebFiling Query');
+
       let ewfResponse = openidm.query(
         SYSTEM_WEBFILING_AUTHCODE,
         { '_queryFilter': searchTerm }
       );
+
+      _log('Finished WebFiling Query');
       
       _log('[SEARCH AUTH CODE IN EWF] EWF aut codes response: '+ ewfResponse);
       _log('[SEARCH AUTH CODE IN EWF] No. of results of  EWF query for auth codes: ' + ewfResponse.resultCount);
