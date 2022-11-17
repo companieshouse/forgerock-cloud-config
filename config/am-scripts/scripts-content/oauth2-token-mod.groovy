@@ -67,22 +67,8 @@ if (claims == null) {
         }
         accessToken.setField("internal-app", isInternalApp)
 
-        // Test possible scopes
-        // TODO Pass values in request
-
-        // var scopes = ""
-        //var scopes = "https://account.companieshouse.gov.uk/user/profile.read"
-        var scopes = "https://identity.company-information.service.gov.uk/user/profile.read"
-        // var scopes = "https://account.companieshouse.gov.uk/user.write-full"
-        // var scopes = "https://identity.company-information.service.gov.uk/user.write-full"
-        // var scopes = "https://api.companieshouse.gov.uk/company/registered-office-address.update"
-        // var scopes = "https://api.company-information.service.gov.uk/company/registered-office-address.update"
-        // var scopes = "https://api.companieshouse.gov.uk/company/admin.write-full"
-        // var scopes = "https://api.company-information.service.gov.uk/company/admin.write-full"
-        // var scopes = "http://api.companieshouse.gov.uk/company"
-        // var scopes = "https://api.companieshouse.gov.uk/company"
-        // var scopes = "https://account.companieshouse.gov.uk/user/profile.read https://account.companieshouse.gov.uk/user.write-full"
-        // var scopes = "https://identity.company-information.service.gov.uk/user/profile.read https://identity.company-information.service.gov.uk/user.write-full"
+        var scopes = accessToken.getScope()
+        logger.error('[CHSLOG] Scopes = ' + scopes)
 
         var permissions = scopesToPermissions(scopes, company, isInternalApp)
 
@@ -140,12 +126,12 @@ def scopesToPermissions(incomingScopes, companyNumber, isInternalApp=false) {
 
     def permissionRecord = [:]
 
-    if (incomingScopes.length() == 0) {
+    if (incomingScopes.size() == 0) {
         return permissionRecord
     }
 
-    String[] scopes = incomingScopes.split(' ')
     for (scope in scopes) {
+        logger.error('[CHSLOG] Each scope = ' + scope)
         def map = scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, legacyScopesAllowed)
         addPermissions(permissionRecord, map)
     }
