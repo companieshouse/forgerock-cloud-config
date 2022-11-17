@@ -1,5 +1,5 @@
 {
-	"_id": "provisioner.openicf/CHSCompany",
+	"_id": "provisioner.openicf/CHSCompanyReducedTimeout",
 	"connectorRef": {
 		"connectorHostRef": "chs-group",
 		"displayName": "MongoDB Connector",
@@ -11,8 +11,8 @@
 	"poolConfigOption": {
 		"maxObjects": 30,
 		"maxIdle": 30,
-		"maxWait": 150000,
-		"minEvictableIdleTimeMillis": 120000,
+		"maxWait": 15000,
+		"minEvictableIdleTimeMillis": 12000,
 		"minIdle": 1
 	},
 	"resultsHandlerConfig": {
