@@ -621,35 +621,31 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
         return map
     } else {
 
-        //do regex cases
-        var companyTypeRegex = /^https:\/\/api.companieshouse.gov.uk\/company\/(\w+).create/
-        var officerIdRegex = /^https:\/\/api.companieshouse.gov.uk\/company\/(\d+)\/officers\/(\w+)\/(\d+).(\w+)/
-        var registerTypeRegex = /^https:\/\/api.companieshouse.gov.uk\/company\/(\d+)\/registers\/(\w+).update/
-        var pscIdRegex = /^https:\/\/api.companieshouse.gov.uk\/company\/(\d+)\/persons-with-significant-control\/(\w+)\/(\d+).(\w+)/
-        var chargeIdRegex = /^https:\/\/api.companieshouse.gov.uk\/company\/(\d+)\/charges\/(\d+).update/
+        //do dynamic value cases (having to use string manipulation and FR won't currently allow use of regex classes)
 
-        var matcher = scope =~ companyTypeRegex
-        if (matcher.size() > 0) {
-            var companyType = matcher[0][0]
-            logger.message('[CHSLOG] CompanyType = ' + companyType)
-            if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyType + '.create')) {
-                def map = [:]
-                map['company_incorporation'] = companyType + ':create'
-                return map
-            }
+        // Scope = 'https://api.companieshouse.gov.uk/company/' + companyType + '.create'
+        if (scope.startsWith('https://api.companieshouse.gov.uk/company/') && scope.endsWith('.create')) {
+            var companySplitScope = scope.split('https://api.companieshouse.gov.uk/company/')
+            var companyType = companySplitScope[1].split('.create')
+            def map = [:]
+            logger.message('[CHSLOG] CompanyType = ' + companyType[0])
+            map['company_incorporation'] = companyType[0] + ':create'
+            return map
         }
 
-        matcher = scope =~ officerIdRegex
-        if (matcher.size() > 0) {
-            var officerType = matcher[1][0]
-            var officerId = matcher[2][0]
-
-            if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/officers/' + officerType + '/' + officerId + '.update')) {
+        if (scope.contains("/officers/")) {
+            var officersSplit = scope.split('/officers/')
+            if (officersSplit[1].endsWith('.update')) { // 'https://api.companieshouse.gov.uk/company/' + companyNumber + '/officers/' + officerType + '/' + officerId + '.update'
+                var officerIdSplit = officersSplit[1].split('/')
+                var officerId = officerIdSplit[1].split('.update')[0]
                 def map = [:]
                 map['company_officers'] = officerId + ':update'
                 return map
-            } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/officers/' + officerType + '/' + officerId + '.read-full')) {
+            }
+            else if (officersSplit[1].endsWith('.read-full')) { // 'https://api.companieshouse.gov.uk/company/' + companyNumber + '/officers/' + officerType + '/' + officerId + '.read-full'
                 if (isInternalApp) {
+                    var officerIdSplit = officersSplit[1].split('/')
+                    var officerId = officerIdSplit[1].split('.read-full')[0]
                     def map = [:]
                     map['company_officers'] = officerId + ':read-full'
                     return map
@@ -661,28 +657,30 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
             }
         }
 
-        matcher = scope =~ registerTypeRegex
-        if (matcher.size() > 0) {
-            var registerType = matcher[1][0]
+        if (scope.contains("/registers/") && scope.contains(".update")) { // 'https://api.companieshouse.gov.uk/company/' + companyNumber + '/registers/' + registerType + '.update'
+            var registersSplit = scope.split("/registers/")
+            var registerTypeSplit = registersSplit[1].split('.update')
+            var registerType = registerTypeSplit[0]
 
-            if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/registers/' + registerType + '.update')) {
-                def map = [:]
-                map['company_registers'] = registerType + ':update'
-                return map
-            }
+            def map = [:]
+            map['company_registers'] = registerType + ':update'
+            return map
         }
 
-        matcher = scope =~ pscIdRegex
-        if (matcher.size() > 0) {
-            var pscType = matcher[1][0]
-            var pscId = matcher[2][0]
-
-            if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/persons-with-significant-control/' + pscType + '/' + pscId + '.update')) {
+        if (scope.contains("/persons-with-significant-control/")) {
+            if (scope.contains(".update")) { // 'https://api.companieshouse.gov.uk/company/' + companyNumber + '/persons-with-significant-control/' + pscType + '/' + pscId + '.update'
+                var significantControlSplit = scope.split("/persons-with-significant-control/")
+                var pscSlashSplit = significantControlSplit[1].split('/')
+                var pscId = pscSlashSplit[1].split('.update')[0]
                 def map = [:]
                 map['company_pscs'] = pscId + ':update'
                 return map
-            } else if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/persons-with-significant-control/' + pscType + '/' + pscId + '.read-full')) {
+            }
+            else if (scope.contains(".read-full")) { // 'https://api.companieshouse.gov.uk/company/' + companyNumber + '/persons-with-significant-control/' + pscType + '/' + pscId + '.read-full'
                 if (isInternalApp) {
+                    var significantControlSplit = scope.split("/persons-with-significant-control/")
+                    var pscSlashSplit = significantControlSplit[1].split('/')
+                    var pscId = pscSlashSplit[1].split('.read-full')[0]
                     def map = [:]
                     map['company_pscs'] = pscId + ':read-full'
                     return map
@@ -694,15 +692,14 @@ def scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, le
             }
         }
 
-        matcher = scope =~ chargeIdRegex
-        if (matcher.size() > 0) {
-            var chargeId = matcher[1][0]
+        if (scope.contains("/charges/") && scope.contains(".update")) { // 'https://api.companieshouse.gov.uk/company/' + companyNumber + '/charges/' + chargeId + '.update'
+            var chargesSplit = scope.split("/charges/")
+            var chargeIdSplit = chargesSplit[1].split('.update')
+            var chargeId = chargeIdSplit[0]
 
-            if (scope.equals('https://api.companieshouse.gov.uk/company/' + companyNumber + '/charges/' + chargeId + '.update')) {
-                def map = [:]
-                map['company_charges'] = chargeId + ':update'
-                return map
-            }
+            def map = [:]
+            map['company_charges'] = chargeId + ':update'
+            return map
         }
 
         def map = [:]
