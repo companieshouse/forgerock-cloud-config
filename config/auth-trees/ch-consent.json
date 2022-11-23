@@ -1,108 +1,161 @@
 {
-   "nodes": [
-    {
-        "_id": "94dc78fa-64fa-44e5-ab3b-3c26aa82d97b",
-        "nodeType": "ScriptedDecisionNode",
-        "details": {
-            "outcomes": ["hasSession", "noSession"],
-            "inputs": ["*"],
-            "outputs": ["*"],
-            "script": "c4001e02-469c-4cc4-bf95-9f43d7e46568"
-        }
-    },
-    {
-        "_id": "90d7e5ad-5e0b-41ca-b3e9-5c5128cbc6ad",
-        "nodeType": "ScriptedDecisionNode",
-        "details": {
-            "outcomes": ["success", "noconsent", "error"],
-            "inputs": ["*"],
-            "outputs": ["*"],
-            "script": "26c31a86-df26-4dd3-8675-55e29388d568"
-        }
-    },
-    {
-        "_id": "f3381fb1-4c4c-4deb-ba08-12bce46472ae",
-        "nodeType": "ScriptedDecisionNode",
-        "details": {
-            "outcomes": ["success", "error"],
-            "inputs": ["*"],
-            "outputs": ["*"],
-            "script": "f981c992-2b82-4f38-919a-93ea83e7b8fb"
-        }
-    },
-    {
-        "_id": "a9c243b5-abd9-43fe-be2b-4464c1568b71",
-        "nodeType": "ScriptedDecisionNode",
-        "details": {
-            "outcomes": ["success", "error"],
-            "inputs": ["*"],
-            "outputs": ["*"],
-            "script": "3de821a3-7c07-4ae4-858f-8e46192ed667"
-        }
-    }
-   ],
-   "tree": {
-	"_id": "CHConsent",
-    "description": "Consent journey",
-	"identityResource": "managed/alpha_user",
-	"uiConfig": {},
-	"entryNodeId": "94dc78fa-64fa-44e5-ab3b-3c26aa82d97b",
-	"nodes": {
-		"94dc78fa-64fa-44e5-ab3b-3c26aa82d97b": {
-			"x": 204,
-			"y": 232.015625,
-			"connections": {
-				"noSession": "e301438c-0bd0-429c-ab0c-66126501069a",
-				"hasSession": "90d7e5ad-5e0b-41ca-b3e9-5c5128cbc6ad"
-			},
+	"nodes": [
+		{
+			"_id": "94dc78fa-64fa-44e5-ab3b-3c26aa82d97b",
 			"nodeType": "ScriptedDecisionNode",
-			"displayName": "Check for Session"
+			"details": {
+				"script": "c4001e02-469c-4cc4-bf95-9f43d7e46568",
+				"outcomes": [
+					"hasSession",
+					"noSession"
+				],
+				"outputs": [
+					"*"
+				],
+				"inputs": [
+					"*"
+				]
+			}
 		},
-		"90d7e5ad-5e0b-41ca-b3e9-5c5128cbc6ad": {
-			"x": 452,
-			"y": 171.015625,
-			"connections": {
-				"error": "e301438c-0bd0-429c-ab0c-66126501069a",
-				"noconsent": "e301438c-0bd0-429c-ab0c-66126501069a",
-				"success": "f3381fb1-4c4c-4deb-ba08-12bce46472ae"
-			},
+		{
+			"_id": "90d7e5ad-5e0b-41ca-b3e9-5c5128cbc6ad",
 			"nodeType": "ScriptedDecisionNode",
-			"displayName": "Process Request"
+			"details": {
+				"script": "26c31a86-df26-4dd3-8675-55e29388d568",
+				"outcomes": [
+					"success",
+					"noconsent",
+					"error"
+				],
+				"outputs": [
+					"*"
+				],
+				"inputs": [
+					"*"
+				]
+			}
 		},
-		"f3381fb1-4c4c-4deb-ba08-12bce46472ae": {
-			"x": 661,
-			"y": 182.015625,
-			"connections": {
-				"success": "a9c243b5-abd9-43fe-be2b-4464c1568b71",
-				"error": "e301438c-0bd0-429c-ab0c-66126501069a"
-			},
+		{
+			"_id": "f3381fb1-4c4c-4deb-ba08-12bce46472ae",
 			"nodeType": "ScriptedDecisionNode",
-			"displayName": "Get Consent"
+			"details": {
+				"script": "f981c992-2b82-4f38-919a-93ea83e7b8fb",
+				"outcomes": [
+					"success",
+					"error"
+				],
+				"outputs": [
+					"*"
+				],
+				"inputs": [
+					"*"
+				]
+			}
 		},
-		"a9c243b5-abd9-43fe-be2b-4464c1568b71": {
-			"x": 876,
-			"y": 183.015625,
-			"connections": {
-				"success": "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
-				"error": "e301438c-0bd0-429c-ab0c-66126501069a"
-			},
+		{
+			"_id": "a9c243b5-abd9-43fe-be2b-4464c1568b71",
 			"nodeType": "ScriptedDecisionNode",
-			"displayName": "Send Response"
+			"details": {
+				"script": "3de821a3-7c07-4ae4-858f-8e46192ed667",
+				"outcomes": [
+					"success",
+					"error"
+				],
+				"outputs": [
+					"*"
+				],
+				"inputs": [
+					"*"
+				]
+			}
+		},
+		{
+			"_id": "9d51558f-8d80-49ab-9a39-6f0b218d2a82",
+			"nodeType": "ScriptedDecisionNode",
+			"details": {
+				"script": "c1ce3005-e136-4c75-8ba9-9d4929f15782",
+				"outcomes": [
+					"true"
+				],
+				"outputs": [
+					"*"
+				],
+				"inputs": [
+					"*"
+				]
+			}
 		}
-	},
-	"staticNodes": {
-		"startNode": {
-			"x": 50,
-			"y": 250
+	],
+	"tree": {
+		"_id": "CHConsent",
+		"identityResource": "managed/alpha_user",
+		"uiConfig": {},
+		"entryNodeId": "94dc78fa-64fa-44e5-ab3b-3c26aa82d97b",
+		"nodes": {
+			"94dc78fa-64fa-44e5-ab3b-3c26aa82d97b": {
+				"x": 204,
+				"y": 232.015625,
+				"connections": {
+					"noSession": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"hasSession": "90d7e5ad-5e0b-41ca-b3e9-5c5128cbc6ad"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Check for Session"
+			},
+			"90d7e5ad-5e0b-41ca-b3e9-5c5128cbc6ad": {
+				"x": 452,
+				"y": 171.015625,
+				"connections": {
+					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"noconsent": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"success": "f3381fb1-4c4c-4deb-ba08-12bce46472ae"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Process Request"
+			},
+			"f3381fb1-4c4c-4deb-ba08-12bce46472ae": {
+				"x": 661,
+				"y": 182.015625,
+				"connections": {
+					"success": "a9c243b5-abd9-43fe-be2b-4464c1568b71",
+					"error": "e301438c-0bd0-429c-ab0c-66126501069a"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Get Consent"
+			},
+			"a9c243b5-abd9-43fe-be2b-4464c1568b71": {
+				"x": 876,
+				"y": 183.015625,
+				"connections": {
+					"error": "e301438c-0bd0-429c-ab0c-66126501069a",
+					"success": "9d51558f-8d80-49ab-9a39-6f0b218d2a82"
+				},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Send Response"
+			},
+			"9d51558f-8d80-49ab-9a39-6f0b218d2a82": {
+				"x": 1077,
+				"y": 361.015625,
+				"connections": {},
+				"nodeType": "ScriptedDecisionNode",
+				"displayName": "Display Consent Response Success Url"
+			}
 		},
-		"70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
-			"x": 1126,
-			"y": 208
+		"staticNodes": {
+			"startNode": {
+				"x": 50,
+				"y": 250
+			},
+			"70e691a5-1e33-4ac3-a356-e7b6d60d92e0": {
+				"x": 1126,
+				"y": 208
+			},
+			"e301438c-0bd0-429c-ab0c-66126501069a": {
+				"x": 882,
+				"y": 528
+			}
 		},
-		"e301438c-0bd0-429c-ab0c-66126501069a": {
-			"x": 882,
-			"y": 528
-		}
+		"description": "Consent journey",
+		"enabled": true
 	}
-   }
 }
