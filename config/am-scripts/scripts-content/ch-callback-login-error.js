@@ -24,7 +24,7 @@ if (callbacks.isEmpty()) {
   if(!errorMessage){
     _log('Rendered login first time or redirected after session timeout');
   } else {
-    _log('Error: ' + errorMessage + ' - Shared State : ' + sharedState.toString());
+    _log('Error: ' + errorMessage);
   }
   
   var level = fr.TextOutputCallback.INFORMATION;
@@ -43,7 +43,7 @@ if (callbacks.isEmpty()) {
   } 
 } else {
   if(errorMessage){
-    _log('Error with callbacks: ' + errorMessage + ' - Shared State : ' + sharedState.toString());
+    _log('Error with callbacks: ' + errorMessage);
   }
 }
 
