@@ -1,6 +1,6 @@
 {
-    "_id": "restriced-word",
-    "name": "Restriced Word",
+    "_id": "restricted-word",
+    "name": "Restricted Word",
     "permissions": [
         "/admin/restricted-word"
     ],

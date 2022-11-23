@@ -1,8 +1,9 @@
 {
-    "_id": "extensions-download",
-    "name": "Extensions Download",
+    "_id": "extensions-admin",
+    "name": "Extensions Admin",
     "permissions": [
-        "/admin/extensions-download"
+        "/admin/extensions-download",
+        "/admin/extensions-view"
     ],
     "description": "Authorises a user to access functionality which enables them to download forms (submitted via CHS) which request/justify an extension to a company’ filing deadline to file accounts)",
     "realm": "alpha"

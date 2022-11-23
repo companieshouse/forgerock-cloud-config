@@ -1,0 +1,9 @@
+{
+    "_id": "bulk-refunds",
+    "name": "Bulk Refunds",
+    "permissions": [
+        "/admin/payments-bulk-refunds"
+    ],
+    "description": "Bulk Refunds",
+    "realm": "alpha"
+}
