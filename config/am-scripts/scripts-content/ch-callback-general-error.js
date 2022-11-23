@@ -23,7 +23,7 @@ var errorMessage = sharedState.get('errorMessage') || 'An error occurred';
 var errorProps = sharedState.get('pagePropsJSON');
 var level = fr.TextOutputCallback.ERROR;
 
-_log('Error: ' + errorMessage + ' - Shared State : ' + sharedState.toString());
+_log('Error: ' + errorMessage);
 
 action = fr.Action.send(
   new fr.TextOutputCallback(
