@@ -1,5 +1,5 @@
 var _scriptName = 'CH CALLBACK SHOW PHONE OR MAIL';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -21,7 +21,6 @@ try {
   if (mfaRoute === 'sms') {
     if (idRepository.getAttribute(userId, 'telephoneNumber').iterator().hasNext()) {
       phoneNumber = idRepository.getAttribute(userId, 'telephoneNumber').iterator().next();
-      _log('phoneNumber : ' + phoneNumber);
     } else {
       _log('Couldn\'t find telephoneNumber');
     }
@@ -29,11 +28,9 @@ try {
     var isChangeEmail = sharedState.get('isChangeEmail');
     if (isChangeEmail) {
       emailAddress = sharedState.get('newEmail');
-      _log('emailAddress from change email journey: ' + emailAddress);
     } else {
       if (idRepository.getAttribute(userId, 'mail').iterator().hasNext()) {
         emailAddress = idRepository.getAttribute(userId, 'mail').iterator().next();
-        _log('emailAddress : ' + emailAddress);
       } else {
         _log('Couldn\'t find emailAddress');
       }

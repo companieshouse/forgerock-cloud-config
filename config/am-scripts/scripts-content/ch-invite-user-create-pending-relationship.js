@@ -1,5 +1,5 @@
 var _scriptName = 'CH INVITE USER CREATE PENDING RELATIONSHIP';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 /* 
   ** INPUT DATA
@@ -51,7 +51,7 @@ var IdentifierType = {
 };
 
 function logResponse (response) {
-  _log('Scripted Node HTTP Response Body: ' + response.getEntity().getString());
+  _log('Scripted Node HTTP Response Body: ' + response.getEntity().getString(), 'MESSAGE');
 }
 
 // extracts the user membership status to the given company. User could be provided as a user ID or a username (email) 
@@ -61,7 +61,7 @@ function getUserMembershipForCompany (userIdentifier, company, idType) {
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
   var companyNo = JSON.parse(company).number;
   if (accessToken == null) {
-    _log('Access token not in transient state');
+    _log('Access token not in transient state', 'MESSAGE');
     return false;
   }
 
@@ -76,7 +76,7 @@ function getUserMembershipForCompany (userIdentifier, company, idType) {
     };
 
   request.setMethod('POST');
-  _log('Check user ' + userIdentifier + 'membership status to company ' + companyNo);
+  _log('Check user ' + userIdentifier + 'membership status to company ' + companyNo, 'MESSAGE');
   var endpointName = (idType === IdentifierType.USERID) ? 'getCompanyStatusByUserId' : 'getCompanyStatusByUsername';
   request.setUri(idmCompanyAuthEndpoint + '?_action=' + endpointName);
   request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
@@ -102,7 +102,7 @@ function createPendingRelationship (callerId, userName, company) {
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
   var companyNo = JSON.parse(company).number;
   if (accessToken == null) {
-    _log('Access token not in shared state');
+    _log('Access token not in shared state', 'MESSAGE');
     return {
       success: false,
       message: '[INVITE USER CHECK MEMBERSHIP] Access token not in shared state'
@@ -117,7 +117,7 @@ function createPendingRelationship (callerId, userName, company) {
     };
 
   request.setMethod('POST');
-  _log('Creating PENDING relationship between user ' + userName + ' and company ' + companyNo);
+  _log('Creating PENDING relationship between user ' + userName + ' and company ' + companyNo, 'MESSAGE');
   request.setUri(idmCompanyAuthEndpoint + '?_action=inviteUserByUsername');
   request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
   request.getHeaders().add('Content-Type', 'application/json');
@@ -129,7 +129,7 @@ function createPendingRelationship (callerId, userName, company) {
   logResponse(response);
   var membershipResponse = JSON.parse(response.getEntity().getString());
   if (response.getStatus().getCode() === 200) {
-    _log('Created Pending relationship with company - user: ' + userName + ' - company: ' + companyNo);
+    _log('Created Pending relationship with company - user: ' + userName + ' - company: ' + companyNo, 'MESSAGE');
     return {
       success: membershipResponse.success
     };
@@ -151,10 +151,10 @@ function performAuthzCheck (inviterUserId, invitedEmail, companyData) {
 
   //store the subject username in shared state
   sharedState.put('inviterName', inviterMembership.subject.fullName || inviterMembership.subject.userName);
-  _log('Inviter membership to company: ' + JSON.stringify(inviterMembership));
+  _log('Inviter membership to company: ' + JSON.stringify(inviterMembership), 'MESSAGE');
   // check whether the caller (user owning the session in which the inviter journey has been started) is already authorised for the company
   if (inviterMembership.company.status !== MembershipStatus.CONFIRMED) {
-    _log('The Inviter is not authorised for the company!');
+    _log('The Inviter is not authorised for the company!', 'MESSAGE');
     sharedState.put('errorMessage', 'You are not authorised for Company \'\'' + JSON.parse(companyData).name + '\'');
     sharedState.put('pagePropsJSON', JSON.stringify(
       {
@@ -176,9 +176,9 @@ function performAuthzCheck (inviterUserId, invitedEmail, companyData) {
     return false;
   }
   sharedState.put('invitedName', invitedMembership.subject.fullName || invitedMembership.subject.userName);
-  _log('Invited membership to company: ' + invitedMembership);
+  _log('Invited membership to company: ' + invitedMembership, 'MESSAGE');
   if (invitedMembership.company.status === MembershipStatus.CONFIRMED) {
-    _log('The Invited user must be not already authorised in order to be invited.');
+    _log('The Invited user must be not already authorised in order to be invited.', 'MESSAGE');
     sharedState.put('errorMessage', 'The Invited user must be not already authorised in order to be invited.');
     sharedState.put('pagePropsJSON', JSON.stringify(
       {

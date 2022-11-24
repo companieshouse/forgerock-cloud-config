@@ -1,5 +1,5 @@
 var _scriptName = 'CH LOGIN SOFT LOCK INCREMENT COUNTER';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 /* 
   ** INPUT DATA
@@ -36,12 +36,12 @@ var NodeOutcome = {
 };
 
 function logResponse (response) {
-  _log('Scripted Node HTTP Response: ' + response.getStatus() + ', Body: ' + response.getEntity().getString());
+  _log('Scripted Node HTTP Response: ' + response.getStatus() + ', Body: ' + response.getEntity().getString(), 'MESSAGE');
 }
 
 // reads the current invalid login attempts counter from frUnindexedInteger1
 function getCounterValue (userId, accessToken) {
-  _log('[GET COUNTER VALUE] Getting soft lock counter value...');
+  _log('[GET COUNTER VALUE] Getting soft lock counter value...', 'MESSAGE');
   try{
     var request = new org.forgerock.http.protocol.Request();
 
@@ -68,7 +68,7 @@ function getCounterValue (userId, accessToken) {
 // updates the invalid login attempts counter by setting the provided value into frUnindexedInteger1
 function updateCounterValue (userId, value, accessToken) {
 
-  _log('[UPDATE COUNTER VALUE] Updating soft lock counter to ' + value);
+  _log('[UPDATE COUNTER VALUE] Updating soft lock counter to ' + value, 'MESSAGE');
   try{
     var convertedCounter = fr.Integer.valueOf(value);
     var request = new org.forgerock.http.protocol.Request();
@@ -84,14 +84,13 @@ function updateCounterValue (userId, value, accessToken) {
       }
     ];
     request.setEntity(requestBodyJson);
-    //_log("[UPDATE SOFT LOCK COUNTER] request JSON: " + JSON.stringify(requestBodyJson));
 
     var response = httpClient.send(request).get();
 
     //logResponse(response);
 
     if (response.getStatus().getCode() === 200) {
-      _log('[UPDATE COUNTER VALUE] Counter updated correctly');
+      _log('[UPDATE COUNTER VALUE] Counter updated correctly', 'MESSAGE');
       return convertedCounter;
     } else {
       _log('[UPDATE COUNTER VALUE] Error while updating counter value: ' + response.getStatus().getCode());
@@ -105,7 +104,7 @@ function updateCounterValue (userId, value, accessToken) {
 
 // soft locks the user, by setting the soft lock date (in UNIX date format) into frIndexedString4
 function performSoftLock (userId, accessToken) {
-  _log('[SOFT LOCK] Performing soft lock...');
+  _log('[SOFT LOCK] Performing soft lock...', 'MESSAGE');
   try{
     var dateNow = new Date();
     var request = new org.forgerock.http.protocol.Request();
@@ -129,7 +128,7 @@ function performSoftLock (userId, accessToken) {
     logResponse(response);
 
     if (response.getStatus().getCode() === 200) {
-      _log('[SOFT LOCK] Soft lock date set correctly');
+      _log('[SOFT LOCK] Soft lock date set correctly', 'MESSAGE');
       return NodeOutcome.TRUE;
     } else {
       _log('[SOFT LOCK] Error while setting soft lock date: ' + response.getStatus().getCode());
@@ -154,20 +153,20 @@ if (errorMessage.equals('Enter a correct username and password.')) {
   var userId = sharedState.get('_id');
 
   if (userId == null) {
-    _log('No user name in shared state');
+    _log('No user name in shared state', 'MESSAGE');
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
   }
 
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
 
   if (accessToken == null) {
-    _log('Access token not in transient state');
+    _log('Access token not in transient state', 'MESSAGE');
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
   }
 
   var counter = getCounterValue(userId, accessToken);
 
-  _log('Value of counter: ' + counter);
+  _log('Value of counter: ' + counter, 'MESSAGE');
 
   if (counter === false) {
     _log('[TOPLEVEL] Error/Exception while getting counter value');

@@ -1,5 +1,5 @@
 var _scriptName = 'CH LOGIN SOFT LOCK RESET COUNTER';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 /* 
   ** INPUT DATA
@@ -35,7 +35,7 @@ var NodeOutcome = {
 };
 
 function logResponse (response) {
-  _log('Scripted Node HTTP Response: ' + response.getStatus() + ', Body: ' + response.getEntity().getString());
+  _log('Scripted Node HTTP Response: ' + response.getStatus() + ', Body: ' + response.getEntity().getString(), 'MESSAGE');
 }
 
 // unlocks the provided user by setting frIndexedString4 (date of soft lock) to null and frUnindexedInteger1 (counter) to 0
@@ -65,7 +65,7 @@ function resetSoftLockCounter (userId, accessToken) {
     logResponse(response);
 
     if (response.getStatus().getCode() === 200) {
-      _log('[RESET LOCK COUNTER] User unlocked correctly');
+      _log('[RESET LOCK COUNTER] User unlocked correctly', 'MESSAGE');
       return true;
     } else {
       _log('[RESET LOCK COUNTER] Error while unlocking user: ' + response.getStatus().getCode());
@@ -82,13 +82,13 @@ try {
   var userId = sharedState.get('_id');
 
   if (userId == null) {
-    _log('[TOPLEVEL] No user name in shared state');
+    _log('[TOPLEVEL] No user name in shared state', 'MESSAGE');
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
   }
 
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
   if (accessToken == null) {
-    _log('[TOPLEVEL] Access token not in transient state');
+    _log('[TOPLEVEL] Access token not in transient state', 'MESSAGE');
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
   }
 
