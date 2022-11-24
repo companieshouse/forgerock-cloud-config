@@ -82,7 +82,7 @@ try {
   var language = _getSelectedLanguage(requestHeaders);
   var emailAddress = extractEmail();
 
-  _log('User email address: ' + emailAddress);
+  _log('User email address: ' + emailAddress, 'MESSAGE');
   // _log('Code: ' + code);
 
   if (!emailAddress) {

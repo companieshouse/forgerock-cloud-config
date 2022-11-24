@@ -118,7 +118,7 @@ function getHeaderParams (requestHeaders) {
   }
 
   _log('About to return');
-  _log('Headers : ' + String(requestHeaders) + ' --- ' + username + ' ' + pwd + ' ' + link + ' ' + email + ' ' + companyName + ' ' + companyNumber);
+  _log('Headers : ' + String(requestHeaders) + ' --- ' + username + ' ' + pwd + ' ' + link + ' ' + email + ' ' + companyName + ' ' + companyNumber, 'MESSAGE');
 
   return {
     success: true,
