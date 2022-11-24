@@ -41,7 +41,7 @@ function getUserMembershipForCompany (userIdentifier, companyNo) {
     };
 
     request.setMethod('POST');
-    _log('[GET USER MEMBERSHIP] Check user ' + userIdentifier + 'membership status to company ' + companyNo);
+    _log('[GET USER MEMBERSHIP] Check user ' + userIdentifier + 'membership status to company ' + companyNo,  'MESSAGE');
     _log('[GET USER MEMBERSHIP] Calling ' + idmCompanyAuthEndpoint + '?_action=getCompanyStatusByUserId');
     request.setUri(idmCompanyAuthEndpoint + '?_action=getCompanyStatusByUserId');
     request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
@@ -87,7 +87,6 @@ try {
     } else {
       _log('[TOPLEVEL] User already associated with company!');
       var useAuthCode = JSON.parse(sharedState.get('companyData')).authCode;
-      _log('[TOPLEVEL] Company auth code = ' + useAuthCode + ', language = ' + language);
 
       outcome = NodeOutcome.USER_ASSOCIATED;
 

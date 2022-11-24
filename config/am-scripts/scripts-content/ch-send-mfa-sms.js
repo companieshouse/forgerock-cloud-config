@@ -41,7 +41,7 @@ function sendErrorCallbacks () {
     }
 
     var pagePropsJSON = JSON.stringify(pageProps);
-    _log('pagePropsJSON = ' + pagePropsJSON);
+    _log('pagePropsJSON = ' + pagePropsJSON, 'MESSAGE');
 
     var errorStageName = 'REGISTRATION_1';
     var journeyName = _getJourneyName();
@@ -78,7 +78,7 @@ function sendTextMessage (language, phoneNumber, code) {
   var notifyJWT = transientState.get('notifyJWT');
   var templates = transientState.get('notifyTemplates');
   var requestBodyJson;
-  _log('JWT from transient state: ' + notifyJWT);
+  _log('JWT from transient state: ' + notifyJWT, 'MESSAGE');
   _log('Templates from transient state: ' + templates);
 
   var request = new org.forgerock.http.protocol.Request();
@@ -165,8 +165,6 @@ try {
 
   var language = _getSelectedLanguage(requestHeaders);
   var phoneNumber = extractPhoneNumber();
-
-  _log('User phoneNumber: ' + phoneNumber);
 
   if (!phoneNumber || phoneNumber === 'false' || !code) {
     sendErrorCallbacks();

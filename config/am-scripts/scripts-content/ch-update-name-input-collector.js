@@ -38,7 +38,6 @@ if (callbacks.isEmpty()) {
   }
 } else {
   var fullName = callbacks.get(1).getName();
-  _log('full name: ' + fullName);
 
   sharedState.put('objectAttributes',
     {

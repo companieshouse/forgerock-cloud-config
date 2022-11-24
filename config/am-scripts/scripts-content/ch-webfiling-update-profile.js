@@ -143,7 +143,7 @@ try {
 
       if (type === 'PHONE' || type === 'BOTH') {
         newPhoneNumber = callbacks.get(PHONE_CALLBACK_INDEX).getName();
-        _log(logPrefix + ' new phone: ' + newPhoneNumber);
+        _log(logPrefix + ' new phone: ' + newPhoneNumber, 'MESSAGE');
 
         if (newPhoneNumber && !_isValidPhone(newPhoneNumber)) {
           sharedState.put('errorMessage', 'Invalid mobile number entered.');
@@ -159,11 +159,11 @@ try {
           action = fr.Action.goTo(NodeOutcome.FAIL).build();
 
           invalidPhoneNumber = true;
-          _log(logPrefix + ' setting action as : fail (invalidPhoneNumber = ' + invalidPhoneNumber + ')');
+          _log(logPrefix + ' setting action as : fail (invalidPhoneNumber = ' + invalidPhoneNumber + ')', 'MESSAGE');
         }
       }
 
-      _log(logPrefix + ' after having checked newPhoneNumber (invalidPhoneNumber = ' + invalidPhoneNumber + ')');
+      _log(logPrefix + ' after having checked newPhoneNumber (invalidPhoneNumber = ' + invalidPhoneNumber + ')', 'MESSAGE');
 
       if (!invalidPhoneNumber) {
         var payload;

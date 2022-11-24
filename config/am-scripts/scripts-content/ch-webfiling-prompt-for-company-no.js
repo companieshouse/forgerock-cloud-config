@@ -46,7 +46,8 @@ function fetchCompanyParameters () {
   var companyNo = requestParameters.get('companyNo');
   var jurisdiction = requestParameters.get('jurisdiction');
   if (companyNo && jurisdiction) {
-    _log('[FILE FOR THIS COMPANY - FETCH COMPANY QUERY PARAMS] company number/jurisdiction found in query params: ' + companyNo.get(0) + ' - ' + jurisdiction.get(0));
+    _log('[FILE FOR THIS COMPANY - FETCH COMPANY QUERY PARAMS] company number/jurisdiction found in query params');
+    _log('[FILE FOR THIS COMPANY - FETCH COMPANY QUERY PARAMS]' + companyNo.get(0) + ' - ' + jurisdiction.get(0), 'MESSAGE');
     return {
       companyNo: companyNo.get(0),
       jurisdiction: jurisdiction.get(0)
@@ -103,10 +104,10 @@ try {
       }
     } else {
       var jurisdictionIndex = callbacks.get(2).getSelectedIndexes()[0];
-      _log('[ENTER COMPANY DETAILS] selected jurisdiction: ' + jurisdictions[jurisdictionIndex]);
+      _log('[ENTER COMPANY DETAILS] selected jurisdiction: ' + jurisdictions[jurisdictionIndex], 'MESSAGE');
 
       var companyNumber = callbacks.get(1).getName();
-      _log('[ENTER COMPANY DETAILS] entered companyNumber: ' + companyNumber);
+      _log('[ENTER COMPANY DETAILS] entered companyNumber: ' + companyNumber, 'MESSAGE');
 
       sharedState.put('companyNumber', companyNumber);
       sharedState.put('jurisdiction', jurisdictions[jurisdictionIndex]);
@@ -116,7 +117,7 @@ try {
         .build();
     }
   } else {
-    _log('[FILE FOR THIS COMPANY - FETCH COMPANY QUERY PARAMS] companyNumber (from query params): ' + companyParamsResponse.companyNo + ' - ' + companyParamsResponse.jurisdiction);
+    _log('[FILE FOR THIS COMPANY - FETCH COMPANY QUERY PARAMS] companyNumber (from query params): ' + companyParamsResponse.companyNo + ' - ' + companyParamsResponse.jurisdiction,  'MESSAGE');
     sharedState.put('companyNumber', companyParamsResponse.companyNo);
     sharedState.put('jurisdiction', companyParamsResponse.jurisdiction);
     sharedState.put('skipConfirmation', true);

@@ -91,7 +91,7 @@ var confirmRemoveCallback = new fr.ConfirmationCallback(
 
 //removes the user from the company
 function removeUserFromCompany (callerId, companyNo, userIdToRemove) {
-  _log('Removing user ' + userIdToRemove + ' from company ' + companyNo);
+  _log('Removing user ' + userIdToRemove + ' from company ' + companyNo, 'MESSAGE');
   var request = new org.forgerock.http.protocol.Request();
   var accessToken = sharedState.get('idmAccessToken');
   if (accessToken == null) {
@@ -120,13 +120,13 @@ function removeUserFromCompany (callerId, companyNo, userIdToRemove) {
   var response = httpClient.send(request).get();
   var actionResponse = JSON.parse(response.getEntity().getString());
   if (response.getStatus().getCode() === 200) {
-    _log('User removed from company - user: ' + userIdToRemove + ' - company: '+companyNo);
+    _log('User removed from company - user: ' + userIdToRemove + ' - company: '+companyNo, 'MESSAGE');
     return {
       success: actionResponse.success,
       removerName: (actionResponse.caller.fullName ? actionResponse.caller.fullName : actionResponse.caller.userName)
     };
   } else {
-    _log('Error while removing user from company: ' + response.getEntity().getString());
+    _log('Error while removing user from company: ' + response.getEntity().getString(), 'MESSAGE');
     return {
       success: false,
       message: actionResponse.detail.reason

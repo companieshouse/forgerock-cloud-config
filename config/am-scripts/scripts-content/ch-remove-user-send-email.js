@@ -74,12 +74,12 @@ function sendErrorCallbacks (token, message) {
 //sends the email (via Notify) to the recipient using the given JWT
 function sendEmail (removerName, userToRemove, companyName) {
 
-  _log('params: company name:' + companyName);
+  _log('params: company name:' + companyName, 'MESSAGE');
 
   var notifyJWT = transientState.get('notifyJWT');
   var templates = transientState.get('notifyTemplates');
 
-  _log('JWT from transient state: ' + notifyJWT);
+  _log('JWT from transient state: ' + notifyJWT, 'MESSAGE');
   _log('Templates from transient state: ' + templates);
 
   request.setUri(_fromConfig('NOTIFY_EMAIL_ENDPOINT'));
