@@ -1,5 +1,5 @@
 var _scriptName = 'CH PHONE NUMBER ENTERED';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var phone = sharedState.get('objectAttributes').get('telephoneNumber');
 if (phone) {

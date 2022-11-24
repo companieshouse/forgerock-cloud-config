@@ -1,5 +1,5 @@
 var _scriptName = 'CH CALLBACK PROMPT FOR COMPANY INFO';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 /* 
   ** OUTPUT DATA
@@ -28,9 +28,6 @@ if (callbacks.isEmpty()) {
 } else {
   var credential = callbacks.get(0).getName();
   var companyNumber = callbacks.get(1).getName();
-
-  // _log('Credential: ' + credential);
-  _log('CompanyNumber: ' + companyNumber);
 
   sharedState.put('credential', credential);
   sharedState.put('companyNumber', companyNumber);

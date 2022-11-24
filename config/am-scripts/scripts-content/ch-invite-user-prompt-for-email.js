@@ -20,7 +20,7 @@
 */
 
 var _scriptName = 'INVITE USER INPUT COLLECTOR';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -65,12 +65,13 @@ try {
     var email = callbacks.get(1).getName();
     var userId = sharedState.get('_id');
     if (!_isValidEmail(email)) {
-      _log('Invalid email: ' + email);
+      _log('Invalid email');
+      _log('Invalid email: ' + email, 'MESSAGE');
       action = fr.Action.goTo(NodeOutcome.EMAIL_INVALID_ERROR).build();
     } else {
-      _log('company number: ' + JSON.parse(companyData).number);
-      _log('invited email: ' + email);
-      _log('inviter ID: ' + userId);
+      _log('company number: ' + JSON.parse(companyData).number, 'MESSAGE');
+      _log('invited email: ' + email, 'MESSAGE');
+      _log('inviter ID: ' + userId, 'MESSAGE');
 
       sharedState.put('email', email);
       action = fr.Action.goTo(NodeOutcome.SUCCESS).build();

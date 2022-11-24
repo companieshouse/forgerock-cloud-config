@@ -1,5 +1,5 @@
 var _scriptName = 'CH PASSWORD RESET PWD UPDATED';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,

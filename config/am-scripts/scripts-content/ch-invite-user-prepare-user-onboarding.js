@@ -1,5 +1,5 @@
 var _scriptName = 'CH INVITE USER PREPARE USER ONBOARDING';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 /* 
   ** INPUT DATA
@@ -40,7 +40,7 @@ var invitedEmail = sharedState.get('email');
 var inviterName = sharedState.get('inviterName');
 
 function logResponse (response) {
-  _log('Scripted Node HTTP Response: ' + response.getStatus() + ', Body: ' + response.getEntity().getString());
+  _log('Scripted Node HTTP Response: ' + response.getStatus() + ', Body: ' + response.getEntity().getString(), 'MESSAGE');
 }
 
 //checks whether the user with the given email already exists in IDM
@@ -66,10 +66,10 @@ function checkUserExistence (email) {
     if (response.getStatus().getCode() === 200) {
       var searchResponse = JSON.parse(response.getEntity().getString());
       if (searchResponse && searchResponse.result && searchResponse.result.length > 0) {
-        _log('user found: ' + searchResponse.result[0].toString());
+        _log('user found: ' + searchResponse.result[0].toString(), 'MESSAGE');
         return true;
       } else {
-        _log('user NOT found: ' + email);
+        _log('user NOT found: ' + email, 'MESSAGE');
         return false;
       }
     } else {
@@ -87,7 +87,7 @@ function fetchIDMToken () {
   var ACCESS_TOKEN_STATE_FIELD = 'idmAccessToken';
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
   if (accessToken == null) {
-    _log('Access token not in transient state');
+    _log('Access token not in transient state', 'MESSAGE');
     return false;
   }
   return accessToken;
@@ -124,10 +124,10 @@ function createUser (invitedEmail) {
     logResponse(response);
 
     if (response.getStatus().getCode() === 201) {
-      _log('201 response from IDM');
+      _log('201 response from IDM', 'MESSAGE');
       return true;
     } else {
-      _log('Error during user creation');
+      _log('Error during user creation', 'MESSAGE');
       return false;
     }
   } catch (e) {
@@ -140,11 +140,11 @@ function createUser (invitedEmail) {
 try {
   var FIDC_ENDPOINT = _fromConfig('FIDC_ENDPOINT');
   var onboardingDate = _getCurrentDateAsString();
-  _log('Setting onboarding date to ' + onboardingDate);
+  _log('Setting onboarding date to ' + onboardingDate, 'MESSAGE');
 
   var userExists = checkUserExistence(invitedEmail);
   if (userExists === NodeOutcome.ERROR) {
-    _log('check existence');
+    _log('check existence', 'MESSAGE');
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
   } else if (!userExists) {
     if (!createUser(invitedEmail)) {

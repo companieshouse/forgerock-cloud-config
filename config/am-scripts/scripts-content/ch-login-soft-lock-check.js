@@ -1,5 +1,5 @@
 var _scriptName = 'CH LOGIN SOFT LOCK CHECK';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 /* 
   ** INPUT DATA
@@ -39,7 +39,7 @@ var NodeOutcome = {
 };
 
 function logResponse (response) {
-  _log('Scripted Node HTTP Response: ' + response.getStatus() + ', Body: ' + response.getEntity().getString());
+  _log('Scripted Node HTTP Response: ' + response.getStatus() + ', Body: ' + response.getEntity().getString(), 'MESSAGE');
 }
 
 // checks the user soft lock status, by checking the frIndexedString4 (lock date) is populated and whether the date of lock is less than 5 mins ago
@@ -61,7 +61,7 @@ function checkUserLockStatus (userId, accessToken) {
       var userResponse = JSON.parse(response.getEntity().getString());
       var softLockDate = userResponse.frIndexedString4;
       if (!softLockDate) {
-        _log('[CHECK LOCK STATUS] The user is not locked');
+        _log('[CHECK LOCK STATUS] The user is not locked', 'MESSAGE');
         return NodeOutcome.NOT_LOCKED;
       } else {
         _log('[CHECK LOCK STATUS] found lock date: ' + softLockDate);
@@ -91,19 +91,19 @@ try {
   var userId = sharedState.get('_id');
 
   if (userId == null) {
-    _log('[TOPLEVEL] No user name in shared state');
+    _log('[TOPLEVEL] No user name in shared state', 'MESSAGE');
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
   }
 
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
   if (accessToken == null) {
-    _log('[TOPLEVEL] Access token not in shared state');
+    _log('[TOPLEVEL] Access token not in shared state', 'MESSAGE');
     action = fr.Action.goTo(NodeOutcome.ERROR).build();
   }
 
   var lockStatus = checkUserLockStatus(userId, accessToken);
 
-  _log('[TOPLEVEL] Is user locked: ' + lockStatus);
+  _log('[TOPLEVEL] Is user locked: ' + lockStatus, 'MESSAGE');
   if (lockStatus === NodeOutcome.LOCKED) {
     sharedState.put('errorMessage', 'You have entered incorrect details too many times. Your account is now locked for '.concat(String(SOFT_LOCK_MINUTES), ' minutes.'));
     sharedState.put('pagePropsJSON', JSON.stringify(
