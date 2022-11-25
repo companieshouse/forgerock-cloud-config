@@ -31,7 +31,6 @@ if (callbacks.isEmpty()) {
   if (idRepository.getAttribute(userId, PHONE_NUMBER_FIELD).iterator().hasNext()) {
 
     var currentPhoneNumber = idRepository.getAttribute(userId, PHONE_NUMBER_FIELD).iterator().next();
-    _log('Found currentPhoneNumber: ' + currentPhoneNumber);
 
     if (currentPhoneNumber) {
       transientState.put('currentPhoneNumber', currentPhoneNumber);
@@ -79,7 +78,6 @@ if (callbacks.isEmpty()) {
   var newPhoneNumber = callbacks.get(2).getName();
   var currentPassword = fr.String(callbacks.get(1).getPassword());
 
-  _log('New phone number ' + newPhoneNumber);
 
   if(!newPhoneNumber){
     _log('SUCCESS - PHONE REMOVED');

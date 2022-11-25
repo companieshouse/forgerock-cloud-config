@@ -1,5 +1,5 @@
 var _scriptName = 'CH CHOOSE OTP';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -16,23 +16,19 @@ var fr = JavaImporter(
 var phoneNumber = '';
 var emailAddress = '';
 
-_log('Starting request of Choose OTP Method');
+_log('Starting request of Choose OTP Method', 'MESSAGE');
 
 try {
   var userId = sharedState.get('_id');
 
-  _log('UserId : ' + userId);
-
   if (idRepository.getAttribute(userId, 'telephoneNumber').iterator().hasNext()) {
     phoneNumber = idRepository.getAttribute(userId, 'telephoneNumber').iterator().next();
-    _log('phoneNumber : ' + phoneNumber);
   } else {
     _log('Couldn\'t find telephoneNumber');
   }
 
   if (idRepository.getAttribute(userId, 'mail').iterator().hasNext()) {
     emailAddress = idRepository.getAttribute(userId, 'mail').iterator().next();
-    _log('emailAddress : ' + emailAddress);
   } else {
     _log('Couldn\'t find emailAddress');
   }
@@ -44,8 +40,6 @@ var userDetailsJSON = JSON.stringify({
   'phoneNumber': _obfuscatePhone(phoneNumber),
   'emailAddress': _obfuscateEmail(emailAddress)
 });
-
-_log('User Details JSON : ' + userDetailsJSON);
 
 if (callbacks.isEmpty()) {
   var confirmMessage = 'How do you want to confirm it\'s you?';
@@ -69,7 +63,7 @@ if (callbacks.isEmpty()) {
 } else {
   var otpMethod = callbacks.get(0).getSelectedIndexes()[0];
 
-  _log('OTP Method Requested : ' + otpMethod);
+  _log('OTP Method Requested : ' + otpMethod, 'MESSAGE');
 
   if (otpMethod === 0) {
     sharedState.put('mfa-route', 'email');

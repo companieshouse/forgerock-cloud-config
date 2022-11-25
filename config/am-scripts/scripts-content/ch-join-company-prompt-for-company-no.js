@@ -1,5 +1,5 @@
 var _scriptName = 'CH JOIN COMPANY PROMPT FOR COMPANY NO';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 /* 
   ** OUTPUT DATA
@@ -61,10 +61,10 @@ if (callbacks.isEmpty()) {
   }
 } else {
   var jurisdictionIndex = callbacks.get(2).getSelectedIndexes()[0];
-  _log('jurisdiction: ' + jurisdictions[jurisdictionIndex]);
+  _log('jurisdiction: ' + jurisdictions[jurisdictionIndex], 'MESSAGE');
 
   var companyNumber = callbacks.get(1).getName();
-  _log('companyNumber: ' + companyNumber);
+  _log('companyNumber: ' + companyNumber, 'MESSAGE');
   sharedState.put('jurisdiction', jurisdictions[jurisdictionIndex]);
   sharedState.put('companyNumber', companyNumber);
   action = fr.Action.goTo('true').build();

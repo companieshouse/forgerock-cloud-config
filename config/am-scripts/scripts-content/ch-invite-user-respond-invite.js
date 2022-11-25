@@ -24,7 +24,7 @@
 */
 
 var _scriptName = 'CH INVITE USER RESPOND INVITE';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -56,7 +56,7 @@ function fetchActionParameter () {
   var action = requestParameters.get('action');
 
   if (!action) {
-    _log('No invite action found in request');
+    _log('No invite action found in request', 'MESSAGE');
     return false;
   } else {
     if (!action.get(0).equals('accept') && !action.get(0).equals('decline')) {
@@ -70,19 +70,19 @@ function fetchActionParameter () {
 }
 
 function logResponse (response) {
-  _log('Scripted Node HTTP Response: ' + response.getStatus() + ', Body: ' + response.getEntity().getString());
+  _log('Scripted Node HTTP Response: ' + response.getStatus() + ', Body: ' + response.getEntity().getString(), 'MESSAGE');
 }
 
 // responds to the invite
 function respondToInvite (callerId, company, action) {
-  _log('Processing action \'' + action + '\' for user ' + callerId + ' and company ' + JSON.parse(company).number);
+  _log('Processing action \'' + action + '\' for user ' + callerId + ' and company ' + JSON.parse(company).number, 'MESSAGE');
 
   var request = new org.forgerock.http.protocol.Request();
   var ACCESS_TOKEN_STATE_FIELD = 'idmAccessToken';
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
   var companyNo = JSON.parse(company).number;
   if (accessToken == null) {
-    _log('Access token not in transient state');
+    _log('Access token not in transient state', 'MESSAGE');
     return NodeOutcome.ERROR;
   }
 
@@ -108,7 +108,7 @@ function respondToInvite (callerId, company, action) {
   logResponse(response);
 
   if (response.getStatus().getCode() === 200) {
-    _log('Invite Response processed ' + action + ' - company: ' + JSON.parse(company).number + ' - response: ' + response.getEntity().getString());
+    _log('Invite Response processed ' + action + ' - company: ' + JSON.parse(company).number + ' - response: ' + response.getEntity().getString(), 'MESSAGE');
     return {
       success: actionResponse.success,
       inviterId: actionResponse.company.inviterId
@@ -157,7 +157,7 @@ try {
 
   // if there is no 'action' parameter or the 'action' parameter is set to 'send', skip the accept/reject logic, and proceed to sending the invite
   if (!actionParam || actionParam === InviteActions.SEND) {
-    _log('Skip invite response processing');
+    _log('Skip invite response processing', 'MESSAGE');
     outcome = NodeOutcome.SKIP_RESPOND;
   } else if (actionParam === 'error') {
     sendErrorCallbacks('INVITE_USER_ERROR', 'INVITE_USER_UNKNOWN_ACTION_ERROR', 'Unsupported action found in request');
@@ -166,7 +166,7 @@ try {
 
     if (actionParam === InviteActions.ACCEPT) {
       var acceptResponse = respondToInvite(userId, companyData, InviteActions.ACCEPT);
-      _log('ACCEPT INVITE RESPONSE: ' + JSON.stringify(acceptResponse));
+      _log('ACCEPT INVITE RESPONSE: ' + JSON.stringify(acceptResponse), 'MESSAGE');
       if (!acceptResponse.success) {
         _log('Error while setting relationship status to confirmed');
         sendErrorCallbacks('INVITE_USER_ERROR', 'INVITE_USER_ACCEPT_INVITE_ERROR', acceptResponse.message);

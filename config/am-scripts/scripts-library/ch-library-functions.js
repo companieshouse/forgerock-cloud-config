@@ -33,7 +33,7 @@ function _log (message, logLevel) {
   }
 
   var chLogMarker = '[CHLOG]';
-  var scriptNameForDisplay = _getScriptNameForDisplay() + '[SPAN:' + _getSpanId() + ']' + '[USER: ' + userName + '/' + userId + ']';
+  var scriptNameForDisplay = _getScriptNameForDisplay() + '[SPAN:' + _getSpanId() + ']' + '[USER: ' + userId + ']';
 
   if (logLevel === 'MESSAGE' && logger.messageEnabled()) {
     logger.message(chLogMarker.concat(scriptNameForDisplay).concat(' ').concat(message));

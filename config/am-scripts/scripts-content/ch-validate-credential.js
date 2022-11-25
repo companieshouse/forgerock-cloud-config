@@ -69,7 +69,7 @@ function validateCredential (credential, hash, validateMethod) {
     _log('validationResponse: ' + validationResponse);
 
     if (validationResponse.errorMessage) {
-      _log('cannot parse hash: ' + hash);
+      _log('cannot parse hash: ' + hash, 'MESSAGE');
       return NodeOutcome.FALSE; //TOD return error outcome and handle it in tree
     }
 
@@ -95,7 +95,7 @@ var validateMethod = sharedState.get('validateMethod');
 
 //_log('credential: ' + credential);
 
-_log('hashedCredential: ' + hash);
+_log('hashedCredential: ' + hash, 'MESSAGE');
 _log('validateMethod: ' + validateMethod);
 
 outcome = validateCredential(credential, hash, validateMethod);

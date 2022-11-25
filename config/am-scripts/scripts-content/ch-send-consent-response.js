@@ -5,7 +5,7 @@ var config = {
     rcsIssuer: "journey-rcs",
     ssoCookieName: "dd8758f44f45905"
 }
-  
+
 var NodeOutcome = {
     SUCCESS: "success",
     ERROR: "error"
@@ -33,12 +33,12 @@ function getCookie(name) {
     }
 
     var cookies = cookieHeader.get(0).split(";");
-    _log("[SEND CONSENT RESPONSE] Cookies: " + cookies);
+    _log("[SEND CONSENT RESPONSE] Cookies: " + cookies, 'MESSAGE');
 
     for (var i=0; i<cookies.length; i++) {
     //for each (cookie in cookies) {
         var cookie = cookies[i];
-        _log("[SEND CONSENT RESPONSE] cookie: " + cookie);
+        _log("[SEND CONSENT RESPONSE] cookie: " + cookie, 'MESSAGE');
         var cookieSpec = cookie.split("=");
         if (cookieSpec[0].trim() == name) {
             _log("[SEND CONSENT RESPONSE] Gotcha " + cookieSpec);
@@ -118,7 +118,7 @@ function buildJwt(consentRequest,secret,issuer) {
                 .claims(jwtClaims)
                 .build();
   
-    _log("[SEND CONSENT RESPONSE] Signed JWT: " + jwt);
+    _log("[SEND CONSENT RESPONSE] Signed JWT: " + jwt, 'MESSAGE');
     return jwt  
 }
 
@@ -139,10 +139,10 @@ if (!ssoToken) {
     _log("[SEND CONSENT RESPONSE] posting on user's behalf")
 
     var redirectUri = consentRequest.get("consentApprovalRedirectUri").asString()  
-    _log("[SEND CONSENT RESPONSE] posting to " + redirectUri)
+    _log("[SEND CONSENT RESPONSE] posting to " + redirectUri, 'MESSAGE')
 
     var jwt = buildJwt(consentRequest,config.rcsSecret,config.rcsIssuer)
-    _log("[SEND CONSENT RESPONSE] built jwt " + jwt);
+    _log("[SEND CONSENT RESPONSE] built jwt " + jwt, 'MESSAGE');
 
     var location = postResponse(redirectUri,jwt,config.ssoCookieName,ssoToken)
     _log("[SEND CONSENT RESPONSE] got location " + location)

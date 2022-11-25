@@ -1,5 +1,5 @@
 var _scriptName = 'CH CALLBACK MAX RETRY LIMIT';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,

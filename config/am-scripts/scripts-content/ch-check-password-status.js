@@ -1,5 +1,5 @@
 var _scriptName = 'CH CHECK PASSWORD STATUS';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 /*
   ** INPUT DATA
@@ -30,11 +30,11 @@ function pwdRestore () {
 
 function checkPasswordStatus () {
   var userId = sharedState.get('_id');
-  _log('Found userId: ' + userId);
+  _log('Found userId: ' + userId, 'MESSAGE');
 
   if (idRepository.getAttribute(userId, PASSWORD_MIGRATED_FIELD).iterator().hasNext()) {
     var status = idRepository.getAttribute(userId, PASSWORD_MIGRATED_FIELD).iterator().next();
-    _log('[CHECK PASSWORD STATUS] Found status: ' + status);
+    _log('[CHECK PASSWORD STATUS] Found status: ' + status, 'MESSAGE');
     if (status.equals('migrated')) {
       // Migrated user has already validated their password
       return NodeOutcome.VALID;
@@ -48,8 +48,6 @@ function checkPasswordStatus () {
     return NodeOutcome.VALID;
   }
 }
-
-// _log('Shared State : ' + sharedState.toString());
 
 // restore the password from shared state
 pwdRestore();

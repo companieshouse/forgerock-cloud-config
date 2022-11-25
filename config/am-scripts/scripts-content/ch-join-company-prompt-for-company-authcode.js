@@ -1,5 +1,5 @@
 var _scriptName = 'CH JOIN COMPANY PROMPT FOR COMPANY AUTHCODE';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 /* 
   ** OUTPUT DATA
@@ -61,7 +61,7 @@ if (callbacks.isEmpty()) {
 
   var credential = callbacks.get(1).getName();
 
-  _log('cleartext auth code: ' + credential);
+  _log('cleartext auth code: ' + credential, 'MESSAGE');
 
   sharedState.put('credential', credential);
   action = fr.Action.goTo('true').build();

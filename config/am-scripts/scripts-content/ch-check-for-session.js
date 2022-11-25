@@ -1,5 +1,5 @@
 var _scriptName = 'CH CHECK FOR SESSION';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 /* 
   ** OUTCOMES
@@ -24,8 +24,7 @@ var NodeOutcome = {
 try {
   if (_isAuthenticated()) {
     outcome = NodeOutcome.HAS_SESSION;
-    // _log('Existing session: ' + existingSession.toString());
-    _log('Has existing session');
+    _log('Has existing session', 'MESSAGE');
   } else {
     if (callbacks.isEmpty()) {
       action = fr.Action.send(

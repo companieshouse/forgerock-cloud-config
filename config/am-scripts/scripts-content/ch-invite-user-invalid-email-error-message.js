@@ -1,5 +1,5 @@
 var _scriptName = 'CH INVITE USER INVALID EMAIL ERROR MESSAGE';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 sharedState.put('errorMessage', 'Invalid email address.');
 sharedState.put('pagePropsJSON', JSON.stringify(

@@ -25,7 +25,7 @@
 */
 
 var _scriptName = 'CH INVITE USER FETCH COMPANY';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -44,7 +44,7 @@ function fetchQueryParameters () {
   var userId = requestParameters.get('userId');
 
   if (!companyNo) {
-    _log('No Company Number found in request.');
+    _log('No Company Number found in request.', 'MESSAGE');
     var errorMessage = 'No Company Number found in request.';
     var errorProps = JSON.stringify(
       {
@@ -76,7 +76,7 @@ function getUserInfo (userId) {
     var request = new org.forgerock.http.protocol.Request();
     var accessToken = transientState.get('idmAccessToken');
     if (!accessToken) {
-      _log('Access token not in shared state');
+      _log('Access token not in shared state', 'MESSAGE');
       return {
         success: false,
         message: 'Access token not in shared state'
@@ -94,13 +94,11 @@ function getUserInfo (userId) {
     if (response.getStatus().getCode() === 200) {
       var user = JSON.parse(response.getEntity().getString());
       if (user) {
-        _log('user found: ' + JSON.stringify(user));
         return {
           success: true,
           user: user
         };
       } else {
-        _log('user NOT found: ' + userId);
         return {
           success: false,
           message: 'User not found: ' + userId
@@ -128,7 +126,7 @@ function getCompanyInfo (userId, companyNo) {
   var request = new org.forgerock.http.protocol.Request();
   var accessToken = transientState.get('idmAccessToken');
   if (accessToken == null) {
-    _log('Access token not in shared state');
+    _log('Access token not in shared state', 'MESSAGE');
     return NodeOutcome.ERROR;
   }
 
@@ -140,7 +138,7 @@ function getCompanyInfo (userId, companyNo) {
 
   request.setMethod('POST');
 
-  _log('Get company details for ' + companyNo);
+  _log('Get company details for ' + companyNo, 'MESSAGE');
 
   request.setUri(idmCompanyAuthEndpoint + '?_action=getCompanyByNumber');
   request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
@@ -195,7 +193,8 @@ try {
       var userInfo = getUserInfo(params.userId);
       if (!userInfo.success) {
         sharedState.put('errorMessage', 'Error while fetching user by ID: ' + params.userId);
-        _log('Error while fetching user by ID ' + params.userId);
+        _log('Error while fetching user by ID');
+        _log('Error while fetching user by ID ' + params.userId, 'MESSAGE');
         outcome = NodeOutcome.ERROR;
       } else {
         sharedState.put('email', userInfo.user.userName);

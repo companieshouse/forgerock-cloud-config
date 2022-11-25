@@ -58,7 +58,7 @@ function getCompanyInfo (companyNo) {
     };
 
   request.setMethod('POST');
-  _log('Get company details for ' + companyNo);
+  _log('Get company details for ' + companyNo, 'MESSAGE');
   request.setUri(idmCompanyAuthEndpoint + '?_action=getCompanyByNumber');
   request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
   request.getHeaders().add('Content-Type', 'application/json');
@@ -114,7 +114,7 @@ function lookupUser (userId) {
         user: JSON.parse(response.getEntity().getString())
       };
     } else {
-      _log('Error while looking up user: ' + response.getStatus().getCode());
+      _log('Error while looking up user: ' + response.getStatus().getCode(), 'MESSAGE');
       return {
         success: false,
         message: 'Error while GET user: ' + response.getStatus().getCode()
@@ -134,7 +134,7 @@ function fetchParameters () {
   var companyNo = requestParameters.get('companyNumber');
   var userId = requestParameters.get('userId');
   if (companyNo && userId) {
-    _log('company number/userId found in request: ' + companyNo.get(0) + ' - ' + userId.get(0));
+    _log('company number/userId found in request: ' + companyNo.get(0) + ' - ' + userId.get(0), 'MESSAGE');
     return {
       companyNo: companyNo.get(0),
       userId: userId.get(0)

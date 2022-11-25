@@ -1,5 +1,5 @@
 var _scriptName = 'CH CALLBACK LOGIN ERROR';
-//_log('Starting');
+_log('Starting', 'MESSAGE');
 
 /* 
   ** OUTPUT DATA
