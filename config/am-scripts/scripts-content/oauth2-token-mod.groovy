@@ -75,6 +75,10 @@ if (claims == null) {
         accessToken.setField("token_permissions", permissions)
     }
 }
+/**
+ * Add roles for user to token
+ */
+accessToken.setField("roles", identity.getAttributes(["fr-idm-effectiveRole"]))
 
 /** 
  * Check if user is associated with the company number passed in.
