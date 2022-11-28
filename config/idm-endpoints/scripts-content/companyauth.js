@@ -937,7 +937,7 @@
       statusChangeAllowedResult = allowInviteAcceptance(callerStatus, subjectStatus, newStatus, isCallerAdminUser, isMe);
       if (!statusChangeAllowedResult.allowed) {
         log('[RESPOND INVITE ACTION - ACCEPT] Action blocked: add relationship to company');
-        logDebug('[RESPOND INVITE ACTION - ACCEPT] Action blocked: add relationship to company - action performed by ' + actor._id) + ' - message: ' + statusChangeAllowedResult.message;
+        logDebug('[RESPOND INVITE ACTION - ACCEPT] Action blocked: add relationship to company - action performed by ' + actor._id + ' - message: ' + statusChangeAllowedResult.message);
         throw {
           code: 403,
           message: 'status update denied',
@@ -990,7 +990,7 @@
       statusChangeAllowedResult = allowInviteDecline(callerStatus, subjectStatus, isCallerAdminUser, isMe);
       if (!statusChangeAllowedResult.allowed) {
         log('[RESPOND INVITE ACTION - DECLINE] Action blocked: remove PENDING relationship to company');
-        logDebug('[RESPOND INVITE ACTION - DECLINE] Action blocked: remove PENDING relationship to company - action performed by ' + actor._id) + ' - message: ' + statusChangeAllowedResult.message;
+        logDebug('[RESPOND INVITE ACTION - DECLINE] Action blocked: remove PENDING relationship to company - action performed by ' + actor._id + ' - message: ' + statusChangeAllowedResult.message);
         throw {
           code: 403,
           message: 'relationship deletion denied',
@@ -1059,7 +1059,7 @@
     statusChangeAllowedResult = allowUserRemoval(callerStatus, actor._id, subjectStatus, subjectInviterId, isCallerAdminUser, isMe);
     if (!statusChangeAllowedResult.allowed) {
       log('[REMOVE AUTHZ USER ACTION] Action blocked: add user  to company');
-      logDebug('[REMOVE AUTHZ USER ACTION] Action blocked: add user  to company - action performed by ' + actor._id) + ' - message: ' + statusChangeAllowedResult.message;
+      logDebug('[REMOVE AUTHZ USER ACTION] Action blocked: add user  to company - action performed by ' + actor._id + ' - message: ' + statusChangeAllowedResult.message);
       throw {
         code: 403,
         message: 'user removal denied',
@@ -1125,7 +1125,7 @@
 
     if (!statusChangeAllowedResult.allowed) {
       log('[ADD AUTHZ USER ACTION] Action blocked: add user  to company');
-      logDebug('[ADD AUTHZ USER ACTION] Action blocked: add user  to company - action performed by ' + actor._id) + ' - message: ' + statusChangeAllowedResult.message;
+      logDebug('[ADD AUTHZ USER ACTION] Action blocked: add user  to company - action performed by ' + actor._id + ' - message: ' + statusChangeAllowedResult.message);
       throw {
         code: 403,
         message: 'Action blocked: add user  to company - action performed by ' + actor._id,
