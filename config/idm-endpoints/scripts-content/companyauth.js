@@ -1004,7 +1004,7 @@
 
       deleteRelationshipResult = deleteRelationship(subject._id, companyId);
       if (!deleteRelationshipResult || !deleteRelationshipResult.success) {
-        log'[RESPOND INVITE ACTION - DECLINE] An error occurred while deleting the pending relationship');
+        log('[RESPOND INVITE ACTION - DECLINE] An error occurred while deleting the pending relationship');
         logDebug('[RESPOND INVITE ACTION - DECLINE] An error occurred while deleting the pending relationship (performed by user ' + actor._id + '): ' + deleteRelationshipResult.message);
         throw {
           code: 400,
