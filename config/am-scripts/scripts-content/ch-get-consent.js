@@ -5,7 +5,8 @@ var fr = JavaImporter(
     javax.security.auth.callback.TextOutputCallback,
     javax.security.auth.callback.ConfirmationCallback,
     org.forgerock.json.JsonValue,
-    javax.security.auth.callback.TextOutputCallback
+    javax.security.auth.callback.TextOutputCallback,
+    com.sun.identity.authentication.callbacks.HiddenValueCallback
 )
 
 var NodeOutcome = {
@@ -48,7 +49,15 @@ function getConsentCallbacks() {
     })
   
     var claims = consentRequest.get("claims")
+
+    var claimsObj = {};
+    claims.keySet().toArray().forEach(function (key) {
+        var value = scopes.get(key)
+        claimsObj[key]=value+"";
+    })
+
     _log("[GET CONSENT] Got claims " + claims, 'MESSAGE')
+
     if (claims != null && claims.get("userinfo") != null) {
         consentCallbacks.push(new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION,"Info"))
         var userinfo = claims.get("userinfo")
@@ -61,7 +70,7 @@ function getConsentCallbacks() {
   
     var confirmOptions = ["Yes","No"]
     consentCallbacks.push(new fr.ConfirmationCallback(fr.ConfirmationCallback.INFORMATION, confirmOptions, 1));
-  
+    consentCallbacks.push(new fr.HiddenValueCallback('pagePropsJSON', JSON.stringify(claimsObj) ));
     return consentCallbacks
 }
 
