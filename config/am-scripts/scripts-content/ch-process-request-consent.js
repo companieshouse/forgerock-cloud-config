@@ -26,7 +26,7 @@ if (!consentRequest) {
     var claims = jwt.getClaimsSet().toJsonValue()
 
     _log("[PROCESS REQUEST CONSENT] Claims " + claims, 'MESSAGE')
-    sharedState.put("consentRequest", claims, 'MESSAGE')
+    sharedState.put("consentRequest", claims)
 
     outcome = NodeOutcome.SUCCESS;
 }
