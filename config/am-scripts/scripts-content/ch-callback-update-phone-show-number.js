@@ -1,5 +1,5 @@
 var _scriptName = 'CH CALLBACK UPDATE PHONE SHOW NUMBER';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -8,7 +8,6 @@ var fr = JavaImporter(
 );
 
 var phoneNumber = sharedState.get('objectAttributes').get('telephoneNumber');
-_log('Phone number: ' + phoneNumber);
 
 var notificationId = transientState.get('notificationId');
 var otpError = transientState.get('error');

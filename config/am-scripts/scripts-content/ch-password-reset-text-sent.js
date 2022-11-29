@@ -18,7 +18,7 @@
 */
 
 var _scriptName = 'CH PASSWORD RESET TEXT SENT';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -69,11 +69,10 @@ if (!phoneNumber) {
     ).build();
   }
 }
-_log('phoneNumber : ' + phoneNumber);
 
 var notificationId = transientState.get('notificationId');
 var otpError = transientState.get('error');
-_log('Notification ID: ' + notificationId);
+_log('Notification ID: ' + notificationId, 'MESSAGE');
 _log('Found OTP Error : ' + otpError);
 
 if (otpError) {

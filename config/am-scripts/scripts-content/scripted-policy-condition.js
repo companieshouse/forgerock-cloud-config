@@ -115,7 +115,6 @@ function validateAndInitializeParameters () {
     return false;
   }
   userAddress = userAddressSet.iterator().next();
-  _log('User address: ' + userAddress);
 
   if (!environment) {
     logger.warning('No environment parameters specified in the evaluation request.');

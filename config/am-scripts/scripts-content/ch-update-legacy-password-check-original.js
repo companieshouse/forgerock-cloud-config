@@ -28,7 +28,6 @@ var NodeOutcome = {
 
 function checkUserPassword (userEnteredPassword, passwordFromCollector) {
 
-  _log('Comparing ' + userEnteredPassword + ' with ' + passwordFromCollector);
   if (!userEnteredPassword.equals(passwordFromCollector)) {
     sharedState.put('errorMessage', 'The current password you supplied is incorrect.');
     _log('The current password you supplied is correct');

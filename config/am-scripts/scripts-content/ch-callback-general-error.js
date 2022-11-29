@@ -11,7 +11,7 @@
 */
 
 var _scriptName = 'CH CALLBACK GENERAL ERROR';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -23,7 +23,7 @@ var errorMessage = sharedState.get('errorMessage') || 'An error occurred';
 var errorProps = sharedState.get('pagePropsJSON');
 var level = fr.TextOutputCallback.ERROR;
 
-_log('Error: ' + errorMessage + ' - Shared State : ' + sharedState.toString());
+_log('Error: ' + errorMessage);
 
 action = fr.Action.send(
   new fr.TextOutputCallback(

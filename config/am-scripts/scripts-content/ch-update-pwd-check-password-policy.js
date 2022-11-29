@@ -128,7 +128,7 @@ function getUserObject () {
 function getUserData (email, id) {
   try {
     var searchTerm = email ? ('/openidm/managed/alpha_user?_queryFilter=userName+eq+%22' + email + '%22') : '/openidm/managed/alpha_user?_queryFilter=_id+eq+%22' + id + '%22';
-    _log('[GET USER DATA] User Search term: ' + searchTerm);
+    _log('[GET USER DATA] User Search term: ' + searchTerm, 'MESSAGE');
 
     var idmUserEndpoint = _fromConfig('FIDC_ENDPOINT') + searchTerm;
     var request = new org.forgerock.http.protocol.Request();
@@ -154,13 +154,13 @@ function getUserData (email, id) {
     if (response.getStatus().getCode() === 200) {
       var searchResponse = JSON.parse(response.getEntity().getString());
       if (searchResponse && searchResponse.result && searchResponse.result.length > 0) {
-        _log('[GET USER DATA] User found: ' + searchResponse.result[0].toString());
+        _log('[GET USER DATA] User found: ' + searchResponse.result[0].toString(), 'MESSAGE');
         return {
           success: true,
           user: searchResponse.result[0]
         };
       } else {
-        _log('[GET USER DATA] User NOT found: ' + email);
+        _log('[GET USER DATA] User NOT found: ' + email, 'MESSAGE');
         return {
           success: false,
           message: 'User NOT found: ' + email

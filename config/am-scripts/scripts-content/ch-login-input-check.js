@@ -1,11 +1,10 @@
 var _scriptName = 'CH LOGIN INPUT CHECK';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var username = sharedState.get('username');
 var password = transientState.get('password');
 
-_log('Checking input for username : ' + username);
-// _log('Shared State : ' + sharedState.toString());
+_log('Checking input for username : ' + username, 'MESSAGE');
 
 var NodeOutcome = {
   TRUE: 'true',
@@ -19,7 +18,8 @@ try {
     // email has wrong format
     if (!_isValidEmail(username)) {
       errorMessage = errorMessage.concat('Invalid email format: ').concat(username);
-      _log(errorMessage);
+      _log('Invalid email format');
+      _log(errorMessage, 'MESSAGE');
       sharedState.put('errorMessage', errorMessage);
       sharedState.put('pagePropsJSON', JSON.stringify(
         {
@@ -32,7 +32,7 @@ try {
         }));
       outcome = NodeOutcome.FALSE;
     } else {
-      _log('User ' + username + ' logging in...');
+      _log('User ' + username + ' logging in...', 'MESSAGE');
       outcome = NodeOutcome.TRUE;
     }
   } else if (!username || !password) {

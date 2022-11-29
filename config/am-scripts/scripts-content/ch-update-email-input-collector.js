@@ -63,13 +63,13 @@ function checkUserExistence (email) {
   if (response.getStatus().getCode() === 200) {
     var searchResponse = JSON.parse(response.getEntity().getString());
     if (searchResponse && searchResponse.result && searchResponse.result.length > 0) {
-      _log('user found: ' + JSON.stringify(searchResponse.result[0]));
+      _log('user found: ' + JSON.stringify(searchResponse.result[0]), 'MESSAGE');
       return {
         success: true,
         userFound: true
       };
     } else {
-      _log('user NOT found: ' + email);
+      _log('user NOT found: ' + email, 'MESSAGE');
       return {
         success: true,
         userFound: false
@@ -128,7 +128,7 @@ try {
     var userExistenceCheckResponse = checkUserExistence(newEmail);
 
     if (!_isValidEmail(newEmail)) {
-      _log('Invalid email: ' + newEmail);
+      _log('Invalid email: ' + newEmail, 'MESSAGE');
       sharedState.put('errorMessage', 'Invalid email address.');
       sharedState.put('pagePropsJSON', JSON.stringify(
         {

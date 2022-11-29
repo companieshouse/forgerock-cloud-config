@@ -23,7 +23,7 @@ function updateUsername (userId, value) {
     _log('Access token not in shared state');
     return false;
   }
-  _log('Updating email to ' + value);
+  _log('Updating email to ' + value, 'MESSAGE');
 
   var request = new org.forgerock.http.protocol.Request();
   request.setMethod('PATCH');

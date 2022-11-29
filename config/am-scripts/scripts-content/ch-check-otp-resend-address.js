@@ -1,5 +1,5 @@
 var _scriptName = 'CH CHECK OTP RESEND ADDRESS';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -27,7 +27,7 @@ try {
   var mfaRoute = sharedState.get('mfa-route');
   var userId = sharedState.get('_id');
 
-  _log('MFA Route : ' + mfaRoute + ', userId : ' + userId);
+  _log('MFA Route : ' + mfaRoute + ', userId : ' + userId, 'MESSAGE');
 
   var phoneNumber = '';
   var email = '';
@@ -41,12 +41,10 @@ try {
     } else if (idRepository.getAttribute(userId, 'telephoneNumber').iterator().hasNext()) {
       phoneNumber = idRepository.getAttribute(userId, 'telephoneNumber').iterator().next();
     } else {
-      _log('Failed to get phoneNumber for userId : ' + userId);
+      _log('Failed to get phoneNumber for userId : ' + userId, 'MESSAGE');
 
-      _log('shared: ' + sharedState.get('objectAttributes'));
       if (sharedState.get('objectAttributes')) {
         phoneNumber = sharedState.get('objectAttributes').get('telephoneNumber');
-        _log('phoneNumber (sharedState): ' + phoneNumber);
       }
     }
 
@@ -58,19 +56,17 @@ try {
     } else if (idRepository.getAttribute(userId, 'mail').iterator().hasNext()) {
       email = idRepository.getAttribute(userId, 'mail').iterator().next();
     } else {
-      _log('Failed to get email for userId : ' + userId);
+      _log('Failed to get email for userId : ' + userId, 'MESSAGE');
 
-      _log('shared: ' + sharedState.get('objectAttributes'));
       if (sharedState.get('objectAttributes')) {
         email = sharedState.get('objectAttributes').get('mail');
-        _log('email (sharedState): ' + email);
       }
     }
 
     mfaRouteText = 'Do you want to resend the email to '.concat(email).concat('?');
   }
 
-  _log('MFA Route Text : ' + mfaRouteText);
+  _log('MFA Route Text : ' + mfaRouteText, 'MESSAGE');
 
   if (callbacks.isEmpty()) {
     action = fr.Action.send(
@@ -94,7 +90,7 @@ try {
     ).build();
   } else {
     var confirmIndex = callbacks.get(1).getSelectedIndex();
-    _log('Confirm resend choice: ' + confirmIndex);
+    _log('Confirm resend choice: ' + confirmIndex, 'MESSAGE');
 
     if (confirmIndex === ConfirmIndex.RESEND) {
       outcome = NodeOutcome.RESEND;

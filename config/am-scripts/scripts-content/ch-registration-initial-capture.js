@@ -54,9 +54,9 @@ if (callbacks.isEmpty()) {
   emailAddress = callbacks.get(2).getName();
   mobileNumber = callbacks.get(3).getName();
 
-  _log('fullName : ' + fullName);
-  _log('emailAddress : ' + emailAddress);
-  _log('mobileNumber : ' + mobileNumber);
+  _log('fullName : ' + fullName, 'MESSAGE');
+  _log('emailAddress : ' + emailAddress, 'MESSAGE');
+  _log('mobileNumber : ' + mobileNumber, 'MESSAGE');
 
   sharedState.put('objectAttributes',
     {

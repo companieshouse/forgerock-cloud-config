@@ -61,7 +61,7 @@ function extractRegDataFromState () {
     email = sharedState.get('objectAttributes').get('mail');
     fullName = sharedState.get('objectAttributes').get('givenName');
     phone = sharedState.get('objectAttributes').get('telephoneNumber');
-    _log('mail : ' + email + ' - name: ' + fullName + ' - phone: ' + phone);
+    _log('mail : ' + email + ' - name: ' + fullName + ' - phone: ' + phone, 'MESSAGE');
     return { email: email, phone: phone, fullName: fullName };
   } catch (e) {
     _log('error in fetching objectAttributes : ' + e);
@@ -166,7 +166,7 @@ function sendEmail (language, jwt) {
   var templates = transientState.get('notifyTemplates');
   var returnUrl = host.concat('/account/register/verify/?token=', jwt);
 
-  _log('JWT from transient state: ' + notifyJWT);
+  _log('JWT from transient state: ' + notifyJWT, 'MESSAGE');
   _log('Templates from transient state: ' + templates);
   _log('RETURN URL: ' + returnUrl);
 
