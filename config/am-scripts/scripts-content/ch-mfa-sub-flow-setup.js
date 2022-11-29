@@ -1,8 +1,8 @@
 var _scriptName = 'CH MFA SUB-FLOW SETUP';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var journeyName = _getJourneyName();
-_log('Setup for Journey Name : ' + journeyName);
+_log('Setup for Journey Name : ' + journeyName, 'MESSAGE');
 
 var config = {
   otpCheckStageNameVariable: 'otpCheckStageName'
@@ -18,10 +18,10 @@ var useStageName = 'GENERIC_ERROR';
 var useOutcome = NodeOutcome.DEFAULT;
 
 var isRegistrationMFA = sharedState.get('registrationMFA');
-_log('Is Registration MFA : ' + isRegistrationMFA);
+_log('Is Registration MFA : ' + isRegistrationMFA, 'MESSAGE');
 
 var sharedStateMfaRoute = sharedState.get('mfa-route');
-_log('Shared State MFA route : ' + sharedStateMfaRoute);
+_log('Shared State MFA route : ' + sharedStateMfaRoute, 'MESSAGE');
 
 if (String(journeyName) === 'CHChangePhoneNumber') {
   useStageName = 'UPDATE_PHONE_2';

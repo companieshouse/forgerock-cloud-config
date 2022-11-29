@@ -39,13 +39,13 @@ function buildReturnUrl (email, companyNumber, isNewUser, host, userId, linkToke
 
   var onboardingParams = buildOnboardingParams(userId, linkTokenId, companyNumber);
 
-  _log('Onboarding params : ' + onboardingParams);
+  _log('Onboarding params : ' + onboardingParams, 'MESSAGE');
 
   if (onboardingParams) {
     var returnUrl = host.concat('/account/scrs/?', onboardingParams)
       .concat('&goto=', encodeURIComponent('/account/home/?companyNo=' + companyNumber + '&scrsUserType=' + (isNewUser ? 'new' : 'existing')), '&scrsUserType=', encodeURIComponent(isNewUser ? 'new' : 'existing'));
 
-    _log('Onboarding Url : ' + returnUrl);
+    _log('Onboarding Url : ' + returnUrl, 'MESSAGE');
 
     return {
       success: true,
@@ -66,7 +66,7 @@ function getEmailTemplateId (templates, newUser) {
   var templateId;
   var templatesParsed = JSON.parse(templates);
 
-  _log(JSON.stringify(templatesParsed, null, 2));
+  _log(JSON.stringify(templatesParsed, null, 2), 'MESSAGE');
 
   if (String(newUser) === 'true') {
     templateId = templatesParsed.en_scrs_notification_new;
@@ -78,12 +78,12 @@ function getEmailTemplateId (templates, newUser) {
 }
 
 function sendEmail (email, companyName, returnUrl, newUser) {
-  _log('params: ' + email + ' - ' + companyName + ' (New User = ' + newUser + ')');
+  _log('params: ' + email + ' - ' + companyName + ' (New User = ' + newUser + ')', 'MESSAGE');
 
   var notifyJWT = transientState.get('notifyJWT');
   var templates = transientState.get('notifyTemplates');
 
-  _log('JWT from transient state: ' + notifyJWT);
+  _log('JWT from transient state: ' + notifyJWT, 'MESSAGE');
   _log('Templates from transient state: ' + templates);
   _log(email + ' => RETURN URL: ' + returnUrl);
 

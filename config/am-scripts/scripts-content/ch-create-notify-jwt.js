@@ -14,7 +14,7 @@
 */
 
 var _scriptName = 'CH CREATE NOTIFY JWT';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.json.jose.builders.JwtBuilderFactory,
@@ -58,7 +58,6 @@ function buildJwt () {
     return false;
   }
 
-  _log('parsed: ' + JSON.stringify(notifyObj));
   var issuer = notifyObj.issUuid;
 
   try {
@@ -88,7 +87,7 @@ function buildJwt () {
       .claims(jwtClaims)
       .build();
 
-    _log('JWT for Notify: ' + jwt);
+    _log('JWT for Notify: ' + jwt, 'MESSAGE');
   } catch (e) {
     _log('Error while building JWT - ' + e);
     return false;

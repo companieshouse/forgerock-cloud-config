@@ -62,14 +62,15 @@ try {
 
 if (newObject.password !== oldObject.password) {
     logger.info('OnUpdate The user password has changed - LEGACY PASSWORD update started');
+    var body = {"convert": object.password};
     var request = {
         'url': HASH_CONVERT_API_URL,
         'method': 'POST',
         'headers': {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json;charset=utf-8',
             'x-api-key': HASH_CONVERT_API_KEY
         },
-        'body': '{"convert": "' + object.password + '"}'
+        'body': JSON.stringify(body)
     };
 
     if(!HASH_CONVERT_API_URL || !HASH_CONVERT_API_KEY){

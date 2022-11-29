@@ -1,5 +1,5 @@
 var _scriptName = 'CH ONBOARDING VERIFY TOKEN';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -86,7 +86,7 @@ function validatedJwtClaims (jwtString, issuer, jwtType) {
       break;
 
     default:
-      _log('Unknown jwt type ' + jwtType);
+      _log('Unknown jwt type ' + jwtType, 'MESSAGE');
       return {
         success: false,
         code: 'ERROR_JWT_TYPE_UNKNOWN',
@@ -179,7 +179,7 @@ function fetchIDMToken () {
   var ACCESS_TOKEN_STATE_FIELD = 'idmAccessToken';
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
   if (accessToken === null) {
-    _log('Access token not in transient state');
+    _log('Access token not in transient state', 'MESSAGE');
     return false;
   }
   return accessToken;
@@ -192,7 +192,7 @@ function lookupUser (email) {
     var request = new org.forgerock.http.protocol.Request();
     var accessToken = fetchIDMToken();
     if (!accessToken) {
-      _log('Access token not in transient state');
+      _log('Access token not in transient state', 'MESSAGE');
       return {
         success: false,
         error: 'Access token not in transient state'
@@ -210,13 +210,14 @@ function lookupUser (email) {
     if (response.getStatus().getCode() === 200) {
       var searchResponse = JSON.parse(response.getEntity().getString());
       if (searchResponse && searchResponse.result && searchResponse.result.length > 0) {
-        _log('user found: ' + searchResponse.result[0].toString());
+        _log('user found: ' + searchResponse.result[0].toString(), 'MESSAGE');
         return {
           success: true,
           user: searchResponse.result[0]
         };
       } else {
-        _log('user NOT found: ' + email);
+        _log('user NOT found');
+        _log('user NOT found: ' + email, 'MESSAGE');
         return {
           success: true,
           user: null
@@ -244,7 +245,7 @@ function isUserInvitedForCompany (userEmail, companyNo) {
   var accessToken = transientState.get('idmAccessToken');
   var idmCompanyAuthEndpoint = FIDC_ENDPOINT + '/openidm/endpoint/companyauth?_action=getCompanyStatusByUsername';
   if (accessToken === null) {
-    _log('Access token not in transient state');
+    _log('Access token not in transient state', 'MESSAGE');
     return {
       success: false,
       error: 'Access token not in transient state'
@@ -257,7 +258,7 @@ function isUserInvitedForCompany (userEmail, companyNo) {
   };
 
   request.setMethod('POST');
-  _log('Check user ' + userEmail + ' membership status to company ' + companyNo);
+  _log('Check user ' + userEmail + ' membership status to company ' + companyNo, 'MESSAGE');
   request.setUri(idmCompanyAuthEndpoint);
   request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
   request.getHeaders().add('Content-Type', 'application/json');
@@ -286,7 +287,7 @@ function extractInfoFromToken (claimSet) {
   try {
     var email = claimSet.subject;
     var companyNo = claimSet.companyNo;
-    _log('initiating email: ' + email + ' - companyNo: ' + companyNo);
+    _log('initiating email: ' + email + ' - companyNo: ' + companyNo, 'MESSAGE');
     return {
       email: email,
       companyNo: companyNo
@@ -324,7 +325,7 @@ function raiseError (message, token) {
 }
 
 function saveUserDataToState (tokenData, companyName) {
-  _log('The provided token is still valid');
+  _log('The provided token is still valid', 'MESSAGE');
   try {
     // put the read attributes in shared state for the Create Object node to consume
     sharedState.put('objectAttributes',
@@ -348,11 +349,12 @@ function validateOnboardingDate (user) {
 
   var onboardDate = user.frIndexedDate2;
   if (!onboardDate) {
-    _log('Onboarding date not found for user ' + user._id);
+    _log('Onboarding date not found for user');
+    _log('Onboarding date not found for user ' + user._id, 'MESSAGE');
     return false;
   }
 
-  _log('onboarding date: ' + onboardDate);
+  _log('onboarding date: ' + onboardDate, 'MESSAGE');
 
   if (onboardDate.length > 0) {
     var onboardDateUTC = _convertStringToDateTime(onboardDate);

@@ -1,5 +1,5 @@
 var _scriptName = 'CH PASSWORD RESET SEND EMAIL';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -57,12 +57,10 @@ function getKey (secret, keyType) {
 
 //extracts the email address from shared state
 function extractEmailFromState () {
-  _log('host: ' + host);
-  _log('shared: ' + sharedState.get('objectAttributes'));
+  _log('host: ' + host, 'MESSAGE');
 
   try {
     email = sharedState.get('objectAttributes').get('mail');
-    _log('mail : ' + email);
   } catch (e) {
     _log('error in fetching objectAttributes : ' + e);
     return false;
@@ -72,7 +70,7 @@ function extractEmailFromState () {
 
 function buildJwt (claims, issuer, audience, jwtType) {
 
-  _log('Building response JWT');
+  _log('Building response JWT', 'MESSAGE');
 
   var signingKey = getKey(config.signingKey, KeyType.SIGNING);
   var signingHandler = new fr.SecretHmacSigningHandler(signingKey);
@@ -144,7 +142,7 @@ function buildJwt (claims, issuer, audience, jwtType) {
 function buildReturnUrl (jwt) {
   try {
     returnUrl = host.concat('/password-recovery/verify/?token=', jwt);
-    _log('URL: ' + returnUrl);
+    _log('URL: ' + returnUrl, 'MESSAGE');
     return returnUrl;
   } catch (e) {
     _log('Error while extracting host: ' + e);
@@ -207,8 +205,8 @@ function sendEmail (language) {
   var notifyJWT = transientState.get('notifyJWT');
   var templates = transientState.get('notifyTemplates');
   var requestBodyJson;
-  _log('Notify JWT from transient state: ' + notifyJWT);
-  _log('Templates from transient state: ' + templates);
+  _log('Notify JWT from transient state: ' + notifyJWT, 'MESSAGE');
+  _log('Templates from transient state: ' + templates, 'MESSAGE');
   var isUserExisting = transientState.get('isUserExisting');
   request.setUri(_fromConfig('NOTIFY_EMAIL_ENDPOINT'));
   try {
@@ -240,12 +238,12 @@ function sendEmail (language) {
 
   var response = httpClient.send(request).get();
   var notificationId;
-  _log('Response: ' + response.getStatus().getCode() + ' - ' + response.getCause() + ' - ' + response.getEntity().getString());
+  _log('Response: ' + response.getStatus().getCode() + ' - ' + response.getCause() + ' - ' + response.getEntity().getString(), 'MESSAGE');
 
   try {
     notificationId = JSON.parse(response.getEntity().getString()).id;
     transientState.put('notificationId', notificationId);
-    _log('Notify ID: ' + notificationId);
+    _log('Notify ID: ' + notificationId, 'MESSAGE');
   } catch (e) {
     _log('Error while parsing Notify response: ' + e);
     return false;

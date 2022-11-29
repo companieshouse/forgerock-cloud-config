@@ -27,7 +27,7 @@ function getConsentCallbacks() {
     var consentRequest = sharedState.get("consentRequest")
 
     if (consentRequest == null) {
-        _log("[GET CONSENT] No consent request in shared state")
+        _log("[GET CONSENT] No consent request in shared state", 'MESSAGE')
         return null
     }
 
@@ -38,10 +38,10 @@ function getConsentCallbacks() {
     ]
 
     var scopes = consentRequest.get("scopes")
-    _log("[GET CONSENT] Got scopes " + scopes)
+    _log("[GET CONSENT] Got scopes " + scopes, 'MESSAGE')
     scopes.keySet().toArray().forEach(function (key) {
         var value = scopes.get(key)
-        _log("[GET CONSENT] scope " + key + ": " + value)
+        _log("[GET CONSENT] scope " + key + ": " + value, 'MESSAGE')
         if (value == null) {
             value = key
         }
@@ -49,13 +49,15 @@ function getConsentCallbacks() {
     })
   
     var claims = consentRequest.get("claims")
+
     var claimsObj = {};
     claims.keySet().toArray().forEach(function (key) {
         var value = scopes.get(key)
         claimsObj[key]=value+"";
     })
 
-    _log("[GET CONSENT] Got claims " + claims)
+    _log("[GET CONSENT] Got claims " + claims, 'MESSAGE')
+
     if (claims != null && claims.get("userinfo") != null) {
         consentCallbacks.push(new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION,"Info"))
         var userinfo = claims.get("userinfo")
@@ -85,7 +87,7 @@ if (callbacks.isEmpty()) {
   }
 } else {
     var decisionIndex = callbacks.get(callbacks.size() - 1).getSelectedIndex()
-    _log("[GET CONSENT] Decision index " + decisionIndex)
+    _log("[GET CONSENT] Decision index " + decisionIndex, 'MESSAGE')
     var consentDecision = (decisionIndex == 0)
     sharedState.put("consentDecision",consentDecision)
     action = fr.Action.goTo(NodeOutcome.SUCCESS).build()

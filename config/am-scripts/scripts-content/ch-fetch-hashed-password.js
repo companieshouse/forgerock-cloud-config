@@ -1,5 +1,5 @@
 var _scriptName = 'CH FETCH HASHED PASSWORD';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action
@@ -17,22 +17,20 @@ var NodeOutcome = {
 
 function fetchHashedPassword () {
   var userId = sharedState.get('_id');
-  _log('Found userId: ' + userId);
 
   if (idRepository.getAttribute(userId, LEGACY_PASSWORD_FIELD).iterator().hasNext()) {
     var legacyPassword = idRepository.getAttribute(userId, LEGACY_PASSWORD_FIELD).iterator().next();
-    _log('Found legacyPassword: ' + legacyPassword);
     sharedState.put('hashedCredential', legacyPassword);
 
     var validateMethod = 'CHS';
     if (idRepository.getAttribute(userId, ORIGIN_FIELD).iterator().hasNext()) {
       var origin = idRepository.getAttribute(userId, ORIGIN_FIELD).iterator().next();
-      _log('Origin: ' + origin);
+      _log('Origin: ' + origin, 'MESSAGE');
       if (String(origin) === WEBFILING_USER) {
         validateMethod = WEBFILING_USER;
       }
     }
-    _log('validateMethod: ' + validateMethod);
+    _log('validateMethod: ' + validateMethod, 'MESSAGE');
     sharedState.put('validateMethod', validateMethod);
 
     var password = transientState.get('password');

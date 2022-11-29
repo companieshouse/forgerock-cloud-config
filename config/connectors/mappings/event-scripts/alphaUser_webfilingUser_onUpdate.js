@@ -1,2 +1,2 @@
-logger.error("[CH-SYNC][ALPHA-USER-TO-EWF][UPDATE] target: " + target);
-logger.error("[CH-SYNC][ALPHA-USER-TO-EWF][UPDATE] oldTarget: " + oldTarget);
+logger.debug("[CH-SYNC][ALPHA-USER-TO-EWF][UPDATE] target: " + target);
+logger.debug("[CH-SYNC][ALPHA-USER-TO-EWF][UPDATE] oldTarget: " + oldTarget);

@@ -123,15 +123,15 @@ webFilingClaimResolver = { claim, identity ->
     if (identity != null) {
         def webFilingData = [
             'company_no' : (sessionPresent ? session.getProperty('companyNumber') : null),
-            'password' : (sessionPresent ? session.getProperty('password') : null),
             'jurisdiction': (sessionPresent ? session.getProperty('jurisdiction') : null),
-            'auth_code': (sessionPresent ? session.getProperty('authCode') : null),
             'language': (sessionPresent ? session.getProperty('language') : null),
         ]
 
-        if (logger.warningEnabled()) {
-            logger.warning('[CHSLOG] OIDC Claims Script : webFilingData = ' + webFilingData)
-        }
+        logger.message('[CHSLOG] OIDC Claims Script : webFilingData = ' + webFilingData)
+
+
+        webFilingData.put('auth_code', (sessionPresent ? session.getProperty('authCode') : null))
+        webFilingData.put('password', (sessionPresent ? session.getProperty('password') : null))
 
         return webFilingData
     }

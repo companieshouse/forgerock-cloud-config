@@ -1,5 +1,5 @@
 var _scriptName = 'CH INVITE USER SEND EMAIL CONFIRM';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -33,7 +33,7 @@ try {
       companyName = JSON.parse(companyData).name;
     }
 
-    _log('Company Name : ' + companyName);
+    _log('Company Name : ' + companyName, 'MESSAGE');
 
     action = fr.Action.send(
       new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION, 'Check the authorised person\'s email address before we send the email to '.concat(email)),
@@ -55,7 +55,7 @@ try {
     ).build();
   } else {
     var confirmIndex = callbacks.get(1).getSelectedIndex();
-    _log('confirm resend choice: ' + confirmIndex);
+    _log('confirm resend choice: ' + confirmIndex, 'MESSAGE');
 
     if (confirmIndex === ConfirmIndex.SEND) {
       action = fr.Action.goTo(NodeOutcome.SEND).build();

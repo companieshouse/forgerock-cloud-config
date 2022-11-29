@@ -9,8 +9,8 @@
 		"connectorName": "org.forgerock.openicf.connectors.mongodb.MongoDBConnector"
 	},
 	"poolConfigOption": {
-		"maxObjects": 10,
-		"maxIdle": 10,
+		"maxObjects": 30,
+		"maxIdle": 30,
 		"maxWait": 150000,
 		"minEvictableIdleTimeMillis": 120000,
 		"minIdle": 1
@@ -85,7 +85,7 @@
 		"maxConnectionIdleTime": "0",
 		"maxConnectionLifeTime": "0",
 		"minConnectionsPerHost": "0",
-		"maxConnectionsPerHost": "5"
+		"maxConnectionsPerHost": "25"
 	},
 	"enabled": true,
 	"objectTypes": {

@@ -78,7 +78,7 @@ function isUserAuthorisedForCompany (userId, companyNo, accessToken) {
   };
 
   request.setMethod('POST');
-  _log('Check user ' + userId + ' membership status to company ' + companyNo);
+  _log('Check user ' + userId + ' membership status to company ' + companyNo, 'MESSAGE');
   request.setUri(idmCompanyAuthEndpoint);
   request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
   request.getHeaders().add('Content-Type', 'application/json');
