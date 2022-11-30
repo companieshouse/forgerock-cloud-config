@@ -11,7 +11,7 @@
 		"overrideableOIDCClaims":[
 			
 		],
-		"clientsCanSkipConsent":false,
+		"clientsCanSkipConsent":true,
 		"oidcClaimsScript":"36863ffb-40ec-48b9-94b1-9a99f71cc3b5",
 		"usePolicyEngineForScope":false,
 		"authorizeEndpointDataProviderClass":"",
@@ -166,7 +166,7 @@
 		},
 		"isConsentImplied": {
 			"inherited": false,
-			"value": false
+			"value": true
 		},
 		"softwareIdentity": {
 			"inherited": false
