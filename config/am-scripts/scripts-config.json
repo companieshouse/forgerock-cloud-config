@@ -869,6 +869,22 @@
     },
     {
       "payload": {
+        "_id": "d22f9a0c-426a-4466-b95e-d0f125b0d5fb",
+        "name": " Apps OAuth2 Access Token Modification Script",
+        "description": "Global script for OAuth2 Access Token Modification for CHS Apps and 3rd Party Apps",
+        "script": "<replace>",
+        "default": false,
+        "language": "GROOVY",
+        "context": "OAUTH2_ACCESS_TOKEN_MODIFICATION",
+        "createdBy": "id=dsameuser,ou=user,dc=openam,dc=forgerock,dc=org",
+        "creationDate": 1433147666269,
+        "lastModifiedBy": "id=dsameuser,ou=user,dc=openam,dc=forgerock,dc=org",
+        "lastModifiedDate": 1433147666269
+      },
+      "filename": "oauth2-token-mod-apps.groovy"
+    },
+    {
+      "payload": {
         "_id": "36863ffb-40ec-48b9-94b1-9a99f71cc3b5",
         "name": "OIDC Claims Script",
         "description": "Default global script for OIDC claims",

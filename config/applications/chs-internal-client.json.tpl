@@ -30,7 +30,7 @@
 		"issueRefreshToken":true,
 		"accessTokenMayActScript":"[Empty]",
 		"evaluateScopePluginType":"JAVA",
-		"accessTokenModificationScript":"d22f9a0c-426a-4466-b95e-d0f125b0d5fa"
+		"accessTokenModificationScript":"d22f9a0c-426a-4466-b95e-d0f125b0d5fb"
     },
 	"coreOAuth2ClientConfig": {
 		"userpassword": "{CHS_INTERNAL_CLIENT_PASSWORD}",
