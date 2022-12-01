@@ -869,8 +869,8 @@
     },
     {
       "payload": {
-        "_id": "d22f9a0c-426a-4466-b95e-d0f125b0d5fb",
-        "name": " Apps OAuth2 Access Token Modification Script",
+        "_id": "e24385ea-a00e-4c9f-8eda-4f61e752dfb7",
+        "name": "Apps OAuth2 Access Token Modification Script",
         "description": "Global script for OAuth2 Access Token Modification for CHS Apps and 3rd Party Apps",
         "script": "<replace>",
         "default": false,

@@ -34,7 +34,7 @@
 	},
 	"remoteConsentRedirectUrl": {
 		"inherited": false,
-		"value": "https://idam-ui.amido.aws.chdev.org/account/chconsent?authIndexType=service&authIndexValue=CHConsent&ForceAuth=true"
+		"value": "https://idam-ui.amido.aws.chdev.org/account/consent?authIndexType=service&authIndexValue=CHConsent&ForceAuth=true"
 	},
 	"remoteConsentRequestEncryptionEnabled": {
 		"inherited": false,
