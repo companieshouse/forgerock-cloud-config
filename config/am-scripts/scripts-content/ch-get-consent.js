@@ -70,6 +70,7 @@ function getConsentCallbacks() {
   
     var confirmOptions = ["Yes","No"]
     consentCallbacks.push(new fr.HiddenValueCallback('pagePropsJSON', JSON.stringify(claimsObj) ));
+    consentCallbacks.push(new fr.HiddenValueCallback('stage', 'GET_CONSENT'));
     consentCallbacks.push(new fr.ConfirmationCallback(fr.ConfirmationCallback.INFORMATION, confirmOptions, 1));
 
     return consentCallbacks

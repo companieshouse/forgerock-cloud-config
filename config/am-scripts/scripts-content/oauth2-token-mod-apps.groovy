@@ -62,7 +62,7 @@ if (claims == null) {
         }
 
         def isInternalApp = false
-        if (clientId == 'CHSInternalClient') {
+        if (clientId == 'CHSWebClient') {
             isInternalApp = true
         }
         accessToken.setField("internal-app", isInternalApp)
@@ -79,7 +79,8 @@ if (claims == null) {
 /**
  * Add roles for user to token
  */
-accessToken.setField("roles", identity.getAttributes(["fr-idm-effectiveRole"]))
+//Enabled when needed
+//accessToken.setField("roles", identity.getAttributes(["fr-idm-effectiveRole"]))
 
 /**
  * Check if user is associated with the company number passed in.
