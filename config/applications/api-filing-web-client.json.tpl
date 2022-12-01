@@ -33,7 +33,7 @@
 		"accessTokenModificationScript":"d22f9a0c-426a-4466-b95e-d0f125b0d5fa"
     },
 	"coreOAuth2ClientConfig": {
-		"userpassword": "ApiFilingWebClient",
+		"userpassword": "{API_FILING_CLIENT_PASSWORD}",
 		"loopbackInterfaceRedirection": {
 			"inherited": false,
 			"value": false

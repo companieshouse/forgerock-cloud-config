@@ -11,7 +11,7 @@
 		"overrideableOIDCClaims":[
 			
 		],
-		"clientsCanSkipConsent":false,
+		"clientsCanSkipConsent":true,
 		"oidcClaimsScript":"36863ffb-40ec-48b9-94b1-9a99f71cc3b5",
 		"usePolicyEngineForScope":false,
 		"authorizeEndpointDataProviderClass":"",
@@ -33,7 +33,7 @@
 		"accessTokenModificationScript":"d22f9a0c-426a-4466-b95e-d0f125b0d5fa"
     },
 	"coreOAuth2ClientConfig": {
-		"userpassword": "CHSWebClient",
+		"userpassword": "{CHS_INTERNAL_CLIENT_PASSWORD}",
 		"loopbackInterfaceRedirection": {
 			"inherited": false,
 			"value": false
@@ -166,7 +166,7 @@
 		},
 		"isConsentImplied": {
 			"inherited": false,
-			"value": false
+			"value": true
 		},
 		"softwareIdentity": {
 			"inherited": false

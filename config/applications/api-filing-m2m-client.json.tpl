@@ -1,7 +1,7 @@
 {
 	"_id": "ApiFilingM2MClient",
 	"coreOAuth2ClientConfig": {
-		"userpassword": "ApiFilingM2MClient",
+		"userpassword": "{API_FILING_CLIENT_PASSWORD}",
 		"loopbackInterfaceRedirection": {
 			"inherited": false,
 			"value": false
