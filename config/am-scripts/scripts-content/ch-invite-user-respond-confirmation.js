@@ -1,5 +1,5 @@
 var _scriptName = 'CH INVITE USER RESPOND CONFIRMATION';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -20,7 +20,7 @@ var InviteActions = {
 function fetchActionParameter () {
   var action = requestParameters.get('action');
 
-  _log('action = ' + action);
+  _log('action = ' + action, 'MESSAGE');
 
   if (!action) {
     _log('No invite action found in request');
@@ -55,7 +55,7 @@ try {
       .concat('.');
   }
 
-  _log('infoMessage = ' + infoMessage);
+  _log('infoMessage = ' + infoMessage, 'MESSAGE');
 
   action = fr.Action.send(
     new fr.TextOutputCallback(

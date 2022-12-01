@@ -1,9 +1,9 @@
 var _scriptName = 'CH LOGIN ERROR MESSAGE';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var username = sharedState.get('username') || '<Unknown>';
 
-_log('Cannot find a user with this email : ' + username);
+_log('Cannot find a user with this email : ' + username, 'MESSAGE');
 
 sharedState.put('errorMessage', 'Cannot find a user with this email : ' + username);
 

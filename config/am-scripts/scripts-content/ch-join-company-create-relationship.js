@@ -1,5 +1,5 @@
 var _scriptName = 'CH JOIN COMPANY CREATE RELATIONSHIP';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 /* 
   ** INPUT DATA
@@ -42,7 +42,7 @@ var Actions = {
 };
 
 function logResponse (response) {
-  _log('Scripted Node HTTP Response: ' + response.getStatus() + ', Body: ' + response.getEntity().getString());
+  _log('Scripted Node HTTP Response: ' + response.getStatus() + ', Body: ' + response.getEntity().getString(), 'MESSAGE');
 }
 
 // checks whether the user has already the company associated with their profile
@@ -52,7 +52,7 @@ function checkUserAlreadyAuthzForCompany (userId, company) {
 
     var accessToken = transientState.get('idmAccessToken');
     if (accessToken == null) {
-      _log('[CHECK USER AUTHZ] Access token not in transient state');
+      _log('[CHECK USER AUTHZ] Access token not in transient state', 'MESSAGE');
       return {
         success: false,
         message: 'Access token not in transient state'
@@ -68,7 +68,7 @@ function checkUserAlreadyAuthzForCompany (userId, company) {
     request.setMethod('POST');
 
     request.setUri(idmCompanyAuthEndpoint + '?_action=getCompanyStatusByUserId');
-    _log('[CHECK USER AUTHZ] Call URL: ' + idmCompanyAuthEndpoint + '?_action=getCompanyStatusByUserId');
+    _log('[CHECK USER AUTHZ] Call URL: ' + idmCompanyAuthEndpoint + '?_action=getCompanyStatusByUserId', 'MESSAGE');
     request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
     request.getHeaders().add('Content-Type', 'application/json');
     request.getHeaders().add('Accept-API-Version', 'resource=1.0');
@@ -95,7 +95,7 @@ function addRelationshipToCompany (userId, company) {
 
     var accessToken = transientState.get('idmAccessToken');
     if (accessToken == null) {
-      _log('[ADD RELATIONSHIP] Access token not in transient state');
+      _log('[ADD RELATIONSHIP] Access token not in transient state', 'MESSAGE');
       return {
         success: false,
         message: 'Access token not in transient state'
@@ -115,11 +115,11 @@ function addRelationshipToCompany (userId, company) {
     request.getHeaders().add('Content-Type', 'application/json');
     request.getHeaders().add('Accept-API-Version', 'resource=1.0');
     request.setEntity(requestBodyJson);
-    _log('[ADD RELATIONSHIP] Calling IDM endpoint: ' + idmCompanyAuthEndpoint + '?_action=addAuthorisedUser');
+    _log('[ADD RELATIONSHIP] Calling IDM endpoint: ' + idmCompanyAuthEndpoint + '?_action=addAuthorisedUser', 'MESSAGE');
     var response = httpClient.send(request).get();
     var actionResponse = JSON.parse(response.getEntity().getString());
     if (response.getStatus().getCode() === 200) {
-      _log('[ADD RELATIONSHIP] Created relationship with company - user: ' + userId + ' - company: ' + company.number);
+      _log('[ADD RELATIONSHIP] Created relationship with company - user: ' + userId + ' - company: ' + company.number, 'MESSAGE');
       return {
         success: actionResponse.success
       };
@@ -164,7 +164,7 @@ function fetchIDMToken () {
   var ACCESS_TOKEN_STATE_FIELD = 'idmAccessToken';
   var accessToken = transientState.get(ACCESS_TOKEN_STATE_FIELD);
   if (accessToken == null) {
-    _log('Access token not in transient state');
+    _log('Access token not in transient state', 'MESSAGE');
     return false;
   }
   return accessToken;
@@ -208,8 +208,8 @@ try {
   var idmUserEndpoint = _fromConfig('FIDC_ENDPOINT') + '/openidm/managed/alpha_user/';
   var companyData = sharedState.get('companyData');
   var userId = sharedState.get('_id');
-  _log('Incoming company data :' + companyData);
-  _log('Incoming company id :' + JSON.parse(companyData)._id);
+  _log('Incoming company data :' + companyData, 'MESSAGE');
+  _log('Incoming company id :' + JSON.parse(companyData)._id, 'MESSAGE');
   var language = _getSelectedLanguage(requestHeaders);
 
   var accessToken = fetchIDMToken();
@@ -222,7 +222,7 @@ try {
   var authCodeActiveResult = isCompanyAuthCodeActive(authCodeStartDate, authCodeExpiryDate);
 
   if (checkUserAlreadyAuthzForCompany(userId, JSON.parse(companyData))) {
-    _log('The user is already authorised (CONFIRMED) for company ' + JSON.parse(companyData).name);
+    _log('The user is already authorised (CONFIRMED) for company ' + JSON.parse(companyData).name, 'MESSAGE');
     sharedState.put('errorMessage', 'The company ' + JSON.parse(companyData).name + ' is already associated with the user.');
     sharedState.put('pagePropsJSON', JSON.stringify(
       {
@@ -240,7 +240,7 @@ try {
       .putSessionProperty('language', language.toLowerCase())
       .build();
   } else if (authCodeActiveResult.success && !authCodeActiveResult.isActive) {
-    _log('The company ' + JSON.parse(companyData).name + ' does not have an active auth code');
+    _log('The company ' + JSON.parse(companyData).name + ' does not have an active auth code', 'MESSAGE');
     sharedState.put('errorMessage', 'The company ' + JSON.parse(companyData).name + ' does not have an active auth code. ');
     sharedState.put('pagePropsJSON', JSON.stringify(
       {
@@ -256,7 +256,7 @@ try {
       }));
     action = fr.Action.goTo(NodeOutcome.AUTH_CODE_INACTIVE).build();
   } else if (authCodeActiveResult.error) {
-    _log('Could not verify expiration date of auth code for company ' + JSON.parse(companyData).name);
+    _log('Could not verify expiration date of auth code for company ' + JSON.parse(companyData).name, 'MESSAGE');
     sharedState.put('errorMessage', 'Could not verify expiration date of auth code for company ' + JSON.parse(companyData).name);
     sharedState.put('pagePropsJSON', JSON.stringify(
       {
@@ -272,7 +272,7 @@ try {
       }));
     action = fr.Action.goTo(NodeOutcome.AUTH_CODE_INACTIVE).build();
   } else {
-    _log('Adding relationship between user ' + userId + ' and company ' + JSON.parse(companyData).number);
+    _log('Adding relationship between user ' + userId + ' and company ' + JSON.parse(companyData).number, 'MESSAGE');
     var addUserResult = addRelationshipToCompany(userId, JSON.parse(companyData));
 
     var companyNotificationData = {

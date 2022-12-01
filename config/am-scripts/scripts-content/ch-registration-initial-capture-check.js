@@ -14,9 +14,9 @@ outcome = NodeOutcome.TRUE;
 
 if (sharedState.get('objectAttributes')) {
 
-  _log('For fullName : ' + sharedState.get('objectAttributes').get('givenName'));
-  _log('Checking mail : ' + sharedState.get('objectAttributes').get('mail'));
-  _log('Checking telephoneNumber : ' + sharedState.get('objectAttributes').get('telephoneNumber'));
+  _log('For fullName : ' + sharedState.get('objectAttributes').get('givenName'), 'MESSAGE');
+  _log('Checking mail : ' + sharedState.get('objectAttributes').get('mail'), 'MESSAGE');
+  _log('Checking telephoneNumber : ' + sharedState.get('objectAttributes').get('telephoneNumber'), 'MESSAGE');
 
   var emailAddress = sharedState.get('objectAttributes').get('mail');
 

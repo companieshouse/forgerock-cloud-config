@@ -1,6 +1,6 @@
 (function () {
   const logNowMsecs = new Date().getTime();
-  _log('SCRS Starting! request = ' + JSON.stringify(request));
+  _logDebug('SCRS Starting! request = ' + JSON.stringify(request));
 
   const BEARER_TOKEN_COMPANY_SUBMISSIONS = _getVariableOrSecret('esv.032feca6b7.scrscompanysubmissionstoken');
   const BEARER_TOKEN_AUTHORISED_FILERS_EMAILS = _getVariableOrSecret('esv.bada060229.scrsauthorisedfilersemailstoken');
@@ -36,10 +36,14 @@
     logger.error('[CHLOG][SCRS][' + logNowMsecs + '] ' + message);
   }
 
+  function _logDebug (message) {
+      logger.debug('[CHLOG][SCRS][' + logNowMsecs + '] ' + message);
+    }
+
   function _getVariableOrSecret (name) {
     const fixedName = name.replace(/-/g, '.');
     const value = identityServer.getProperty(fixedName);
-    _log('Returning variable or secret : ' + fixedName + ' as : ' + value);
+    _logDebug('Returning variable or secret : ' + fixedName + ' as : ' + value);
     return value;
   }
 
@@ -57,7 +61,7 @@
   }
 
   function sleepMSecs (msecs) {
-    _log('Sleeping for : ' + msecs + ' msecs');
+    _logDebug('Sleeping for : ' + msecs + ' msecs');
 
     var waitTill = new Date(new Date().getTime() + msecs);
     while (waitTill > new Date()) {}
@@ -86,10 +90,10 @@
   }
 
   function getCompanyIncorporations (incorporationTimepoint, useIncorporationsPerPage) {
-    _log('Getting Company Incorporations from timepoint : ' + incorporationTimepoint + ' (items_per_page = ' + useIncorporationsPerPage + ')');
+    _logDebug('Getting Company Incorporations from timepoint : ' + incorporationTimepoint + ' (items_per_page = ' + useIncorporationsPerPage + ')');
 
     const url = ENDPOINT_COMPANY_SUBMISSIONS + '?timepoint=' + incorporationTimepoint + '&items_per_page=' + useIncorporationsPerPage;
-    _log('Company Incorporations url : ' + url);
+    _logDebug('Company Incorporations url : ' + url);
 
     let request = {
       'url': url,
@@ -126,9 +130,9 @@
         'headers': headers
       };
 
-      _log('Journey Request:  ' + JSON.stringify(request));
+      _logDebug('Journey Request:  ' + JSON.stringify(request));
       let journeyResponse = openidm.action('external/rest', 'call', request);
-      _log('Journey Response:  ' + JSON.stringify(journeyResponse));
+      _logDebug('Journey Response:  ' + JSON.stringify(journeyResponse));
 
       return journeyResponse;
     } catch (e) {
@@ -150,7 +154,7 @@
   }
 
   function getUserByUsername (username) {
-    _log('Looking up username : ' + username);
+    _logDebug('Looking up username : ' + username);
 
     let response = openidm.query(
       'managed/' + OBJECT_USER,
@@ -159,7 +163,8 @@
     );
 
     if (response.resultCount !== 1) {
-      _log('getUserByUsername: No user found for : ' + username);
+      _log('getUserByUsername: No user found');
+      _logDebug('getUserByUsername: No user found for : ' + username);
       return null;
     }
 
@@ -175,7 +180,7 @@
   }
 
   function getOrCreateScrsServiceUser (initialTimepoint) {
-    _log('Initial Timepoint for SCRS Service User : ' + initialTimepoint);
+    _logDebug('Initial Timepoint for SCRS Service User : ' + initialTimepoint);
 
     let response = getScrsServiceUser();
     if (response.resultCount === 0) {
@@ -190,13 +195,13 @@
       );
     }
 
-    _log('Found existing SCRS Service User : ' + response.result[0]);
+    _logDebug('Found existing SCRS Service User : ' + response.result[0]);
 
     return response.result[0];
   }
 
   function updateScrsServiceUserTimepoint (scrsUserId, updatedTimepoint) {
-    _log('Updating SCRS Service User Id : ' + scrsUserId + ' with next timePoint of : ' + updatedTimepoint);
+    _logDebug('Updating SCRS Service User Id : ' + scrsUserId + ' with next timePoint of : ' + updatedTimepoint);
 
     if (scrsUserId && updatedTimepoint) {
       let descriptionUpdate = {
@@ -209,7 +214,7 @@
         null,
         [descriptionUpdate]);
 
-      _log('Updated with next timePoint : ' + updatedTimepoint);
+      _logDebug('Updated with next timePoint : ' + updatedTimepoint);
     }
   }
 
@@ -224,7 +229,7 @@
       let cacheKey = email.toUpperCase();
 
       if (_ewfUserParentUsernameMap.has(cacheKey)) {
-        _log('EWF Parent Name query for : ' + email + ', Cached Value = ' + _ewfUserParentUsernameMap.get(cacheKey));
+        _logDebug('EWF Parent Name query for : ' + email + ', Cached Value = ' + _ewfUserParentUsernameMap.get(cacheKey));
         return _ewfUserParentUsernameMap.get(cacheKey);
       }
 
@@ -233,14 +238,14 @@
         { '_queryFilter': 'EMAIL eq "' + email + '"' }
       );
 
-      _log('EWF Parent Name query for : ' + email + ', Count = ' + response.resultCount);
+      _logDebug('EWF Parent Name query for : ' + email + ', Count = ' + response.resultCount);
 
       if (response.resultCount === 1) {
-        _log('Response from EWF : ' + JSON.stringify(response.result[0]));
+        _logDebug('Response from EWF : ' + JSON.stringify(response.result[0]));
 
         if (response.result[0]._id) {
           _ewfUserParentUsernameMap.set(cacheKey, response.result[0]._id);
-          _log('EWF Parent Name query for : ' + email + ', Value put in Cache = ' + response.result[0]._id);
+          _logDebug('EWF Parent Name query for : ' + email + ', Value put in Cache = ' + response.result[0]._id);
           return response.result[0]._id;
         }
       }
@@ -252,7 +257,7 @@
   }
 
   function createUser (email, description, linkTokenHint, ewfParentUsernameForEmail) {
-    _log('User does not exist: Creating new user with username ' + email);
+    _logDebug('User does not exist: Creating new user with username ' + email);
 
     let userDetails = {
       'userName': email,
@@ -270,17 +275,17 @@
     }
 
     if (ewfParentUsernameForEmail) {
-      _log('EWF ParentUsername for ' + email + ' = ' + ewfParentUsernameForEmail);
+      _logDebug('EWF ParentUsername for ' + email + ' = ' + ewfParentUsernameForEmail);
       userDetails.frIndexedString1 = ewfParentUsernameForEmail;
     }
 
-    _log('User details for createUser : ' + JSON.stringify(userDetails));
+    _logDebug('User details for createUser : ' + JSON.stringify(userDetails));
 
     return openidm.create('managed/' + OBJECT_USER, null, userDetails);
   }
 
   function updateUserLinkTokenId (userId, linkTokenUuid) {
-    _log('Updating User Id : ' + userId + ' with linkTokenUuid of : ' + linkTokenUuid);
+    _logDebug('Updating User Id : ' + userId + ' with linkTokenUuid of : ' + linkTokenUuid);
 
     if (userId && linkTokenUuid) {
       let linkTokenUuidUpdate = {
@@ -293,7 +298,7 @@
         null,
         [linkTokenUuidUpdate]);
 
-      _log('Updated with linkTokenUuid : ' + linkTokenUuid);
+      _logDebug('Updated with linkTokenUuid : ' + linkTokenUuid);
     }
   }
 
@@ -401,7 +406,7 @@
   }
 
   function createCompany (companyIncorp) {
-    _log('Creating new company with details : ' + companyIncorp);
+    _logDebug('Creating new company with details : ' + companyIncorp);
 
     let chsResponse = openidm.query(
       SYSTEM_CHS_COMPANY,
@@ -419,7 +424,7 @@
 
         // Create the company using the retrieved data
 
-        _log('Creating company using retrieved CHS & Auth Code data');
+        _logDebug('Creating company using retrieved CHS & Auth Code data');
 
         const companyData = {
           'number': companyIncorp.company_number,
@@ -445,7 +450,7 @@
 
     // Create the company manually for now with the limited data we have
 
-    _log('Creating company using SCRS supplied data');
+    _logDebug('Creating company using SCRS supplied data');
 
     return openidm.create('managed/' + OBJECT_COMPANY,
       null,
@@ -503,9 +508,9 @@
         }
       };
 
-      _log('Get Company Emails request : ' + JSON.stringify(request));
+      _logDebug('Get Company Emails request : ' + JSON.stringify(request));
       const result = openidm.action('external/rest', 'call', request);
-      _log('Get Company Emails response : ' + JSON.stringify(result));
+      _logDebug('Get Company Emails response : ' + JSON.stringify(result));
 
       return result;
     } catch (e) {
@@ -515,7 +520,8 @@
           const detail = e.javaException.detail ? JSON.parse(e.javaException.detail) : {};
 
           if(code === 400 && detail.body && (detail.body.error_code === "1000" || detail.body.error_code === "1001")){
-               _log('Error in calling filers endpoint for company ' + companyNumber + ' - code: ' + detail.body.error_code + ' - ' + detail.body.message);
+               _logDebug('Error in calling filers endpoint for company ' + companyNumber + ' - code: ' + detail.body.error_code + ' - ' + detail.body.message);
+               _log('Error in calling filers endpoint for company');
           } else {
                _log('Error in getCompanyEmails() call : ' + e);
           }
@@ -546,19 +552,19 @@
       ].join('');
     }
 
-    _log('Using default timepoint: ' + timePoint);
+    _logDebug('Using default timepoint: ' + timePoint);
 
     let scrsServiceUserDetails = getOrCreateScrsServiceUser(timePoint);
 
-    _log('SCRS Service User : ' + scrsServiceUserDetails);
+    _logDebug('SCRS Service User : ' + scrsServiceUserDetails);
 
     if (scrsServiceUserDetails && scrsServiceUserDetails.description) {
-      _log('Using timePoint from SCRS Service User : ' + scrsServiceUserDetails.description);
+      _logDebug('Using timePoint from SCRS Service User : ' + scrsServiceUserDetails.description);
 
       timePoint = scrsServiceUserDetails.description;
     }
 
-    _log('Final timePoint for Integration Call : ' + timePoint);
+    _logDebug('Final timePoint for Integration Call : ' + timePoint);
     return timePoint;
   }
 
@@ -575,7 +581,7 @@
   }
 
   function extractLinksNextTimePoint (linksNext, defaultValue) {
-    _log('Links Next = ' + linksNext);
+    _logDebug('Links Next = ' + linksNext);
 
     if (!linksNext) {
       return defaultValue;
@@ -584,7 +590,7 @@
     let timePointParam = getParameterFromUrlByName(linksNext, 'timepoint');
 
     if (timePointParam) {
-      _log('Incorporations Links > Next timePoint : ' + timePointParam);
+      _logDebug('Incorporations Links > Next timePoint : ' + timePointParam);
       return timePointParam;
     }
 
@@ -618,7 +624,7 @@
     let notificationResponse = callNotificationJourney(email, ENDPOINT_IDAM_UI, companyInfo.name, companyInfo.number, newUser,
       foundUser._id, linkTokenUuid, emailLang);
 
-    _log('notification response : ' + JSON.stringify(notificationResponse));
+    _logDebug('notification response : ' + JSON.stringify(notificationResponse));
 
     outputUsers.push({
       _id: foundUser._id,
@@ -634,7 +640,7 @@
   }
 
   function triggerReconById (email, ewfParentUsernameForEmail) {
-    _log('Triggering reconById for email : ' + email + ', ewfParentUserName : ' + ewfParentUsernameForEmail);
+    _logDebug('Triggering reconById for email : ' + email + ', ewfParentUserName : ' + ewfParentUsernameForEmail);
 
     const response = openidm.action('recon', 'reconById', {}, {
       'mapping': 'webfilingUser_alphaUser',
@@ -642,7 +648,7 @@
       'waitForCompletion': false
     });
 
-    _log('ReconById response: ' + response);
+    _logDebug('ReconById response: ' + response);
   }
 
   function associateUserWithCompany (email, companyInfo) {
@@ -651,9 +657,9 @@
       let emailLang = 'en';
 
       let ewfParentUsernameForEmail = getParentUsernameFromEwf(email);
-      _log('EWF ParentUsername for ' + email + ' = ' + ewfParentUsernameForEmail);
+      _logDebug('EWF ParentUsername for ' + email + ' = ' + ewfParentUsernameForEmail);
 
-      _log('Processing user with email : ' + email + ', language = ' + emailLang);
+      _logDebug('Processing user with email : ' + email + ', language = ' + emailLang);
       let foundUser = getUserByUsername(email);
 
       let linkTokenUuid = uuidv4();
@@ -670,7 +676,7 @@
           _log('No FIDC User found');
 
           foundUser = createUser(email, null, linkTokenUuid);
-          _log('New User ID: ' + foundUser._id);
+          _logDebug('New User ID: ' + foundUser._id);
 
           let newUser = true;
           addConfirmedRelationshipAndEmail(email, emailLang, foundUser, companyInfo, newUser, linkTokenUuid);
@@ -687,7 +693,7 @@
 
       } else {
 
-        _log('EWF PARENT_NAME found : ' + ewfParentUsernameForEmail);
+        _logDebug('EWF PARENT_NAME found : ' + ewfParentUsernameForEmail);
 
         if (!foundUser) {
 
@@ -695,7 +701,7 @@
 
           if (CREATE_USER_USING_RECON_BY_ID) {
 
-            _log('Creating user : ' + email + 'using reconById() strategy');
+            _logDebug('Creating user : ' + email + 'using reconById() strategy');
 
             let retryCounter = 10;
             triggerReconById(email, ewfParentUsernameForEmail);
@@ -710,10 +716,10 @@
 
           } else {
 
-            _log('Creating user : ' + email + 'using createUser() strategy');
+            _logDebug('Creating user : ' + email + 'using createUser() strategy');
 
             foundUser = createUser(email, null, linkTokenUuid, ewfParentUsernameForEmail);
-            _log('New User ID: ' + foundUser._id);
+            _logDebug('New User ID: ' + foundUser._id);
 
           }
 
@@ -749,30 +755,30 @@
       responseNextTimePoint = timePoint;
 
       let incorporationsResponse = getCompanyIncorporations(timePoint, itemsPerPage);
-      _log('Incorporations response : ' + incorporationsResponse);
+      _logDebug('Incorporations response : ' + incorporationsResponse);
 
       if (incorporationsResponse) {
         let incorporations = JSON.parse(incorporationsResponse);
 
         if (incorporations) {
           if (incorporations.links && incorporations.links.next) {
-            _log('Incorporations : Links > Next = ' + incorporations.links.next);
+            _logDebug('Incorporations : Links > Next = ' + incorporations.links.next);
             linksNextTimePoint = extractLinksNextTimePoint(incorporations.links.next, '');
           }
 
           if (incorporations.items) {
             for (let companyIncorpItem of incorporations.items) {
-              _log('Received Company : ' + companyIncorpItem.company_number);
+              _logDebug('Received Company : ' + companyIncorpItem.company_number);
 
               if (companyIncorpItem.transaction_type === 'incorporation' && companyIncorpItem.transaction_status === 'accepted') {
                 companyAttemptCount++;
-                _log('Processing Accepted Company : ' + companyIncorpItem.company_number + ' (item ' + companyAttemptCount + ')');
+                _logDebug('Processing Accepted Company : ' + companyIncorpItem.company_number + ' (item ' + companyAttemptCount + ')');
 
                 try {
                   let companyInfo = getCompany(companyIncorpItem.company_number);
 
                   if (!companyInfo) {
-                    _log('Company not found: ' + companyIncorpItem.company_number + ', creating.');
+                    _logDebug('Company not found: ' + companyIncorpItem.company_number + ', creating.');
 
                     createCompany(companyIncorpItem);
                     companyInfo = getCompany(companyIncorpItem.company_number);
@@ -798,20 +804,20 @@
                     }).join(',');
 
                     try {
-                      _log('Getting Company Emails for No : ' + companyIncorpItem.company_number);
+                      _logDebug('Getting Company Emails for No : ' + companyIncorpItem.company_number);
                       let emailsResponse = getCompanyEmails(companyIncorpItem.company_number);
-                      _log('Emails response : ' + JSON.stringify(emailsResponse));
+                      _logDebug('Emails response : ' + JSON.stringify(emailsResponse));
 
                       if (emailsResponse && emailsResponse.items) {
                         let emailsUnique = removeDuplicateEmails(emailsResponse.items);
 
-                        _log('Emails (unique) : ' + emailsUnique);
-                        _log('Company Members Already : ' + allMembersEmailsString);
+                        _logDebug('Emails (unique) : ' + emailsUnique);
+                        _logDebug('Company Members Already : ' + allMembersEmailsString);
 
                         emailsUnique.forEach(email => {
                           if (allMembersEmailsString.indexOf(email) > -1) {
                             let userObj = allMembers.find(element => (element.email === email));
-                            _log('The user with email : ' + email + ' is already a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: ' + userObj.status);
+                            _logDebug('The user with email : ' + email + ' is already a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: ' + userObj.status);
 
                             outputUsers.push({
                               message: 'The user with email : ' + email + ' is already a member of company ' + companyInfo.name + ' (' + companyInfo.number + ') - status: ' + userObj.status
@@ -821,7 +827,8 @@
                           }
                         });
                       } else {
-                        _log('No emails provided to associate with company : ' + companyIncorpItem.company_number);
+                        _log('No emails provided to associate with company');
+                        _logDebug('No emails provided to associate with company : ' + companyIncorpItem.company_number);
                       }
 
                     } catch (e) {

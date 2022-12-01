@@ -1,5 +1,5 @@
 var _scriptName = 'CH CAPTURE OTP RESPONSE';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var NodeOutcome = {
   CORRECT: 'correct',
@@ -49,20 +49,14 @@ try {
   if (mfaRoute === 'sms') {
     if (isUpdatePhoneNumber && newPhoneNumber) {
       phoneNumber = newPhoneNumber;
-      _log('phoneNumber : ' + newPhoneNumber + ' (new)');
     } else {
       if (idRepository.getAttribute(userId, 'telephoneNumber').iterator().hasNext()) {
         phoneNumber = idRepository.getAttribute(userId, 'telephoneNumber').iterator().next();
-        _log('phoneNumber : ' + phoneNumber);
       } else {
         _log('Couldn\'t find telephoneNumber from user record');
 
-        // Do we have it in shared state instead? For example, as part of onboarding so it's not
-        // actually persisted to the user yet?
-        _log('shared: ' + sharedState.get('objectAttributes'));
         if (sharedState.get('objectAttributes')) {
           phoneNumber = sharedState.get('objectAttributes').get('telephoneNumber');
-          _log('phoneNumber (sharedState): ' + phoneNumber);
         }
       }
     }
@@ -70,11 +64,9 @@ try {
     var isChangeEmail = sharedState.get('isChangeEmail');
     if (isChangeEmail) {
       emailAddress = sharedState.get('newEmail');
-      _log('emailAddress from change email journey: ' + emailAddress);
     } else {
       if (idRepository.getAttribute(userId, 'mail').iterator().hasNext()) {
         emailAddress = idRepository.getAttribute(userId, 'mail').iterator().next();
-        _log('emailAddress : ' + emailAddress);
       } else {
         _log('Couldn\'t find emailAddress from user record');
       }
@@ -172,22 +164,21 @@ if (callbacks.isEmpty()) {
   var otp = fr.String(callbacks.get(3).getPassword());
   var correctOtp = sharedState.get(config.otpSharedStateVariable);
 
-  // _log('Resend = ' + resend + ', correctOtp = ' + correctOtp);
-  _log('Resend = ' + resend);
+  _log('Resend = ' + resend, 'MESSAGE');
 
   if (resend === 'true') {
-    _log('Resend requested');
+    _log('Resend requested', 'MESSAGE');
     sharedState.put('otpResend', true);
     outcome = NodeOutcome.RESEND;
   } else if (!correctOtp) {
-    _log('No OTP in shared state');
+    _log('No OTP in shared state', 'MESSAGE');
     outcome = NodeOutcome.ERROR;
   } else if (!otp.equals(correctOtp)) {
     _log('Incorrect OTP');
     sharedState.put('otpError', true);
     outcome = NodeOutcome.INCORRECT;
   } else {
-    _log('Correct OTP');
+    _log('Correct OTP', 'MESSAGE');
     outcome = NodeOutcome.CORRECT;
   }
 

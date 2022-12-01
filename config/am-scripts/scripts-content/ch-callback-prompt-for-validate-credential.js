@@ -1,5 +1,5 @@
 var _scriptName = 'CH CALLBACK PROMPT FOR VALIDATE CREDENTIAL';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -11,7 +11,6 @@ if (callbacks.isEmpty()) {
     new fr.NameCallback('Enter Credential')
   ).build();
 } else {
-  // _log('Credential: ' + callbacks.get(0).getName());
   sharedState.put('credential', callbacks.get(0).getName());
   action = fr.Action.goTo('true').build();
 }

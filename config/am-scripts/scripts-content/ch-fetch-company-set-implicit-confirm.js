@@ -1,5 +1,5 @@
 var _scriptName = 'CH FETCH COMPANY SET IMPLICIT CONFIRM';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 sharedState.put('skipConfirmation', true);
 

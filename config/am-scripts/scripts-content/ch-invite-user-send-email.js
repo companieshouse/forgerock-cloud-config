@@ -1,5 +1,5 @@
 var _scriptName = 'COMPANY INVITE SEND EMAIL';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -64,7 +64,7 @@ function getKey (secret, keyType) {
 
 function buildJwt (claims, issuer, audience, jwtType) {
 
-  _log('Building response JWT');
+  _log('Building response JWT', 'MESSAGE');
 
   var signingKey = getKey(config.signingKey, KeyType.SIGNING);
   var signingHandler = new fr.SecretHmacSigningHandler(signingKey);
@@ -208,14 +208,14 @@ function buildReturnUrl (invitedEmail, companyNumber) {
 //sends the email (via Notify) to the recipient using the given JWT
 function sendEmail (invitedEmail, companyName, inviterName, returnUrl) {
 
-  _log('params: ' + invitedEmail + ' - ' + companyName + ' - ' + inviterName);
+  _log('params: ' + invitedEmail + ' - ' + companyName + ' - ' + inviterName, 'MESSAGE');
 
   var notifyJWT = transientState.get('notifyJWT');
   var templates = transientState.get('notifyTemplates');
 
-  _log('JWT from transient state: ' + notifyJWT);
-  _log('Templates from transient state: ' + templates);
-  _log('RETURN URL: ' + returnUrl);
+  _log('JWT from transient state: ' + notifyJWT, 'MESSAGE');
+  _log('Templates from transient state: ' + templates, 'MESSAGE');
+  _log('RETURN URL: ' + returnUrl, 'MESSAGE');
 
   request.setUri(_fromConfig('NOTIFY_EMAIL_ENDPOINT'));
   try {
@@ -245,7 +245,7 @@ function sendEmail (invitedEmail, companyName, inviterName, returnUrl) {
   var notificationId;
   var notifyErrorMessage;
   // _log('Notify Response: ' + response.getStatus().getCode() + ' - ' + response.getEntity().getString());
-  _log('Notify Response: ' + response.getStatus().getCode());
+  _log('Notify Response: ' + response.getStatus().getCode(), 'MESSAGE');
 
   try {
     notificationId = JSON.parse(response.getEntity().getString()).id;
@@ -259,7 +259,7 @@ function sendEmail (invitedEmail, companyName, inviterName, returnUrl) {
 
   if (response.getStatus().getCode() === 201) {
     transientState.put('notificationId', notificationId);
-    _log('Notify ID: ' + notificationId);
+    _log('Notify ID: ' + notificationId, 'MESSAGE');
   } else {
     if (JSON.parse(response.getEntity().getString()).errors.length > 0) {
       notifyErrorMessage = JSON.parse(response.getEntity().getString()).errors[0].message;
@@ -280,7 +280,7 @@ function lookupUser (email) {
 
     var accessToken = transientState.get('idmAccessToken');
     if (accessToken == null) {
-      _log('Access token not in transient state');
+      _log('Access token not in transient state', 'MESSAGE');
       return {
         success: false,
         message: 'Access token not in transient state'
@@ -298,13 +298,14 @@ function lookupUser (email) {
     if (response.getStatus().getCode() === 200) {
       var searchResponse = JSON.parse(response.getEntity().getString());
       if (searchResponse && searchResponse.result && searchResponse.result.length > 0) {
-        _log('user found: ' + searchResponse.result[0].toString());
+        _log('user found: ' + searchResponse.result[0].toString(), 'MESSAGE');
         return {
           success: true,
           user: searchResponse.result[0]
         };
       } else {
-        _log('user NOT found: ' + email);
+        _log('user NOT found');
+        _log('user NOT found: ' + email, 'MESSAGE');
         return {
           success: true,
           user: null
@@ -327,28 +328,28 @@ function lookupUser (email) {
 }
 
 function checkIfOnboarding () {
-  _log('Checking onboarding state for user');
+  _log('Checking onboarding state for user', 'MESSAGE');
 
   if (sharedState.get('isOnboarding')) {
-    _log('isOnboarding sharedState flag : true, returning as still onboarding');
+    _log('isOnboarding sharedState flag : true, returning as still onboarding', 'MESSAGE');
     return true;
   }
 
   if (inviteData && inviteData.invitedEmail) {
-    _log('inviteData.invitedEmail : ' + inviteData.invitedEmail);
+    _log('inviteData.invitedEmail : ' + inviteData.invitedEmail, 'MESSAGE');
 
     var userDetails = lookupUser(inviteData.invitedEmail);
 
     if (userDetails && userDetails.user && userDetails.user.frIndexedDate2) {
       var onboardDate = userDetails.user.frIndexedDate2;
-      _log('Users frIndexedDate2 is set as : ' + onboardDate + ', returning as still onboarding');
+      _log('Users frIndexedDate2 is set as : ' + onboardDate + ', returning as still onboarding', 'MESSAGE');
       return true;
     } else {
-      _log('Could not retrieve user details for : ' + inviteData.invitedEmail);
+      _log('Could not retrieve user details for : ' + inviteData.invitedEmail, 'MESSAGE');
     }
   }
 
-  _log('Determined user as not onboarding');
+  _log('Determined user as not onboarding', 'MESSAGE');
   return false;
 }
 

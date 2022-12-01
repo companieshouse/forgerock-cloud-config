@@ -4,13 +4,17 @@ function _log (message) {
   logger.error('[CHLOG][SCRS-WRAPPER][' + logNowMsecs + '] ' + message);
 }
 
+function _logDebug (message) {
+  logger.debug('[CHLOG][SCRS-WRAPPER][' + logNowMsecs + '] ' + message);
+}
+
 _log('SCRS Scheduled Starting!');
 
 const maxIterations = 5;
 const incorporationsPerPage = 50;
 
 for (let iteration = 1; iteration <= maxIterations; iteration++) {
-  _log('SCRS Iteration no. ' + iteration + ' starts (max iterations = ' + maxIterations + ')');
+  _logDebug('SCRS Iteration no. ' + iteration + ' starts (max iterations = ' + maxIterations + ')');
 
   let endpointResponse = openidm.action(
     'endpoint/scrs',
@@ -22,12 +26,12 @@ for (let iteration = 1; iteration <= maxIterations; iteration++) {
     null);
 
   if (endpointResponse && endpointResponse.results) {
-    _log('SCRS Iteration no. ' + iteration + ' => response :  ' + JSON.stringify(endpointResponse));
+    _logDebug('SCRS Iteration no. ' + iteration + ' => response :  ' + JSON.stringify(endpointResponse));
 
     const triedSomeCompanies = endpointResponse.results.companyAttemptCount > 0;
     const allCompaniesFailed = endpointResponse.results.companyFailureCount === endpointResponse.results.companyAttemptCount;
 
-    _log('SCRS Iteration no. ' + iteration + ' => response analysis : triedSomeCompanies = ' + triedSomeCompanies + ', allCompaniesFailed = ' + allCompaniesFailed);
+    _logDebug('SCRS Iteration no. ' + iteration + ' => response analysis : triedSomeCompanies = ' + triedSomeCompanies + ', allCompaniesFailed = ' + allCompaniesFailed);
 
     if (!triedSomeCompanies) {
       // No companies attempted, probably nothing to do

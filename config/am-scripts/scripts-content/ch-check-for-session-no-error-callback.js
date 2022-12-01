@@ -20,20 +20,19 @@ var NodeOutcome = {
 try {
   if (_isAuthenticated()) {
     outcome = NodeOutcome.HAS_SESSION;
-    // _log('Existing session: ' + existingSession.toString());
-    _log('Has existing session');
+    _log('Has existing session', 'MESSAGE');
   } else {
     outcome = NodeOutcome.NO_SESSION;
-    _log('No existing session');
+    _log('No existing session', 'MESSAGE');
   }
 
 
-  _log('[CHSLOG] requestParameters : ' + requestParameters); 
+  _log('[CHSLOG] requestParameters : ' + requestParameters, 'MESSAGE');
 
   var goto;
   var claims;
   var gotoParam = requestParameters.get("goto");
-  _log('[CHSLOG] gotoParam : ' + gotoParam); 
+  _log('[CHSLOG] gotoParam : ' + gotoParam, 'MESSAGE');
   if (gotoParam) {
     goto = String(gotoParam.get(0));
     var vars = goto.split("&");
@@ -42,15 +41,14 @@ try {
         if(pair[0] == "claims"){
           claims = decodeURIComponent(pair[1]);}
     }
-    
-    _log('[CHSLOG] CHS company number: ' + JSON.parse(claims).userinfo.company.value);
+
     nodeState.putShared("chsCompanyNumber", JSON.parse(claims).userinfo.company.value);
   }
 } catch (e) {
   _log('error: ' + e);
   sharedState.put('errorMessage', e.toString());
 }
-_log('[CHSLOG] userGotoParam : ' + sharedState.get('userGotoParam'));
+_log('[CHSLOG] userGotoParam : ' + sharedState.get('userGotoParam'), 'MESSAGE');
 
 _log('Outcome = ' + _getOutcomeForDisplay());
 

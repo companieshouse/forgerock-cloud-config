@@ -1730,6 +1730,22 @@
         "lastModifiedDate": 1630446313640
       },
       "filename": "ch-registration-confirm.js"
+    },
+    {
+      "payload": {
+        "_id": "c1ce3005-e136-4c75-8ba9-9d4929f15782",
+        "name": "CH - Display Consent Response Success URL",
+        "description": "Display Consent Response Success URL",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "id=ecde1f81-38e2-423f-8b5a-58ab59439724,ou=user,ou=am-config",
+        "lastModifiedDate": 1630446313640
+      },
+      "filename": "ch-consent-display-consent-response-success-url.js"
     }
   ]
 }

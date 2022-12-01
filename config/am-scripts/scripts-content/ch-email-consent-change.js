@@ -1,5 +1,5 @@
 var _scriptName = 'CH EMAIL CONSENT CHANGE';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 /* 
   ** INPUT DATA
@@ -73,13 +73,13 @@ function raiseError (message, token) {
 function updatePreferences (userId, field, value) {
   var accessToken = sharedState.get('idmAccessToken');
   if (accessToken == null) {
-    _log('Access token not in shared state');
+    _log('Access token not in shared state', 'MESSAGE');
     return {
       success: false,
       message: 'Access token not in transient state'
     };
   }
-  _log('Updating counter to ' + value);
+  _log('Updating counter to ' + value, 'MESSAGE');
 
   var request = new org.forgerock.http.protocol.Request();
   request.setMethod('PATCH');
@@ -98,7 +98,7 @@ function updatePreferences (userId, field, value) {
   var response = httpClient.send(request).get();
 
   if (response.getStatus().getCode() === 200) {
-    _log('Counter updated correctly');
+    _log('Counter updated correctly', 'MESSAGE');
     return true;
   } else {
     _log('Error while updating counter value: ' + response.getEntity().getString());
@@ -111,7 +111,7 @@ function lookupUser (userId) {
   try {
     var accessToken = transientState.get('idmAccessToken');
     if (accessToken == null) {
-      _log('Access token not in transient state');
+      _log('Access token not in transient state', 'MESSAGE');
       return {
         success: false,
         message: 'Access token not in transient state'
@@ -133,7 +133,7 @@ function lookupUser (userId) {
         user: JSON.parse(response.getEntity().getString())
       };
     } else {
-      _log('Error while looking up user ' + userId + ' : ' + response.getStatus().getCode());
+      _log('Error while looking up user ' + userId + ' : ' + response.getStatus().getCode(), 'MESSAGE');
       return {
         success: false,
         message: 'Error while GET user ' + userId + ' : ' + response.getStatus().getCode() + ' - request: ' + alphaUserUrl + userId + '_fields=preferences'

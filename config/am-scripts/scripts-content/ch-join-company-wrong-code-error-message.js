@@ -1,5 +1,5 @@
 var _scriptName = 'CH JOIN COMPANY WRONG CODE ERROR MESSAGE';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var companyData = sharedState.get('companyData');
 sharedState.put('errorMessage', 'The auth code you supplied is incorrect.');
@@ -15,7 +15,7 @@ sharedState.put('pagePropsJSON', JSON.stringify(
       name: JSON.parse(companyData).name
     }
   }));
-_log('The auth code you supplied is incorrect.');
+_log('The auth code you supplied is incorrect.', 'MESSAGE');
 outcome = 'true';
 
 _log('Outcome = ' + _getOutcomeForDisplay());

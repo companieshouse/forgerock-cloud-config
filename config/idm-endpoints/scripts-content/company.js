@@ -23,6 +23,10 @@
   function _log (message) {
     logger.error('[CHLOG][GETCOMPANY][' + new Date(logNowMsecs).toISOString() + '] ' + message);
   }
+
+  function _logDebug (message) {
+      logger.debug('[CHLOG][GETCOMPANY][' + new Date(logNowMsecs).toISOString() + '] ' + message);
+  }
   
   // Look up a user
   function getUserById (id) {
@@ -73,20 +77,20 @@
     });
       
     let searchTerm = companyNumbers.join(' or ');
-    _log('[SEARCH COMPANY IN CHS] search term: ' + searchTerm);
+    _logDebug('[SEARCH COMPANY IN CHS] search term: ' + searchTerm);
   
     try {
-      _log('Starting MongoDB getCompanies Query');
+      _logDebug('Starting MongoDB getCompanies Query');
 
       let chsResponse = openidm.query(
         SYSTEM_CHS_COMPANY,
         { '_queryFilter': searchTerm }
       );
 
-      _log('Finished MongoDB getCompanies Query');
+      _logDebug('Finished MongoDB getCompanies Query');
       
-      _log('[SEARCH COMPANY IN CHS] CHS companies response: '+ chsResponse);
-      _log('[SEARCH COMPANY IN CHS] No. of results of CHS query for companies: ' + chsResponse.resultCount);
+      _logDebug('[SEARCH COMPANY IN CHS] CHS companies response: '+ chsResponse);
+      _logDebug('[SEARCH COMPANY IN CHS] No. of results of CHS query for companies: ' + chsResponse.resultCount);
       //_log('Response from CHS : ' + JSON.stringify(chsResponse.result));
   
       companiesSourceData = chsResponse.result;
@@ -99,17 +103,17 @@
     }
     
     try {
-      _log('Starting WebFiling Query');
+      _logDebug('Starting WebFiling Query');
 
       let ewfResponse = openidm.query(
         SYSTEM_WEBFILING_AUTHCODE,
         { '_queryFilter': searchTerm }
       );
 
-      _log('Finished WebFiling Query');
+      _logDebug('Finished WebFiling Query');
       
-      _log('[SEARCH AUTH CODE IN EWF] EWF aut codes response: '+ ewfResponse);
-      _log('[SEARCH AUTH CODE IN EWF] No. of results of  EWF query for auth codes: ' + ewfResponse.resultCount);
+      _logDebug('[SEARCH AUTH CODE IN EWF] EWF aut codes response: '+ ewfResponse);
+      _logDebug('[SEARCH AUTH CODE IN EWF] No. of results of  EWF query for auth codes: ' + ewfResponse.resultCount);
       //_log('Response from EWF : ' + JSON.stringify(ewfResponse.result));
       authCodesSourceData = ewfResponse.result;
     } catch (e) {
@@ -174,64 +178,66 @@
           
         if(sourceAuthCode){
           if(sourceAuthCode.AUTHCODE !== company.authCode){
-            _log('[UPDATE COMPANY] Auth code AUTHCODE at source different from auth code in IDM for company ' + company.number);
+            _logDebug('[UPDATE COMPANY] Auth code AUTHCODE at source different from auth code in IDM for company ' + company.number);
             patchItems.push(createPatchItem('authCode', sourceAuthCode.AUTHCODE));
           }
           if(sourceAuthCode.STARTDTE !== company.authCodeValidFrom){
-            _log('[UPDATE COMPANY] Auth code STARTDTE at source different from auth code in IDM for company ' + company.number);
+            _logDebug('[UPDATE COMPANY] Auth code STARTDTE at source different from auth code in IDM for company ' + company.number);
             patchItems.push(createPatchItem('authCodeValidFrom', sourceAuthCode.STARTDTE));
           } 
           if(sourceAuthCode.EXPIRYDTE !== company.authCodeValidUntil){
-            _log('[UPDATE COMPANY] Auth code EXPIRYDTE at source different from auth code in IDM for company ' + company.number);
+            _logDebug('[UPDATE COMPANY] Auth code EXPIRYDTE at source different from auth code in IDM for company ' + company.number);
             patchItems.push(createPatchItem('authCodeValidUntil', sourceAuthCode.EXPIRYDTE));
           } 
         } else {
-          _log('Auth Code data not found at source (EWF AUTHCODE table) for company ' + company.number);
+          _logDebug('Auth Code data not found at source (EWF AUTHCODE table) for company ' + company.number);
+          _log('Auth Code data not found at source (EWF AUTHCODE table) for company');
         }
   
         if(sourceCompany && sourceCompany.data){
           if(sourceCompany.data.company_name !== company.name){
-            _log('[UPDATE COMPANY] Company name at source different from the one IDM for company ' + company.number);
+            _logDebug('[UPDATE COMPANY] Company name at source different from the one IDM for company ' + company.number);
             patchItems.push(createPatchItem('name', sourceCompany.data.company_name));
           }
           if(sourceCompany.data.type !== company.type){
-            _log('[UPDATE COMPANY] Company type at source different from the one in IDM for company ' + company.number);
+            _logDebug('[UPDATE COMPANY] Company type at source different from the one in IDM for company ' + company.number);
             patchItems.push(createPatchItem('type', sourceCompany.data.type));
           }
           if(sourceCompany.data.company_status !== company.status){
-            _log('[UPDATE COMPANY] Company status at source different from the one in IDM for company ' + company.number);
+            _logDebug('[UPDATE COMPANY] Company status at source different from the one in IDM for company ' + company.number);
             patchItems.push(createPatchItem('status', sourceCompany.data.company_status));
           }       
           if(sourceCompany.data.registered_office_address.locality !== company.locality){
-            _log('[UPDATE COMPANY] Company locality at source different from the one in IDM for company ' + company.number);
+            _logDebug('[UPDATE COMPANY] Company locality at source different from the one in IDM for company ' + company.number);
             patchItems.push(createPatchItem('locality', sourceCompany.data.registered_office_address.locality));
           }            
           if(sourceCompany.data.registered_office_address.postal_code !== company.postalCode){
-            _log('[UPDATE COMPANY] Company postal code at source different from the one in IDM for company ' + company.number);
+            _logDebug('[UPDATE COMPANY] Company postal code at source different from the one in IDM for company ' + company.number);
             patchItems.push(createPatchItem('postalCode', sourceCompany.data.registered_office_address.postal_code));
           }
           if(sourceCompany.data.registered_office_address.address_line_1 !== company.addressLine1){
-            _log('[UPDATE COMPANY] Company address line 1 at source different from the one in IDM for company ' + company.number);
+            _logDebug('[UPDATE COMPANY] Company address line 1 at source different from the one in IDM for company ' + company.number);
             patchItems.push(createPatchItem('addressLine1', sourceCompany.data.registered_office_address.address_line_1));
           }
           if(sourceCompany.data.registered_office_address.address_line_2 !== company.addressLine2){
-            _log('[UPDATE COMPANY] Company address line 2 at source different from the one in IDM for company ' + company.number);
+            _logDebug('[UPDATE COMPANY] Company address line 2 at source different from the one in IDM for company ' + company.number);
             patchItems.push(createPatchItem('addressLine2', sourceCompany.data.registered_office_address.address_line_2));
           }
           if(sourceCompany.data.registered_office_address.region !== company.region){
-            _log('[UPDATE COMPANY] Company region at source different from the one in IDM for company ' + company.number);
+            _logDebug('[UPDATE COMPANY] Company region at source different from the one in IDM for company ' + company.number);
             patchItems.push(createPatchItem('region', sourceCompany.data.registered_office_address.region));
           }
           if(sourceCompany.data.date_of_creation !== company.creationDate){
-            _log('[UPDATE COMPANY] Company creation date at source different from the one in IDM for company ' + company.number);
+            _logDebug('[UPDATE COMPANY] Company creation date at source different from the one in IDM for company ' + company.number);
             patchItems.push(createPatchItem('creationDate', sourceCompany.data.date_of_creation));
           }
           if(mapCHSCompanyJurisdiction(sourceCompany.data.jurisdiction) !== company.jurisdiction){
-            _log('[UPDATE COMPANY] Company jurisdiction at source different from the one in IDM for company ' + company.number);
+            _logDebug('[UPDATE COMPANY] Company jurisdiction at source different from the one in IDM for company ' + company.number);
             patchItems.push(createPatchItem('jurisdiction', mapCHSCompanyJurisdiction(sourceCompany.data.jurisdiction)));
           }
         } else {
-          _log('Company data not found at source (CHS MongoDB) for company ' + company.name);
+          _log('Company data not found at source (CHS MongoDB) for company');
+          _logDebug('Company data not found at source (CHS MongoDB) for company ' + company.name);
         }
           
         if(patchItems.length > 0){
@@ -356,7 +362,7 @@
     let fetchedCompanies = getCompanies(actor.memberOfOrg);
 
     //query 3/4: fetch source data set for associated companies (including auth codes) by company number
-    _log('[ON-DEMAND SYNC] User ' + actor.userName + ' is member of ' + fetchedCompanies.length + ' companies!');
+    _logDebug('[ON-DEMAND SYNC] User ' + actor.userName + ' is member of ' + fetchedCompanies.length + ' companies!');
     const chunkSize = 100;
     let pageCount = 0;
     const res = [];
@@ -365,12 +371,12 @@
         let chunk = fetchedCompanies.slice(i, i + chunkSize);
         
         let companiesInPage = chunk.map(c => {return c.number});
-        _log('[ON-DEMAND SYNC] processing page of results ' + pageCount++ + ' - ' + JSON.stringify(companiesInPage));
+        _logDebug('[ON-DEMAND SYNC] processing page of results ' + pageCount++ + ' - ' + JSON.stringify(companiesInPage));
         sourceData = getCompaniesDataFromSource(chunk);
         
         //UPDATES: UPDATE companies in IDM if source data info is found
         if(sourceData.success){
-          _log('[ON-DEMAND SYNC] Successfully looked up source company/auth code data from CHS/EWF');
+          _logDebug('[ON-DEMAND SYNC] Successfully looked up source company/auth code data from CHS/EWF');
           updateCompanyData(fetchedCompanies, sourceData);
         } else {
           _log('[ON-DEMAND SYNC] Error while looking up source company/auth code data from CHS/EWF - ' + sourceData.message);

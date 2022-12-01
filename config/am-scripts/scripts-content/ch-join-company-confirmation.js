@@ -1,5 +1,5 @@
 var _scriptName = 'CH JOIN COMPANY CONFIRMATION';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 /* 
   ** INPUT DATA
@@ -24,7 +24,7 @@ var NodeOutcome = {
 };
 
 var companyData = sharedState.get('companyData');
-// _log('company data: ' + companyData);
+
 var infoMessage = 'The company has been added to your account';
 
 if (callbacks.isEmpty()) {

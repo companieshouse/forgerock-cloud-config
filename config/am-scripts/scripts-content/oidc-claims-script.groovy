@@ -127,9 +127,8 @@ webFilingClaimResolver = { claim, identity ->
             'language': (sessionPresent ? session.getProperty('language') : null),
         ]
 
-        if (logger.warningEnabled()) {
-            logger.warning('[CHSLOG] OIDC Claims Script : webFilingData = ' + webFilingData)
-        }
+        logger.message('[CHSLOG] OIDC Claims Script : webFilingData = ' + webFilingData)
+
 
         webFilingData.put('auth_code', (sessionPresent ? session.getProperty('authCode') : null))
         webFilingData.put('password', (sessionPresent ? session.getProperty('password') : null))

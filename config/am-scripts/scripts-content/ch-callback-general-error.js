@@ -11,7 +11,7 @@
 */
 
 var _scriptName = 'CH CALLBACK GENERAL ERROR';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,

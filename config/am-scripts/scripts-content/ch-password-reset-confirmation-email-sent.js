@@ -1,5 +1,5 @@
 var _scriptName = 'CH PASSWORD RESET CONFIRMATION EMAIL SENT';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -27,7 +27,6 @@ if (!isEmailResend) {
   isEmailResend = false;
 }
 
-_log('email : ' + email);
 outcome = NodeOutcome.TRUE;
 
 if (callbacks.isEmpty()) {
@@ -55,21 +54,21 @@ if (callbacks.isEmpty()) {
     )
   ).build();
 } else {
-  _log('Checking response from user');
+  _log('Checking response from user', 'MESSAGE');
 
   var confirmIndex = callbacks.get(1).getSelectedIndex();
-  _log('Confirm resend choice: ' + confirmIndex);
+  _log('Confirm resend choice: ' + confirmIndex, 'MESSAGE');
 
   if (confirmIndex === ConfirmIndex.RESEND) {
 
-    _log('User chose to resend');
+    _log('User chose to resend', 'MESSAGE');
 
     sharedState.put('resendEmail', true);
     outcome = NodeOutcome.RESEND;
 
   } else if (confirmIndex === ConfirmIndex.CHANGE_EMAIL) {
 
-    _log('User chose to re-enter email address');
+    _log('User chose to re-enter email address', 'MESSAGE');
 
     sharedState.put('resendEmail', false);
     outcome = NodeOutcome.CHANGE_EMAIL;

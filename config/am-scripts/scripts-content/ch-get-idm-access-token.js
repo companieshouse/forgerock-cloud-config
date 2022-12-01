@@ -1,5 +1,5 @@
 var _scriptName = 'CH GET IDM ACCESS TOKEN';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var treeServiceUsername = _getVariable('esv.c5d3143c84.manualidmusername');
 var treeServiceUserPassword = _getSecret('esv.bdb15f6140.treeserviceuserpassword');
@@ -24,7 +24,7 @@ function fetchSecret () {
 }
 
 function logResponse (response) {
-  _log('HTTP Response: ' + response.getStatus() + ', Body: ' + response.getEntity().getString());
+  _log('HTTP Response: ' + response.getStatus() + ', Body: ' + response.getEntity().getString(), 'MESSAGE');
 }
 
 function getAccessToken () {
@@ -32,8 +32,8 @@ function getAccessToken () {
   if (!clientInfo) {
     return NodeOutcome.ERROR;
   }
-  //_log('Secret retrieved: ' + JSON.stringify(clientInfo));
-  _log('Getting IDM Access Token...');
+
+  _log('Getting IDM Access Token...', 'MESSAGE');
   var request = new org.forgerock.http.protocol.Request();
   request.setUri(tokenEndpoint);
   request.setMethod('POST');
@@ -46,21 +46,20 @@ function getAccessToken () {
     '&password=' + encodeURIComponent(clientInfo.servicePassword);
   request.setEntity(params);
   var response = httpClient.send(request).get();
-  //logResponse(response);
 
   var oauth2response = JSON.parse(response.getEntity().getString());
   if (!oauth2response) {
-    _log('Bad response');
+    _log('Bad response', 'MESSAGE');
     return NodeOutcome.ERROR;
   }
 
   var accessToken = oauth2response.access_token;
   if (!accessToken) {
-    _log('Couldn\'t get access token from response');
+    _log('Couldn\'t get access token from response', 'MESSAGE');
     return NodeOutcome.ERROR;
   }
 
-  _log('Access token acquired: ' + accessToken);
+  _log('Access token acquired', 'MESSAGE');
   transientState.put(ACCESS_TOKEN_STATE_FIELD, accessToken);
   return NodeOutcome.SUCCESS;
 }

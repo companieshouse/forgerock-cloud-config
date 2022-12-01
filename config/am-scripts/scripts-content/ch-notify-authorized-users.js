@@ -1,5 +1,5 @@
 var _scriptName = 'CH NOTIFY AUTHORIZED USERS';
-_log('Starting');
+_log('Starting', 'MESSAGE');
 
 var fr = JavaImporter(
   org.forgerock.openam.auth.node.api.Action,
@@ -26,7 +26,7 @@ function extractEventFromState () {
   try {
     var notificationDetails = JSON.parse(sharedState.get('companyNotification'));
 
-    _log('Notification data: ' + sharedState.get('companyNotification'));
+    _log('Notification data: ' + sharedState.get('companyNotification'), 'MESSAGE');
 
     if (!notificationDetails.action || !notificationDetails.companyNumber) {
       _log('Missing params to send email to authz users');
@@ -64,13 +64,13 @@ function extractEventFromState () {
 function getUserData (email, id) {
   try {
     var searchTerm = email ? ('/openidm/managed/alpha_user?_queryFilter=userName+eq+%22' + email + '%22') : '/openidm/managed/alpha_user?_queryFilter=_id+eq+%22' + id + '%22';
-    _log('User Search term: ' + searchTerm);
+    _log('User Search term: ' + searchTerm, 'MESSAGE');
     var idmUserEndpoint = FIDC_ENDPOINT.concat(searchTerm);
     var request = new org.forgerock.http.protocol.Request();
     var accessToken = transientState.get('idmAccessToken');
 
     if (accessToken == null) {
-      _log('Access token not in shared state');
+      _log('Access token not in shared state', 'MESSAGE');
       return {
         success: false,
         message: 'Access token not in shared state'
@@ -89,13 +89,14 @@ function getUserData (email, id) {
     if (response.getStatus().getCode() === 200) {
       var searchResponse = JSON.parse(response.getEntity().getString());
       if (searchResponse && searchResponse.result && searchResponse.result.length > 0) {
-        _log('[CHECK USER EXIST] User found: ' + searchResponse.result[0].toString());
+        _log('[CHECK USER EXIST] User found: ' + searchResponse.result[0].toString(), 'MESSAGE');
         return {
           success: true,
           user: searchResponse.result[0]
         };
       } else {
-        _log('User NOT found: ' + email);
+        _log('User NOT found');
+        _log('User NOT found: ' + email, 'MESSAGE');
         return {
           success: false,
           message: '[CHECK USER EXIST] user NOT found: ' + email
@@ -123,7 +124,7 @@ function getCompanyData (companyNo) {
     var request = new org.forgerock.http.protocol.Request();
     var accessToken = transientState.get('idmAccessToken');
     if (accessToken == null) {
-      _log('Access token not in shared state');
+      _log('Access token not in shared state', 'MESSAGE');
       return {
         success: false,
         message: '[INVITE USER - GET COMPANY DETAILS] Access token not in shared state'
@@ -137,7 +138,7 @@ function getCompanyData (companyNo) {
 
     request.setMethod('POST');
 
-    _log('Get company details for ' + companyNo);
+    _log('Get company details for ' + companyNo, 'MESSAGE');
 
     request.setUri(idmCompanyAuthEndpoint + '?_action=getCompanyByNumber');
     request.getHeaders().add('Authorization', 'Bearer ' + accessToken);
@@ -163,14 +164,16 @@ function getCompanyData (companyNo) {
         };
       }
     } else {
-      _log('Could not get company ' + companyNo + ' - Error ' + response.getEntity().getString());
+      _log('Could not get company - Error ' + response.getEntity().getString())
+      _log('Could not get company ' + companyNo + ' - Error ' + response.getEntity().getString(), 'MESSAGE');
       return {
         success: false,
         message: '[NOTIFY AUTHZ USER - GET COMPANY DETAILS] Could not get company ' + companyNo + ' - Error ' + response.getEntity().getString()
       };
     }
   } catch(e){
-    _log('Could not get company ' + companyNo + ' - Error ' + e);
+    _log('Could not get company - Error ' + e);
+    _log('Could not get company ' + companyNo + ' - Error ' + e, 'MESSAGE');
     return {
       success: false,
       message: '[NOTIFY AUTHZ USER - GET COMPANY DETAILS] Could not get company ' + companyNo + ' - Error ' + e
@@ -242,8 +245,8 @@ function sendEmail (action, recipient, companyName, actorName, subjectName) {
   var request = new org.forgerock.http.protocol.Request();
   var requestBodyJson;
 
-  _log('JWT from transient state: ' + notifyJWT);
-  _log('Templates from transient state: ' + templates);
+  _log('JWT from transient state: ' + notifyJWT, 'MESSAGE');
+  _log('Templates from transient state: ' + templates, 'MESSAGE');
 
   request.setUri(_fromConfig('NOTIFY_EMAIL_ENDPOINT'));
 
@@ -257,7 +260,7 @@ function sendEmail (action, recipient, companyName, actorName, subjectName) {
     };
   }
 
-  _log('NOTIFY REQUEST:' + JSON.stringify(requestBodyJson));
+  _log('NOTIFY REQUEST:' + JSON.stringify(requestBodyJson), 'MESSAGE');
 
   request.setMethod('POST');
   request.getHeaders().add('Content-Type', 'application/json');
@@ -266,7 +269,7 @@ function sendEmail (action, recipient, companyName, actorName, subjectName) {
 
   var response = httpClient.send(request).get();
   // _log('Notify Response: ' + response.getStatus().getCode() + ' - ' + response.getEntity().getString());
-  _log('Notify Response: ' + response.getStatus().getCode());
+  _log('Notify Response: ' + response.getStatus().getCode(), 'MESSAGE');
 
   return {
     success: (response.getStatus().getCode() === 201),
@@ -334,26 +337,29 @@ try {
 
       for (var index = 0; index < company.members.length; index++) {
         if (company.members[index].membershipStatus === 'confirmed' && isSendToMemberAllowed(company.members[index], notifyEventData)) {
-          _log('Sending email to  : ' + company.members[index].email + ' - ID: ' + company.members[index]._id);
+          _log('Sending email to  : ' + company.members[index].email + ' - ID: ' + company.members[index]._id, 'MESSAGE');
           var sendEmailResult = sendEmail(notifyEventData.action, company.members[index].email, company.name, actorName, subjectName);
           if (!sendEmailResult.success) {
-            _log('Error while sending email to : ' + company.members[index].email + ' - error: ' + sendEmailResult.message);
+            _log('Error while sending email - error: ' + sendEmailResult.message);
+            _log('Error while sending email to : ' + company.members[index].email + ' - error: ' + sendEmailResult.message, 'MESSAGE');
             failedEmails++;
           } else {
-            _log('Notification email successfully sent to : ' + company.members[index].email);
+            _log('Notification email successfully sent to : ' + company.members[index].email, 'MESSAGE');
             sentEmails++;
           }
         } else {
           if (!isSendToMemberAllowed(company.members[index], notifyEventData)) {
             skippedEmails++;
-            _log('The user ' + company.members[index].email + ' is excluded from receiving this company notification - notification email not sent');
+            _log('The user is excluded from receiving this company notification - notification email not sent');
+            _log('The user ' + company.members[index].email + ' is excluded from receiving this company notification - notification email not sent', 'MESSAGE');
           } else {
-            _log('The user ' + company.members[index].email + ' is not \'confirmed\' for company - notification email not sent');
+            _log('The user is not \'confirmed\' for company - notification email not sent');
+            _log('The user ' + company.members[index].email + ' is not \'confirmed\' for company - notification email not sent', 'MESSAGE');
           }
         }
       }
 
-      _log(sentEmails + ' authorised company members have been notified via email(s) successfully! Notifications failed: ' + failedEmails + ', skipped: ' + skippedEmails);
+      _log(sentEmails + ' authorised company members have been notified via email(s) successfully! Notifications failed: ' + failedEmails + ', skipped: ' + skippedEmails, 'MESSAGE');
     } else {
       _log('Error during company lookup');
     }
