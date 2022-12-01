@@ -136,7 +136,7 @@ def scopesToPermissions(incomingScopes, companyNumber, isInternalApp=false) {
         return permissionRecord
     }
 
-    //Find a nicer way of not processing these scopes
+    //TODO Find a nicer way of not processing these scopes
     scopes.removeElement("openid");
     scopes.removeElement("profile");
 
