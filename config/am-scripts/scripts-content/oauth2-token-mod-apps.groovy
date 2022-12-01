@@ -136,6 +136,10 @@ def scopesToPermissions(incomingScopes, companyNumber, isInternalApp=false) {
         return permissionRecord
     }
 
+    //Find a nicer way of not processing these scopes
+    scopes.removeElement("openid");
+    scopes.removeElement("profile");
+
     for (scope in scopes) {
         logger.error('[CHSLOG] Each scope = ' + scope)
         def map = scopeToPermissions(scope, permissionRecord, companyNumber, isInternalApp, legacyScopesAllowed)

@@ -55,9 +55,7 @@
 				"https://account.companieshouse.gov.uk/user/profile.read",
 				"https://identity.company-information.service.gov.uk/user/profile.read",
 				"https://api.companieshouse.gov.uk/company/registered-office-address.update",
-				"https://api.company-information.service.gov.uk/company/registered-office-address.update",
-				"https://api.companieshouse.gov.uk/company/admin.write-full",
-				"https://api.company-information.service.gov.uk/company/admin.write-full"
+				"https://api.company-information.service.gov.uk/company/registered-office-address.update"
 			]
 		},
 		"status": {

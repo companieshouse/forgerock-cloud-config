@@ -60,6 +60,8 @@
 				"https://api.company-information.service.gov.uk/company/registered-office-address.update",
 				"https://api.companieshouse.gov.uk/company/admin.write-full",
 				"https://api.company-information.service.gov.uk/company/admin.write-full",
+				"http://identity.company-information.service.gov.uk/user/profile.delete",
+				"http://identity.company-information.service.gov.uk/user/profile.update",
 				"http://api.companieshouse.gov.uk/company"
             ]
 		},
