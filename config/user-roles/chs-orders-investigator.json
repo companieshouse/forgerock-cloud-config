@@ -1,0 +1,9 @@
+{
+    "_id": "chs-orders-investigator",
+    "name": "CHS Orders Investigator",
+    "permissions": [
+        "/admin/chs-order-investigation"
+    ],
+    "description": "CHS Orders Investigator",
+    "realm": "alpha"
+}

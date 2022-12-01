@@ -4,6 +4,6 @@
     "permissions": [
         "/admin/images"
     ],
-    "description": "view images of document filings",
+    "description": "View images of document filings",
     "realm": "alpha"
 }

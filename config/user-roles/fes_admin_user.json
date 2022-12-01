@@ -1,0 +1,9 @@
+{
+    "_id": "fes_admin_user",
+    "name": "FES Admin User",
+    "permissions": [
+        "/admin/transaction-search"
+    ],
+    "description": "FES Admin User",
+    "realm": "alpha"
+}
