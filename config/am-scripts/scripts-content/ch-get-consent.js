@@ -71,7 +71,8 @@ function getConsentCallbacks() {
     }
 
     var confirmOptions = ["Yes","No"]
-    var pagePropsJSON = {"claims":claimsObj, "scopes":scopesObj }
+    var company = claims.get("id_token").get("company").get("value")+"";
+    var pagePropsJSON = {"company":company, "scopes":scopesObj }
     consentCallbacks.push(new fr.HiddenValueCallback('pagePropsJSON', JSON.stringify(pagePropsJSON) ));
     consentCallbacks.push(new fr.HiddenValueCallback('stage', 'GET_CONSENT'));
     consentCallbacks.push(new fr.ConfirmationCallback(fr.ConfirmationCallback.INFORMATION, confirmOptions, 1));
