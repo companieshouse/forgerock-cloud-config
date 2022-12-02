@@ -38,9 +38,11 @@ function getConsentCallbacks() {
     ]
 
     var scopes = consentRequest.get("scopes")
+    var scopesObj = {};
     _log("[GET CONSENT] Got scopes " + scopes, 'MESSAGE')
     scopes.keySet().toArray().forEach(function (key) {
         var value = scopes.get(key)
+        scopesObj[key]=value+"";
         _log("[GET CONSENT] scope " + key + ": " + value, 'MESSAGE')
         if (value == null) {
             value = key
@@ -52,7 +54,7 @@ function getConsentCallbacks() {
 
     var claimsObj = {};
     claims.keySet().toArray().forEach(function (key) {
-        var value = scopes.get(key)
+        var value = claims.get(key)
         claimsObj[key]=value+"";
     })
 
@@ -67,9 +69,10 @@ function getConsentCallbacks() {
             consentCallbacks.push(new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION,("- ").concat(key).concat(": ").concat(value.get("value"))))
         })
     }
-  
+
     var confirmOptions = ["Yes","No"]
-    consentCallbacks.push(new fr.HiddenValueCallback('pagePropsJSON', JSON.stringify(claimsObj) ));
+    var pagePropsJSON = {"claims":claimsObj, "scopes":scopesObj }
+    consentCallbacks.push(new fr.HiddenValueCallback('pagePropsJSON', JSON.stringify(pagePropsJSON) ));
     consentCallbacks.push(new fr.HiddenValueCallback('stage', 'GET_CONSENT'));
     consentCallbacks.push(new fr.ConfirmationCallback(fr.ConfirmationCallback.INFORMATION, confirmOptions, 1));
 
