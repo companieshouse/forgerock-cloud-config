@@ -38,11 +38,11 @@ function getConsentCallbacks() {
     ]
 
     var scopes = consentRequest.get("scopes")
-    var scopesObj = {};
+    var scopesObj = [];
     _log("[GET CONSENT] Got scopes " + scopes, 'MESSAGE')
     scopes.keySet().toArray().forEach(function (key) {
         var value = scopes.get(key)
-        scopesObj[key]=value+"";
+        scopesObj.push(key+"");
         _log("[GET CONSENT] scope " + key + ": " + value, 'MESSAGE')
         if (value == null) {
             value = key
