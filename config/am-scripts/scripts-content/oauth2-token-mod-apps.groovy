@@ -79,8 +79,10 @@ if (claims == null) {
 /**
  * Add roles for user to token
  */
-//Enabled when needed
-//accessToken.setField("roles", identity.getAttributes(["fr-idm-effectiveRole"]))
+if (identity.hasProperty("fr-idm-effectiveRole")) {
+//    accessToken.setField("roles", identity.getAttributes(["fr-idm-effectiveRole"]).toSet())
+    accessToken.setField("roles", identity)
+}
 
 /**
  * Check if user is associated with the company number passed in.
