@@ -33,9 +33,7 @@ function getConsentCallbacks() {
 
     var clientName = consentRequest.get("client_name")
     var infoMessage = "Allow ".concat(clientName).concat(" to do the following:")
-    var consentCallbacks = [
-        new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION,infoMessage)
-    ]
+    var consentCallbacks = []
 
     var scopes = consentRequest.get("scopes")
     var scopesObj = [];
@@ -47,7 +45,6 @@ function getConsentCallbacks() {
         if (value == null) {
             value = key
         }
-        consentCallbacks.push(new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION,("- ").concat(value)))
     })
   
     var claims = consentRequest.get("claims")
@@ -61,12 +58,10 @@ function getConsentCallbacks() {
     _log("[GET CONSENT] Got claims " + claims, 'MESSAGE')
 
     if (claims != null && claims.get("userinfo") != null) {
-        consentCallbacks.push(new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION,"Info"))
         var userinfo = claims.get("userinfo")
         userinfo.keySet().toArray().forEach(function (key) {
             var value = userinfo.get(key)
             _log("[GET CONSENT] userinfo " + key + ": " + value)
-            consentCallbacks.push(new fr.TextOutputCallback(fr.TextOutputCallback.INFORMATION,("- ").concat(key).concat(": ").concat(value.get("value"))))
         })
     }
 
