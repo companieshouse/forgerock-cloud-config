@@ -79,10 +79,13 @@ if (claims == null) {
 /**
  * Add roles for user to token
  */
-if (identity.hasProperty("fr-idm-effectiveRole")) {
-//    accessToken.setField("roles", identity.getAttributes(["fr-idm-effectiveRole"]).toSet())
-    accessToken.setField("roles", identity)
+def attributes = identity.getAttributes(["fr-idm-effectiveRole"].toSet())
+def rolesObject = new JsonSlurper().parseText(attributes["fr-idm-effectiveRole"].toString())
+def roles = []
+rolesObject.each { item ->
+    roles.add(item._refResourceId)
 }
+accessToken.setField("roles", roles)
 
 /**
  * Check if user is associated with the company number passed in.
