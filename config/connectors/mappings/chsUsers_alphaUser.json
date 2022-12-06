@@ -1,6 +1,6 @@
 {
   "target": "managed/alpha_user",
-  "enabled": false,
+  "enabled": true,
   "source": "system/CHSUser/users",
   "name": "chsUsers_alphaUser",
   "consentRequired": false,
