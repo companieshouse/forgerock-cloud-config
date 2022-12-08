@@ -1,7 +1,8 @@
   (function () {
 
 
-    const apiUserPass = identityServer.getProperty('esv.api.userpass');
+    const apiPass = identityServer.getProperty('esv.am.api.pass');
+    const apiUser = identityServer.getProperty('esv.am.api.user');
 
     let auth1 = {
       'url': 'https://openam-companieshouse-uk-dev.id.forgerock.io/am/json/realms/root/authenticate',
@@ -27,7 +28,7 @@
         input: [
           {
             name: 'IDToken1',
-            value: '<username>'
+            value: apiUser
           }
         ],
         _id: 0
@@ -43,7 +44,7 @@
         input: [
           {
             name: 'IDToken2',
-            value: apiUserPass
+            value: apiPass
           }
         ],
         _id: 1
