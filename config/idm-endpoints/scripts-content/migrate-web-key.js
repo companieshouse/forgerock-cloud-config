@@ -1,7 +1,7 @@
   (function () {
 
 
-    const tadmin = identityServer.getProperty('esv.poc1.tadmin');
+    const apiUserPass = identityServer.getProperty('esv.api.userpass');
 
     let auth1 = {
       'url': 'https://openam-companieshouse-uk-dev.id.forgerock.io/am/json/realms/root/authenticate',
@@ -43,7 +43,7 @@
         input: [
           {
             name: 'IDToken2',
-            value: tadmin
+            value: apiUserPass
           }
         ],
         _id: 1
