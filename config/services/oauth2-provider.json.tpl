@@ -87,7 +87,6 @@
     "includeAllKtyAlgCombinationsInJwksUri": false,
     "amrMappings": {},
     "loaMapping": {
-      "chs": "CHLogin",
       "webfiling": "CHWebFiling-Login",
       "webfilingcomp": "CHWebFiling"
     },

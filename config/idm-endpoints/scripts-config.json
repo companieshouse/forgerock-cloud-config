@@ -11,10 +11,6 @@
     {
       "endpointName": "scrs",
       "scriptFileName": "scrs.js"
-    },
-    {
-      "endpointName": "migrate-web-key",
-      "scriptFileName": "migrate-web-key.js"
     }
   ],
   "tasks": [
