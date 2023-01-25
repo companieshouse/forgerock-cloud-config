@@ -222,7 +222,7 @@ function _isValidInternationalPhoneNumber(number) {
 //number parameter needs to be digits only with no whitespaces
 function _hasInternationalPrefix(number){
 
-for(var code of callingCodes){
+for (code in callingCodes){
    if(number.startsWith(code)){
       return true;
    }
