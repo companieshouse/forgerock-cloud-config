@@ -14,6 +14,10 @@
     "type": "text/javascript",
     "source": "// change via external file"
   },
+  "syncFailureHandler": {
+    "maxRetries": 5,
+    "postRetryAction": "logged-ignore"
+  },
   "properties": [
     {
       "target": "PARENT_USERNAME",
