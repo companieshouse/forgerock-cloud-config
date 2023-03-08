@@ -10,10 +10,10 @@
 	},
 	"poolConfigOption": {
 		"maxObjects": 2,
-		"maxIdle": 2,
+		"maxIdle": 100,
 		"maxWait": 150000,
 		"minEvictableIdleTimeMillis": 120000,
-		"minIdle": 2
+		"minIdle": 10 
 	},
 	"resultsHandlerConfig": {
 		"enableNormalizingResultsHandler": false,
@@ -69,7 +69,7 @@
 		"defaultAutoCommit": null,
 		"testOnConnect": false,
 		"jdbcInterceptors": null,
-		"initialSize": "2",
+		"initialSize": "10",
 		"defaultTransactionIsolation": -1,
 		"numTestsPerEvictionRun": 0,
 		"url": "jdbc:oracle:thin:@//ewfdb.development.heritage.aws.internal:1521/EWF",
@@ -81,7 +81,7 @@
 		"timeBetweenEvictionRunsMillis": "5000",
 		"testOnReturn": false,
 		"useLock": false,
-		"maxActive": "2",
+		"maxActive": "100",
 		"username": "KERMITEWF",
 		"password": {
 			"$crypto": {
