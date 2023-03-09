@@ -10,10 +10,10 @@
 	},
 	"poolConfigOption": {
 		"maxObjects": 2,
-		"maxIdle": 100,
+		"maxIdle": 2,
 		"maxWait": 150000,
 		"minEvictableIdleTimeMillis": 120000,
-		"minIdle": 10 
+		"minIdle": 2
 	},
 	"resultsHandlerConfig": {
 		"enableNormalizingResultsHandler": false,
