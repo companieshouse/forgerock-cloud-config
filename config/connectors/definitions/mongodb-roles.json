@@ -1,117 +1,117 @@
 {
-  "_id": "provisioner.openicf/CHSRoles",
-  "configurationProperties": {
-    "ICFName": "name",
-    "arrayAttributes": [],
-    "authenticateScriptFileName": null,
-    "classpath": [],
-    "clusterAddresses": null,
-    "connectionURI": "&{esv.1ad9ee29ae.configurationpropertiesconnectionuri}",
-    "createScriptFileName": "CreateMongoDB.groovy",
-    "customConfiguration": null,
-    "customSensitiveConfiguration": null,
-    "customizerScriptFileName": null,
-    "database": "account",
-    "dateAttributes": [],
-    "dateFormat": "yyyy-MM-dd'T'HH:mm:ss'Z'",
-    "debug": "false",
-    "deleteScriptFileName": "DeleteMongoDB.groovy",
-    "disabledGlobalASTTransformations": null,
-    "host": "&{esv.1ad9ee29ae.configurationpropertieshost}",
-    "includeEmptyList": "false",
-    "includeNullValue": "false",
-    "maxConnectionIdleTime": "0",
-    "maxConnectionLifeTime": "0",
-    "maxConnectionsPerHost": "5",
-    "minConnectionsPerHost": "0",
-    "minimumRecompilationInterval": "100",
-    "password": null,
-    "port": "27017",
-    "recompileGroovySource": "false",
-    "resolveUsernameScriptFileName": null,
-    "schemaScriptFileName": "SchemaMongoDB.groovy",
-    "scriptBaseClass": null,
-    "scriptExtensions": "groovy",
-    "scriptOnResourceScriptFileName": null,
-    "scriptRoots": [
-      "jar:file:connectors/mongodb-connector-1.5.20.0.jar!/scripts/mongodb/"
-    ],
-    "searchScriptFileName": "SearchMongoDB.groovy",
-    "sourceEncoding": "UTF-8",
-    "sslEnabled": "true",
-    "sslHostNameValidation": "true",
-    "syncScriptFileName": null,
-    "targetDirectory": null,
-    "testScriptFileName": "TestMongoDB.groovy",
-    "timeZone": "UTC",
-    "tolerance": "10",
-    "updateScriptFileName": "UpdateMongoDB.groovy",
-    "user": null,
-    "userDatabase": null,
-    "verbose": false,
-    "warningLevel": "1"
-  },
-  "connectorRef": {
-    "bundleName": "org.forgerock.openicf.connectors.mongodb-connector",
-    "bundleVersion": "1.5.20.0",
-    "connectorHostRef": "chs-group",
-    "connectorName": "org.forgerock.openicf.connectors.mongodb.MongoDBConnector",
-    "displayName": "MongoDB Connector",
-    "systemType": "provisioner.openicf"
-  },
-  "enabled": true,
-  "objectTypes": {
-    "roles": {
-      "$schema": "http://json-schema.org/draft-03/schema",
-      "id": "roles",
-      "nativeType": "roles",
-      "properties": {
-        "_id": {
-          "nativeName": "_id",
-          "nativeType": "string",
-          "required": true,
-          "type": "string"
-        },
-        "permissions": {
-          "items": {
-            "nativeType": "string",
-            "type": "string"
-          },
-          "nativeName": "permissions",
-          "nativeType": "string",
-          "required": false,
-          "type": "array"
-        }
-      },
-      "type": "object"
-    }
-  },
-  "operationTimeout": {
-    "AUTHENTICATE": -1,
-    "CREATE": -1,
-    "DELETE": -1,
-    "GET": -1,
-    "RESOLVEUSERNAME": -1,
-    "SCHEMA": -1,
-    "SCRIPT_ON_CONNECTOR": -1,
-    "SCRIPT_ON_RESOURCE": -1,
-    "SEARCH": -1,
-    "SYNC": -1,
-    "TEST": -1,
-    "UPDATE": -1,
-    "VALIDATE": -1
-  },
-  "poolConfigOption": {
-    "maxIdle": 10,
-    "maxObjects": 10,
-    "maxWait": 150000,
-    "minEvictableIdleTimeMillis": 120000,
-    "minIdle": 1
-  },
-  "resultsHandlerConfig": {
-    "enableAttributesToGetSearchResultsHandler": true,
-    "enableCaseInsensitiveFilter": false,
-    "enableFilteredResultsHandler": false,
-    "enableNormalizingResultsHandler": false
-  }
+	"_id": "provisioner.openicf/CHSRoles",
+	"connectorRef": {
+		"connectorHostRef": "chs-group",
+		"displayName": "MongoDB Connector",
+		"bundleVersion": "1.5.20.0",
+		"systemType": "provisioner.openicf",
+		"bundleName": "org.forgerock.openicf.connectors.mongodb-connector",
+		"connectorName": "org.forgerock.openicf.connectors.mongodb.MongoDBConnector"
+	},
+	"poolConfigOption": {
+		"maxObjects": 10,
+		"maxIdle": 10,
+		"maxWait": 150000,
+		"minEvictableIdleTimeMillis": 120000,
+		"minIdle": 1
+	},
+	"resultsHandlerConfig": {
+		"enableNormalizingResultsHandler": false,
+		"enableFilteredResultsHandler": false,
+		"enableCaseInsensitiveFilter": false,
+		"enableAttributesToGetSearchResultsHandler": true
+	},
+	"operationTimeout": {
+		"CREATE": -1,
+		"UPDATE": -1,
+		"DELETE": -1,
+		"TEST": -1,
+		"SCRIPT_ON_CONNECTOR": -1,
+		"SCRIPT_ON_RESOURCE": -1,
+		"GET": -1,
+		"RESOLVEUSERNAME": -1,
+		"AUTHENTICATE": -1,
+		"SEARCH": -1,
+		"VALIDATE": -1,
+		"SYNC": -1,
+		"SCHEMA": -1
+	},
+	"configurationProperties": {
+		"customSensitiveConfiguration": null,
+		"createScriptFileName": "CreateMongoDB.groovy",
+		"targetDirectory": null,
+		"customizerScriptFileName": null,
+		"warningLevel": "1",
+		"authenticateScriptFileName": null,
+		"scriptExtensions": "groovy",
+		"scriptOnResourceScriptFileName": null,
+		"minimumRecompilationInterval": "100",
+		"deleteScriptFileName": "DeleteMongoDB.groovy",
+		"scriptBaseClass": null,
+		"scriptRoots": [
+			"jar:file:connectors/mongodb-connector-1.5.20.0.jar!/scripts/mongodb/"
+		],
+		"customConfiguration": null,
+		"resolveUsernameScriptFileName": null,
+		"searchScriptFileName": "SearchMongoDB.groovy",
+		"tolerance": "10",
+		"updateScriptFileName": "UpdateMongoDB.groovy",
+		"debug": "false",
+		"classpath": [],
+		"disabledGlobalASTTransformations": null,
+		"schemaScriptFileName": "SchemaMongoDB.groovy",
+		"verbose": false,
+		"testScriptFileName": "TestMongoDB.groovy",
+		"sourceEncoding": "UTF-8",
+		"syncScriptFileName": null,
+		"recompileGroovySource": "false",
+		"connectionURI": "&{esv.1ad9ee29ae.configurationpropertiesconnectionuri}",
+		"host": "&{esv.1ad9ee29ae.configurationpropertieshost}",
+		"port": "27017",
+		"user": null,
+		"password": null,
+		"userDatabase": null,
+		"clusterAddresses": null,
+		"dateAttributes": [],
+		"database": "account",
+		"arrayAttributes": [],
+		"includeNullValue": "false",
+		"includeEmptyList": "false",
+		"dateFormat": "yyyy-MM-dd'T'HH:mm:ss'Z'",
+		"timeZone": "UTC",
+		"ICFName": "name",
+		"sslEnabled": "true",
+		"sslHostNameValidation": "true",
+		"maxConnectionIdleTime": "0",
+		"maxConnectionLifeTime": "0",
+		"minConnectionsPerHost": "0",
+		"maxConnectionsPerHost": "5"
+	},
+	"enabled": true,
+	"objectTypes": {
+		"roles": {
+			"$schema": "http://json-schema.org/draft-03/schema",
+			"type": "object",
+			"id": "roles",
+			"nativeType": "roles",
+			"properties": {
+				"_id": {
+					"type": "string",
+					"nativeName": "_id",
+					"nativeType": "string",
+					"required": true
+				},
+				"permissions": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"nativeType": "string"
+					},
+					"nativeName": "permissions",
+					"nativeType": "string",
+					"required": false
+				}
+			}
+		}
+	}
 }
