@@ -26,13 +26,9 @@
             "*"
         ],
         "enabled": true,
-        "acceptedOrigins": [
-            "https://sdkapp.example.com:8443",
-            "http://localhost:3000",
-            "https://idam-ui.amido.aws.chdev.org",
-            "https://ui-amido-demo.forgeblocks.com",
-            "https://example.com"
-        ],
+        "acceptedOrigins": {
+            "$list": "&{esv.93fcfd459d.dataacceptedorigins}",
+        }
         "allowCredentials": true,
         "exposedHeaders": [
             "*"
