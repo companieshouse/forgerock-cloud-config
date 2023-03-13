@@ -27,7 +27,7 @@
         ],
         "enabled": true,
         "acceptedOrigins": {
-            "$list": "&{esv.93fcfd459d.dataacceptedorigins}",
+            "$list": "&{esv.93fcfd459d.dataacceptedorigins}"
         }
         "allowCredentials": true,
         "exposedHeaders": [
