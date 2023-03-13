@@ -69,10 +69,10 @@
 		"defaultAutoCommit": null,
 		"testOnConnect": false,
 		"jdbcInterceptors": null,
-		"initialSize": "&{esv.2099bcaeaf.configurationpropertiesinitialsize}",
+		"initialSize": "10",
 		"defaultTransactionIsolation": -1,
 		"numTestsPerEvictionRun": 0,
-		"url": "jdbc:oracle:thin:@//ewfdb.development.heritage.aws.internal:1521/EWF",
+		"url": "&{esv.2099bcaeaf.configurationpropertiesurl}",
 		"testOnBorrow": false,
 		"fairQueue": true,
 		"accessToUnderlyingConnectionAllowed": true,
@@ -81,23 +81,9 @@
 		"timeBetweenEvictionRunsMillis": "5000",
 		"testOnReturn": false,
 		"useLock": false,
-		"maxActive": "&{esv.2099bcaeaf.configurationpropertiesmaxactive}",
-		"username": "KERMITEWF",
-		"password": {
-			"$crypto": {
-				"type": "x-simple-encryption",
-				"value": {
-					"cipher": "AES/CBC/PKCS5Padding",
-					"stableId": "openidm-sym-default",
-					"salt": "YtmBlhCW8cq/TgvB3DKIPA==",
-					"data": "CcTtGPrE+m1M2ihvaOijmg==",
-					"keySize": 16,
-					"purpose": "idm.config.encryption",
-					"iv": "smh+VcNKGpc7Ri5XPLd29Q==",
-					"mac": "79+upJDAsNEY/fAQ3SWaDg=="
-				}
-			}
-		},
+		"maxActive": "100",
+		"username": "&{esv.2099bcaeaf.configurationpropertiesusername}",
+		"password": "&{esv.2099bcaeaf.configurationpropertiespassword}",
 		"quoting": "NONE",
 		"table": "CUSTOMER_VIEW",
 		"keyColumn": "PARENT_USERNAME",
