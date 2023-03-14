@@ -160,6 +160,11 @@
     "valueBase64": "%ESV_B4EC3CE32C_DATAADVANCEDOAUTH2CONFIGCUSTOMLOGINURLTEMPLATE%"
   },
   {
+    "_id": "esv-b4ec3ce32c-dataadvancedoauth2confighashsalt",
+    "description": "Configuration parameter /data/advancedOAuth2Config/hashSalt in file am/services/realm/root-alpha/oauth2provider/1.0/organizationconfig/default.json",
+    "valueBase64": "%ESV_B4EC3CE32C_DATAADVANCEDOAUTH2CONFIGHASHSALT%"
+  },
+  {
     "_id": "esv-1ad9ee29ae-configurationpropertieshost",
     "description": "Configuration parameter /configurationProperties/host in file idm/conf/provisioner.openicf-CHSRoles.json",
     "valueBase64": "%ESV_1AD9EE29AE_CONFIGURATIONPROPERTIESHOST%"

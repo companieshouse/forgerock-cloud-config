@@ -151,7 +151,7 @@
       "pairwise"
     ],
     "tlsClientCertificateHeaderFormat": "URLENCODED_PEM",
-    "hashSalt": "n0FLWZh88zPTlWf2c3OEBlBd5r4=",
+    "hashSalt": "&{esv.b4ec3ce32c.dataadvancedoauth2confighashsalt}",
     "macaroonTokenFormat": "V2",
     "tlsCertificateRevocationCheckingEnabled": false,
     "responseTypeClasses": [
