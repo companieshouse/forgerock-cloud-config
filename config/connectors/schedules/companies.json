@@ -1,20 +1,22 @@
 {
-  "_id": "CHS Companies to alpha_organization",
-  "enabled": {"$bool": "&{esv.b1ea4bdc4a.reconscheduleucompaniesenabled}"},
-	"persisted": true,
-	"recoverable": false,
-	"misfirePolicy": "fireAndProceed",
-	"schedule": "&{esv.c827402089.reconscheduleucompaniescronexp}",
-	"repeatInterval": 0,
-	"repeatCount": 0,
-	"type": "cron",
-	"invokeService": "sync",
-	"invokeContext": {
-		"action": "reconcile",
-		"mapping": "chsMongoCompanyProfile_alphaOrg"
-	},
-	"invokeLogLevel": "info",
-	"startTime": null,
-	"endTime": null,
-	"concurrentExecution": false
+    "_id": "CHS Companies to alpha_organization",
+    "enabled": {
+        "$bool": "&{esv.b1ea4bdc4a.reconscheduleucompaniesenabled}"
+    },
+    "persisted": true,
+    "recoverable": false,
+    "misfirePolicy": "fireAndProceed",
+    "schedule": "&{esv.c827402089.reconscheduleucompaniescronexp}",
+    "repeatInterval": 0,
+    "repeatCount": 0,
+    "type": "cron",
+    "invokeService": "sync",
+    "invokeContext": {
+        "action": "reconcile",
+        "mapping": "chsMongoCompanyProfile_alphaOrg"
+    },
+    "invokeLogLevel": "info",
+    "startTime": null,
+    "endTime": null,
+    "concurrentExecution": false
 }
