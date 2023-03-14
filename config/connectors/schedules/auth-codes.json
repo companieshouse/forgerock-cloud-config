@@ -1,12 +1,10 @@
 {
     "_id": "EWF Auth Codes to alpha_organization",
-    "enabled": {
-        "$bool": "&{esv.2bb35d546a.reconscheduleauthcodesenabled}"
-    },
+    "enabled": true,
     "persisted": true,
     "recoverable": false,
     "misfirePolicy": "fireAndProceed",
-    "schedule": "&{esv.9db15a3625.reconscheduleauthcodescronexp}",
+    "schedule": "0 0 22 1/1 * ? *",
     "repeatInterval": 0,
     "repeatCount": 0,
     "type": "cron",

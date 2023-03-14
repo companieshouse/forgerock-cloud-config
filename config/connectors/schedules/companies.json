@@ -1,12 +1,10 @@
 {
     "_id": "CHS Companies to alpha_organization",
-    "enabled": {
-        "$bool": "&{esv.b1ea4bdc4a.reconscheduleucompaniesenabled}"
-    },
+    "enabled": true,
     "persisted": true,
     "recoverable": false,
     "misfirePolicy": "fireAndProceed",
-    "schedule": "&{esv.c827402089.reconscheduleucompaniescronexp}",
+    "schedule": "0 0 4 1/1 * ? *",
     "repeatInterval": 0,
     "repeatCount": 0,
     "type": "cron",
