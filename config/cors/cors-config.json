@@ -47,7 +47,7 @@
         "requestAttributes": {},
         "scriptExtensions": {},
         "initParams": {
-            "allowedOrigins": {"$list": "&{esv.ba5058c071.initparamsallowedorigins}"},
+            "allowedOrigins": "https://idam-ui.amido.aws.chdev.org",
             "allowedMethods": "GET,POST,PUT,DELETE,PATCH,HEAD,OPTIONS",
             "allowedHeaders": "authorization,content-type,accept-api-version,*",
             "allowCredentials": true,
