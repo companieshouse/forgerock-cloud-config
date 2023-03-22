@@ -10,9 +10,34 @@
     "valueBase64": "%ESV_1A23622894_CONFIGURATIONPROPERTIESCONNECTIONURI%"
   },
   {
+    "_id": "esv-778b694e17-configurationpropertiesinitialsize",
+    "description": "Configuration parameter /configurationProperties/initialSize in file idm/conf/provisioner.openicf-CHSUser.json",
+    "valueBase64": "%ESV_778B694E17_CONFIGURATIONPROPERTIESINITIALSIZE%"
+  },
+  {
+    "_id": "esv-778b694e17-configurationpropertiesmaxactive",
+    "description": "Configuration parameter /configurationProperties/maxActive in file idm/conf/provisioner.openicf-CHSUser.json",
+    "valueBase64": "%ESV_778B694E17_CONFIGURATIONPROPERTIESMAXACTIVE%"
+  },
+  {
+    "_id": "esv-778b694e17-configurationpropertiesmaxidle",
+    "description": "Configuration parameter /configurationProperties/maxIdle in file idm/conf/provisioner.openicf-CHSUser.json",
+    "valueBase64": "%ESV_778B694E17_CONFIGURATIONPROPERTIESMAXIDLE%"
+  },
+  {
+    "_id": "esv-778b694e17-configurationpropertiesminidle",
+    "description": "Configuration parameter /configurationProperties/minIdle in file idm/conf/provisioner.openicf-CHSUser.json",
+    "valueBase64": "%ESV_778B694E17_CONFIGURATIONPROPERTIESMINIDLE%"
+  },
+  {
     "_id": "esv-778b694e17-configurationpropertiesurl",
     "description": "Configuration parameter /configurationProperties/url in file idm/conf/provisioner.openicf-WebfilingAuthCode.json",
     "valueBase64": "%ESV_778B694E17_CONFIGURATIONPROPERTIESURL%"
+  },
+  {
+    "_id": "esv-778b694e17-configurationpropertiesusername",
+    "description": "Configuration parameter /configurationProperties/username in file idm/conf/provisioner.openicf-WebfilingAuthCode.json",
+    "valueBase64": "%ESV_778B694E17_CONFIGURATIONPROPERTIESUSERNAME%"
   },
   {
     "_id": "esv-97d59851ff-configurationpropertieshost",
@@ -30,14 +55,34 @@
     "valueBase64": "%ESV_BA5058C071_INITPARAMSALLOWEDORIGINS%"
   },
   {
+    "_id": "esv-2099bcaeaf-configurationpropertiesinitialsize",
+    "description": "Configuration parameter /configurationProperties/initialSize in file idm/conf/provisioner.openicf-WebfilingUser.json",
+    "valueBase64": "%ESV_2099BCAEAF_CONFIGURATIONPROPERTIESINITIALSIZE%"
+  },
+  {
     "_id": "esv-2099bcaeaf-configurationpropertiesmaxactive",
     "description": "Configuration parameter /configurationProperties/maxActive in file idm/conf/provisioner.openicf-WebfilingUser.json",
     "valueBase64": "%ESV_2099BCAEAF_CONFIGURATIONPROPERTIESMAXACTIVE%"
   },
   {
-    "_id": "esv-2099bcaeaf-configurationpropertiesinitialsize",
-    "description": "Configuration parameter /configurationProperties/initialSize in file idm/conf/provisioner.openicf-WebfilingUser.json",
-    "valueBase64": "%ESV_2099BCAEAF_CONFIGURATIONPROPERTIESINITIALSIZE%"
+    "_id": "esv-2099bcaeaf-configurationpropertiesmaxidle",
+    "description": "Configuration parameter /configurationProperties/maxIdle in file idm/conf/provisioner.openicf-WebfilingUser.json",
+    "valueBase64": "%ESV_2099BCAEAF_CONFIGURATIONPROPERTIESMAXIDLE%"
+  },
+  {
+    "_id": "esv-2099bcaeaf-configurationpropertiesminidle",
+    "description": "Configuration parameter /configurationProperties/minIdle in file idm/conf/provisioner.openicf-WebfilingUser.json",
+    "valueBase64": "%ESV_2099BCAEAF_CONFIGURATIONPROPERTIESMINIDLE%"
+  },
+  {
+    "_id": "esv-2099bcaeaf-configurationpropertiesurl",
+    "description": "Configuration parameter /configurationProperties/url in file idm/conf/provisioner.openicf-WebfilingUser.json",
+    "valueBase64": "%ESV_2099BCAEAF_CONFIGURATIONPROPERTIESURL%"
+  },
+  {
+    "_id": "esv-2099bcaeaf-configurationpropertiesusername",
+    "description": "Configuration parameter /configurationProperties/username in file idm/conf/provisioner.openicf-WebfilingUser.json",
+    "valueBase64": "%ESV_2099BCAEAF_CONFIGURATIONPROPERTIESUSERNAME%"
   },
   {
     "_id": "esv-cb50efd02a-configurationpropertiesconnectionuri",
@@ -75,11 +120,6 @@
     "valueBase64": "%ESV_93FCFD459D_DATAACCEPTEDORIGINS%"
   },
   {
-    "_id": "esv-2099bcaeaf-configurationpropertiesurl",
-    "description": "Configuration parameter /configurationProperties/url in file idm/conf/provisioner.openicf-WebfilingUser.json",
-    "valueBase64": "%ESV_2099BCAEAF_CONFIGURATIONPROPERTIESURL%"
-  },
-  {
     "_id": "esv-c5d3143c84-manualcompanyincorporationsendpoint",
     "description": "Script variable MANUAL_companyIncorporationsEndpoint in file idm/conf/endpoint-scrs.json",
     "valueBase64": "%ESV_C5D3143C84_MANUALCOMPANYINCORPORATIONSENDPOINT%"
@@ -115,14 +155,14 @@
     "valueBase64": "%ESV_97D59851FF_CONFIGURATIONPROPERTIESCONNECTIONURI%"
   },
   {
-    "_id": "esv-2099bcaeaf-configurationpropertiesusername",
-    "description": "Configuration parameter /configurationProperties/username in file idm/conf/provisioner.openicf-WebfilingUser.json",
-    "valueBase64": "%ESV_2099BCAEAF_CONFIGURATIONPROPERTIESUSERNAME%"
-  },
-  {
     "_id": "esv-b4ec3ce32c-dataadvancedoauth2configcustomloginurltemplate",
     "description": "Configuration parameter /data/advancedOAuth2Config/customLoginUrlTemplate in file am/services/realm/root-alpha/oauth2provider/1.0/organizationconfig/default.json",
     "valueBase64": "%ESV_B4EC3CE32C_DATAADVANCEDOAUTH2CONFIGCUSTOMLOGINURLTEMPLATE%"
+  },
+  {
+    "_id": "esv-b4ec3ce32c-dataadvancedoauth2confighashsalt",
+    "description": "Configuration parameter /data/advancedOAuth2Config/hashSalt in file am/services/realm/root-alpha/oauth2provider/1.0/organizationconfig/default.json",
+    "valueBase64": "%ESV_B4EC3CE32C_DATAADVANCEDOAUTH2CONFIGHASHSALT%"
   },
   {
     "_id": "esv-1ad9ee29ae-configurationpropertieshost",
@@ -143,11 +183,6 @@
     "_id": "esv-c5d3143c84-manualcustomuiurl",
     "description": "Script variable MANUAL_customUiUrl in file idm/conf/endpoint-scrs.json",
     "valueBase64": "%ESV_C5D3143C84_MANUALCUSTOMUIURL%"
-  },
-  {
-    "_id": "esv-778b694e17-configurationpropertiesusername",
-    "description": "Configuration parameter /configurationProperties/username in file idm/conf/provisioner.openicf-WebfilingAuthCode.json",
-    "valueBase64": "%ESV_778B694E17_CONFIGURATIONPROPERTIESUSERNAME%"
   },
   {
     "_id": "esv-d0f01990f4-manualscrsusername",

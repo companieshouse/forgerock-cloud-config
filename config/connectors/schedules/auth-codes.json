@@ -1,20 +1,20 @@
 {
-  "_id": "EWF Auth Codes to alpha_organization",
-  "enabled": true,
-	"persisted": true,
-	"recoverable": false,
-	"misfirePolicy": "fireAndProceed",
-	"schedule": "0 0 9,21 ? * * *",
-	"repeatInterval": 0,
-	"repeatCount": 0,
-	"type": "cron",
-	"invokeService": "sync",
-	"invokeContext": {
-		"action": "reconcile",
-		"mapping": "webfilingAuthCode_alphaOrg"
-	},
-	"invokeLogLevel": "info",
-	"startTime": null,
-	"endTime": null,
-	"concurrentExecution": false
+    "_id": "EWF Auth Codes to alpha_organization",
+    "enabled": true,
+    "persisted": true,
+    "recoverable": false,
+    "misfirePolicy": "fireAndProceed",
+    "schedule": "0 0 22 * * ?",
+    "repeatInterval": 0,
+    "repeatCount": 0,
+    "type": "cron",
+    "invokeService": "sync",
+    "invokeContext": {
+        "action": "reconcile",
+        "mapping": "webfilingAuthCode_alphaOrg"
+    },
+    "invokeLogLevel": "info",
+    "startTime": null,
+    "endTime": null,
+    "concurrentExecution": false
 }

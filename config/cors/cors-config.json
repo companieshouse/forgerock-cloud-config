@@ -27,8 +27,8 @@
         ],
         "enabled": true,
         "acceptedOrigins": {
-            "$list": "&{esv.93fcfd459d.dataacceptedorigins}",
-        }
+            "$list": "&{esv.93fcfd459d.dataacceptedorigins}"
+        },
         "allowCredentials": true,
         "exposedHeaders": [
             "*"
@@ -47,7 +47,7 @@
         "requestAttributes": {},
         "scriptExtensions": {},
         "initParams": {
-            "allowedOrigins": "&{byos.ba5058c071.initparamsallowedorigins}",
+            "allowedOrigins": "&{esv.ba5058c071.initparamsallowedorigins}",
             "allowedMethods": "GET,POST,PUT,DELETE,PATCH,HEAD,OPTIONS",
             "allowedHeaders": "authorization,content-type,accept-api-version,*",
             "allowCredentials": true,

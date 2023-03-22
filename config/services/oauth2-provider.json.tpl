@@ -151,7 +151,7 @@
       "pairwise"
     ],
     "tlsClientCertificateHeaderFormat": "URLENCODED_PEM",
-    "hashSalt": "n0FLWZh88zPTlWf2c3OEBlBd5r4=",
+    "hashSalt": "&{esv.b4ec3ce32c.dataadvancedoauth2confighashsalt}",
     "macaroonTokenFormat": "V2",
     "tlsCertificateRevocationCheckingEnabled": false,
     "responseTypeClasses": [
@@ -166,7 +166,7 @@
     ],
     "tokenSigningAlgorithm": "HS256",
     "codeVerifierEnforced": "false",
-    "customLoginUrlTemplate": "https://idam-ui.amido.aws.chdev.org/account/login/?goto=${goto}<#if acrValues??>&acr_values=${acrValues}</#if><#if realm??>&realm=${realm}</#if><#if module??>&module=${module}</#if><#if service??>&service=${service}</#if><#if locale??>&locale=${locale}</#if><#if authIndexType??>&authIndexType=${authIndexType}</#if><#if authIndexValue??>&authIndexValue=${authIndexValue}</#if>&mode=AUTHN_ONLY",
+    "customLoginUrlTemplate": "&{esv.b4ec3ce32c.dataadvancedoauth2configcustomloginurltemplate}",
     "displayNameAttribute": "cn",
     "tokenExchangeClasses": [
       "urn:ietf:params:oauth:token-type:access_token=>urn:ietf:params:oauth:token-type:access_token|org.forgerock.oauth2.core.tokenexchange.accesstoken.AccessTokenToAccessTokenExchanger",

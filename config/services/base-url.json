@@ -1,7 +1,7 @@
 {
 	"source": "REQUEST_VALUES",
 	"contextPath": "/am",
-	"fixedValue": "https://idam.amido.aws.chdev.org",
+	"fixedValue": "&{esv.d180501ac1.datafixedvalue}",
 	"_id": "baseurl",
 	"_type": {
 		"_id": "baseurl",
