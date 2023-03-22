@@ -4,7 +4,7 @@
     "persisted": true,
     "recoverable": false,
     "misfirePolicy": "fireAndProceed",
-    "schedule": "0 0 4 * * SAT",
+    "schedule": "&{esv.c827402089.reconscheduleucompaniescronexp}",
     "repeatInterval": 0,
     "repeatCount": 0,
     "type": "cron",
