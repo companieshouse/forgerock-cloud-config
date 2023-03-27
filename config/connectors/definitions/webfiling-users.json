@@ -15,6 +15,10 @@
 		"minEvictableIdleTimeMillis": 120000,
 		"minIdle": 2
 	},
+	"syncFailureHandler": {
+		"maxRetries": 5,
+		"postRetryAction": "logged-ignore"
+	},
 	"resultsHandlerConfig": {
 		"enableNormalizingResultsHandler": false,
 		"enableFilteredResultsHandler": false,
