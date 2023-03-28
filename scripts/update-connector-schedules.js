@@ -19,7 +19,7 @@ const updateConnectorSchedules = async (argv) => {
     // Update each schedule
     await Promise.all(
       scheduleFilesContent.map(async (scheduleFile) => {
-        const requestUrl = `${FIDC_URL}/openidm/scheduler/job/${scheduleFile._id}`
+        const requestUrl = `${FIDC_URL}/openidm/config/schedule/${scheduleFile._id}`
         await fidcRequest(requestUrl, scheduleFile, accessToken)
         console.log(`${scheduleFile._id} updated`)
         return Promise.resolve()
