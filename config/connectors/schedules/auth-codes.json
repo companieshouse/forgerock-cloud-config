@@ -4,7 +4,7 @@
     "persisted": true,
     "recoverable": false,
     "misfirePolicy": "fireAndProceed",
-    "schedule": "0 0 22 * * ?",
+    "schedule": "&{esv.9db15a3625.reconscheduleauthcodescronexp}",
     "repeatInterval": 0,
     "repeatCount": 0,
     "type": "cron",
