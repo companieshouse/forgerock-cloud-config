@@ -71,7 +71,7 @@ describe('update-connector-schedules', () => {
 
   it('should call API with config file', async () => {
     expect.assertions(2)
-    const expectedUrl = `${mockValues.fidcUrl}/openidm/scheduler/job/${mockConfig._id}`
+    const expectedUrl = `${mockValues.fidcUrl}/openidm/config/schedule/${mockConfig._id}`
     await updateConnectorSchedules(mockValues)
     expect(fidcRequest.mock.calls.length).toEqual(1)
     expect(fidcRequest).toHaveBeenCalledWith(
