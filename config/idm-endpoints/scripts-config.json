@@ -11,6 +11,10 @@
     {
       "endpointName": "scrs",
       "scriptFileName": "scrs.js"
+    },
+    {
+      "endpointName": "companies",
+      "scriptFileName": "companies.js"
     }
   ],
   "tasks": [
