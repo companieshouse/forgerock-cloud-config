@@ -355,6 +355,12 @@
             "actions": "*"
         },
         {
+            "pattern": "endpoint/companies",
+            "roles": "internal/role/openidm-authorized",
+            "methods": "read,query,action",
+            "actions": "*"
+        },
+        {
             "pattern": "endpoint/scrs",
             "roles": "internal/role/openidm-authorized",
             "methods": "read,query,action",
