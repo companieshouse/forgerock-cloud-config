@@ -5,12 +5,14 @@ var NodeOutcome = {
   CORRECT: 'correct',
   INCORRECT: 'incorrect',
   RESEND: 'resend',
-  ERROR: 'error'
+  ERROR: 'error',
+  SEND_SMS: 'sendSMS'
 };
 
 var ConfirmIndex = {
   RESEND: 0,
-  NEXT: 1
+  NEXT: 1,
+  SEND_SMS: 2
 };
 
 var config = {
@@ -146,6 +148,11 @@ if (callbacks.isEmpty()) {
       fr.ConfirmationCallback.INFORMATION,
       getMfaRouteOptions(mfaRoute),
       1),
+    new fr.ConfirmationCallback(
+      'Do you want to send the security code via sms?',
+      fr.ConfirmationCallback.INFORMATION,
+      getMfaRouteOptions(mfaRoute),
+      1),
     new fr.HiddenValueCallback('stage', checkOtpStageName),
     new fr.HiddenValueCallback('description', 'Please enter the code you received'),
     new fr.HiddenValueCallback('header', 'Please enter your code')
@@ -161,6 +168,12 @@ if (callbacks.isEmpty()) {
     resend = 'true';
   }
 
+  var sendSMS = false
+  var confirmSMSIndex = callbacks.get(5).getSelectedIndex();
+  if (confirmSMSIndex === ConfirmIndex.SEND_SMS) {
+    sendSMS = true;
+  }
+
   var otp = fr.String(callbacks.get(3).getPassword());
   var correctOtp = sharedState.get(config.otpSharedStateVariable);
 
@@ -169,6 +182,10 @@ if (callbacks.isEmpty()) {
   if (resend === 'true') {
     _log('Resend requested', 'MESSAGE');
     sharedState.put('otpResend', true);
+    outcome = NodeOutcome.RESEND;
+  } else if (sendSMS === true) {
+    _log('send SMS requested', 'MESSAGE');
+    sharedState.put('otpSendSMS', true);
     outcome = NodeOutcome.RESEND;
   } else if (!correctOtp) {
     _log('No OTP in shared state', 'MESSAGE');
