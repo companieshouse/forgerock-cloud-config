@@ -185,8 +185,7 @@ if (callbacks.isEmpty()) {
     outcome = NodeOutcome.RESEND;
   } else if (sendSMS === true) {
     _log('send SMS requested', 'MESSAGE');
-    sharedState.put('otpSendSMS', true);
-    outcome = NodeOutcome.RESEND;
+    outcome = NodeOutcome.SEND_SMS;
   } else if (!correctOtp) {
     _log('No OTP in shared state', 'MESSAGE');
     outcome = NodeOutcome.ERROR;
