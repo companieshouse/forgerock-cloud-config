@@ -32,7 +32,23 @@ var fr = JavaImporter(
 
 function getMfaRouteOptions (mfaRoute) {
   // mfaRoute = sms or email
-  return ['RESEND', 'NEXT'];
+  return ['RESEND', 'NEXT', 'SEND_SMS'];
+}
+
+function getPhoneNumber(userId){
+  if (isUpdatePhoneNumber && newPhoneNumber) {
+    return newPhoneNumber;
+  } else {
+    if (idRepository.getAttribute(userId, 'telephoneNumber').iterator().hasNext()) {
+      return idRepository.getAttribute(userId, 'telephoneNumber').iterator().next();
+    } else {
+      _log('Couldn\'t find telephoneNumber from user record');
+
+      if (sharedState.get('objectAttributes')) {
+        return sharedState.get('objectAttributes').get('telephoneNumber');
+      }
+    }
+  }
 }
 
 var phoneNumber = '';
@@ -47,22 +63,9 @@ var mfaRoute = sharedState.get('mfa-route');
 
 try {
   var userId = sharedState.get('_id');
+  phoneNumber = getPhoneNumber(userId)
 
-  if (mfaRoute === 'sms') {
-    if (isUpdatePhoneNumber && newPhoneNumber) {
-      phoneNumber = newPhoneNumber;
-    } else {
-      if (idRepository.getAttribute(userId, 'telephoneNumber').iterator().hasNext()) {
-        phoneNumber = idRepository.getAttribute(userId, 'telephoneNumber').iterator().next();
-      } else {
-        _log('Couldn\'t find telephoneNumber from user record');
-
-        if (sharedState.get('objectAttributes')) {
-          phoneNumber = sharedState.get('objectAttributes').get('telephoneNumber');
-        }
-      }
-    }
-  } else if (mfaRoute === 'email') {
+ if (mfaRoute === 'email') {
     var isChangeEmail = sharedState.get('isChangeEmail');
     if (isChangeEmail) {
       emailAddress = sharedState.get('newEmail');
@@ -73,7 +76,7 @@ try {
         _log('Couldn\'t find emailAddress from user record');
       }
     }
-  } else {
+  } else if (mfaRoute !== 'sms') {
     _log('Couldn\'t determine route used for sending MFA code');
   }
 } catch (e) {
@@ -148,14 +151,9 @@ if (callbacks.isEmpty()) {
       fr.ConfirmationCallback.INFORMATION,
       getMfaRouteOptions(mfaRoute),
       1),
-    new fr.ConfirmationCallback(
-      'Do you want to send the security code via sms?',
-      fr.ConfirmationCallback.INFORMATION,
-      phoneNumber === '' ? [false] : [true],
-      1),
     new fr.HiddenValueCallback('stage', checkOtpStageName),
     new fr.HiddenValueCallback('description', 'Please enter the code you received'),
-    new fr.HiddenValueCallback('header', 'Please enter your code')
+    new fr.HiddenValueCallback('header', 'Please enter your code'),
   ).build();
 } else {
 
@@ -163,14 +161,11 @@ if (callbacks.isEmpty()) {
   sharedState.put('otpResend', null);
 
   resend = 'false';
+  var sendSMS = false
   var confirmIndex = callbacks.get(4).getSelectedIndex();
   if (confirmIndex === ConfirmIndex.RESEND) {
     resend = 'true';
-  }
-
-  var sendSMS = false
-  var confirmSMSIndex = callbacks.get(5).getSelectedIndex();
-  if (confirmSMSIndex === ConfirmIndex.SEND_SMS) {
+  } else if (confirmIndex === ConfirmIndex.SEND_SMS) {
     sendSMS = true;
   }
 
