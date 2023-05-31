@@ -151,7 +151,7 @@ if (callbacks.isEmpty()) {
     new fr.ConfirmationCallback(
       'Do you want to send the security code via sms?',
       fr.ConfirmationCallback.INFORMATION,
-      getMfaRouteOptions(mfaRoute),
+      phoneNumber === '' ? [false] : [true],
       1),
     new fr.HiddenValueCallback('stage', checkOtpStageName),
     new fr.HiddenValueCallback('description', 'Please enter the code you received'),
