@@ -153,7 +153,7 @@ if (callbacks.isEmpty()) {
       1),
     new fr.HiddenValueCallback('stage', checkOtpStageName),
     new fr.HiddenValueCallback('description', 'Please enter the code you received'),
-    new fr.HiddenValueCallback('header', 'Please enter your code'),
+    new fr.HiddenValueCallback('header', 'Please enter your code')
   ).build();
 } else {
 
