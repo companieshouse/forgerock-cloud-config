@@ -206,9 +206,9 @@
   } else
   if (request.method === 'read') {
   
-    let currentPage = request.additionalParameters.currentPage || Defaults.CURRENT_PAGE;
-    let pageSize = request.additionalParameters.pageSize || Defaults.PAGE_SIZE;
-    let maxPages = request.additionalParameters.maxPages || Defaults.MAX_PAGES;
+    let currentPage = Number(request.additionalParameters.currentPage) || Defaults.CURRENT_PAGE;
+    let pageSize = Number(request.additionalParameters.pageSize) || Defaults.PAGE_SIZE;
+    let maxPages = Number(request.additionalParameters.maxPages) || Defaults.MAX_PAGES;
     let searchTerm = request.additionalParameters.searchTerm;
     let statusParam = request.additionalParameters.status;
               
