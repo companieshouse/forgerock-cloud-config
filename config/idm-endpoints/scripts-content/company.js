@@ -352,13 +352,13 @@
     }
     return mappedUser;
   }
-
+  
   //query 1: fetch all associated companies from current user
   var actor = getUserById(context.security.authenticationId);
   let sourceData;
   let outputCompanies = [];
   if (actor.memberOfOrg.length > 0) {
-
+      
     //query 2: fetch full IDM data set for associated companies (this will get company number too)
     let fetchedCompanies = getCompanies(actor.memberOfOrg);
 
@@ -367,14 +367,14 @@
     const chunkSize = 100;
     let pageCount = 0;
     const res = [];
-
+        
     for (let i = 0; i < fetchedCompanies.length; i += chunkSize) {
         let chunk = fetchedCompanies.slice(i, i + chunkSize);
-
+        
         let companiesInPage = chunk.map(c => {return c.number});
         _logDebug('[ON-DEMAND SYNC] processing page of results ' + pageCount++ + ' - ' + JSON.stringify(companiesInPage));
         sourceData = getCompaniesDataFromSource(chunk);
-
+        
         //UPDATES: UPDATE companies in IDM if source data info is found
         if(sourceData.success){
           _logDebug('[ON-DEMAND SYNC] Successfully looked up source company/auth code data from CHS/EWF');
@@ -386,18 +386,18 @@
 
     //query 5: fetch updated companies data
     fetchedCompanies = getCompanies(actor.memberOfOrg);
-
+  
     //prepare response
     actor.memberOfOrg.forEach(company => {
-      // let companyInfo = getCompany(company._ref);
-      const companyInfo = fetchedCompanies.find( fetchedCompany => {
+      // let companyInfo = getCompany(company._ref);      
+      const companyInfo = fetchedCompanies.find( fetchedCompany => { 
         return (fetchedCompany._id === company._refResourceId);
       });
-
+        
       let mappedMembers = mapCompanyMembers(company._refResourceId, companyInfo.members);
       let inviter;
       let membershipStatus;
-
+      
       if(company._refProperties){
         inviter = mapInviter(company._refProperties.inviterId);
         membershipStatus = company._refProperties.membershipStatus;
@@ -421,47 +421,47 @@
       });
     });
   }
-
+  
   if (request.action === RequestAction.GET_USER_COMPANIES) {
     return outputCompanies;
   } else
   if (request.method === 'read') {
-
+  
     let currentPage = request.additionalParameters.currentPage || Defaults.CURRENT_PAGE;
     let pageSize = request.additionalParameters.pageSize || Defaults.PAGE_SIZE;
     let maxPages = request.additionalParameters.maxPages || Defaults.MAX_PAGES;
     let searchTerm = request.additionalParameters.searchTerm;
     let statusParam = request.additionalParameters.status;
-
+              
     // apply search term filter
     if (searchTerm) {
       outputCompanies = outputCompanies.filter(comp => {
         return (comp.name.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1 || comp.number.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1);
       });
     }
-
+  
     // apply status filter
     if(statusParam){
-
+  
       if(![StatusFilter.CONFIRMED, StatusFilter.PENDING].includes(statusParam)){
         throw {
           code: 400,
           message: 'Invalid value for status filter. Allowed values are [confirmed, pending]'
         };
       }
-
+  
       outputCompanies = outputCompanies.filter(comp => {
         return (comp.membershipStatus === statusParam);
       });
     }
-
+  
     let pagination = paginate(
       outputCompanies.length,
       currentPage,
       pageSize,
       maxPages
     );
-
+  
     return {
       _id: context.security.authenticationId,
       pagination: pagination,
@@ -469,3 +469,4 @@
     };
   }
 })();
+  
