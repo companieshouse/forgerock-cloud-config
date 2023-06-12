@@ -133,7 +133,6 @@
         name: fullUser.givenName,
         email: fullUser.userName,
         displayName: fullUser.givenName ? fullUser.givenName : fullUser.userName,
-        phone: fullUser.telephoneNumber ? fullUser.telephoneNumber : undefined,
         membershipStatus: status ? status._refProperties.membershipStatus : StatusFilter.NONE
       });
     });
@@ -149,8 +148,7 @@
           _id: user._id,
           name: user.givenName,
           email: user.userName,
-          displayName: user.givenName ? user.givenName : user.userName,
-          phone: user.telephoneNumber ? user.telephoneNumber : undefined,
+          displayName: user.givenName ? user.givenName : user.userName
         };
       }
     }
