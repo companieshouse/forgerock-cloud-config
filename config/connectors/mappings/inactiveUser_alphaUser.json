@@ -1,0 +1,80 @@
+   {
+      "target": "managed/alpha_user",
+      "source": "system/InactiveUser/__ACCOUNT__",
+      "name": "inactiveUser_alphaUser",
+      "consentRequired": false,
+      "icon": null,
+      "displayName": "inactiveUser_alphaUser",
+      "properties": [
+        {
+          "target": "accountStatus",
+          "default": "inactive"
+        },
+        {
+          "target": "userName",
+          "source": "email"
+        }
+      ],
+      "policies": [
+        {
+          "action": "IGNORE",
+          "situation": "AMBIGUOUS"
+        },
+        {
+          "action": "IGNORE",
+          "situation": "SOURCE_MISSING"
+        },
+        {
+          "action": "IGNORE",
+          "situation": "MISSING"
+        },
+        {
+          "action": "IGNORE",
+          "situation": "FOUND_ALREADY_LINKED"
+        },
+        {
+          "action": "IGNORE",
+          "situation": "UNQUALIFIED"
+        },
+        {
+          "action": "IGNORE",
+          "situation": "UNASSIGNED"
+        },
+        {
+          "action": "IGNORE",
+          "situation": "LINK_ONLY"
+        },
+        {
+          "action": "IGNORE",
+          "situation": "TARGET_IGNORED"
+        },
+        {
+          "action": "IGNORE",
+          "situation": "SOURCE_IGNORED"
+        },
+        {
+          "action": "IGNORE",
+          "situation": "ALL_GONE"
+        },
+        {
+          "action": "UPDATE",
+          "situation": "CONFIRMED"
+        },
+        {
+          "action": "UPDATE",
+          "situation": "FOUND"
+        },
+        {
+          "action": "IGNORE",
+          "situation": "ABSENT"
+        }
+      ],
+      "correlationQuery": [
+        {
+          "linkQualifier": "default",
+          "type": "text/javascript",
+          "globals": {},
+          "source": "var qry = { \"_queryFilter\" : \"userName eq \\\"\" + source.email + \"\\\"\" };\n\nqry"
+        }
+      ]
+   }
