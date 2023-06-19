@@ -38,7 +38,7 @@
   },
   "configurationProperties": {
     "spaceReplacementString": "_",
-    "csvFile": "/opt/app/testing",
+    "csvFile": "/opt/app/data/inactive.csv",
     "newlineString": "\n",
     "headerUid": "email",
     "quoteCharacter": "\"",
