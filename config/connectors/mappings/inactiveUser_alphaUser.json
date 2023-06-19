@@ -2,7 +2,7 @@
       "target": "managed/alpha_user",
       "source": "system/InactiveUser/__ACCOUNT__",
       "name": "inactiveUser_alphaUser",
-      "consentRequired": false,
+      "enabled": true,
       "icon": null,
       "displayName": "inactiveUser_alphaUser",
       "properties": [
