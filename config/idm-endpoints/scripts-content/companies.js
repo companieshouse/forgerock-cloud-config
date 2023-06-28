@@ -23,7 +23,7 @@
   }
 
   function _logDebug (message) {
-      logger.debug('[CHLOG][GETCOMPANY][' + new Date(logNowMsecs).toISOString() + '] ' + message);
+    logger.debug('[CHLOG][GETCOMPANY][' + new Date(logNowMsecs).toISOString() + '] ' + message);
   }
   
   // Look up a user
@@ -154,96 +154,144 @@
     }
     return mappedUser;
   }
-  
-  //query 1: fetch all associated companies from current user
-  var actor = getUserById(context.security.authenticationId);
-  let sourceData;
-  let outputCompanies = [];
-  if (actor.memberOfOrg.length > 0) {
-      
-    //query 2: fetch full IDM data set for associated companies (this will get company number too)
-    let fetchedCompanies = getCompanies(actor.memberOfOrg);
-  
-    //prepare response
-    actor.memberOfOrg.forEach(company => {
-      // let companyInfo = getCompany(company._ref);      
-      const companyInfo = fetchedCompanies.find( fetchedCompany => { 
-        return (fetchedCompany._id === company._refResourceId);
-      });
-        
-      let mappedMembers = mapCompanyMembers(company._refResourceId, companyInfo.members);
-      let inviter;
-      let membershipStatus;
-      
-      if(company._refProperties){
-        inviter = mapInviter(company._refProperties.inviterId);
-        membershipStatus = company._refProperties.membershipStatus;
-      }
 
-      outputCompanies.push({
-        _id: companyInfo._id,
-        name: companyInfo.name,
-        number: companyInfo.number,
-        membershipStatus: company._refProperties.membershipStatus,
-        members: membershipStatus === StatusFilter.CONFIRMED ? mappedMembers : null,
-        status: companyInfo.status,
-        addressLine1: companyInfo.addressLine1,
-        addressLine2: companyInfo.addressLine2,
-        postalCode: companyInfo.postalCode,
-        locality: companyInfo.locality,
-        jurisdiction: companyInfo.jurisdiction,
-        type: companyInfo.type,
-        region: companyInfo.region,
-        inviter: inviter
-      });
-    });
+  function mapCompanyData (company, companyInfo){
+    let mappedMembers = mapCompanyMembers(company._refResourceId, companyInfo.members);
+    let inviter;
+    let membershipStatus;
+        
+    if(company._refProperties){
+      inviter = mapInviter(company._refProperties.inviterId);
+      membershipStatus = company._refProperties.membershipStatus;
+    }
+  
+    return {
+      _id: companyInfo._id,
+      name: companyInfo.name,
+      number: companyInfo.number,
+      membershipStatus: company._refProperties.membershipStatus,
+      members: membershipStatus === StatusFilter.CONFIRMED ? mappedMembers : null,
+      status: companyInfo.status,
+      addressLine1: companyInfo.addressLine1,
+      addressLine2: companyInfo.addressLine2,
+      postalCode: companyInfo.postalCode,
+      locality: companyInfo.locality,
+      jurisdiction: companyInfo.jurisdiction,
+      type: companyInfo.type,
+      region: companyInfo.region,
+      inviter: inviter
+    };
   }
-  
-  if (request.action === RequestAction.GET_USER_COMPANIES) {
-    return outputCompanies;
-  } else
-  if (request.method === 'read') {
-  
+
+  function getPaginatedCompanies (){
     let currentPage = Number(request.additionalParameters.currentPage) || Defaults.CURRENT_PAGE;
     let pageSize = Number(request.additionalParameters.pageSize) || Defaults.PAGE_SIZE;
     let maxPages = Number(request.additionalParameters.maxPages) || Defaults.MAX_PAGES;
-    let searchTerm = request.additionalParameters.searchTerm;
-    let statusParam = request.additionalParameters.status;
-              
-    // apply search term filter
-    if (searchTerm) {
-      outputCompanies = outputCompanies.filter(comp => {
-        return (comp.name.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1 || comp.number.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1);
-      });
-    }
-  
-    // apply status filter
-    if(statusParam){
-  
-      if(![StatusFilter.CONFIRMED, StatusFilter.PENDING].includes(statusParam)){
-        throw {
-          code: 400,
-          message: 'Invalid value for status filter. Allowed values are [confirmed, pending]'
-        };
-      }
-  
-      outputCompanies = outputCompanies.filter(comp => {
-        return (comp.membershipStatus === statusParam);
-      });
-    }
-  
-    let pagination = paginate(
-      outputCompanies.length,
+    let outputCompanies = [];
+
+    //query 1: fetch all associated companies from current user
+    const actor = getUserById(context.security.authenticationId);
+    const companiesLength = actor.memberOfOrg.length;
+    const pagination = paginate(
+      companiesLength,
       currentPage,
       pageSize,
       maxPages
     );
-  
+
+    if (companiesLength > 0) {
+      // slice data for pagination
+      const paginatedAssociatedCompanies = actor.memberOfOrg.slice(pagination.startIndex, pagination.endIndex + 1);
+
+      //query 2: fetch full IDM data set for associated companies (this will get company number too)
+      let fetchedCompanies = getCompanies(paginatedAssociatedCompanies);
+    
+      //prepare response
+      paginatedAssociatedCompanies.forEach(company => {
+        // let companyInfo = getCompany(company._ref);      
+        const companyInfo = fetchedCompanies.find( fetchedCompany => { 
+          return (fetchedCompany._id === company._refResourceId);
+        });
+          
+        outputCompanies.push(mapCompanyData(company, companyInfo));
+      });
+    }
+
     return {
       _id: context.security.authenticationId,
       pagination: pagination,
-      results: outputCompanies.slice(pagination.startIndex, pagination.endIndex + 1)
+      results: outputCompanies
     };
+  }
+
+  function getAllCompanyData (){
+    //query 1: fetch all associated companies from current user
+    var actor = getUserById(context.security.authenticationId);
+    let outputCompanies = [];
+
+    if (actor.memberOfOrg.length > 0) {
+      //query 2: fetch full IDM data set for associated companies (this will get company number too)
+      let fetchedCompanies = getCompanies( actor.memberOfOrg);
+    
+      //prepare response
+      actor.memberOfOrg.forEach(company => {
+        // let companyInfo = getCompany(company._ref);      
+        const companyInfo = fetchedCompanies.find( fetchedCompany => { 
+          return (fetchedCompany._id === company._refResourceId);
+        });
+          
+        outputCompanies.push(mapCompanyData(company, companyInfo));
+      });
+    }
+    return outputCompanies;
+  }
+  
+  function getAllCompaniesFromSearch (outputCompanies, searchTerm){
+    return  outputCompanies.filter(comp => {
+      return (comp.name.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1 || comp.number.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1);
+    });
+  }
+
+  function getAllCompaniesFromStatus (outputCompanies, statusParam){
+    if(![StatusFilter.CONFIRMED, StatusFilter.PENDING].includes(statusParam)){
+      throw {
+        code: 400,
+        message: 'Invalid value for status filter. Allowed values are [confirmed, pending]'
+      };
+    }
+
+    return outputCompanies.filter(comp => {
+      return (comp.membershipStatus === statusParam);
+    });
+  }
+
+  let searchTerm = request.additionalParameters.searchTerm;
+  let statusParam = request.additionalParameters.status;
+  
+  
+  if (request.action === RequestAction.GET_USER_COMPANIES) {
+    return getAllCompanyData();
+  } else
+  if (request.method === 'read' && (searchTerm || statusParam)) {
+
+    let outputCompanies = getAllCompanyData();
+
+    // apply search term filter
+    if (searchTerm) {
+      outputCompanies = getAllCompaniesFromSearch(outputCompanies, searchTerm);
+    }
+  
+    // apply status filter
+    if(statusParam){
+      outputCompanies = getAllCompaniesFromStatus (outputCompanies, statusParam);
+    }
+  
+    return {
+      _id: context.security.authenticationId,
+      results: outputCompanies
+    };
+  } else {
+    return getPaginatedCompanies();
   }
 })();
   
