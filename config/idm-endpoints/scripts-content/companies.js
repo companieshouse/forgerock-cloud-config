@@ -60,6 +60,35 @@
     return response.result;
   }
 
+  function getCompaniesSearch (_refArray, searchTerm) {
+    
+    if(!_refArray || _refArray.length === 0){
+      return [];
+    }
+
+    const companyNameFilter = '/name co "' + searchTerm + '"';
+    
+    let companyIds = _refArray.map(refItem => {
+      return '/_id eq "' + refItem._refResourceId + '"' ;      
+    });
+      
+    let companySearchTerm = companyIds.join(' or ');
+    //_log('Search term for companies search: ' + searchTerm);
+    
+    let response = openidm.query(
+      'managed/' + OBJECT_COMPANY,
+      { '_queryFilter':  companySearchTerm},
+      ['_id', 'number', 'name', 'authCode', 'authCodeValidFrom', 'authCodeValidUntil', 'status', 'members', 'addressLine1', 'addressLine2',
+        'jurisdiction', 'locality', 'postalCode', 'region', 'type', 'creationDate', 'members']
+    );
+  
+    if (response.resultCount === 0) {
+      return [];
+    }
+  
+    return response.result;
+  }
+
 
   
   function paginate (
@@ -187,6 +216,7 @@
     let currentPage = Number(request.additionalParameters.currentPage) || Defaults.CURRENT_PAGE;
     let pageSize = Number(request.additionalParameters.pageSize) || Defaults.PAGE_SIZE;
     let maxPages = Number(request.additionalParameters.maxPages) || Defaults.MAX_PAGES;
+    let statusParam = request.additionalParameters.status;
     let outputCompanies = [];
 
     //query 1: fetch all associated companies from current user
@@ -215,12 +245,64 @@
           
         outputCompanies.push(mapCompanyData(company, companyInfo));
       });
+
+      if(statusParam){
+        outputCompanies = getAllCompaniesFromStatus (outputCompanies, statusParam);
+      }
     }
 
     return {
       _id: context.security.authenticationId,
       pagination: pagination,
       results: outputCompanies
+    };
+  }
+
+  function getPaginatedCompanySearch (){
+    let currentPage = Number(request.additionalParameters.currentPage) || Defaults.CURRENT_PAGE;
+    let pageSize = Number(request.additionalParameters.pageSize) || Defaults.PAGE_SIZE;
+    let maxPages = Number(request.additionalParameters.maxPages) || Defaults.MAX_PAGES;
+    let searchTerm = request.additionalParameters.searchTerm;
+    let statusParam = request.additionalParameters.status;
+    let outputCompanies = [];
+    let pagination = null;
+
+    //query 1: fetch all associated companies from current user
+    const actor = getUserById(context.security.authenticationId);
+    const companiesLength = actor.memberOfOrg.length;
+
+    if (companiesLength > 0) {
+      //query 2: fetch full IDM data set for associated companies (this will get company number too)
+      let fetchedCompanies = getCompanies(actor.memberOfOrg);
+  
+      //prepare response
+      actor.memberOfOrg.forEach(company => {
+        // let companyInfo = getCompany(company._ref);      
+        const companyInfo = fetchedCompanies.find( fetchedCompany => { 
+          return (fetchedCompany._id === company._refResourceId);
+        });
+
+        if(isInSearchTerm(companyInfo, searchTerm)){
+          outputCompanies.push(mapCompanyData(company, companyInfo));
+        }
+      });
+
+      if(statusParam){
+        outputCompanies = getAllCompaniesFromStatus (outputCompanies, statusParam);
+      }
+    }
+
+    pagination = paginate(
+      outputCompanies.length,
+      currentPage,
+      pageSize,
+      maxPages
+    );
+
+    return {
+      _id: context.security.authenticationId,
+      pagination: pagination,
+      results: outputCompanies.slice(pagination.startIndex, pagination.endIndex + 1)
     };
   }
 
@@ -246,12 +328,6 @@
     return outputCompanies;
   }
   
-  function getAllCompaniesFromSearch (outputCompanies, searchTerm){
-    return  outputCompanies.filter(comp => {
-      return (comp.name.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1 || comp.number.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1);
-    });
-  }
-
   function getAllCompaniesFromStatus (outputCompanies, statusParam){
     if(![StatusFilter.CONFIRMED, StatusFilter.PENDING].includes(statusParam)){
       throw {
@@ -265,31 +341,16 @@
     });
   }
 
+  function isInSearchTerm (company, searchTerm){
+    return company.name.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1 || company.number.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1;
+  }
+
   let searchTerm = request.additionalParameters.searchTerm;
-  let statusParam = request.additionalParameters.status;
-  
   
   if (request.action === RequestAction.GET_USER_COMPANIES) {
     return getAllCompanyData();
-  } else
-  if (request.method === 'read' && (searchTerm || statusParam)) {
-
-    let outputCompanies = getAllCompanyData();
-
-    // apply search term filter
-    if (searchTerm) {
-      outputCompanies = getAllCompaniesFromSearch(outputCompanies, searchTerm);
-    }
-  
-    // apply status filter
-    if(statusParam){
-      outputCompanies = getAllCompaniesFromStatus (outputCompanies, statusParam);
-    }
-  
-    return {
-      _id: context.security.authenticationId,
-      results: outputCompanies
-    };
+  } else if (request.method === 'read' && searchTerm ) {
+    return getPaginatedCompanySearch();
   } else {
     return getPaginatedCompanies();
   }
