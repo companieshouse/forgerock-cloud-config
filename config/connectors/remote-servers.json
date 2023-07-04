@@ -1,6 +1,9 @@
 {
   "_id": "provisioner.openicf.connectorinfoprovider",
   "connectorsLocation": "connectors",
+  "ICFServlet": {
+    "maxMessageSize": 102400
+  },
   "remoteConnectorClients": [
     {
       "name": "chs-primary",
