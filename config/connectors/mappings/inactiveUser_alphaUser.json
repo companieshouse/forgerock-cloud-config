@@ -76,5 +76,10 @@
           "globals": {},
           "source": "var qry = { \"_queryFilter\" : \"userName eq \\\"\" + source.email + \"\\\"\" };\n\nqry"
         }
-      ]
+      ],
+     "clusteredSourceReconEnabled": true,
+     "reconSourceQueryPageSize": {
+       "$int": "&{esv.a147709bca.manualreconsourcequerypagesize}"
+     },
+     "taskThreads": 20
    }
