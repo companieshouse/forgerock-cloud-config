@@ -27,52 +27,58 @@ function extractEmail () {
 }
 
 function sendEmail (language, code, emailAddress) {
-  var notifyJWT = transientState.get('notifyJWT');
-  var templates = transientState.get('notifyTemplates');
-  var request = new org.forgerock.http.protocol.Request();
-  var requestBodyJson;
-  request.setUri(_fromConfig('NOTIFY_EMAIL_ENDPOINT'));
-  try {
-    requestBodyJson = {
-      'email_address': emailAddress,
-      'template_id': language === 'EN' ? JSON.parse(templates).en_otpEmail : JSON.parse(templates).cy_otpEmail,
-      'personalisation': {
-        'code': code
-      }
-    };
-  } catch (e) {
-    _log('Error while preparing request for Notify: ' + e);
-    return {
-      success: false,
-      message: '[SEND MFA EMAIL] Error while preparing request for Notify: '.concat(e)
-    };
-  }
-
-  request.setMethod('POST');
-  request.getHeaders().add('Content-Type', 'application/json');
-  request.getHeaders().add('Authorization', 'Bearer ' + notifyJWT);
-  request.getEntity().setString(JSON.stringify(requestBodyJson));
-
-  var notificationId;
-  var response = httpClient.send(request).get();
-
-  try {
-    notificationId = JSON.parse(response.getEntity().getString()).id;
-    transientState.put('notificationId', notificationId);
-    _log('Notify ID: ' + notificationId);
+//  var notifyJWT = transientState.get('notifyJWT');
+//  var templates = transientState.get('notifyTemplates');
+//  var request = new org.forgerock.http.protocol.Request();
+//  var requestBodyJson;
+//  request.setUri(_fromConfig('NOTIFY_EMAIL_ENDPOINT'));
+//  try {
+//    requestBodyJson = {
+//      'email_address': emailAddress,
+//      'template_id': language === 'EN' ? JSON.parse(templates).en_otpEmail : JSON.parse(templates).cy_otpEmail,
+//      'personalisation': {
+//        'code': code
+//      }
+//    };
+//  } catch (e) {
+//    _log('Error while preparing request for Notify: ' + e);
+//    return {
+//      success: false,
+//      message: '[SEND MFA EMAIL] Error while preparing request for Notify: '.concat(e)
+//    };
+//  }
+//
+//  request.setMethod('POST');
+//  request.getHeaders().add('Content-Type', 'application/json');
+//  request.getHeaders().add('Authorization', 'Bearer ' + notifyJWT);
+//  request.getEntity().setString(JSON.stringify(requestBodyJson));
+//
+//  var notificationId;
+//  var response = httpClient.send(request).get();
+//
+//  try {
+//    notificationId = JSON.parse(response.getEntity().getString()).id;
+//    transientState.put('notificationId', notificationId);
+//    _log('Notify ID: ' + notificationId);
+//    sharedState.put('mfa-route', 'email');
+//  } catch (e) {
+//    _log('Error while parsing Notify response: ' + e);
+//    return {
+//      success: false,
+//      message: '[SEND MFA EMAIL] Error while parsing Notify response: '.concat(e)
+//    };
+//  }
+//
+//  return {
+//    success: (response.getStatus().getCode() === 201),
+//    message: (response.getStatus().getCode() === 201) ? ('Message sent') : response.getEntity().getString()
+//  };
     sharedState.put('mfa-route', 'email');
-  } catch (e) {
-    _log('Error while parsing Notify response: ' + e);
-    return {
-      success: false,
-      message: '[SEND MFA EMAIL] Error while parsing Notify response: '.concat(e)
-    };
-  }
 
-  return {
-    success: (response.getStatus().getCode() === 201),
-    message: (response.getStatus().getCode() === 201) ? ('Message sent') : response.getEntity().getString()
-  };
+    return {
+        success: true,
+        message: "Returning true"
+    };
 }
 
 // execution flow

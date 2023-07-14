@@ -22,6 +22,7 @@ try {
   var email = sharedState.get('objectAttributes').get('mail');
   var notificationId = transientState.get('notificationId');
   var isEmailResend = sharedState.get('resendEmail');
+  var registrationJwt = sharedState.get('registrationJwt');
 
   if (callbacks.isEmpty()) {
     action = fr.Action.send(
@@ -44,6 +45,10 @@ try {
       new fr.HiddenValueCallback(
         'notificationId',
         notificationId
+      ),
+      new fr.HiddenValueCallback(
+        'registrationJwt',
+        registrationJwt
       ),
       new fr.ConfirmationCallback(
         'Do you want to resend the email, or use a different address?',
