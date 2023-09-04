@@ -132,8 +132,6 @@ if (callbacks.isEmpty()) {
     pageProps.resend = otpResend;
   }
 
-  var correctOtp = sharedState.get(config.otpSharedStateVariable);
-
   action = fr.Action.send(
     new fr.HiddenValueCallback(
       'pagePropsJSON',
@@ -146,10 +144,6 @@ if (callbacks.isEmpty()) {
     new fr.HiddenValueCallback(
       'notificationId',
       notificationId
-    ),
-    new fr.HiddenValueCallback(
-      'secretOtp',
-      correctOtp
     ),
     new fr.PasswordCallback('Security Code', false),
     new fr.ConfirmationCallback(

@@ -161,49 +161,49 @@ function sendErrorCallbacks (stage, token, message) {
 
 //sends the email (via Notify) to the recipient using the given registration JWT
 function sendEmail (language, jwt) {
-//  var requestBodyJson;
-//  var notifyJWT = transientState.get('notifyJWT');
-//  var templates = transientState.get('notifyTemplates');
-//  var returnUrl = host.concat('/account/register/verify/?token=', jwt);
-//
-//  _log('JWT from transient state: ' + notifyJWT, 'MESSAGE');
-//  _log('Templates from transient state: ' + templates);
-//  _log('RETURN URL: ' + returnUrl);
-//
-//  request.setUri(_fromConfig('NOTIFY_EMAIL_ENDPOINT'));
-//  try {
-//    requestBodyJson = {
-//      'email_address': email,
-//      'template_id': language === 'EN' ? JSON.parse(templates).en_verifyReg : JSON.parse(templates).cy_verifyReg,
-//      'personalisation': {
-//        'link': returnUrl
-//      }
-//    };
-//  } catch (e) {
-//    _log('Error while preparing request for Notify: ' + e);
-//    return false;
-//  }
-//
-//  request.setMethod('POST');
-//  request.getHeaders().add('Content-Type', 'application/json');
-//  request.getHeaders().add('Authorization', 'Bearer ' + notifyJWT);
-//  request.getEntity().setString(JSON.stringify(requestBodyJson));
-//
-//  var response = httpClient.send(request).get();
-//  var notificationId;
-//  // _log('Notify Response: ' + response.getStatus().getCode() + ' - ' + response.getEntity().getString());
-//  _log('Notify Response: ' + response.getStatus().getCode());
-//
-//  try {
-//    notificationId = JSON.parse(response.getEntity().getString()).id;
-//    transientState.put('notificationId', notificationId);
-//    _log('Notify ID: ' + notificationId);
-//  } catch (e) {
-//    _log('Error while parsing Notify response: ' + e);
-//    return false;
-//  }
+  var requestBodyJson;
+  var notifyJWT = transientState.get('notifyJWT');
+  var templates = transientState.get('notifyTemplates');
+  var returnUrl = host.concat('/account/register/verify/?token=', jwt);
 
-  return true; // (response.getStatus().getCode() === 201);
+  _log('JWT from transient state: ' + notifyJWT, 'MESSAGE');
+  _log('Templates from transient state: ' + templates);
+  _log('RETURN URL: ' + returnUrl);
+
+  request.setUri(_fromConfig('NOTIFY_EMAIL_ENDPOINT'));
+  try {
+    requestBodyJson = {
+      'email_address': email,
+      'template_id': language === 'EN' ? JSON.parse(templates).en_verifyReg : JSON.parse(templates).cy_verifyReg,
+      'personalisation': {
+        'link': returnUrl
+      }
+    };
+  } catch (e) {
+    _log('Error while preparing request for Notify: ' + e);
+    return false;
+  }
+
+  request.setMethod('POST');
+  request.getHeaders().add('Content-Type', 'application/json');
+  request.getHeaders().add('Authorization', 'Bearer ' + notifyJWT);
+  request.getEntity().setString(JSON.stringify(requestBodyJson));
+
+  var response = httpClient.send(request).get();
+  var notificationId;
+  // _log('Notify Response: ' + response.getStatus().getCode() + ' - ' + response.getEntity().getString());
+  _log('Notify Response: ' + response.getStatus().getCode());
+
+  try {
+    notificationId = JSON.parse(response.getEntity().getString()).id;
+    transientState.put('notificationId', notificationId);
+    _log('Notify ID: ' + notificationId);
+  } catch (e) {
+    _log('Error while parsing Notify response: ' + e);
+    return false;
+  }
+
+  return (response.getStatus().getCode() === 201);
 }
 
 // main execution flow
@@ -241,7 +241,6 @@ try {
     sendErrorCallbacks('REGISTRATION_ERROR', 'REGISTRATION_GENERAL_ERROR', 'An error has occurred! Please try again later.');
   } else {
     if (sendEmail(language, registrationJwt)) {
-      sharedState.put('registrationJwt', registrationJwt);
       action = fr.Action.goTo(NodeOutcome.SUCCESS).build();
     } else {
       sendErrorCallbacks('REGISTRATION_ERROR', 'REGISTRATION_SEND_EMAIL_ERROR', 'An error occurred while sending the email. Please try again later.');
