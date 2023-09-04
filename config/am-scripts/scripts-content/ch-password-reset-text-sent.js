@@ -101,12 +101,10 @@ if (otpError) {
     ).build();
   }
 } else if (callbacks.isEmpty()) {
-    var secretOtp = sharedState.get('oneTimePassword');
-
   action = fr.Action.send(
     new fr.HiddenValueCallback(
       'pagePropsJSON',
-      JSON.stringify({ 'phoneNumber': _obfuscatePhone(phoneNumber), 'secretOtp': secretOtp })
+      JSON.stringify({ 'phoneNumber': _obfuscatePhone(phoneNumber) })
     ),
     new fr.HiddenValueCallback(
       'notificationId',

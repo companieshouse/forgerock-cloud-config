@@ -84,62 +84,58 @@ function sendTextMessage (language, phoneNumber, code) {
   var request = new org.forgerock.http.protocol.Request();
   request.setUri(_fromConfig('NOTIFY_SMS_ENDPOINT'));
 
-//  try {
-//    requestBodyJson = {
-//      'phone_number': phoneNumber,
-//      'template_id': language === 'EN' ? JSON.parse(templates).en_otpSms : JSON.parse(templates).cy_otpSms,
-//      'personalisation': {
-//        'code': code
-//      }
-//    };
-//  } catch (e) {
-//    _log('Error while preparing request for Notify: ' + e);
-//    return false;
-//  }
-//
-//  try {
-//    request.setMethod('POST');
-//    request.getHeaders().add('Content-Type', 'application/json');
-//    request.getHeaders().add('Authorization', 'Bearer ' + notifyJWT);
-//    request.getEntity().setString(JSON.stringify(requestBodyJson));
-//
-//    var notificationId;
-//    var response = httpClient.send(request).get();
-//    // _log('Notify Response: ' + response.getStatus().getCode() + ' cause= ' + response.getCause() + ' body=' + response.getEntity().getString());
-//    _log('Notify Response: ' + response.getStatus().getCode() + ' cause= ' + response.getCause());
-//
-//    try {
-//      notificationId = JSON.parse(response.getEntity().getString()).id;
-//
-//      _log('Notify ID: ' + notificationId);
-//
-//      transientState.put('notificationId', notificationId);
-//      sharedState.put('mfa-route', 'sms');
-//    } catch (e) {
-//      _log('Error while parsing Notify response: ' + e);
-//      return false;
-//    }
-//
-//    // _log('Notify Response: ' + response.getStatus().getCode() + response.getCause() + response.getEntity().getString());
-//    _log('Notify Response: ' + response.getStatus().getCode() + ' cause=' + response.getCause());
-//
-//    var notifyCode = response.getStatus().getCode();
-//
-//    if (notifyCode === 400) {
-//      sharedState.put('invalidPhone', true);
-//    } else if (notifyCode > 400) {
-//      sharedState.put('smsSendError', true);
-//    }
-//
-//    return notifyCode === 201;
-//  } catch (e) {
-//    _log('Error sending via Notify : ' + e);
-//    return false;
-//  }
+  try {
+    requestBodyJson = {
+      'phone_number': phoneNumber,
+      'template_id': language === 'EN' ? JSON.parse(templates).en_otpSms : JSON.parse(templates).cy_otpSms,
+      'personalisation': {
+        'code': code
+      }
+    };
+  } catch (e) {
+    _log('Error while preparing request for Notify: ' + e);
+    return false;
+  }
 
-    sharedState.put('mfa-route', 'sms');
+  try {
+    request.setMethod('POST');
+    request.getHeaders().add('Content-Type', 'application/json');
+    request.getHeaders().add('Authorization', 'Bearer ' + notifyJWT);
+    request.getEntity().setString(JSON.stringify(requestBodyJson));
 
-    return true;
+    var notificationId;
+    var response = httpClient.send(request).get();
+    // _log('Notify Response: ' + response.getStatus().getCode() + ' cause= ' + response.getCause() + ' body=' + response.getEntity().getString());
+    _log('Notify Response: ' + response.getStatus().getCode() + ' cause= ' + response.getCause());
+
+    try {
+      notificationId = JSON.parse(response.getEntity().getString()).id;
+
+      _log('Notify ID: ' + notificationId);
+
+      transientState.put('notificationId', notificationId);
+      sharedState.put('mfa-route', 'sms');
+    } catch (e) {
+      _log('Error while parsing Notify response: ' + e);
+      return false;
+    }
+
+    // _log('Notify Response: ' + response.getStatus().getCode() + response.getCause() + response.getEntity().getString());
+    _log('Notify Response: ' + response.getStatus().getCode() + ' cause=' + response.getCause());
+
+    var notifyCode = response.getStatus().getCode();
+
+    if (notifyCode === 400) {
+      sharedState.put('invalidPhone', true);
+    } else if (notifyCode > 400) {
+      sharedState.put('smsSendError', true);
+    }
+
+    return notifyCode === 201;
+  } catch (e) {
+    _log('Error sending via Notify : ' + e);
+    return false;
+  }
 }
 
 function extractPhoneNumber () {
