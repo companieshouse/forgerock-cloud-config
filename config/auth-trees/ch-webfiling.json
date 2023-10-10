@@ -104,6 +104,14 @@
       }
     },
     {
+      "_id": "5985c5a0-5b48-433f-a2a8-9eecb423578a",
+      "nodeType": "RetryLimitDecisionNode",
+      "details": {
+        "incrementUserAttributeOnFailure": false,
+        "retryLimit": 3
+      }
+    },
+    {
       "_id": "4b27ff9e-407a-4880-8c81-92be95c0e46f",
       "nodeType": "ScriptedDecisionNode",
       "details": {
@@ -360,8 +368,8 @@
         "y": 391.015625,
         "connections": {
           "error": "074551cb-6074-4ded-b08e-03c638bfd1a1",
-          "false": "61877889-8233-4048-b76c-39f882081e40",
-          "other": "61877889-8233-4048-b76c-39f882081e40",
+          "false": "5985c5a0-5b48-433f-a2a8-9eecb423578a",
+          "other": "5985c5a0-5b48-433f-a2a8-9eecb423578a",
           "true": "b13495ba-6ac2-4877-8535-4f63dffb813f"
         },
         "nodeType": "ScriptedDecisionNode",
@@ -393,6 +401,16 @@
         "connections": {
           "Reject": "bfcdaf66-5730-40b7-a847-00f62cd539ca",
           "Retry": "fc86f06d-b17e-4cda-b10c-fb9fae255d59"
+        },
+        "nodeType": "RetryLimitDecisionNode",
+        "displayName": "Retry Limit Decision"
+      },
+      "5985c5a0-5b48-433f-a2a8-9eecb423578a": {
+        "x": 380,
+        "y": 391.01562,
+        "connections": {
+          "Reject": "074551cb-6074-4ded-b08e-03c638bfd1a",
+          "Retry": "61877889-8233-4048-b76c-39f882081e40"
         },
         "nodeType": "RetryLimitDecisionNode",
         "displayName": "Retry Limit Decision"
