@@ -263,5 +263,10 @@
     "_id": "esv-scrs-script-repeatinterval",
     "description": "Frequency of execution of SCRS script",
     "valueBase64": "%ESV_SCRS_SCRIPT_REPEATINTERVAL%"
+  },
+  {
+    "_id": "esv-tenant-env-fqdn",
+    "description": "This is the dev environment fqdn",
+    "valueBase64": "%ESV_TENANT_ENV_FQDN%"
   }
 ]
