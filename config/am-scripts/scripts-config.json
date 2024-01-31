@@ -1746,6 +1746,22 @@
         "lastModifiedDate": 1630446313640
       },
       "filename": "ch-consent-display-consent-response-success-url.js"
+    },
+    {
+      "payload": {
+        "_id": "35e9d5f6-8caf-440b-b9fc-a9e0b7a43f78",
+        "name": "CH: EWF - Invalidate a user's sessions",
+        "description": "This script issues an API http call to invalidate all the sessions that a user has open. The call authenticates via the am-access account.",
+        "script": "<replace>",
+        "default": false,
+        "language": "JAVASCRIPT",
+        "context": "AUTHENTICATION_TREE_DECISION_NODE",
+        "createdBy": "null",
+        "creationDate": 0,
+        "lastModifiedBy": "null",
+        "lastModifiedDate": 0
+      },
+      "filename": "ch-invalidate-user-sessions.js"
     }
   ]
 }

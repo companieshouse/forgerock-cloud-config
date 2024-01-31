@@ -1,4 +1,4 @@
-var _scriptName = 'CH INVALIDATE USER SESSIONS';
+var _scriptName = 'CH INVALIDATE USER SESSIONS BY USER';
 _log('EDMS-INVALIDATE: Starting');
 
 var fr = JavaImporter(
