@@ -23,7 +23,7 @@
       "repeatInterval": {
         "$int": "&{esv.removeexpiredonboardedusers.repeatinterval|1800000}"
       },
-      "queryFilter": "((/frIndexedDate2 lt \"${Time.now - 7d}Z\"))",
+      "queryFilter": "((/frIndexedDate2 lte \"${Time.now - 8d}Z\"))",
       "scriptFileName": "removeExpiredOnboardedUsers.js"
     },
     {
@@ -31,7 +31,7 @@
       "repeatInterval": {
         "$int": "&{esv.removeexpiredinvitations.repeatinterval|1800000}"
       },
-      "queryFilter": "((/frIndexedMultivalued1 lt \"${Time.now - 7d}Z\"))",
+      "queryFilter": "((/frIndexedMultivalued1 lte \"${Time.now - 8d}Z\"))",
       "scriptFileName": "removeExpiredInvitations.js"
     }
   ],
