@@ -28,6 +28,12 @@
       "displayName": "ewf-secondary",
       "useSSL": true,
       "enabled": true
+    },
+    {
+      "name": "forgerock-export",
+      "displayName": "forgerock-export",
+      "useSSL": true,
+      "enabled": true
     }
   ],
   "remoteConnectorServers": [],
