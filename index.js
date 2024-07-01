@@ -37,6 +37,11 @@ if (!process.env.FIDC_URL) {
   process.exit(1)
 }
 
+if (!process.env.FIDC_COOKIE_NAME) {
+  console.error('Missing required environment variable: FIDC_COOKIE_NAME')
+  process.exit(1)
+}
+
 // Script arguments
 yargs
   .usage('Usage: $0 [arguments]')

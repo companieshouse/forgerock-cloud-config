@@ -1,11 +1,12 @@
 const fetch = require('node-fetch')
 
 const fidcGet = async (requestUrl, token, sessionToken) => {
+  const { FIDC_COOKIE_NAME } = process.env
   const headers = sessionToken
     ? {
         'content-type': 'application/json',
         'x-requested-with': 'ForgeRock CREST.js',
-        cookie: token,
+        [FIDC_COOKIE_NAME]: token,
         'Accept-API-Version': 'resource=1.0'
       }
     : {
