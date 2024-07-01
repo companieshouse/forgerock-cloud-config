@@ -21,6 +21,7 @@ A `.env` file can be used for setting environment variables when running locally
 | Name             | Description                           | Default Value | Required           |
 | ---------------- | ------------------------------------- | ------------- | ------------------ |
 | FIDC_URL         | ForgeRock Identity Cloud URL          | N/A           | :white_check_mark: |
+| FIDC_COOKIE_NAME | ForgeRock Identity Cloud cookie name  | N/A           | :white_check_mark: |
 | UI_URL           | CH Account UI URL                     | N/A           | :white_check_mark: |
 | OAUTH2_HASH_SALT | Hash salt to be use by OAuth2 service | N/A           | :white_check_mark: |
 

@@ -6,6 +6,7 @@ describe('fidc-get', () => {
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
+    fidcCookieName: '12345678',
     token: 'abcd-1234',
     body: null
   }
@@ -18,9 +19,13 @@ describe('fidc-get', () => {
   const expectedSessionTokenHeaders = {
     'content-type': 'application/json',
     'x-requested-with': 'ForgeRock CREST.js',
-    cookie: mockValues.token,
+    [mockValues.fidcCookieName]: mockValues.token,
     'Accept-API-Version': 'resource=1.0'
   }
+
+  beforeEach(() => {
+    process.env.FIDC_COOKIE_NAME = mockValues.fidcCookieName
+  })
 
   afterEach(() => {
     jest.resetAllMocks()
