@@ -1,0 +1,197 @@
+{
+  "consentRequired": false,
+  "correlationQuery": [
+    {
+      "expressionTree": {
+        "any": [
+          "forgerockId"
+        ]
+      },
+      "file": "ui/correlateTreeToQueryFilter.js",
+      "linkQualifier": "default",
+      "mapping": "alphaUser_forgerockData",
+      "type": "text/javascript"
+    }
+  ],
+  "displayName": "alphaUser_forgerockData",
+  "icon": null,
+  "name": "alphaUser_forgerockData",
+  "policies": [
+    {
+      "action": "IGNORE",
+      "situation": "AMBIGUOUS"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "SOURCE_MISSING"
+    },
+    {
+      "action": "CREATE",
+      "situation": "MISSING"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "FOUND_ALREADY_LINKED"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "UNQUALIFIED"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "UNASSIGNED"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "LINK_ONLY"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "TARGET_IGNORED"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "SOURCE_IGNORED"
+    },
+    {
+      "action": "IGNORE",
+      "situation": "ALL_GONE"
+    },
+    {
+      "action": "UPDATE",
+      "situation": "CONFIRMED"
+    },
+    {
+      "action": "UPDATE",
+      "situation": "FOUND"
+    },
+    {
+      "action": "CREATE",
+      "situation": "ABSENT"
+    }
+  ],
+  "properties": [
+    {
+      "source": "mail",
+      "target": "mail"
+    },
+    {
+      "source": "_id",
+      "target": "forgerockId"
+    },
+    {
+      "source": "frIndexedMultivalued2",
+      "target": "authorisedCompanies",
+      "transform": {
+        "globals": {},
+        "source": "var authorisedCompanies = {'items':source};\n\nauthorisedCompanies;",
+        "type": "text/javascript"
+      }
+    },
+    {
+      "source": "userName",
+      "target": "userName"
+    },
+    {
+      "target": "givenName",
+      "source": "givenName"
+    },
+    {
+      "target": "cn",
+      "source": "cn"
+    },
+    {
+      "target": "sn",
+      "source": "sn"
+    },
+    {
+      "target": "accountStatus",
+      "source": "accountStatus"
+    },
+    {
+      "target": "telephoneNumber",
+      "source": "telephoneNumber"
+    },
+    {
+      "target": "postalAddress",
+      "source": "postalAddress"
+    },
+    {
+      "target": "country",
+      "source": "country"
+    },
+    {
+      "target": "city",
+      "source": "city"
+    },
+    {
+      "target": "stateProvince",
+      "source": "stateProvince"
+    },
+    {
+      "target": "preferences",
+      "source": "preferences"
+    },
+    {
+      "target": "memberOfOrgIds",
+      "source": "memberOfOrgIDs",
+      "transform": {
+        "type": "text/javascript",
+        "globals": {},
+        "source": "var memberOfOrgIDs = {'items':source};\n\nmemberOfOrgIDs;"
+      }
+    },
+    {
+      "target": "webFilingParentUsername",
+      "source": "frIndexedString1"
+    },
+    {
+      "target": "migratedPasswordStatus",
+      "source": "frIndexedString3"
+    },
+    {
+      "target": "dateOfSoftLockAccount",
+      "source": "frIndexedString4"
+    },
+    {
+      "target": "origin",
+      "source": "frIndexedString5"
+    },
+    {
+      "target": "scannerStartedStatus",
+      "source": "frUnindexedString1"
+    },
+    {
+      "target": "scannerCompletedStatus",
+      "source": "frUnindexedString2"
+    },
+    {
+      "target": "scrsAcivationUUID",
+      "source": "frUnindexedString3"
+    },
+    {
+      "target": "pendingInviteTimestamps",
+      "source": "frIndexedMultivalued1",
+      "transform": {
+        "type": "text/javascript",
+        "globals": {},
+        "source": "var frIndexedMultivalued1 = {'items':source};\n\nfrIndexedMultivalued1;"
+      }
+    },
+    {
+      "target": "companyInvitations",
+      "source": "frIndexedMultivalued3",
+      "transform": {
+        "type": "text/javascript",
+        "globals": {},
+        "source": "var frIndexedMultivalued3 = {'items':source};\n\nfrIndexedMultivalued3;"
+      }
+    },
+    {
+      "target": "postalCode",
+      "source": "postalCode"
+    }
+  ],
+  "source": "managed/alpha_user",
+  "target": "system/ForgerockData/forgerock_data"
+}

@@ -1,0 +1,253 @@
+{
+	"_id": "provisioner.openicf/ForgerockData",
+	"connectorRef": {
+		"connectorHostRef": "forgerock-export",
+		"displayName": "MongoDB Connector",
+		"bundleVersion": "1.5.20.0",
+		"systemType": "provisioner.openicf",
+		"bundleName": "org.forgerock.openicf.connectors.mongodb-connector",
+		"connectorName": "org.forgerock.openicf.connectors.mongodb.MongoDBConnector"
+	},
+	"poolConfigOption": {
+		"maxObjects": 30,
+		"maxIdle": 30,
+		"maxWait": 150000,
+		"minEvictableIdleTimeMillis": 120000,
+		"minIdle": 1
+	},
+	"resultsHandlerConfig": {
+		"enableNormalizingResultsHandler": false,
+		"enableFilteredResultsHandler": false,
+		"enableCaseInsensitiveFilter": false,
+		"enableAttributesToGetSearchResultsHandler": true
+	},
+	"operationTimeout": {
+		"CREATE": -1,
+		"UPDATE": -1,
+		"DELETE": -1,
+		"TEST": -1,
+		"SCRIPT_ON_CONNECTOR": -1,
+		"SCRIPT_ON_RESOURCE": -1,
+		"GET": -1,
+		"RESOLVEUSERNAME": -1,
+		"AUTHENTICATE": -1,
+		"SEARCH": -1,
+		"VALIDATE": -1,
+		"SYNC": -1,
+		"SCHEMA": -1
+	},
+	"configurationProperties": {
+		"customSensitiveConfiguration": null,
+		"createScriptFileName": "CreateMongoDB.groovy",
+		"targetDirectory": null,
+		"customizerScriptFileName": null,
+		"warningLevel": "1",
+		"authenticateScriptFileName": null,
+		"scriptExtensions": "groovy",
+		"scriptOnResourceScriptFileName": null,
+		"minimumRecompilationInterval": "100",
+		"deleteScriptFileName": "DeleteMongoDB.groovy",
+		"scriptBaseClass": null,
+		"scriptRoots": [
+			"jar:file:connectors/mongodb-connector-1.5.20.0.jar!/scripts/mongodb/"
+		],
+		"customConfiguration": null,
+		"resolveUsernameScriptFileName": null,
+		"searchScriptFileName": "SearchMongoDB.groovy",
+		"tolerance": "10",
+		"updateScriptFileName": "UpdateMongoDB.groovy",
+		"debug": "false",
+		"classpath": [],
+		"disabledGlobalASTTransformations": null,
+		"schemaScriptFileName": "SchemaMongoDB.groovy",
+		"verbose": false,
+		"testScriptFileName": "TestMongoDB.groovy",
+		"sourceEncoding": "UTF-8",
+		"syncScriptFileName": null,
+		"recompileGroovySource": "false",
+		"connectionURI": "&{esv.mongodb.forgerock.connection.uri}",
+		"host": null,
+		"port": 27017,
+		"user": null,
+		"password": null,
+		"userDatabase": null,
+		"clusterAddresses": null,
+		"dateAttributes": [],
+		"database": "forgerock",
+		"arrayAttributes": [],
+		"includeNullValue": "false",
+		"includeEmptyList": "false",
+		"dateFormat": "yyyy-MM-dd'T'HH:mm:ss'Z'",
+		"timeZone": "UTC",
+		"ICFName": "name",
+		"sslEnabled": "true",
+		"sslHostNameValidation": "true",
+		"maxConnectionIdleTime": "0",
+		"maxConnectionLifeTime": "0",
+		"minConnectionsPerHost": "0",
+		"maxConnectionsPerHost": "25"
+	},
+	"enabled": true,
+	"objectTypes": {
+		"forgerock_data": {
+			"$schema": "http://json-schema.org/draft-03/schema",
+			"type": "object",
+			"id": "forgerock_data",
+			"nativeType": "forgerock_data",
+			"properties": {
+				"mail": {
+					"type": "string",
+					"nativeType": "string",
+					"nativeName": "mail",
+					"required": true,
+					"flags": [],
+					"runAsUser": false
+				},
+				"forgerockId": {
+					"type": "string",
+					"nativeName": "forgerockId",
+					"nativeType": "string",
+					"required": true
+				},
+				"authorisedCompanies": {
+					"type": "object",
+					"nativeType": "object",
+					"nativeName": "authorisedCompanies",
+					"required": false
+				},
+				"userName": {
+					"type": "string",
+					"nativeName": "userName",
+					"nativeType": "string",
+					"required": true
+				},
+				"givenName": {
+					"type": "string",
+					"nativeName": "givenName",
+					"nativeType": "string",
+					"required": false
+				},
+				"cn": {
+					"type": "string",
+					"nativeName": "cn",
+					"nativeType": "string",
+					"required": false
+				},
+				"sn": {
+					"type": "string",
+					"nativeName": "sn",
+					"nativeType": "string",
+					"required": false
+				},
+				"accountStatus": {
+					"type": "string",
+					"nativeName": "accountStatus",
+					"nativeType": "string",
+					"required": false
+				},
+				"telephoneNumber": {
+					"type": "string",
+					"nativeName": "telephoneNumber",
+					"nativeType": "string",
+					"required": false
+				},
+				"postalAddress": {
+					"type": "string",
+					"nativeName": "postalAddress",
+					"nativeType": "string",
+					"required": false
+				},
+				"city": {
+					"type": "string",
+					"nativeName": "city",
+					"nativeType": "string",
+					"required": false
+				},
+				"country": {
+					"type": "string",
+					"nativeName": "country",
+					"nativeType": "string",
+					"required": false
+				},
+				"stateProvince": {
+					"type": "string",
+					"nativeName": "stateProvince",
+					"nativeType": "string",
+					"required": false
+				},
+				"preferences": {
+					"type": "object",
+					"nativeType": "object",
+					"nativeName": "preferences",
+					"required": false
+				},
+				"memberOfOrgIds": {
+					"type": "object",
+					"nativeType": "object",
+					"nativeName": "memberOfOrgIds",
+					"required": false
+				},
+				"webFilingParentUsername": {
+					"type": "string",
+					"nativeName": "webFilingParentUsername",
+					"nativeType": "string",
+					"required": false
+				},
+				"migratedPasswordStatus": {
+					"type": "string",
+					"nativeName": "migratedPasswordStatus",
+					"nativeType": "string",
+					"required": false
+				},
+				"dateOfSoftLockAccount": {
+					"type": "string",
+					"nativeName": "dateOfSoftLockAccount",
+					"nativeType": "string",
+					"required": false
+				},
+				"origin": {
+					"type": "string",
+					"nativeName": "origin",
+					"nativeType": "string",
+					"required": false
+				},
+				"scannerStartedStatus": {
+					"type": "string",
+					"nativeName": "scannerStartedStatus",
+					"nativeType": "string",
+					"required": false
+				},
+				"scannerCompletedStatus": {
+					"type": "string",
+					"nativeName": "scannerCompletedStatus",
+					"nativeType": "string",
+					"required": false
+				},
+				"scrsAcivationUUID": {
+					"type": "string",
+					"nativeName": "scrsAcivationUUID",
+					"nativeType": "string",
+					"required": false
+				},
+				"pendingInviteTimestamps": {
+					"type": "object",
+					"nativeType": "object",
+					"nativeName": "pendingInviteTimestamps",
+					"required": false
+				},
+				"companyInvitations": {
+					"type": "object",
+					"nativeType": "object",
+					"nativeName": "companyInvitations",
+					"required": false
+				},
+				"postalCode": {
+					"type": "string",
+					"nativeName": "postalCode",
+					"nativeType": "string",
+					"required": false
+				}
+			}
+		}
+	}
+}
