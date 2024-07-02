@@ -5,7 +5,6 @@ describe('update-cors', () => {
   jest.mock('../../helpers/get-access-token')
   jest.mock('../../helpers/get-session-token')
   jest.mock('../../helpers/fidc-request')
-  const getSessionToken = require('../../helpers/get-session-token')
   const getAccessToken = require('../../helpers/get-access-token')
   const fidcRequest = require('../../helpers/fidc-request')
   const updateCors = require('../../scripts/update-cors')
@@ -88,9 +87,6 @@ describe('update-cors', () => {
 
   beforeEach(() => {
     fidcRequest.mockImplementation(() => Promise.resolve())
-    getSessionToken.mockImplementation(() =>
-      Promise.resolve(mockValues.sessionToken)
-    )
     getAccessToken.mockImplementation(() =>
       Promise.resolve(mockValues.accessToken)
     )
@@ -112,17 +108,6 @@ describe('update-cors', () => {
     process.exit.mockRestore()
   })
 
-  it('should error if getSessionToken functions fails', async () => {
-    expect.assertions(2)
-    const errorMessage = 'Invalid user'
-    getSessionToken.mockImplementation(() =>
-      Promise.reject(new Error(errorMessage))
-    )
-    await updateCors(mockValues)
-    expect(console.error).toHaveBeenCalledWith(errorMessage)
-    expect(process.exit).toHaveBeenCalledWith(1)
-  })
-
   it('should error if getAccessToken functions fails', async () => {
     expect.assertions(2)
     const errorMessage = 'Invalid user'
@@ -135,25 +120,11 @@ describe('update-cors', () => {
   })
 
   it('should call AM API using config file', async () => {
-    expect.assertions(4)
-    const expectedServiceUrl = `${mockValues.fidcUrl}/am/json/global-config/services/CorsService`
-    const expectedServiceConfigUrl = `${expectedServiceUrl}/configuration/${mockConfig.corsServiceConfig._id}`
+    expect.assertions(2)
     const expectedIdmUrl = `${mockValues.fidcUrl}/openidm/config/servletfilter/cors`
     await updateCors(mockValues)
-    expect(fidcRequest.mock.calls.length).toEqual(3)
+    expect(fidcRequest.mock.calls.length).toEqual(1)
     expect(fidcRequest.mock.calls[0]).toEqual([
-      expectedServiceUrl,
-      mockConfig.corsServiceGlobal,
-      mockValues.sessionToken,
-      true
-    ])
-    expect(fidcRequest.mock.calls[1]).toEqual([
-      expectedServiceConfigUrl,
-      mockConfig.corsServiceConfig,
-      mockValues.sessionToken,
-      true
-    ])
-    expect(fidcRequest.mock.calls[2]).toEqual([
       expectedIdmUrl,
       mockConfig.idmCorsConfig,
       mockValues.accessToken,
