@@ -1,7 +1,7 @@
 {
 	"_id": "provisioner.openicf/ForgerockData",
 	"connectorRef": {
-		"connectorHostRef": "chs-group",
+		"connectorHostRef": "forgerock-export",
 		"displayName": "MongoDB Connector",
 		"bundleVersion": "1.5.20.0",
 		"systemType": "provisioner.openicf",
