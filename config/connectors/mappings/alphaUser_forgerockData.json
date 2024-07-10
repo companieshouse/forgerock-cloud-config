@@ -194,5 +194,11 @@
     }
   ],
   "source": "managed/alpha_user",
-  "target": "system/ForgerockData/forgerock_data"
+  "target": "system/ForgerockData/forgerock_data",
+  "clusteredSourceReconEnabled": true,
+  "reconSourceQueryPageSize": {
+    "$int": "&{esv.659b97c692.companyreconsourcequerypagesize}"
+  },
+  "sourceQueryFullEntry": true,
+  "taskThreads": 20
 }
