@@ -167,7 +167,7 @@
       "source": "frUnindexedString2"
     },
     {
-      "target": "scrsAcivationUUID",
+      "target": "scrsActivationUUID",
       "source": "frUnindexedString3"
     },
     {
@@ -191,6 +191,18 @@
     {
       "target": "postalCode",
       "source": "postalCode"
+    },
+    {
+      "target": "lastLoginDate",
+      "source": "frIndexedDate1"
+    },
+    {
+      "target": "onboardingDate",
+      "source": "frIndexedDate2"
+    },
+    {
+      "target": "lastSync",
+      "source": "lastSync"
     }
   ],
   "source": "managed/alpha_user",

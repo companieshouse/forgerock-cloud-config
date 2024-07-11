@@ -223,9 +223,9 @@
 					"nativeType": "string",
 					"required": false
 				},
-				"scrsAcivationUUID": {
+				"scrsActivationUUID": {
 					"type": "string",
-					"nativeName": "scrsAcivationUUID",
+					"nativeName": "scrsActivationUUID",
 					"nativeType": "string",
 					"required": false
 				},
@@ -245,6 +245,24 @@
 					"type": "string",
 					"nativeName": "postalCode",
 					"nativeType": "string",
+					"required": false
+				},
+				"lastLoginDate": {
+					"type": "string",
+					"nativeName": "lastLoginDate",
+					"nativeType": "string",
+					"required": false
+				},
+				"onboardingDate": {
+					"type": "string",
+					"nativeName": "onboardingDate",
+					"nativeType": "string",
+					"required": false
+				},
+				"lastSync": {
+					"type": "object",
+					"nativeType": "object",
+					"nativeName": "lastSync",
 					"required": false
 				}
 			}
