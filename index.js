@@ -42,6 +42,18 @@ if (!process.env.FIDC_COOKIE_NAME) {
   process.exit(1)
 }
 
+if (!process.env.SERVICE_ACCOUNT_ID) {
+  console.error('Missing required environment variable: SERVICE_ACCOUNT_ID')
+  process.exit(1)
+}
+
+if (!process.env.SERVICE_ACCOUNT_KEY && (!process.env.SERVICE_ACCOUNT_KEY_PART_1 || !process.env.SERVICE_ACCOUNT_KEY_PART_2)) {
+  console.error('Missing required environment variable: SERVICE_ACCOUNT_KEY or SERVICE_ACCOUNT_KEY_PART_1 and SERVICE_ACCOUNT_KEY_PART_2')
+  process.exit(1)
+}
+
+process.env.SERVICE_ACCOUNT_KEY = process.env.SERVICE_ACCOUNT_KEY || JSON.stringify({ ...JSON.parse(process.env.SERVICE_ACCOUNT_KEY_PART_1), ...JSON.parse(process.env.SERVICE_ACCOUNT_KEY_PART_2) })
+
 // Script arguments
 yargs
   .usage('Usage: $0 [arguments]')
@@ -51,15 +63,13 @@ yargs
   .command({
     command: 'agents',
     desc: 'Update ForgeRock Agents (./config/agents)',
-    builder: cliOptions(['username', 'password', 'realm', 'igAgentPassword']),
+    builder: cliOptions(['realm', 'igAgentPassword']),
     handler: (argv) => updateAgents(argv)
   })
   .command({
     command: 'applications',
     desc: 'Update ForgeRock Applications (./config/applications)',
     builder: cliOptions([
-      'username',
-      'password',
       'realm',
       'authTreePassword',
       'igOidcPassword'
@@ -118,12 +128,6 @@ yargs
     command: 'cors',
     desc: 'Update ForgeRock CORS (./config/cors)',
     builder: cliOptions([
-      'username',
-      'password',
-      'idmUsername',
-      'idmPassword',
-      'adminClientId',
-      'adminClientSecret',
       'realm'
     ]),
     handler: (argv) => updateCors(argv)
@@ -132,10 +136,6 @@ yargs
     command: 'internal-roles',
     desc: 'Update IDM Internal Roles (./config/internal-roles)',
     builder: cliOptions([
-      'idmUsername',
-      'idmPassword',
-      'adminClientId',
-      'adminClientSecret',
       'realm'
     ]),
     handler: (argv) => updateInternalRoles(argv)
@@ -217,10 +217,6 @@ yargs
     command: 'user-roles',
     desc: 'Update IDM User Roles (./config/user-roles)',
     builder: cliOptions([
-      'idmUsername',
-      'idmPassword',
-      'adminClientId',
-      'adminClientSecret',
       'realm'
     ]),
     handler: (argv) => updateUserRoles(argv)
@@ -259,25 +255,25 @@ yargs
   .command({
     command: 'update-managed-users',
     desc: 'Update Managed Users (./config/managed-users)',
-    builder: cliOptions(['username', 'password', 'realm', 'treeServiceUserPassword']),
+    builder: cliOptions(['realm', 'treeServiceUserPassword']),
     handler: (argv) => updateManagedUsers(argv)
   })
   .command({
     command: 'variables',
     desc: 'Update Variables (.env)',
-    builder: cliOptions(['username', 'password', 'realm']),
+    builder: cliOptions(['realm']),
     handler: (argv) => updateVariables(argv)
   })
   .command({
     command: 'secrets',
     desc: 'Update Secrets (.env)',
-    builder: cliOptions(['username', 'password', 'realm']),
+    builder: cliOptions(['realm']),
     handler: (argv) => updateSecrets(argv)
   })
   .command({
     command: 'restart-fidc',
     desc: 'Restart FIDC services',
-    builder: cliOptions(['username', 'password', 'realm']),
+    builder: cliOptions(['realm']),
     handler: (argv) => restartFidc(argv)
   })
   .command({
@@ -289,7 +285,7 @@ yargs
   .command({
     command: 'update-esv-and-optional-restart',
     desc: 'Update Variables and Secrets and Optinal Restart',
-    builder: cliOptions(['username', 'password', 'realm']),
+    builder: cliOptions(['realm']),
     handler: (argv) => updateEsvAndRestart(argv)
   })
   .demandCommand()

@@ -2,7 +2,7 @@
 
 This repository contains scripts and configuration for the Companies House ForgeRock Identity Cloud tenant. All scripts are used as part of the CI/CD pipeline but can also be ran locally.
 
-Not all steps can be run against Staging and Production tenants; all changes to static configuration must be applied via the configuration promotion process. Changes to dynamic configuration can be aplied to all types of tenants. For more information refer to the Identity Cloud docs: https://backstage.forgerock.com/docs/idcloud/latest/tenants/promote-configuration.html  
+Not all steps can be run against Staging and Production tenants; all changes to static configuration must be applied via the configuration promotion process. Changes to dynamic configuration can be aplied to all types of tenants. For more information refer to the Identity Cloud docs: https://backstage.forgerock.com/docs/idcloud/latest/tenants/promote-configuration.html
 
 ## Running Locally
 
@@ -16,14 +16,18 @@ The following need to be installed/configured for local use:
 
 ### Environment Variables
 
-A `.env` file can be used for setting environment variables when running locally. Copy the `.env.sample` file to a new file called `.env` and update the values for the environment. 
+A `.env` file can be used for setting environment variables when running locally. Copy the `.env.sample` file to a new file called `.env` and update the values for the environment.
 
-| Name             | Description                           | Default Value | Required           |
-| ---------------- | ------------------------------------- | ------------- | ------------------ |
-| FIDC_URL         | ForgeRock Identity Cloud URL          | N/A           | :white_check_mark: |
-| FIDC_COOKIE_NAME | ForgeRock Identity Cloud cookie name  | N/A           | :white_check_mark: |
-| UI_URL           | CH Account UI URL                     | N/A           | :white_check_mark: |
-| OAUTH2_HASH_SALT | Hash salt to be use by OAuth2 service | N/A           | :white_check_mark: |
+| Name                       | Description                                           | Default Value | Required                                                                           |
+| -------------------------- | ----------------------------------------------------- | ------------- | ---------------------------------------------------------------------------------- |
+| FIDC_URL                   | ForgeRock Identity Cloud URL                          | N/A           | :white_check_mark:                                                                 |
+| FIDC_COOKIE_NAME           | ForgeRock Identity Cloud cookie name                  | N/A           | :white_check_mark:                                                                 |
+| SERVICE_ACCOUNT_ID         | ForgeRock Service Account ID                          | N/A           | :white_check_mark:                                                                 |
+| SERVICE_ACCOUNT_KEY        | ForgeRock Service Account JSON key                    | N/A           | _If **SERVICE_ACCOUNT_KEY_PART_1** and **SERVICE_ACCOUNT_KEY_PART_2** are not set_ |
+| SERVICE_ACCOUNT_KEY_PART_1 | First half of the ForgeRock Service Account JSON key  | N/A           | _If **SERVICE_ACCOUNT_KEY** is not set_                                            |
+| SERVICE_ACCOUNT_KEY_PART_2 | Second half of the ForgeRock Service Account JSON key | N/A           | _If **SERVICE_ACCOUNT_KEY** is not set_                                            |
+| UI_URL                     | CH Account UI URL                                     | N/A           | :white_check_mark:                                                                 |
+| OAUTH2_HASH_SALT           | Hash salt to be use by OAuth2 service                 | N/A           | :white_check_mark:                                                                 |
 
 ### Install Dependencies
 

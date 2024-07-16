@@ -2,10 +2,9 @@ describe('update-cors', () => {
   jest.mock('fs')
   const fs = require('fs')
   const path = require('path')
-  jest.mock('../../helpers/get-access-token')
-  jest.mock('../../helpers/get-session-token')
+  jest.mock('../../helpers/get-service-account-token')
   jest.mock('../../helpers/fidc-request')
-  const getAccessToken = require('../../helpers/get-access-token')
+  const getServiceAccountToken = require('../../helpers/get-service-account-token')
   const fidcRequest = require('../../helpers/fidc-request')
   const updateCors = require('../../scripts/update-cors')
   jest.spyOn(console, 'log').mockImplementation(() => {})
@@ -14,8 +13,7 @@ describe('update-cors', () => {
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
-    sessionToken: 'session=1234',
-    accessToken: 'blah',
+    accessToken: 'forgerock-token',
     realm: 'alpha'
   }
 
@@ -87,7 +85,7 @@ describe('update-cors', () => {
 
   beforeEach(() => {
     fidcRequest.mockImplementation(() => Promise.resolve())
-    getAccessToken.mockImplementation(() =>
+    getServiceAccountToken.mockImplementation(() =>
       Promise.resolve(mockValues.accessToken)
     )
     process.env.FIDC_URL = mockValues.fidcUrl
@@ -108,10 +106,10 @@ describe('update-cors', () => {
     process.exit.mockRestore()
   })
 
-  it('should error if getAccessToken functions fails', async () => {
+  it('should error if getServiceAccountToken functions fails', async () => {
     expect.assertions(2)
     const errorMessage = 'Invalid user'
-    getAccessToken.mockImplementation(() =>
+    getServiceAccountToken.mockImplementation(() =>
       Promise.reject(new Error(errorMessage))
     )
     await updateCors(mockValues)
@@ -120,11 +118,25 @@ describe('update-cors', () => {
   })
 
   it('should call AM API using config file', async () => {
-    expect.assertions(2)
+    expect.assertions(4)
+    const expectedServiceUrl = `${mockValues.fidcUrl}/am/json/global-config/services/CorsService`
+    const expectedServiceConfigUrl = `${expectedServiceUrl}/configuration/${mockConfig.corsServiceConfig._id}`
     const expectedIdmUrl = `${mockValues.fidcUrl}/openidm/config/servletfilter/cors`
     await updateCors(mockValues)
-    expect(fidcRequest.mock.calls.length).toEqual(1)
+    expect(fidcRequest.mock.calls.length).toEqual(3)
     expect(fidcRequest.mock.calls[0]).toEqual([
+      expectedServiceUrl,
+      mockConfig.corsServiceGlobal,
+      mockValues.accessToken,
+      false
+    ])
+    expect(fidcRequest.mock.calls[1]).toEqual([
+      expectedServiceConfigUrl,
+      mockConfig.corsServiceConfig,
+      mockValues.accessToken,
+      false
+    ])
+    expect(fidcRequest.mock.calls[2]).toEqual([
       expectedIdmUrl,
       mockConfig.idmCorsConfig,
       mockValues.accessToken,

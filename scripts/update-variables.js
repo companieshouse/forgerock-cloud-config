@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const getAccessToken = require('../helpers/get-access-token')
+const getServiceAccountToken = require('../helpers/get-service-account-token')
 const fidcRequest = require('../helpers/fidc-request')
 const fidcGet = require('../helpers/fidc-get')
 const fidcPost = require('../helpers/fidc-post')
@@ -34,11 +34,11 @@ async function alreadyExists (variableName, valueBase64, requestUrl, scriptUrl, 
   return ret
 }
 
-const updateVariables = async (argv) => {
+const updateVariables = async () => {
   const { FIDC_URL } = process.env
 
   try {
-    const accessToken = await getAccessToken(argv)
+    const accessToken = await getServiceAccountToken()
     const variables = []
     const varsPath = path.resolve(__dirname, '../config/variables-secrets/variables.json')
 

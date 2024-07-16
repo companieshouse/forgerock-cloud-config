@@ -2,8 +2,8 @@ describe('update-agents', () => {
   jest.mock('fs')
   const fs = require('fs')
   const path = require('path')
-  jest.mock('../../helpers/get-session-token')
-  const getSessionToken = require('../../helpers/get-session-token')
+  jest.mock('../../helpers/get-service-account-token')
+  const getServiceAccountToken = require('../../helpers/get-service-account-token')
   jest.mock('../../helpers/fidc-request')
   const fidcRequest = require('../../helpers/fidc-request')
   jest.mock('../../helpers/replace-sensitive-values')
@@ -16,7 +16,7 @@ describe('update-agents', () => {
 
   const mockValues = {
     fidcUrl: 'https://fidc-test.forgerock.com',
-    sessionToken: 'session=1234',
+    accessToken: 'forgerock-token',
     realm: 'alpha'
   }
 
@@ -53,7 +53,7 @@ describe('update-agents', () => {
   // }
 
   beforeEach(() => {
-    getSessionToken.mockImplementation(() =>
+    getServiceAccountToken.mockImplementation(() =>
       Promise.resolve(mockValues.sessionToken)
     )
     fidcRequest.mockImplementation(() => Promise.resolve())
@@ -77,10 +77,10 @@ describe('update-agents', () => {
     process.exit.mockRestore()
   })
 
-  it('should error if getSessionToken functions fails', async () => {
+  it('should error if getServiceAccountToken functions fails', async () => {
     expect.assertions(2)
     const errorMessage = 'Invalid user'
-    getSessionToken.mockImplementation(() =>
+    getServiceAccountToken.mockImplementation(() =>
       Promise.reject(new Error(errorMessage))
     )
     await updateAgents(mockValues)

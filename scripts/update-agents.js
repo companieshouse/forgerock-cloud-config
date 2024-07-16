@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const getSessionToken = require('../helpers/get-session-token')
+const getServiceAccountToken = require('../helpers/get-service-account-token')
 const fidcRequest = require('../helpers/fidc-request')
 const replaceSensitiveValues = require('../helpers/replace-sensitive-values')
 
@@ -9,7 +9,7 @@ const updateAgents = async (argv) => {
   const { FIDC_URL } = process.env
 
   try {
-    const sessionToken = await getSessionToken(argv)
+    const accessToken = await getServiceAccountToken()
 
     // Read agent JSON files
     const dir = path.resolve(__dirname, '../config/agents')
@@ -32,7 +32,7 @@ const updateAgents = async (argv) => {
       agentFileContent.map(async (agentFile) => {
         const requestUrl = `${FIDC_URL}/am/json/realms/root/realms/${realm}/realm-config/agents/${agentFile._type._id}/${agentFile._id}`
         delete agentFile._type
-        await fidcRequest(requestUrl, agentFile, sessionToken, true)
+        await fidcRequest(requestUrl, agentFile, accessToken, false)
         console.log(`${agentFile._id} updated`)
         return Promise.resolve()
       })

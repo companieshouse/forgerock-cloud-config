@@ -2,8 +2,8 @@ describe('update-managed-users', () => {
   jest.mock('fs')
   const fs = require('fs')
   const path = require('path')
-  jest.mock('../../helpers/get-access-token')
-  const getAccessToken = require('../../helpers/get-access-token')
+  jest.mock('../../helpers/get-service-account-token')
+  const getServiceAccountToken = require('../../helpers/get-service-account-token')
   jest.mock('../../helpers/fidc-request')
   const fidcRequest = require('../../helpers/fidc-request')
   jest.spyOn(console, 'log').mockImplementation(() => {})
@@ -97,7 +97,7 @@ describe('update-managed-users', () => {
 
   beforeEach(() => {
     fidcRequest.mockImplementation(() => Promise.resolve())
-    getAccessToken.mockImplementation(() =>
+    getServiceAccountToken.mockImplementation(() =>
       Promise.resolve(mockValues.accessToken)
     )
     process.env.FIDC_URL = mockValues.fidcUrl
@@ -118,10 +118,10 @@ describe('update-managed-users', () => {
     process.exit.mockRestore()
   })
 
-  it('should error if getAccessToken functions fails', async () => {
+  it('should error if getServiceAccountToken functions fails', async () => {
     expect.assertions(2)
     const errorMessage = 'Invalid user'
-    getAccessToken.mockImplementation(() =>
+    getServiceAccountToken.mockImplementation(() =>
       Promise.reject(new Error(errorMessage))
     )
     await updateManagedUsers(mockValues)

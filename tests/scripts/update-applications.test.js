@@ -2,8 +2,8 @@ describe('update-applications', () => {
   jest.mock('fs')
   const fs = require('fs')
   const path = require('path')
-  jest.mock('../../helpers/get-session-token')
-  const getSessionToken = require('../../helpers/get-session-token')
+  jest.mock('../../helpers/get-service-account-token')
+  const getServiceAccountToken = require('../../helpers/get-service-account-token')
   jest.mock('../../helpers/fidc-request')
   const fidcRequest = require('../../helpers/fidc-request')
   jest.mock('../../helpers/replace-sensitive-values')
@@ -18,7 +18,7 @@ describe('update-applications', () => {
     fidcUrl: 'https://fidc-test.forgerock.com',
     uiUrl: 'https://idam-ui.companieshouse.gov.uk',
     ewfUrl: 'https://ewf.companieshouse.gov.uk',
-    sessionToken: 'session=1234',
+    accessToken: 'forgerock-token',
     realm: 'alpha'
   }
 
@@ -56,8 +56,8 @@ describe('update-applications', () => {
   }
 
   beforeEach(() => {
-    getSessionToken.mockImplementation(() =>
-      Promise.resolve(mockValues.sessionToken)
+    getServiceAccountToken.mockImplementation(() =>
+      Promise.resolve(mockValues.accessToken)
     )
     fidcRequest.mockImplementation(() => Promise.resolve())
     replaceSensitiveValues.mockImplementation(() => Promise.resolve())
@@ -91,10 +91,10 @@ describe('update-applications', () => {
     expect(process.exit).toHaveBeenCalledWith(1)
   })
 
-  it('should error if getSessionToken functions fails', async () => {
+  it('should error if getServiceAccountToken functions fails', async () => {
     expect.assertions(2)
     const errorMessage = 'Invalid user'
-    getSessionToken.mockImplementation(() =>
+    getServiceAccountToken.mockImplementation(() =>
       Promise.reject(new Error(errorMessage))
     )
     await updateApplications(mockValues)
@@ -132,8 +132,8 @@ describe('update-applications', () => {
     expect(fidcRequest.mock.calls[0]).toEqual([
       expectedUrl,
       mockConfig,
-      mockValues.sessionToken,
-      true
+      mockValues.accessToken,
+      false
     ])
   })
 
@@ -147,8 +147,8 @@ describe('update-applications', () => {
     expect(fidcRequest.mock.calls[0]).toEqual([
       expectedUrl,
       mockConfig,
-      mockValues.sessionToken,
-      true
+      mockValues.accessToken,
+      false
     ])
   })
 })
