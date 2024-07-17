@@ -50,11 +50,24 @@ const updateSecrets = async () => {
           if (secretEntry._id && secretEntry.valueBase64) {
             if (secretEntry.valueBase64.startsWith('%') && secretEntry.valueBase64.endsWith('%')) {
               const envName = secretEntry.valueBase64.replaceAll('%', ' ').trim()
-              const envValue = process.env[envName]
+              let envValue = process.env[envName]
 
               if (!envValue) {
-                console.error(`No environment value with key : '${envName}' for ESV named : '${secretEntry._id}', exiting!`)
-                process.exit(1)
+                if (secretEntry.mergeJsonVariables) {
+                  let mergedOutput = {}
+                  secretEntry.mergeJsonVariables.forEach(function (mergeEnvName) {
+                    const mergeEnvValue = process.env[mergeEnvName]
+                    if (!mergeEnvValue) {
+                      console.error(`No environment value with key : '${mergeEnvName}' for ESV named : '${secretEntry._id}', exiting!`)
+                      process.exit(1)
+                    }
+                    mergedOutput = Object.assign(mergedOutput, JSON.parse(mergeEnvValue))
+                  })
+                  envValue = btoa(JSON.stringify(mergedOutput)) // Base64 encoded string
+                } else {
+                  console.error(`No environment value with key : '${envName}' for ESV named : '${secretEntry._id}', exiting!`)
+                  process.exit(1)
+                }
               }
 
               secretEntry.valueBase64 = envValue
