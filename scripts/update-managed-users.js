@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const getAccessToken = require('../helpers/get-access-token')
+const getServiceAccountToken = require('../helpers/get-service-account-token')
 const fidcRequest = require('../helpers/fidc-request')
 const replaceSensitiveValues = require('../helpers/replace-sensitive-values')
 
@@ -8,7 +8,7 @@ const updateManagedUsers = async (argv) => {
   const { FIDC_URL, AUTH_TREE_PASSWORD, ADMIN_CLIENT_TEST_PASSWORD } = process.env
 
   try {
-    const accessToken = await getAccessToken(argv)
+    const accessToken = await getServiceAccountToken()
 
     // Combine managed object JSON files
     const dir = path.resolve(__dirname, '../config/managed-users')

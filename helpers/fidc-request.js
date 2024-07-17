@@ -22,6 +22,15 @@ const fidcRequest = async (requestUrl, body, token, sessionToken) => {
     headers['Accept-API-Version'] = 'protocol=1.0,resource=1.0'
   }
 
+  // Adding header for OAuth2Client endpoint
+  const amEndpoint =
+    requestUrl.indexOf('/am/json/global-config') > -1 ||
+    requestUrl.indexOf('/am/json/realms') > -1
+
+  if (amEndpoint) {
+    headers['Accept-API-Version'] = 'protocol=2.0,resource=1.0'
+  }
+
   const requestOptions = {
     method: 'put',
     body: JSON.stringify(body),

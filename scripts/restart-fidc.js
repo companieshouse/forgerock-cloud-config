@@ -1,11 +1,11 @@
-const getAccessToken = require('../helpers/get-access-token')
+const getServiceAccountToken = require('../helpers/get-service-account-token')
 const fidcPost = require('../helpers/fidc-post')
 
-const restartFidc = async (argv) => {
+const restartFidc = async () => {
   const { FIDC_URL } = process.env
 
   try {
-    const accessToken = await getAccessToken(argv)
+    const accessToken = await getServiceAccountToken()
 
     const requestUrl = `${FIDC_URL}/environment/startup?_action=restart`
 
