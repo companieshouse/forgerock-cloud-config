@@ -123,8 +123,10 @@ try {
     }
   } else {
     var password = fr.String(callbacks.get(1).getPassword());
-    var newEmail = fr.String(callbacks.get(2).getName());
-    var confirmNewEmail = fr.String(callbacks.get(3).getName());
+    var newCasedEmail = fr.String(callbacks.get(2).getName());
+    var newEmail = newCasedEmail.toLowerCase();
+    var confirmNewCasedEmail = fr.String(callbacks.get(3).getName());
+    var confirmNewEmail = confirmNewCasedEmail.toLowerCase();
     var userExistenceCheckResponse = checkUserExistence(newEmail);
 
     if (!_isValidEmail(newEmail)) {
