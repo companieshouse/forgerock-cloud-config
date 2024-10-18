@@ -3,7 +3,7 @@
 	"connectorRef": {
 		"connectorHostRef": "chs-group",
 		"displayName": "CHS User Connector",
-		"bundleVersion": "1.5.20.0",
+		"bundleVersion": "1.5.20.22",
 		"systemType": "provisioner.openicf",
 		"bundleName": "org.forgerock.openicf.connectors.mongodb-connector",
 		"connectorName": "org.forgerock.openicf.connectors.mongodb.MongoDBConnector"
@@ -49,7 +49,7 @@
 		"deleteScriptFileName": "DeleteMongoDB.groovy",
 		"scriptBaseClass": null,
 		"scriptRoots": [
-			"jar:file:connectors/mongodb-connector-1.5.20.0.jar\u0021/scripts/mongodb/"
+			"jar:file:connectors/mongodb-connector-1.5.20.22.jar!/scripts/mongodb/"
 		],
 		"customConfiguration": null,
 		"resolveUsernameScriptFileName": null,
