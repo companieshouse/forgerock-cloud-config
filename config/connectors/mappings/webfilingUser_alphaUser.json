@@ -86,7 +86,19 @@
   },
   "sourceQueryFullEntry": true,
   "taskThreads": 20,
-  "correlationQuery": [],
+  "correlationQuery": [
+    {
+      "linkQualifier": "default",
+      "expressionTree": {
+        "all": [
+          "frIndexedString1"
+        ]
+      },
+      "mapping": "webfilingUser_alphaUser",
+      "type": "text/javascript",
+      "file": "ui/correlateTreeToQueryFilter.js"
+    }
+  ],
   "onCreate": {
     "type": "text/javascript",
     "globals": {},
