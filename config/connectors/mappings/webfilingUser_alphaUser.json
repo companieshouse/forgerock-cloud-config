@@ -7,15 +7,27 @@
   "properties": [
     {
       "target": "mail",
-      "source": "EMAIL"
+      "source": "EMAIL",
+      "transform": {
+        "type": "text/javascript",
+        "source": "source.toLowerCase();"
+      }
     },
     {
       "target": "sn",
-      "source": "EMAIL"
+      "source": "EMAIL",
+      "transform": {
+        "type": "text/javascript",
+        "source": "source.toLowerCase();"
+      }
     },
     {
       "target": "userName",
-      "source": "EMAIL"
+      "source": "EMAIL",
+      "transform": {
+        "type": "text/javascript",
+        "source": "source.toLowerCase();"
+      }
     },
     {
       "target": "frIndexedString2",
