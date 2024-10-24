@@ -4,7 +4,7 @@
         "$bool": "&{esv.2bb35d546a.reconscheduleauthcodesenabled}"
     },
     "persisted": true,
-    "recoverable": false,
+    "recoverable": true,
     "misfirePolicy": "fireAndProceed",
     "schedule": "&{esv.9db15a3625.reconscheduleauthcodescronexp}",
     "repeatInterval": 0,

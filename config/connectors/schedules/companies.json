@@ -4,7 +4,7 @@
         "$bool": "&{esv.b1ea4bdc4a.reconscheduleucompaniesenabled}"
     },
     "persisted": true,
-    "recoverable": false,
+    "recoverable": true,
     "misfirePolicy": "fireAndProceed",
     "schedule": "&{esv.c827402089.reconscheduleucompaniescronexp}",
     "repeatInterval": 0,
