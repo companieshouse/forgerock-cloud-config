@@ -64,7 +64,7 @@
       "situation": "UNASSIGNED"
     },
     {
-      "action": "EXCEPTION",
+      "action": "UNLINK",
       "situation": "LINK_ONLY"
     },
     {
@@ -84,7 +84,7 @@
       "situation": "CONFIRMED"
     },
     {
-      "action": "UPDATE",
+      "action": "LINK",
       "situation": "FOUND"
     },
     {
