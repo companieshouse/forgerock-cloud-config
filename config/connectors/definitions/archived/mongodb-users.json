@@ -3,7 +3,7 @@
 	"connectorRef": {
 		"connectorHostRef": "chs-group",
 		"displayName": "CHS User Connector",
-		"bundleVersion": "[1.5.0.0,1.6.0.0]",
+		"bundleVersion": "[1.5.0.0,1.6.0.0)",
 		"systemType": "provisioner.openicf",
 		"bundleName": "org.forgerock.openicf.connectors.mongodb-connector",
 		"connectorName": "org.forgerock.openicf.connectors.mongodb.MongoDBConnector"
