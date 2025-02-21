@@ -3,7 +3,7 @@
 	"connectorRef": {
 		"connectorHostRef": "ewf-group",
 		"displayName": "Database Table Connector",
-		"bundleVersion": "1.5.20.3-SNAPSHOT",
+		"bundleVersion": "[1.5.0.0,1.6.0.0)",
 		"systemType": "provisioner.openicf",
 		"bundleName": "org.forgerock.openicf.connectors.databasetable-connector",
 		"connectorName": "org.identityconnectors.databasetable.DatabaseTableConnector"
@@ -26,20 +26,20 @@
 		"enableAttributesToGetSearchResultsHandler": true
 	},
 	"operationTimeout": {
-		"CREATE": -1,
-		"UPDATE": -1,
-		"DELETE": -1,
-		"TEST": -1,
-		"SCRIPT_ON_CONNECTOR": -1,
-		"SCRIPT_ON_RESOURCE": -1,
-		"GET": -1,
-		"RESOLVEUSERNAME": -1,
-		"AUTHENTICATE": -1,
-		"SEARCH": -1,
-		"VALIDATE": -1,
-		"SYNC": -1,
-		"SCHEMA": -1
-	},
+		"AUTHENTICATE": 10000,
+		"CREATE": 30000,
+		"DELETE": 30000,
+		"GET": 30000,
+		"RESOLVEUSERNAME": 15000,
+		"SCHEMA": 15000,
+		"SCRIPT_ON_CONNECTOR": 15000,
+		"SCRIPT_ON_RESOURCE": 15000,
+		"SEARCH": 180000,
+		"SYNC": 180000,
+		"TEST": 10000,
+		"UPDATE": 30000,
+		"VALIDATE": -15000
+	  },
 	"configurationProperties": {
 		"connectionProperties": null,
 		"propagateInterruptState": false,
