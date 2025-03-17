@@ -1,0 +1,137 @@
+{
+	"_id": "provisioner.openicf/WebfilingAuthCode",
+	"configurationProperties": {
+		"abandonWhenPercentageFull": 0,
+		"accessToUnderlyingConnectionAllowed": true,
+		"allNative": false,
+		"alternateUsernameAllowed": false,
+		"changeLogColumn": null,
+		"commitOnReturn": false,
+		"connectionProperties": null,
+		"defaultAutoCommit": null,
+		"defaultCatalog": null,
+		"defaultReadOnly": null,
+		"defaultTransactionIsolation": -1,
+		"disablePaging": false,
+		"driverClassName": "oracle.jdbc.OracleDriver",
+		"enableEmptyString": false,
+		"fairQueue": true,
+		"ignoreExceptionOnPreLoad": false,
+		"inclusiveSync": false,
+		"initSQL": null,
+		"initialSize": "&{esv.778b694e17.configurationpropertiesinitialsize}",
+		"jdbcInterceptors": null,
+		"jmxEnabled": true,
+		"keyColumn": "CONUMB",
+		"logAbandoned": false,
+		"logValidationErrors": false,
+		"maxActive": "&{esv.778b694e17.configurationpropertiesmaxactive}",
+		"maxAge": "0",
+		"maxIdle": "&{esv.778b694e17.configurationpropertiesmaxidle}",
+		"maxWait": "30000",
+		"minEvictableIdleTimeMillis": "60000",
+		"minIdle": "&{esv.778b694e17.configurationpropertiesminidle}",
+		"name": "Tomcat Connection Pool[1-999663323]",
+		"nativeTimestamps": false,
+		"numTestsPerEvictionRun": 0,
+		"password": "&{esv.778b694e17.configurationpropertiespassword}",
+		"passwordColumn": null,
+		"propagateInterruptState": false,
+		"quoting": "NONE",
+		"removeAbandoned": false,
+		"removeAbandonedTimeout": 60,
+		"rethrowAllSQLExceptions": true,
+		"rollbackOnReturn": false,
+		"suppressPassword": true,
+		"suspectTimeout": 0,
+		"table": "AUTHCODE",
+		"testOnBorrow": false,
+		"testOnConnect": false,
+		"testOnReturn": false,
+		"testWhileIdle": false,
+		"timeBetweenEvictionRunsMillis": "5000",
+		"url": "&{esv.778b694e17.configurationpropertiesurl}",
+		"useDisposableConnectionFacade": true,
+		"useEquals": true,
+		"useLock": false,
+		"useStatementFacade": true,
+		"username": "&{esv.778b694e17.configurationpropertiesusername}",
+		"validationInterval": "3000",
+		"validationQuery": null,
+		"validationQueryTimeout": "-1",
+		"validatorClassName": null
+	},
+	"connectorRef": {
+		"bundleName": "org.forgerock.openicf.connectors.databasetable-connector",
+		"bundleVersion": "[1.5.0.0,1.6.0.0)",
+		"connectorHostRef": "ewf-group",
+		"connectorName": "org.identityconnectors.databasetable.DatabaseTableConnector",
+		"displayName": "Database Table Connector",
+		"systemType": "provisioner.openicf"
+	},
+	"enabled": true,
+	"objectTypes": {
+		"authCode": {
+			"$schema": "http://json-schema.org/draft-03/schema",
+			"type": "object",
+			"id": "__ACCOUNT__",
+			"nativeType": "__ACCOUNT__",
+			"properties": {
+				"AUTHCODE": {
+					"flags": [],
+					"nativeName": "AUTHCODE",
+					"nativeType": "string",
+					"required": true,
+					"runAsUser": false,
+					"type": "string"
+				},
+				"STARTDTE": {
+					"type": "string",
+					"nativeName": "STARTDTE",
+					"nativeType": "string",
+					"required": false
+				},
+				"EXPIRYDTE": {
+					"type": "string",
+					"nativeName": "EXPIRYDTE",
+					"nativeType": "string",
+					"required": false
+				},
+				"__NAME__": {
+					"type": "string",
+					"nativeName": "__NAME__",
+					"nativeType": "string",
+					"required": true
+				}
+			}
+		}
+	},
+	"operationTimeout": {
+		"AUTHENTICATE": 30000,
+		"CREATE": -1,
+		"DELETE": -1,
+		"GET": -1,
+		"RESOLVEUSERNAME": -1,
+		"SCHEMA": -1,
+		"SCRIPT_ON_CONNECTOR": -1,
+		"SCRIPT_ON_RESOURCE": -1,
+		"SEARCH": -1,
+		"SYNC": -1,
+		"TEST": -1,
+		"UPDATE": -1,
+		"VALIDATE": -1
+	  },
+	"poolConfigOption": {
+		"maxIdle": 2,
+		"maxObjects": 2,
+		"maxWait": 150000,
+		"minEvictableIdleTimeMillis": 120000,
+		"minIdle": 2
+	},
+	"resultsHandlerConfig": {
+		"enableAttributesToGetSearchResultsHandler": true,
+		"enableCaseInsensitiveFilter": false,
+		"enableFilteredResultsHandler": false,
+		"enableNormalizingResultsHandler": false
+	}
+}
