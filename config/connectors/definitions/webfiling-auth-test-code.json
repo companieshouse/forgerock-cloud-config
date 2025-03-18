@@ -1,5 +1,5 @@
 {
-	"_id": "provisioner.openicf/WebfilingAuthCode",
+	"_id": "provisioner.openicf/WebfilingAuthtestCode",
 	"configurationProperties": {
 		"abandonWhenPercentageFull": 0,
 		"accessToUnderlyingConnectionAllowed": true,
