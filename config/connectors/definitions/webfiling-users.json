@@ -26,19 +26,18 @@
 		"enableAttributesToGetSearchResultsHandler": true
 	},
 	"operationTimeout": {
-		"AUTHENTICATE": -1,
-		"CREATE": -1,
-		"DELETE": -1,
-		"GET": -1,
-		"RESOLVEUSERNAME": -1,
-		"SCHEMA": -1,
-		"SCRIPT_ON_CONNECTOR": -1,
-		"SCRIPT_ON_RESOURCE": -1,
-		"SEARCH": -1,
-		"SYNC": -1,
-		"TEST": -1,
-		"UPDATE": -1,
-		"VALIDATE": -1
+		"AUTHENTICATE": 30000,       
+		"CREATE": 240000,            
+		"DELETE": 240000,             
+		"GET": 30000,                  
+		"SCHEMA": 240000,              
+		"SCRIPT_ON_CONNECTOR": 240000, 
+		"SCRIPT_ON_RESOURCE": 240000,  
+		"SEARCH": 240000,             
+		"SYNC": 240000,                
+		"TEST": 30000,                 
+		"UPDATE": 240000,              
+		"VALIDATE": 240000 
 	  },
 	"configurationProperties": {
 		"connectionProperties": null,
