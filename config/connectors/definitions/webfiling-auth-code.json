@@ -45,7 +45,7 @@
 		"suppressPassword": true,
 		"suspectTimeout": 0,
 		"table": "AUTHCODE",
-		"testOnBorrow": false,
+		"testOnBorrow": true,
 		"testOnConnect": false,
 		"testOnReturn": false,
 		"testWhileIdle": false,
@@ -57,7 +57,7 @@
 		"useStatementFacade": true,
 		"username": "&{esv.778b694e17.configurationpropertiesusername}",
 		"validationInterval": "3000",
-		"validationQuery": null,
+		"validationQuery": "SELECT 1 FROM DUAL",
 		"validationQueryTimeout": "-1",
 		"validatorClassName": null
 	},
