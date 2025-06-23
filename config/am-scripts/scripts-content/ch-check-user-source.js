@@ -227,13 +227,13 @@ function createOrUpdateUser (accessToken, email) {
 }
 
 function fetchUserFromEWFByParentUsername (parentUsername) {
-  var searchTerm = '?_queryFilter=_id+eq+%22' + parentUsername + '%22';
+  var searchTerm = '?_queryFilter=_id+ci+%22' + parentUsername + '%22';
   return fetchUserFromEWFBySearchTerm(accessToken, searchTerm);
 }
 
 function fetchUserFromEWFByEmail (email) {
   var emailEncoded = encodeURIComponent(email.trim());
-  var searchTerm = '?_queryFilter=EMAIL+eq+%22' + emailEncoded + '%22';
+  var searchTerm = '?_queryFilter=EMAIL+ci+%22' + emailEncoded + '%22';
   return fetchUserFromEWFBySearchTerm(accessToken, searchTerm);
 }
 
