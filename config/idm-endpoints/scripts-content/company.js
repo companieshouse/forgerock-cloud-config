@@ -1,6 +1,6 @@
 (function () {
   const logNowMsecs = new Date().getTime();
-  const SYSTEM_CHS_COMPANY = 'system/CHSCompany/company_profile';
+  const SYSTEM_CHS_COMPANY = 'system/CHSCompanyReducedTimeouts/company_profile';
   const SYSTEM_WEBFILING_AUTHCODE = 'system/WebfilingAuthCode/authCode';
   const OBJECT_COMPANY = 'alpha_organization';
   
