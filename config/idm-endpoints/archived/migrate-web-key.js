@@ -228,7 +228,7 @@
           "tokenEncryptionEnabled": false,
           "enableRemoteConsent": false,
           "evaluateScopePluginType": "JAVA",
-          "customLoginUrlTemplate": "https://idam-ui.amido.aws.chdev.org/account/chslogin/?goto=${goto}<#if acrValues??>&acr_values=${acrValues}</#if><#if realm??>&realm=${realm}</#if><#if module??>&module=${module}</#if><#if service??>&service=${service}</#if><#if locale??>&locale=${locale}</#if><#if authIndexType??>&authIndexType=${authIndexType}</#if><#if authIndexValue??>&authIndexValue=${authIndexValue}</#if><#if claims??>&claims=${claims}</#if>&mode=AUTHN_ONLY&ForceAuth=true",
+          "customLoginUrlTemplate": "https://idam-ui-dev.company-information.service.gov.uk/account/chslogin/?goto=${goto}<#if acrValues??>&acr_values=${acrValues}</#if><#if realm??>&realm=${realm}</#if><#if module??>&module=${module}</#if><#if service??>&service=${service}</#if><#if locale??>&locale=${locale}</#if><#if authIndexType??>&authIndexType=${authIndexType}</#if><#if authIndexValue??>&authIndexValue=${authIndexValue}</#if><#if claims??>&claims=${claims}</#if>&mode=AUTHN_ONLY&ForceAuth=true",
           "usePolicyEngineForScope": false,
           "oidcMayActScript": "[Empty]",
           "oidcClaimsScript": "36863ffb-40ec-48b9-94b1-9a99f71cc3b5",
