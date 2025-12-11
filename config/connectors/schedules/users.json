@@ -1,8 +1,6 @@
 {
     "_id": "EWF Users to alpha_user",
-    "enabled": {
-        "$bool": "&{esv.566930381b.reconscheduleusersenabled}"
-    },
+    "enabled": false,
     "persisted": true,
     "recoverable": true,
     "misfirePolicy": "fireAndProceed",
