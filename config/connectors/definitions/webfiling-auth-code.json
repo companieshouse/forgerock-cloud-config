@@ -69,7 +69,7 @@
 		"displayName": "Database Table Connector",
 		"systemType": "provisioner.openicf"
 	},
-	"enabled": true,
+	"enabled": false,
 	"objectTypes": {
 		"authCode": {
 			"$schema": "http://json-schema.org/draft-03/schema",

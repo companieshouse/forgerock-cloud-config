@@ -87,7 +87,7 @@
 		"minConnectionsPerHost": "0",
 		"maxConnectionsPerHost": "25"
 	},
-	"enabled": true,
+	"enabled": false,
 	"objectTypes": {
 		"company_profile": {
 			"$schema": "http://json-schema.org/draft-03/schema",
