@@ -9,31 +9,31 @@
       "name": "chs-primary",
       "displayName": "chs-primary",
       "useSSL": true,
-      "enabled": true
+      "enabled": false
     },
     {
       "name": "chs-secondary",
       "displayName": "chs-secondary",
       "useSSL": true,
-      "enabled": true
+      "enabled": false
     },
     {
       "name": "ewf-primary",
       "displayName": "ewf-primary",
       "useSSL": true,
-      "enabled": true
+      "enabled": false
     },
     {
       "name": "ewf-secondary",
       "displayName": "ewf-secondary",
       "useSSL": true,
-      "enabled": true
+      "enabled": false
     },
     {
       "name": "forgerock-export",
       "displayName": "forgerock-export",
       "useSSL": true,
-      "enabled": true
+      "enabled": false
     }
   ],
   "remoteConnectorServers": [],
