@@ -1,6 +1,6 @@
 {
   "target": "managed/alpha_organization",
-  "enabled": true,
+  "enabled": false,
   "source": "system/WebfilingAuthCode/authCode",
   "name": "webfilingAuthCode_alphaOrg",
   "consentRequired": false,
