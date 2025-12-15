@@ -1,6 +1,6 @@
 {
 	"target": "managed/alpha_organization",
-	"enabled": true,
+	"enabled": false,
 	"source": "system/CHSCompany/company_profile",
 	"name": "chsMongoCompanyProfile_alphaOrg",
 	"consentRequired": false,

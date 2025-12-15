@@ -1,8 +1,6 @@
 {
     "_id": "EWF Auth Codes to alpha_organization",
-    "enabled": {
-        "$bool": "&{esv.2bb35d546a.reconscheduleauthcodesenabled}"
-    },
+    "enabled": false,
     "persisted": true,
     "recoverable": true,
     "misfirePolicy": "fireAndProceed",

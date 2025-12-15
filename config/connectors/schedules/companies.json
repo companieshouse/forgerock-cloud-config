@@ -1,8 +1,6 @@
 {
     "_id": "CHS Companies to alpha_organization",
-    "enabled": {
-        "$bool": "&{esv.b1ea4bdc4a.reconscheduleucompaniesenabled}"
-    },
+    "enabled": false,
     "persisted": true,
     "recoverable": true,
     "misfirePolicy": "fireAndProceed",

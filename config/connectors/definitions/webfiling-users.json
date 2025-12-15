@@ -101,7 +101,7 @@
 		"suppressPassword": true,
 		"inclusiveSync": false
 	},
-	"enabled": true,
+	"enabled": false,
 	"objectTypes": {
 		"webfilingUser": {
 			"$schema": "http://json-schema.org/draft-03/schema",
